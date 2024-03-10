@@ -1,0 +1,72 @@
+package io.github.droidkaigi.confsched.sessions.component
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.model.TimetableCategory
+import io.github.droidkaigi.confsched.model.fakes
+import io.github.droidkaigi.confsched.sessions.SessionsStrings
+import io.github.droidkaigi.confsched.sessions.section.SearchFilterUiState
+import kotlinx.collections.immutable.toImmutableList
+
+const val FilterCategoryChipTestTag = "FilterCategoryChip"
+
+@Composable
+fun FilterCategoryChip(
+    searchFilterUiState: SearchFilterUiState<TimetableCategory>,
+    onCategoriesSelected: (TimetableCategory, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    onFilterCategoryChipClicked: () -> Unit,
+) {
+    DropdownFilterChip(
+        searchFilterUiState = searchFilterUiState,
+        onSelected = onCategoriesSelected,
+        filterChipLabelDefaultText = SessionsStrings.Category.asString(),
+        onFilterChipClick = onFilterCategoryChipClicked,
+        dropdownMenuItemText = { category ->
+            category.title.currentLangTitle
+        },
+        modifier = modifier.testTag(FilterCategoryChipTestTag),
+    )
+}
+
+@MultiThemePreviews
+@Composable
+fun PreviewFilterCategoryChip() {
+    var uiState by remember {
+        mutableStateOf(
+            SearchFilterUiState(
+                selectedItems = emptyList<TimetableCategory>().toImmutableList(),
+                items = TimetableCategory.fakes().toImmutableList(),
+            ),
+        )
+    }
+
+    KaigiTheme {
+        FilterCategoryChip(
+            searchFilterUiState = uiState,
+            onCategoriesSelected = { category, isSelected ->
+                val selectedCategories = uiState.selectedItems.toMutableList()
+                val newSelectedCategories = selectedCategories.apply {
+                    if (isSelected) {
+                        add(category)
+                    } else {
+                        remove(category)
+                    }
+                }
+                uiState = uiState.copy(
+                    selectedItems = newSelectedCategories.toImmutableList(),
+                    isSelected = newSelectedCategories.isNotEmpty(),
+                    selectedValues = newSelectedCategories.joinToString { it.title.currentLangTitle },
+                )
+            },
+            onFilterCategoryChipClicked = {},
+        )
+    }
+}
