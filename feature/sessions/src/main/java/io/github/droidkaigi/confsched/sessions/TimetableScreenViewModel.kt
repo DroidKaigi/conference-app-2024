@@ -7,11 +7,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.ViewModelLifecycle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
-import io.github.droidkaigi.confsched.designsystem.strings.AppStrings
 import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.SessionsRepository
@@ -23,15 +21,8 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
 import io.github.droidkaigi.confsched.ui.ComposeViewModel
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.buildUiState
-import io.github.droidkaigi.confsched.ui.handleErrorAndRetry
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed interface TimetableScreenEvent {

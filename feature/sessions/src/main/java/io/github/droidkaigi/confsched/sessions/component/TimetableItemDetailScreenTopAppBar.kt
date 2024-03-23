@@ -40,6 +40,8 @@ import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
+const val DropdownFilterChipItemTestTag = "DropdownFilterChipItem"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimetableItemDetailScreenTopAppBar(

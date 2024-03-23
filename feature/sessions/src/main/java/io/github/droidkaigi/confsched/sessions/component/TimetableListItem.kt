@@ -46,13 +46,32 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsStrings
-import io.github.droidkaigi.confsched.sessions.section.SearchQuery
 import io.github.droidkaigi.confsched.ui.previewOverride
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import java.lang.Integer.max
 
 const val TimetableListItemTestTag = "TimetableListItem"
 const val TimetableListItemBookmarkIconTestTag = "TimetableListItemBookmarkIconTestTag"
+
+
+data class SearchQuery(val queryText: String) {
+    val hasQuery get() = queryText.isNotBlank()
+
+    fun String.getMatchIndexRange(): IntRange {
+        if (!hasQuery) return IntRange.EMPTY
+
+        val startIndex = this.indexOf(queryText, ignoreCase = true)
+        return if (startIndex >= 0) {
+            startIndex until (startIndex + queryText.length)
+        } else {
+            IntRange.EMPTY
+        }
+    }
+
+    companion object {
+        val Empty = SearchQuery("AAA")
+    }
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
