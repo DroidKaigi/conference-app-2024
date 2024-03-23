@@ -12,13 +12,14 @@ repositories {
     gradlePluginPortal()
 }
 
+// We are using JDK 17 for build process but we are targeting JDK 11 for the app
 // If we use jvmToolchain, we need to install JDK 11
 val compileKotlin: KotlinCompile by tasks
-compileKotlin.kotlinOptions.jvmTarget = "11"
+compileKotlin.kotlinOptions.jvmTarget = "17"
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
@@ -93,6 +94,15 @@ gradlePlugin {
         register("kotlinMppKotlinSerialization") {
             id = "droidkaigi.primitive.kmp.serialization"
             implementationClass = "io.github.droidkaigi.confsched.primitive.KotlinSerializationPlugin"
+        }
+        register("ComposeInvestigator") {
+            id = "droidkaigi.primitive.compose.investigator"
+            implementationClass = "io.github.droidkaigi.confsched.primitive.ComposeInvestigatorPlugin"
+        }
+
+        register("Molecule") {
+            id = "droidkaigi.primitive.molecule"
+            implementationClass = "io.github.droidkaigi.confsched.primitive.MoleculePlugin"
         }
         register("koverEntryPoint") {
             id = "droidkaigi.primitive.kover.entrypoint"

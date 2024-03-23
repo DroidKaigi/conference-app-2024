@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
@@ -20,6 +21,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailRead
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import kotlinx.coroutines.test.TestDispatcher
+import org.robolectric.shadows.ShadowLooper
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -27,9 +29,10 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     private val testDispatcher: TestDispatcher,
 ) {
     @Inject lateinit var robotTestRule: RobotTestRule
+
     private lateinit var composeTestRule: AndroidComposeTestRule<*, *>
     operator fun invoke(
-        block: TimetableItemDetailScreenRobot.() -> Unit,
+        block: suspend TimetableItemDetailScreenRobot.() -> Unit,
     ) {
         runTestWithLogging(timeout = 30.seconds) {
             this@TimetableItemDetailScreenRobot.composeTestRule = robotTestRule.composeTestRule
@@ -37,7 +40,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
         }
     }
 
-    fun setupScreenContent() {
+    suspend fun setupScreenContent() {
         composeTestRule.setContent {
             KaigiTheme {
                 TimetableItemDetailScreen(
@@ -52,7 +55,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun clickBookmarkButton() {
+    suspend fun clickBookmarkButton() {
         composeTestRule
             .onNode(hasTestTag(TimetableItemDetailBookmarkIconTestTag))
             .performClick()
@@ -102,11 +105,15 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     }
 
     fun waitUntilIdle() {
-        composeTestRule.waitForIdle()
-        testDispatcher.scheduler.advanceUntilIdle()
+        repeat(5) {
+            composeTestRule.waitForIdle()
+            testDispatcher.scheduler.advanceUntilIdle()
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        }
     }
 
     companion object {
-        val defaultSessionId: String = SessionsAllResponse.fake().sessions.find { it.sessionType == "NORMAL" }!!.id
+        val defaultSessionId: String =
+            SessionsAllResponse.fake().sessions.find { it.sessionType == "NORMAL" }!!.id
     }
 }

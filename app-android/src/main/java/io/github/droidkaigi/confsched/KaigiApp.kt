@@ -61,8 +61,6 @@ import io.github.droidkaigi.confsched.sessions.searchScreen
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
-import io.github.droidkaigi.confsched.staff.navigateStaffScreen
-import io.github.droidkaigi.confsched.staff.staffScreen
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 
@@ -105,10 +103,6 @@ private fun KaigiNavHost(
         searchScreen(
             onNavigationIconClick = navController::popBackStack,
             onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-        )
-        staffScreen(
-            onBackClick = navController::popBackStack,
-            onStaffClick = externalNavController::navigate,
         )
         // For KMP, we are not using navigation abstraction for contributors screen
         composable(contributorsScreenRoute) {

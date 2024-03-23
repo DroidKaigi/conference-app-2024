@@ -90,7 +90,7 @@ fun TimetableItemDetailScreen(
     onShareClick: (TimetableItem) -> Unit,
     viewModel: TimetableItemDetailViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.models.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
@@ -101,18 +101,22 @@ fun TimetableItemDetailScreen(
     LaunchedEffect(uiState.shouldNavigateToBookmarkList) {
         if (uiState.shouldNavigateToBookmarkList) {
             onNavigateToBookmarkScreenRequested()
-            viewModel.onViewBookmarkListRequestCompleted()
+            viewModel.take(TimetableItemDetailEvent.ViewBookmarkListRequestCompleted)
         }
     }
 
     TimetableItemDetailScreen(
         uiState = uiState,
         onNavigationIconClick = onNavigationIconClick,
-        onBookmarkClick = viewModel::onBookmarkClick,
+        onBookmarkClick = {
+            viewModel.take(TimetableItemDetailEvent.Bookmark(it))
+        },
         onLinkClick = onLinkClick,
         onCalendarRegistrationClick = onCalendarRegistrationClick,
         onShareClick = onShareClick,
-        onSelectedLanguage = viewModel::onSelectDescriptionLanguage,
+        onSelectedLanguage = {
+            viewModel.take(TimetableItemDetailEvent.SelectDescriptionLanguage(it))
+        },
         snackbarHostState = snackbarHostState,
     )
 }
@@ -215,7 +219,9 @@ fun TimetableItemDetailScreenPreview() {
             TimetableItemDetailScreen(
                 uiState = Loaded(
                     timetableItem = fakeSession,
-                    timetableItemDetailSectionUiState = TimetableItemDetailSectionUiState(fakeSession),
+                    timetableItemDetailSectionUiState = TimetableItemDetailSectionUiState(
+                        fakeSession
+                    ),
                     isBookmarked = isBookMarked,
                     isLangSelectable = true,
                     viewBookmarkListRequestState = ViewBookmarkListRequestState.NotRequested,

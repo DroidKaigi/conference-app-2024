@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -25,6 +26,7 @@ fun SnackbarMessageEffect(
 ) {
     userMessageStateHolder.messageUiState.userMessages.firstOrNull()?.let { userMessage ->
         LaunchedEffect(userMessage) {
+            if (userMessage.userMessageResult != null) return@LaunchedEffect
             val snackbarResult: SnackbarResult = if (userMessage.duration == null) {
                 snackbarHostState.showSnackbar(
                     message = userMessage.message,
@@ -72,6 +74,7 @@ class UserMessageStateHolderImpl : UserMessageStateHolder {
                 messages[userMessageIndex].copy(userMessageResult = userMessageResult),
             )
         }
+        Logger.d { "UserMessageStateHolderImpl.messageShown $messageId messages:$messages" }
         _messageUiState = _messageUiState.copy(userMessages = messages)
     }
 
@@ -80,6 +83,7 @@ class UserMessageStateHolderImpl : UserMessageStateHolder {
         actionLabel: String?,
         duration: SnackbarDuration?,
     ): UserMessageResult {
+        Logger.d { "UserMessageStateHolderImpl.showMessage message:$message" }
         val messages = _messageUiState.userMessages.toMutableList()
         val newMessage = UserMessage(message, actionLabel = actionLabel, duration = duration)
         messages.add(newMessage)
@@ -87,25 +91,30 @@ class UserMessageStateHolderImpl : UserMessageStateHolder {
         val messageResult = snapshotFlow {
             _messageUiState
         }.filter { messageState ->
-            messageState.userMessages.find { it.id == newMessage.id }?.let { userMessage ->
+            val filterResult = messageState.userMessages.find { it.id == newMessage.id }?.let { userMessage ->
                 val messageResult = userMessage.userMessageResult
                 messageResult != null
             } ?: false
+            Logger.d { "UserMessageStateHolderImpl.showMessage filter message messageState:$messageState newMessage:$newMessage filterResult:$filterResult" }
+            filterResult
         }
             .map { messageState ->
                 val userMessage =
                     checkNotNull(messageState.userMessages.find { it.id == newMessage.id })
+                Logger.d { "UserMessageStateHolderImpl.showMessage map message messageState:$messageState newMessage:$newMessage userMessage:$userMessage" }
                 checkNotNull(
                     userMessage
                         .userMessageResult,
                 )
             }
             .first()
+        Logger.d { "UserMessageStateHolderImpl.showMessage after first messageResult:$messageResult" }
         val newMessages = _messageUiState.userMessages.toMutableList()
         newMessages.find { it.id == newMessage.id }?.let { userMessage ->
             newMessages.remove(userMessage)
         }
         _messageUiState = _messageUiState.copy(userMessages = newMessages)
+        Logger.d { "UserMessageStateHolderImpl.showMessage end _messageUiState:$_messageUiState" }
         return messageResult
     }
 }

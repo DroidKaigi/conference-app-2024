@@ -3,9 +3,11 @@ plugins {
     id("droidkaigi.primitive.kmp.android")
     id("droidkaigi.primitive.kmp.android.hilt")
     id("droidkaigi.primitive.kmp.ios")
+    id("droidkaigi.primitive.kmp.compose")
     id("droidkaigi.primitive.detekt")
     id("droidkaigi.primitive.kmp.ktorfit")
     id("droidkaigi.primitive.kmp.serialization")
+    id("droidkaigi.primitive.compose.investigator")
 }
 
 android.namespace = "io.github.droidkaigi.confsched.core.data"

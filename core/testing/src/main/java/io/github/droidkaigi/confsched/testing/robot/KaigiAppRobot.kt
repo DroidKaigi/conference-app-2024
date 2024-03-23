@@ -21,7 +21,6 @@ class KaigiAppRobot @Inject constructor(
 
     @Inject lateinit var timetableScreenRobot: TimetableScreenRobot
 
-    @Inject lateinit var aboutScreenRobot: AboutScreenRobot
     private lateinit var composeTestRule: AndroidComposeTestRule<*, *>
     operator fun invoke(
         block: KaigiAppRobot.() -> Unit,

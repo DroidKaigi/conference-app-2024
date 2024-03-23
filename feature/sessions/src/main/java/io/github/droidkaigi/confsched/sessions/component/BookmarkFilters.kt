@@ -78,7 +78,6 @@ fun BookmarkFilters(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BookmarkFilterChip(
     labelText: String,
@@ -93,6 +92,8 @@ private fun BookmarkFilterChip(
     val selectedChipBoarderColor = FilterChipDefaults.filterChipBorder(
         borderColor = MaterialTheme.colorScheme.outline,
         borderWidth = 0.dp,
+        enabled = true,
+        selected = true,
     )
     FilterChip(
         onClick = onClick,
@@ -117,7 +118,10 @@ private fun BookmarkFilterChip(
         border = if (isSelected) {
             selectedChipBoarderColor
         } else {
-            FilterChipDefaults.filterChipBorder()
+            FilterChipDefaults.filterChipBorder(
+                enabled = true,
+                selected = false
+            )
         },
         selected = isSelected,
     )

@@ -1,111 +1,147 @@
 package io.github.droidkaigi.confsched.sessions
 
 import androidx.compose.material3.SnackbarDuration.Short
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.ViewModelLifecycle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.github.droidkaigi.confsched.designsystem.strings.AppStrings
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItemId
-import io.github.droidkaigi.confsched.model.TimetableSessionType
+import io.github.droidkaigi.confsched.model.TimetableSessionType.NORMAL
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.Bookmark
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDescriptionLanguage
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.ViewBookmarkListRequestCompleted
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
+import io.github.droidkaigi.confsched.sessions.ViewBookmarkListRequestState.NotRequested
+import io.github.droidkaigi.confsched.sessions.ViewBookmarkListRequestState.Requested
 import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetailSectionUiState
-import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings
-import io.github.droidkaigi.confsched.ui.UserMessageResult
+import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
+import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
+import io.github.droidkaigi.confsched.ui.ComposeViewModel
+import io.github.droidkaigi.confsched.ui.DefaultComposeViewModel
+import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.buildUiState
-import io.github.droidkaigi.confsched.ui.handleErrorAndRetry
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+sealed interface TimetableItemDetailEvent {
+    data class Bookmark(val timetableItem: TimetableItem) : TimetableItemDetailEvent
+    data class SelectDescriptionLanguage(val language: Lang) : TimetableItemDetailEvent
+    data object ViewBookmarkListRequestCompleted : TimetableItemDetailEvent
+}
 
 @HiltViewModel
 class TimetableItemDetailViewModel @Inject constructor(
     private val sessionsRepository: SessionsRepository,
     val userMessageStateHolder: UserMessageStateHolder,
-    savedStateHandle: SavedStateHandle,
+    private val savedStateHandle: SavedStateHandle,
+    private val viewModelLifecycle: ViewModelLifecycle,
 ) : ViewModel(),
-    UserMessageStateHolder by userMessageStateHolder {
-
-    private val timetableItemIdFlow = savedStateHandle.getStateFlow<String>(
-        timetableItemDetailScreenRouteItemIdParameterName,
-        "",
-    )
-    private val timetableItemStateFlow: StateFlow<Pair<TimetableItem, Boolean>?> =
-        timetableItemIdFlow.flatMapLatest { timetableItemId: String ->
-            sessionsRepository
-                .getTimetableItemWithBookmarkStream(TimetableItemId(timetableItemId))
-        }
-            .handleErrorAndRetry(
-                AppStrings.Retry,
-                userMessageStateHolder,
-            )
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = null,
-            )
-    private val viewBookmarkListRequestStateFlow =
-        MutableStateFlow<ViewBookmarkListRequestState>(ViewBookmarkListRequestState.NotRequested)
-    private val selectedDescriptionLanguageStateFlow: MutableStateFlow<Lang?> =
-        MutableStateFlow(null)
-
-    val uiState: StateFlow<TimetableItemDetailScreenUiState> =
-        buildUiState(
-            timetableItemStateFlow,
-            viewBookmarkListRequestStateFlow,
-            selectedDescriptionLanguageStateFlow,
-        ) { timetableItemAndBookmark, viewBookmarkListRequestState, selectedLang ->
-            if (timetableItemAndBookmark == null) {
-                return@buildUiState TimetableItemDetailScreenUiState.Loading
-            }
-            if (selectedLang == null) {
-                onSelectDescriptionLanguage(Lang.valueOf(timetableItemAndBookmark.first.language.langOfSpeaker))
-            }
-            val (timetableItem, bookmarked) = timetableItemAndBookmark
-            TimetableItemDetailScreenUiState.Loaded(
-                timetableItem = timetableItem,
-                timetableItemDetailSectionUiState = TimetableItemDetailSectionUiState(timetableItem),
-                isBookmarked = bookmarked,
-                isLangSelectable = timetableItem.sessionType == TimetableSessionType.NORMAL,
-                viewBookmarkListRequestState = viewBookmarkListRequestState,
-                currentLang = selectedLang,
-            )
-        }
-
-    fun onBookmarkClick(timetableItem: TimetableItem) {
-        viewModelScope.launch {
-            sessionsRepository.toggleBookmark(timetableItem.id)
-            val bookmarked = timetableItemStateFlow.value?.second ?: return@launch
-            if (bookmarked) {
-                val result = userMessageStateHolder.showMessage(
-                    message = TimetableItemDetailStrings.BookmarkedSuccessfully.asString(),
-                    actionLabel = TimetableItemDetailStrings.ViewBookmarkList.asString(),
-                    duration = Short,
+    ComposeViewModel<TimetableItemDetailEvent, TimetableItemDetailScreenUiState> by DefaultComposeViewModel(
+        viewModelLifecycle = viewModelLifecycle,
+        userMessageStateHolder = userMessageStateHolder,
+        content = { events ->
+            timetableItemDetailViewModel(
+                events = events,
+                eventEmitter = { take(it) },
+                userMessageStateHolder = userMessageStateHolder,
+                sessionsRepository = sessionsRepository,
+                sessionIdFlow = savedStateHandle.getStateFlow(
+                    timetableItemDetailScreenRouteItemIdParameterName,
+                    "",
                 )
-                if (result == UserMessageResult.ActionPerformed) {
-                    viewBookmarkListRequestStateFlow.update { ViewBookmarkListRequestState.Requested }
+            )
+        }
+    ),
+    UserMessageStateHolder by userMessageStateHolder
+
+@Composable
+fun timetableItemDetailViewModel(
+    events: Flow<TimetableItemDetailEvent>,
+    eventEmitter: (TimetableItemDetailEvent) -> Unit,
+    sessionsRepository: SessionsRepository,
+    userMessageStateHolder: UserMessageStateHolder,
+    sessionIdFlow: StateFlow<String>,
+): TimetableItemDetailScreenUiState {
+    val timetableItemId by remember {
+        sessionIdFlow
+    }.collectAsState()
+    val timetableItemStateWithBookmark by rememberUpdatedState(
+        sessionsRepository
+            .timetableItemWithBookmark(TimetableItemId(timetableItemId))
+    )
+    var viewBookmarkListRequest by remember {
+        mutableStateOf<ViewBookmarkListRequestState>(
+            NotRequested
+        )
+    }
+    var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
+
+    LaunchedEffect(timetableItemStateWithBookmark?.first) {
+        val timetableItem = timetableItemStateWithBookmark?.first
+        val sessionDefaultLang = timetableItem?.language
+        if (sessionDefaultLang != null) {
+            eventEmitter(
+                TimetableItemDetailEvent.SelectDescriptionLanguage(
+                    Lang.valueOf(
+                        sessionDefaultLang.langOfSpeaker
+                    )
+                )
+            )
+        }
+    }
+    LaunchedEffect(Unit) {
+        events.collect { event ->
+            when (event) {
+                is Bookmark -> {
+                    val timetableItemWithBookmark = timetableItemStateWithBookmark
+                    val timetableItem =
+                        timetableItemWithBookmark?.first ?: return@collect
+                    sessionsRepository.toggleBookmark(timetableItem.id)
+                    val oldBookmarked = timetableItemWithBookmark.second
+                    if (!oldBookmarked) {
+                        val result = userMessageStateHolder.showMessage(
+                            message = BookmarkedSuccessfully.asString(),
+                            actionLabel = ViewBookmarkList.asString(),
+                            duration = Short,
+                        )
+                        if (result == ActionPerformed) {
+                            viewBookmarkListRequest = Requested
+                        }
+                    }
+                }
+
+                is ViewBookmarkListRequestCompleted -> {
+                    viewBookmarkListRequest = NotRequested
+                }
+
+                is SelectDescriptionLanguage -> {
+                    selectedDescriptionLanguage = event.language
                 }
             }
         }
     }
-
-    fun onViewBookmarkListRequestCompleted() {
-        viewModelScope.launch {
-            viewBookmarkListRequestStateFlow.update { ViewBookmarkListRequestState.NotRequested }
-        }
-    }
-
-    fun onSelectDescriptionLanguage(
-        language: Lang,
-    ) {
-        selectedDescriptionLanguageStateFlow.value = language
-    }
+    val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
+        ?: return Loading
+    val (timetableItem, bookmarked) = timetableItemStateWithBookmarkValue
+    return Loaded(
+        timetableItem = timetableItem,
+        timetableItemDetailSectionUiState = TimetableItemDetailSectionUiState(timetableItem),
+        isBookmarked = bookmarked,
+        isLangSelectable = timetableItem.sessionType == NORMAL,
+        viewBookmarkListRequestState = viewBookmarkListRequest,
+        currentLang = selectedDescriptionLanguage,
+    )
 }

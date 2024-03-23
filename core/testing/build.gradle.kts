@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.roborazzi)
     implementation(libs.kermit)
     api(libs.roborazziRule)
+    api(libs.robolectric)
     api(libs.composeUiTestJunit4)
     implementation(libs.composeMaterialWindowSize)
 }
