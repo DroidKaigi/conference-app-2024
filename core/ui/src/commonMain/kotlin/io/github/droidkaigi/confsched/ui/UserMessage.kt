@@ -95,13 +95,17 @@ class UserMessageStateHolderImpl : UserMessageStateHolder {
                 val messageResult = userMessage.userMessageResult
                 messageResult != null
             } ?: false
-            Logger.d { "UserMessageStateHolderImpl.showMessage filter message messageState:$messageState newMessage:$newMessage filterResult:$filterResult" }
+            Logger.d {
+                "UserMessageStateHolderImpl.showMessage filter message messageState:$messageState newMessage:$newMessage filterResult:$filterResult"
+            }
             filterResult
         }
             .map { messageState ->
                 val userMessage =
                     checkNotNull(messageState.userMessages.find { it.id == newMessage.id })
-                Logger.d { "UserMessageStateHolderImpl.showMessage map message messageState:$messageState newMessage:$newMessage userMessage:$userMessage" }
+                Logger.d {
+                    "UserMessageStateHolderImpl.showMessage map message messageState:$messageState newMessage:$newMessage userMessage:$userMessage"
+                }
                 checkNotNull(
                     userMessage
                         .userMessageResult,

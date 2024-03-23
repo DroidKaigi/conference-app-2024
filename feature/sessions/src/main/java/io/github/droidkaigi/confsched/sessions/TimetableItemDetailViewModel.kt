@@ -60,9 +60,9 @@ class TimetableItemDetailViewModel @Inject constructor(
                 sessionIdFlow = savedStateHandle.getStateFlow(
                     timetableItemDetailScreenRouteItemIdParameterName,
                     "",
-                )
+                ),
             )
-        }
+        },
     ),
     UserMessageStateHolder by userMessageStateHolder
 
@@ -79,11 +79,11 @@ fun timetableItemDetailViewModel(
     }.collectAsState()
     val timetableItemStateWithBookmark by rememberUpdatedState(
         sessionsRepository
-            .timetableItemWithBookmark(TimetableItemId(timetableItemId))
+            .timetableItemWithBookmark(TimetableItemId(timetableItemId)),
     )
     var viewBookmarkListRequest by remember {
         mutableStateOf<ViewBookmarkListRequestState>(
-            NotRequested
+            NotRequested,
         )
     }
     var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
@@ -95,9 +95,9 @@ fun timetableItemDetailViewModel(
             eventEmitter(
                 SelectDescriptionLanguage(
                     Lang.valueOf(
-                        sessionDefaultLang.langOfSpeaker
-                    )
-                )
+                        sessionDefaultLang.langOfSpeaker,
+                    ),
+                ),
             )
         }
     }

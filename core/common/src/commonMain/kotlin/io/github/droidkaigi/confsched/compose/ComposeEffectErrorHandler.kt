@@ -43,8 +43,10 @@ fun <T : R, R> Flow<T>.safeCollectAsState(
         try {
             if (context == EmptyCoroutineContext) {
                 collect { value = it as R }
-            } else withContext(context) {
-                collect { value = it as R }
+            } else {
+                withContext(context) {
+                    collect { value = it as R }
+                }
             }
         } catch (e: Throwable) {
             composeEffectErrorHandler.emit(e)

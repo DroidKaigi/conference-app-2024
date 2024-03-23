@@ -66,7 +66,7 @@ class DefaultComposeViewModel<Event, Model>(
                 }
             }
             return@launchMolecule CompositionLocalProviderWithReturnValue<Model>(
-                LocalComposeEffectErrorHandler provides errorHandler
+                LocalComposeEffectErrorHandler provides errorHandler,
             ) {
                 content(events)
             }

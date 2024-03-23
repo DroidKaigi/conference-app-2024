@@ -10,13 +10,12 @@ fun <Event : Any, UiState : Any> ComposeViewModel(
     userMessageStateHolder: UserMessageStateHolder,
     content: @Composable ComposeViewModel<Event, UiState>.(Flow<Event>) -> UiState,
 ): ComposeViewModel<Event, UiState> {
-
     val kmpViewModelLifecycle = KmpViewModelLifecycle()
     viewModelLifecycle.addOnClearedListener { kmpViewModelLifecycle.onCleared() }
     return DefaultComposeViewModel(
         viewModelLifecycle = kmpViewModelLifecycle,
         composeCoroutineContext = AndroidUiDispatcher.Main,
         userMessageStateHolder = userMessageStateHolder,
-        content = content
+        content = content,
     )
 }

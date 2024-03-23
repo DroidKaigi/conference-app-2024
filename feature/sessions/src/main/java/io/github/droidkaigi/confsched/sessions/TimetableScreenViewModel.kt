@@ -6,7 +6,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.ViewModelLifecycle
@@ -55,9 +54,9 @@ class TimetableScreenViewModel @Inject constructor(
             timetableScreenViewModel(
                 events = events,
                 userMessageStateHolder = userMessageStateHolder,
-                sessionsRepository = sessionsRepository
+                sessionsRepository = sessionsRepository,
             )
-        }
+        },
     ),
     UserMessageStateHolder by userMessageStateHolder
 
@@ -74,7 +73,7 @@ fun timetableScreenViewModel(
         timetableSheet(
             sessionTimetable = sessions,
             uiType = timetableUiType,
-        )
+        ),
     )
     SafeLaunchedEffect(Unit) {
         events.collect { event ->
