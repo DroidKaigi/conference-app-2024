@@ -5,11 +5,11 @@ import androidx.compose.ui.platform.AndroidUiDispatcher
 import dagger.hilt.android.ViewModelLifecycle
 import kotlinx.coroutines.flow.Flow
 
-fun <Event : Any, UiState> DefaultComposeViewModel(
+fun <Event : Any, UiState : Any> ComposeViewModel(
     viewModelLifecycle: ViewModelLifecycle,
     userMessageStateHolder: UserMessageStateHolder,
     content: @Composable ComposeViewModel<Event, UiState>.(Flow<Event>) -> UiState,
-): DefaultComposeViewModel<Event, UiState> {
+): ComposeViewModel<Event, UiState> {
 
     val kmpViewModelLifecycle = KmpViewModelLifecycle()
     viewModelLifecycle.addOnClearedListener { kmpViewModelLifecycle.onCleared() }

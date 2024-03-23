@@ -40,24 +40,10 @@ import io.github.droidkaigi.confsched.main.MainScreenTab.FloorMap
 import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
-import io.github.droidkaigi.confsched.model.AboutItem.CodeOfConduct
-import io.github.droidkaigi.confsched.model.AboutItem.Contributors
-import io.github.droidkaigi.confsched.model.AboutItem.License
-import io.github.droidkaigi.confsched.model.AboutItem.Medium
-import io.github.droidkaigi.confsched.model.AboutItem.PrivacyPolicy
-import io.github.droidkaigi.confsched.model.AboutItem.Sponsors
-import io.github.droidkaigi.confsched.model.AboutItem.Staff
-import io.github.droidkaigi.confsched.model.AboutItem.X
-import io.github.droidkaigi.confsched.model.AboutItem.YouTube
-import io.github.droidkaigi.confsched.model.Lang.JAPANESE
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.model.defaultLang
-import io.github.droidkaigi.confsched.sessions.navigateSearchScreen
 import io.github.droidkaigi.confsched.sessions.navigateTimetableScreen
-import io.github.droidkaigi.confsched.sessions.navigateToBookmarkScreen
 import io.github.droidkaigi.confsched.sessions.navigateToTimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
-import io.github.droidkaigi.confsched.sessions.searchScreen
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
@@ -94,16 +80,11 @@ private fun KaigiNavHost(
         mainScreen(windowSize, displayFeatures, navController, externalNavController)
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
-            onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-            onNavigateToBookmarkScreenRequested = navController::navigateToBookmarkScreen,
             onLinkClick = externalNavController::navigate,
             onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
             onShareClick = externalNavController::onShareClick,
         )
-        searchScreen(
-            onNavigationIconClick = navController::popBackStack,
-            onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-        )
+
         // For KMP, we are not using navigation abstraction for contributors screen
         composable(contributorsScreenRoute) {
             val lifecycleOwner = LocalLifecycleOwner.current
@@ -134,9 +115,7 @@ private fun NavGraphBuilder.mainScreen(
         mainNestedGraph = { mainNestedNavController, contentPadding ->
             nestedSessionScreens(
                 modifier = Modifier,
-                onSearchClick = navController::navigateSearchScreen,
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-                onBookmarkIconClick = navController::navigateToBookmarkScreen,
                 contentPadding = contentPadding,
             )
         },

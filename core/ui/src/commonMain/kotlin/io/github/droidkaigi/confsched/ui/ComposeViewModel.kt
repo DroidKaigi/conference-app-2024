@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.coroutines.CoroutineContext
 
-interface ComposeViewModel<Event, Model> {
-    val models: StateFlow<Model>
+interface ComposeViewModel<Event, UiState> {
+    val uiState: StateFlow<UiState>
     fun take(event: Event)
 }
 
@@ -54,7 +54,7 @@ class DefaultComposeViewModel<Event, Model>(
     // small enough to surface issues if they get backed up for some reason.
     private val events = MutableSharedFlow<Event>(extraBufferCapacity = 20)
 
-    override val models: StateFlow<Model> by lazy(LazyThreadSafetyMode.NONE) {
+    override val uiState: StateFlow<Model> by lazy(LazyThreadSafetyMode.NONE) {
         scope.launchMolecule(mode = ContextClock) {
             val errorHandler = object : ComposeEffectErrorHandler {
                 val sharedFlow = MutableSharedFlow<Throwable>(extraBufferCapacity = 20)

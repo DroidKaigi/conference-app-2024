@@ -29,7 +29,6 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetailSectio
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
 import io.github.droidkaigi.confsched.ui.ComposeViewModel
-import io.github.droidkaigi.confsched.ui.DefaultComposeViewModel
 import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import kotlinx.coroutines.flow.Flow
@@ -49,7 +48,7 @@ class TimetableItemDetailViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val viewModelLifecycle: ViewModelLifecycle,
 ) : ViewModel(),
-    ComposeViewModel<TimetableItemDetailEvent, TimetableItemDetailScreenUiState> by DefaultComposeViewModel(
+    ComposeViewModel<TimetableItemDetailEvent, TimetableItemDetailScreenUiState> by ComposeViewModel(
         viewModelLifecycle = viewModelLifecycle,
         userMessageStateHolder = userMessageStateHolder,
         content = { events ->
@@ -94,7 +93,7 @@ fun timetableItemDetailViewModel(
         val sessionDefaultLang = timetableItem?.language
         if (sessionDefaultLang != null) {
             eventEmitter(
-                TimetableItemDetailEvent.SelectDescriptionLanguage(
+                SelectDescriptionLanguage(
                     Lang.valueOf(
                         sessionDefaultLang.langOfSpeaker
                     )

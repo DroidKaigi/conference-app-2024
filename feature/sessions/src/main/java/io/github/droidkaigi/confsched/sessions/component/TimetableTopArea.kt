@@ -1,8 +1,6 @@
 package io.github.droidkaigi.confsched.sessions.component
 
-import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.GridView
 import androidx.compose.material.icons.outlined.ViewTimeline
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,23 +19,15 @@ import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.feature.sessions.R
 import io.github.droidkaigi.confsched.model.TimetableUiType
-import io.github.droidkaigi.confsched.sessions.SessionsStrings.Bookmark
-import io.github.droidkaigi.confsched.sessions.SessionsStrings.Search
 import io.github.droidkaigi.confsched.sessions.SessionsStrings.Timetable
 
-const val SearchButtonTestTag = "SearchButton"
 const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
-const val TimetableBookmarksIconTestTag = "TimetableBookmarksIconTestTag"
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun TimetableTopArea(
     timetableUiType: TimetableUiType,
     onTimetableUiChangeClick: () -> Unit,
-    onSearchClick: () -> Unit,
-    onTopAreaBookmarkIconClick: () -> Unit,
-    onReachAnimationEnd: () -> Unit,
-    onBookmarkClickStatus: Boolean,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
@@ -49,23 +39,6 @@ fun TimetableTopArea(
         },
         modifier = modifier,
         actions = {
-            IconButton(
-                modifier = Modifier.testTag(SearchButtonTestTag),
-                onClick = { onSearchClick() },
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Search,
-                    contentDescription = Search.asString(),
-                )
-            }
-            BookmarkIcon(
-                modifier = Modifier
-                    .testTag(TimetableBookmarksIconTestTag)
-                    .clickable { onTopAreaBookmarkIconClick() },
-                contentDescription = Bookmark.asString(),
-                onBookmarkClickStatus = onBookmarkClickStatus,
-                onReachAnimationEnd = onReachAnimationEnd,
-            )
             IconButton(
                 modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
                 onClick = { onTimetableUiChangeClick() },
@@ -95,10 +68,6 @@ fun TimetableTopAreaPreview() {
             TimetableTopArea(
                 timetableUiType = TimetableUiType.Grid,
                 onTimetableUiChangeClick = {},
-                onSearchClick = {},
-                onTopAreaBookmarkIconClick = {},
-                onReachAnimationEnd = {},
-                onBookmarkClickStatus = false,
             )
         }
     }

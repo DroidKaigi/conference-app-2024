@@ -59,17 +59,13 @@ import kotlin.math.roundToInt
 
 const val timetableScreenRoute = "timetable"
 fun NavGraphBuilder.nestedSessionScreens(
-    onSearchClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
-    onBookmarkIconClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
 ) {
     composable(timetableScreenRoute) {
         TimetableScreen(
-            onSearchClick = onSearchClick,
             onTimetableItemClick = onTimetableItemClick,
-            onBookmarkIconClick = onBookmarkIconClick,
             contentPadding = contentPadding,
             modifier = modifier,
         )
@@ -90,9 +86,7 @@ const val TimetableScreenTestTag = "TimetableScreen"
 
 @Composable
 fun TimetableScreen(
-    onSearchClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
-    onBookmarkIconClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: TimetableScreenViewModel = hiltViewModel(),
@@ -108,11 +102,12 @@ fun TimetableScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         onTimetableItemClick = onTimetableItemClick,
-        onBookmarkClick = viewModel::onBookmarkClick,
-        onBookmarkIconClick = onBookmarkIconClick,
-        onSearchClick = onSearchClick,
-        onTimetableUiChangeClick = viewModel::onUiTypeChange,
-        onReachAnimationEnd = viewModel::onReachAnimationEnd,
+        onBookmarkClick = { item, bookmarked ->
+            viewModel.take(TimetableScreenEvent.Bookmark(item, bookmarked))
+        },
+        onTimetableUiChangeClick = {
+            viewModel.take(TimetableScreenEvent.UiTypeChange)
+        },
         contentPadding = contentPadding,
         modifier = modifier,
     )
@@ -152,10 +147,7 @@ private fun TimetableScreen(
     snackbarHostState: SnackbarHostState,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
-    onBookmarkIconClick: () -> Unit,
-    onSearchClick: () -> Unit,
     onTimetableUiChangeClick: () -> Unit,
-    onReachAnimationEnd: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
@@ -194,10 +186,6 @@ private fun TimetableScreen(
             TimetableTopArea(
                 timetableUiType = uiState.timetableUiType,
                 onTimetableUiChangeClick = onTimetableUiChangeClick,
-                onSearchClick = onSearchClick,
-                onTopAreaBookmarkIconClick = onBookmarkIconClick,
-                onBookmarkClickStatus = uiState.onBookmarkIconClickStatus,
-                onReachAnimationEnd = onReachAnimationEnd,
             )
         },
         contentWindowInsets = WindowInsets(
@@ -274,10 +262,7 @@ fun PreviewTimetableScreenDark() {
                 snackbarHostState = SnackbarHostState(),
                 onTimetableItemClick = {},
                 onBookmarkClick = { _, _ -> },
-                onBookmarkIconClick = {},
-                onSearchClick = {},
                 onTimetableUiChangeClick = {},
-                onReachAnimationEnd = {},
                 modifier = Modifier.statusBarsPadding(),
             )
         }

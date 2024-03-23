@@ -63,7 +63,7 @@ public class DefaultSessionsRepository(
     }
 
     @Composable
-    public fun timetable(): Timetable {
+    public override fun timetable(): Timetable {
         var first by remember { mutableStateOf(true) }
         SafeLaunchedEffect(first) {
             if (first) {
