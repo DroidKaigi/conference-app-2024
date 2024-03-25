@@ -53,7 +53,6 @@ import java.lang.Integer.max
 const val TimetableListItemTestTag = "TimetableListItem"
 const val TimetableListItemBookmarkIconTestTag = "TimetableListItemBookmarkIconTestTag"
 
-
 data class SearchQuery(val queryText: String) {
     val hasQuery get() = queryText.isNotBlank()
 

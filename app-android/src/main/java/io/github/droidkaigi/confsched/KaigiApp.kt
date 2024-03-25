@@ -29,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.DisplayFeature
 import co.touchlab.kermit.Logger
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import io.github.droidkaigi.confsched.contributors.AndroidContributorsViewModel
 import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -82,14 +83,18 @@ private fun KaigiNavHost(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
             onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
-            onShareClick = externalNavController::onShareClick,
+            // For debug
+//            onShareClick = externalNavController::onShareClick,
+            onShareClick = {
+                navController.navigate(contributorsScreenRoute)
+            },
         )
 
         // For KMP, we are not using navigation abstraction for contributors screen
         composable(contributorsScreenRoute) {
             val lifecycleOwner = LocalLifecycleOwner.current
             ContributorsScreen(
-                viewModel = hiltViewModel(),
+                viewModel = hiltViewModel<AndroidContributorsViewModel>(),
                 onNavigationIconClick = {
                     handleOnClickIfNotNavigating(
                         lifecycleOwner,

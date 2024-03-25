@@ -27,12 +27,12 @@ class KmpComposePlugin : Plugin<Project> {
                             implementation(compose.dependencies.material3)
                             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                             implementation(compose.dependencies.components.resources)
+                            implementation(libs.library("androidxLifecycleViewModel"))
                         }
                     }
                     getByName("androidMain").apply {
                         dependencies {
                             implementation(libs.library("androidxActivityActivityCompose"))
-                            implementation(libs.library("androidxLifecycleLifecycleRuntimeKtx"))
                             implementation(libs.library("composeUiToolingPreview"))
                         }
                     }
