@@ -18,8 +18,6 @@ import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableScreen
 import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
-import io.github.droidkaigi.confsched.sessions.component.SearchButtonTestTag
-import io.github.droidkaigi.confsched.sessions.component.TimetableBookmarksIconTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableListItemBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableListItemTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableUiTypeChangeButtonTestTag
@@ -56,9 +54,7 @@ class TimetableScreenRobot @Inject constructor(
             CompositionLocalProvider(LocalClock provides FakeClock) {
                 KaigiTheme {
                     TimetableScreen(
-                        onSearchClick = { },
                         onTimetableItemClick = { },
-                        onBookmarkIconClick = { },
                     )
                 }
             }
@@ -96,21 +92,9 @@ class TimetableScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun clickSearchButton() {
-        composeTestRule
-            .onNode(hasTestTag(SearchButtonTestTag))
-            .performClick()
-    }
-
     fun clickTimetableUiTypeChangeButton() {
         composeTestRule
             .onNode(hasTestTag(TimetableUiTypeChangeButtonTestTag))
-            .performClick()
-    }
-
-    fun clickBookmarkButton() {
-        composeTestRule
-            .onNode(hasTestTag(TimetableBookmarksIconTestTag))
             .performClick()
     }
 

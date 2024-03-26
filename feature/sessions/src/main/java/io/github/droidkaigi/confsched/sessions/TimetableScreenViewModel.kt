@@ -7,7 +7,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.ViewModelLifecycle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
@@ -20,6 +19,7 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
 import io.github.droidkaigi.confsched.ui.ComposeViewModel
+import io.github.droidkaigi.confsched.ui.KmpViewModelLifecycle
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.Flow
@@ -36,7 +36,7 @@ sealed interface TimetableScreenEvent {
 class TimetableScreenViewModel @Inject constructor(
     private val sessionsRepository: SessionsRepository,
     val userMessageStateHolder: UserMessageStateHolder,
-    private val viewModelLifecycle: ViewModelLifecycle,
+    private val viewModelLifecycle: KmpViewModelLifecycle,
 ) : ViewModel(),
     ComposeViewModel<TimetableScreenEvent, TimetableScreenUiState> by ComposeViewModel(
         viewModelLifecycle = viewModelLifecycle,
@@ -48,8 +48,7 @@ class TimetableScreenViewModel @Inject constructor(
                 sessionsRepository = sessionsRepository,
             )
         },
-    ),
-    UserMessageStateHolder by userMessageStateHolder
+    )
 
 @Composable
 fun timetableScreenViewModel(

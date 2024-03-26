@@ -35,7 +35,7 @@ data class ContributorsUiState(val contributors: PersistentList<Contributor>)
 
 @Composable
 fun ContributorsScreen(
-    viewModel: ContributorsViewModel,
+    viewModel: ContributorsScreenViewModel,
     isTopAppBarHidden: Boolean = false,
     onNavigationIconClick: () -> Unit,
     onContributorItemClick: (url: String) -> Unit,

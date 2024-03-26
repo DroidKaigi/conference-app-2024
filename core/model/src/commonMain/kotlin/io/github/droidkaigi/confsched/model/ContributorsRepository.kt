@@ -1,10 +1,12 @@
 package io.github.droidkaigi.confsched.model
 
+import androidx.compose.runtime.Composable
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.coroutines.flow.Flow
 
 interface ContributorsRepository {
 
-    fun contributors(): Flow<PersistentList<Contributor>>
     suspend fun refresh()
+
+    @Composable
+    fun contributors(): PersistentList<Contributor>
 }

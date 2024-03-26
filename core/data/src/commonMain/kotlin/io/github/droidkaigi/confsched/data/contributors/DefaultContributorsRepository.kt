@@ -1,5 +1,9 @@
 package io.github.droidkaigi.confsched.data.contributors
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.safeCollectAsState
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.model.ContributorsRepository
 import kotlinx.collections.immutable.PersistentList
@@ -15,12 +19,15 @@ public class DefaultContributorsRepository(
     private val contributorsStateFlow =
         MutableStateFlow<PersistentList<Contributor>>(persistentListOf())
 
-    override fun contributors(): Flow<PersistentList<Contributor>> {
-        return contributorsStateFlow.onStart {
-            if (contributorsStateFlow.value.isEmpty()) {
+    @Composable
+    override fun contributors(): PersistentList<Contributor> {
+        val contributors by contributorsStateFlow.safeCollectAsState()
+        SafeLaunchedEffect(contributors) {
+            if (contributors.isEmpty()) {
                 refresh()
             }
         }
+        return contributorsStateFlow.value
     }
 
     override suspend fun refresh() {

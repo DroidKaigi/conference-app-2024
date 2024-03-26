@@ -7,6 +7,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.staticCompositionLocalOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -52,4 +53,11 @@ fun <T : R, R> Flow<T>.safeCollectAsState(
             composeEffectErrorHandler.emit(e)
         }
     }
+}
+
+@Composable
+fun <T : R, R> StateFlow<T>.safeCollectAsState(
+    context: CoroutineContext = EmptyCoroutineContext,
+): State<R> {
+    return safeCollectAsState(value, context)
 }

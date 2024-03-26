@@ -47,7 +47,6 @@ class TimetableItemDetailScreenRobot @Inject constructor(
                     onLinkClick = { },
                     onCalendarRegistrationClick = { },
                     onShareClick = { },
-                    onNavigateToBookmarkScreenRequested = { },
                 )
             }
         }

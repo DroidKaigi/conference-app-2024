@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.coroutines.CoroutineContext
 
-interface ComposeViewModel<Event, UiState> {
+interface ComposeViewModel<Event, UiState> : UserMessageStateHolder {
     val uiState: StateFlow<UiState>
     fun take(event: Event)
 }
@@ -41,7 +41,8 @@ class DefaultComposeViewModel<Event, Model>(
     val userMessageStateHolder: UserMessageStateHolder,
     val content: @Composable ComposeViewModel<Event, Model>.(Flow<Event>) -> Model,
 ) :
-    ComposeViewModel<Event, Model> {
+    ComposeViewModel<Event, Model>,
+    UserMessageStateHolder by userMessageStateHolder {
     private val scope = CoroutineScope(composeCoroutineContext)
 
     init {

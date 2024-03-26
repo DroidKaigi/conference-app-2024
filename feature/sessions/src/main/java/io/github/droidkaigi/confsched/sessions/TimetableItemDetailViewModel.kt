@@ -11,7 +11,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.ViewModelLifecycle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.SessionsRepository
@@ -29,6 +28,7 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetailSectio
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
 import io.github.droidkaigi.confsched.ui.ComposeViewModel
+import io.github.droidkaigi.confsched.ui.KmpViewModelLifecycle
 import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import kotlinx.coroutines.flow.Flow
@@ -46,7 +46,7 @@ class TimetableItemDetailViewModel @Inject constructor(
     private val sessionsRepository: SessionsRepository,
     val userMessageStateHolder: UserMessageStateHolder,
     private val savedStateHandle: SavedStateHandle,
-    private val viewModelLifecycle: ViewModelLifecycle,
+    private val viewModelLifecycle: KmpViewModelLifecycle,
 ) : ViewModel(),
     ComposeViewModel<TimetableItemDetailEvent, TimetableItemDetailScreenUiState> by ComposeViewModel(
         viewModelLifecycle = viewModelLifecycle,
@@ -63,8 +63,7 @@ class TimetableItemDetailViewModel @Inject constructor(
                 ),
             )
         },
-    ),
-    UserMessageStateHolder by userMessageStateHolder
+    )
 
 @Composable
 fun timetableItemDetailViewModel(
