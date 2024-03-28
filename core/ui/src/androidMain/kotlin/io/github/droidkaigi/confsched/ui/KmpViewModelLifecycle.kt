@@ -1,6 +1,9 @@
 package io.github.droidkaigi.confsched.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ExperimentalComposeApi
+import androidx.compose.runtime.PausableMonotonicFrameClock
+import androidx.compose.runtime.monotonicFrameClock
 import androidx.compose.ui.platform.AndroidUiDispatcher
 import dagger.Module
 import dagger.Provides
@@ -20,17 +23,16 @@ class KmpViewModelLifecycleModule {
     }
 }
 
+@OptIn(ExperimentalComposeApi::class)
 fun <Event : Any, UiState : Any> ComposeViewModel(
     viewModelLifecycle: KmpViewModelLifecycle,
-    userMessageStateHolder: UserMessageStateHolder,
     content: @Composable ComposeViewModel<Event, UiState>.(Flow<Event>) -> UiState,
 ): ComposeViewModel<Event, UiState> {
     val kmpViewModelLifecycle = KmpViewModelLifecycle()
     viewModelLifecycle.addOnClearedListener { kmpViewModelLifecycle.onCleared() }
     return DefaultComposeViewModel(
         viewModelLifecycle = kmpViewModelLifecycle,
-        composeCoroutineContext = AndroidUiDispatcher.Main,
-        userMessageStateHolder = userMessageStateHolder,
+        composeCoroutineContext = AndroidUiDispatcher.Main + PausableMonotonicFrameClock(AndroidUiDispatcher.Main.monotonicFrameClock),
         content = content,
     )
 }

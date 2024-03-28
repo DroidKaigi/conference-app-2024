@@ -101,6 +101,7 @@ private fun KaigiNavHost(
                         navController::popBackStack,
                     )
                 },
+                lifecycle = LocalLifecycleOwner.current.lifecycle,
                 onContributorItemClick = externalNavController::navigate,
             )
         }

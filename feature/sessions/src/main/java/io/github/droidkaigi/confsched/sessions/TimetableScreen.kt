@@ -17,6 +17,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +33,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -52,6 +54,7 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheet
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.toPersistentMap
@@ -91,12 +94,16 @@ fun TimetableScreen(
     contentPadding: PaddingValues = PaddingValues(),
     viewModel: TimetableScreenViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.activeLifecycleWhile(lifecycleOwner.lifecycle)
+    }
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = viewModel.userMessageStateHolder,
+        userMessageStateHolder = viewModel as UserMessageStateHolder,
     )
     TimetableScreen(
         uiState = uiState,

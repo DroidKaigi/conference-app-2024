@@ -35,16 +35,14 @@ sealed interface TimetableScreenEvent {
 @HiltViewModel
 class TimetableScreenViewModel @Inject constructor(
     private val sessionsRepository: SessionsRepository,
-    val userMessageStateHolder: UserMessageStateHolder,
     private val viewModelLifecycle: KmpViewModelLifecycle,
 ) : ViewModel(),
     ComposeViewModel<TimetableScreenEvent, TimetableScreenUiState> by ComposeViewModel(
         viewModelLifecycle = viewModelLifecycle,
-        userMessageStateHolder = userMessageStateHolder,
         content = { events ->
             timetableScreenViewModel(
                 events = events,
-                userMessageStateHolder = userMessageStateHolder,
+                userMessageStateHolder = this,
                 sessionsRepository = sessionsRepository,
             )
         },

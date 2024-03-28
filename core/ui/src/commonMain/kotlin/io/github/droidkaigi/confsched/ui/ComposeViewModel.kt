@@ -1,11 +1,18 @@
 package io.github.droidkaigi.confsched.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ExperimentalComposeApi
 import androidx.compose.runtime.InternalComposeApi
+import androidx.compose.runtime.PausableMonotonicFrameClock
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.monotonicFrameClock
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleOwner
 import app.cash.molecule.RecompositionMode.ContextClock
 import app.cash.molecule.launchMolecule
+import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.ComposeEffectErrorHandler
 import io.github.droidkaigi.confsched.compose.LocalComposeEffectErrorHandler
 import kotlinx.coroutines.CoroutineScope
@@ -18,6 +25,8 @@ import kotlin.coroutines.CoroutineContext
 interface ComposeViewModel<Event, UiState> : UserMessageStateHolder {
     val uiState: StateFlow<UiState>
     fun take(event: Event)
+
+    fun activeLifecycleWhile(lifecycle: Lifecycle)
 }
 
 class KmpViewModelLifecycle {
@@ -37,12 +46,11 @@ class KmpViewModelLifecycle {
 
 class DefaultComposeViewModel<Event, Model>(
     viewModelLifecycle: KmpViewModelLifecycle,
-    composeCoroutineContext: CoroutineContext,
-    val userMessageStateHolder: UserMessageStateHolder,
+    val composeCoroutineContext: CoroutineContext,
     val content: @Composable ComposeViewModel<Event, Model>.(Flow<Event>) -> Model,
 ) :
     ComposeViewModel<Event, Model>,
-    UserMessageStateHolder by userMessageStateHolder {
+    UserMessageStateHolder by UserMessageStateHolderImpl() {
     private val scope = CoroutineScope(composeCoroutineContext)
 
     init {
@@ -72,6 +80,28 @@ class DefaultComposeViewModel<Event, Model>(
                 content(events)
             }
         }
+    }
+    @OptIn(ExperimentalComposeApi::class) private val lifecycleObserver =
+        object : DefaultLifecycleObserver {
+            override fun onStart(owner: LifecycleOwner) {
+                super.onStart(owner)
+                (composeCoroutineContext.monotonicFrameClock as PausableMonotonicFrameClock).resume()
+                // can be called multiple times
+                Logger.d { "$this:start $owner" }
+            }
+
+            override fun onStop(owner: LifecycleOwner) {
+                super.onStop(owner)
+                (composeCoroutineContext.monotonicFrameClock as PausableMonotonicFrameClock).pause()
+                Logger.d { "$this:stop $owner" }
+            }
+        }
+
+    private var currentLifecycle: Lifecycle? = null
+    override fun activeLifecycleWhile(lifecycle: Lifecycle) {
+        currentLifecycle?.removeObserver(lifecycleObserver)
+        lifecycle.addObserver(lifecycleObserver)
+        currentLifecycle = lifecycle
     }
 
     @Composable

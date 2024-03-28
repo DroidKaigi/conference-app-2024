@@ -22,7 +22,7 @@ public class DefaultContributorsRepository(
     @Composable
     override fun contributors(): PersistentList<Contributor> {
         val contributors by contributorsStateFlow.safeCollectAsState()
-        SafeLaunchedEffect(contributors) {
+        SafeLaunchedEffect(Unit) {
             if (contributors.isEmpty()) {
                 refresh()
             }

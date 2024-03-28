@@ -13,6 +13,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -39,6 +41,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailScre
 import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetail
 import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetailSectionUiState
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val timetableItemDetailScreenRoute =
@@ -79,12 +82,16 @@ fun TimetableItemDetailScreen(
     onShareClick: (TimetableItem) -> Unit,
     viewModel: TimetableItemDetailViewModel = hiltViewModel(),
 ) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.activeLifecycleWhile(lifecycleOwner.lifecycle)
+    }
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = viewModel.userMessageStateHolder,
+        userMessageStateHolder = viewModel as UserMessageStateHolder,
     )
 
     TimetableItemDetailScreen(

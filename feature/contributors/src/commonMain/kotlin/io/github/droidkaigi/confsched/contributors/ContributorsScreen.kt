@@ -17,15 +17,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
+import androidx.lifecycle.Lifecycle
 import io.github.droidkaigi.confsched.contributors.component.ContributorListItem
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 
 const val contributorsScreenRoute = "contributors"
@@ -36,16 +39,20 @@ data class ContributorsUiState(val contributors: PersistentList<Contributor>)
 @Composable
 fun ContributorsScreen(
     viewModel: ContributorsScreenViewModel,
+    lifecycle:Lifecycle,
     isTopAppBarHidden: Boolean = false,
     onNavigationIconClick: () -> Unit,
     onContributorItemClick: (url: String) -> Unit,
 ) {
+    LaunchedEffect(lifecycle) {
+        viewModel.activeLifecycleWhile(lifecycle)
+    }
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = viewModel.userMessageStateHolder,
+        userMessageStateHolder = viewModel as UserMessageStateHolder,
     )
     ContributorsScreen(
         uiState = uiState,

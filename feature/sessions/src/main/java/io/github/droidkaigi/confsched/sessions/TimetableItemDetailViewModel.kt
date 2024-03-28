@@ -44,18 +44,16 @@ sealed interface TimetableItemDetailEvent {
 @HiltViewModel
 class TimetableItemDetailViewModel @Inject constructor(
     private val sessionsRepository: SessionsRepository,
-    val userMessageStateHolder: UserMessageStateHolder,
     private val savedStateHandle: SavedStateHandle,
     private val viewModelLifecycle: KmpViewModelLifecycle,
 ) : ViewModel(),
     ComposeViewModel<TimetableItemDetailEvent, TimetableItemDetailScreenUiState> by ComposeViewModel(
         viewModelLifecycle = viewModelLifecycle,
-        userMessageStateHolder = userMessageStateHolder,
         content = { events ->
             timetableItemDetailViewModel(
                 events = events,
                 eventEmitter = { take(it) },
-                userMessageStateHolder = userMessageStateHolder,
+                userMessageStateHolder = this,
                 sessionsRepository = sessionsRepository,
                 sessionIdFlow = savedStateHandle.getStateFlow(
                     timetableItemDetailScreenRouteItemIdParameterName,

@@ -19,18 +19,16 @@ sealed interface ContributorsScreenEvent {
 
 open class ContributorsScreenViewModel(
     private val contributorsRepository: ContributorsRepository,
-    val userMessageStateHolder: UserMessageStateHolder,
     composeCoroutineContext:CoroutineContext,
     private val viewModelLifecycle: KmpViewModelLifecycle,
 ) : ViewModel(),
     ComposeViewModel<ContributorsScreenEvent, ContributorsUiState> by DefaultComposeViewModel(
         viewModelLifecycle = viewModelLifecycle,
         composeCoroutineContext = composeCoroutineContext,
-        userMessageStateHolder = userMessageStateHolder,
         content = { events ->
             contributorsScreenViewModel(
                 events = events,
-                userMessageStateHolder = userMessageStateHolder,
+                userMessageStateHolder = this,
                 contributorsRepository = contributorsRepository,
             )
         },
