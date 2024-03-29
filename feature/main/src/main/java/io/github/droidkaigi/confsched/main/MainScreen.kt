@@ -27,11 +27,13 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -47,6 +49,7 @@ import io.github.droidkaigi.confsched.main.component.KaigiBottomBar
 import io.github.droidkaigi.confsched.main.component.KaigiNavigationRail
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -88,6 +91,10 @@ fun MainScreen(
     viewModel: MainScreenViewModel = hiltViewModel(),
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
 ) {
+    val lifecycle = LocalLifecycleOwner.current
+    LaunchedEffect(lifecycle.lifecycle) {
+        viewModel.activeLifecycleWhile(lifecycle.lifecycle)
+    }
     val uiState by viewModel.uiState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -100,7 +107,7 @@ fun MainScreen(
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = viewModel.userMessageStateHolder,
+        userMessageStateHolder = viewModel as UserMessageStateHolder,
     )
     MainScreen(
         uiState = uiState,

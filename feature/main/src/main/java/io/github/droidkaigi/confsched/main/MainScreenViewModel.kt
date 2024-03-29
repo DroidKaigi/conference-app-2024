@@ -1,40 +1,46 @@
 package io.github.droidkaigi.confsched.main
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import io.github.droidkaigi.confsched.compose.safeCollectAsState
 import io.github.droidkaigi.confsched.data.contributors.AchievementRepository
-import io.github.droidkaigi.confsched.designsystem.strings.AppStrings
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.buildUiState
-import io.github.droidkaigi.confsched.ui.handleErrorAndRetry
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.stateIn
+import io.github.droidkaigi.confsched.ui.ComposeViewModel
+import io.github.droidkaigi.confsched.ui.KmpViewModelLifecycle
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+
+sealed interface MainScreenEvent {}
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    val userMessageStateHolder: UserMessageStateHolder,
-    achievementRepository: AchievementRepository,
+    private val achievementRepository: AchievementRepository,
+    private val savedStateHandle: SavedStateHandle,
+    private val viewModelLifecycle: KmpViewModelLifecycle,
 ) : ViewModel(),
-    UserMessageStateHolder by userMessageStateHolder {
-    private val isAchievementsEnabledStateFlow: StateFlow<Boolean> = achievementRepository.getAchievementEnabledStream()
-        .handleErrorAndRetry(
-            AppStrings.Retry,
-            userMessageStateHolder,
-        )
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = false,
-        )
+    ComposeViewModel<MainScreenEvent, MainScreenUiState> by ComposeViewModel(
+        viewModelLifecycle = viewModelLifecycle,
+        content = { events ->
+            mainScreenViewModel(
+                events = events,
+                achievementRepository = achievementRepository,
+            )
+        },
+    )
 
-    val uiState: StateFlow<MainScreenUiState> = buildUiState(
-        isAchievementsEnabledStateFlow,
-    ) { isAchievementsEnabled ->
-        MainScreenUiState(
-            isAchievementsEnabled = isAchievementsEnabled,
+@Composable
+fun mainScreenViewModel(
+    events: Flow<MainScreenEvent>,
+    achievementRepository: AchievementRepository,
+): MainScreenUiState {
+    val isAchievementsEnabled: Boolean by achievementRepository
+        .getAchievementEnabledStream()
+        .safeCollectAsState(
+            initial = false
         )
-    }
+    return MainScreenUiState(
+        isAchievementsEnabled = isAchievementsEnabled,
+    )
 }
