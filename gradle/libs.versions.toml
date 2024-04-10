@@ -13,7 +13,7 @@ composeJb = "1.6.0"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
 composeHiltNavigatiaon = "1.2.0"
-androidxLifecycle = "2.8.0-alpha03"
+androidxLifecycle = "2.8.0-alpha04"
 androidxActivity = "1.8.2"
 androidxFragment = "1.6.1"
 androidxSplashScreen = "1.0.1"
@@ -113,6 +113,7 @@ androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCo
 androidxAppCompat = { module = "androidx.appcompat:appcompat", version = "1.7.0-alpha03" }
 androidxLifecycleLifecycleRuntimeKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
 androidxLifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidxLifecycle" }
+androidxLifecycleViewModelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "0.0.0-SNAPSHOT" }
 androidxLifecycleCommon = { module = "androidx.lifecycle:lifecycle-common", version.ref = "androidxLifecycle" }
 androidxActivityActivityCompose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidxDatastoreDatastorePreferences = { module = "androidx.datastore:datastore-preferences-core", version = "1.1.0-alpha04" }

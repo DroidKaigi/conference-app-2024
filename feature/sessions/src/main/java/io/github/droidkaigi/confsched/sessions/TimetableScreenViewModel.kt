@@ -15,6 +15,7 @@ import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
+import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
@@ -52,7 +53,7 @@ class TimetableScreenViewModel @Inject constructor(
 fun timetableScreenViewModel(
     events: Flow<TimetableScreenEvent>,
     userMessageStateHolder: UserMessageStateHolder,
-    sessionsRepository: SessionsRepository,
+    sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState {
     val sessions by rememberUpdatedState(sessionsRepository.timetable())
     var timetableUiType by remember { mutableStateOf(TimetableUiType.List) }

@@ -28,6 +28,7 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.RememberObserver
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -42,6 +43,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.DisplayFeature
+import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.feature.main.R
 import io.github.droidkaigi.confsched.main.NavigationType.BOTTOM_NAVIGATION
 import io.github.droidkaigi.confsched.main.NavigationType.NAVIGATION_RAIL
@@ -50,9 +52,13 @@ import io.github.droidkaigi.confsched.main.component.KaigiNavigationRail
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
+import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 const val mainScreenRoute = "main"
 const val MainScreenTestTag = "MainScreen"
@@ -88,14 +94,11 @@ fun MainScreen(
     windowSize: WindowSizeClass,
     displayFeatures: ImmutableList<DisplayFeature>,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
-    viewModel: MainScreenViewModel = hiltViewModel(),
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
 ) {
-    val lifecycle = LocalLifecycleOwner.current
-    LaunchedEffect(lifecycle.lifecycle) {
-        viewModel.activeLifecycleWhile(lifecycle.lifecycle)
-    }
-    val uiState by viewModel.uiState.collectAsState()
+    val eventEmitter = rememberEventEmitter<MainScreenEvent>()
+    val userMessageStateHolder = rememberUserMessageStateHolder()
+    val uiState = mainScreenViewModel(eventEmitter)
     val snackbarHostState = remember { SnackbarHostState() }
 
     val navigationType: NavigationType = when (windowSize.widthSizeClass) {
@@ -107,7 +110,7 @@ fun MainScreen(
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = viewModel as UserMessageStateHolder,
+        userMessageStateHolder = userMessageStateHolder,
     )
     MainScreen(
         uiState = uiState,

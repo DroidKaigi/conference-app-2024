@@ -1,6 +1,6 @@
 package io.github.droidkaigi.confsched.data.achievements
 
-import io.github.droidkaigi.confsched.data.contributors.AchievementRepository
+import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.data.remoteconfig.RemoteConfigApi
 import io.github.droidkaigi.confsched.model.Achievement
 import kotlinx.collections.immutable.PersistentSet

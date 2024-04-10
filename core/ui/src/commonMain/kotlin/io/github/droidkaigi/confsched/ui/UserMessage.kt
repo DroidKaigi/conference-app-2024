@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import co.touchlab.kermit.Logger
+import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -121,6 +122,10 @@ class UserMessageStateHolderImpl : UserMessageStateHolder {
         Logger.d { "UserMessageStateHolderImpl.showMessage end _messageUiState:$_messageUiState" }
         return messageResult
     }
+}
+
+@Composable fun rememberUserMessageStateHolder(): UserMessageStateHolder {
+    return rememberRetained { UserMessageStateHolderImpl() }
 }
 
 interface UserMessageStateHolder {

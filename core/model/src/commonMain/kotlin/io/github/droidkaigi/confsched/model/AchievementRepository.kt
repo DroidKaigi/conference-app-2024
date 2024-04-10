@@ -1,6 +1,7 @@
-package io.github.droidkaigi.confsched.data.contributors
+package io.github.droidkaigi.confsched.model
 
-import io.github.droidkaigi.confsched.model.Achievement
+import androidx.compose.runtime.Composable
+import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.coroutines.flow.Flow
 
@@ -13,4 +14,9 @@ interface AchievementRepository {
     suspend fun saveAchievements(achievement: Achievement)
     suspend fun resetAchievements()
     suspend fun displayedInitialDialog()
+}
+
+@Composable
+fun localAchievementRepository(): AchievementRepository {
+    return LocalRepositories.current[AchievementRepository::class] as AchievementRepository
 }

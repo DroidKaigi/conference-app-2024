@@ -14,6 +14,7 @@ import app.cash.molecule.RecompositionMode.ContextClock
 import app.cash.molecule.launchMolecule
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.ComposeEffectErrorHandler
+import io.github.droidkaigi.confsched.compose.CompositionLocalProviderWithReturnValue
 import io.github.droidkaigi.confsched.compose.LocalComposeEffectErrorHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -66,12 +67,7 @@ class DefaultComposeViewModel<Event, Model>(
     override val uiState: StateFlow<Model> by lazy(LazyThreadSafetyMode.NONE) {
         scope.launchMolecule(mode = ContextClock) {
             val errorHandler = object : ComposeEffectErrorHandler {
-                val sharedFlow = MutableSharedFlow<Throwable>(extraBufferCapacity = 20)
-                override val errors: Flow<Throwable> = sharedFlow
-
                 override suspend fun emit(throwable: Throwable) {
-                    throwable.printStackTrace()
-                    sharedFlow.emit(throwable)
                 }
             }
             return@launchMolecule CompositionLocalProviderWithReturnValue<Model>(
@@ -102,18 +98,6 @@ class DefaultComposeViewModel<Event, Model>(
         currentLifecycle?.removeObserver(lifecycleObserver)
         lifecycle.addObserver(lifecycleObserver)
         currentLifecycle = lifecycle
-    }
-
-    @Composable
-    @OptIn(InternalComposeApi::class)
-    fun <T> CompositionLocalProviderWithReturnValue(
-        value: ProvidedValue<*>,
-        content: @Composable () -> T,
-    ): T {
-        currentComposer.startProvider(value)
-        val result = content()
-        currentComposer.endProvider()
-        return result
     }
 
     override fun take(event: Event) {

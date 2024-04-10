@@ -1,5 +1,10 @@
 package io.github.droidkaigi.confsched.ui
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import io.github.droidkaigi.confsched.compose.ComposeEffectErrorHandler
+import io.github.droidkaigi.confsched.compose.CompositionLocalProviderWithReturnValue
+import io.github.droidkaigi.confsched.compose.LocalComposeEffectErrorHandler
 import io.github.droidkaigi.confsched.designsystem.strings.Strings
 import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import kotlinx.coroutines.flow.Flow
@@ -21,3 +26,24 @@ fun <T> Flow<T>.handleErrorAndRetry(
 
     retryPerformed
 }.catch { /* Do nothing if the user dose not retry. */ }
+
+@Composable
+fun <T> applicationErrorHandler(
+    userMessageStateHolder: UserMessageStateHolder,
+    block: @Composable () -> T,
+): T {
+    val handler = remember(userMessageStateHolder) {
+        object : ComposeEffectErrorHandler {
+            override suspend fun emit(throwable: Throwable) {
+                val a = throwable.toApplicationErrorMessage()
+                userMessageStateHolder.showMessage(
+                    message = a,
+                    actionLabel = null,
+                )
+            }
+        }
+    }
+    return CompositionLocalProviderWithReturnValue(LocalComposeEffectErrorHandler provides handler) {
+        block()
+    }
+}

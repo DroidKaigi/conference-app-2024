@@ -20,7 +20,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -29,7 +28,6 @@ import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.DisplayFeature
 import co.touchlab.kermit.Logger
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import io.github.droidkaigi.confsched.contributors.AndroidContributorsViewModel
 import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -94,7 +92,6 @@ private fun KaigiNavHost(
         composable(contributorsScreenRoute) {
             val lifecycleOwner = LocalLifecycleOwner.current
             ContributorsScreen(
-                viewModel = hiltViewModel<AndroidContributorsViewModel>(),
                 onNavigationIconClick = {
                     handleOnClickIfNotNavigating(
                         lifecycleOwner,

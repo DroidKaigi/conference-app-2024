@@ -6,7 +6,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.droidkaigi.confsched.compose.safeCollectAsState
-import io.github.droidkaigi.confsched.data.contributors.AchievementRepository
+import io.github.droidkaigi.confsched.model.AchievementRepository
+import io.github.droidkaigi.confsched.model.localAchievementRepository
 import io.github.droidkaigi.confsched.ui.ComposeViewModel
 import io.github.droidkaigi.confsched.ui.KmpViewModelLifecycle
 import kotlinx.coroutines.flow.Flow
@@ -33,7 +34,7 @@ class MainScreenViewModel @Inject constructor(
 @Composable
 fun mainScreenViewModel(
     events: Flow<MainScreenEvent>,
-    achievementRepository: AchievementRepository,
+    achievementRepository: AchievementRepository = localAchievementRepository(),
 ): MainScreenUiState {
     val isAchievementsEnabled: Boolean by achievementRepository
         .getAchievementEnabledStream()

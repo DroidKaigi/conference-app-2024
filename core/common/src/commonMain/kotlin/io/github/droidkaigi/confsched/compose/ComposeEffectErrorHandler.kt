@@ -1,10 +1,13 @@
 package io.github.droidkaigi.confsched.compose
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.State
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.staticCompositionLocalOf
+import io.github.takahirom.rin.produceRetainedState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,13 +15,27 @@ import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
+@Composable
+@OptIn(InternalComposeApi::class)
+fun <T> CompositionLocalProviderWithReturnValue(
+    value: ProvidedValue<*>,
+    content: @Composable () -> T,
+): T {
+    currentComposer.startProvider(value)
+    val result = content()
+    currentComposer.endProvider()
+    return result
+}
+
 interface ComposeEffectErrorHandler {
-    val errors: Flow<Throwable>
     suspend fun emit(throwable: Throwable)
 }
 
 val LocalComposeEffectErrorHandler = staticCompositionLocalOf<ComposeEffectErrorHandler> {
-    error("CompositionLocal Error not present")
+    object : ComposeEffectErrorHandler {
+        override suspend fun emit(throwable: Throwable) {
+        }
+    }
 }
 
 @Composable
@@ -40,7 +57,7 @@ fun <T : R, R> Flow<T>.safeCollectAsState(
 ): State<R> {
     val composeEffectErrorHandler = LocalComposeEffectErrorHandler.current
     // See collectAsState
-    return produceState(initial, this, context) {
+    return produceRetainedState(initial, this, context) {
         try {
             if (context == EmptyCoroutineContext) {
                 collect { value = it as R }

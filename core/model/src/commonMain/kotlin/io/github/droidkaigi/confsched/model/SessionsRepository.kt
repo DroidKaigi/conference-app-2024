@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.model
 
 import androidx.compose.runtime.Composable
+import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import kotlinx.coroutines.flow.Flow
 
 interface SessionsRepository {
@@ -13,4 +14,9 @@ interface SessionsRepository {
     @Composable
     fun timetableItemWithBookmark(id: TimetableItemId): Pair<TimetableItem, Boolean>?
     suspend fun toggleBookmark(id: TimetableItemId)
+}
+
+@Composable
+fun localSessionsRepository(): SessionsRepository {
+    return LocalRepositories.current[SessionsRepository::class] as SessionsRepository
 }

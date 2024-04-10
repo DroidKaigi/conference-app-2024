@@ -5,7 +5,7 @@ import io.github.droidkaigi.confsched.data.achievements.AchievementsDataStore
 import io.github.droidkaigi.confsched.data.achievements.DefaultAchievementRepository
 import io.github.droidkaigi.confsched.data.auth.AuthApi
 import io.github.droidkaigi.confsched.data.auth.DefaultAuthApi
-import io.github.droidkaigi.confsched.data.contributors.AchievementRepository
+import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsRepository

@@ -13,19 +13,16 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.component.LoadingText
 import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
 import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
@@ -41,7 +38,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailScre
 import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetail
 import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetailSectionUiState
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val timetableItemDetailScreenRoute =
@@ -80,31 +77,32 @@ fun TimetableItemDetailScreen(
     onLinkClick: (url: String) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
-    viewModel: TimetableItemDetailViewModel = hiltViewModel(),
 ) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(lifecycleOwner) {
-        viewModel.activeLifecycleWhile(lifecycleOwner.lifecycle)
-    }
-    val uiState by viewModel.uiState.collectAsState()
+    val eventEmitter = rememberEventEmitter<TimetableItemDetailEvent>()
+    val userMessageStateHolder = rememberUserMessageStateHolder()
+    val uiState = timetableItemDetailViewModel(
+        events = eventEmitter,
+        userMessageStateHolder = userMessageStateHolder,
+    )
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = viewModel as UserMessageStateHolder,
+        userMessageStateHolder = userMessageStateHolder,
     )
 
     TimetableItemDetailScreen(
         uiState = uiState,
         onNavigationIconClick = onNavigationIconClick,
         onBookmarkClick = {
-            viewModel.take(TimetableItemDetailEvent.Bookmark(it))
+            eventEmitter.tryEmit(TimetableItemDetailEvent.Bookmark(it))
         },
         onLinkClick = onLinkClick,
         onCalendarRegistrationClick = onCalendarRegistrationClick,
         onShareClick = onShareClick,
         onSelectedLanguage = {
-            viewModel.take(TimetableItemDetailEvent.SelectDescriptionLanguage(it))
+            eventEmitter.tryEmit(TimetableItemDetailEvent.SelectDescriptionLanguage(it))
         },
         snackbarHostState = snackbarHostState,
     )

@@ -4,7 +4,7 @@ import io.github.droidkaigi.confsched.data.achievements.AchievementsDataStore
 import io.github.droidkaigi.confsched.data.auth.AuthApi
 import io.github.droidkaigi.confsched.data.auth.Authenticator
 import io.github.droidkaigi.confsched.data.auth.User
-import io.github.droidkaigi.confsched.data.contributors.AchievementRepository
+import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.data.remoteconfig.RemoteConfigApi
 import io.github.droidkaigi.confsched.data.sessions.SessionCacheDataStore
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient

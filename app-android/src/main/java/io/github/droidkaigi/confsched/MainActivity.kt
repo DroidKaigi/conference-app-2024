@@ -20,6 +20,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.WindowInfoTracker
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.droidkaigi.confsched.data.di.RepositoryQualifier
+import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -31,6 +33,10 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var clockProvider: ClockProvider
+
+    @RepositoryQualifier
+    @Inject
+    lateinit var repositories: Map<Class<out Any>, @JvmSuppressWildcards Any>
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +68,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             val windowSize = calculateWindowSizeClass(this)
             val displayFeatures = calculateDisplayFeatures(this)
-            CompositionLocalProvider(LocalClock provides clockProvider.clock()) {
+            CompositionLocalProvider(
+                LocalClock provides clockProvider.clock(),
+                LocalRepositories provides repositories
+//                    .filter { it.value != null }
+                    .map { (k, v) ->
+                        k.kotlin to v as Any
+                    }.toMap(),
+            ) {
+                println(LocalRepositories.current)
                 KaigiApp(
                     windowSize = windowSize,
                     displayFeatures = displayFeatures,
