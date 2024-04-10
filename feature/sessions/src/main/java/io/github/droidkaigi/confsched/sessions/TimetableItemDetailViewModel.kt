@@ -10,9 +10,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.SessionsRepository
@@ -30,42 +27,18 @@ import io.github.droidkaigi.confsched.sessions.ViewBookmarkListRequestState.Requ
 import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetailSectionUiState
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
-import io.github.droidkaigi.confsched.ui.ComposeViewModel
-import io.github.droidkaigi.confsched.ui.KmpViewModelLifecycle
 import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.applicationErrorHandler
 import io.github.droidkaigi.confsched.ui.rememberCreationExtraFlow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
 sealed interface TimetableItemDetailEvent {
     data class Bookmark(val timetableItem: TimetableItem) : TimetableItemDetailEvent
     data class SelectDescriptionLanguage(val language: Lang) : TimetableItemDetailEvent
     data object ViewBookmarkListRequestCompleted : TimetableItemDetailEvent
 }
-
-@HiltViewModel
-class TimetableItemDetailViewModel @Inject constructor(
-    private val sessionsRepository: SessionsRepository,
-    private val savedStateHandle: SavedStateHandle,
-    private val viewModelLifecycle: KmpViewModelLifecycle,
-) : ViewModel(),
-    ComposeViewModel<TimetableItemDetailEvent, TimetableItemDetailScreenUiState> by ComposeViewModel(
-        viewModelLifecycle = viewModelLifecycle,
-        content = { events ->
-            timetableItemDetailViewModel(
-                events = events as MutableSharedFlow<TimetableItemDetailEvent>,
-                userMessageStateHolder = this,
-                sessionsRepository = sessionsRepository,
-                sessionIdFlow = savedStateHandle.getStateFlow(
-                    timetableItemDetailScreenRouteItemIdParameterName,
-                    "",
-                ),
-            )
-        },
-    )
 
 @Composable
 fun timetableItemDetailViewModel(
