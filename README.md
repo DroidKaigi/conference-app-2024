@@ -2,6 +2,39 @@
 
 ## Development
 
+### Points to note
+* Use Composable function for ViewModels
+* Use Composable function for Repositories
+* How the Composable function can be lifecycle aware
+* How to handle errors in Composable functions
+* ???
+* Something related to tests?
+  * Roborazzi as debug tool of Robolectric tests
+* Something other challenges?
+
+### Things to decide
+
+* Which name should we use for the ViewModel function? `presenter` or `viewModel`?
+
+The function will be like this. What this function do is ViewModel. But the function returns UiState.
+The thing is Android developers are familiar with Android ViewModel and this function is not ViewModel.
+So I think `presenter` is better.
+
+```
+@Composable
+fun presenter(event: Flow<Event>): UiState
+```
+
+* If we use Composable functions for Repositories, how can iOS app use it?
+
+If we use Composable functions for Repositories, iOS app can't use it directly.
+We can workaround it by using molecule to convert it to flow.
+
+
+-------
+
+Work in progress.
+
 ### Expanding the Use of Composable Functions Beyond UI
 
 As Coroutines suspend functions replace Callbacks, Compose replaces Kotlin Coroutines Flow.
