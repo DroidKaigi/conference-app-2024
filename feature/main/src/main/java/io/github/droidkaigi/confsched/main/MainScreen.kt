@@ -13,6 +13,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,20 +23,17 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.RememberObserver
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
@@ -47,18 +45,11 @@ import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.feature.main.R
 import io.github.droidkaigi.confsched.main.NavigationType.BOTTOM_NAVIGATION
 import io.github.droidkaigi.confsched.main.NavigationType.NAVIGATION_RAIL
-import io.github.droidkaigi.confsched.main.component.KaigiBottomBar
-import io.github.droidkaigi.confsched.main.component.KaigiNavigationRail
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
-import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.MutableSharedFlow
 
 const val mainScreenRoute = "main"
 const val MainScreenTestTag = "MainScreen"
@@ -178,26 +169,27 @@ private fun MainScreen(
     val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
     Row(modifier = Modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == NAVIGATION_RAIL) {
-            KaigiNavigationRail(
-                mainScreenTabs = MainScreenTab.entries.toPersistentList(),
-                onTabSelected = { tab ->
-                    onTabSelected(mainNestedNavController, tab)
-                },
-                currentTab = currentTab ?: MainScreenTab.Timetable,
-                isEnableAchievements = uiState.isAchievementsEnabled,
-            )
+            Column {
+                Text(text = "nav rail")
+                MainScreenTab.values().forEach { tab ->
+                    Button(onClick = { onTabSelected(mainNestedNavController, tab) }) {
+                        Text(text = tab.label + " " + (currentTab == tab))
+                    }
+                }
+            }
         }
         Scaffold(
             bottomBar = {
                 AnimatedVisibility(visible = navigationType == BOTTOM_NAVIGATION) {
-                    KaigiBottomBar(
-                        mainScreenTabs = MainScreenTab.entries.toPersistentList(),
-                        onTabSelected = { tab ->
-                            onTabSelected(mainNestedNavController, tab)
-                        },
-                        currentTab = currentTab ?: MainScreenTab.Timetable,
-                        isEnableAchievements = uiState.isAchievementsEnabled,
-                    )
+                    Row {
+                        Text(text = "bottom nav")
+                        MainScreenTab.values().forEach { tab ->
+                            Button(onClick = { onTabSelected(mainNestedNavController, tab) }) {
+                                Text(text = tab.label + " " + (currentTab == tab))
+                            }
+                        }
+                    }
+
                 }
             },
         ) { padding ->

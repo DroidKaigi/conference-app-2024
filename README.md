@@ -9,48 +9,39 @@ Compose can make ViewModel and Repository more readable and maintainable by the 
 
 #### UI
 
-It's almost the same as the normal usage of ViewModel. You can use `hiltViewModel()` to get ViewModel. And you can listen to the ViewModel's `uiState` Flow.
+Now we don't use `ViewModel`. Instead, we use `presenter` which is a Composable function.
 
 ```kotlin
 @Composable
 fun TimetableItemDetailScreen(
-    ...
-    viewModel: TimetableItemDetailViewModel = hiltViewModel(),
+    onNavigationIconClick: () -> Unit,
+    onLinkClick: (url: String) -> Unit,
+    onCalendarRegistrationClick: (TimetableItem) -> Unit,
+    onShareClick: (TimetableItem) -> Unit,
 ) {
-    ...
-    val uiState by viewModel.uiState.collectAsState()
+    val eventEmitter = rememberEventEmitter<TimetableItemDetailEvent>()
+    val userMessageStateHolder = rememberUserMessageStateHolder()
+    val uiState = timetableItemDetailPresenter(
+        events = eventEmitter,
+        userMessageStateHolder = userMessageStateHolder,
+    )
+    
         ...
+
 
     TimetableItemDetailScreen(
         uiState = uiState,
-        ...
+        onNavigationIconClick = onNavigationIconClick,
         onBookmarkClick = {
-            viewModel.take(TimetableItemDetailEvent.Bookmark(it))
+            eventEmitter.tryEmit(TimetableItemDetailEvent.Bookmark(it))
         },
 ```
 
 #### ViewModel Composable functions
 
-ViewModels now launch Composable function to handle UI events and return UiStates.
+`Presenter` handles UI events and return UiStates.
 
 ```kotlin
-@HiltViewModel
-class TimetableItemDetailViewModel @Inject constructor(
-    private val sessionsRepository: SessionsRepository,
-    ...
-) : ViewModel(),
-    ComposeViewModel<TimetableItemDetailEvent, TimetableItemDetailScreenUiState> by ComposeViewModel(
-        ..
-        content = { events ->
-            timetableItemDetailViewModel(
-                events = events,
-                ...,
-                sessionsRepository = sessionsRepository,
-            )
-        },
-    )
-
-
 @Composable
 fun timetableItemDetailViewModel(
     events: Flow<TimetableItemDetailEvent>,

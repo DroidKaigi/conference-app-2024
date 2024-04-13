@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.sessions
 
-import android.annotation.SuppressLint
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,7 +23,6 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
 import io.github.droidkaigi.confsched.sessions.ViewBookmarkListRequestState.NotRequested
 import io.github.droidkaigi.confsched.sessions.ViewBookmarkListRequestState.Requested
-import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetailSectionUiState
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
 import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
@@ -41,8 +39,7 @@ sealed interface TimetableItemDetailEvent {
 }
 
 @Composable
-fun timetableItemDetailViewModel(
-    @SuppressLint("ComposeMutableParameters")
+fun timetableItemDetailPresenter(
     events: MutableSharedFlow<TimetableItemDetailEvent>,
     userMessageStateHolder: UserMessageStateHolder,
     sessionsRepository: SessionsRepository = localSessionsRepository(),

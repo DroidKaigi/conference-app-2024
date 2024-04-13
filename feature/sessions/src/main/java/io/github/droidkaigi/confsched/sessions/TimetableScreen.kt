@@ -5,13 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.Text
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -24,14 +26,10 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -43,9 +41,6 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
-import io.github.droidkaigi.confsched.sessions.component.TimetableTopArea
-import io.github.droidkaigi.confsched.sessions.component.rememberTimetableScreenScrollState
-import io.github.droidkaigi.confsched.sessions.section.TimetableHeader
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheet
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
@@ -54,7 +49,6 @@ import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.toPersistentMap
-import kotlin.math.roundToInt
 
 const val timetableScreenRoute = "timetable"
 fun NavGraphBuilder.nestedSessionScreens(
@@ -95,6 +89,7 @@ fun TimetableScreen(
         events = eventEmitter,
         userMessageStateHolder = userMessageStateHolder,
     )
+
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
@@ -155,7 +150,6 @@ private fun TimetableScreen(
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     val density = LocalDensity.current
-    val state = rememberTimetableScreenScrollState()
     val layoutDirection = LocalLayoutDirection.current
     val gradientEndRatio =
         if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
@@ -168,7 +162,6 @@ private fun TimetableScreen(
     Scaffold(
         modifier = modifier
             .testTag(TimetableScreenTestTag)
-            .nestedScroll(state.screenNestedScrollConnection)
             .background(timetableTopBackground())
             .drawWithCache {
                 onDrawBehind {
@@ -186,10 +179,16 @@ private fun TimetableScreen(
             },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            TimetableTopArea(
-                timetableUiType = uiState.timetableUiType,
-                onTimetableUiChangeClick = onTimetableUiChangeClick,
-            )
+//            TimetableTopArea(
+//                timetableUiType = uiState.timetableUiType,
+//                onTimetableUiChangeClick = onTimetableUiChangeClick,
+//            )
+            Row {
+                Text(text = "UiType: ${uiState.timetableUiType}")
+                Button(onClick = { onTimetableUiChangeClick() }) {
+                    Text("Change UiType")
+                }
+            }
         },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
@@ -202,33 +201,11 @@ private fun TimetableScreen(
         Box(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
         ) {
-            TimetableHeader(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onGloballyPositioned { coordinates ->
-                        state.onHeaderPositioned(
-                            coordinates.size.height.toFloat() - innerPadding.calculateTopPadding().value,
-                        )
-                    },
-            )
             TimetableSheet(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 131.dp)
-                    .layout { measurable, constraints ->
-                        val placeable = measurable.measure(
-                            constraints.copy(maxHeight = constraints.maxHeight - state.sheetScrollOffset.roundToInt()),
-                        )
-                        layout(placeable.width, placeable.height) {
-                            placeable.placeRelative(
-                                0,
-                                0 + (state.sheetScrollOffset / 2).roundToInt(),
-                            )
-                        }
-                    },
+                    .fillMaxSize(),
                 onTimetableItemClick = onTimetableItemClick,
                 uiState = uiState.contentUiState,
-                timetableScreenScrollState = state,
                 onFavoriteClick = onBookmarkClick,
                 contentPadding = PaddingValues(
                     bottom = innerPadding.calculateBottomPadding(),

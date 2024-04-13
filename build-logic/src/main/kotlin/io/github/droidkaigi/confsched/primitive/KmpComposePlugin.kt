@@ -27,6 +27,7 @@ class KmpComposePlugin : Plugin<Project> {
                             implementation(compose.dependencies.material3)
                             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                             implementation(compose.dependencies.components.resources)
+                            implementation(libs.library("rin"))
                             implementation(libs.library("androidxLifecycleViewModel"))
                             implementation(libs.library("androidxLifecycleViewModelCompose"))
                             implementation(libs.library("androidxLifecycleCommon"))

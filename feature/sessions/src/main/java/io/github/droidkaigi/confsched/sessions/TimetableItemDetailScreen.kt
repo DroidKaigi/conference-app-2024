@@ -4,13 +4,17 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -28,17 +32,17 @@ import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
 import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Lang
+import io.github.droidkaigi.confsched.model.Lang.JAPANESE
+import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
-import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBottomAppBar
-import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailScreenTopAppBar
-import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetail
-import io.github.droidkaigi.confsched.sessions.section.TimetableItemDetailSectionUiState
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
+import kotlinx.coroutines.flow.MutableSharedFlow
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val timetableItemDetailScreenRoute =
@@ -77,13 +81,13 @@ fun TimetableItemDetailScreen(
     onLinkClick: (url: String) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
-) {
-    val eventEmitter = rememberEventEmitter<TimetableItemDetailEvent>()
-    val userMessageStateHolder = rememberUserMessageStateHolder()
-    val uiState = timetableItemDetailViewModel(
+    eventEmitter: MutableSharedFlow<TimetableItemDetailEvent> = rememberEventEmitter(),
+    userMessageStateHolder: UserMessageStateHolder = rememberUserMessageStateHolder(),
+    uiState: TimetableItemDetailScreenUiState = timetableItemDetailPresenter(
         events = eventEmitter,
         userMessageStateHolder = userMessageStateHolder,
-    )
+    ),
+) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -120,6 +124,10 @@ sealed class TimetableItemDetailScreenUiState {
     ) : TimetableItemDetailScreenUiState()
 }
 
+data class TimetableItemDetailSectionUiState(
+    val timetableItem: TimetableItem,
+)
+
 sealed class ViewBookmarkListRequestState {
     data object NotRequested : ViewBookmarkListRequestState()
     data object Requested : ViewBookmarkListRequestState()
@@ -144,36 +152,59 @@ private fun TimetableItemDetailScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             if (uiState is Loaded) {
-                TimetableItemDetailScreenTopAppBar(
-                    title = uiState.timetableItem.title,
-                    isLangSelectable = uiState.isLangSelectable,
-                    onNavigationIconClick = onNavigationIconClick,
-                    onSelectedLanguage = onSelectedLanguage,
-                    scrollBehavior = scrollBehavior,
-                )
+                Row {
+                    Button(onClick = { onNavigationIconClick() }) {
+                        Text(text = "Back")
+                    }
+                    Text(text = uiState.timetableItem.title.currentLangTitle)
+                    if (uiState.isLangSelectable) {
+                        Button(onClick = { onSelectedLanguage(JAPANESE) }) {
+                            Text(text = "日本語")
+                        }
+                        Button(onClick = { onSelectedLanguage(Lang.ENGLISH) }) {
+                            Text(text = "English")
+                        }
+                    }
+                }
             }
         },
         bottomBar = {
             if (uiState is Loaded) {
-                TimetableItemDetailBottomAppBar(
-                    timetableItem = uiState.timetableItem,
-                    isBookmarked = uiState.isBookmarked,
-                    onBookmarkClick = onBookmarkClick,
-                    onCalendarRegistrationClick = onCalendarRegistrationClick,
-                    onShareClick = onShareClick,
-                )
+                Column {
+                    Button(onClick = { onBookmarkClick(uiState.timetableItem) }) {
+                        Text(text = "Bookmark: ${uiState.isBookmarked}")
+                    }
+                    Button(onClick = { onCalendarRegistrationClick(uiState.timetableItem) }) {
+                        Text(text = "Calendar")
+                    }
+                    Button(onClick = { onShareClick(uiState.timetableItem) }) {
+                        Text(text = "Share")
+                    }
+                }
             }
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
         if (uiState is Loaded) {
-            TimetableItemDetail(
-                modifier = Modifier.fillMaxSize(),
-                uiState = uiState.timetableItemDetailSectionUiState,
-                selectedLanguage = uiState.currentLang,
-                onLinkClick = onLinkClick,
-                contentPadding = innerPadding,
-            )
+            Column {
+                val currentLang = uiState.currentLang ?: Lang.ENGLISH
+                fun MultiLangText.getByLang(lang: Lang): String {
+                    return if (lang == JAPANESE) {
+                        jaTitle
+                    } else {
+                        enTitle
+                    }
+                }
+                Text(
+                    text = when (val item = uiState.timetableItem) {
+                        is TimetableItem.Session -> item.description.getByLang(currentLang)
+                        is TimetableItem.Special -> item.description.getByLang(currentLang)
+                    }
+                )
+                Button(onClick = { onLinkClick(uiState.timetableItem.url) }) {
+                    Text(text = "Link")
+                }
+            }
         }
 
         AnimatedVisibility(
