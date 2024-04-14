@@ -28,7 +28,7 @@ fun <T> Flow<T>.handleErrorAndRetry(
 }.catch { /* Do nothing if the user dose not retry. */ }
 
 @Composable
-fun <T> applicationErrorHandler(
+fun <T> defaultErrorHandler(
     userMessageStateHolder: UserMessageStateHolder = rememberUserMessageStateHolder(),
     block: @Composable (UserMessageStateHolder) -> T,
 ): T {

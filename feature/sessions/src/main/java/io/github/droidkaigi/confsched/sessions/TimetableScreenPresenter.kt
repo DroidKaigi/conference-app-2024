@@ -20,8 +20,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreenEvent.UiTypeChange
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
-import io.github.droidkaigi.confsched.ui.applicationErrorHandler
-import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.defaultErrorHandler
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.Flow
 
@@ -35,46 +34,44 @@ sealed interface TimetableScreenEvent {
 @Composable
 fun timetableScreenPresenter(
     events: Flow<TimetableScreenEvent>,
-    sessionsRepository: SessionsRepository = localSessionsRepository()
-): TimetableScreenUiState {
-    return applicationErrorHandler { userMessageStateHolder ->
-        val sessions by rememberUpdatedState(sessionsRepository.timetable())
-        var timetableUiType by remember { mutableStateOf(TimetableUiType.List) }
-        var bookmarkAnimationStart by remember { mutableStateOf(false) }
-        val timetableUiState by rememberUpdatedState(
-            timetableSheet(
-                sessionTimetable = sessions,
-                uiType = timetableUiType,
-            ),
-        )
-        SafeLaunchedEffect(Unit) {
-            events.collect { event ->
-                when (event) {
-                    is Bookmark -> {
-                        sessionsRepository.toggleBookmark(event.timetableItem.id)
-                        if (event.bookmarked) {
-                            bookmarkAnimationStart = true
-                        }
+    sessionsRepository: SessionsRepository = localSessionsRepository(),
+): TimetableScreenUiState = defaultErrorHandler { userMessageStateHolder ->
+    val sessions by rememberUpdatedState(sessionsRepository.timetable())
+    var timetableUiType by remember { mutableStateOf(TimetableUiType.List) }
+    var bookmarkAnimationStart by remember { mutableStateOf(false) }
+    val timetableUiState by rememberUpdatedState(
+        timetableSheet(
+            sessionTimetable = sessions,
+            uiType = timetableUiType,
+        ),
+    )
+    SafeLaunchedEffect(Unit) {
+        events.collect { event ->
+            when (event) {
+                is Bookmark -> {
+                    sessionsRepository.toggleBookmark(event.timetableItem.id)
+                    if (event.bookmarked) {
+                        bookmarkAnimationStart = true
                     }
+                }
 
-                    UiTypeChange -> {
-                        timetableUiType =
-                            if (timetableUiType == TimetableUiType.List) {
-                                Grid
-                            } else {
-                                TimetableUiType.List
-                            }
-                    }
+                UiTypeChange -> {
+                    timetableUiType =
+                        if (timetableUiType == TimetableUiType.List) {
+                            Grid
+                        } else {
+                            TimetableUiType.List
+                        }
                 }
             }
         }
-        TimetableScreenUiState(
-            contentUiState = timetableUiState,
-            timetableUiType = timetableUiType,
-            onBookmarkIconClickStatus = bookmarkAnimationStart,
-            userMessageStateHolder = userMessageStateHolder
-        )
     }
+    TimetableScreenUiState(
+        contentUiState = timetableUiState,
+        timetableUiType = timetableUiType,
+        onBookmarkIconClickStatus = bookmarkAnimationStart,
+        userMessageStateHolder = userMessageStateHolder
+    )
 }
 
 @Composable

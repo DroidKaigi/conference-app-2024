@@ -21,9 +21,8 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
-import io.github.droidkaigi.confsched.ui.applicationErrorHandler
+import io.github.droidkaigi.confsched.ui.defaultErrorHandler
 import io.github.droidkaigi.confsched.ui.rememberCreationExtra
-import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.coroutines.flow.SharedFlow
 
 sealed interface TimetableItemDetailEvent {
@@ -40,57 +39,55 @@ fun timetableItemDetailPresenter(
         timetableItemDetailScreenRouteItemIdParameterName,
         ""
     ),
-): TimetableItemDetailScreenUiState {
-    return applicationErrorHandler { userMessageStateHolder ->
-        val timetableItemStateWithBookmark by rememberUpdatedState(
-            sessionsRepository
-                .timetableItemWithBookmark(TimetableItemId(timetableItemId)),
-        )
-        var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
+): TimetableItemDetailScreenUiState = defaultErrorHandler { userMessageStateHolder ->
+    val timetableItemStateWithBookmark by rememberUpdatedState(
+        sessionsRepository
+            .timetableItemWithBookmark(TimetableItemId(timetableItemId)),
+    )
+    var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
 
-        SafeLaunchedEffect(Unit) {
-            events.collect { event ->
-                when (event) {
-                    is Bookmark -> {
-                        val timetableItemWithBookmark = timetableItemStateWithBookmark
-                        val timetableItem =
-                            timetableItemWithBookmark?.first ?: return@collect
-                        sessionsRepository.toggleBookmark(timetableItem.id)
-                        val oldBookmarked = timetableItemWithBookmark.second
-                        if (!oldBookmarked) {
-                            val result = userMessageStateHolder.showMessage(
-                                message = BookmarkedSuccessfully.asString(),
-                                actionLabel = ViewBookmarkList.asString(),
-                                duration = Short,
-                            )
-                        }
+    SafeLaunchedEffect(Unit) {
+        events.collect { event ->
+            when (event) {
+                is Bookmark -> {
+                    val timetableItemWithBookmark = timetableItemStateWithBookmark
+                    val timetableItem =
+                        timetableItemWithBookmark?.first ?: return@collect
+                    sessionsRepository.toggleBookmark(timetableItem.id)
+                    val oldBookmarked = timetableItemWithBookmark.second
+                    if (!oldBookmarked) {
+                        val result = userMessageStateHolder.showMessage(
+                            message = BookmarkedSuccessfully.asString(),
+                            actionLabel = ViewBookmarkList.asString(),
+                            duration = Short,
+                        )
                     }
+                }
 
-                    is ViewBookmarkListRequestCompleted -> {
-                    }
+                is ViewBookmarkListRequestCompleted -> {
+                }
 
-                    is SelectDescriptionLanguage -> {
-                        selectedDescriptionLanguage = event.language
-                    }
+                is SelectDescriptionLanguage -> {
+                    selectedDescriptionLanguage = event.language
                 }
             }
         }
-        SafeLaunchedEffect(timetableItemStateWithBookmark?.first) {
-            val timetableItem = timetableItemStateWithBookmark?.first ?: return@SafeLaunchedEffect
-            if (selectedDescriptionLanguage == null) {
-                selectedDescriptionLanguage = Lang.valueOf(timetableItem.language.langOfSpeaker)
-            }
-        }
-        val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
-            ?: return@applicationErrorHandler Loading(userMessageStateHolder)
-        val (timetableItem, bookmarked) = timetableItemStateWithBookmarkValue
-        Loaded(
-            timetableItem = timetableItem,
-            timetableItemDetailSectionUiState = TimetableItemDetailSectionUiState(timetableItem),
-            isBookmarked = bookmarked,
-            isLangSelectable = timetableItem.sessionType == NORMAL,
-            currentLang = selectedDescriptionLanguage,
-            userMessageStateHolder = userMessageStateHolder
-        )
     }
+    SafeLaunchedEffect(timetableItemStateWithBookmark?.first) {
+        val timetableItem = timetableItemStateWithBookmark?.first ?: return@SafeLaunchedEffect
+        if (selectedDescriptionLanguage == null) {
+            selectedDescriptionLanguage = Lang.valueOf(timetableItem.language.langOfSpeaker)
+        }
+    }
+    val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
+        ?: return@defaultErrorHandler Loading(userMessageStateHolder)
+    val (timetableItem, bookmarked) = timetableItemStateWithBookmarkValue
+    Loaded(
+        timetableItem = timetableItem,
+        timetableItemDetailSectionUiState = TimetableItemDetailSectionUiState(timetableItem),
+        isBookmarked = bookmarked,
+        isLangSelectable = timetableItem.sessionType == NORMAL,
+        currentLang = selectedDescriptionLanguage,
+        userMessageStateHolder = userMessageStateHolder
+    )
 }

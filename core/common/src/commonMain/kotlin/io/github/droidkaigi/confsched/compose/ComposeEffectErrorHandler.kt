@@ -9,6 +9,7 @@ import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.github.takahirom.rin.produceRetainedState
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
@@ -44,8 +45,9 @@ fun SafeLaunchedEffect(key: Any?, block: suspend CoroutineScope.() -> Unit) {
     LaunchedEffect(key) {
         try {
             block()
-        } catch (throwable: Throwable) {
-            composeEffectErrorHandler.emit(throwable)
+        } catch (e: Exception) {
+            ensureActive()
+            composeEffectErrorHandler.emit(e)
         }
     }
 }
