@@ -26,13 +26,17 @@ import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.contributors.component.ContributorListItem
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 
 const val contributorsScreenRoute = "contributors"
 const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
 
-data class ContributorsUiState(val contributors: PersistentList<Contributor>)
+data class ContributorsUiState(
+    val contributors: PersistentList<Contributor>,
+    val userMessageStateHolder: UserMessageStateHolder
+)
 
 @Composable
 fun ContributorsScreen(
@@ -42,17 +46,15 @@ fun ContributorsScreen(
     onContributorItemClick: (url: String) -> Unit,
 ) {
     val eventEmitter = rememberEventEmitter<ContributorsScreenEvent>()
-    val userMessageStateHolder = rememberUserMessageStateHolder()
-    val uiState = contributorsScreenViewModel(
+    val uiState = contributorsScreenPresenter(
         events = eventEmitter,
-        userMessageStateHolder = userMessageStateHolder,
     )
 
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = userMessageStateHolder,
+        userMessageStateHolder = uiState.userMessageStateHolder,
     )
     ContributorsScreen(
         uiState = uiState,

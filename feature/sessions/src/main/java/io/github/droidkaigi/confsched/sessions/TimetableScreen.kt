@@ -45,9 +45,10 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheet
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.toPersistentMap
 
 const val timetableScreenRoute = "timetable"
@@ -84,17 +85,15 @@ fun TimetableScreen(
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     val eventEmitter = rememberEventEmitter<TimetableScreenEvent>()
-    val userMessageStateHolder = rememberUserMessageStateHolder()
-    val uiState = timetableScreenViewModel(
+    val uiState = timetableScreenPresenter(
         events = eventEmitter,
-        userMessageStateHolder = userMessageStateHolder,
     )
 
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = userMessageStateHolder,
+        userMessageStateHolder = uiState.userMessageStateHolder,
     )
     TimetableScreen(
         uiState = uiState,
@@ -115,6 +114,7 @@ data class TimetableScreenUiState(
     val contentUiState: TimetableSheetUiState,
     val timetableUiType: TimetableUiType,
     val onBookmarkIconClickStatus: Boolean,
+    val userMessageStateHolder: UserMessageStateHolder,
 )
 
 private val timetableTopBackgroundLight = Color(0xFFF6FFD3)
@@ -238,6 +238,7 @@ fun PreviewTimetableScreenDark() {
                     ),
                     timetableUiType = TimetableUiType.Grid,
                     onBookmarkIconClickStatus = false,
+                    userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
                 snackbarHostState = SnackbarHostState(),
                 onTimetableItemClick = {},

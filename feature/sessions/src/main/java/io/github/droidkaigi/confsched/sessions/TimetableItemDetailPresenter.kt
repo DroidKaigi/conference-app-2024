@@ -2,8 +2,6 @@ package io.github.droidkaigi.confsched.sessions
 
 import androidx.compose.material3.SnackbarDuration.Short
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,16 +19,12 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDe
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.ViewBookmarkListRequestCompleted
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
-import io.github.droidkaigi.confsched.sessions.ViewBookmarkListRequestState.NotRequested
-import io.github.droidkaigi.confsched.sessions.ViewBookmarkListRequestState.Requested
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
-import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.applicationErrorHandler
-import io.github.droidkaigi.confsched.ui.rememberCreationExtraFlow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.StateFlow
+import io.github.droidkaigi.confsched.ui.rememberCreationExtra
+import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
+import kotlinx.coroutines.flow.SharedFlow
 
 sealed interface TimetableItemDetailEvent {
     data class Bookmark(val timetableItem: TimetableItem) : TimetableItemDetailEvent
@@ -40,42 +34,20 @@ sealed interface TimetableItemDetailEvent {
 
 @Composable
 fun timetableItemDetailPresenter(
-    events: MutableSharedFlow<TimetableItemDetailEvent>,
-    userMessageStateHolder: UserMessageStateHolder,
+    events: SharedFlow<TimetableItemDetailEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
-    sessionIdFlow: StateFlow<String> = rememberCreationExtraFlow(
+    timetableItemId: String = rememberCreationExtra(
         timetableItemDetailScreenRouteItemIdParameterName,
         ""
     ),
 ): TimetableItemDetailScreenUiState {
-    return applicationErrorHandler(userMessageStateHolder = userMessageStateHolder) {
-        val timetableItemId by remember {
-            sessionIdFlow
-        }.collectAsState()
+    return applicationErrorHandler { userMessageStateHolder ->
         val timetableItemStateWithBookmark by rememberUpdatedState(
             sessionsRepository
                 .timetableItemWithBookmark(TimetableItemId(timetableItemId)),
         )
-        var viewBookmarkListRequest by remember {
-            mutableStateOf<ViewBookmarkListRequestState>(
-                NotRequested,
-            )
-        }
         var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
 
-        LaunchedEffect(timetableItemStateWithBookmark?.first) {
-            val timetableItem = timetableItemStateWithBookmark?.first
-            val sessionDefaultLang = timetableItem?.language
-            if (sessionDefaultLang != null) {
-                events.emit(
-                    SelectDescriptionLanguage(
-                        Lang.valueOf(
-                            sessionDefaultLang.langOfSpeaker,
-                        ),
-                    ),
-                )
-            }
-        }
         SafeLaunchedEffect(Unit) {
             events.collect { event ->
                 when (event) {
@@ -91,14 +63,10 @@ fun timetableItemDetailPresenter(
                                 actionLabel = ViewBookmarkList.asString(),
                                 duration = Short,
                             )
-                            if (result == ActionPerformed) {
-                                viewBookmarkListRequest = Requested
-                            }
                         }
                     }
 
                     is ViewBookmarkListRequestCompleted -> {
-                        viewBookmarkListRequest = NotRequested
                     }
 
                     is SelectDescriptionLanguage -> {
@@ -107,16 +75,22 @@ fun timetableItemDetailPresenter(
                 }
             }
         }
+        SafeLaunchedEffect(timetableItemStateWithBookmark?.first) {
+            val timetableItem = timetableItemStateWithBookmark?.first ?: return@SafeLaunchedEffect
+            if (selectedDescriptionLanguage == null) {
+                selectedDescriptionLanguage = Lang.valueOf(timetableItem.language.langOfSpeaker)
+            }
+        }
         val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
-            ?: return@applicationErrorHandler Loading
+            ?: return@applicationErrorHandler Loading(userMessageStateHolder)
         val (timetableItem, bookmarked) = timetableItemStateWithBookmarkValue
         Loaded(
             timetableItem = timetableItem,
             timetableItemDetailSectionUiState = TimetableItemDetailSectionUiState(timetableItem),
             isBookmarked = bookmarked,
             isLangSelectable = timetableItem.sessionType == NORMAL,
-            viewBookmarkListRequestState = viewBookmarkListRequest,
             currentLang = selectedDescriptionLanguage,
+            userMessageStateHolder = userMessageStateHolder
         )
     }
 }

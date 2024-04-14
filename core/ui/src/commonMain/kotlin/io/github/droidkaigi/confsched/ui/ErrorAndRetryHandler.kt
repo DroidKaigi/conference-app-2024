@@ -29,8 +29,8 @@ fun <T> Flow<T>.handleErrorAndRetry(
 
 @Composable
 fun <T> applicationErrorHandler(
-    userMessageStateHolder: UserMessageStateHolder,
-    block: @Composable () -> T,
+    userMessageStateHolder: UserMessageStateHolder = rememberUserMessageStateHolder(),
+    block: @Composable (UserMessageStateHolder) -> T,
 ): T {
     val handler = remember(userMessageStateHolder) {
         object : ComposeEffectErrorHandler {
@@ -44,6 +44,6 @@ fun <T> applicationErrorHandler(
         }
     }
     return CompositionLocalProviderWithReturnValue(LocalComposeEffectErrorHandler provides handler) {
-        block()
+        block(userMessageStateHolder)
     }
 }

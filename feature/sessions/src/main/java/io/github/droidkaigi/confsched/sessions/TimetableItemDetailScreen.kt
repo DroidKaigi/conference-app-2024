@@ -7,8 +7,10 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -26,6 +28,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.component.LoadingText
 import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
@@ -41,8 +44,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
-import kotlinx.coroutines.flow.MutableSharedFlow
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val timetableItemDetailScreenRoute =
@@ -81,19 +83,15 @@ fun TimetableItemDetailScreen(
     onLinkClick: (url: String) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
-    eventEmitter: MutableSharedFlow<TimetableItemDetailEvent> = rememberEventEmitter(),
-    userMessageStateHolder: UserMessageStateHolder = rememberUserMessageStateHolder(),
+    eventEmitter: EventEmitter<TimetableItemDetailEvent> = rememberEventEmitter(),
     uiState: TimetableItemDetailScreenUiState = timetableItemDetailPresenter(
         events = eventEmitter,
-        userMessageStateHolder = userMessageStateHolder,
     ),
 ) {
-
     val snackbarHostState = remember { SnackbarHostState() }
-
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = userMessageStateHolder,
+        userMessageStateHolder = uiState.userMessageStateHolder,
     )
 
     TimetableItemDetailScreen(
@@ -112,26 +110,25 @@ fun TimetableItemDetailScreen(
     )
 }
 
-sealed class TimetableItemDetailScreenUiState {
-    data object Loading : TimetableItemDetailScreenUiState()
+sealed interface TimetableItemDetailScreenUiState {
+    data class Loading(
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ) : TimetableItemDetailScreenUiState
     data class Loaded(
         val timetableItem: TimetableItem,
         val timetableItemDetailSectionUiState: TimetableItemDetailSectionUiState,
         val isBookmarked: Boolean,
         val isLangSelectable: Boolean,
-        val viewBookmarkListRequestState: ViewBookmarkListRequestState,
         val currentLang: Lang?,
-    ) : TimetableItemDetailScreenUiState()
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ) : TimetableItemDetailScreenUiState
+
+    val userMessageStateHolder: UserMessageStateHolder
 }
 
 data class TimetableItemDetailSectionUiState(
     val timetableItem: TimetableItem,
 )
-
-sealed class ViewBookmarkListRequestState {
-    data object NotRequested : ViewBookmarkListRequestState()
-    data object Requested : ViewBookmarkListRequestState()
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -152,20 +149,35 @@ private fun TimetableItemDetailScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             if (uiState is Loaded) {
-                Row {
-                    Button(onClick = { onNavigationIconClick() }) {
-                        Text(text = "Back")
-                    }
-                    Text(text = uiState.timetableItem.title.currentLangTitle)
-                    if (uiState.isLangSelectable) {
-                        Button(onClick = { onSelectedLanguage(JAPANESE) }) {
-                            Text(text = "日本語")
+                LargeTopAppBar(title = {
+                    Row {
+                        Button(onClick = { onNavigationIconClick() }) {
+                            Text(
+                                text = "Back",
+                                style = MaterialTheme.typography.bodySmall
+                            )
                         }
-                        Button(onClick = { onSelectedLanguage(Lang.ENGLISH) }) {
-                            Text(text = "English")
+                        Text(
+                            modifier = Modifier.weight(1F),
+                            text = uiState.timetableItem.title.currentLangTitle,
+                            style = MaterialTheme.typography.bodyLarge
+                        )
+                        if (uiState.isLangSelectable) {
+                            Button(onClick = { onSelectedLanguage(JAPANESE) }) {
+                                Text(
+                                    text = "日本語",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
+                            Button(onClick = { onSelectedLanguage(Lang.ENGLISH) }) {
+                                Text(
+                                    text = "English",
+                                    style = MaterialTheme.typography.bodySmall
+                                )
+                            }
                         }
                     }
-                }
+                })
             }
         },
         bottomBar = {
@@ -186,7 +198,11 @@ private fun TimetableItemDetailScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
         if (uiState is Loaded) {
-            Column {
+            Column(
+                Modifier.padding(
+                    top = innerPadding.calculateTopPadding()
+                )
+            ) {
                 val currentLang = uiState.currentLang ?: Lang.ENGLISH
                 fun MultiLangText.getByLang(lang: Lang): String {
                     return if (lang == JAPANESE) {
@@ -239,8 +255,8 @@ fun TimetableItemDetailScreenPreview() {
                     ),
                     isBookmarked = isBookMarked,
                     isLangSelectable = true,
-                    viewBookmarkListRequestState = ViewBookmarkListRequestState.NotRequested,
                     currentLang = Lang.JAPANESE,
+                    userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
                 onNavigationIconClick = {},
                 onBookmarkClick = {

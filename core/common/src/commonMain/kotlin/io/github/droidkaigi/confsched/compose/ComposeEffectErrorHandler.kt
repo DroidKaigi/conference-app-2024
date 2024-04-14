@@ -39,7 +39,7 @@ val LocalComposeEffectErrorHandler = staticCompositionLocalOf<ComposeEffectError
 }
 
 @Composable
-fun SafeLaunchedEffect(key: Any, block: suspend CoroutineScope.() -> Unit) {
+fun SafeLaunchedEffect(key: Any?, block: suspend CoroutineScope.() -> Unit) {
     val composeEffectErrorHandler = LocalComposeEffectErrorHandler.current
     LaunchedEffect(key) {
         try {

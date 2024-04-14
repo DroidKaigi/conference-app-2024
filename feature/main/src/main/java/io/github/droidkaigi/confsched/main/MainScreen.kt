@@ -47,7 +47,7 @@ import io.github.droidkaigi.confsched.main.NavigationType.BOTTOM_NAVIGATION
 import io.github.droidkaigi.confsched.main.NavigationType.NAVIGATION_RAIL
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.PersistentList
 
@@ -88,8 +88,7 @@ fun MainScreen(
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
 ) {
     val eventEmitter = rememberEventEmitter<MainScreenEvent>()
-    val userMessageStateHolder = rememberUserMessageStateHolder()
-    val uiState = mainScreenViewModel(eventEmitter)
+    val uiState = mainScreenPresenter(eventEmitter)
     val snackbarHostState = remember { SnackbarHostState() }
 
     val navigationType: NavigationType = when (windowSize.widthSizeClass) {
@@ -101,7 +100,7 @@ fun MainScreen(
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
-        userMessageStateHolder = userMessageStateHolder,
+        userMessageStateHolder = uiState.userMessageStateHolder,
     )
     MainScreen(
         uiState = uiState,
@@ -153,6 +152,7 @@ enum class MainScreenTab(
 
 data class MainScreenUiState(
     val isAchievementsEnabled: Boolean = false,
+    val userMessageStateHolder: UserMessageStateHolder,
 )
 
 @Composable

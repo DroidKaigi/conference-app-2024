@@ -5,21 +5,25 @@ import androidx.compose.runtime.getValue
 import io.github.droidkaigi.confsched.compose.safeCollectAsState
 import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.model.localAchievementRepository
+import io.github.droidkaigi.confsched.ui.applicationErrorHandler
 import kotlinx.coroutines.flow.Flow
 
 sealed interface MainScreenEvent {}
 
 @Composable
-fun mainScreenViewModel(
+fun mainScreenPresenter(
     events: Flow<MainScreenEvent>,
     achievementRepository: AchievementRepository = localAchievementRepository(),
 ): MainScreenUiState {
-    val isAchievementsEnabled: Boolean by achievementRepository
-        .getAchievementEnabledStream()
-        .safeCollectAsState(
-            initial = false
+    return applicationErrorHandler { userMessageStateHolder ->
+        val isAchievementsEnabled: Boolean by achievementRepository
+            .getAchievementEnabledStream()
+            .safeCollectAsState(
+                initial = false
+            )
+        MainScreenUiState(
+            isAchievementsEnabled = isAchievementsEnabled,
+            userMessageStateHolder = userMessageStateHolder,
         )
-    return MainScreenUiState(
-        isAchievementsEnabled = isAchievementsEnabled,
-    )
+    }
 }
