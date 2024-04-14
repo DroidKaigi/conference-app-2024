@@ -20,7 +20,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreenEvent.UiTypeChange
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
-import io.github.droidkaigi.confsched.ui.defaultErrorHandler
+import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.Flow
 
@@ -35,7 +35,7 @@ sealed interface TimetableScreenEvent {
 fun timetableScreenPresenter(
     events: Flow<TimetableScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
-): TimetableScreenUiState = defaultErrorHandler { userMessageStateHolder ->
+): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val sessions by rememberUpdatedState(sessionsRepository.timetable())
     var timetableUiType by remember { mutableStateOf(TimetableUiType.List) }
     var bookmarkAnimationStart by remember { mutableStateOf(false) }

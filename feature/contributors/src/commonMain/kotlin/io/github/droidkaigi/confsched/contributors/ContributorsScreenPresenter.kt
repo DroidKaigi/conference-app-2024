@@ -6,7 +6,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.model.ContributorsRepository
 import io.github.droidkaigi.confsched.model.localContributorsRepository
-import io.github.droidkaigi.confsched.ui.defaultErrorHandler
+import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
 sealed interface ContributorsScreenEvent {
@@ -16,17 +16,15 @@ sealed interface ContributorsScreenEvent {
 fun contributorsScreenPresenter(
     events: Flow<ContributorsScreenEvent>,
     contributorsRepository: ContributorsRepository = localContributorsRepository(),
-): ContributorsUiState {
-    return defaultErrorHandler { userMessageStateHolder ->
-        val contributors by rememberUpdatedState(contributorsRepository.contributors())
-        SafeLaunchedEffect(Unit) {
-            events.collect {
+): ContributorsUiState = providePresenterDefaults { userMessageStateHolder ->
+    val contributors by rememberUpdatedState(contributorsRepository.contributors())
+    SafeLaunchedEffect(Unit) {
+        events.collect {
 
-            }
         }
-        ContributorsUiState(
-            contributors = contributors,
-            userMessageStateHolder,
-        )
     }
+    ContributorsUiState(
+        contributors = contributors,
+        userMessageStateHolder = userMessageStateHolder,
+    )
 }

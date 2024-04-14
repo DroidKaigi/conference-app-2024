@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 typealias EventEmitter<T> = MutableSharedFlow<T>
 
 @Composable
-fun <T> rememberEventEmitter(): MutableSharedFlow<T> {
+fun <T> rememberEventEmitter(): EventEmitter<T> {
     return remember {
         MutableSharedFlow<T>(extraBufferCapacity = 20)
     }

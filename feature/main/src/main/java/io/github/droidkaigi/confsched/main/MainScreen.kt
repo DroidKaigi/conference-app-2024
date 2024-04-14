@@ -41,6 +41,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.DisplayFeature
+import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.feature.main.R
 import io.github.droidkaigi.confsched.main.NavigationType.BOTTOM_NAVIGATION
@@ -86,9 +87,9 @@ fun MainScreen(
     displayFeatures: ImmutableList<DisplayFeature>,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
+    eventEmitter: EventEmitter<MainScreenEvent> = rememberEventEmitter(),
+    uiState: MainScreenUiState = mainScreenPresenter(eventEmitter),
 ) {
-    val eventEmitter = rememberEventEmitter<MainScreenEvent>()
-    val uiState = mainScreenPresenter(eventEmitter)
     val snackbarHostState = remember { SnackbarHostState() }
 
     val navigationType: NavigationType = when (windowSize.widthSizeClass) {

@@ -25,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -49,6 +50,7 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val timetableItemDetailScreenRoute =
     "timetableItemDetail/{$timetableItemDetailScreenRouteItemIdParameterName}"
+const val TimetableItemDetailBookmarkIconTestTag = "TimetableItemDetailBookmarkIconTestTag"
 
 fun NavGraphBuilder.sessionScreens(
     onNavigationIconClick: () -> Unit,
@@ -183,10 +185,14 @@ private fun TimetableItemDetailScreen(
         bottomBar = {
             if (uiState is Loaded) {
                 Column {
-                    Button(onClick = { onBookmarkClick(uiState.timetableItem) }) {
+                    Button(
+                        modifier = Modifier.testTag(TimetableItemDetailBookmarkIconTestTag),
+                        onClick = { onBookmarkClick(uiState.timetableItem) }) {
                         Text(text = "Bookmark: ${uiState.isBookmarked}")
                     }
-                    Button(onClick = { onCalendarRegistrationClick(uiState.timetableItem) }) {
+                    Button(
+
+                        onClick = { onCalendarRegistrationClick(uiState.timetableItem) }) {
                         Text(text = "Calendar")
                     }
                     Button(onClick = { onShareClick(uiState.timetableItem) }) {

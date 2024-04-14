@@ -17,6 +17,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.sessions.TimetableListItemBookmarkIconTestTag
+import io.github.droidkaigi.confsched.sessions.TimetableListItemTestTag
 import kotlinx.collections.immutable.PersistentMap
 
 const val TimetableListTestTag = "TimetableList"
@@ -48,10 +50,13 @@ fun TimetableList(
                     text = timetableItem.title.currentLangTitle,
                     modifier = Modifier
                         .padding(horizontal = 16.dp)
+                        .testTag(TimetableListItemTestTag)
                         .clickable { onTimetableItemClick(timetableItem) },
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Button(onClick = { onBookmarkClick(timetableItem, true) }) {
+                Button(
+                    modifier = Modifier.testTag(TimetableListItemBookmarkIconTestTag),
+                    onClick = { onBookmarkClick(timetableItem, true) }) {
                     Text(
                         text = "Bookmark ${isBookmarked}",
                     )

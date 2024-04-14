@@ -21,7 +21,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
-import io.github.droidkaigi.confsched.ui.defaultErrorHandler
+import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.droidkaigi.confsched.ui.rememberCreationExtra
 import kotlinx.coroutines.flow.SharedFlow
 
@@ -36,10 +36,10 @@ fun timetableItemDetailPresenter(
     events: SharedFlow<TimetableItemDetailEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
     timetableItemId: String = rememberCreationExtra(
-        timetableItemDetailScreenRouteItemIdParameterName,
-        ""
+        key = timetableItemDetailScreenRouteItemIdParameterName,
+        initialValue = ""
     ),
-): TimetableItemDetailScreenUiState = defaultErrorHandler { userMessageStateHolder ->
+): TimetableItemDetailScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val timetableItemStateWithBookmark by rememberUpdatedState(
         sessionsRepository
             .timetableItemWithBookmark(TimetableItemId(timetableItemId)),
@@ -80,7 +80,7 @@ fun timetableItemDetailPresenter(
         }
     }
     val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
-        ?: return@defaultErrorHandler Loading(userMessageStateHolder)
+        ?: return@providePresenterDefaults Loading(userMessageStateHolder)
     val (timetableItem, bookmarked) = timetableItemStateWithBookmarkValue
     Loaded(
         timetableItem = timetableItem,

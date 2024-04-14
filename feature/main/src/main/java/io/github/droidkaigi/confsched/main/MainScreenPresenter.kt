@@ -5,7 +5,7 @@ import androidx.compose.runtime.getValue
 import io.github.droidkaigi.confsched.compose.safeCollectAsState
 import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.model.localAchievementRepository
-import io.github.droidkaigi.confsched.ui.defaultErrorHandler
+import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
 sealed interface MainScreenEvent {}
@@ -14,7 +14,7 @@ sealed interface MainScreenEvent {}
 fun mainScreenPresenter(
     events: Flow<MainScreenEvent>,
     achievementRepository: AchievementRepository = localAchievementRepository(),
-): MainScreenUiState = defaultErrorHandler { userMessageStateHolder ->
+): MainScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val isAchievementsEnabled: Boolean by achievementRepository
         .getAchievementEnabledStream()
         .safeCollectAsState(

@@ -2,10 +2,8 @@ package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isRoot
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import com.github.takahirom.roborazzi.Dump
@@ -14,10 +12,9 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.data.sessions.fake
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
-import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBookmarkIconTestTag
-import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailReadMoreButtonTestTag
-import io.github.droidkaigi.confsched.testing.RobotTestRule
+import io.github.droidkaigi.confsched.testing.RobotTestEnvironment
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.shadows.ShadowLooper
@@ -27,20 +24,20 @@ import kotlin.time.Duration.Companion.seconds
 class TimetableItemDetailScreenRobot @Inject constructor(
     private val testDispatcher: TestDispatcher,
 ) {
-    @Inject lateinit var robotTestRule: RobotTestRule
+    @Inject lateinit var robotTestEnvironment: RobotTestEnvironment
+    private val composeTestRule
+        get() = robotTestEnvironment.composeTestRule
 
-    private lateinit var composeTestRule: AndroidComposeTestRule<*, *>
     operator fun invoke(
         block: suspend TimetableItemDetailScreenRobot.() -> Unit,
     ) {
         runTestWithLogging(timeout = 30.seconds) {
-            this@TimetableItemDetailScreenRobot.composeTestRule = robotTestRule.composeTestRule
             block()
         }
     }
 
     suspend fun setupScreenContent() {
-        composeTestRule.setContent {
+        robotTestEnvironment.setContent {
             KaigiTheme {
                 TimetableItemDetailScreen(
                     onNavigationIconClick = { },
@@ -58,19 +55,6 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onNode(hasTestTag(TimetableItemDetailBookmarkIconTestTag))
             .performClick()
         waitUntilIdle()
-    }
-
-    fun scrollToDescription() {
-        composeTestRule
-            .onNode(hasTestTag(TimetableItemDetailReadMoreButtonTestTag))
-            .performScrollTo()
-        scroll()
-    }
-
-    fun clickReadMoreButton() {
-        composeTestRule
-            .onNode(hasTestTag(TimetableItemDetailReadMoreButtonTestTag))
-            .performClick()
     }
 
     fun scroll() {

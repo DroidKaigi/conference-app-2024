@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.testing
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
@@ -14,6 +15,8 @@ import com.github.takahirom.roborazzi.RoborazziOptions.PixelBitConfig
 import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.RoborazziRule
 import com.github.takahirom.roborazzi.RoborazziRule.Options
+import io.github.droidkaigi.confsched.data.di.RepositoryProvider
+import io.github.droidkaigi.confsched.ui.Inject
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
@@ -85,5 +88,21 @@ class RobotTestRule(
             )
             .around(composeTestRule)
             .apply(base, description)
+    }
+}
+
+class RobotTestEnvironment @Inject constructor(
+    private val robotTestRule: RobotTestRule,
+    private val repositoryProvider: RepositoryProvider,
+) {
+    val composeTestRule: AndroidComposeTestRule<ActivityScenarioRule<*>, *>
+        get() = robotTestRule.composeTestRule
+
+    fun setContent(content: @Composable () -> Unit) {
+        composeTestRule.setContent {
+            repositoryProvider.Provide {
+                content()
+            }
+        }
     }
 }

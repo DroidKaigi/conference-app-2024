@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -52,6 +53,9 @@ import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.toPersistentMap
 
 const val timetableScreenRoute = "timetable"
+const val TimetableListItemBookmarkIconTestTag = "TimetableListItemBookmarkIcon"
+const val TimetableListItemTestTag = "TimetableListItem"
+const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
 fun NavGraphBuilder.nestedSessionScreens(
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
@@ -83,11 +87,11 @@ fun TimetableScreen(
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-) {
-    val eventEmitter = rememberEventEmitter<TimetableScreenEvent>()
-    val uiState = timetableScreenPresenter(
+    eventEmitter: EventEmitter<TimetableScreenEvent> = rememberEventEmitter<TimetableScreenEvent>(),
+    uiState: TimetableScreenUiState = timetableScreenPresenter(
         events = eventEmitter,
-    )
+    ),
+) {
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -185,7 +189,9 @@ private fun TimetableScreen(
 //            )
             Row {
                 Text(text = "UiType: ${uiState.timetableUiType}")
-                Button(onClick = { onTimetableUiChangeClick() }) {
+                Button(
+                    modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
+                    onClick = { onTimetableUiChangeClick() }) {
                     Text("Change UiType")
                 }
             }

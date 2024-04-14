@@ -26,24 +26,3 @@ fun <T> Flow<T>.handleErrorAndRetry(
 
     retryPerformed
 }.catch { /* Do nothing if the user dose not retry. */ }
-
-@Composable
-fun <T> defaultErrorHandler(
-    userMessageStateHolder: UserMessageStateHolder = rememberUserMessageStateHolder(),
-    block: @Composable (UserMessageStateHolder) -> T,
-): T {
-    val handler = remember(userMessageStateHolder) {
-        object : ComposeEffectErrorHandler {
-            override suspend fun emit(throwable: Throwable) {
-                val a = throwable.toApplicationErrorMessage()
-                userMessageStateHolder.showMessage(
-                    message = a,
-                    actionLabel = null,
-                )
-            }
-        }
-    }
-    return CompositionLocalProviderWithReturnValue(LocalComposeEffectErrorHandler provides handler) {
-        block(userMessageStateHolder)
-    }
-}

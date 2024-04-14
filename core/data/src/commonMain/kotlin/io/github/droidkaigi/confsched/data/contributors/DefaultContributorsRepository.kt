@@ -9,9 +9,7 @@ import io.github.droidkaigi.confsched.model.ContributorsRepository
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onStart
 
 public class DefaultContributorsRepository(
     private val contributorsApi: ContributorsApiClient,

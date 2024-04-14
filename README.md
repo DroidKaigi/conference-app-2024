@@ -14,7 +14,7 @@
 
 ### Things to decide
 
-* Which name should we use for the ViewModel function? `presenter` or `viewModel`?
+* [DONE] Which name should we use for the ViewModel function? `presenter` or `viewModel`?
 
 The function will be like this. What this function do is ViewModel. But the function returns UiState.
 The thing is Android developers are familiar with Android ViewModel and this function is not ViewModel.
