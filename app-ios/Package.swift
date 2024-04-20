@@ -18,13 +18,14 @@ let package = Package(
         .target(
             name: "App",
             dependencies: [
-                "KmmModule",
+                "KmpModule",
             ]
         ),
         .testTarget(
             name: "AppTests",
             dependencies: ["App"]
         ),
-        .binaryTarget(name: "KmmModule", path: "build/shared.xcframework"),
+        // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
+        .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/release/shared.xcframework"),
     ]
 )

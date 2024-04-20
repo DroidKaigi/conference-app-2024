@@ -21,13 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
-import androidx.lifecycle.Lifecycle
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.contributors.component.ContributorListItem
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 
 const val contributorsScreenRoute = "contributors"
@@ -40,7 +38,6 @@ data class ContributorsUiState(
 
 @Composable
 fun ContributorsScreen(
-    lifecycle:Lifecycle,
     isTopAppBarHidden: Boolean = false,
     onNavigationIconClick: () -> Unit,
     onContributorItemClick: (url: String) -> Unit,
@@ -67,7 +64,7 @@ fun ContributorsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ContributorsScreen(
+fun ContributorsScreen(
     uiState: ContributorsUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,

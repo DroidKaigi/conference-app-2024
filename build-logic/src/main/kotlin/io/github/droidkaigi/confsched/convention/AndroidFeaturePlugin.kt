@@ -15,7 +15,7 @@ class AndroidFeaturePlugin : Plugin<Project> {
                 apply("droidkaigi.primitive.android.hilt")
                 apply("droidkaigi.primitive.android.roborazzi")
                 apply("droidkaigi.primitive.molecule")
-                apply("droidkaigi.primitive.compose.investigator")
+//                apply("droidkaigi.primitive.compose.investigator")
                 apply("droidkaigi.primitive.detekt")
             }
 

@@ -3,13 +3,13 @@ androidGradlePlugin = "8.1.1"
 # For updating Kotlin and Compose Compiler version, see:
 # https://github.com/JetBrains/compose-multiplatform/blob/master/VERSIONING.md#kotlin-compatibility
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin?#pre-release_kotlin_compatibility
-kotlin = "1.9.22"
+kotlin = "1.9.23"
 
 androidxCore = "1.12.0"
 androidDesugarJdkLibs = "2.0.4"
 compose = "2024.03.00"
-composeCompiler = "1.5.10"
-composeJb = "1.6.0"
+composeCompiler = "1.5.12"
+composeJb = "1.6.1"
 rin = "0.0.1"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
@@ -28,9 +28,9 @@ koin = "3.4.3"
 ktlint = "0.49.1"
 kotlinxSerialization = "1.6.0"
 ktor = "2.3.4"
-roborazzi = "1.7.0-alpha-2"
+roborazzi = "1.13.0"
 showkase = "1.0.0-beta18"
-ksp = "1.9.22-1.0.17"
+ksp = "1.9.23-1.0.19"
 firebaseBom = "32.2.3"
 multiplatformFirebase = "1.8.1"
 kermit = "1.2.2"
@@ -193,7 +193,7 @@ plugins = [
     "detektGradlePlugin",
     "ossLicensesPlugin",
     "moleculeGradlePlugin",
-    "composeInvestigatorGradlePlugin",
+#    "composeInvestigatorGradlePlugin",
     "koverPlugin",
     "firebaseCrashlyticsGradlePlugin"
 ]
