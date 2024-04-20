@@ -25,7 +25,11 @@ let package = Package(
             name: "AppTests",
             dependencies: ["App"]
         ),
+        // For debug
+        // Please run ./gradlew app-ios-shared:linkDebugFrameworkIosSimulatorArm64 first
+        .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/bin/iosSimulatorArm64/debugFramework/shared.framework"),
+        // For release
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
-        .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/release/shared.xcframework"),
+        //   .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/release/shared.xcframework"),
     ]
 )
