@@ -79,6 +79,10 @@ gradlePlugin {
             id = "droidkaigi.primitive.kmp.compose"
             implementationClass = "io.github.droidkaigi.confsched.primitive.KmpComposePlugin"
         }
+        register("kotlinMppRoborazzi") {
+            id = "droidkaigi.primitive.kmp.roborazzi"
+            implementationClass = "io.github.droidkaigi.confsched.primitive.KmpRoborazziPlugin"
+        }
         register("kotlinMppKtorfit") {
             id = "droidkaigi.primitive.kmp.ktorfit"
             implementationClass = "io.github.droidkaigi.confsched.primitive.KmpKtorfitPlugin"
@@ -121,6 +125,10 @@ gradlePlugin {
         register("androidFeature") {
             id = "droidkaigi.convention.androidfeature"
             implementationClass = "io.github.droidkaigi.confsched.convention.AndroidFeaturePlugin"
+        }
+        register("kmpFeature") {
+            id = "droidkaigi.convention.kmpfeature"
+            implementationClass = "io.github.droidkaigi.confsched.convention.KmpFeaturePlugin"
         }
     }
 }

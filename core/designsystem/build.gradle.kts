@@ -10,6 +10,14 @@ plugins {
 
 android.namespace = "io.github.droidkaigi.confsched.core.designsystem"
 
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {}
+        }
+    }
+}
+
 android {
     sourceSets {
         named("main") {

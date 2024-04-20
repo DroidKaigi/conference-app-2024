@@ -38,6 +38,7 @@ kotlin {
                 api(projects.core.data)
                 api(projects.core.ui)
                 api(projects.feature.contributors)
+                api(projects.feature.sessions)
                 implementation(libs.kotlinxCoroutinesCore)
             }
         }

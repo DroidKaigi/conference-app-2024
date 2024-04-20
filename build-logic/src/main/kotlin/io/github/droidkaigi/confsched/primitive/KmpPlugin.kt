@@ -12,6 +12,7 @@ class KmpPlugin : Plugin<Project> {
         with(target) {
             with(pluginManager) {
                 apply("org.jetbrains.kotlin.multiplatform")
+
             }
             tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) {
                 kotlinOptions.jvmTarget = "11"
