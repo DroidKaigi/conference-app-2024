@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.sessions
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
@@ -12,11 +11,11 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material.Text
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -26,7 +25,6 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
@@ -50,6 +48,7 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.ui.getScreenSizeInfo
 import kotlinx.collections.immutable.toPersistentMap
 
 const val timetableScreenRoute = "timetable"
@@ -72,7 +71,7 @@ fun NavGraphBuilder.nestedSessionScreens(
 
 fun NavController.navigateTimetableScreen() {
     navigate(timetableScreenRoute) {
-        popUpTo(id = graph.findStartDestination().id) {
+        popUpTo(route = checkNotNull(graph.findStartDestination().route)) {
             saveState = true
         }
         launchSingleTop = true
@@ -156,7 +155,7 @@ private fun TimetableScreen(
     val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
     val gradientEndRatio =
-        if (LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT) {
+        if (getScreenSizeInfo().isPort) {
             0.2f
         } else {
             0.5f

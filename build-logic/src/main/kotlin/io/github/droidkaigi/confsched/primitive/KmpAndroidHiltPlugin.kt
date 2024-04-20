@@ -31,6 +31,21 @@ class KmpAndroidHiltPlugin : Plugin<Project> {
                         implementation(libs.library("androidxFragment"))
                     }
                 }
+                sourceSets.getByName("androidUnitTest") {
+                    val kspConfiguration = configurations["kspAndroidTest"] // not AndroidAndroidTest
+                    kspConfiguration.dependencies.add(
+                        libs.library("daggerHiltAndroidCompiler").let {
+                            DefaultExternalModuleDependency(
+                                it.module.group,
+                                it.module.name,
+                                it.versionConstraint.requiredVersion
+                            )
+                        }
+                    )
+                    dependencies {
+                        implementation(libs.library("daggerHiltAndroidTesting"))
+                    }
+                }
             }
         }
     }

@@ -28,7 +28,7 @@ class AndroidFeaturePlugin : Plugin<Project> {
     }
 }
 
-private fun Project.buildComposeMetricsParameters(): List<String> {
+fun Project.buildComposeMetricsParameters(): List<String> {
     val metricParameters = mutableListOf<String>()
     val enableMetricsProvider = project.providers.gradleProperty("enableComposeCompilerMetrics")
     val relativePath = projectDir.relativeTo(rootDir)

@@ -9,7 +9,7 @@ androidxCore = "1.12.0"
 androidDesugarJdkLibs = "2.0.4"
 compose = "2024.03.00"
 composeCompiler = "1.5.12"
-composeJb = "1.6.1"
+composeMultiplatform = "1.6.10-beta01"
 rin = "0.0.1"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
@@ -48,7 +48,7 @@ androidxLifecycleProcess = "2.8.0-alpha03"
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
-composeJbGradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "composeJb" }
+composeJbGradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "composeMultiplatform" }
 hiltGradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger" }
 roborazziGradlePlugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "roborazzi" }
 kspGradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
@@ -100,7 +100,7 @@ composeMaterialWindowSize = { module = "androidx.compose.material3:material3-win
 composeMaterialIcon = { module = "androidx.compose.material:material-icons-extended" }
 composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 composeUiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-composeNavigation = { module = "androidx.navigation:navigation-compose", version = "2.7.7" }
+composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha01" }
 composeHiltNavigtation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigatiaon" }
 composeLintCheck = { module = "com.slack.lint.compose:compose-lint-checks", version = "1.2.0" }
 composeCoil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
