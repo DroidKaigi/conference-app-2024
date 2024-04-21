@@ -24,7 +24,7 @@ let package = Package(
             dependencies: [.app]
         ),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
-        .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/release/shared.xcframework"),
+        .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
 )
 
