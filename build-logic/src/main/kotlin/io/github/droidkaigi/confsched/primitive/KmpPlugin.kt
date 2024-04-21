@@ -20,6 +20,15 @@ class KmpPlugin : Plugin<Project> {
             tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink>().configureEach {
                 notCompatibleWithConfigurationCache("Configuration chache not supported for a system property read at configuration time")
             }
+            kotlin {
+                with(sourceSets) {
+                    commonMain {
+                        dependencies {
+                            implementation(libs.findLibrary("kermit").get())
+                        }
+                    }
+                }
+            }
         }
     }
 }

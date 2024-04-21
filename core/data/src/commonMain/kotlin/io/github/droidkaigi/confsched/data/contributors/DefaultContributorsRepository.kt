@@ -25,7 +25,7 @@ public class DefaultContributorsRepository(
                 refresh()
             }
         }
-        return contributorsStateFlow.value
+        return contributors
     }
 
     override suspend fun refresh() {

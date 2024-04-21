@@ -1,9 +1,5 @@
-// TODO: Remove when you start using `displayFeatures`
-@file:Suppress("UnusedParameter")
-
 package io.github.droidkaigi.confsched.main
 
-import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
@@ -40,31 +36,31 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.window.layout.DisplayFeature
+import conference_app_2024.feature.main.generated.resources.Res
+import conference_app_2024.feature.main.generated.resources.icon_achievement_fill
+import conference_app_2024.feature.main.generated.resources.icon_achievement_outline
+import conference_app_2024.feature.main.generated.resources.icon_map_fill
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.feature.main.R
 import io.github.droidkaigi.confsched.main.NavigationType.BOTTOM_NAVIGATION
 import io.github.droidkaigi.confsched.main.NavigationType.NAVIGATION_RAIL
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.PersistentList
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 const val mainScreenRoute = "main"
 const val MainScreenTestTag = "MainScreen"
 
 fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
-    displayFeatures: PersistentList<DisplayFeature>,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
     mainNestedGraph: NavGraphBuilder.(mainNestedNavController: NavController, PaddingValues) -> Unit,
 ) {
     composable(mainScreenRoute) {
         MainScreen(
             windowSize = windowSize,
-            displayFeatures = displayFeatures,
             mainNestedGraphStateHolder = mainNestedGraphStateHolder,
             mainNestedNavGraph = mainNestedGraph,
         )
@@ -84,7 +80,6 @@ enum class NavigationType {
 @Composable
 fun MainScreen(
     windowSize: WindowSizeClass,
-    displayFeatures: ImmutableList<DisplayFeature>,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
     eventEmitter: EventEmitter<MainScreenEvent> = rememberEventEmitter(),
@@ -115,7 +110,8 @@ fun MainScreen(
 
 sealed class IconRepresentation {
     data class Vector(val imageVector: ImageVector) : IconRepresentation()
-    data class Drawable(@DrawableRes val drawableId: Int) : IconRepresentation()
+    @ExperimentalResourceApi
+    data class Drawable(val drawableId: DrawableResource) : IconRepresentation()
 }
 
 enum class MainScreenTab(
@@ -131,15 +127,17 @@ enum class MainScreenTab(
         label = MainStrings.Timetable.asString(),
         contentDescription = MainStrings.Timetable.asString(),
     ),
+    @OptIn(ExperimentalResourceApi::class)
     FloorMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
-        selectedIcon = IconRepresentation.Drawable(drawableId = R.drawable.icon_map_fill),
+        selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_map_fill),
         label = MainStrings.FloorMap.asString(),
         contentDescription = MainStrings.FloorMap.asString(),
     ),
+    @OptIn(ExperimentalResourceApi::class)
     Achievements(
-        icon = IconRepresentation.Drawable(drawableId = R.drawable.icon_achievement_outline),
-        selectedIcon = IconRepresentation.Drawable(drawableId = R.drawable.icon_achievement_fill),
+        icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_outline),
+        selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_fill),
         label = MainStrings.Achievements.asString(),
         contentDescription = MainStrings.Achievements.asString(),
     ),

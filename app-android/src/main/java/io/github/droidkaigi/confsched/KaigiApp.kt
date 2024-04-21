@@ -112,7 +112,6 @@ private fun NavGraphBuilder.mainScreen(
 ) {
     mainScreen(
         windowSize = windowSize,
-        displayFeatures = displayFeatures,
         mainNestedGraphStateHolder = KaigiAppMainNestedGraphStateHolder(),
         mainNestedGraph = { mainNestedNavController, contentPadding ->
             nestedSessionScreens(

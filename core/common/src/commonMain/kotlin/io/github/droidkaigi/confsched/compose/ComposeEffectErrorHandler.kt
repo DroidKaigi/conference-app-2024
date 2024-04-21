@@ -35,6 +35,7 @@ interface ComposeEffectErrorHandler {
 val LocalComposeEffectErrorHandler = staticCompositionLocalOf<ComposeEffectErrorHandler> {
     object : ComposeEffectErrorHandler {
         override suspend fun emit(throwable: Throwable) {
+            throwable.printStackTrace()
         }
     }
 }

@@ -1,9 +1,5 @@
 plugins {
-    id("droidkaigi.primitive.kmp")
-    id("droidkaigi.primitive.kmp.android")
-    id("droidkaigi.primitive.kmp.android.hilt")
-    id("droidkaigi.primitive.kmp.ios")
-    id("droidkaigi.primitive.kmp.compose")
+    id("droidkaigi.convention.kmpfeature")
 }
 
 android.namespace = "io.github.droidkaigi.confsched.feature.contributors"
