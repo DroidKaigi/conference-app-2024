@@ -11,23 +11,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.model.ContributorsRepository
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import platform.UIKit.UIViewController
 
 @Suppress("UNUSED")
 fun contributorViewController(
-    contributorsRepository: ContributorsRepository,
+    repositories: Repositories,
     onContributorItemClick: (url: String) -> Unit,
 ): UIViewController = ComposeUIViewController {
     NavHost(rememberNavController(), startDestination = "root") {
         composable("root") {
             CompositionLocalProvider(
-                LocalRepositories provides mapOf(
-                    ContributorsRepository::class to contributorsRepository,
-                )
+                LocalRepositories provides repositories.map
             ) {
                 Logger.d { "contributorViewController" }
                 val eventEmitter = rememberEventEmitter<ContributorsScreenEvent>()

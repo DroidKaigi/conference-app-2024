@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.shared
 
+import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.data.achievements.AchievementsDataStore
 import io.github.droidkaigi.confsched.data.auth.AuthApi
 import io.github.droidkaigi.confsched.data.auth.Authenticator
@@ -55,5 +56,6 @@ class EntryPointTest {
         assertNotNull(kmpEntryPoint.get<ContributorsRepository>())
         assertNotNull(kmpEntryPoint.get<SponsorsRepository>())
         assertNotNull(kmpEntryPoint.get<StaffRepository>())
+        assertNotNull(kmpEntryPoint.get<Repositories>())
     }
 }

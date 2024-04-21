@@ -43,8 +43,17 @@ import platform.Foundation.NSDocumentDirectory
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSURL
 import platform.Foundation.NSUserDomainMask
+import kotlin.reflect.KClass
 
 public class BaseUrl(internal val baseUrl: String)
+
+public interface Repositories {
+    public val map: Map<KClass<*>, Any>
+}
+
+public class DefaultRepositories(
+    public override val map: Map<KClass<*>, Any>,
+): Repositories
 
 @OptIn(ExperimentalForeignApi::class)
 public val dataModule: Module = module {
@@ -134,4 +143,14 @@ public val dataModule: Module = module {
     singleOf(::DefaultContributorsRepository) bind ContributorsRepository::class
     singleOf(::DefaultStaffRepository) bind StaffRepository::class
     singleOf(::DefaultSponsorsRepository) bind SponsorsRepository::class
+    single<Repositories> {
+        DefaultRepositories(mapOf(
+                AchievementRepository::class to get<AchievementRepository>(),
+                SessionsRepository::class to get<SessionsRepository>(),
+                ContributorsRepository::class to get<ContributorsRepository>(),
+                StaffRepository::class to get<StaffRepository>(),
+                SponsorsRepository::class to get<SponsorsRepository>(),
+            )
+        )
+    }
 }
