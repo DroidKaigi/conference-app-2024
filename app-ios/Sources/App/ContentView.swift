@@ -41,9 +41,9 @@ public struct ContentView: View {
 struct ContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         let container = Container.shared
-        let repository: ContributorsRepository = container.get(type: ContributorsRepository.self)
+        let repositories: Repositories = container.get(type: Repositories.self)
         return DarwinContributorsKt.contributorViewController(
-            contributorsRepository: repository,
+            repositories: repositories,
             onContributorItemClick: {_ in}
         )
     }
