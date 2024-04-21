@@ -96,7 +96,7 @@ composeAnimation = { module = "androidx.compose.animation:animation" }
 composeAnimationGraphics = { module = "androidx.compose.animation:animation-graphics" }
 composeMaterial = { module = "androidx.compose.material:material" }
 composeMaterial3 = { module = "androidx.compose.material3:material3", version.ref = "composeMaterial3" }
-composeMaterialWindowSize = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "composeMaterial3" }
+composeMaterialWindowSize = "dev.chrisbanes.material3:material3-window-size-class-multiplatform:0.5.0"
 composeMaterialIcon = { module = "androidx.compose.material:material-icons-extended" }
 composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 composeUiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
@@ -129,6 +129,7 @@ javaPoet = { module = "com.squareup:javapoet", version = "1.13.0" }
 kotlinSerializationJson = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
 
 ktorClientCore = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktorClientLogging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
 ktorClientOkHttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
 ktorClientDarwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktorKotlinxSerialization = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }

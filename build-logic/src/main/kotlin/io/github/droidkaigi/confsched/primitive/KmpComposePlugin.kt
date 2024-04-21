@@ -28,6 +28,8 @@ class KmpComposePlugin : Plugin<Project> {
                             @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                             implementation(compose.dependencies.components.resources)
                             implementation(libs.library("rin"))
+                            implementation(libs.library("composeNavigation"))
+                            implementation(libs.library("composeMaterialWindowSize"))
                             implementation(libs.library("androidxLifecycleViewModel"))
                             implementation(libs.library("androidxLifecycleViewModelCompose"))
                             implementation(libs.library("androidxLifecycleCommon"))

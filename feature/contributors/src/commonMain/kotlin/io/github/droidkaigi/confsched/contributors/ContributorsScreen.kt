@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
+import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.contributors.component.ContributorListItem
 import io.github.droidkaigi.confsched.model.Contributor
@@ -33,7 +34,7 @@ const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
 
 data class ContributorsUiState(
     val contributors: PersistentList<Contributor>,
-    val userMessageStateHolder: UserMessageStateHolder
+    val userMessageStateHolder: UserMessageStateHolder,
 )
 
 @Composable
@@ -71,6 +72,7 @@ fun ContributorsScreen(
     onContributorItemClick: (url: String) -> Unit,
     isTopAppBarHidden: Boolean,
 ) {
+    Logger.d { "ContributorsScreen: $uiState" }
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

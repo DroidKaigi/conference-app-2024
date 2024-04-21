@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            val windowSize = calculateWindowSizeClass(this)
+            val windowSize = calculateWindowSizeClass()
             val displayFeatures = calculateDisplayFeatures(this)
             CompositionLocalProvider(
                 LocalClock provides clockProvider.clock(),
