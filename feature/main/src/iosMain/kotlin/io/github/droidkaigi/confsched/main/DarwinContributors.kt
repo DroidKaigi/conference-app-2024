@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.contributors
+package io.github.droidkaigi.confsched.main
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.CompositionLocalProvider
@@ -18,7 +18,7 @@ import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import platform.UIKit.UIViewController
 
 @Suppress("UNUSED")
-fun contributorViewController(
+fun mainViewController(
     repositories: Repositories,
     onContributorItemClick: (url: String) -> Unit,
 ): UIViewController = ComposeUIViewController {
@@ -27,10 +27,10 @@ fun contributorViewController(
             CompositionLocalProvider(
                 LocalRepositories provides repositories.map
             ) {
-                Logger.d { "contributorViewController" }
-                val eventEmitter = rememberEventEmitter<ContributorsScreenEvent>()
+                Logger.d { "mainViewController" }
+                val eventEmitter = rememberEventEmitter<MainScreenEvent>()
 
-                val uiState = contributorsScreenPresenter(
+                val uiState = mainScreenPresenter(
                     events = eventEmitter,
                 )
 
@@ -46,17 +46,14 @@ fun contributorViewController(
                     // TODO: How to know the destroy event of the ViewController?
 //        viewModel.viewModelScope.cancel()
                 }
+                val mainNestedGraphStateHolder =
 
                 KaigiTheme {
 
-                    ContributorsScreen(
-                        uiState = uiState,
-                        snackbarHostState = snackbarHostState,
-                        isTopAppBarHidden = true,
-                        onBackClick = { /** no action for iOS side **/ },
-                        onContributorItemClick = onContributorItemClick,
-                    )
-
+//                    MainScreen(
+//                        uiState = uiState,
+//                        snackbarHostState = snackbarHostState,
+//                    )
                 }
             }
         }

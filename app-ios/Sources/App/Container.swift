@@ -30,4 +30,11 @@ struct Container {
             }
             return object
         }
+    
+    func get<TypeProtocol>(type: TypeProtocol) -> TypeProtocol where TypeProtocol: Protocol {
+            guard let object = entryPoint.get(objCProtocol: type) as? TypeProtocol else {
+                fatalError("Not found instance for \(type)")
+            }
+            return object
+        }
 }

@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 plugins {
     id("droidkaigi.primitive.kmp")
     id("droidkaigi.primitive.kmp.ios")
+    id("droidkaigi.primitive.kmp.compose")
 }
 
 kotlin {
@@ -33,6 +34,8 @@ kotlin {
                         logger.lifecycle("framework '${this.name} ${this.target}' will be in XCFramework")
                     }
 
+                    export(projects.feature.main)
+                    export(projects.feature.sessions)
                     export(projects.feature.contributors)
                     export(projects.core.model)
                     export(projects.core.data)
@@ -46,8 +49,9 @@ kotlin {
                 api(projects.core.model)
                 api(projects.core.data)
                 api(projects.core.ui)
-                api(projects.feature.contributors)
+                api(projects.feature.main)
                 api(projects.feature.sessions)
+                api(projects.feature.contributors)
                 implementation(libs.kotlinxCoroutinesCore)
             }
         }

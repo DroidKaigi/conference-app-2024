@@ -42,8 +42,8 @@ import conference_app_2024.feature.main.generated.resources.icon_achievement_out
 import conference_app_2024.feature.main.generated.resources.icon_map_fill
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.main.NavigationType.BOTTOM_NAVIGATION
-import io.github.droidkaigi.confsched.main.NavigationType.NAVIGATION_RAIL
+import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
+import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -74,7 +74,7 @@ interface MainNestedGraphStateHolder {
 }
 
 enum class NavigationType {
-    BOTTOM_NAVIGATION, NAVIGATION_RAIL
+    BottomNavigation, NavigationRail
 }
 
 @Composable
@@ -88,10 +88,10 @@ fun MainScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val navigationType: NavigationType = when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> BOTTOM_NAVIGATION
-        WindowWidthSizeClass.Medium -> NAVIGATION_RAIL
-        WindowWidthSizeClass.Expanded -> NAVIGATION_RAIL
-        else -> BOTTOM_NAVIGATION
+        WindowWidthSizeClass.Compact -> BottomNavigation
+        WindowWidthSizeClass.Medium -> NavigationRail
+        WindowWidthSizeClass.Expanded -> NavigationRail
+        else -> BottomNavigation
     }
 
     SnackbarMessageEffect(
@@ -155,7 +155,7 @@ data class MainScreenUiState(
 )
 
 @Composable
-private fun MainScreen(
+fun MainScreen(
     uiState: MainScreenUiState,
     snackbarHostState: SnackbarHostState,
     navigationType: NavigationType,
@@ -167,7 +167,7 @@ private fun MainScreen(
     val navBackStackEntry by mainNestedNavController.currentBackStackEntryAsState()
     val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
     Row(modifier = Modifier.fillMaxSize()) {
-        AnimatedVisibility(visible = navigationType == NAVIGATION_RAIL) {
+        AnimatedVisibility(visible = navigationType == NavigationRail) {
             Column {
                 Text(text = "nav rail")
                 MainScreenTab.values().forEach { tab ->
@@ -179,7 +179,7 @@ private fun MainScreen(
         }
         Scaffold(
             bottomBar = {
-                AnimatedVisibility(visible = navigationType == BOTTOM_NAVIGATION) {
+                AnimatedVisibility(visible = navigationType == BottomNavigation) {
                     Row {
                         Text(text = "bottom nav")
                         MainScreenTab.values().forEach { tab ->

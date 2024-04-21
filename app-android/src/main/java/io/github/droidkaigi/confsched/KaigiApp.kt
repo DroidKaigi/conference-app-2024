@@ -46,6 +46,7 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
+import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 
@@ -76,7 +77,7 @@ private fun KaigiNavHost(
     externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
-        mainScreen(windowSize, displayFeatures, navController, externalNavController)
+        mainScreen(windowSize,  navController, externalNavController)
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
@@ -106,7 +107,6 @@ private fun KaigiNavHost(
 
 private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
-    displayFeatures: PersistentList<DisplayFeature>,
     navController: NavHostController,
     externalNavController: ExternalNavController,
 ) {

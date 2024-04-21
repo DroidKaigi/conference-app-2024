@@ -29,6 +29,18 @@ public struct ContentView: View {
             .padding()
             .tabItem {
                 Label(
+                    title: { Text("KMP Contributor") },
+                    icon: { Image(systemName: "42.circle") }
+                )
+            }
+            
+            
+            VStack {
+                KaigiAppComposeViewControllerWrapper()
+            }
+            .padding()
+            .tabItem {
+                Label(
                     title: { Text("KMP") },
                     icon: { Image(systemName: "42.circle") }
                 )
@@ -41,9 +53,9 @@ public struct ContentView: View {
 struct ContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         let container = Container.shared
-        let repository: ContributorsRepository = container.get(type: ContributorsRepository.self)
+        let repositories: Repositories = container.get(type: Repositories.self)
         return DarwinContributorsKt.contributorViewController(
-            contributorsRepository: repository,
+            repositories: repositories,
             onContributorItemClick: {_ in}
         )
     }
@@ -52,6 +64,19 @@ struct ContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
     }
 }
 
+
+struct KaigiAppComposeViewControllerWrapper: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        let container = Container.shared
+        let repositories: Repositories = container.get(type: Repositories.self)
+        return IosComposeKaigiAppKt.kaigiAppController(
+            repositories: repositories
+        )
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    }
+}
 
 #Preview {
     ContentView()

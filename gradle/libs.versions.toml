@@ -9,8 +9,8 @@ androidxCore = "1.12.0"
 androidDesugarJdkLibs = "2.0.4"
 compose = "2024.03.00"
 composeCompiler = "1.5.12"
-composeMultiplatform = "1.6.10-beta01"
-rin = "0.0.1"
+composeMultiplatform = "1.6.10-dev1593"
+rin = "0.0.2"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
 composeHiltNavigatiaon = "1.2.0"
@@ -100,7 +100,7 @@ composeMaterialWindowSize = "dev.chrisbanes.material3:material3-window-size-clas
 composeMaterialIcon = { module = "androidx.compose.material:material-icons-extended" }
 composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 composeUiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha01" }
+composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-dev1593" }
 composeHiltNavigtation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigatiaon" }
 composeLintCheck = { module = "com.slack.lint.compose:compose-lint-checks", version = "1.2.0" }
 composeCoil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
