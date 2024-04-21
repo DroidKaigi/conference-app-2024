@@ -23,17 +23,13 @@ kotlin {
                     binaryOption("bundleVersion", version.toString())
                     binaryOption("bundleShortVersionString", version.toString())
 
-                    var added = false
-                    if (project.properties["app.ios.shared.debug"] == "true") {
-                        if (this.target.name == "iosSimulatorArm64" && this.debuggable) {
-                            xcf.add(this)
-                            added = true
-                        }
+                    val includeToXCF = if (project.properties["app.ios.shared.debug"] == "true") {
+                        this.target.name == "iosSimulatorArm64" && this.debuggable
                     } else {
-                        xcf.add(this)
-                        added = true
+                        true
                     }
-                    if (added) {
+                    if (includeToXCF) {
+                        xcf.add(this)
                         logger.lifecycle("framework '${this.name} ${this.target}' will be in XCFramework")
                     }
 
