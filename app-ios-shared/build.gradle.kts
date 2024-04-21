@@ -22,7 +22,16 @@ kotlin {
                     binaryOption("bundleId", "io.github.droidkaigi.confsched.shared")
                     binaryOption("bundleVersion", version.toString())
                     binaryOption("bundleShortVersionString", version.toString())
-                    xcf.add(this)
+
+                    val includeToXCF = if (project.properties["app.ios.shared.debug"] == "true") {
+                        this.target.name == "iosSimulatorArm64" && this.debuggable
+                    } else {
+                        true
+                    }
+                    if (includeToXCF) {
+                        xcf.add(this)
+                        logger.lifecycle("framework '${this.name} ${this.target}' will be in XCFramework")
+                    }
 
                     export(projects.feature.contributors)
                     export(projects.core.model)
@@ -44,3 +53,4 @@ kotlin {
         }
     }
 }
+
