@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched
+package io.github.droidkaigi.confsched.ui
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
