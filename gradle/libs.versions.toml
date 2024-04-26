@@ -10,7 +10,7 @@ androidDesugarJdkLibs = "2.0.4"
 compose = "2024.03.00"
 composeCompiler = "1.5.12"
 composeMultiplatform = "1.6.10-dev1593"
-rin = "0.0.2"
+rin = "0.1.0"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
 composeHiltNavigatiaon = "1.2.0"
@@ -106,7 +106,7 @@ composeLintCheck = { module = "com.slack.lint.compose:compose-lint-checks", vers
 composeCoil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
 composeImageLoader = { module = "io.github.qdsfdhvh:image-loader", version = "1.6.7" }
 composeShimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version = "1.0.5" }
-rin = { module = "io.github.takahirom.rin:rin", version = "0.0.1" }
+rin = { module = "io.github.takahirom.rin:rin", version.ref = "rin" }
 lottieCompose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version = "1.5.1" }
 
