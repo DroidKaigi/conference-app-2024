@@ -11,6 +11,7 @@ kotlin {
                 implementation(projects.core.ui)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(projects.core.designsystem)
+                implementation(libs.moleculeRuntime)
             }
         }
     }
