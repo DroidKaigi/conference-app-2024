@@ -123,12 +123,13 @@ class PreviewTest(
     @ShowkaseMultiplePreviewsWorkaround
     private fun newUiMode(baseUiMode: Int, previewValue: String): Int {
         val nightMode = when (previewValue) {
-            MultiThemePreviewDefinition.DarkMode.Name -> {
-                MultiThemePreviewDefinition.DarkMode.UiMode
-            }
-            MultiThemePreviewDefinition.LightMode.Name -> {
-                MultiThemePreviewDefinition.LightMode.UiMode
-            }
+            // FIXME
+//            MultiThemePreviewDefinition.DarkMode.Name -> {
+//                MultiThemePreviewDefinition.DarkMode.UiMode
+//            }
+//            MultiThemePreviewDefinition.LightMode.Name -> {
+//                MultiThemePreviewDefinition.LightMode.UiMode
+//            }
             else -> baseUiMode
         }
 

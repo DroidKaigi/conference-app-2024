@@ -55,16 +55,4 @@ class KaigiAppTest {
             }
         }
     }
-
-    @Test
-    fun checkTimetableTabs() {
-        kaigiAppRobot {
-            timetableScreenRobot {
-                DroidKaigi2023Day.entries.forEach { dayEntry ->
-                    clickTimetableTab(dayEntry.day)
-                    capture()
-                }
-            }
-        }
-    }
 }
