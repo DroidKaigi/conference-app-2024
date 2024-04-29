@@ -64,6 +64,7 @@ moleculeGradlePlugin = { module = "app.cash.molecule:molecule-gradle-plugin", ve
 moleculeRuntime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 koverPlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 composeInvestigatorGradlePlugin = { module = "land.sungbin.composeinvestigator:land.sungbin.composeinvestigator.gradle.plugin", version.ref = "composeInvestigator" }
+skiePlugin = { module = "co.touchlab.skie:co.touchlab.skie.gradle.plugin", version = "0.6.2" }
 
 androidDesugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 
@@ -100,7 +101,7 @@ composeMaterialWindowSize = "dev.chrisbanes.material3:material3-window-size-clas
 composeMaterialIcon = { module = "androidx.compose.material:material-icons-extended" }
 composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 composeUiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-dev1593" }
+composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha01" }
 composeHiltNavigtation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigatiaon" }
 composeLintCheck = { module = "com.slack.lint.compose:compose-lint-checks", version = "1.2.0" }
 composeCoil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }
@@ -189,6 +190,7 @@ plugins = [
     "kspGradlePlugin",
     "firebaseGradlePlugin",
     "ktorfitGradlePlugin",
+    "skiePlugin",
     "kotlinxSerializationGradlePlugin",
     "completeKotlinPlugin",
     "detektGradlePlugin",

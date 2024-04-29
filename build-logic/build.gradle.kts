@@ -87,6 +87,10 @@ gradlePlugin {
             id = "droidkaigi.primitive.kmp.ktorfit"
             implementationClass = "io.github.droidkaigi.confsched.primitive.KmpKtorfitPlugin"
         }
+        register("kotlinMppSkie") {
+            id = "droidkaigi.primitive.kmp.skie"
+            implementationClass = "io.github.droidkaigi.confsched.primitive.KmpSkiePlugin"
+        }
         register("kotlinMppAndroidHilt") {
             id = "droidkaigi.primitive.kmp.android.hilt"
             implementationClass = "io.github.droidkaigi.confsched.primitive.KmpAndroidHiltPlugin"
