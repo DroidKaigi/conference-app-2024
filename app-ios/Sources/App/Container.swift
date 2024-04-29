@@ -1,4 +1,5 @@
 import shared
+import ObjectiveC
 
 struct Container {
     static let shared: Container = .init()
@@ -8,12 +9,12 @@ struct Container {
         entryPoint = .init()
         class DummyAuthenticator: Authenticator {
             
-            func currentUser() async throws -> User? {
+            func __currentUser() async throws -> User? {
               return User(idToken: "")
             }
             
             
-            func signInAnonymously() async throws -> User? {
+            func __signInAnonymously() async throws -> User? {
                 return User(idToken: "")
             }
             

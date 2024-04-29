@@ -7,6 +7,9 @@ public struct ContentView: View {
     @State var selection = 1
     public var body: some View {
         
+        let container = Container.shared
+        let repositories: Repositories = container.get(type: Repositories.self)
+        
         TabView(selection: $selection) {
             VStack {
                 Image(systemName: "globe")
@@ -24,7 +27,7 @@ public struct ContentView: View {
             
             
             VStack {
-                ContributorComposeViewControllerWrapper()
+                ContributorComposeViewControllerWrapper(repositories: repositories)
             }
             .padding()
             .tabItem {
@@ -45,15 +48,22 @@ public struct ContentView: View {
                     icon: { Image(systemName: "42.circle") }
                 )
             }
-        
+            
+
+            ContributorsViewWithKmpPresenter(repositories: repositories)
+                .tabItem {
+                    Label(
+                        title: { Text("KMP Presenter") },
+                        icon: { Image(systemName: "42.circle") }
+                    )
+                }
         }
     }
 }
 
 struct ContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
+    let repositories: Repositories
     func makeUIViewController(context: Context) -> UIViewController {
-        let container = Container.shared
-        let repositories: Repositories = container.get(type: Repositories.self)
         return DarwinContributorsKt.contributorViewController(
             repositories: repositories,
             onContributorItemClick: {_ in}

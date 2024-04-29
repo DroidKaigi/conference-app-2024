@@ -209,7 +209,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd ${SRCROOT}/../..\n./gradlew assembleSharedXCFramework\n";
+			shellScript = "cd ${SRCROOT}/../..\n./gradlew assembleSharedXCFramework --no-configuration-cache\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

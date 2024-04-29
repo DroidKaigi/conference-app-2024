@@ -1,6 +1,6 @@
 #!/bin/sh
 ./gradlew testDevDebugUnitTest
-./gradlew assembleSharedXCFramework
+./gradlew assembleSharedXCFramework --no-configuration-cache
 
 
 
