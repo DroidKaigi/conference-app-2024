@@ -6,6 +6,7 @@ import io.github.droidkaigi.confsched.data.dataModule
 import io.github.droidkaigi.confsched.data.remoteconfig.RemoteConfigApi
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
+import org.koin.core.module.Module
 import org.koin.dsl.module
 import kotlin.reflect.KClass
 
@@ -18,6 +19,7 @@ class KmpEntryPoint {
     fun init(
         remoteConfigApi: RemoteConfigApi,
         authenticator: Authenticator,
+        dataModuleOverride: Module = module {  },
     ) {
         koinApplication = startKoin {
             modules(
@@ -32,7 +34,8 @@ class KmpEntryPoint {
                     single {
                         authenticator
                     }
-                }
+                },
+                dataModuleOverride
             )
         }
     }

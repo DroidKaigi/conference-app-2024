@@ -7,6 +7,7 @@ plugins {
     id("droidkaigi.primitive.kmp.ios")
     id("droidkaigi.primitive.kmp.compose")
     id("droidkaigi.primitive.kmp.skie")
+    id("droidkaigi.primitive.kmp.roborazzi")
 }
 
 kotlin {
@@ -54,6 +55,13 @@ kotlin {
                 api(projects.feature.sessions)
                 api(projects.feature.contributors)
                 implementation(libs.kotlinxCoroutinesCore)
+            }
+        }
+        iosTest {
+            dependencies {
+                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                implementation(compose.uiTest)
+                implementation(libs.roborazziIos)
             }
         }
     }

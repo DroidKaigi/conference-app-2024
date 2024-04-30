@@ -163,6 +163,7 @@ androidxTestEspressoEspressoCore = { module = "androidx.test.espresso:espresso-c
 robolectric = { module = "org.robolectric:robolectric", version = "4.10.3" }
 roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 roborazziCompose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+roborazziIos = { module = "io.github.takahirom.roborazzi:roborazzi-compose-ios", version.ref = "roborazzi" }
 roborazziRule = { module = "io.github.takahirom.roborazzi:roborazzi-junit-rule", version.ref = "roborazzi" }
 showkaseRuntime = { group = "com.airbnb.android", name = "showkase", version.ref = "showkase" }
 showkaseProcessor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "showkase" }
