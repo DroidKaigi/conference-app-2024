@@ -110,6 +110,7 @@ fun MainScreen(
 
 sealed class IconRepresentation {
     data class Vector(val imageVector: ImageVector) : IconRepresentation()
+
     @ExperimentalResourceApi
     data class Drawable(val drawableId: DrawableResource) : IconRepresentation()
 }
@@ -127,6 +128,7 @@ enum class MainScreenTab(
         label = MainStrings.Timetable.asString(),
         contentDescription = MainStrings.Timetable.asString(),
     ),
+
     @OptIn(ExperimentalResourceApi::class)
     FloorMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
@@ -134,6 +136,7 @@ enum class MainScreenTab(
         label = MainStrings.FloorMap.asString(),
         contentDescription = MainStrings.FloorMap.asString(),
     ),
+
     @OptIn(ExperimentalResourceApi::class)
     Achievements(
         icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_outline),
@@ -181,9 +184,11 @@ fun MainScreen(
             bottomBar = {
                 AnimatedVisibility(visible = navigationType == BottomNavigation) {
                     Row {
-                        Text(text = "bottom nav")
-                        MainScreenTab.values().forEach { tab ->
-                            Button(onClick = { onTabSelected(mainNestedNavController, tab) }) {
+                        MainScreenTab.entries.forEach { tab ->
+                            Button(
+                                modifier = Modifier.weight(1F),
+                                onClick = { onTabSelected(mainNestedNavController, tab) }
+                            ) {
                                 Text(text = tab.label + " " + (currentTab == tab))
                             }
                         }

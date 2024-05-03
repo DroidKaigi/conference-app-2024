@@ -20,6 +20,7 @@ kotlin {
                 api(libs.composeImageLoader)
                 api(libs.kotlinxDatetime)
                 implementation(libs.moleculeRuntime)
+                implementation(libs.coreBundle)
             }
         }
     }

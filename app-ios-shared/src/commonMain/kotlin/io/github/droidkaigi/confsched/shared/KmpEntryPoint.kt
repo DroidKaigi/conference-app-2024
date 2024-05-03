@@ -4,6 +4,7 @@ import io.github.droidkaigi.confsched.data.BaseUrl
 import io.github.droidkaigi.confsched.data.auth.Authenticator
 import io.github.droidkaigi.confsched.data.dataModule
 import io.github.droidkaigi.confsched.data.remoteconfig.RemoteConfigApi
+import co.touchlab.skie.configuration.annotations.DefaultArgumentInterop
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
@@ -16,10 +17,11 @@ class KmpEntryPoint {
     // Please EntryPoint.get() instead of this property
     lateinit var koinApplication: KoinApplication
 
+    @DefaultArgumentInterop.Enabled
     fun init(
         remoteConfigApi: RemoteConfigApi,
         authenticator: Authenticator,
-        dataModuleOverride: Module = module {  },
+        dataModuleOverride: Module = module { },
     ) {
         koinApplication = startKoin {
             modules(

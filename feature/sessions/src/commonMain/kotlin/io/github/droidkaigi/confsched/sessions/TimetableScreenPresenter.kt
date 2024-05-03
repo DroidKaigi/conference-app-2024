@@ -38,7 +38,6 @@ fun timetableScreenPresenter(
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val sessions by rememberUpdatedState(sessionsRepository.timetable())
     var timetableUiType by remember { mutableStateOf(TimetableUiType.List) }
-    var bookmarkAnimationStart by remember { mutableStateOf(false) }
     val timetableUiState by rememberUpdatedState(
         timetableSheet(
             sessionTimetable = sessions,
@@ -50,9 +49,6 @@ fun timetableScreenPresenter(
             when (event) {
                 is Bookmark -> {
                     sessionsRepository.toggleBookmark(event.timetableItem.id)
-                    if (event.bookmarked) {
-                        bookmarkAnimationStart = true
-                    }
                 }
 
                 UiTypeChange -> {
@@ -69,7 +65,6 @@ fun timetableScreenPresenter(
     TimetableScreenUiState(
         contentUiState = timetableUiState,
         timetableUiType = timetableUiType,
-        onBookmarkIconClickStatus = bookmarkAnimationStart,
         userMessageStateHolder = userMessageStateHolder
     )
 }
