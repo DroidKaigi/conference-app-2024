@@ -55,6 +55,7 @@ kotlin {
                 api(projects.feature.sessions)
                 api(projects.feature.contributors)
                 implementation(libs.kotlinxCoroutinesCore)
+                implementation(libs.skieAnnotation)
             }
         }
         iosTest {

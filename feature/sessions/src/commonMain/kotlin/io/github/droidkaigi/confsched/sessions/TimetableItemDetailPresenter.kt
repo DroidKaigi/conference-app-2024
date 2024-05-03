@@ -22,7 +22,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
 import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
-import io.github.droidkaigi.confsched.ui.rememberCreationExtra
+import io.github.droidkaigi.confsched.ui.rememberNavigationArgument
 import kotlinx.coroutines.flow.SharedFlow
 
 sealed interface TimetableItemDetailEvent {
@@ -35,11 +35,11 @@ sealed interface TimetableItemDetailEvent {
 fun timetableItemDetailPresenter(
     events: SharedFlow<TimetableItemDetailEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
-    timetableItemId: String = rememberCreationExtra(
+    timetableItemId: String = rememberNavigationArgument(
         key = timetableItemDetailScreenRouteItemIdParameterName,
         initialValue = ""
     ),
-): TimetableItemDetailScreenUiState = providePresenterDefaults { userMessageStateHolder ->
+): TimetableItemDetailScreenUiState = providePresenterDefaults<TimetableItemDetailScreenUiState> { userMessageStateHolder ->
     val timetableItemStateWithBookmark by rememberUpdatedState(
         sessionsRepository
             .timetableItemWithBookmark(TimetableItemId(timetableItemId)),

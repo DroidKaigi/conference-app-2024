@@ -9,7 +9,7 @@ androidxCore = "1.12.0"
 androidDesugarJdkLibs = "2.0.4"
 compose = "2024.03.00"
 composeCompiler = "1.5.12"
-composeMultiplatform = "1.6.10-dev1593"
+composeMultiplatform = "1.6.10-beta03"
 rin = "0.1.0"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
@@ -44,6 +44,7 @@ lottie = "6.1.0"
 molecule = "1.4.1"
 kover = "0.7.3"
 androidxLifecycleProcess = "2.8.0-alpha03"
+skie = "0.6.2"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -64,7 +65,7 @@ moleculeGradlePlugin = { module = "app.cash.molecule:molecule-gradle-plugin", ve
 moleculeRuntime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 koverPlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 composeInvestigatorGradlePlugin = { module = "land.sungbin.composeinvestigator:land.sungbin.composeinvestigator.gradle.plugin", version.ref = "composeInvestigator" }
-skiePlugin = { module = "co.touchlab.skie:co.touchlab.skie.gradle.plugin", version = "0.6.2" }
+skiePlugin = { module = "co.touchlab.skie:co.touchlab.skie.gradle.plugin", version.ref = "skie" }
 
 androidDesugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 
@@ -77,6 +78,7 @@ androidxLifecycleProcess = { group = "androidx.lifecycle", name = "lifecycle-pro
 
 # for iOS
 koin = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+skieAnnotation = { module = "co.touchlab.skie:configuration-annotations", version.ref = "skie" }
 
 kotlinxCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 
@@ -101,7 +103,8 @@ composeMaterialWindowSize = "dev.chrisbanes.material3:material3-window-size-clas
 composeMaterialIcon = { module = "androidx.compose.material:material-icons-extended" }
 composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 composeUiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha01" }
+composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha02" }
+coreBundle = { module = "org.jetbrains.androidx.core:core-bundle", version = "1.0.0-alpha01" }
 composeHiltNavigtation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigatiaon" }
 composeLintCheck = { module = "com.slack.lint.compose:compose-lint-checks", version = "1.2.0" }
 composeCoil = { module = "io.coil-kt:coil-compose", version = "2.4.0" }

@@ -116,7 +116,6 @@ fun TimetableScreen(
 data class TimetableScreenUiState(
     val contentUiState: TimetableSheetUiState,
     val timetableUiType: TimetableUiType,
-    val onBookmarkIconClickStatus: Boolean,
     val userMessageStateHolder: UserMessageStateHolder,
 )
 
@@ -242,7 +241,6 @@ fun PreviewTimetableScreenDark() {
                         ),
                     ),
                     timetableUiType = TimetableUiType.Grid,
-                    onBookmarkIconClickStatus = false,
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
                 snackbarHostState = SnackbarHostState(),
