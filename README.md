@@ -2,6 +2,169 @@
 
 ## Development
 
+<img width="815" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f0a9a5a2-e10d-470c-9e7d-0ad15128f1f5">
+
+### Understanding the App's Data Flow: A Guide for Contributors
+
+For contributing to the app, it is important to understand the data flow of the app.
+
+#### 1. Displaying Sessions on the Timetable Screen
+
+This section explains how the TimetableScreen is set up to display sessions, detailing the flow from the presenter to the UI state.
+
+```
+              TimetableScreenUiState
+timetableScreenPresenter ----> TimetableScreen
+```
+
+```kotlin
+@Composable
+fun TimetableScreen(
+    ...
+    eventEmitter: EventEmitter<TimetableScreenEvent> = rememberEventEmitter<TimetableScreenEvent>(),
+    uiState: TimetableScreenUiState = timetableScreenPresenter(
+        events = eventEmitter,
+    ),
+) {
+    ...
+    TimetableScreen(
+        uiState = uiState,
+        onBookmarkClick = { item, bookmarked ->
+            eventEmitter.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
+        },
+```
+
+#### 2. User Interaction with the Bookmark Button
+
+Here, the interaction of bookmarking a session is detailed, showcasing how events trigger updates within the presenter.
+
+```
+      TimetableScreenEvent.Bookmark
+TimetableScreen ----> timetableScreenPresenter
+```
+
+```kotlin
+@Composable
+fun timetableScreenPresenter(
+    events: Flow<TimetableScreenEvent>,
+    sessionsRepository: SessionsRepository = localSessionsRepository(),
+): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
+    ...
+    SafeLaunchedEffect(Unit) {
+        events.collect { event ->
+            when (event) {
+                is Bookmark -> {
+                    sessionsRepository.toggleBookmark(event.timetableItem.id)
+                }
+                ...
+            }
+        }
+    }
+    ...
+}
+```
+
+#### 3. Saving the bookmarked session
+
+This part outlines how bookmark changes are persisted in the user's data store, demonstrating the repository's role in data handling.
+
+```
+        TimetableItemId
+SessionsRepository ----> userDataStore
+```
+
+
+```kotlin
+    override suspend fun toggleBookmark(id: TimetableItemId) {
+        userDataStore.toggleFavorite(id)
+    }
+```
+
+#### 4. Recomposing the Repository's Timetable Upon Bookmarking
+
+Focuses on how user actions (like bookmarking) cause the repository to update and recompose the timetable data.
+
+```
+      favoriteSessions
+userDataStore ----> Repository
+```
+
+```kotlin
+    @Composable
+public override fun timetable(): Timetable {
+    val timetable by remember {
+        ...
+    }.safeCollectAsState(Timetable())
+    val favoriteSessions by remember {
+        userDataStore.getFavoriteSessionStream()
+    }.safeCollectAsState(persistentSetOf())
+
+    return timetable.copy(bookmarks = favoriteSessions)
+}
+```
+
+#### 5. Passing the Updated Timetable to the Presenter
+
+Describes the flow of updated session data back to the screen presenter, highlighting how the UI state is refreshed.
+
+```
+                 Timetable
+SessionsRepository ----> timetableScreenPresenter
+```
+
+```kotlin
+@Composable
+fun timetableScreenPresenter(
+    events: Flow<TimetableScreenEvent>,
+    sessionsRepository: SessionsRepository = localSessionsRepository(),
+): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
+    // Sessions are updated in the timetable() function
+    val sessions by rememberUpdatedState(sessionsRepository.timetable())
+    ...
+    val timetableUiState by rememberUpdatedState(
+        timetableSheet(
+            sessionTimetable = sessions,
+            uiType = timetableUiType,
+        ),
+    )
+    ...
+    SafeLaunchedEffect(Unit) {
+        events.collect { event ->
+            ...
+        }
+    }
+    TimetableScreenUiState(
+        contentUiState = timetableUiState,
+        timetableUiType = timetableUiType,
+        userMessageStateHolder = userMessageStateHolder
+    )
+}
+```
+
+#### 6. Displaying the Updated Timetable on the Screen
+
+This final step illustrates how the updated timetable is displayed on the screen, completing the cycle of user interaction and data update.
+
+```
+          TimetableScreenUiState
+timetableScreenPresenter ----> TimetableScreen
+```
+
+```kotlin
+@Composable
+fun TimetableScreen(
+    ...,
+    uiState: TimetableScreenUiState = timetableScreenPresenter(
+        events = eventEmitter,
+    ),
+) {
+    ...
+    TimetableScreen(
+        uiState = uiState,
+```        
+
+
+<!--
 ### Points to note
 * Use Composable function for ViewModels
 * Use Composable function for Repositories
@@ -206,3 +369,5 @@ SafeLaunchedEffect(first) {
     }
 }
 ```
+
+-->
