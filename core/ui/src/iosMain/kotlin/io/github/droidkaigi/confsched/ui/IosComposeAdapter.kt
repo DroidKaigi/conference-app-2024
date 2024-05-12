@@ -1,7 +1,11 @@
 package io.github.droidkaigi.confsched.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.ui.interop.LocalUIViewController
+import androidx.compose.ui.window.ComposeUIViewController
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LifecycleRegistry
@@ -9,11 +13,18 @@ import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.CompositionLocalProviderWithReturnValue
+import io.github.droidkaigi.confsched.data.Repositories
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import kotlinx.coroutines.flow.Flow
+import platform.UIKit.UIViewController
 import kotlin.reflect.KClass
 
 @Suppress("unused")
@@ -43,4 +54,34 @@ fun <EVENT, UISTATE> presenterStateFlow(
     }
 }
 
+
+@Suppress("UNUSED")
+fun composeViewController(
+    repositories: Repositories,
+    content: @Composable () -> Unit,
+): UIViewController = /** no action for iOS side **/
+    ComposeUIViewController {
+    /** no action for iOS side **/
+        NavHost(rememberNavController(), startDestination = "root") {
+        composable("root") {
+            /** no action for iOS side **/
+            CompositionLocalProvider(
+                LocalRepositories provides repositories.map
+            ) {
+                Logger.d { "contributorViewController" }
+                val uiViewController = LocalUIViewController.current
+                LaunchedEffect(uiViewController) {
+//        uiViewController
+                    // TODO: How to know the destroy event of the ViewController?
+//        viewModel.viewModelScope.cancel()
+                }
+
+                /** no action for iOS side **/
+                KaigiTheme {
+                    content()
+                }
+            }
+        }
+    }
+}
 
