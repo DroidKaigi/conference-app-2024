@@ -13,18 +13,36 @@ let package = Package(
             name: "App",
             targets: ["App"]
         ),
+        .library(
+            name: "TimetableFeature",
+            targets: ["TimetableFeature"]
+        ),
+    ],
+    dependencies: [
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
     ],
     targets: [
         .target(
             name: "App",
-            dependencies: [.kmpModule]
+            dependencies: [
+                "TimetableFeature",
+                .kmpModule,
+            ]
         ),
         .testTarget(
             name: "AppTests",
             dependencies: [.app]
         ),
+
+        .target(
+            name: "TimetableFeature",
+            dependencies: [
+                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+            ]
+        ),
+
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
-        .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
+        .binaryTarget(name: "KmpModule", path: "build/shared.xcframework"),
     ]
 )
 
