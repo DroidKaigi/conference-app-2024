@@ -1,5 +1,4 @@
 import ComposableArchitecture
-import SessionFeature
 import TimetableFeature
 
 @Reducer
