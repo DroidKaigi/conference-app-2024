@@ -9,8 +9,8 @@ public struct TimetableScreen: View {
     }
 
     public var body: some View {
-        ForEach(store.timetableItems, id: \.timetableItem.id) { item in
-            Text(item.timetableItem.title.jaTitle)
+        ForEach(store.timetableItems, id: \.self) { item in
+            Text(item)
         }
     }
 }

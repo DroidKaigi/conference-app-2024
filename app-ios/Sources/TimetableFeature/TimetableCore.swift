@@ -1,5 +1,4 @@
 import ComposableArchitecture
-import shared
 
 @Reducer
 public struct TimetableCore {
@@ -7,7 +6,7 @@ public struct TimetableCore {
 
     @ObservableState
     public struct State: Equatable {
-        public var timetableItems: [TimetableItemWithFavorite] = [TimetableItemWithFavorite.companion.fake()]
+        public var timetableItems: [String] = []
 
         public init() {}
     }
