@@ -2,13 +2,13 @@ import SwiftUI
 import shared
 
 struct ContributorsViewWithKmpPresenter: View {
-    private let repositories: Repositories
-    private let events: SkieSwiftMutableSharedFlow<ContributorsScreenEvent>
+    private let repositories: any Repositories
+    private let events: SkieSwiftMutableSharedFlow<any ContributorsScreenEvent>
     @State private var currentState: ContributorsUiState? = nil
 
-    init(repositories: Repositories) {
+    init(repositories: any Repositories) {
         self.repositories = repositories
-        self.events = SkieKotlinSharedFlowFactory<ContributorsScreenEvent>()
+        self.events = SkieKotlinSharedFlowFactory<any ContributorsScreenEvent>()
             .createSkieKotlinSharedFlow(replay: 0, extraBufferCapacity: 0)
         
     }
