@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by 日野森寛也 on 2024/05/23.
-//
-
 import ComposableArchitecture
 
 @Reducer

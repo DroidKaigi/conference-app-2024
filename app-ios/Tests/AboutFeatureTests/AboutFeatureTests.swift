@@ -1,10 +1,3 @@
-//
-//  AboutFeatureTests.swift
-//  
-//
-//  Created by 日野森寛也 on 2024/05/23.
-//
-
 import XCTest
 import ComposableArchitecture
 @testable import AboutFeature
