@@ -8,7 +8,7 @@ public struct ContentView: View {
     public var body: some View {
         
         let container = Container.shared
-        let repositories: Repositories = container.get(type: Repositories.self)
+        let repositories: any Repositories = container.get(type: (any Repositories).self)
         
         TabView(selection: $selection) {
             VStack {
@@ -62,9 +62,9 @@ public struct ContentView: View {
 }
 
 struct ContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
-    let repositories: Repositories
+    let repositories: any Repositories
     func makeUIViewController(context: Context) -> UIViewController {
-        return DarwinContributorsKt.contributorViewController(
+        return IosComposeKt.contributorViewController(
             repositories: repositories,
             onContributorItemClick: {_ in}
         )
@@ -78,7 +78,7 @@ struct ContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
 struct KaigiAppComposeViewControllerWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIViewController {
         let container = Container.shared
-        let repositories: Repositories = container.get(type: Repositories.self)
+        let repositories: any Repositories = container.get(type: (any Repositories).self)
         return IosComposeKaigiAppKt.kaigiAppController(
             repositories: repositories
         )
