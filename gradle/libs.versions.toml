@@ -44,7 +44,7 @@ lottie = "6.1.0"
 molecule = "1.4.1"
 kover = "0.7.3"
 androidxLifecycleProcess = "2.8.0-alpha03"
-skie = "0.6.2"
+skie = "0.7.2"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

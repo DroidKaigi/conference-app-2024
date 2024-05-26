@@ -17,11 +17,19 @@ class KmpEntryPoint {
     // Please EntryPoint.get() instead of this property
     lateinit var koinApplication: KoinApplication
 
-    @DefaultArgumentInterop.Enabled
     fun init(
         remoteConfigApi: RemoteConfigApi,
         authenticator: Authenticator,
-        dataModuleOverride: Module = module { },
+    ) = initForTest(
+        remoteConfigApi = remoteConfigApi,
+        authenticator = authenticator,
+        dataModuleOverride = module { },
+    )
+
+    fun initForTest(
+        remoteConfigApi: RemoteConfigApi,
+        authenticator: Authenticator,
+        dataModuleOverride: Module,
     ) {
         koinApplication = startKoin {
             modules(
