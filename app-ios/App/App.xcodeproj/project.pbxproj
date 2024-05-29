@@ -26,6 +26,7 @@
 		8C7DACB52BCBCCB0002C298A /* App.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		8C7DACBB2BCBCDA0002C298A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8C7DACC12BCBD0F1002C298A /* app-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "app-ios"; path = ..; sourceTree = "<group>"; };
+		C495D60A2C075130003B324E /* App.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = App.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,6 +79,7 @@
 		8C7DACC22BCBD111002C298A /* App */ = {
 			isa = PBXGroup;
 			children = (
+				C495D60A2C075130003B324E /* App.xctestplan */,
 				8C7DACB12BCBCCB0002C298A /* Preview Content */,
 				8C7DACB22BCBCCB0002C298A /* App.swift */,
 				8C7DACB32BCBCCB0002C298A /* Assets.xcassets */,
