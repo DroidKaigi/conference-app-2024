@@ -25,6 +25,10 @@ let package = Package(
             name: "TimetableDetailFeature",
             targets: ["TimetableDetailFeature"]
         ),
+        .library(
+            name: "AboutFeature",
+            targets: ["AboutFeature"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -55,7 +59,6 @@ let package = Package(
                 .tca
             ]
         ),
-        
         .target(
             name: "TimetableDetailFeature",
             dependencies: [
@@ -65,6 +68,19 @@ let package = Package(
         .testTarget(
             name: "TimetableDetailFeatureTests",
             dependencies: [.timetableDetailFeature, .tca]
+        ),
+        .target(
+            name: "AboutFeature",
+            dependencies: [
+                .tca
+            ]
+        ),
+        .testTarget(
+            name: "AboutFeatureTests",
+            dependencies: [
+                .aboutFeature,
+                .tca
+            ]
         ),
 
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
@@ -88,6 +104,7 @@ extension Target.Dependency {
     static let app: Target.Dependency = "App"
     static let timetableDetailFeature: Target.Dependency = "TimetableDetailFeature"
     static let timetableFeature: Target.Dependency = "TimetableFeature"
+    static let aboutFeature: Target.Dependency = "AboutFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
 
     static let tca: Target.Dependency = .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
