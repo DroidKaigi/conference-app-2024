@@ -21,6 +21,10 @@ let package = Package(
             name: "TimetableFeature",
             targets: ["TimetableFeature"]
         ),
+        .library(
+            name: "TimetableDetailFeature",
+            targets: ["TimetableDetailFeature"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -29,8 +33,9 @@ let package = Package(
         .target(
             name: "App",
             dependencies: [
-                "TimetableFeature",
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .timetableFeature,
+                .timetableDetailFeature,
+                .tca,
             ]
         ),
         .testTarget(
@@ -47,8 +52,19 @@ let package = Package(
         .target(
             name: "TimetableFeature",
             dependencies: [
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .tca
             ]
+        ),
+        
+        .target(
+            name: "TimetableDetailFeature",
+            dependencies: [
+                .tca,
+            ]
+        ),
+        .testTarget(
+            name: "TimetableDetailFeatureTests",
+            dependencies: [.timetableDetailFeature, .tca]
         ),
 
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
@@ -70,7 +86,11 @@ package.targets
 
 extension Target.Dependency {
     static let app: Target.Dependency = "App"
+    static let timetableDetailFeature: Target.Dependency = "TimetableDetailFeature"
+    static let timetableFeature: Target.Dependency = "TimetableFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
+
+    static let tca: Target.Dependency = .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
 }
 
 /// ref: https://github.com/treastrain/swift-upcomingfeatureflags-cheatsheet?tab=readme-ov-file#short
