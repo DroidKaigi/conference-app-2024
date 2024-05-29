@@ -6,8 +6,8 @@ final class AboutFeatureTests: XCTestCase {
 
     @MainActor
     func testExample() async throws {
-        let store = TestStore(initialState: AboutCore.State(text: "HOGE")) {
-            AboutCore()
+        let store = TestStore(initialState: AboutReducer.State(text: "HOGE")) {
+            AboutReducer()
         }
         await store.send(.onAppear) {
             $0.text = "About Feature"

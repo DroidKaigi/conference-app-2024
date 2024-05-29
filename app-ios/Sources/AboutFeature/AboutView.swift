@@ -2,9 +2,9 @@ import ComposableArchitecture
 import SwiftUI
 
 public struct AboutView: View {
-    private let store: StoreOf<AboutCore>
+    private let store: StoreOf<AboutReducer>
 
-    public init(store: StoreOf<AboutCore>) {
+    public init(store: StoreOf<AboutReducer>) {
         self.store = store
     }
 
@@ -17,5 +17,5 @@ public struct AboutView: View {
 }
 
 #Preview {
-    AboutView(store: .init(initialState: .init(text: "Hoge"), reducer: { AboutCore() }))
+    AboutView(store: .init(initialState: .init(text: "Hoge"), reducer: { AboutReducer() }))
 }

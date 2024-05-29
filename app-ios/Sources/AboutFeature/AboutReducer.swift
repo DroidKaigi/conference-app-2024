@@ -1,7 +1,7 @@
 import ComposableArchitecture
 
 @Reducer
-public struct AboutCore {
+public struct AboutReducer {
     public init() { }
     
     @ObservableState
