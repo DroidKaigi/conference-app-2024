@@ -72,14 +72,14 @@ let package = Package(
         .target(
             name: "AboutFeature",
             dependencies: [
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .tca
             ]
         ),
         .testTarget(
             name: "AboutFeatureTests",
             dependencies: [
-                "AboutFeature",
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .aboutFeature,
+                .tca
             ]
         ),
 
@@ -104,6 +104,7 @@ extension Target.Dependency {
     static let app: Target.Dependency = "App"
     static let timetableDetailFeature: Target.Dependency = "TimetableDetailFeature"
     static let timetableFeature: Target.Dependency = "TimetableFeature"
+    static let aboutFeature: Target.Dependency = "AboutFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
 
     static let tca: Target.Dependency = .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
