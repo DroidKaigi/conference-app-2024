@@ -1,0 +1,43 @@
+{
+  "configurations" : [
+    {
+      "id" : "4FDFB90B-1EDC-4453-AFF9-603E4D951A6B",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:App.xcodeproj",
+      "identifier" : "8C772B142BCBCBCA00F2BADC",
+      "name" : "DroidKaigi2024App"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "AboutFeatureTests",
+        "name" : "AboutFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "AppTests",
+        "name" : "AppTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "TimetableDetailFeatureTests",
+        "name" : "TimetableDetailFeatureTests"
+      }
+    }
+  ],
+  "version" : 1
+}
