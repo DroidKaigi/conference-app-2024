@@ -2,17 +2,27 @@ import SwiftUI
 
 #if canImport(App)
 import App
+import ComposableArchitecture
+
+final class AppDelegate: NSObject, UIApplicationDelegate {
+    let store = Store(
+        initialState: RootReducer.State(),
+        reducer: { RootReducer() }
+    )
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        store.send(.appDelegate(.didFinishLaunching))
+        return true
+    }
+}
 
 @main
 struct DroidKaigi2024AppApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
     var body: some Scene {
         WindowGroup {
-            RootView(
-                store: .init(
-                    initialState: .init(),
-                    reducer: { RootCore() }
-                )
-            )
+            RootView(store: appDelegate.store)
         }
     }
 }
