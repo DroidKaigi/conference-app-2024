@@ -17,12 +17,6 @@ class KmpFeaturePlugin : Plugin<Project> {
                 apply("droidkaigi.primitive.kmp.roborazzi")
                 apply("droidkaigi.primitive.detekt")
             }
-
-            tasks.withType<KotlinCompile>().configureEach {
-                kotlinOptions {
-                    freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
-                }
-            }
         }
     }
 }

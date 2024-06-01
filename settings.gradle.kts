@@ -29,5 +29,6 @@ include(
     ":core:model",
     ":core:ui",
     ":core:testing",
+    ":core:testing-manifest",
     ":core:common",
 )

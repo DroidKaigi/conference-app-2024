@@ -14,5 +14,10 @@ kotlin {
                 implementation(libs.moleculeRuntime)
             }
         }
+        androidUnitTest {
+            dependencies {
+                implementation(projects.core.testing)
+            }
+        }
     }
 }

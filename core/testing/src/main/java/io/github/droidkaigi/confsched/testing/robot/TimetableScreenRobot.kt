@@ -21,7 +21,9 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreen
 import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableUiTypeChangeButtonTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
-import io.github.droidkaigi.confsched.testing.RobotTestEnvironment
+import io.github.droidkaigi.confsched.testing.CaptureScreenRobot
+import io.github.droidkaigi.confsched.testing.DefaultCaptureScreenRobot
+import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
@@ -30,15 +32,14 @@ import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
 class TimetableScreenRobot @Inject constructor(
+    private val robotTestRule: RobotTestRule,
     private val testDispatcher: TestDispatcher,
-) {
-    @Inject lateinit var robotTestEnvironment: RobotTestEnvironment
-    private val composeTestRule
-        get() = robotTestEnvironment.composeTestRule
-
+) : CaptureScreenRobot by DefaultCaptureScreenRobot(robotTestRule) {
     @Inject lateinit var sessionsApiClient: SessionsApiClient
-    val fakeSessionsApiClient: FakeSessionsApiClient
+    private val fakeSessionsApiClient: FakeSessionsApiClient
         get() = sessionsApiClient as FakeSessionsApiClient
+
+    private val composeTestRule get() = robotTestRule.composeTestRule
 
     operator fun invoke(
         block: TimetableScreenRobot.() -> Unit,
@@ -49,7 +50,7 @@ class TimetableScreenRobot @Inject constructor(
     }
 
     fun setupTimetableScreenContent() {
-        robotTestEnvironment.setContent {
+        robotTestRule.setContent {
             CompositionLocalProvider(LocalClock provides FakeClock) {
                 KaigiTheme {
                     TimetableScreen(
@@ -122,12 +123,6 @@ class TimetableScreenRobot @Inject constructor(
             .onAllNodes(hasTestTag(TimetableListItemTestTag))
             .onFirst()
             .assertIsDisplayed()
-    }
-
-    fun checkScreenCapture() {
-        composeTestRule
-            .onNode(isRoot())
-            .captureRoboImage()
     }
 
     fun checkTimetableListCapture() {

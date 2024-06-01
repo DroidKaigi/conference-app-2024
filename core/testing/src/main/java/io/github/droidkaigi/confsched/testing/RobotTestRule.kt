@@ -15,6 +15,11 @@ import com.github.takahirom.roborazzi.RoborazziOptions.PixelBitConfig
 import com.github.takahirom.roborazzi.RoborazziOptions.RecordOptions
 import com.github.takahirom.roborazzi.RoborazziRule
 import com.github.takahirom.roborazzi.RoborazziRule.Options
+import com.github.takahirom.roborazzi.captureScreenRoboImage
+import dagger.hilt.EntryPoint
+import dagger.hilt.EntryPoints
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
 import io.github.droidkaigi.confsched.ui.Inject
 import org.junit.rules.RuleChain
@@ -22,32 +27,46 @@ import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import kotlin.reflect.KClass
 
-inline fun <reified A : ComponentActivity> RobotTestRule(
+fun RobotTestRule(
     testInstance: Any,
     bundle: Bundle? = null,
 ): RobotTestRule {
-    val composeTestRule = AndroidComposeTestRule<ActivityScenarioRule<A>, A>(
-        activityRule = ActivityScenarioRule(
-            Intent(
-                ApplicationProvider.getApplicationContext(),
-                A::class.java,
-            ).apply {
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                if (bundle != null) {
-                    putExtras(bundle)
-                }
-            },
-        ),
-        activityProvider = { rule ->
-            var activity: A? = null
-            rule.scenario.onActivity { activity = it }
-            if (activity == null) {
-                error("Activity was not set in the ActivityScenarioRule!")
-            }
-            return@AndroidComposeTestRule activity!!
-        },
+    return RobotTestRule<HiltTestActivity>(
+        HiltTestActivity::class,
+        testInstance,
+        bundle,
     )
+}
+
+inline fun<reified T: ComponentActivity> RobotTestRule(
+    activityClass: KClass<T>,
+    testInstance: Any,
+    bundle: Bundle? = null,
+): RobotTestRule {
+    val composeTestRule =
+        AndroidComposeTestRule<ActivityScenarioRule<T>, T>(
+            activityRule = ActivityScenarioRule(
+                Intent(
+                    ApplicationProvider.getApplicationContext(),
+                    activityClass.java,
+                ).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    if (bundle != null) {
+                        putExtras(bundle)
+                    }
+                },
+            ),
+            activityProvider = { rule ->
+                var activity: T? = null
+                rule.scenario.onActivity { activity = it }
+                if (activity == null) {
+                    error("Activity was not set in the ActivityScenarioRule!")
+                }
+                return@AndroidComposeTestRule activity as T
+            },
+        )
     return RobotTestRule(
         testInstance,
         composeTestRule as AndroidComposeTestRule<ActivityScenarioRule<*>, *>,
@@ -88,6 +107,29 @@ class RobotTestRule(
             )
             .around(composeTestRule)
             .apply(base, description)
+    }
+
+    @EntryPoint
+    @InstallIn(SingletonComponent::class)
+    interface RepositoryProviderEntryPoint {
+        fun getRepositoryProvider(): RepositoryProvider
+    }
+
+    fun setContent(content: @Composable () -> Unit) {
+        val repositoryProvider = EntryPoints.get(
+            composeTestRule.activity.application,
+            RepositoryProviderEntryPoint::class.java
+        )
+            .getRepositoryProvider()
+        composeTestRule.setContent {
+            repositoryProvider.Provide {
+                content()
+            }
+        }
+    }
+
+    fun captureScreen() {
+        captureScreenRoboImage()
     }
 }
 
