@@ -1,8 +1,11 @@
 package io.github.droidkaigi.confsched.primitive
 
+import io.github.droidkaigi.confsched.convention.buildComposeMetricsParameters
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("unused")
 class KmpComposePlugin : Plugin<Project> {
@@ -47,6 +50,11 @@ class KmpComposePlugin : Plugin<Project> {
                 }
             }
 
+            tasks.withType<KotlinCompile>().configureEach {
+                kotlinOptions {
+                    freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
+                }
+            }
         }
     }
 }

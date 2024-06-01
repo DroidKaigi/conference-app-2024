@@ -4,7 +4,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.robot.KaigiAppRobot
@@ -28,7 +27,7 @@ import javax.inject.Inject
 class KaigiAppTest {
 
     @get:Rule
-    @BindValue val robotTestRule: RobotTestRule = RobotTestRule<MainActivity>(this)
+    @BindValue val robotTestRule: RobotTestRule = RobotTestRule(MainActivity::class, this)
 
     @Inject lateinit var kaigiAppRobot: KaigiAppRobot
 
