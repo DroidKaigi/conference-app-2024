@@ -20,7 +20,7 @@ public struct RootView: View {
 
     public var body: some View {
         TabView(selection: $selection) {
-            TimetableScreen(
+            TimetableListView(
                 store: store.scope(
                     state: \.timetable,
                     action: \.timetable

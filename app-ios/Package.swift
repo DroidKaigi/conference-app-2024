@@ -47,12 +47,13 @@ let package = Package(
         .target(
             name: "TimetableFeature",
             dependencies: [
+                .kmpModule,
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
         ),
         .testTarget(
             name: "TimetableTests",
-            dependencies: [
+            dependencies: [.app,
                 "TimetableFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
             ]
