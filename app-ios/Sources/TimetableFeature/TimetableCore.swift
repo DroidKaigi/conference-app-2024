@@ -6,7 +6,7 @@ public struct TimetableCore {
 
     @ObservableState
     public struct State: Equatable {
-        public var timetableItems: [String] = []
+        public var timetableItems: [String] = ["aaa"]
 
         public init() {}
     }

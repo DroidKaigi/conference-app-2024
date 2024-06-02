@@ -32,6 +32,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", exact: "10.26.0"),
     ],
     targets: [
         .target(
@@ -40,6 +41,7 @@ let package = Package(
                 .timetableFeature,
                 .timetableDetailFeature,
                 .tca,
+                "KMPClient",
             ]
         ),
         .testTarget(
@@ -50,6 +52,16 @@ let package = Package(
             name: "AppExperiments",
             dependencies: [
                 .kmpModule,
+            ]
+        ),
+
+        .target(
+            name: "KMPClient",
+            dependencies: [
+                .kmpModule,
+                .firebaseAuth,
+                .firebaseRemoteConfig,
+                .tca,
             ]
         ),
 
@@ -88,15 +100,15 @@ let package = Package(
     ]
 )
 
-let swiftCommonSettings = SwiftSetting.allCases
-    // https://www.swift.org/documentation/concurrency/
-    + [.enableExperimentalFeature("StrictConcurrency")]
-
 package.targets
     .filter { ![.system, .binary, .plugin, .macro].contains($0.type) }
     .forEach { target in
-        var settings = target.swiftSettings ?? []
-        settings.append(contentsOf: swiftCommonSettings)
+        var settings = SwiftSetting.allCases
+
+        if target.name != "KMPClient" {
+            // https://www.swift.org/documentation/concurrency/
+            settings.append(.enableExperimentalFeature("StrictConcurrency"))
+        }
         target.swiftSettings = settings
     }
 
@@ -107,6 +119,8 @@ extension Target.Dependency {
     static let aboutFeature: Target.Dependency = "AboutFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
 
+    static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
+    static let firebaseRemoteConfig: Target.Dependency = .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk")
     static let tca: Target.Dependency = .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
 }
 
