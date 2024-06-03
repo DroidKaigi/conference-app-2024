@@ -22,7 +22,7 @@ class EntryPointTest {
     @Test
     fun get() {
         val kmpEntryPoint = KmpEntryPoint()
-        kmpEntryPoint.init(
+        kmpEntryPoint.initForTest(
             remoteConfigApi = object : RemoteConfigApi {
                 override suspend fun getBoolean(key: String): Boolean {
                     return true

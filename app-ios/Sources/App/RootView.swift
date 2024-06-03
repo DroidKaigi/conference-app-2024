@@ -11,10 +11,10 @@ private enum Tab {
 }
 
 public struct RootView: View {
-    private let store: StoreOf<RootCore>
+    private let store: StoreOf<RootReducer>
     @State private var selection: Tab = .timetable
 
-    public init(store: StoreOf<RootCore>) {
+    public init(store: StoreOf<RootReducer>) {
         self.store = store
     }
 

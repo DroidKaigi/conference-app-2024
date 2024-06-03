@@ -21,16 +21,27 @@ let package = Package(
             name: "TimetableFeature",
             targets: ["TimetableFeature"]
         ),
+        .library(
+            name: "TimetableDetailFeature",
+            targets: ["TimetableDetailFeature"]
+        ),
+        .library(
+            name: "AboutFeature",
+            targets: ["AboutFeature"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
+        .package(url: "https://github.com/firebase/firebase-ios-sdk.git", exact: "10.26.0"),
     ],
     targets: [
         .target(
             name: "App",
             dependencies: [
-                "TimetableFeature",
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .timetableFeature,
+                .timetableDetailFeature,
+                .tca,
+                "KMPClient",
             ]
         ),
         .testTarget(
@@ -41,6 +52,16 @@ let package = Package(
             name: "AppExperiments",
             dependencies: [
                 .kmpModule,
+            ]
+        ),
+
+        .target(
+            name: "KMPClient",
+            dependencies: [
+                .kmpModule,
+                .firebaseAuth,
+                .firebaseRemoteConfig,
+                .tca,
             ]
         ),
 
@@ -56,6 +77,30 @@ let package = Package(
             dependencies: [.app,
                 "TimetableFeature",
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .tca
+            ]
+        ),
+        .target(
+            name: "TimetableDetailFeature",
+            dependencies: [
+                .tca,
+            ]
+        ),
+        .testTarget(
+            name: "TimetableDetailFeatureTests",
+            dependencies: [.timetableDetailFeature, .tca]
+        ),
+        .target(
+            name: "AboutFeature",
+            dependencies: [
+                .tca
+            ]
+        ),
+        .testTarget(
+            name: "AboutFeatureTests",
+            dependencies: [
+                .aboutFeature,
+                .tca
             ]
         ),
 
@@ -64,21 +109,28 @@ let package = Package(
     ]
 )
 
-let swiftCommonSettings = SwiftSetting.allCases
-    // https://www.swift.org/documentation/concurrency/
-    + [.enableExperimentalFeature("StrictConcurrency")]
-
 package.targets
     .filter { ![.system, .binary, .plugin, .macro].contains($0.type) }
     .forEach { target in
-        var settings = target.swiftSettings ?? []
-        settings.append(contentsOf: swiftCommonSettings)
+        var settings = SwiftSetting.allCases
+
+        if target.name != "KMPClient" {
+            // https://www.swift.org/documentation/concurrency/
+            settings.append(.enableExperimentalFeature("StrictConcurrency"))
+        }
         target.swiftSettings = settings
     }
 
 extension Target.Dependency {
     static let app: Target.Dependency = "App"
+    static let timetableDetailFeature: Target.Dependency = "TimetableDetailFeature"
+    static let timetableFeature: Target.Dependency = "TimetableFeature"
+    static let aboutFeature: Target.Dependency = "AboutFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
+
+    static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
+    static let firebaseRemoteConfig: Target.Dependency = .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk")
+    static let tca: Target.Dependency = .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
 }
 
 /// ref: https://github.com/treastrain/swift-upcomingfeatureflags-cheatsheet?tab=readme-ov-file#short

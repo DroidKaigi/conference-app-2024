@@ -30,7 +30,7 @@ class IosComposeKaigiTest {
     @Test
     fun get() {
         val kmpEntryPoint = KmpEntryPoint()
-        kmpEntryPoint.init(
+        kmpEntryPoint.initForTest(
             FakeRemoteConfigApi(),
             object : Authenticator {
                 override suspend fun currentUser(): User? {

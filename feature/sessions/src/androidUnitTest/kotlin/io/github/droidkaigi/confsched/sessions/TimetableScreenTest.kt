@@ -4,11 +4,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.droidkaigi.confsched.testing.HiltTestActivity
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot.ServerStatus
+import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
 import org.junit.experimental.categories.Category
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class TimetableScreenTest {
 
     @get:Rule
-    @BindValue val robotTestRule: RobotTestRule = RobotTestRule<HiltTestActivity>(this)
+    @BindValue val robotTestRule: RobotTestRule = RobotTestRule(this)
 
     @Inject
     lateinit var timetableScreenRobot: TimetableScreenRobot
@@ -36,7 +36,7 @@ class TimetableScreenTest {
     fun checkLaunchShot() {
         timetableScreenRobot {
             setupTimetableScreenContent()
-            checkScreenCapture()
+            captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
     }
 
@@ -46,7 +46,7 @@ class TimetableScreenTest {
         timetableScreenRobot {
             setupServer(ServerStatus.Error)
             setupTimetableScreenContent()
-            checkScreenCapture()
+            captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
     }
 
@@ -116,7 +116,7 @@ class TimetableScreenTest {
     fun checkSmallFontScaleShot() {
         timetableScreenRobot {
             setupTimetableScreenContent()
-            checkScreenCapture()
+            captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
     }
 
@@ -126,7 +126,7 @@ class TimetableScreenTest {
     fun checkLargeFontScaleShot() {
         timetableScreenRobot {
             setupTimetableScreenContent()
-            checkScreenCapture()
+            captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
     }
 
@@ -136,7 +136,7 @@ class TimetableScreenTest {
     fun checkHugeFontScaleShot() {
         timetableScreenRobot {
             setupTimetableScreenContent()
-            checkScreenCapture()
+            captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
     }
 }
