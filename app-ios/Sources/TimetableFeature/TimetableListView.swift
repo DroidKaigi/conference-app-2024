@@ -13,14 +13,16 @@ public struct TimetableView: View {
             HStack {
                 ForEach(DayTab.allCases) { tabItem in
                     Button(action: {
-                        
+                        store.send(.selectDay(tabItem))
                     }, label: {
-                        Text(tabItem.rawValue)
+                        Text(tabItem.rawValue).foregroundColor(.green)
+                            .underline()
                     })
                 }
                 Spacer()
             }.padding(5)
-            //TimetableListView()
+            TimetableListView(store: store)
+            Spacer()
         }
     }
 }

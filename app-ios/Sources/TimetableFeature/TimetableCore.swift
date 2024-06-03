@@ -30,7 +30,7 @@ public struct TimetableCore {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                //send(.selectDay(DayTab.Day1))
+                state.timetableItems = SampleData.init().day1Data
                 return .none
             case .selectDay(let dayTab):
                 //TODO: Get fake data for tab
