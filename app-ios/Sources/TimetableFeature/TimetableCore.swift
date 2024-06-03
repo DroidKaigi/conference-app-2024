@@ -53,7 +53,7 @@ public struct TimetableCore {
     }
 }
 
-/// Enum for day selection
+/// Enum for day selection (placeholder)
 public enum DayTab: String, CaseIterable, Identifiable {
     public var id : RawValue { rawValue }
     

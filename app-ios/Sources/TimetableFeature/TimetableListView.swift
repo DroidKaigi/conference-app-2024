@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import SwiftUI
 
+/// View of Timetable Screen.
 public struct TimetableView: View {
     private let store: StoreOf<TimetableCore>
 
@@ -27,6 +28,7 @@ public struct TimetableView: View {
     }
 }
 
+/// A list of conference items
 public struct TimetableListView: View {
     private let store: StoreOf<TimetableCore>
 
@@ -44,6 +46,7 @@ public struct TimetableListView: View {
     }
 }
 
+///A single conference list item
 struct ListViewItem: View {
     let listItem: TimetableItem
     
@@ -69,6 +72,7 @@ struct ListViewItem: View {
     }
 }
 
+/// Information tag for a speech (room, language, etc)
 struct TagView: View {
     let tagText: String
     let highlight: Bool
