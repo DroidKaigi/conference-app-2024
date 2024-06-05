@@ -53,9 +53,9 @@ public struct TimetableCore {
 public enum DayTab: String, CaseIterable, Identifiable {
     public var id : RawValue { rawValue }
     
-    case Day1 = "Day1"
-    case Day2 = "Day2"
-    case Day3 = "Day3"
+    case day1 = "Day1"
+    case day2 = "Day2"
+    case day3 = "Day3"
 }
 
 /// Temporary data struct to represent what our actual data will look like
