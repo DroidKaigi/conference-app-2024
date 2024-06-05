@@ -88,7 +88,7 @@ struct TagView: View {
 }
 
 // Photo view for Speakers, etc
-struct photoView: View {
+struct PhotoView: View {
     //TODO: Replace this with an actual photo render
     let photo: String
     let name: String
