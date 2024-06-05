@@ -6,18 +6,16 @@
 //
 
 import XCTest
-@testable import App
+import ComposableArchitecture
+@testable import TimetableFeature
 
 final class TimetableTests: XCTestCase {
-    func testExample() throws {
-//        @MainActor
-//        func testExample() async throws {
-//            let store = TestStore(initialState: AboutCore.State(text: "HOGE")) {
-//                AboutCore()
-//            }
-//            await store.send(.onAppear) {
-//                $0.text = "About Feature"
-//            }
-//        }
+    @MainActor func testExample() async throws {
+        let store = TestStore(initialState: TimetableReducer.State()) {
+            TimetableReducer()
+        }
+        await store.send(.onAppear) {
+            $0.timetableItems = SampleData.init().day1Data
+        }
     }
 }
