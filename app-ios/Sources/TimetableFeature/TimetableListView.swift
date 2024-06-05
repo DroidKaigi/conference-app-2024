@@ -3,9 +3,9 @@ import SwiftUI
 
 /// View of Timetable Screen.
 public struct TimetableView: View {
-    private let store: StoreOf<TimetableCore>
+    private let store: StoreOf<TimetableReducer>
 
-    public init(store: StoreOf<TimetableCore>) {
+    public init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
     
@@ -30,9 +30,9 @@ public struct TimetableView: View {
 
 /// A list of conference items
 public struct TimetableListView: View {
-    private let store: StoreOf<TimetableCore>
+    private let store: StoreOf<TimetableReducer>
 
-    public init(store: StoreOf<TimetableCore>) {
+    public init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
 
@@ -54,14 +54,14 @@ struct ListViewItem: View {
         VStack(alignment: .leading) {
             HStack {
                 TagView(tagText: listItem.room, highlight: true)
-                ForEach(listItem.languuages, id: \.self) { lang in
+                ForEach(listItem.languages, id: \.self) { lang in
                     TagView(tagText: lang, highlight: false)
                 }
                 Spacer()
                 Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundColor(Color.gray)
             }
             Text(listItem.title).font(.title)
-            photoView(photo:"person.circle.fill",
+            PhotoView(photo:"person.circle.fill",
                       name: listItem.speaker)
             
         }.padding(10)
@@ -104,7 +104,7 @@ struct PhotoView: View {
 #Preview {
     TimetableView(
         store: .init(initialState: .init(timetableItems: SampleData.init().day1Data),
-                     reducer: { TimetableCore() })
+                     reducer: { TimetableReducer() })
     )
 }
 
@@ -113,7 +113,7 @@ struct PhotoView: View {
         store: .init(
             initialState: 
                     .init(timetableItems: SampleData.init().day1Data),
-            reducer: { TimetableCore() }
+            reducer: { TimetableReducer() }
         )
     )
 }
