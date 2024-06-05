@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  TimetableTests.swift
 //  
 //
 //  Created by CHARLES BOND on 2024/05/28.
