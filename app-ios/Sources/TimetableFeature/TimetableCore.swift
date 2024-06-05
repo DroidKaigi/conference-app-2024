@@ -10,12 +10,8 @@ public struct TimetableCore {
     public struct State: Equatable {
         var timetableItems: [TimetableItem] = [] //Should be simple objects
         
-        public init(timetableItems: [TimetableItem]) {
+        public init(timetableItems: [TimetableItem] = []) {
             self.timetableItems = timetableItems
-        }
-        
-        public init() {
-            self.timetableItems = []
         }
     }
 
