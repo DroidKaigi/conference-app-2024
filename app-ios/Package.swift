@@ -76,7 +76,7 @@ let package = Package(
             name: "TimetableTests",
             dependencies: [.app,
                 "TimetableFeature",
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .tca,
                 .tca
             ]
         ),
