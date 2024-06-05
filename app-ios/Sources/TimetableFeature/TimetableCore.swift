@@ -61,7 +61,7 @@ public enum DayTab: String, CaseIterable, Identifiable {
 /// Temporary data struct to represent what our actual data will look like
 public struct TimetableItem: Equatable, Hashable {
     let room: String
-    let languuages: [String]
+    let languages: [String]
     let title: String
     let speaker: String
     let startTime: String
