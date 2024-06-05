@@ -3,7 +3,7 @@ import shared
 import Foundation
 
 @Reducer
-public struct TimetableCore {
+public struct TimetableReducer {
     public init() {}
 
     @ObservableState
