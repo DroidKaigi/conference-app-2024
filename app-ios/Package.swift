@@ -69,7 +69,7 @@ let package = Package(
             name: "TimetableFeature",
             dependencies: [
                 .kmpModule,
-                .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
+                .tca,
             ]
         ),
         .testTarget(
