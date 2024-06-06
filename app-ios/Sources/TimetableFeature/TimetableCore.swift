@@ -14,13 +14,11 @@ public struct TimetableReducer {
         }
     }
 
-    //Executable actions
     public enum Action {
         case onAppear
         case selectDay(DayTab)
     }
 
-    //Implementation of actions
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
@@ -48,7 +46,6 @@ public struct TimetableReducer {
     }
 }
 
-/// Enum for day selection (placeholder)
 public enum DayTab: String, CaseIterable, Identifiable {
     public var id : RawValue { rawValue }
     
@@ -57,7 +54,6 @@ public enum DayTab: String, CaseIterable, Identifiable {
     case day3 = "Day3"
 }
 
-/// Temporary data struct to represent what our actual data will look like
 public struct TimetableItem: Equatable, Hashable {
     let room: String
     let languages: [String]
@@ -68,7 +64,6 @@ public struct TimetableItem: Equatable, Hashable {
     let isFavorite: Bool
 }
 
-///Placeholder for testing
 public struct SampleData {
     public let day1Data = [TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
                                   title: "DroidKaigiアプリで見るアーキテクチャの変遷",
