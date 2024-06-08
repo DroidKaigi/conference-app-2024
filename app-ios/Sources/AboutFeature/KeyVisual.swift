@@ -52,7 +52,6 @@ struct KeyVisual: View {
     VStack {
         Spacer()
         KeyVisual()
-            .environment(\.locale, Locale(identifier: "ja"))
             .background(Color(.background))
         Spacer()
     }

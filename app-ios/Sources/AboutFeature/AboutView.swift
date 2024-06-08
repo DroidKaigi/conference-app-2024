@@ -20,5 +20,4 @@ public struct AboutView: View {
 
 #Preview {
     AboutView(store: .init(initialState: .init(text: "Hoge"), reducer: { AboutReducer() }))
-        .environment(\.locale, Locale(identifier: "ja"))
 }
