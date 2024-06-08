@@ -40,7 +40,8 @@ class EntryPointTest {
                 override suspend fun signInAnonymously(): User? {
                     return null
                 }
-            }
+            },
+            testOverrideModules
         )
         // Check finer dependencies first to debug easily
         assertNotNull(kmpEntryPoint.get<UserDataStore>())
