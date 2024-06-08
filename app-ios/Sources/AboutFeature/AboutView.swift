@@ -9,13 +9,16 @@ public struct AboutView: View {
     }
 
     public var body: some View {
-        Text(store.text)
-            .onAppear {
-                store.send(.onAppear)
-            }
+        VStack {
+            KeyVisual()
+                .padding(16)
+            Spacer()
+        }
+        .background(Color(.background))
     }
 }
 
 #Preview {
     AboutView(store: .init(initialState: .init(text: "Hoge"), reducer: { AboutReducer() }))
+        .environment(\.locale, Locale(identifier: "ja"))
 }
