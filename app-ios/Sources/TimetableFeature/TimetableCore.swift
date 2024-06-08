@@ -26,7 +26,7 @@ public struct TimetableReducer {
                 state.timetableItems = SampleData.init().day1Data
                 return .none
             case .selectDay(let dayTab):
-                //TODO: Get fake data for tab
+                //TODO: Replace with real data
                 
                 switch dayTab {
                 case .day1:
@@ -39,8 +39,6 @@ public struct TimetableReducer {
                     state.timetableItems = SampleData.init().day3Data
                     return .none
                 }
-                
-                //return .none
             }
         }
     }

@@ -1,10 +1,3 @@
-//
-//  TimetableTests.swift
-//  
-//
-//  Created by CHARLES BOND on 2024/05/28.
-//
-
 import XCTest
 import ComposableArchitecture
 @testable import TimetableFeature
