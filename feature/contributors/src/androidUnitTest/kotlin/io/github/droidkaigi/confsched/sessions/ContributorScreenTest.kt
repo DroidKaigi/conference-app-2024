@@ -7,7 +7,9 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.testing.CaptureScreenRobot
 import io.github.droidkaigi.confsched.testing.DefaultCaptureScreenRobot
+import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.RobotTestRule
+import io.github.droidkaigi.confsched.testing.ScreenRobot
 import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
@@ -47,13 +49,7 @@ class ContributorScreenTest {
 
 class ContributorScreenRobot @Inject constructor(
     private val robotTestRule: RobotTestRule,
-) : CaptureScreenRobot by DefaultCaptureScreenRobot(robotTestRule) {
-    operator fun invoke(
-        block: ContributorScreenRobot.() -> Unit,
-    ) {
-        block()
-    }
-
+) : ScreenRobot<ContributorScreenRobot> by DefaultScreenRobot(robotTestRule) {
     fun setupScreenContent() {
         robotTestRule.setContent {
             ContributorsScreen(
