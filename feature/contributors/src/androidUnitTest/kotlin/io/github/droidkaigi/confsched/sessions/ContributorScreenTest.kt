@@ -5,10 +5,11 @@ import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.contributors.ContributorsScreen
-import io.github.droidkaigi.confsched.testing.CaptureScreenRobot
-import io.github.droidkaigi.confsched.testing.DefaultCaptureScreenRobot
+import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.RobotTestRule
+import io.github.droidkaigi.confsched.testing.ScreenRobot
 import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
+import io.github.droidkaigi.confsched.testing.runRobot
 import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
@@ -35,7 +36,7 @@ class ContributorScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkScreenContent() {
-        contributorScreenRobot {
+        runRobot(contributorScreenRobot) {
             setupScreenContent()
 
             captureScreenWithChecks(
@@ -46,14 +47,8 @@ class ContributorScreenTest {
 }
 
 class ContributorScreenRobot @Inject constructor(
-    private val robotTestRule: RobotTestRule,
-) : CaptureScreenRobot by DefaultCaptureScreenRobot(robotTestRule) {
-    operator fun invoke(
-        block: ContributorScreenRobot.() -> Unit,
-    ) {
-        block()
-    }
-
+    robotTestRule: RobotTestRule,
+) : ScreenRobot by DefaultScreenRobot(robotTestRule) {
     fun setupScreenContent() {
         robotTestRule.setContent {
             ContributorsScreen(

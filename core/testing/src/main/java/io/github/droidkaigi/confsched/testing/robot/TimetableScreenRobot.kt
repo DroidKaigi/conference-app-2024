@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.testing.robot
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
@@ -12,8 +11,6 @@ import androidx.compose.ui.test.swipeUp
 import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
-import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
-import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableListItemBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableListItemTestTag
@@ -21,34 +18,20 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreen
 import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableUiTypeChangeButtonTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
-import io.github.droidkaigi.confsched.testing.CaptureScreenRobot
-import io.github.droidkaigi.confsched.testing.DefaultCaptureScreenRobot
+import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
+import io.github.droidkaigi.confsched.testing.DefaultTimetableServerRobot
 import io.github.droidkaigi.confsched.testing.RobotTestRule
-import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
+import io.github.droidkaigi.confsched.testing.ScreenRobot
+import io.github.droidkaigi.confsched.testing.TimetableServerRobot
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import kotlinx.coroutines.test.TestDispatcher
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 class TimetableScreenRobot @Inject constructor(
-    private val robotTestRule: RobotTestRule,
-    private val testDispatcher: TestDispatcher,
-) : CaptureScreenRobot by DefaultCaptureScreenRobot(robotTestRule) {
-    @Inject lateinit var sessionsApiClient: SessionsApiClient
-    private val fakeSessionsApiClient: FakeSessionsApiClient
-        get() = sessionsApiClient as FakeSessionsApiClient
-
-    private val composeTestRule get() = robotTestRule.composeTestRule
-
-    operator fun invoke(
-        block: TimetableScreenRobot.() -> Unit,
-    ) {
-        runTestWithLogging(timeout = 30.seconds) {
-            block()
-        }
-    }
-
+    private val screenRobot: DefaultScreenRobot,
+    private val defaultTimetableScreenRobot: DefaultTimetableServerRobot
+) : ScreenRobot by screenRobot,
+    TimetableServerRobot by defaultTimetableScreenRobot{
     fun setupTimetableScreenContent() {
         robotTestRule.setContent {
             CompositionLocalProvider(LocalClock provides FakeClock) {
@@ -60,20 +43,6 @@ class TimetableScreenRobot @Inject constructor(
             }
         }
         waitUntilIdle()
-    }
-
-    enum class ServerStatus {
-        Operational,
-        Error,
-    }
-
-    fun setupServer(serverStatus: ServerStatus) {
-        fakeSessionsApiClient.setup(
-            when (serverStatus) {
-                ServerStatus.Operational -> FakeSessionsApiClient.Status.Operational
-                ServerStatus.Error -> FakeSessionsApiClient.Status.Error
-            },
-        )
     }
 
     fun clickFirstSession() {
@@ -141,10 +110,5 @@ class TimetableScreenRobot @Inject constructor(
                     ),
                 ),
             )
-    }
-
-    fun waitUntilIdle() {
-        composeTestRule.waitForIdle()
-        testDispatcher.scheduler.advanceUntilIdle()
     }
 }

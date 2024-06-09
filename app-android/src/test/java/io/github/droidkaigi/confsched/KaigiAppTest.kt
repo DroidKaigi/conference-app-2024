@@ -7,6 +7,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.robot.KaigiAppRobot
+import io.github.droidkaigi.confsched.testing.runRobot
 import org.junit.Rule
 import org.junit.Test
 import org.junit.experimental.categories.Category
@@ -33,25 +34,22 @@ class KaigiAppTest {
 
     @Test
     fun checkStartupShot() {
-        kaigiAppRobot {
-            capture()
+        runRobot(kaigiAppRobot) {
+            waitUntilIdle()
+            captureScreenWithChecks {
+                runRobot(timetableScreenRobot) {
+                    checkTimetableItemsDisplayed()
+                }
+            }
         }
     }
 
     @Test
     @Config(qualifiers = RobolectricDeviceQualifiers.MediumTablet)
     fun checkMediumTabletLaunchShot() {
-        kaigiAppRobot {
-            capture()
-        }
-    }
-
-    @Test
-    fun checkStartup() {
-        kaigiAppRobot {
-            timetableScreenRobot {
-                checkTimetableItemsDisplayed()
-            }
+        runRobot(kaigiAppRobot) {
+            waitUntilIdle()
+            captureScreenWithChecks()
         }
     }
 }

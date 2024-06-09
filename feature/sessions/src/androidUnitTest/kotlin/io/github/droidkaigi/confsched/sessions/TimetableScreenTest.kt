@@ -5,9 +5,10 @@ import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.RobotTestRule
+import io.github.droidkaigi.confsched.testing.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot
-import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot.ServerStatus
+import io.github.droidkaigi.confsched.testing.runRobot
 import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
@@ -34,7 +35,7 @@ class TimetableScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkLaunchShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
@@ -43,8 +44,8 @@ class TimetableScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkLaunchServerErrorShot() {
-        timetableScreenRobot {
-            setupServer(ServerStatus.Error)
+        runRobot(timetableScreenRobot) {
+            setupTimetableServer(ServerStatus.Error)
             setupTimetableScreenContent()
             captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
@@ -52,7 +53,7 @@ class TimetableScreenTest {
 
     @Test
     fun checkLaunch() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             checkTimetableItemsDisplayed()
         }
@@ -61,7 +62,7 @@ class TimetableScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkLaunchAccessibilityShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             checkAccessibilityCapture()
         }
@@ -70,7 +71,7 @@ class TimetableScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkBookmarkToggleShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             clickFirstSessionBookmark()
             checkTimetableListCapture()
@@ -82,7 +83,7 @@ class TimetableScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkScrollShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             scrollTimetable()
             checkTimetableListCapture()
@@ -92,7 +93,7 @@ class TimetableScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkGridShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             clickTimetableUiTypeChangeButton()
             checkTimetableListCapture()
@@ -102,7 +103,7 @@ class TimetableScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkGridScrollShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             clickTimetableUiTypeChangeButton()
             scrollTimetable()
@@ -114,7 +115,7 @@ class TimetableScreenTest {
     @Category(ScreenshotTests::class)
     @Config(fontScale = 0.5f)
     fun checkSmallFontScaleShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
@@ -124,7 +125,7 @@ class TimetableScreenTest {
     @Category(ScreenshotTests::class)
     @Config(fontScale = 1.5f)
     fun checkLargeFontScaleShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }
@@ -134,7 +135,7 @@ class TimetableScreenTest {
     @Category(ScreenshotTests::class)
     @Config(fontScale = 2.0f)
     fun checkHugeFontScaleShot() {
-        timetableScreenRobot {
+        runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             captureScreenWithChecks(checks = todoChecks("TODO: Please add some checks!"))
         }

@@ -28,6 +28,9 @@ class KmpPlugin : Plugin<Project> {
                         }
                     }
                 }
+                compilerOptions {
+                    freeCompilerArgs.add("-Xcontext-receivers")
+                }
             }
         }
     }
