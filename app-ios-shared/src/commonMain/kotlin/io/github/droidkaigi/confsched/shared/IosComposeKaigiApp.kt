@@ -98,7 +98,7 @@ private fun KaigiNavHost(
 //                        navController::popBackStack,
 //                    )
                 },
-                onContributorItemClick = {}, // externalNavController::navigate,
+                onContributorsItemClick = {}, // externalNavController::navigate,
             )
         }
     }

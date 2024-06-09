@@ -3,8 +3,8 @@ package io.github.droidkaigi.confsched.contributors
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.droidkaigi.confsched.testing.ContributorServerRobot
-import io.github.droidkaigi.confsched.testing.DefaultContributorServerRobot
+import io.github.droidkaigi.confsched.testing.ContributorsServerRobot
+import io.github.droidkaigi.confsched.testing.DefaultContributorsServerRobot
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.ScreenRobot
@@ -17,18 +17,18 @@ import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-class ContributorScreenTest {
+class ContributorsScreenTest {
 
     @get:Rule
     @BindValue val robotTestRule: RobotTestRule = RobotTestRule(this)
 
     @Inject
-    lateinit var contributorScreenRobot: ContributorScreenRobot
+    lateinit var contributorsScreenRobot: ContributorsScreenRobot
 
     @Test
     fun checkScreenContent() {
-        runRobot(contributorScreenRobot) {
-            setupContributorServer(ContributorServerRobot.ServerStatus.Operational)
+        runRobot(contributorsScreenRobot) {
+            setupContributorServer(ContributorsServerRobot.ServerStatus.Operational)
             setupScreenContent()
 
             captureScreenWithChecks(
@@ -39,8 +39,8 @@ class ContributorScreenTest {
 
     @Test
     fun checkErrorScreenContent() {
-        runRobot(contributorScreenRobot) {
-            setupContributorServer(ContributorServerRobot.ServerStatus.Error)
+        runRobot(contributorsScreenRobot) {
+            setupContributorServer(ContributorsServerRobot.ServerStatus.Error)
             setupScreenContent()
 
             captureScreenWithChecks(
@@ -50,16 +50,16 @@ class ContributorScreenTest {
     }
 }
 
-class ContributorScreenRobot @Inject constructor(
+class ContributorsScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,
-    contributorServerRobot: DefaultContributorServerRobot,
+    contributorsServerRobot: DefaultContributorsServerRobot,
 ) : ScreenRobot by screenRobot,
-    ContributorServerRobot by contributorServerRobot {
+    ContributorsServerRobot by contributorsServerRobot {
     fun setupScreenContent() {
         robotTestRule.setContent {
             ContributorsScreen(
                 onNavigationIconClick = { },
-                onContributorItemClick = { },
+                onContributorsItemClick = { },
             )
         }
     }

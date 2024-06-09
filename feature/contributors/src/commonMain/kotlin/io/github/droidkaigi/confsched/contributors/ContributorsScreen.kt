@@ -49,7 +49,7 @@ fun NavGraphBuilder.contributorsScreens(
                     onNavigationIconClick,
                 )
             },
-            onContributorItemClick = onContributorItemClick,
+            onContributorsItemClick = onContributorItemClick,
         )
     }
 }
@@ -63,7 +63,7 @@ data class ContributorsUiState(
 fun ContributorsScreen(
     isTopAppBarHidden: Boolean = false,
     onNavigationIconClick: () -> Unit,
-    onContributorItemClick: (url: String) -> Unit,
+    onContributorsItemClick: (url: String) -> Unit,
 ) {
     val eventEmitter = rememberEventEmitter<ContributorsScreenEvent>()
     val uiState = contributorsScreenPresenter(
@@ -81,7 +81,7 @@ fun ContributorsScreen(
         isTopAppBarHidden = isTopAppBarHidden,
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
-        onContributorItemClick = onContributorItemClick,
+        onContributorsItemClick = onContributorsItemClick,
     )
 }
 
@@ -91,7 +91,7 @@ fun ContributorsScreen(
     uiState: ContributorsUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
-    onContributorItemClick: (url: String) -> Unit,
+    onContributorsItemClick: (url: String) -> Unit,
     isTopAppBarHidden: Boolean,
 ) {
     Logger.d { "ContributorsScreen: $uiState" }
@@ -127,7 +127,7 @@ fun ContributorsScreen(
     ) { padding ->
         Contributors(
             contributors = uiState.contributors,
-            onContributorItemClick = onContributorItemClick,
+            onContributorsItemClick = onContributorsItemClick,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -145,7 +145,7 @@ fun ContributorsScreen(
 @Composable
 private fun Contributors(
     contributors: PersistentList<Contributor>,
-    onContributorItemClick: (url: String) -> Unit,
+    onContributorsItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -154,7 +154,7 @@ private fun Contributors(
         items(contributors) {
             ContributorsItem(
                 contributor = it,
-                onClick = onContributorItemClick,
+                onClick = onContributorsItemClick,
                 modifier = Modifier.fillMaxWidth()
             )
         }

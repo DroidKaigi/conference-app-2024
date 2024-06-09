@@ -115,7 +115,7 @@ class DefaultTimetableServerRobot @Inject constructor(sessionsApiClient: Session
     }
 }
 
-interface ContributorServerRobot {
+interface ContributorsServerRobot {
     enum class ServerStatus {
         Operational,
         Error,
@@ -124,14 +124,14 @@ interface ContributorServerRobot {
     fun setupContributorServer(serverStatus: ServerStatus)
 }
 
-class DefaultContributorServerRobot @Inject constructor(contributorsApiClient: ContributorsApiClient) :
-    ContributorServerRobot {
+class DefaultContributorsServerRobot @Inject constructor(contributorsApiClient: ContributorsApiClient) :
+    ContributorsServerRobot {
     private val fakeContributorsApiClient = contributorsApiClient as FakeContributorsApiClient
-    override fun setupContributorServer(serverStatus: ContributorServerRobot.ServerStatus) {
+    override fun setupContributorServer(serverStatus: ContributorsServerRobot.ServerStatus) {
         fakeContributorsApiClient.setup(
             when (serverStatus) {
-                ContributorServerRobot.ServerStatus.Operational -> FakeContributorsApiClient.Status.Operational
-                ContributorServerRobot.ServerStatus.Error -> FakeContributorsApiClient.Status.Error
+                ContributorsServerRobot.ServerStatus.Operational -> FakeContributorsApiClient.Status.Operational
+                ContributorsServerRobot.ServerStatus.Error -> FakeContributorsApiClient.Status.Error
             },
         )
     }
