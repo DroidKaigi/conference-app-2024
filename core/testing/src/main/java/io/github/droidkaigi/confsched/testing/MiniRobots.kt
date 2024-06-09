@@ -1,6 +1,8 @@
 package io.github.droidkaigi.confsched.testing
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
+import io.github.droidkaigi.confsched.data.contributors.FakeContributorsApiClient
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
@@ -108,6 +110,28 @@ class DefaultTimetableServerRobot @Inject constructor(sessionsApiClient: Session
             when (serverStatus) {
                 TimetableServerRobot.ServerStatus.Operational -> FakeSessionsApiClient.Status.Operational
                 TimetableServerRobot.ServerStatus.Error -> FakeSessionsApiClient.Status.Error
+            },
+        )
+    }
+}
+
+interface ContributorServerRobot {
+    enum class ServerStatus {
+        Operational,
+        Error,
+    }
+
+    fun setupContributorServer(serverStatus: ServerStatus)
+}
+
+class DefaultContributorServerRobot @Inject constructor(contributorsApiClient: ContributorsApiClient) :
+    ContributorServerRobot {
+    private val fakeContributorsApiClient = contributorsApiClient as FakeContributorsApiClient
+    override fun setupContributorServer(serverStatus: ContributorServerRobot.ServerStatus) {
+        fakeContributorsApiClient.setup(
+            when (serverStatus) {
+                ContributorServerRobot.ServerStatus.Operational -> FakeContributorsApiClient.Status.Operational
+                ContributorServerRobot.ServerStatus.Error -> FakeContributorsApiClient.Status.Error
             },
         )
     }
