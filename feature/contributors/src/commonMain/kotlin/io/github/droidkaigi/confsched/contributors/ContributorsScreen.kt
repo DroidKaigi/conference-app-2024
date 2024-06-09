@@ -20,17 +20,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.contributors.component.ContributorListItem
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 
 const val contributorsScreenRoute = "contributors"
 const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
+
+fun NavGraphBuilder.contributorsScreens(
+    onNavigationIconClick: () -> Unit,
+    onContributorItemClick: (url: String) -> Unit,
+) {
+    composable(contributorsScreenRoute) {
+        val lifecycleOwner = LocalLifecycleOwner.current
+        ContributorsScreen(
+            onNavigationIconClick = {
+                handleOnClickIfNotNavigating(
+                    lifecycleOwner,
+                    onNavigationIconClick,
+                )
+            },
+            onContributorItemClick = onContributorItemClick,
+        )
+    }
+}
 
 data class ContributorsUiState(
     val contributors: PersistentList<Contributor>,

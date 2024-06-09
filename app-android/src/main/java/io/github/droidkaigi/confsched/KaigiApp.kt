@@ -17,19 +17,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.DisplayFeature
 import co.touchlab.kermit.Logger
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
+import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
@@ -47,7 +45,6 @@ import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -77,7 +74,7 @@ private fun KaigiNavHost(
     externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
-        mainScreen(windowSize,  navController, externalNavController)
+        mainScreen(windowSize, navController, externalNavController)
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
@@ -89,19 +86,10 @@ private fun KaigiNavHost(
             },
         )
 
-        // For KMP, we are not using navigation abstraction for contributors screen
-        composable(contributorsScreenRoute) {
-            val lifecycleOwner = LocalLifecycleOwner.current
-            ContributorsScreen(
-                onNavigationIconClick = {
-                    handleOnClickIfNotNavigating(
-                        lifecycleOwner,
-                        navController::popBackStack,
-                    )
-                },
-                onContributorItemClick = externalNavController::navigate,
-            )
-        }
+        contributorsScreens(
+            onNavigationIconClick = navController::popBackStack,
+            onContributorItemClick = externalNavController::navigate,
+        )
     }
 }
 
