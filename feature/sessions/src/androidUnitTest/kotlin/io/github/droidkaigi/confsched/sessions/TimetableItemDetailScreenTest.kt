@@ -6,12 +6,10 @@ import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.RobotTestRule
-import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.robot.TimetableItemDetailScreenRobot
 import io.github.droidkaigi.confsched.testing.runRobot
 import org.junit.Rule
 import org.junit.Test
-import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import javax.inject.Inject
@@ -38,7 +36,6 @@ class TimetableItemDetailScreenTest {
     lateinit var timetableItemDetailScreenRobot: TimetableItemDetailScreenRobot
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkLaunchShot() {
         runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
@@ -47,7 +44,6 @@ class TimetableItemDetailScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkLaunchAccessibilityShot() {
         runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
@@ -56,7 +52,6 @@ class TimetableItemDetailScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkBookmarkToggleShot() {
         runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
@@ -66,7 +61,6 @@ class TimetableItemDetailScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkScrollShot() {
         runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
@@ -82,7 +76,6 @@ class TimetableItemDetailScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     @Config(fontScale = 0.5f)
     fun checkSmallFontScaleShot() {
         runRobot(timetableItemDetailScreenRobot) {
@@ -92,7 +85,6 @@ class TimetableItemDetailScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     @Config(fontScale = 1.5f)
     fun checkLargeFontScaleShot() {
         runRobot(timetableItemDetailScreenRobot) {
@@ -102,7 +94,6 @@ class TimetableItemDetailScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     @Config(fontScale = 2.0f)
     fun checkHugeFontScaleShot() {
         runRobot(timetableItemDetailScreenRobot) {

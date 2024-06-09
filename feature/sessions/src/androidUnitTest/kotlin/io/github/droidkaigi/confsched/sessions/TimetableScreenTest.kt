@@ -6,13 +6,11 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.TimetableServerRobot.ServerStatus
-import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot
 import io.github.droidkaigi.confsched.testing.runRobot
 import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
-import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import javax.inject.Inject
@@ -31,7 +29,6 @@ class TimetableScreenTest {
     lateinit var timetableScreenRobot: TimetableScreenRobot
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkLaunchShot() {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
@@ -40,7 +37,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkLaunchServerErrorShot() {
         runRobot(timetableScreenRobot) {
             setupTimetableServer(ServerStatus.Error)
@@ -58,7 +54,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkLaunchAccessibilityShot() {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
@@ -67,7 +62,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkBookmarkToggleShot() {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
@@ -79,7 +73,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkScrollShot() {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
@@ -89,7 +82,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkGridShot() {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
@@ -99,7 +91,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkGridScrollShot() {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
@@ -110,7 +101,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     @Config(fontScale = 0.5f)
     fun checkSmallFontScaleShot() {
         runRobot(timetableScreenRobot) {
@@ -120,7 +110,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     @Config(fontScale = 1.5f)
     fun checkLargeFontScaleShot() {
         runRobot(timetableScreenRobot) {
@@ -130,7 +119,6 @@ class TimetableScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     @Config(fontScale = 2.0f)
     fun checkHugeFontScaleShot() {
         runRobot(timetableScreenRobot) {
