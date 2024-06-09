@@ -8,7 +8,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import com.airbnb.android.showkase.models.Showkase
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import com.github.takahirom.roborazzi.DEFAULT_ROBORAZZI_OUTPUT_DIR_PATH
-import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviewDefinition
 import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviewDefinition
@@ -16,13 +15,9 @@ import io.github.droidkaigi.confsched.designsystem.preview.ShowkaseMultiplePrevi
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
-import org.robolectric.annotation.Config
 import java.util.Locale
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
-@Config(
-    qualifiers = RobolectricDeviceQualifiers.NexusOne,
-)
 class PreviewTest(
     val showkaseBrowserComponent: ShowkaseBrowserComponent,
 ) {

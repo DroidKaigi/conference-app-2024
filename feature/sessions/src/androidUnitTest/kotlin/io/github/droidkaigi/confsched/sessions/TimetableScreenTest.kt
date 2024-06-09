@@ -1,7 +1,6 @@
 package io.github.droidkaigi.confsched.sessions
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.RobotTestRule
@@ -17,9 +16,6 @@ import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)
 @HiltAndroidTest
-@Config(
-    qualifiers = RobolectricDeviceQualifiers.NexusOne,
-)
 class TimetableScreenTest {
 
     @get:Rule
