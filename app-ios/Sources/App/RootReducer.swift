@@ -8,11 +8,11 @@ public struct RootReducer {
     @ObservableState
     public struct State: Equatable {
         public var appDelegate: AppDelegateReducer.State
-        public var timetable: TimetableCore.State
+        public var timetable: TimetableReducer.State
 
         public init(
             appDelegate: AppDelegateReducer.State = .init(),
-            timetable: TimetableCore.State = .init()
+            timetable: TimetableReducer.State = .init()
         ) {
             self.appDelegate = appDelegate
             self.timetable = timetable
@@ -21,7 +21,7 @@ public struct RootReducer {
 
     public enum Action {
         case appDelegate(AppDelegateReducer.Action)
-        case timetable(TimetableCore.Action)
+        case timetable(TimetableReducer.Action)
     }
 
     public var body: some ReducerOf<Self> {
@@ -29,7 +29,7 @@ public struct RootReducer {
             AppDelegateReducer()
         }
         Scope(state: \.timetable, action: \.timetable) {
-            TimetableCore()
+            TimetableReducer()
         }
     }
 }

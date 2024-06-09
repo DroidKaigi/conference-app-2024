@@ -68,6 +68,19 @@ let package = Package(
         .target(
             name: "TimetableFeature",
             dependencies: [
+                .kmpModule,
+                .firebaseAuth,
+                .firebaseRemoteConfig,
+                .tca,
+            ]
+        ),
+        .testTarget(
+            name: "TimetableTests",
+            dependencies: [
+                .app,
+                .timetableFeature,
+                .firebaseAuth,
+                .firebaseRemoteConfig,
                 .tca
             ]
         ),
