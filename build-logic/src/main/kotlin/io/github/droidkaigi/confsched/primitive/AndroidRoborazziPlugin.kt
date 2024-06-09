@@ -17,6 +17,8 @@ class AndroidRoborazziPlugin : Plugin<Project> {
                     unitTests {
                         all {
                             it.jvmArgs("-noverify")
+                            it.systemProperties["robolectric.graphicsMode"] = "NATIVE"
+                            it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
                             it.maxParallelForks = Runtime.getRuntime().availableProcessors()
                             // -Pscreenshot to filter screenshot tests
                             it.useJUnit {
