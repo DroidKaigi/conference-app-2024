@@ -26,7 +26,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.contributors.component.ContributorListItem
+import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -152,7 +152,7 @@ private fun Contributors(
         modifier = modifier,
     ) {
         items(contributors) {
-            ContributorListItem(
+            ContributorsItem(
                 contributor = it,
                 onClick = onContributorItemClick,
                 modifier = Modifier.fillMaxWidth()
