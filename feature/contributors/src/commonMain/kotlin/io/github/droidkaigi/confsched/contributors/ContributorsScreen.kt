@@ -20,17 +20,39 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.contributors.component.ContributorListItem
+import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 
 const val contributorsScreenRoute = "contributors"
 const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
+
+fun NavGraphBuilder.contributorsScreens(
+    onNavigationIconClick: () -> Unit,
+    onContributorItemClick: (url: String) -> Unit,
+) {
+    composable(contributorsScreenRoute) {
+        val lifecycleOwner = LocalLifecycleOwner.current
+        ContributorsScreen(
+            onNavigationIconClick = {
+                handleOnClickIfNotNavigating(
+                    lifecycleOwner,
+                    onNavigationIconClick,
+                )
+            },
+            onContributorsItemClick = onContributorItemClick,
+        )
+    }
+}
 
 data class ContributorsUiState(
     val contributors: PersistentList<Contributor>,
@@ -41,7 +63,7 @@ data class ContributorsUiState(
 fun ContributorsScreen(
     isTopAppBarHidden: Boolean = false,
     onNavigationIconClick: () -> Unit,
-    onContributorItemClick: (url: String) -> Unit,
+    onContributorsItemClick: (url: String) -> Unit,
 ) {
     val eventEmitter = rememberEventEmitter<ContributorsScreenEvent>()
     val uiState = contributorsScreenPresenter(
@@ -59,7 +81,7 @@ fun ContributorsScreen(
         isTopAppBarHidden = isTopAppBarHidden,
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
-        onContributorItemClick = onContributorItemClick,
+        onContributorsItemClick = onContributorsItemClick,
     )
 }
 
@@ -69,7 +91,7 @@ fun ContributorsScreen(
     uiState: ContributorsUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
-    onContributorItemClick: (url: String) -> Unit,
+    onContributorsItemClick: (url: String) -> Unit,
     isTopAppBarHidden: Boolean,
 ) {
     Logger.d { "ContributorsScreen: $uiState" }
@@ -105,7 +127,7 @@ fun ContributorsScreen(
     ) { padding ->
         Contributors(
             contributors = uiState.contributors,
-            onContributorItemClick = onContributorItemClick,
+            onContributorsItemClick = onContributorsItemClick,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
@@ -123,16 +145,16 @@ fun ContributorsScreen(
 @Composable
 private fun Contributors(
     contributors: PersistentList<Contributor>,
-    onContributorItemClick: (url: String) -> Unit,
+    onContributorsItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier,
     ) {
         items(contributors) {
-            ContributorListItem(
+            ContributorsItem(
                 contributor = it,
-                onClick = onContributorItemClick,
+                onClick = onContributorsItemClick,
                 modifier = Modifier.fillMaxWidth()
             )
         }

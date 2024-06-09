@@ -8,19 +8,19 @@ import platform.UIKit.UIViewController
 import kotlin.reflect.KClass
 
 @Suppress("UNUSED")
-fun contributorViewController(
+fun contributorsViewController(
     repositories: Repositories,
-    onContributorItemClick: (url: String) -> Unit,
+    onContributorsItemClick: (url: String) -> Unit,
 ): UIViewController = composeViewController(repositories) {
     ContributorsScreen(
         isTopAppBarHidden = true,
         onNavigationIconClick = { /** no action for iOS side **/ },
-        onContributorItemClick = onContributorItemClick,
+        onContributorsItemClick = onContributorsItemClick,
     )
 }
 
 @Suppress("unused")
-fun contributorScreenPresenterStateFlow(
+fun contributorsScreenPresenterStateFlow(
     repositories: Map<KClass<*>, Any>,
     events: Flow<ContributorsScreenEvent>,
 ): Flow<ContributorsUiState> = presenterStateFlow(

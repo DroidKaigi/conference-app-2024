@@ -26,7 +26,7 @@ import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 private val contributorIconShape = RoundedCornerShape(20.dp)
 
 @Composable
-fun ContributorListItem(
+fun ContributorsItem(
     contributor: Contributor,
     onClick: (url: String) -> Unit,
     modifier: Modifier = Modifier
