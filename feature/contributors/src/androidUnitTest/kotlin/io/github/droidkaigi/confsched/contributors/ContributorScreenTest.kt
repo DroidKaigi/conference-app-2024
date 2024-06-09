@@ -1,9 +1,8 @@
-package io.github.droidkaigi.confsched.sessions
+package io.github.droidkaigi.confsched.contributors
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.testing.ContributorServerRobot
 import io.github.droidkaigi.confsched.testing.DefaultContributorServerRobot
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
