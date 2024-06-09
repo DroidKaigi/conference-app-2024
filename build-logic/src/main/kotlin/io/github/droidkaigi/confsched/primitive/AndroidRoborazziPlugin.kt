@@ -20,13 +20,6 @@ class AndroidRoborazziPlugin : Plugin<Project> {
                             it.systemProperties["robolectric.graphicsMode"] = "NATIVE"
                             it.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
                             it.maxParallelForks = Runtime.getRuntime().availableProcessors()
-                            // -Pscreenshot to filter screenshot tests
-                            it.useJUnit {
-                                if (project.hasProperty("screenshot")) {
-                                    project.logger.lifecycle("Screenshot tests are included")
-                                    includeCategories("io.github.droidkaigi.confsched.testing.category.ScreenshotTests")
-                                }
-                            }
                         }
                     }
                 }

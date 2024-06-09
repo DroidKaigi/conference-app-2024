@@ -10,12 +10,10 @@ import io.github.droidkaigi.confsched.testing.DefaultContributorServerRobot
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.ScreenRobot
-import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.runRobot
 import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
-import org.junit.experimental.categories.Category
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import javax.inject.Inject
@@ -34,7 +32,6 @@ class ContributorScreenTest {
     lateinit var contributorScreenRobot: ContributorScreenRobot
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkScreenContent() {
         runRobot(contributorScreenRobot) {
             setupContributorServer(ContributorServerRobot.ServerStatus.Operational)
@@ -47,7 +44,6 @@ class ContributorScreenTest {
     }
 
     @Test
-    @Category(ScreenshotTests::class)
     fun checkErrorScreenContent() {
         runRobot(contributorScreenRobot) {
             setupContributorServer(ContributorServerRobot.ServerStatus.Error)
