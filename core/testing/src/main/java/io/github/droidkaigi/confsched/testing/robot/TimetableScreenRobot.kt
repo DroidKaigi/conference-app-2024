@@ -25,14 +25,12 @@ import io.github.droidkaigi.confsched.testing.ScreenRobot
 import io.github.droidkaigi.confsched.testing.TimetableServerRobot
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import kotlinx.coroutines.test.TestDispatcher
 import javax.inject.Inject
 
 class TimetableScreenRobot @Inject constructor(
-    robotTestRule: RobotTestRule,
-    private val testDispatcher: TestDispatcher,
+    private val screenRobot: DefaultScreenRobot,
     private val defaultTimetableScreenRobot: DefaultTimetableServerRobot
-) : ScreenRobot by DefaultScreenRobot(robotTestRule),
+) : ScreenRobot by screenRobot,
     TimetableServerRobot by defaultTimetableScreenRobot{
     fun setupTimetableScreenContent() {
         robotTestRule.setContent {
@@ -112,10 +110,5 @@ class TimetableScreenRobot @Inject constructor(
                     ),
                 ),
             )
-    }
-
-    fun waitUntilIdle() {
-        composeTestRule.waitForIdle()
-        testDispatcher.scheduler.advanceUntilIdle()
     }
 }

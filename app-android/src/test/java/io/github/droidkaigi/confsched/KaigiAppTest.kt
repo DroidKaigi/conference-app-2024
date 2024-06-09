@@ -48,6 +48,7 @@ class KaigiAppTest {
     @Config(qualifiers = RobolectricDeviceQualifiers.MediumTablet)
     fun checkMediumTabletLaunchShot() {
         runRobot(kaigiAppRobot) {
+            waitUntilIdle()
             captureScreenWithChecks()
         }
     }

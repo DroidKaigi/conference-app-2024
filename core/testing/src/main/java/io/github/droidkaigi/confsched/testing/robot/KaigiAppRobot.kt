@@ -6,6 +6,7 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
+import io.github.droidkaigi.confsched.testing.DefaultWaitRobot
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.ScreenRobot
 import kotlinx.coroutines.test.TestDispatcher
@@ -13,8 +14,8 @@ import javax.inject.Inject
 
 class KaigiAppRobot @Inject constructor(
     robotTestRule: RobotTestRule,
-    private val testDispatcher: TestDispatcher,
-): ScreenRobot by DefaultScreenRobot(robotTestRule) {
+    private val defaultScreenRobot: DefaultScreenRobot,
+): ScreenRobot by defaultScreenRobot {
     @Inject lateinit var timetableScreenRobot: TimetableScreenRobot
 
     fun goToAbout() {
@@ -40,10 +41,5 @@ class KaigiAppRobot @Inject constructor(
             .onFirst()
             .performClick()
         waitUntilIdle()
-    }
-
-    fun waitUntilIdle() {
-        composeTestRule.waitForIdle()
-        testDispatcher.scheduler.advanceUntilIdle()
     }
 }

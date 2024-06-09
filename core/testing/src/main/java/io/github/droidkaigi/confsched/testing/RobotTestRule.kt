@@ -27,6 +27,7 @@ import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import org.robolectric.shadows.ShadowLooper
 import kotlin.reflect.KClass
 
 fun RobotTestRule(
@@ -40,7 +41,7 @@ fun RobotTestRule(
     )
 }
 
-inline fun<reified T: ComponentActivity> RobotTestRule(
+inline fun <reified T : ComponentActivity> RobotTestRule(
     activityClass: KClass<T>,
     testInstance: Any,
     bundle: Bundle? = null,

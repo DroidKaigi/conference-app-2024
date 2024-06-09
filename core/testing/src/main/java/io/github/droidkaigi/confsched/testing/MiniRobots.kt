@@ -4,6 +4,8 @@ import androidx.compose.ui.test.junit4.ComposeTestRule
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
+import kotlinx.coroutines.test.TestDispatcher
+import org.robolectric.shadows.ShadowLooper
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -11,12 +13,18 @@ inline fun <reified T : ScreenRobot> runRobot(robot: T, noinline block: suspend 
     robot.run(robot, block)
 }
 
-class DefaultScreenRobot(override val robotTestRule: RobotTestRule) :
+class DefaultScreenRobot @Inject constructor(
+    override val robotTestRule: RobotTestRule,
+    private val composeScreenRobot: DefaultComposeScreenRobot,
+    private val captureScreenRobot: DefaultCaptureScreenRobot,
+    private val waitRobot: DefaultWaitRobot,
+) :
     ScreenRobot,
-    ComposeScreenRobot by DefaultComposeScreenRobot(robotTestRule),
-    CaptureScreenRobot by DefaultCaptureScreenRobot(robotTestRule)
+    ComposeScreenRobot by composeScreenRobot,
+    CaptureScreenRobot by captureScreenRobot,
+    WaitRobot by waitRobot
 
-interface ScreenRobot : ComposeScreenRobot, CaptureScreenRobot {
+interface ScreenRobot : ComposeScreenRobot, CaptureScreenRobot, WaitRobot {
     val robotTestRule: RobotTestRule
 
     fun <T : ScreenRobot> run(thiz: T, block: suspend T.() -> Unit) {
@@ -26,7 +34,8 @@ interface ScreenRobot : ComposeScreenRobot, CaptureScreenRobot {
     }
 }
 
-class DefaultComposeScreenRobot(private val robotTestRule: RobotTestRule) : ComposeScreenRobot {
+class DefaultComposeScreenRobot @Inject constructor(private val robotTestRule: RobotTestRule) :
+    ComposeScreenRobot {
     override val composeTestRule: ComposeTestRule
         get() = robotTestRule.composeTestRule
 }
@@ -49,7 +58,8 @@ fun todoChecks(@Suppress("UNUSED_PARAMETER") reason: String): () -> Unit {
     return {}
 }
 
-class DefaultCaptureScreenRobot(private val robotTestRule: RobotTestRule) : CaptureScreenRobot {
+class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: RobotTestRule) :
+    CaptureScreenRobot {
     override fun captureScreenWithChecks(checks: () -> Unit) {
         robotTestRule.captureScreen()
         checks()
@@ -61,6 +71,23 @@ class DefaultCaptureScreenRobot(private val robotTestRule: RobotTestRule) : Capt
     )
     override fun captureScreenWithChecks() {
         robotTestRule.captureScreen()
+    }
+}
+
+interface WaitRobot {
+    fun waitUntilIdle()
+}
+
+class DefaultWaitRobot @Inject constructor(
+    private val robotTestRule: RobotTestRule,
+    private val testDispatcher: TestDispatcher,
+) : WaitRobot {
+    override fun waitUntilIdle() {
+        repeat(5) {
+            robotTestRule.composeTestRule.waitForIdle()
+            testDispatcher.scheduler.advanceUntilIdle()
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        }
     }
 }
 
