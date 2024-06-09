@@ -20,7 +20,7 @@ fun contributorsViewController(
 }
 
 @Suppress("unused")
-fun contributorScreenPresenterStateFlow(
+fun contributorsScreenPresenterStateFlow(
     repositories: Map<KClass<*>, Any>,
     events: Flow<ContributorsScreenEvent>,
 ): Flow<ContributorsUiState> = presenterStateFlow(
