@@ -74,9 +74,9 @@ class TimetableScreenTest {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             clickFirstSessionBookmark()
-            checkTimetableListCapture()
+            captureScreenWithChecks()
             clickFirstSessionBookmark()
-            checkTimetableListCapture()
+            captureScreenWithChecks()
         }
     }
 
@@ -86,7 +86,7 @@ class TimetableScreenTest {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             scrollTimetable()
-            checkTimetableListCapture()
+            captureScreenWithChecks()
         }
     }
 
@@ -96,7 +96,7 @@ class TimetableScreenTest {
         runRobot(timetableScreenRobot) {
             setupTimetableScreenContent()
             clickTimetableUiTypeChangeButton()
-            checkTimetableListCapture()
+            captureScreenWithChecks()
         }
     }
 
@@ -107,7 +107,7 @@ class TimetableScreenTest {
             setupTimetableScreenContent()
             clickTimetableUiTypeChangeButton()
             scrollTimetable()
-            checkTimetableListCapture()
+            captureScreenWithChecks()
         }
     }
 

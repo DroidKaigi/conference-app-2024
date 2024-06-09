@@ -20,7 +20,6 @@ import io.github.droidkaigi.confsched.sessions.TimetableUiTypeChangeButtonTestTa
 import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.DefaultTimetableServerRobot
-import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.ScreenRobot
 import io.github.droidkaigi.confsched.testing.TimetableServerRobot
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
@@ -92,12 +91,6 @@ class TimetableScreenRobot @Inject constructor(
             .onAllNodes(hasTestTag(TimetableListItemTestTag))
             .onFirst()
             .assertIsDisplayed()
-    }
-
-    fun checkTimetableListCapture() {
-        composeTestRule
-            .onNode(hasTestTag(TimetableScreenTestTag))
-            .captureRoboImage()
     }
 
     fun checkAccessibilityCapture() {

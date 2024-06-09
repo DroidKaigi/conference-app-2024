@@ -47,8 +47,8 @@ class ContributorScreenTest {
 }
 
 class ContributorScreenRobot @Inject constructor(
-    robotTestRule: RobotTestRule,
-) : ScreenRobot by DefaultScreenRobot(robotTestRule) {
+    screenRobot: DefaultScreenRobot
+) : ScreenRobot by screenRobot {
     fun setupScreenContent() {
         robotTestRule.setContent {
             ContributorsScreen(

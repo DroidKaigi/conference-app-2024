@@ -19,6 +19,7 @@ dependencies {
     implementation(libs.roborazzi)
     implementation(libs.kermit)
     api(projects.core.testingManifest)
+    api(libs.composeNavigation)
     api(libs.roborazziRule)
     api(libs.robolectric)
     api(libs.composeUiTestJunit4)

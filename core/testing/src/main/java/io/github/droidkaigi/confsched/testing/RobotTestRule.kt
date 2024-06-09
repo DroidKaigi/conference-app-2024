@@ -5,6 +5,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import co.touchlab.kermit.CommonWriter
@@ -21,13 +24,12 @@ import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
-import io.github.droidkaigi.confsched.ui.Inject
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
-import org.robolectric.shadows.ShadowLooper
+import javax.inject.Inject
 import kotlin.reflect.KClass
 
 fun RobotTestRule(
@@ -125,6 +127,23 @@ class RobotTestRule(
         composeTestRule.setContent {
             repositoryProvider.Provide {
                 content()
+            }
+        }
+    }
+
+    fun setContentWithNavigation(
+        startDestination: String = "startDestination",
+        route: String = "startDestination",
+        content: @Composable () -> Unit,
+    ) {
+        setContent {
+            NavHost(
+                navController = rememberNavController(),
+                startDestination = startDestination,
+            ) {
+                composable(route) {
+                    content()
+                }
             }
         }
     }

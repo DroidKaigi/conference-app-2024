@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
@@ -30,8 +31,7 @@ public class DefaultSessionsRepository(
     override fun getTimetableStream(): Flow<Timetable> = flow {
         var first = true
         combine(
-            sessionCacheDataStore.getTimetableStream()
-                .catch { e ->
+            sessionCacheDataStore.getTimetableStream().catch { e ->
                     Logger.d(
                         "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
                         e,
@@ -42,8 +42,7 @@ public class DefaultSessionsRepository(
             userDataStore.getFavoriteSessionStream(),
         ) { timetable, favorites ->
             timetable.copy(bookmarks = favorites)
-        }
-            .collect {
+        }.collect {
                 if (!it.isEmpty()) {
                     emit(it)
                 }
@@ -75,8 +74,7 @@ public class DefaultSessionsRepository(
         }
 
         val timetable by remember {
-            sessionCacheDataStore.getTimetableStream()
-                .catch { e ->
+            sessionCacheDataStore.getTimetableStream().catch { e ->
                     Logger.d(
                         "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
                         e,
@@ -89,16 +87,20 @@ public class DefaultSessionsRepository(
             userDataStore.getFavoriteSessionStream()
         }.safeCollectAsState(persistentSetOf())
 
+        Logger.d { "DefaultSessionsRepository timetable() count=${timetable.timetableItems.size}" }
         return timetable.copy(bookmarks = favoriteSessions)
     }
 
     @Composable
     override fun timetableItemWithBookmark(id: TimetableItemId): Pair<TimetableItem, Boolean>? {
-        val timetable = timetable()
-        return remember(id, timetable) {
-            val timetableItem = timetable.timetableItems.firstOrNull { it.id == id } ?: return@remember null
+        val timetable by rememberUpdatedState(timetable())
+        val itemWithBookmark = remember(id, timetable) {
+            val timetableItem =
+                timetable.timetableItems.firstOrNull { it.id == id } ?: return@remember null
             timetableItem to timetable.bookmarks.contains(id)
         }
+        Logger.d { "DefaultSessionsRepository timetableItemWithBookmark() timetableSize:${timetable.timetableItems.size} id:$id itemWithBookmark=$itemWithBookmark" }
+        return itemWithBookmark
     }
 
     override suspend fun toggleBookmark(id: TimetableItemId) {

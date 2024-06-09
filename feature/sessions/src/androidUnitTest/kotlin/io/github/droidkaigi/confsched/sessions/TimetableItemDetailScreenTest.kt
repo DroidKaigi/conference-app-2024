@@ -5,10 +5,10 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.droidkaigi.confsched.testing.HiltTestActivity
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.category.ScreenshotTests
 import io.github.droidkaigi.confsched.testing.robot.TimetableItemDetailScreenRobot
+import io.github.droidkaigi.confsched.testing.runRobot
 import org.junit.Rule
 import org.junit.Test
 import org.junit.experimental.categories.Category
@@ -26,7 +26,7 @@ import javax.inject.Inject
 class TimetableItemDetailScreenTest {
 
     @get:Rule
-    @BindValue val robotTestRule: RobotTestRule = RobotTestRule<HiltTestActivity>(
+    @BindValue val robotTestRule: RobotTestRule = RobotTestRule(
         testInstance = this,
         bundle = Bundle().apply {
             putString(
@@ -42,7 +42,7 @@ class TimetableItemDetailScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkLaunchShot() {
-        timetableItemDetailScreenRobot {
+        runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
             checkScreenCapture()
         }
@@ -51,7 +51,7 @@ class TimetableItemDetailScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkLaunchAccessibilityShot() {
-        timetableItemDetailScreenRobot {
+        runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
             checkAccessibilityCapture()
         }
@@ -60,7 +60,7 @@ class TimetableItemDetailScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkBookmarkToggleShot() {
-        timetableItemDetailScreenRobot {
+        runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
             clickBookmarkButton()
             checkScreenCapture()
@@ -70,7 +70,7 @@ class TimetableItemDetailScreenTest {
     @Test
     @Category(ScreenshotTests::class)
     fun checkScrollShot() {
-        timetableItemDetailScreenRobot {
+        runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
             scroll()
             checkScreenCapture()
@@ -87,7 +87,7 @@ class TimetableItemDetailScreenTest {
     @Category(ScreenshotTests::class)
     @Config(fontScale = 0.5f)
     fun checkSmallFontScaleShot() {
-        timetableItemDetailScreenRobot {
+        runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
             checkScreenCapture()
         }
@@ -97,7 +97,7 @@ class TimetableItemDetailScreenTest {
     @Category(ScreenshotTests::class)
     @Config(fontScale = 1.5f)
     fun checkLargeFontScaleShot() {
-        timetableItemDetailScreenRobot {
+        runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
             checkScreenCapture()
         }
@@ -107,7 +107,7 @@ class TimetableItemDetailScreenTest {
     @Category(ScreenshotTests::class)
     @Config(fontScale = 2.0f)
     fun checkHugeFontScaleShot() {
-        timetableItemDetailScreenRobot {
+        runRobot(timetableItemDetailScreenRobot) {
             setupScreenContent()
             checkScreenCapture()
         }

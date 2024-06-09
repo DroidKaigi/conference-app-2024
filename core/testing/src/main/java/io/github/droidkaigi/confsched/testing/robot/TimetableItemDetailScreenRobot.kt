@@ -14,30 +14,21 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
-import io.github.droidkaigi.confsched.testing.RobotTestEnvironment
-import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
-import kotlinx.coroutines.test.TestDispatcher
-import org.robolectric.shadows.ShadowLooper
+import io.github.droidkaigi.confsched.sessions.timetableItemDetailScreenRoute
+import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
+import io.github.droidkaigi.confsched.testing.ScreenRobot
 import javax.inject.Inject
-import kotlin.time.Duration.Companion.seconds
 
 class TimetableItemDetailScreenRobot @Inject constructor(
-    private val testDispatcher: TestDispatcher,
-) {
-    @Inject lateinit var robotTestEnvironment: RobotTestEnvironment
-    private val composeTestRule
-        get() = robotTestEnvironment.composeTestRule
-
-    operator fun invoke(
-        block: suspend TimetableItemDetailScreenRobot.() -> Unit,
-    ) {
-        runTestWithLogging(timeout = 30.seconds) {
-            block()
-        }
-    }
+    private val screenRobot: DefaultScreenRobot,
+) : ScreenRobot by screenRobot {
 
     suspend fun setupScreenContent() {
-        robotTestEnvironment.setContent {
+        val firstSessionId = SessionsAllResponse.Companion.fake().sessions.first().id
+        robotTestRule.setContentWithNavigation(
+            startDestination = "timetableItemDetail/${firstSessionId}",
+            route = timetableItemDetailScreenRoute,
+        ) {
             KaigiTheme {
                 TimetableItemDetailScreen(
                     onNavigationIconClick = { },
@@ -84,14 +75,6 @@ class TimetableItemDetailScreenRobot @Inject constructor(
                     ),
                 ),
             )
-    }
-
-    fun waitUntilIdle() {
-        repeat(5) {
-            composeTestRule.waitForIdle()
-            testDispatcher.scheduler.advanceUntilIdle()
-            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
-        }
     }
 
     companion object {
