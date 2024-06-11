@@ -58,8 +58,11 @@ struct ListViewItem: View {
                 Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundColor(Color.gray)
             }
             Text(listItem.title).font(.title)
-            PhotoView(photo:"person.circle.fill",
-                      name: listItem.speaker)
+            ForEach(listItem.speakers, id: \.self){ speaker in
+                PhotoView(photo:"person.circle.fill",
+                          name: speaker)
+            }
+            
             
         }.padding(10)
             .overlay(

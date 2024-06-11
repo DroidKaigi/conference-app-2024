@@ -52,60 +52,157 @@ public enum DayTab: String, CaseIterable, Identifiable {
     case day3 = "Day3"
 }
 
+//public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
+//    public var id: String {
+//        UUID().uuidString
+//    }
+//
+//    public var startsTimeString: String
+//    public var endsTimeString: String
+//    public var items: [TimetableItem]
+//
+//    public init(startsTimeString: String, endsTimeString: String, items: [TimetableItem]) {
+//        self.startsTimeString = startsTimeString
+//        self.endsTimeString = endsTimeString
+//        self.items = items
+//    }
+//}
+
 public struct TimetableItem: Equatable, Hashable {
-    let room: String
-    let languages: [String]
+    let id: String //Not used yet
     let title: String
-    let speaker: String
-    let startTime: String
-    let endTime: String
+    let startsAt: String
+    let endsAt: String
+    let category: String
+    let sessionType: String
+    let room: String
+    let targetAudience: String
+    let languages: [String]
+    let asset: String
+    let levels: [String]
+    let speakers: [String]
+    
     let isFavorite: Bool
+    
+    
+    // TODO: The actual class will look more like this
+//    public abstract val id: TimetableItemId
+//    public abstract val title: MultiLangText
+//    public abstract val startsAt: Instant
+//    public abstract val endsAt: Instant
+//    public abstract val category: TimetableCategory
+//    public abstract val sessionType: TimetableSessionType
+//    public abstract val room: TimetableRoom
+//    public abstract val targetAudience: String
+//    public abstract val language: TimetableLanguage
+//    public abstract val asset: TimetableAsset
+//    public abstract val levels: PersistentList<String>
+//    public abstract val speakers: PersistentList<TimetableSpeaker>
 }
 
+
+
 public struct SampleData {
-    public let day1Data = [TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                                  title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-                                  speaker: "Maria Rodriguez",
-                                  startTime: "12:00PM",endTime: "13:00PM",isFavorite:false),
-                             TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                                 title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-                                 speaker: "Maria Rodriguez",
-                                 startTime: "12:00PM",endTime: "13:00PM",isFavorite:false),
-                             TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                             title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-                                 speaker: "Maria Rodriguez",
-                                 startTime: "12:00PM",
-                                 endTime: "13:00PM",isFavorite:false)
-                          ]
+    public let day1Data = [
+    TimetableItem(
+        id: "",
+        title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+        startsAt: "12:00PM", endsAt: "13:00PM",
+        category: "",
+        sessionType: "",
+        room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+        asset:"", levels: [""],
+        speakers: ["Maria Rodriguez"],
+        isFavorite:false
+    ),
+    TimetableItem(
+        id: "",
+        title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+        startsAt: "12:00PM", endsAt: "13:00PM",
+        category: "",
+        sessionType: "",
+        room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+        asset:"", levels: [""],
+        speakers: ["Maria Rodriguez"],
+        isFavorite:false
+     ),
+     TimetableItem(
+        id: "",
+        title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+        startsAt: "12:00PM", endsAt: "13:00PM",
+        category: "",
+        sessionType: "",
+        room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+        asset:"", levels: [""],
+        speakers: ["Maria Rodriguez"],
+
+        isFavorite:false)
+     ]
     
-    public let day2Data = [TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                                  title: "A Beginner's Guide to Understanding the Latest Android Technology",
-                                  speaker: "Kelvin Lueilwitz",
-                                  startTime: "12:00PM",endTime: "13:00PM",isFavorite:false),
-                             TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                                 title: "How to Stay Updated on the Newest Android Technology Innovations",
-                                 speaker: "Mallory Turner",
-                                 startTime: "12:00PM",endTime: "13:00PM",isFavorite:false),
-                             TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                             title: "The Ultimate Guide to Exploring the Latest Android Technology Features",
-                                 speaker: "Clementina Mills",
-                                 startTime: "12:00PM",
-                                 endTime: "13:00PM",isFavorite:false)
-                          ]
+    public let day2Data = [
+    TimetableItem(
+        id: "",
+        title: "A Beginner's Guide to Understanding the Latest Android Technology",
+        startsAt: "12:00PM", endsAt: "13:00PM",
+        category: "",
+        sessionType: "",
+        room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+        asset:"", levels: [""],
+        speakers: ["Kelvin Lueilwitz"],
+        isFavorite:false),
+    TimetableItem(
+        id: "",
+        title: "How to Stay Updated on the Newest Android Technology Innovations",
+        startsAt: "12:00PM", endsAt: "13:00PM",
+        category: "",
+        sessionType: "",
+        room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+        asset:"", levels: [""],
+        speakers: ["Mallory Turner"],
+        isFavorite:false),
+    TimetableItem(
+        id: "",
+        title: "The Ultimate Guide to Exploring the Latest Android Technology Features",
+        startsAt: "12:00PM", endsAt: "13:00PM",
+        category: "",
+        sessionType: "",
+        room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+        asset:"", levels: [""],
+        speakers: ["Clementina Mills"],
+        isFavorite:false)
+    ]
     
-    public let day3Data = [TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                                  title: "Why Should You Invest in the Newest Android Technology?",
-                                  speaker: "Waldo Torp",
-                                  startTime: "12:00PM",endTime: "13:00PM",isFavorite:false),
-                             TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                                 title: "5 Ways the Newest Android Technology is Changing the Tech Industry",
-                                 speaker: "Baron Stracke",
-                                 startTime: "12:00PM",endTime: "13:00PM",isFavorite:false),
-                             TimetableItem(room: "Arctic Fox", languages: ["EN", "JA"],
-                             title: "The Ultimate List of Resources for Learning More About the Latest Android Technology",
-                                 speaker: "Carole Volkman",
-                                 startTime: "12:00PM",
-                                 endTime: "13:00PM",isFavorite:false)
-                          ]
+    public let day3Data = [
+        TimetableItem(
+            id: "",
+            title: "Why Should You Invest in the Newest Android Technology?",
+            startsAt: "12:00PM", endsAt: "13:00PM",
+            category: "",
+            sessionType: "",
+            room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+            asset:"", levels: [""],
+            speakers: ["Waldo Torp"],
+            isFavorite:false),
+        TimetableItem(
+            id: "",
+            title: "5 Ways the Newest Android Technology is Changing the Tech Industry",
+            startsAt: "12:00PM", endsAt: "13:00PM",
+            category: "",
+            sessionType: "",
+            room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+            asset:"", levels: [""],
+            speakers: ["Baron Stracke"],
+            isFavorite:false),
+        TimetableItem(
+            id: "", 
+            title: "The Ultimate List of Resources for Learning More About the Latest Android Technology",
+            startsAt: "12:00PM", endsAt: "13:00PM",
+            category: "",
+            sessionType: "",
+            room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+            asset:"", levels: [""],
+            speakers: ["Carole Volkman"],
+            isFavorite:false)
+       ]
 }
 
