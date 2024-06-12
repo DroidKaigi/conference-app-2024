@@ -29,6 +29,7 @@
 		8C7DACB52BCBCCB0002C298A /* App.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		8C7DACBB2BCBCDA0002C298A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8C7DACC12BCBD0F1002C298A /* app-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "app-ios"; path = ..; sourceTree = "<group>"; };
+		C412816C2C149FB500B458D1 /* DroidKaigi2024App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DroidKaigi2024App-Info.plist"; sourceTree = "<group>"; };
 		C495D60A2C075130003B324E /* App.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = App.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -55,6 +56,7 @@
 		8C772B0C2BCBCBCA00F2BADC = {
 			isa = PBXGroup;
 			children = (
+				C412816C2C149FB500B458D1 /* DroidKaigi2024App-Info.plist */,
 				8C7DACC22BCBD111002C298A /* App */,
 				8C7DACC12BCBD0F1002C298A /* app-ios */,
 				8C772B162BCBCBCA00F2BADC /* Products */,
@@ -442,6 +444,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DroidKaigi2024App-Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -479,6 +482,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "DroidKaigi2024App-Info.plist";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

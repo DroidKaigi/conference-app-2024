@@ -64,9 +64,9 @@ public struct ContentView: View {
 struct ContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
     let repositories: any Repositories
     func makeUIViewController(context: Context) -> UIViewController {
-        return IosComposeKt.contributorViewController(
+        return IosComposeKt.contributorsViewController(
             repositories: repositories,
-            onContributorItemClick: {_ in}
+            onContributorsItemClick: {_ in}
         )
     }
 
