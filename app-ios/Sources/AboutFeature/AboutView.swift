@@ -9,10 +9,12 @@ public struct AboutView: View {
     }
 
     public var body: some View {
-        Text(store.text)
-            .onAppear {
-                store.send(.onAppear)
-            }
+        VStack {
+            KeyVisual()
+                .padding(16)
+            Spacer()
+        }
+        .background(Color(.background))
     }
 }
 
