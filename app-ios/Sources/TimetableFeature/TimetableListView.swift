@@ -15,6 +15,7 @@ public struct TimetableView: View {
                     Button(action: {
                         store.send(.selectDay(tabItem))
                     }, label: {
+                        //TODO: Only selected button should be green and underlined
                         Text(tabItem.rawValue).foregroundColor(.green)
                             .underline()
                     })
@@ -35,11 +36,33 @@ public struct TimetableListView: View {
     }
 
     public var body: some View {
-        ForEach(store.timetableItems, id: \.self) { item in
-            ListViewItem(listItem: item)
+        List {
+            ForEach(store.timetableItems, id: \.self) { item in
+                TimeGroupMiniList(contents: item)
+            }
         }
         .onAppear {
             store.send(.onAppear)
+        }
+    }
+}
+
+struct TimeGroupMiniList: View {
+    let contents: TimetableTimeGroupItems
+    
+    public var body: some View {
+        HStack {
+            VStack {
+                Text(contents.startsTimeString)
+                Text("|")
+                Text(contents.endsTimeString)
+                Spacer()
+            }
+            VStack {
+                ForEach(contents.items, id: \.self) { item in
+                    ListViewItem(listItem: item)
+                }
+            }
         }
     }
 }
@@ -101,7 +124,7 @@ struct PhotoView: View {
 
 #Preview {
     TimetableView(
-        store: .init(initialState: .init(timetableItems: SampleData.init().day1Data),
+        store: .init(initialState: .init(timetableItems: SampleData.init().day1Results),
                      reducer: { TimetableReducer() })
     )
 }
@@ -110,7 +133,7 @@ struct PhotoView: View {
     TimetableListView(
         store: .init(
             initialState: 
-                    .init(timetableItems: SampleData.init().day1Data),
+                    .init(timetableItems: SampleData.init().day1Results),
             reducer: { TimetableReducer() }
         )
     )

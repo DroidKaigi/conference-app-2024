@@ -7,9 +7,9 @@ public struct TimetableReducer {
 
     @ObservableState
     public struct State: Equatable {
-        var timetableItems: [TimetableItem] = [] //Should be simple objects
+        var timetableItems: [TimetableTimeGroupItems] = [] //Should be simple objects
         
-        public init(timetableItems: [TimetableItem]? = []) {
+        public init(timetableItems: [TimetableTimeGroupItems]? = []) {
             self.timetableItems = timetableItems ?? []
         }
     }
@@ -23,20 +23,20 @@ public struct TimetableReducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.timetableItems = SampleData.init().day1Data
+                state.timetableItems = SampleData.init().day1Results
                 return .none
             case .selectDay(let dayTab):
                 //TODO: Replace with real data
                 
                 switch dayTab {
                 case .day1:
-                    state.timetableItems = SampleData.init().day1Data
+                    state.timetableItems = SampleData.init().day1Results
                     return .none
                 case .day2:
-                    state.timetableItems = SampleData.init().day2Data
+                    state.timetableItems = SampleData.init().day2Results
                     return .none
                 case .day3:
-                    state.timetableItems = SampleData.init().day3Data
+                    state.timetableItems = SampleData.init().day3Results
                     return .none
                 }
             }
