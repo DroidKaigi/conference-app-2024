@@ -52,21 +52,21 @@ public enum DayTab: String, CaseIterable, Identifiable {
     case day3 = "Day3"
 }
 
-//public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
-//    public var id: String {
-//        UUID().uuidString
-//    }
-//
-//    public var startsTimeString: String
-//    public var endsTimeString: String
-//    public var items: [TimetableItem]
-//
-//    public init(startsTimeString: String, endsTimeString: String, items: [TimetableItem]) {
-//        self.startsTimeString = startsTimeString
-//        self.endsTimeString = endsTimeString
-//        self.items = items
-//    }
-//}
+public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
+    public var id: String {
+        UUID().uuidString
+    }
+
+    public var startsTimeString: String
+    public var endsTimeString: String
+    public var items: [TimetableItem]
+
+    public init(startsTimeString: String, endsTimeString: String, items: [TimetableItem]) {
+        self.startsTimeString = startsTimeString
+        self.endsTimeString = endsTimeString
+        self.items = items
+    }
+}
 
 public struct TimetableItem: Equatable, Hashable {
     let id: String //Not used yet
@@ -203,209 +203,209 @@ public struct SampleData {
             isFavorite:false)
        ]
     
-//    public let day1Results = [
-//        TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
-//            TimetableItem(
-//                id: "",
-//                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Maria Rodriguez"],
-//                isFavorite:false
-//            ),
-//            TimetableItem(
-//                id: "",
-//                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Maria Rodriguez"],
-//                isFavorite:false
-//             ),
-//             TimetableItem(
-//                id: "",
-//                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Maria Rodriguez"],
-//                isFavorite:false)
-//             ]),
-//        TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
-//            TimetableItem(
-//                id: "",
-//                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Maria Rodriguez"],
-//                isFavorite:false
-//            ),
-//            TimetableItem(
-//                id: "",
-//                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Maria Rodriguez"],
-//                isFavorite:false
-//             ),
-//             TimetableItem(
-//                id: "",
-//                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Maria Rodriguez"],
-//                isFavorite:false)
-//        ])
-//    ]
-//    
-//    public let day2Results = [
-//        TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
-//            TimetableItem(
-//                id: "",
-//                title: "A Beginner's Guide to Understanding the Latest Android Technology",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Kelvin Lueilwitz"],
-//                isFavorite:false),
-//            TimetableItem(
-//                id: "",
-//                title: "How to Stay Updated on the Newest Android Technology Innovations",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Mallory Turner"],
-//                isFavorite:false),
-//            TimetableItem(
-//                id: "",
-//                title: "The Ultimate Guide to Exploring the Latest Android Technology Features",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Clementina Mills"],
-//                isFavorite:false)
-//        ]),
-//        TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
-//            TimetableItem(
-//                id: "",
-//                title: "A Beginner's Guide to Understanding the Latest Android Technology",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Kelvin Lueilwitz"],
-//                isFavorite:false),
-//            TimetableItem(
-//                id: "",
-//                title: "How to Stay Updated on the Newest Android Technology Innovations",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Mallory Turner"],
-//                isFavorite:false),
-//            TimetableItem(
-//                id: "",
-//                title: "The Ultimate Guide to Exploring the Latest Android Technology Features",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Clementina Mills"],
-//                isFavorite:false)
-//        ])
-//    ]
-//    
-//    public let day3Results = [
-//        TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
-//            TimetableItem(
-//                id: "",
-//                title: "Why Should You Invest in the Newest Android Technology?",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Waldo Torp"],
-//                isFavorite:false),
-//            TimetableItem(
-//                id: "",
-//                title: "5 Ways the Newest Android Technology is Changing the Tech Industry",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Baron Stracke"],
-//                isFavorite:false),
-//            TimetableItem(
-//                id: "",
-//                title: "The Ultimate List of Resources for Learning More About the Latest Android Technology",
-//                startsAt: "12:00PM", endsAt: "13:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Carole Volkman"],
-//                isFavorite:false)
-//        ]),
-//        TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
-//            TimetableItem(
-//                id: "",
-//                title: "Why Should You Invest in the Newest Android Technology?",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Waldo Torp"],
-//                isFavorite:false),
-//            TimetableItem(
-//                id: "",
-//                title: "5 Ways the Newest Android Technology is Changing the Tech Industry",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Baron Stracke"],
-//                isFavorite:false),
-//            TimetableItem(
-//                id: "",
-//                title: "The Ultimate List of Resources for Learning More About the Latest Android Technology",
-//                startsAt: "13:00PM", endsAt: "14:00PM",
-//                category: "",
-//                sessionType: "",
-//                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
-//                asset:"", levels: [""],
-//                speakers: ["Carole Volkman"],
-//                isFavorite:false)
-//        ])
-//    ]
+    public let day1Results = [
+        TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
+            TimetableItem(
+                id: "",
+                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Maria Rodriguez"],
+                isFavorite:false
+            ),
+            TimetableItem(
+                id: "",
+                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Maria Rodriguez"],
+                isFavorite:false
+             ),
+             TimetableItem(
+                id: "",
+                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Maria Rodriguez"],
+                isFavorite:false)
+             ]),
+        TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
+            TimetableItem(
+                id: "",
+                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Maria Rodriguez"],
+                isFavorite:false
+            ),
+            TimetableItem(
+                id: "",
+                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Maria Rodriguez"],
+                isFavorite:false
+             ),
+             TimetableItem(
+                id: "",
+                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Maria Rodriguez"],
+                isFavorite:false)
+        ])
+    ]
+    
+    public let day2Results = [
+        TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
+            TimetableItem(
+                id: "",
+                title: "A Beginner's Guide to Understanding the Latest Android Technology",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Kelvin Lueilwitz"],
+                isFavorite:false),
+            TimetableItem(
+                id: "",
+                title: "How to Stay Updated on the Newest Android Technology Innovations",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Mallory Turner"],
+                isFavorite:false),
+            TimetableItem(
+                id: "",
+                title: "The Ultimate Guide to Exploring the Latest Android Technology Features",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Clementina Mills"],
+                isFavorite:false)
+        ]),
+        TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
+            TimetableItem(
+                id: "",
+                title: "A Beginner's Guide to Understanding the Latest Android Technology",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Kelvin Lueilwitz"],
+                isFavorite:false),
+            TimetableItem(
+                id: "",
+                title: "How to Stay Updated on the Newest Android Technology Innovations",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Mallory Turner"],
+                isFavorite:false),
+            TimetableItem(
+                id: "",
+                title: "The Ultimate Guide to Exploring the Latest Android Technology Features",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Clementina Mills"],
+                isFavorite:false)
+        ])
+    ]
+    
+    public let day3Results = [
+        TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
+            TimetableItem(
+                id: "",
+                title: "Why Should You Invest in the Newest Android Technology?",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Waldo Torp"],
+                isFavorite:false),
+            TimetableItem(
+                id: "",
+                title: "5 Ways the Newest Android Technology is Changing the Tech Industry",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Baron Stracke"],
+                isFavorite:false),
+            TimetableItem(
+                id: "",
+                title: "The Ultimate List of Resources for Learning More About the Latest Android Technology",
+                startsAt: "12:00PM", endsAt: "13:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Carole Volkman"],
+                isFavorite:false)
+        ]),
+        TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
+            TimetableItem(
+                id: "",
+                title: "Why Should You Invest in the Newest Android Technology?",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Waldo Torp"],
+                isFavorite:false),
+            TimetableItem(
+                id: "",
+                title: "5 Ways the Newest Android Technology is Changing the Tech Industry",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Baron Stracke"],
+                isFavorite:false),
+            TimetableItem(
+                id: "",
+                title: "The Ultimate List of Resources for Learning More About the Latest Android Technology",
+                startsAt: "13:00PM", endsAt: "14:00PM",
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Carole Volkman"],
+                isFavorite:false)
+        ])
+    ]
 }
 
