@@ -13,7 +13,7 @@ public struct AboutReducer {
         }
     }
 
-    public enum Action {
+    public enum Action: ViewAction {
         case path(StackAction<Path.State, Path.Action>)
         case view(View)
         
@@ -22,9 +22,6 @@ public struct AboutReducer {
             case staffsTapped
             case contributersTapped
             case sponsorsTapped
-            case codeOfConductTapped
-            case acknowledgementsTapped
-            case privacyPolicyTapped
         }
     }
 
@@ -33,7 +30,6 @@ public struct AboutReducer {
         case staffs
         case contributers
         case sponsors
-        case acknowledgements
     }
 
     public var body: some ReducerOf<Self> {
@@ -47,8 +43,6 @@ public struct AboutReducer {
                 return .none
             case .view(.sponsorsTapped):
                 state.path.append(.sponsors)
-                return .none
-            case .view:
                 return .none
             case .path:
                 return .none
