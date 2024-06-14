@@ -1,14 +1,25 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "Acknowledgements" : {
-
-    },
     "Contributers" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "コントリビューター"
+          }
+        }
+      }
     },
     "Credits" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credits"
+          }
+        }
+      }
     },
     "KeyVisualCheckMap" : {
       "localizations" : {
@@ -71,13 +82,24 @@
       }
     },
     "Sponsors" : {
-
-    },
-    "Staff" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スポンサー"
+          }
+        }
+      }
     },
     "Staffs" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スタッフ"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

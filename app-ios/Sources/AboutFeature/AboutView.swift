@@ -15,7 +15,7 @@ public struct AboutView: View {
         } destination: { store in
             switch store.state {
             case .staffs:
-                Text("Staff")
+                Text("Staffs")
             case .contributers:
                 Text("Contributers")
             case .sponsors:
@@ -42,8 +42,11 @@ public struct AboutView: View {
                     Button(action: {
                         send(.staffsTapped)
                     }, label: {
-                        Label("Staffs", systemImage: "face.smiling")
-                            .foregroundStyle(Color(.surfaceOnSurface))
+                        Label(
+                            String(localized: "Staffs", bundle: .module),
+                            systemImage: "face.smiling"
+                        )
+                        .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
                     .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
@@ -54,8 +57,11 @@ public struct AboutView: View {
                     Button(action: {
                         send(.contributersTapped)
                     }, label: {
-                        Label("Contributers", systemImage: "person.3")
-                            .foregroundStyle(Color(.surfaceOnSurface))
+                        Label(
+                            String(localized: "Contributers", bundle: .module),
+                            systemImage: "person.3"
+                        )
+                        .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
                     .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
@@ -66,8 +72,11 @@ public struct AboutView: View {
                     Button(action: {
                         send(.sponsorsTapped)
                     }, label: {
-                        Label("Sponsors", systemImage: "building.2")
-                            .foregroundStyle(Color(.surfaceOnSurface))
+                        Label(
+                            String(localized: "Sponsors", bundle: .module),
+                            systemImage: "building.2"
+                        )
+                        .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
                     .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
