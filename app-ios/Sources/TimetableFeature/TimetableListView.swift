@@ -9,7 +9,7 @@ public struct TimetableView: View {
     }
     
     public var body: some View {
-        VStack {
+        VStack() {
             HStack {
                 ForEach(DayTab.allCases) { tabItem in
                     Button(action: {
@@ -25,6 +25,8 @@ public struct TimetableView: View {
             TimetableListView(store: store)
             Spacer()
         }
+        .background(Color(.backgroundColorset))
+        .frame(maxWidth: .infinity)
     }
 }
 
