@@ -46,6 +46,7 @@ public struct AboutView: View {
                             String(localized: "Staffs", bundle: .module),
                             systemImage: "face.smiling"
                         )
+                        .labelStyle(AboutLabelStyle())
                         .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
@@ -59,8 +60,9 @@ public struct AboutView: View {
                     }, label: {
                         Label(
                             String(localized: "Contributers", bundle: .module),
-                            systemImage: "person.3"
+                            systemImage: "person"
                         )
+                        .labelStyle(AboutLabelStyle())
                         .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
@@ -76,6 +78,7 @@ public struct AboutView: View {
                             String(localized: "Sponsors", bundle: .module),
                             systemImage: "building.2"
                         )
+                        .labelStyle(AboutLabelStyle())
                         .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
@@ -90,6 +93,17 @@ public struct AboutView: View {
             .padding(.horizontal, 16)
         }
         .background(Color(.background))
+    }
+
+    struct AboutLabelStyle: LabelStyle {
+        func makeBody(configuration: Configuration) -> some View {
+            HStack(spacing: 14) {
+                configuration.icon
+                    .font(.headline)
+                configuration.title
+                    .font(.body)
+            }
+        }
     }
 }
 
