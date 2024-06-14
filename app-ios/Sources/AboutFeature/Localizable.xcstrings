@@ -1,6 +1,15 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "Acknowledgements" : {
+
+    },
+    "Contributers" : {
+
+    },
+    "Credits" : {
+
+    },
     "KeyVisualCheckMap" : {
       "localizations" : {
         "ja" : {
@@ -60,6 +69,15 @@
           }
         }
       }
+    },
+    "Sponsors" : {
+
+    },
+    "Staff" : {
+
+    },
+    "Staffs" : {
+
     }
   },
   "version" : "1.0"
