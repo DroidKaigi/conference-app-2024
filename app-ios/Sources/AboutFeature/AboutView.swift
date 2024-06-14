@@ -31,13 +31,10 @@ public struct AboutView: View {
                     .padding(.top, 28)
                     .padding(.bottom, 32)
                 
-                VStack {
-                    HStack {
-                        Text("Credits")
-                            .foregroundStyle(Color(.surfaceOnSurfaceVariant))
-                            .font(.headline)
-                        Spacer()
-                    }
+                VStack(alignment: .leading) {
+                    Text("Credits")
+                        .foregroundStyle(Color(.surfaceOnSurfaceVariant))
+                        .font(.headline)
 
                     Button(action: {
                         send(.staffsTapped)
@@ -47,7 +44,6 @@ public struct AboutView: View {
                             systemImage: "face.smiling"
                         )
                         .labelStyle(AboutLabelStyle())
-                        .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
                     .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
@@ -63,7 +59,6 @@ public struct AboutView: View {
                             systemImage: "person"
                         )
                         .labelStyle(AboutLabelStyle())
-                        .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
                     .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
@@ -79,7 +74,6 @@ public struct AboutView: View {
                             systemImage: "building.2"
                         )
                         .labelStyle(AboutLabelStyle())
-                        .foregroundStyle(Color(.surfaceOnSurface))
                         Spacer()
                     })
                     .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
@@ -103,6 +97,7 @@ public struct AboutView: View {
                 configuration.title
                     .font(.body)
             }
+            .foregroundStyle(Color(.surfaceOnSurface))
         }
     }
 }
