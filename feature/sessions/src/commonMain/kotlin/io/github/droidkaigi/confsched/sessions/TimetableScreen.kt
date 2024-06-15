@@ -190,7 +190,7 @@ private fun TimetableScreen(
                 Button(
                     modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
                     onClick = { onTimetableUiChangeClick() }) {
-                    Text("Change UiType")
+                    Text("Change UiType!")
                 }
             }
         },

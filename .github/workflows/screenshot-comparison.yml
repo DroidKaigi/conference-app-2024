@@ -19,6 +19,7 @@ jobs:
     permissions:
       contents: read # for clone
       actions: write # for upload-artifact
+      checks: read # for wait-on-check-action
 
     steps:
       - name: Checkout for getting base branch HEAD commit
