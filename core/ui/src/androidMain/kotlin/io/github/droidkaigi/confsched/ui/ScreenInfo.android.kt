@@ -11,6 +11,6 @@ actual fun getScreenSizeInfo(): ScreenInfo {
 //    val hDp = config.screenHeightDp.dp
 //    val wDp = config.screenWidthDp.dp
     return ScreenInfo(
-        isPort = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT
+        isPort = LocalConfiguration.current.orientation == Configuration.ORIENTATION_PORTRAIT,
     )
 }

@@ -121,7 +121,7 @@ class RobotTestRule(
     fun setContent(content: @Composable () -> Unit) {
         val repositoryProvider = EntryPoints.get(
             composeTestRule.activity.application,
-            RepositoryProviderEntryPoint::class.java
+            RepositoryProviderEntryPoint::class.java,
         )
             .getRepositoryProvider()
         composeTestRule.setContent {

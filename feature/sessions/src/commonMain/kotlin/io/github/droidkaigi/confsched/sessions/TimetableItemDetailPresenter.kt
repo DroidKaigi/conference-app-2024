@@ -37,7 +37,7 @@ fun timetableItemDetailPresenter(
     sessionsRepository: SessionsRepository = localSessionsRepository(),
     timetableItemId: String = rememberNavigationArgument(
         key = timetableItemDetailScreenRouteItemIdParameterName,
-        initialValue = ""
+        initialValue = "",
     ),
 ): TimetableItemDetailScreenUiState = providePresenterDefaults<TimetableItemDetailScreenUiState> { userMessageStateHolder ->
     val timetableItemStateWithBookmark by rememberUpdatedState(
@@ -56,7 +56,7 @@ fun timetableItemDetailPresenter(
                     sessionsRepository.toggleBookmark(timetableItem.id)
                     val oldBookmarked = timetableItemWithBookmark.second
                     if (!oldBookmarked) {
-                        val result = userMessageStateHolder.showMessage(
+                        userMessageStateHolder.showMessage(
                             message = BookmarkedSuccessfully.asString(),
                             actionLabel = ViewBookmarkList.asString(),
                             duration = Short,
@@ -88,6 +88,6 @@ fun timetableItemDetailPresenter(
         isBookmarked = bookmarked,
         isLangSelectable = timetableItem.sessionType == NORMAL,
         currentLang = selectedDescriptionLanguage,
-        userMessageStateHolder = userMessageStateHolder
+        userMessageStateHolder = userMessageStateHolder,
     )
 }

@@ -51,7 +51,7 @@ interface CaptureScreenRobot {
 
     @Deprecated(
         message = "Use captureScreenWithChecks instead and add checks to ensure screen contents are correct",
-        replaceWith = ReplaceWith("captureScreenWithChecks(checks)")
+        replaceWith = ReplaceWith("captureScreenWithChecks(checks)"),
     )
     fun captureScreenWithChecks()
 }
@@ -69,7 +69,7 @@ class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: R
 
     @Deprecated(
         "Use captureScreenWithChecks instead and add checks to ensure screen contents are correct",
-        replaceWith = ReplaceWith("captureScreenWithChecks(checks)")
+        replaceWith = ReplaceWith("captureScreenWithChecks(checks)"),
     )
     override fun captureScreenWithChecks() {
         robotTestRule.captureScreen()

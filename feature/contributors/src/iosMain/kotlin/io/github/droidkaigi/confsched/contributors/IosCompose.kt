@@ -14,7 +14,7 @@ fun contributorsViewController(
 ): UIViewController = composeViewController(repositories) {
     ContributorsScreen(
         isTopAppBarHidden = true,
-        onNavigationIconClick = { /** no action for iOS side **/ },
+        onNavigationIconClick = { /* no action for iOS side */ },
         onContributorsItemClick = onContributorsItemClick,
     )
 }
@@ -25,9 +25,7 @@ fun contributorsScreenPresenterStateFlow(
     events: Flow<ContributorsScreenEvent>,
 ): Flow<ContributorsUiState> = presenterStateFlow(
     events = events,
-    repositories = repositories
+    repositories = repositories,
 ) {
     contributorsScreenPresenter(events)
 }
-
-

@@ -28,9 +28,9 @@ import javax.inject.Inject
 
 class TimetableScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
-    private val timetableServerRobot: DefaultTimetableServerRobot
+    private val timetableServerRobot: DefaultTimetableServerRobot,
 ) : ScreenRobot by screenRobot,
-    TimetableServerRobot by timetableServerRobot{
+    TimetableServerRobot by timetableServerRobot {
     fun setupTimetableScreenContent() {
         robotTestRule.setContent {
             CompositionLocalProvider(LocalClock provides FakeClock) {

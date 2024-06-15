@@ -32,27 +32,27 @@ public class DefaultSessionsRepository(
         var first = true
         combine(
             sessionCacheDataStore.getTimetableStream().catch { e ->
-                    Logger.d(
-                        "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
-                        e,
-                    )
-                    sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
-                    emitAll(sessionCacheDataStore.getTimetableStream())
-                },
+                Logger.d(
+                    "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
+                    e,
+                )
+                sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+                emitAll(sessionCacheDataStore.getTimetableStream())
+            },
             userDataStore.getFavoriteSessionStream(),
         ) { timetable, favorites ->
             timetable.copy(bookmarks = favorites)
         }.collect {
-                if (!it.isEmpty()) {
-                    emit(it)
-                }
-                if (first) {
-                    first = false
-                    Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
-                    sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
-                    Logger.d("DefaultSessionsRepository onStart fetched")
-                }
+            if (!it.isEmpty()) {
+                emit(it)
             }
+            if (first) {
+                first = false
+                Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
+                sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+                Logger.d("DefaultSessionsRepository onStart fetched")
+            }
+        }
     }
 
     override fun getTimetableItemWithBookmarkStream(id: TimetableItemId): Flow<Pair<TimetableItem, Boolean>> {
@@ -75,13 +75,13 @@ public class DefaultSessionsRepository(
 
         val timetable by remember {
             sessionCacheDataStore.getTimetableStream().catch { e ->
-                    Logger.d(
-                        "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
-                        e,
-                    )
-                    sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
-                    emitAll(sessionCacheDataStore.getTimetableStream())
-                }
+                Logger.d(
+                    "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
+                    e,
+                )
+                sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+                emitAll(sessionCacheDataStore.getTimetableStream())
+            }
         }.safeCollectAsState(Timetable())
         val favoriteSessions by remember {
             userDataStore.getFavoriteSessionStream()
@@ -99,7 +99,9 @@ public class DefaultSessionsRepository(
                 timetable.timetableItems.firstOrNull { it.id == id } ?: return@remember null
             timetableItem to timetable.bookmarks.contains(id)
         }
-        Logger.d { "DefaultSessionsRepository timetableItemWithBookmark() timetableSize:${timetable.timetableItems.size} id:$id itemWithBookmark=$itemWithBookmark" }
+        Logger.d {
+            "DefaultSessionsRepository timetableItemWithBookmark() timetableSize:${timetable.timetableItems.size} id:$id itemWithBookmark=$itemWithBookmark"
+        }
         return itemWithBookmark
     }
 

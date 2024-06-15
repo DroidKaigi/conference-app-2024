@@ -5,7 +5,6 @@ import io.github.droidkaigi.confsched.data.achievements.AchievementsDataStore
 import io.github.droidkaigi.confsched.data.achievements.DefaultAchievementRepository
 import io.github.droidkaigi.confsched.data.auth.AuthApi
 import io.github.droidkaigi.confsched.data.auth.DefaultAuthApi
-import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsRepository
@@ -22,6 +21,7 @@ import io.github.droidkaigi.confsched.data.staff.DefaultStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.DefaultStaffRepository
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
 import io.github.droidkaigi.confsched.data.user.UserDataStore
+import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.model.ContributorsRepository
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.SponsorsRepository
@@ -53,7 +53,7 @@ public interface Repositories {
 
 public class DefaultRepositories(
     public override val map: Map<KClass<*>, Any>,
-): Repositories
+) : Repositories
 
 @OptIn(ExperimentalForeignApi::class)
 public val dataModule: Module = module {
@@ -144,13 +144,14 @@ public val dataModule: Module = module {
     singleOf(::DefaultStaffRepository) bind StaffRepository::class
     singleOf(::DefaultSponsorsRepository) bind SponsorsRepository::class
     single<Repositories> {
-        DefaultRepositories(mapOf(
+        DefaultRepositories(
+            mapOf(
                 AchievementRepository::class to get<AchievementRepository>(),
                 SessionsRepository::class to get<SessionsRepository>(),
                 ContributorsRepository::class to get<ContributorsRepository>(),
                 StaffRepository::class to get<StaffRepository>(),
                 SponsorsRepository::class to get<SponsorsRepository>(),
-            )
+            ),
         )
     }
 }

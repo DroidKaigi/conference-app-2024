@@ -5,8 +5,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.Icons.AutoMirrored.Filled
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,9 +61,10 @@ data class ContributorsUiState(
 
 @Composable
 fun ContributorsScreen(
-    isTopAppBarHidden: Boolean = false,
     onNavigationIconClick: () -> Unit,
     onContributorsItemClick: (url: String) -> Unit,
+    modifier: Modifier = Modifier,
+    isTopAppBarHidden: Boolean = false,
 ) {
     val eventEmitter = rememberEventEmitter<ContributorsScreenEvent>()
     val uiState = contributorsScreenPresenter(
@@ -82,6 +83,7 @@ fun ContributorsScreen(
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
         onContributorsItemClick = onContributorsItemClick,
+        modifier = modifier,
     )
 }
 
@@ -93,6 +95,7 @@ fun ContributorsScreen(
     onBackClick: () -> Unit,
     onContributorsItemClick: (url: String) -> Unit,
     isTopAppBarHidden: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     Logger.d { "ContributorsScreen: $uiState" }
     val scrollBehavior =
@@ -102,7 +105,7 @@ fun ContributorsScreen(
             null
         }
     Scaffold(
-        modifier = Modifier.testTag(ContributorsScreenTestTag),
+        modifier = modifier.testTag(ContributorsScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (scrollBehavior != null) {
@@ -115,12 +118,12 @@ fun ContributorsScreen(
                             onClick = onBackClick,
                         ) {
                             Icon(
-                                imageVector = Icons.Default.ArrowBack,
+                                imageVector = Filled.ArrowBack,
                                 contentDescription = "Back",
                             )
                         }
                     },
-                    scrollBehavior = scrollBehavior
+                    scrollBehavior = scrollBehavior,
                 )
             }
         },
@@ -155,7 +158,7 @@ private fun Contributors(
             ContributorsItem(
                 contributor = it,
                 onClick = onContributorsItemClick,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

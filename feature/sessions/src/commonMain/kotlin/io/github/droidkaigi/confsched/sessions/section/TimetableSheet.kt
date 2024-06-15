@@ -52,10 +52,9 @@ fun TimetableSheet(
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(),
         ) {
             when (uiState) {
-
                 is ListTimetable -> {
                     TimetableList(
                         uiState = requireNotNull(uiState.timetableListUiStates[selectedDay]),

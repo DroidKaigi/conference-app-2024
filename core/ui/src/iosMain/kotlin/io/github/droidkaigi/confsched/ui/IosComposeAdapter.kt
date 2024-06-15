@@ -19,7 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import co.touchlab.kermit.Logger
-import io.github.droidkaigi.confsched.compose.CompositionLocalProviderWithReturnValue
+import io.github.droidkaigi.confsched.compose.compositionLocalProviderWithReturnValue
 import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
@@ -44,9 +44,9 @@ fun <EVENT, UISTATE> presenterStateFlow(
                 override val lifecycle: Lifecycle = LifecycleRegistry(this)
             }
         }
-        CompositionLocalProviderWithReturnValue(LocalViewModelStoreOwner provides nestedRegistry) {
-            CompositionLocalProviderWithReturnValue(LocalLifecycleOwner provides lifecycleRegistry) {
-                CompositionLocalProviderWithReturnValue(LocalRepositories provides repositories) {
+        compositionLocalProviderWithReturnValue(LocalViewModelStoreOwner provides nestedRegistry) {
+            compositionLocalProviderWithReturnValue(LocalLifecycleOwner provides lifecycleRegistry) {
+                compositionLocalProviderWithReturnValue(LocalRepositories provides repositories) {
                     presenter(events)
                 }
             }
@@ -54,19 +54,15 @@ fun <EVENT, UISTATE> presenterStateFlow(
     }
 }
 
-
 @Suppress("UNUSED")
 fun composeViewController(
     repositories: Repositories,
     content: @Composable () -> Unit,
-): UIViewController = /** no action for iOS side **/
-    ComposeUIViewController {
-    /** no action for iOS side **/
-        NavHost(rememberNavController(), startDestination = "root") {
+): UIViewController = ComposeUIViewController {
+    NavHost(rememberNavController(), startDestination = "root") {
         composable("root") {
-            /** no action for iOS side **/
             CompositionLocalProvider(
-                LocalRepositories provides repositories.map
+                LocalRepositories provides repositories.map,
             ) {
                 Logger.d { "contributorViewController" }
                 val uiViewController = LocalUIViewController.current
@@ -76,7 +72,6 @@ fun composeViewController(
 //        viewModel.viewModelScope.cancel()
                 }
 
-                /** no action for iOS side **/
                 KaigiTheme {
                     content()
                 }
@@ -84,4 +79,3 @@ fun composeViewController(
         }
     }
 }
-
