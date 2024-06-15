@@ -17,6 +17,9 @@ This section explains how the TimetableScreen is set up to display sessions, det
 timetableScreenPresenter ----> TimetableScreen
 ```
 
+<img width="603" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f8b2b564-6a0b-4617-83cb-02068459dc0a">
+
+
 ```kotlin
 @Composable
 fun TimetableScreen(
@@ -37,6 +40,8 @@ fun TimetableScreen(
 #### 2. User Interaction with the Bookmark Button
 
 Here, the interaction of bookmarking a session is detailed, showcasing how events trigger updates within the presenter.
+
+<img width="428" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/23109f98-dd7c-4d8c-bc2b-55ad7f259680">
 
 ```
       TimetableScreenEvent.Bookmark
@@ -68,10 +73,14 @@ fun timetableScreenPresenter(
 
 This part outlines how bookmark changes are persisted in the user's data store, demonstrating the repository's role in data handling.
 
+
+
 ```
         TimetableItemId
 SessionsRepository ----> userDataStore
 ```
+
+
 
 
 ```kotlin
@@ -107,8 +116,11 @@ public override fun timetable(): Timetable {
 
 Describes the flow of updated session data back to the screen presenter, highlighting how the UI state is refreshed.
 
-```
-                 Timetable
+
+<img width="518" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/9ad59696-0b94-4d3f-84c4-71ae0402680b">
+
+
+```                 Timetable
 SessionsRepository ----> timetableScreenPresenter
 ```
 
@@ -144,6 +156,8 @@ fun timetableScreenPresenter(
 #### 6. Displaying the Updated Timetable on the Screen
 
 This final step illustrates how the updated timetable is displayed on the screen, completing the cycle of user interaction and data update.
+<img width="483" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/0f4e3371-5a2e-47c4-a065-f0ad676b766f">
+
 
 ```
           TimetableScreenUiState
