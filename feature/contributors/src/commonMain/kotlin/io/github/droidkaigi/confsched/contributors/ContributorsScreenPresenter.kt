@@ -9,8 +9,7 @@ import io.github.droidkaigi.confsched.model.localContributorsRepository
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
-sealed interface ContributorsScreenEvent {
-}
+sealed interface ContributorsScreenEvent
 
 @Composable
 fun contributorsScreenPresenter(
@@ -20,7 +19,6 @@ fun contributorsScreenPresenter(
     val contributors by rememberUpdatedState(contributorsRepository.contributors())
     SafeLaunchedEffect(Unit) {
         events.collect {
-
         }
     }
     ContributorsUiState(

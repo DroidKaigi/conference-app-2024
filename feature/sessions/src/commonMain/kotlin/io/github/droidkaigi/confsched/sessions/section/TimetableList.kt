@@ -12,7 +12,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.model.Timetable
@@ -37,7 +36,6 @@ fun TimetableList(
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
-    val density = LocalDensity.current
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag),
         state = scrollState,
@@ -56,9 +54,10 @@ fun TimetableList(
                 Spacer(modifier = Modifier.weight(1f))
                 Button(
                     modifier = Modifier.testTag(TimetableListItemBookmarkIconTestTag),
-                    onClick = { onBookmarkClick(timetableItem, true) }) {
+                    onClick = { onBookmarkClick(timetableItem, true) },
+                ) {
                     Text(
-                        text = "Bookmark ${isBookmarked}",
+                        text = "Bookmark $isBookmarked",
                     )
                 }
             }

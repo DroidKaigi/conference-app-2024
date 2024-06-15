@@ -3,7 +3,7 @@ package androidx.compose.ui.tooling.preview
 @Retention(AnnotationRetention.BINARY)
 @Target(
     AnnotationTarget.ANNOTATION_CLASS,
-    AnnotationTarget.FUNCTION
+    AnnotationTarget.FUNCTION,
 )
 @Repeatable
 annotation class Preview(

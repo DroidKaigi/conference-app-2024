@@ -156,25 +156,25 @@ private fun TimetableItemDetailScreen(
                         Button(onClick = { onNavigationIconClick() }) {
                             Text(
                                 text = "Back",
-                                style = MaterialTheme.typography.bodySmall
+                                style = MaterialTheme.typography.bodySmall,
                             )
                         }
                         Text(
                             modifier = Modifier.weight(1F),
                             text = uiState.timetableItem.title.currentLangTitle,
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
                         )
                         if (uiState.isLangSelectable) {
                             Button(onClick = { onSelectedLanguage(JAPANESE) }) {
                                 Text(
                                     text = "日本語",
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = MaterialTheme.typography.bodySmall,
                                 )
                             }
                             Button(onClick = { onSelectedLanguage(Lang.ENGLISH) }) {
                                 Text(
                                     text = "English",
-                                    style = MaterialTheme.typography.bodySmall
+                                    style = MaterialTheme.typography.bodySmall,
                                 )
                             }
                         }
@@ -187,12 +187,14 @@ private fun TimetableItemDetailScreen(
                 Column {
                     Button(
                         modifier = Modifier.testTag(TimetableItemDetailBookmarkIconTestTag),
-                        onClick = { onBookmarkClick(uiState.timetableItem) }) {
+                        onClick = { onBookmarkClick(uiState.timetableItem) },
+                    ) {
                         Text(text = "Bookmark: ${uiState.isBookmarked}")
                     }
                     Button(
 
-                        onClick = { onCalendarRegistrationClick(uiState.timetableItem) }) {
+                        onClick = { onCalendarRegistrationClick(uiState.timetableItem) },
+                    ) {
                         Text(text = "Calendar")
                     }
                     Button(onClick = { onShareClick(uiState.timetableItem) }) {
@@ -206,8 +208,8 @@ private fun TimetableItemDetailScreen(
         if (uiState is Loaded) {
             Column(
                 Modifier.padding(
-                    top = innerPadding.calculateTopPadding()
-                )
+                    top = innerPadding.calculateTopPadding(),
+                ),
             ) {
                 val currentLang = uiState.currentLang ?: Lang.ENGLISH
                 fun MultiLangText.getByLang(lang: Lang): String {
@@ -221,7 +223,7 @@ private fun TimetableItemDetailScreen(
                     text = when (val item = uiState.timetableItem) {
                         is TimetableItem.Session -> item.description.getByLang(currentLang)
                         is TimetableItem.Special -> item.description.getByLang(currentLang)
-                    }
+                    },
                 )
                 Button(onClick = { onLinkClick(uiState.timetableItem.url) }) {
                     Text(text = "Link")

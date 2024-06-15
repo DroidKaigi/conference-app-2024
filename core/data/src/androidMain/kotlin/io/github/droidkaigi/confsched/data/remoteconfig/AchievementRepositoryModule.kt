@@ -20,7 +20,7 @@ public abstract class AchievementRepositoryModule {
     @RepositoryQualifier
     @IntoMap
     @ClassKey(AchievementRepository::class)
-    public  abstract fun bindAchievementRepository(
+    public abstract fun bindAchievementRepository(
         repository: AchievementRepository,
     ): Any
 

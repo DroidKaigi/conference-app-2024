@@ -69,6 +69,7 @@ fun KaigiApp(
 @Composable
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
+    @Suppress("UnusedParameter")
     displayFeatures: PersistentList<DisplayFeature>,
     navController: NavHostController = rememberNavController(),
     externalNavController: ExternalNavController = rememberExternalNavController(),
@@ -96,6 +97,7 @@ private fun KaigiNavHost(
 private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     navController: NavHostController,
+    @Suppress("UnusedParameter")
     externalNavController: ExternalNavController,
 ) {
     mainScreen(

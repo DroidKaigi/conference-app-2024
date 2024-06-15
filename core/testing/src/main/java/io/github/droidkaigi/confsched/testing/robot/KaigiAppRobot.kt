@@ -1,21 +1,16 @@
 package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
-import io.github.droidkaigi.confsched.testing.DefaultWaitRobot
-import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.ScreenRobot
-import kotlinx.coroutines.test.TestDispatcher
 import javax.inject.Inject
 
 class KaigiAppRobot @Inject constructor(
-    robotTestRule: RobotTestRule,
     private val defaultScreenRobot: DefaultScreenRobot,
-): ScreenRobot by defaultScreenRobot {
+) : ScreenRobot by defaultScreenRobot {
     @Inject lateinit var timetableScreenRobot: TimetableScreenRobot
 
     fun goToAbout() {

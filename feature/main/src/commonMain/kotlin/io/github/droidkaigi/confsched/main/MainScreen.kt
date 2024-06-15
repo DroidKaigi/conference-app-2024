@@ -159,17 +159,20 @@ data class MainScreenUiState(
 
 @Composable
 fun MainScreen(
+    @Suppress("UnusedParameter")
     uiState: MainScreenUiState,
+    @Suppress("UnusedParameter")
     snackbarHostState: SnackbarHostState,
     navigationType: NavigationType,
     routeToTab: String.() -> MainScreenTab?,
     onTabSelected: (NavController, MainScreenTab) -> Unit,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val mainNestedNavController = rememberNavController()
     val navBackStackEntry by mainNestedNavController.currentBackStackEntryAsState()
     val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
-    Row(modifier = Modifier.fillMaxSize()) {
+    Row(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
             Column {
                 Text(text = "nav rail")
@@ -187,13 +190,12 @@ fun MainScreen(
                         MainScreenTab.entries.forEach { tab ->
                             Button(
                                 modifier = Modifier.weight(1F),
-                                onClick = { onTabSelected(mainNestedNavController, tab) }
+                                onClick = { onTabSelected(mainNestedNavController, tab) },
                             ) {
                                 Text(text = tab.label + " " + (currentTab == tab))
                             }
                         }
                     }
-
                 }
             },
         ) { padding ->

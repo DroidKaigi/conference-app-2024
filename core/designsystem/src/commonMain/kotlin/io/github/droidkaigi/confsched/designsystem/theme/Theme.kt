@@ -1,6 +1,7 @@
+@file:Suppress("UnusedPrivateProperty")
+
 package io.github.droidkaigi.confsched.designsystem.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
@@ -241,18 +242,23 @@ data class ColorFamily(
     val color: Color,
     val onColor: Color,
     val colorContainer: Color,
-    val onColorContainer: Color
+    val onColorContainer: Color,
 )
 
 val unspecified_scheme = ColorFamily(
-    Color.Unspecified, Color.Unspecified, Color.Unspecified, Color.Unspecified
+    Color.Unspecified,
+    Color.Unspecified,
+    Color.Unspecified,
+    Color.Unspecified,
 )
 
 @Composable
 fun KaigiTheme(
-    content: @Composable() () -> Unit
+    content:
+    @Composable()
+    () -> Unit,
 ) {
-  val colorScheme = darkScheme
+    val colorScheme = darkScheme
 //  val view = LocalView.current
 //  if (!view.isInEditMode) {
 //    SideEffect {
@@ -262,10 +268,9 @@ fun KaigiTheme(
 //    }
 //  }
 
-  MaterialTheme(
-    colorScheme = colorScheme,
-    typography = AppTypography,
-    content = content
-  )
+    MaterialTheme(
+        colorScheme = colorScheme,
+        typography = AppTypography,
+        content = content,
+    )
 }
-

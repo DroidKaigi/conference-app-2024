@@ -65,7 +65,7 @@ fun timetableScreenPresenter(
     TimetableScreenUiState(
         contentUiState = timetableUiState,
         timetableUiType = timetableUiType,
-        userMessageStateHolder = userMessageStateHolder
+        userMessageStateHolder = userMessageStateHolder,
     )
 }
 
