@@ -3,6 +3,8 @@ package io.github.droidkaigi.confsched.testing
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.FakeContributorsApiClient
+import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
+import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
@@ -132,6 +134,28 @@ class DefaultContributorsServerRobot @Inject constructor(contributorsApiClient: 
             when (serverStatus) {
                 ContributorsServerRobot.ServerStatus.Operational -> FakeContributorsApiClient.Status.Operational
                 ContributorsServerRobot.ServerStatus.Error -> FakeContributorsApiClient.Status.Error
+            },
+        )
+    }
+}
+
+interface EventMapServerRobot {
+    enum class ServerStatus {
+        Operational,
+        Error,
+    }
+
+    fun setupContributorServer(serverStatus: ServerStatus)
+}
+
+class DefaultEventMapServerRobot @Inject constructor(contributorsApiClient: EventMapApiClient) :
+    EventMapServerRobot {
+    private val fakeEventMapApiClient = contributorsApiClient as FakeEventMapApiClient
+    override fun setupContributorServer(serverStatus: EventMapServerRobot.ServerStatus) {
+        fakeEventMapApiClient.setup(
+            when (serverStatus) {
+                EventMapServerRobot.ServerStatus.Operational -> FakeEventMapApiClient.Status.Operational
+                EventMapServerRobot.ServerStatus.Error -> FakeEventMapApiClient.Status.Error
             },
         )
     }
