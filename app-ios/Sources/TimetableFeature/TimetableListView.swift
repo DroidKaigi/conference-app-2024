@@ -38,13 +38,16 @@ public struct TimetableListView: View {
     }
 
     public var body: some View {
-        List {
-            ForEach(store.timetableItems, id: \.self) { item in
-                TimeGroupMiniList(contents: item)
-            }
-        }
-        .onAppear {
-            store.send(.onAppear)
+        ScrollView{
+            LazyVStack {
+                ForEach(store.timetableItems, id: \.self) { item in
+                    TimeGroupMiniList(contents: item)
+                }
+            }.scrollContentBackground(.hidden)
+            
+                .onAppear {
+                    store.send(.onAppear)
+                }.background(Color(.backgroundColorset))
         }
     }
 }
@@ -59,13 +62,14 @@ struct TimeGroupMiniList: View {
                 Text("|")
                 Text(contents.endsTimeString)
                 Spacer()
-            }
+            }.foregroundColor(Color(.onSurfaceColorset))
             VStack {
                 ForEach(contents.items, id: \.self) { item in
                     ListViewItem(listItem: item)
                 }
             }
-        }
+        }.background(Color.clear)
+            
     }
 }
 
@@ -80,7 +84,7 @@ struct ListViewItem: View {
                     TagView(tagText: lang, highlight: false)
                 }
                 Spacer()
-                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundColor(Color.gray)
+                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundColor(Color(.onSurfaceColorset))
             }
             Text(listItem.title).font(.title)
             ForEach(listItem.speakers, id: \.self){ speaker in
@@ -89,10 +93,10 @@ struct ListViewItem: View {
             }
             
             
-        }.padding(10)
+        }.foregroundColor(Color(.onSurfaceColorset)).padding(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 5)
-                    .stroke(Color.gray, lineWidth: 1)
+                    .stroke(Color(.onSurfaceColorset), lineWidth: 1)
             )
     }
 }
@@ -106,8 +110,8 @@ struct TagView: View {
                 Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundColor(.green)
                     .padding(-3)
             }
-            Text(tagText).foregroundColor (highlight ? Color.green : Color.gray)
-        }.padding(EdgeInsets(top: 2,leading: 7,bottom: 2,trailing: 7)).border(highlight ? Color.green : Color.gray).padding(-2)
+            Text(tagText).foregroundColor (highlight ? Color.green : Color(.onSurfaceColorset))
+        }.padding(EdgeInsets(top: 2,leading: 7,bottom: 2,trailing: 7)).border(highlight ? Color.green : Color(.onSurfaceColorset)).padding(-2)
     }
 }
 
