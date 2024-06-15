@@ -10,6 +10,10 @@ on:
 
 run-name: "unit-test by ${{ github.actor }}"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 permissions: { }
 
 jobs:
@@ -26,13 +30,6 @@ jobs:
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
 
       - uses: ./.github/actions/setup-java
-
-      - uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615 # v2.27.0
-        continue-on-error: true
-        with:
-          name: screenshot
-          workflow: unit-test.yml
-          branch: main
 
       - name: Upload an event payload for EnricoMi/publish-unit-test-result-action
         uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
