@@ -9,7 +9,7 @@ public struct TimetableView: View {
     }
     
     public var body: some View {
-        VStack() {
+        VStack {
             HStack {
                 ForEach(DayTab.allCases) { tabItem in
                     Button(action: {
