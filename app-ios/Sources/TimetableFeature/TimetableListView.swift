@@ -110,8 +110,12 @@ struct TagView: View {
                 Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundColor(.green)
                     .padding(-3)
             }
-            Text(tagText).foregroundColor (highlight ? Color.green : Color(.onSurfaceColorset))
-        }.padding(EdgeInsets(top: 2,leading: 7,bottom: 2,trailing: 7)).border(highlight ? Color.green : Color(.onSurfaceColorset)).padding(-2)
+            Text(tagText).foregroundColor(highlight ? Color.green : Color(.onSurfaceColorset))
+        }
+        .padding(
+            EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
+        .border(highlight ? Color.green : Color(.onSurfaceColorset))
+        .padding(-2)
     }
 }
 
