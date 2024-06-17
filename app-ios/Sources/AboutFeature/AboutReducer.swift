@@ -22,6 +22,9 @@ public struct AboutReducer {
             case staffsTapped
             case contributersTapped
             case sponsorsTapped
+            case codeOfConductTapped
+            case acknowledgementsTapped
+            case privacyPolicyTapped
         }
     }
 
@@ -30,6 +33,7 @@ public struct AboutReducer {
         case staffs
         case contributers
         case sponsors
+        case acknowledgements
     }
 
     public var body: some ReducerOf<Self> {
@@ -43,6 +47,13 @@ public struct AboutReducer {
                 return .none
             case .view(.sponsorsTapped):
                 state.path.append(.sponsors)
+                return .none
+            case .view(.codeOfConductTapped):
+                return .none
+            case .view(.acknowledgementsTapped):
+                state.path.append(.acknowledgements)
+                return .none
+            case .view(.privacyPolicyTapped):
                 return .none
             case .path:
                 return .none

@@ -20,6 +20,8 @@ public struct AboutView: View {
                 Text("Contributers")
             case .sponsors:
                 Text("Sponsors")
+            case .acknowledgements:
+                Text("Acknowledgements")
             }
         }
     }
