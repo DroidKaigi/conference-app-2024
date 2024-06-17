@@ -24,6 +24,13 @@ public struct AboutView: View {
                 Text("Acknowledgements")
             }
         }
+        .sheet(isPresented: $store.isCodeOfConductSheetPresented.sending(\.view.setCodeOfConductSheet), content: {
+            Text("CodeOfConduct")
+        })
+        .sheet(isPresented: $store.isPrivacyPolicySheetPresented.sending(\.view.setPrivacyPolicySheet), content: {
+            Text("PrivacyPolicy")
+        })
+
     }
     
     @ViewBuilder var content: some View {
@@ -92,7 +99,7 @@ public struct AboutView: View {
                         .font(.headline)
 
                     Button(action: {
-
+                        send(.setCodeOfConductSheet(isPresented: true))
                     }, label: {
                         Label(
                             String(localized: "CodeOfConduct", bundle: .module),
@@ -122,7 +129,7 @@ public struct AboutView: View {
                         .background(Color(.outlineOutlineVariant))
 
                     Button(action: {
-
+                        send(.setPrivacyPolicySheet(isPresented: true))
                     }, label: {
                         Label(
                             String(localized: "PrivacyPolicy", bundle: .module),

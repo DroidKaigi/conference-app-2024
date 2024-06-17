@@ -7,6 +7,8 @@ public struct AboutReducer {
     @ObservableState
     public struct State: Equatable {
         var path = StackState<Path.State>()
+        var isCodeOfConductSheetPresented = false
+        var isPrivacyPolicySheetPresented = false
         
         public init(path: StackState<Path.State> = .init()) {
           self.path = path
@@ -22,9 +24,9 @@ public struct AboutReducer {
             case staffsTapped
             case contributersTapped
             case sponsorsTapped
-            case codeOfConductTapped
+            case setCodeOfConductSheet(isPresented: Bool)
             case acknowledgementsTapped
-            case privacyPolicyTapped
+            case setPrivacyPolicySheet(isPresented: Bool)
         }
     }
 
@@ -48,12 +50,14 @@ public struct AboutReducer {
             case .view(.sponsorsTapped):
                 state.path.append(.sponsors)
                 return .none
-            case .view(.codeOfConductTapped):
+            case .view(.setCodeOfConductSheet(let isPresented)):
+                state.isCodeOfConductSheetPresented = isPresented
                 return .none
             case .view(.acknowledgementsTapped):
                 state.path.append(.acknowledgements)
                 return .none
-            case .view(.privacyPolicyTapped):
+            case .view(.setPrivacyPolicySheet(let isPresented)):
+                state.isPrivacyPolicySheetPresented = isPresented
                 return .none
             case .path:
                 return .none
