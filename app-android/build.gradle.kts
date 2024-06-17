@@ -113,4 +113,5 @@ dependencies {
     implementation(libs.firebaseDynamicLinks)
     debugImplementation(projects.core.testingManifest)
     testImplementation(projects.core.testing)
+    testImplementation(libs.composablePreviewScanner)
 }
