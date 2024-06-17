@@ -7,8 +7,7 @@ public struct AboutReducer {
     @ObservableState
     public struct State: Equatable {
         var path = StackState<Path.State>()
-        var isCodeOfConductSheetPresented = false
-        var isPrivacyPolicySheetPresented = false
+        @Presents var presentation: Presentation.State?
         
         public init(path: StackState<Path.State> = .init()) {
           self.path = path
@@ -18,16 +17,23 @@ public struct AboutReducer {
     public enum Action: ViewAction {
         case path(StackAction<Path.State, Path.Action>)
         case view(View)
+        case presentation(PresentationAction<Presentation.Action>)
         
         @CasePathable
         public enum View {
             case staffsTapped
             case contributersTapped
             case sponsorsTapped
-            case setCodeOfConductSheet(isPresented: Bool)
+            case codeOfConductTapped
             case acknowledgementsTapped
-            case setPrivacyPolicySheet(isPresented: Bool)
+            case privacyPolicyTapped
         }
+    }
+
+    @Reducer(state: .equatable)
+    public enum Presentation {
+        case codeOfConduct
+        case privacyPolicy
     }
 
     @Reducer(state: .equatable)
@@ -50,14 +56,16 @@ public struct AboutReducer {
             case .view(.sponsorsTapped):
                 state.path.append(.sponsors)
                 return .none
-            case .view(.setCodeOfConductSheet(let isPresented)):
-                state.isCodeOfConductSheetPresented = isPresented
+            case .view(.codeOfConductTapped):
+                state.presentation = .codeOfConduct
                 return .none
             case .view(.acknowledgementsTapped):
                 state.path.append(.acknowledgements)
                 return .none
-            case .view(.setPrivacyPolicySheet(let isPresented)):
-                state.isPrivacyPolicySheetPresented = isPresented
+            case .view(.privacyPolicyTapped):
+                state.presentation = .privacyPolicy
+                return .none
+            case .presentation:
                 return .none
             case .path:
                 return .none

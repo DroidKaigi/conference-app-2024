@@ -24,13 +24,12 @@ public struct AboutView: View {
                 Text("Acknowledgements")
             }
         }
-        .sheet(isPresented: $store.isCodeOfConductSheetPresented.sending(\.view.setCodeOfConductSheet), content: {
+        .sheet(item: $store.scope(state: \.presentation?.codeOfConduct, action: \.presentation.codeOfConduct), content: { _ in
             Text("CodeOfConduct")
         })
-        .sheet(isPresented: $store.isPrivacyPolicySheetPresented.sending(\.view.setPrivacyPolicySheet), content: {
+        .sheet(item: $store.scope(state: \.presentation?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
             Text("PrivacyPolicy")
         })
-
     }
     
     @ViewBuilder var content: some View {
@@ -99,7 +98,7 @@ public struct AboutView: View {
                         .font(.headline)
 
                     Button(action: {
-                        send(.setCodeOfConductSheet(isPresented: true))
+                        send(.codeOfConductTapped)
                     }, label: {
                         Label(
                             String(localized: "CodeOfConduct", bundle: .module),
@@ -129,7 +128,7 @@ public struct AboutView: View {
                         .background(Color(.outlineOutlineVariant))
 
                     Button(action: {
-                        send(.setPrivacyPolicySheet(isPresented: true))
+                        send(.privacyPolicyTapped)
                     }, label: {
                         Label(
                             String(localized: "PrivacyPolicy", bundle: .module),
