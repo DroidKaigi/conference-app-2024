@@ -9,8 +9,8 @@ public struct TimetableReducer {
     public struct State: Equatable {
         var timetableItems: [TimetableTimeGroupItems] = [] //Should be simple objects
         
-        public init(timetableItems: [TimetableTimeGroupItems]? = []) {
-            self.timetableItems = timetableItems ?? []
+        public init(timetableItems: [TimetableTimeGroupItems] = []) {
+            self.timetableItems = timetableItems
         }
     }
 
