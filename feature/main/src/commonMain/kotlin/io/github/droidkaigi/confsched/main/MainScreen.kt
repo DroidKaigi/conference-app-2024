@@ -130,15 +130,15 @@ enum class MainScreenTab(
     ),
 
     @OptIn(ExperimentalResourceApi::class)
-    FloorMap(
+    EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
         selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_map_fill),
-        label = MainStrings.FloorMap.asString(),
-        contentDescription = MainStrings.FloorMap.asString(),
+        label = MainStrings.EventMap.asString(),
+        contentDescription = MainStrings.EventMap.asString(),
     ),
 
     @OptIn(ExperimentalResourceApi::class)
-    Achievements(
+    ProfileCard(
         icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_outline),
         selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_fill),
         label = MainStrings.Achievements.asString(),

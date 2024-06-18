@@ -22,7 +22,7 @@ class KaigiAppRobot @Inject constructor(
 
     fun goToFloorMap() {
         composeTestRule
-            .onNode(hasTestTag(MainScreenTab.FloorMap.testTag))
+            .onNode(hasTestTag(MainScreenTab.About.testTag))
             .performClick()
         waitUntilIdle()
     }
@@ -30,7 +30,7 @@ class KaigiAppRobot @Inject constructor(
     fun goToAchievements() {
         composeTestRule
             .onAllNodes(
-                matcher = hasTestTag(MainScreenTab.Achievements.testTag),
+                matcher = hasTestTag(MainScreenTab.ProfileCard.testTag),
                 useUnmergedTree = true,
             )
             .onFirst()

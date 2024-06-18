@@ -22,6 +22,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
@@ -38,7 +40,7 @@ const val EventMapScreenTestTag = "EventMapScreenTestTag"
 
 fun NavGraphBuilder.eventMapScreens(
     onNavigationIconClick: () -> Unit,
-    onContributorItemClick: (url: String) -> Unit,
+    onEventMapItemClick: (url: String) -> Unit,
 ) {
     composable(eventMapScreenRoute) {
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -49,8 +51,18 @@ fun NavGraphBuilder.eventMapScreens(
                     onNavigationIconClick,
                 )
             },
-            onEventMapItemClick = onContributorItemClick,
+            onEventMapItemClick = onEventMapItemClick,
         )
+    }
+}
+
+fun NavController.navigateEventMapScreen() {
+    navigate(eventMapScreenRoute) {
+        popUpTo(route = checkNotNull(graph.findStartDestination().route)) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
 

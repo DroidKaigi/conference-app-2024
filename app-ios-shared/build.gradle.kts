@@ -53,6 +53,7 @@ kotlin {
                 api(projects.core.ui)
                 api(projects.feature.main)
                 api(projects.feature.sessions)
+                api(projects.feature.eventmap)
                 api(projects.feature.contributors)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(libs.skieAnnotation)
