@@ -20,11 +20,12 @@ import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
-import io.github.droidkaigi.confsched.main.MainScreenTab.Achievements
-import io.github.droidkaigi.confsched.main.MainScreenTab.FloorMap
+import io.github.droidkaigi.confsched.main.MainScreenTab.EventMap
+import io.github.droidkaigi.confsched.main.MainScreenTab.ProfileCard
 import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
@@ -138,9 +139,9 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     ) {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
+            EventMap -> mainNestedNavController.navigateEventMapScreen()
             About -> TODO()
-            FloorMap -> TODO()
-            Achievements -> TODO()
+            ProfileCard -> TODO()
         }
     }
 }
