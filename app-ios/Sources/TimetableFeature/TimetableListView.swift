@@ -16,7 +16,7 @@ public struct TimetableView: View {
                         store.send(.selectDay(tabItem))
                     }, label: {
                         //TODO: Only selected button should be green and underlined
-                        Text(tabItem.rawValue).foregroundColor(.green)
+                        Text(tabItem.rawValue).foregroundColor(Color(.greenSelectColorset))
                             .underline()
                     })
                 }
@@ -107,14 +107,14 @@ struct TagView: View {
     public var body: some View {
         HStack {
             if highlight {
-                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundColor(.green)
+                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundColor(Color(.greenSelectColorset))
                     .padding(-3)
             }
-            Text(tagText).foregroundColor(highlight ? Color.green : Color(.onSurfaceColorset))
+            Text(tagText).foregroundColor(highlight ? Color(.greenSelectColorset) : Color(.onSurfaceColorset))
         }
         .padding(
             EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
-        .border(highlight ? Color.green : Color(.onSurfaceColorset))
+        .border(highlight ? Color(.greenSelectColorset) : Color(.onSurfaceColorset))
         .padding(-2)
     }
 }
@@ -126,7 +126,7 @@ struct PhotoView: View {
     
     public var body: some View {
         HStack {
-            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundColor(.green)
+            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundColor(Color(.greenSelectColorset))
             Text(name)
         }
     }
