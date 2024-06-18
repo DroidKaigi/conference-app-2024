@@ -7,7 +7,7 @@ public struct AboutReducer {
     @ObservableState
     public struct State: Equatable {
         var path = StackState<Path.State>()
-        @Presents var presentation: Presentation.State?
+        @Presents var presentation: Destination.State?
         
         public init(path: StackState<Path.State> = .init()) {
           self.path = path
@@ -17,7 +17,7 @@ public struct AboutReducer {
     public enum Action: ViewAction {
         case path(StackAction<Path.State, Path.Action>)
         case view(View)
-        case presentation(PresentationAction<Presentation.Action>)
+        case presentation(PresentationAction<Destination.Action>)
         
         @CasePathable
         public enum View {
@@ -31,7 +31,7 @@ public struct AboutReducer {
     }
 
     @Reducer(state: .equatable)
-    public enum Presentation {
+    public enum Destination {
         case codeOfConduct
         case privacyPolicy
     }
