@@ -68,31 +68,31 @@ public struct TimetableDetailView: View {
         .background(Color(.surfaceContainer))
     }
     
-    var sessionDetail: some View {
+    @ViewBuilder var sessionDetail: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("DroidKaigiアプリで見るアーキテクチャの変遷")
+            Text(SampleData.title)
                 .font(.title)
                 .foregroundStyle(Color(.surfaceVariant))
             VStack(spacing: 16) {
                 InformationRow(
                     icon: Image(.icSchedule),
                     title: String(localized: "TimeTableDetailDate", bundle: .module),
-                    content: "2023.09.14 / 11:20 ~ 12:00 (40分)"
+                    content: SampleData.dateValue
                 )
                 InformationRow(
                     icon: Image(.icLocationOn),
                     title: String(localized: "TimeTableDetailLocation", bundle: .module),
-                    content: "Arctic Fox (1F)"
+                    content: SampleData.locationValue
                 )
                 InformationRow(
                     icon: Image(.icLanguage),
                     title: String(localized: "TimeTableDetailLanguage", bundle: .module),
-                    content: "日本語(英語通訳あり)"
+                    content: SampleData.languageValue
                 )
                 InformationRow(
                     icon: Image(.icCategory),
                     title: String(localized: "TimeTableDetailCategory", bundle: .module),
-                    content: "Jetpack Compose"
+                    content: SampleData.categoryValue
                 )
             }
             .padding(16)
@@ -101,24 +101,24 @@ public struct TimetableDetailView: View {
                     .stroke(Color(.onSurface), lineWidth: 1)
             )
             
-            SessionDescriptionView(content: "Kotlin Coroutinesは非同期処理をシンプルに記述できるKotlinの言語機能です。実験的な機能としてこれまでも提供されてきましたがKotlin 1.3で正式にリリース予定です。Androidの誕生から10年たちアプリの利用シーンが増えたKotlin Coroutinesは非同期処理をシンプルに記述できるKotlinの言語機能です。実験的な機能としてこれまでも提供されてきましたがKotlin 1.3で正式にリリース予定です。Androidの誕生から10年たちアプリの利用シーンが増えた.")
+            SessionDescriptionView(content: SampleData.sessionDescription)
                 .padding(.bottom, 24)
         }
     }
     
-    var targetUser: some View {
+    @ViewBuilder var targetUser: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailApplicants", bundle: .module))
                 .font(.title3)
                 .foregroundStyle(Color(.surfaceVariant))
 
-            Text("手を動かして実践してひとへのヒントとなります\nCoroutinesを使いたいと感じているひと\nよりモダンで効率的なAndroidアプリ開発に興味があるひと\n新しいパラダイムをいち早く知りたいひと\nアプリ開発が複雑だと感じるひと\nアプリ開発経験を前提としてあったほうが楽しめます")
+            Text(SampleData.applicants)
                 .font(.callout)
                 .foregroundStyle(Color(.surfaceVariant))
         }
     }
     
-    var speaker: some View {
+    @ViewBuilder var speaker: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailSpeaker", bundle: .module))
                 .font(.title3)
@@ -127,7 +127,7 @@ public struct TimetableDetailView: View {
             HStack {
                 Image(.avatar)
                     .padding(.trailing, 24)
-                Text("name")
+                Text(SampleData.name)
                     .font(.callout)
                     .foregroundStyle(Color(.onSurface))
                 Spacer()
@@ -135,7 +135,7 @@ public struct TimetableDetailView: View {
         }
     }
     
-    var archive: some View {
+    @ViewBuilder var archive: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailArchive", bundle: .module))
                 .font(.title3)

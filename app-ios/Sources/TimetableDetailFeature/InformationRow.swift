@@ -42,7 +42,7 @@ public struct InformationRow: View {
     InformationRow(
         icon: Image(systemName: "clock"),
         title: String(localized: "TimeTableDetailDate", bundle: .module),
-        content: "2023.09.14 / 11:20 ~ 12:00 (40分)"
+        content: SampleData.dateValue
     )
 }
 
