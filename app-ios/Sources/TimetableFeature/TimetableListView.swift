@@ -62,7 +62,7 @@ struct TimeGroupMiniList: View {
                 Text("|")
                 Text(contents.endsTimeString)
                 Spacer()
-            }.padding(10).foregroundColor(Color(.onSurfaceColorset))
+            }.padding(10).foregroundStyle(Color(.onSurfaceColorset))
             VStack {
                 ForEach(contents.items, id: \.self) { item in
                     ListViewItem(listItem: item)
