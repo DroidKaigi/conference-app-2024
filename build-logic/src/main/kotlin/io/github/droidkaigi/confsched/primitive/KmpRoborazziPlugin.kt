@@ -31,18 +31,7 @@ class KmpRoborazziPlugin : Plugin<Project> {
             kotlin {
                 if (plugins.hasPlugin("com.android.library")) {
                     sourceSets.getByName("androidUnitTest") {
-                        val kspConfiguration = configurations["kspAndroid"]
-                        kspConfiguration.dependencies.add(
-                            libs.library("showkaseProcessor").let {
-                                DefaultExternalModuleDependency(
-                                    it.module.group,
-                                    it.module.name,
-                                    it.versionConstraint.requiredVersion
-                                )
-                            }
-                        )
                         dependencies {
-                            implementation(libs.library("showkaseRuntime"))
                             implementation(libs.library("androidxTestEspressoEspressoCore"))
                             implementation(libs.library("junit"))
                             implementation(libs.library("robolectric"))
