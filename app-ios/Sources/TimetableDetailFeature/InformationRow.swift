@@ -1,11 +1,11 @@
 import SwiftUI
 
-public struct InformationRow: View {
+struct InformationRow: View {
     private let icon: Image
     private let title: String
     private let content: String
 
-    public init(
+    init(
         icon: Image,
         title: String,
         content: String
@@ -15,7 +15,7 @@ public struct InformationRow: View {
         self.content = content
     }
 
-    public var body: some View {
+    var body: some View {
         HStack {
             icon
             HStack(spacing: 12) {
