@@ -20,8 +20,16 @@ public struct AboutView: View {
                 Text("Contributers")
             case .sponsors:
                 Text("Sponsors")
+            case .acknowledgements:
+                Text("Acknowledgements")
             }
         }
+        .sheet(item: $store.scope(state: \.destination?.codeOfConduct, action: \.presentation.codeOfConduct), content: { _ in
+            Text("CodeOfConduct")
+        })
+        .sheet(item: $store.scope(state: \.destination?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
+            Text("PrivacyPolicy")
+        })
     }
     
     @ViewBuilder var content: some View {
@@ -82,7 +90,60 @@ public struct AboutView: View {
                         .background(Color(.outlineOutlineVariant))
 
                 }
-                
+                .padding(.bottom, 32)
+
+                VStack(alignment: .leading) {
+                    Text("Others")
+                        .foregroundStyle(Color(.surfaceOnSurfaceVariant))
+                        .font(.headline)
+
+                    Button(action: {
+                        send(.codeOfConductTapped)
+                    }, label: {
+                        Label(
+                            String(localized: "CodeOfConduct", bundle: .module),
+                            systemImage: "apple.logo"
+                        )
+                        .labelStyle(AboutLabelStyle())
+                        Spacer()
+                    })
+                    .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
+
+                    Divider()
+                        .background(Color(.outlineOutlineVariant))
+
+                    Button(action: {
+                        send(.acknowledgementsTapped)
+                    }, label: {
+                        Label(
+                            String(localized: "Acknowledgements", bundle: .module),
+                            systemImage: "doc.on.doc"
+                        )
+                        .labelStyle(AboutLabelStyle())
+                        Spacer()
+                    })
+                    .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
+
+                    Divider()
+                        .background(Color(.outlineOutlineVariant))
+
+                    Button(action: {
+                        send(.privacyPolicyTapped)
+                    }, label: {
+                        Label(
+                            String(localized: "PrivacyPolicy", bundle: .module),
+                            systemImage: "lock.shield"
+                        )
+                        .labelStyle(AboutLabelStyle())
+                        Spacer()
+                    })
+                    .padding(.init(top: 24, leading: 14, bottom: 24, trailing: 14))
+
+                    Divider()
+                        .background(Color(.outlineOutlineVariant))
+
+                }
+
             }
             .padding(.horizontal, 16)
         }
