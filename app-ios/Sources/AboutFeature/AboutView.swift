@@ -4,6 +4,10 @@ import SwiftUI
 @ViewAction(for: AboutReducer.self)
 public struct AboutView: View {
     @Bindable public var store: StoreOf<AboutReducer>
+    
+    var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+    }
 
     public init(store: StoreOf<AboutReducer>) {
         self.store = store
@@ -183,6 +187,14 @@ public struct AboutView: View {
                 }
                 .padding(.vertical, 24)
 
+                Text(String(localized: "AppVersion", bundle: .module))
+                    .font(.body)
+                    .foregroundStyle(Color(.surfaceOnSurface))
+                    .padding(.bottom, 10)
+                
+                Text(version)
+                    .font(.body)
+                    .foregroundStyle(Color(.surfaceOnSurface))
             }
             .padding(.horizontal, 16)
         }
