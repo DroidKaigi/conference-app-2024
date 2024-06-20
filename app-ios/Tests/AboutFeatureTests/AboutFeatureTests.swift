@@ -41,7 +41,7 @@ final class AboutFeatureTests: XCTestCase {
             AboutReducer()
         }
         await store.send(\.view.codeOfConductTapped) {
-            $0.presentation = .codeOfConduct
+            $0.destination = .codeOfConduct
         }
     }
 
@@ -61,7 +61,7 @@ final class AboutFeatureTests: XCTestCase {
             AboutReducer()
         }
         await store.send(\.view.privacyPolicyTapped) {
-            $0.presentation = .privacyPolicy
+            $0.destination = .privacyPolicy
         }
     }
 }

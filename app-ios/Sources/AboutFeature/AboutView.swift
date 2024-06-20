@@ -24,10 +24,10 @@ public struct AboutView: View {
                 Text("Acknowledgements")
             }
         }
-        .sheet(item: $store.scope(state: \.presentation?.codeOfConduct, action: \.presentation.codeOfConduct), content: { _ in
+        .sheet(item: $store.scope(state: \.destination?.codeOfConduct, action: \.presentation.codeOfConduct), content: { _ in
             Text("CodeOfConduct")
         })
-        .sheet(item: $store.scope(state: \.presentation?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
+        .sheet(item: $store.scope(state: \.destination?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
             Text("PrivacyPolicy")
         })
     }
