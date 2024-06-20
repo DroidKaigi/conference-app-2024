@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by CHARLES BOND on 2024/06/16.
-//
-
 import Foundation
 
 public enum DayTab: String, CaseIterable, Identifiable {
@@ -50,7 +43,7 @@ public struct TimetableItem: Equatable, Hashable {
     //TODO: This object is likely to change a lot when we get live data changes
 }
 
-public struct SampleData {
+internal struct SampleData {
     public let day1Results = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
             TimetableItem(
