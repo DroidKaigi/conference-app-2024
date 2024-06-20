@@ -64,4 +64,35 @@ final class AboutFeatureTests: XCTestCase {
             $0.destination = .privacyPolicy
         }
     }
+    
+    @MainActor
+    func testTappedYoutube() async {
+        let store = TestStore(initialState: AboutReducer.State()) {
+            AboutReducer()
+        }
+        await store.send(\.view.youtubeTapped) {
+            $0.destination = .youtube
+        }
+    }
+
+    @MainActor
+    func testTappedXcom() async {
+        let store = TestStore(initialState: AboutReducer.State()) {
+            AboutReducer()
+        }
+        await store.send(\.view.xcomTapped) {
+            $0.destination = .xcom
+        }
+    }
+
+    @MainActor
+    func testTappedMedium() async {
+        let store = TestStore(initialState: AboutReducer.State()) {
+            AboutReducer()
+        }
+        await store.send(\.view.mediumTapped) {
+            $0.destination = .medium
+        }
+    }
+
 }

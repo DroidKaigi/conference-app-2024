@@ -4,6 +4,10 @@ import SwiftUI
 @ViewAction(for: AboutReducer.self)
 public struct AboutView: View {
     @Bindable public var store: StoreOf<AboutReducer>
+    
+    var version: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? ""
+    }
 
     public init(store: StoreOf<AboutReducer>) {
         self.store = store
@@ -29,6 +33,15 @@ public struct AboutView: View {
         })
         .sheet(item: $store.scope(state: \.destination?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
             Text("PrivacyPolicy")
+        })
+        .sheet(item: $store.scope(state: \.destination?.youtube, action: \.presentation.youtube), content: { _ in
+            Text("Youtube")
+        })
+        .sheet(item: $store.scope(state: \.destination?.xcom, action: \.presentation.xcom), content: { _ in
+            Text("X.com")
+        })
+        .sheet(item: $store.scope(state: \.destination?.medium, action: \.presentation.medium), content: { _ in
+            Text("Medium")
         })
     }
     
@@ -143,7 +156,48 @@ public struct AboutView: View {
                         .background(Color(.outlineOutlineVariant))
 
                 }
+                
+                HStack(spacing: 12) {
+                    Button(action: {
+                        send(.youtubeTapped)
+                    }, label: {
+                        Image(systemName: "play.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Color(.surfaceOnSurface))
+                    })
+                    .frame(width: 48, height: 48)
 
+                    Button(action: {
+                        send(.xcomTapped)
+                    }, label: {
+                        Image(systemName: "x.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Color(.surfaceOnSurface))
+                    })
+                    .frame(width: 48, height: 48)
+
+                    Button(action: {
+                        send(.mediumTapped)
+                    }, label: {
+                        Image(systemName: "m.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Color(.surfaceOnSurface))
+                    })
+                    .frame(width: 48, height: 48)
+                }
+                .padding(.vertical, 24)
+
+                Text(String(localized: "AppVersion", bundle: .module))
+                    .font(.body)
+                    .foregroundStyle(Color(.surfaceOnSurface))
+                    .padding(.bottom, 10)
+                
+                Text(version)
+                    .font(.body)
+                    .foregroundStyle(Color(.surfaceOnSurface))
             }
             .padding(.horizontal, 16)
         }

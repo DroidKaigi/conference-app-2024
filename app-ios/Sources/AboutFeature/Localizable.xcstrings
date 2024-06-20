@@ -11,6 +11,16 @@
         }
       }
     },
+    "AppVersion" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アプリバージョン"
+          }
+        }
+      }
+    },
     "CodeOfConduct" : {
       "localizations" : {
         "ja" : {
@@ -101,6 +111,9 @@
         }
       }
     },
+    "Medium" : {
+
+    },
     "Others" : {
       "localizations" : {
         "ja" : {
@@ -140,6 +153,12 @@
           }
         }
       }
+    },
+    "X.com" : {
+
+    },
+    "Youtube" : {
+
     }
   },
   "version" : "1.0"
