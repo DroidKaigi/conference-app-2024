@@ -164,6 +164,7 @@ public struct AboutView: View {
                         Image(systemName: "play.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Color(.surfaceOnSurface))
                     })
                     .frame(width: 48, height: 48)
 
@@ -173,6 +174,7 @@ public struct AboutView: View {
                         Image(systemName: "x.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Color(.surfaceOnSurface))
                     })
                     .frame(width: 48, height: 48)
 
@@ -182,6 +184,7 @@ public struct AboutView: View {
                         Image(systemName: "m.circle")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
+                            .foregroundStyle(Color(.surfaceOnSurface))
                     })
                     .frame(width: 48, height: 48)
                 }
