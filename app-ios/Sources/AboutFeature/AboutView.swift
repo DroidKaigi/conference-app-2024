@@ -30,6 +30,15 @@ public struct AboutView: View {
         .sheet(item: $store.scope(state: \.destination?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
             Text("PrivacyPolicy")
         })
+        .sheet(item: $store.scope(state: \.destination?.youtube, action: \.presentation.youtube), content: { _ in
+            Text("Youtube")
+        })
+        .sheet(item: $store.scope(state: \.destination?.xcom, action: \.presentation.xcom), content: { _ in
+            Text("X.com")
+        })
+        .sheet(item: $store.scope(state: \.destination?.medium, action: \.presentation.medium), content: { _ in
+            Text("Medium")
+        })
     }
     
     @ViewBuilder var content: some View {
@@ -143,6 +152,36 @@ public struct AboutView: View {
                         .background(Color(.outlineOutlineVariant))
 
                 }
+                
+                HStack(spacing: 12) {
+                    Button(action: {
+                        send(.youtubeTapped)
+                    }, label: {
+                        Image(systemName: "play.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    })
+                    .frame(width: 48, height: 48)
+
+                    Button(action: {
+                        send(.xcomTapped)
+                    }, label: {
+                        Image(systemName: "x.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    })
+                    .frame(width: 48, height: 48)
+
+                    Button(action: {
+                        send(.mediumTapped)
+                    }, label: {
+                        Image(systemName: "m.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                    })
+                    .frame(width: 48, height: 48)
+                }
+                .padding(.vertical, 24)
 
             }
             .padding(.horizontal, 16)

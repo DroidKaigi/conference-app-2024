@@ -101,6 +101,9 @@
         }
       }
     },
+    "Medium" : {
+
+    },
     "Others" : {
       "localizations" : {
         "ja" : {
@@ -140,6 +143,12 @@
           }
         }
       }
+    },
+    "X.com" : {
+
+    },
+    "Youtube" : {
+
     }
   },
   "version" : "1.0"

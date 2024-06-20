@@ -27,6 +27,9 @@ public struct AboutReducer {
             case codeOfConductTapped
             case acknowledgementsTapped
             case privacyPolicyTapped
+            case youtubeTapped
+            case xcomTapped
+            case mediumTapped
         }
     }
 
@@ -34,6 +37,9 @@ public struct AboutReducer {
     public enum Destination {
         case codeOfConduct
         case privacyPolicy
+        case youtube
+        case xcom
+        case medium
     }
 
     @Reducer(state: .equatable)
@@ -64,6 +70,15 @@ public struct AboutReducer {
                 return .none
             case .view(.privacyPolicyTapped):
                 state.destination = .privacyPolicy
+                return .none
+            case .view(.youtubeTapped):
+                state.destination = .youtube
+                return .none
+            case .view(.xcomTapped):
+                state.destination = .xcom
+                return .none
+            case .view(.mediumTapped):
+                state.destination = .medium
                 return .none
             case .presentation:
                 return .none
