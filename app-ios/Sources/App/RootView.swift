@@ -1,3 +1,5 @@
+import AboutFeature
+import FavoriteFeature
 import ComposableArchitecture
 import SwiftUI
 import TimetableFeature
@@ -43,23 +45,33 @@ public struct RootView: View {
                     )
                 }
 
-            Text("Favorite Feature")
-                .tag(Tab.favorite)
-                .tabItem {
-                    Label(
-                        title: { Text("Favorite") },
-                        icon: { Image(systemName: "42.circle") }
-                    )
-                }
+            FavoriteScreen(
+                store: store.scope(
+                    state: \.favorite,
+                    action: \.favorite
+                )
+            )
+            .tag(Tab.favorite)
+            .tabItem {
+                Label(
+                    title: { Text("Favorite") },
+                    icon: { Image(systemName: "42.circle") }
+                )
+            }
 
-            Text("About Feature")
-                .tag(Tab.about)
-                .tabItem {
-                    Label(
-                        title: { Text("About") },
-                        icon: { Image(systemName: "42.circle") }
-                    )
-                }
+            AboutView(
+                store: store.scope(
+                    state: \.about,
+                    action: \.about
+                )
+            )
+            .tag(Tab.about)
+            .tabItem {
+                Label(
+                    title: { Text("About") },
+                    icon: { Image(systemName: "42.circle") }
+                )
+            }
 
             Text("ID Card Feature")
                 .tag(Tab.idCard)

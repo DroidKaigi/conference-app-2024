@@ -37,6 +37,13 @@
         "identifier" : "TimetableDetailFeatureTests",
         "name" : "TimetableDetailFeatureTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "FavoriteFeatureTests",
+        "name" : "FavoriteFeatureTests"
+      }
     }
   ],
   "version" : 1
