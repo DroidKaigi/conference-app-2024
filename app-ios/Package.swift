@@ -37,7 +37,11 @@ let package = Package(
         .library(
             name: "StaffFeature",
             targets: ["StaffFeature"]
-        )
+        ),
+        .library(
+            name: "SponsorFeature",
+            targets: ["SponsorFeature"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -154,6 +158,18 @@ let package = Package(
                 .tca
             ]
         ),
+        .target(
+            name: "SponsorFeature",
+            dependencies: [ .tca ]
+        ),
+        .testTarget(
+            name: "SponsorFeatureTests",
+            dependencies: [
+                .sponsorFeature,
+                .tca
+            ]
+        ),
+
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -178,6 +194,7 @@ extension Target.Dependency {
     static let aboutFeature: Target.Dependency = "AboutFeature"
     static let favoriteFeature: Target.Dependency = "FavoriteFeature"
     static let staffFeature: Target.Dependency = "StaffFeature"
+    static let sponsorFeature: Target.Dependency = "SponsorFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
     static let theme: Target.Dependency = "Theme"
 

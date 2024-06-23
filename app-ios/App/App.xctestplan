@@ -48,6 +48,13 @@
     {
       "target" : {
         "containerPath" : "container:",
+        "identifier" : "SponsorFeatureTests",
+        "name" : "SponsorFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
         "identifier" : "StaffFeatureTests",
         "name" : "StaffFeatureTests"
       }
