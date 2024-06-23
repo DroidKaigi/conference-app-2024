@@ -34,6 +34,10 @@ let package = Package(
             name: "FavoriteFeature",
             targets: ["FavoriteFeature"]
         ),
+        .library(
+            name: "StaffFeature",
+            targets: ["StaffFeature"]
+        )
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -118,7 +122,6 @@ let package = Package(
                 .tca
             ]
         ),
-
         .target(
             name: "FavoriteFeature",
             dependencies: [
@@ -132,7 +135,6 @@ let package = Package(
                 .tca
             ]
         ),
-
         .target(
             name: "Theme",
             resources: [
@@ -141,7 +143,17 @@ let package = Package(
             ],
             plugins: [.plugin(name: "SwiftGenPlugin", package: "SwiftGenPlugin")]
         ),
-
+        .target(
+            name: "StaffFeature",
+            dependencies: [ .tca ]
+        ),
+        .testTarget(
+            name: "StaffFeatureTests",
+            dependencies: [
+                .staffFeature,
+                .tca
+            ]
+        ),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -165,6 +177,7 @@ extension Target.Dependency {
     static let timetableFeature: Target.Dependency = "TimetableFeature"
     static let aboutFeature: Target.Dependency = "AboutFeature"
     static let favoriteFeature: Target.Dependency = "FavoriteFeature"
+    static let staffFeature: Target.Dependency = "StaffFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
     static let theme: Target.Dependency = "Theme"
 
