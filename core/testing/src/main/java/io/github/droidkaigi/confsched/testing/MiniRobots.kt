@@ -145,13 +145,13 @@ interface EventMapServerRobot {
         Error,
     }
 
-    fun setupContributorServer(serverStatus: ServerStatus)
+    fun setupEventMapServer(serverStatus: ServerStatus)
 }
 
 class DefaultEventMapServerRobot @Inject constructor(contributorsApiClient: EventMapApiClient) :
     EventMapServerRobot {
     private val fakeEventMapApiClient = contributorsApiClient as FakeEventMapApiClient
-    override fun setupContributorServer(serverStatus: EventMapServerRobot.ServerStatus) {
+    override fun setupEventMapServer(serverStatus: EventMapServerRobot.ServerStatus) {
         fakeEventMapApiClient.setup(
             when (serverStatus) {
                 EventMapServerRobot.ServerStatus.Operational -> FakeEventMapApiClient.Status.Operational
