@@ -10,7 +10,7 @@ final class SponsorFeatureTests: XCTestCase {
             SponsorReducer()
         }
         await store.send(.onAppear) {
-            $0.text = "About Feature"
+            $0.text = "Sponsor Feature"
         }
     }
 

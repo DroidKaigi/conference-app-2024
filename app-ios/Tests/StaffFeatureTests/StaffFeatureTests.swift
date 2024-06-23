@@ -10,7 +10,7 @@ final class StaffFeatureTests: XCTestCase {
             StaffReducer()
         }
         await store.send(.onAppear) {
-            $0.text = "About Feature"
+            $0.text = "Staff Feature"
         }
     }
 
