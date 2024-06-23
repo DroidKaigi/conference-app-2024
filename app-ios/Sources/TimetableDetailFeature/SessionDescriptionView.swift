@@ -1,4 +1,5 @@
 import SwiftUI
+import Theme
 
 struct SessionDescriptionView: View {
     @State private var isDescriptionExpanded: Bool = false
@@ -15,7 +16,7 @@ struct SessionDescriptionView: View {
                 .textSelection(.enabled)
                 .lineLimit(isDescriptionExpanded ? nil : 5)
                 .font(.callout)
-                .foregroundStyle(Color(.surfaceVariant))
+                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
                 .background {
                     ViewThatFits(in: .vertical) {
                         Text(content)
@@ -33,11 +34,11 @@ struct SessionDescriptionView: View {
                     canBeExpanded = false
                 } label: {
                     Text(String(localized: "TimeTableDetailReadMore", bundle: .module))
-                        .foregroundStyle(Color(.primary))
+                        .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
                         .frame(width: 120, height: 40, alignment: .center)
                         .overlay {
                             Capsule()
-                                .stroke(Color(.outline))
+                                .stroke(AssetColors.Outline.outline.swiftUIColor)
                         }
                 }
             }
@@ -50,5 +51,5 @@ struct SessionDescriptionView: View {
         SessionDescriptionView(content: SampleData.sessionDescription)
             .padding(.horizontal, 16)
     }
-    .background(Color(.background))
+    .background(AssetColors.Surface.surface.swiftUIColor)
 }
