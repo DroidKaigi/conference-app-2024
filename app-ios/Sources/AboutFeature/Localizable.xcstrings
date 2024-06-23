@@ -31,6 +31,23 @@
         }
       }
     },
+    "CodeOfConductURL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://portal.droidkaigi.jp/en/about/code-of-conduct"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://portal.droidkaigi.jp/about/code-of-conduct"
+          }
+        }
+      }
+    },
     "Contributers" : {
       "localizations" : {
         "ja" : {
@@ -111,9 +128,6 @@
         }
       }
     },
-    "Medium" : {
-
-    },
     "Others" : {
       "localizations" : {
         "ja" : {
@@ -130,6 +144,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "プライバシーポリシー"
+          }
+        }
+      }
+    },
+    "PrivacyPolicyURL" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://portal.droidkaigi.jp/en/about/code-of-conduct"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://portal.droidkaigi.jp/about/privacy"
           }
         }
       }
@@ -153,12 +184,6 @@
           }
         }
       }
-    },
-    "X.com" : {
-
-    },
-    "Youtube" : {
-
     }
   },
   "version" : "1.0"
