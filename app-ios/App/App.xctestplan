@@ -58,6 +58,13 @@
         "identifier" : "StaffFeatureTests",
         "name" : "StaffFeatureTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "ContributorFeatureTests",
+        "name" : "ContributorFeatureTests"
+      }
     }
   ],
   "version" : 1
