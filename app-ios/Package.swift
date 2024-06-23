@@ -29,7 +29,11 @@ let package = Package(
         .library(
             name: "AboutFeature",
             targets: ["AboutFeature"]
-        )
+        ),
+        .library(
+            name: "FavoriteFeature",
+            targets: ["FavoriteFeature"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -40,6 +44,8 @@ let package = Package(
         .target(
             name: "App",
             dependencies: [
+                .aboutFeature,
+                .favoriteFeature,
                 .timetableFeature,
                 .timetableDetailFeature,
                 .tca,
@@ -111,6 +117,20 @@ let package = Package(
             ]
         ),
 
+        .target(
+            name: "FavoriteFeature",
+            dependencies: [
+                .tca,
+            ]
+        ),
+        .testTarget(
+            name: "FavoriteFeatureTests",
+            dependencies: [
+                .favoriteFeature,
+                .tca
+            ]
+        ),
+
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -133,6 +153,7 @@ extension Target.Dependency {
     static let timetableDetailFeature: Target.Dependency = "TimetableDetailFeature"
     static let timetableFeature: Target.Dependency = "TimetableFeature"
     static let aboutFeature: Target.Dependency = "AboutFeature"
+    static let favoriteFeature: Target.Dependency = "FavoriteFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
 
     static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
