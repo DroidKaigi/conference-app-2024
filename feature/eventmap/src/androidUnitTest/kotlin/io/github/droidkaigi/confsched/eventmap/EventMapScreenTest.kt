@@ -28,7 +28,7 @@ class EventMapScreenTest {
     @Test
     fun checkScreenContent() {
         runRobot(eventMapScreenRobot) {
-            setupContributorServer(EventMapServerRobot.ServerStatus.Operational)
+            setupEventMapServer(EventMapServerRobot.ServerStatus.Operational)
             setupScreenContent()
 
             captureScreenWithChecks(
@@ -40,7 +40,7 @@ class EventMapScreenTest {
     @Test
     fun checkErrorScreenContent() {
         runRobot(eventMapScreenRobot) {
-            setupContributorServer(EventMapServerRobot.ServerStatus.Error)
+            setupEventMapServer(EventMapServerRobot.ServerStatus.Error)
             setupScreenContent()
 
             captureScreenWithChecks(
