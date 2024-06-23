@@ -39,6 +39,7 @@ let package = Package(
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", exact: "10.26.0"),
         .package(url: "https://github.com/cybozu/LicenseList.git", exact: "0.7.0"),
+        .package(url: "https://github.com/SwiftGen/SwiftGenPlugin", from: "6.6.2"),
     ],
     targets: [
         .target(
@@ -96,6 +97,7 @@ let package = Package(
             name: "TimetableDetailFeature",
             dependencies: [
                 .tca,
+                .theme,
             ]
         ),
         .testTarget(
@@ -131,6 +133,15 @@ let package = Package(
             ]
         ),
 
+        .target(
+            name: "Theme",
+            resources: [
+                .process("Resources"),
+                .process("swiftgen.yml"),
+            ],
+            plugins: [.plugin(name: "SwiftGenPlugin", package: "SwiftGenPlugin")]
+        ),
+
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -155,6 +166,7 @@ extension Target.Dependency {
     static let aboutFeature: Target.Dependency = "AboutFeature"
     static let favoriteFeature: Target.Dependency = "FavoriteFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
+    static let theme: Target.Dependency = "Theme"
 
     static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
     static let firebaseRemoteConfig: Target.Dependency = .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk")

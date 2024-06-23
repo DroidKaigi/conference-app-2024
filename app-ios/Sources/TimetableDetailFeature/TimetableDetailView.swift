@@ -1,5 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
+import Theme
 
 public struct TimetableDetailView: View {
     private let store: StoreOf<TimetableDetailReducer>
@@ -10,17 +11,17 @@ public struct TimetableDetailView: View {
                 sessionDetail
                     .padding(.horizontal, 16)
                 
-                Divider().background(Color(.outlineVariant))
+                Divider().background(AssetColors.Outline.outlineVariant.swiftUIColor)
 
                 targetUser
                     .padding(16)
 
-                Divider().background(Color(.outlineVariant))
+                Divider().background(AssetColors.Outline.outlineVariant.swiftUIColor)
                 
                 speaker
                     .padding(16)
                 
-                Divider().background(Color(.outlineVariant))
+                Divider().background(AssetColors.Outline.outlineVariant.swiftUIColor)
                 
                 archive
                     .padding(16)
@@ -28,7 +29,7 @@ public struct TimetableDetailView: View {
             
             footer
         }
-        .background(Color(.background))
+        .background(AssetColors.Surface.surface.swiftUIColor)
         .frame(maxWidth: .infinity)
     }
     
@@ -58,21 +59,21 @@ public struct TimetableDetailView: View {
                     Image(.icFavorite)
                 }
                 .frame(width: 56, height: 56)
-                .background(Color(.secondaryContainer))
+                .background(AssetColors.Surface.surfaceContainer.swiftUIColor)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }
         }
         .frame(height: 80)
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
-        .background(Color(.surfaceContainer))
+        .background(AssetColors.Surface.surfaceContainer.swiftUIColor)
     }
     
     @ViewBuilder var sessionDetail: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text(SampleData.title)
                 .font(.title)
-                .foregroundStyle(Color(.surfaceVariant))
+                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
             VStack(spacing: 16) {
                 InformationRow(
                     icon: Image(.icSchedule),
@@ -98,7 +99,7 @@ public struct TimetableDetailView: View {
             .padding(16)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(Color(.onSurface), lineWidth: 1)
+                    .stroke(AssetColors.Surface.onSurface.swiftUIColor, lineWidth: 1)
             )
             
             SessionDescriptionView(content: SampleData.sessionDescription)
@@ -110,11 +111,11 @@ public struct TimetableDetailView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailApplicants", bundle: .module))
                 .font(.title3)
-                .foregroundStyle(Color(.surfaceVariant))
+                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
 
             Text(SampleData.applicants)
                 .font(.callout)
-                .foregroundStyle(Color(.surfaceVariant))
+                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
         }
     }
     
@@ -122,14 +123,14 @@ public struct TimetableDetailView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailSpeaker", bundle: .module))
                 .font(.title3)
-                .foregroundStyle(Color(.surfaceVariant))
+                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
 
             HStack {
                 Image(.avatar)
                     .padding(.trailing, 24)
                 Text(SampleData.name)
                     .font(.callout)
-                    .foregroundStyle(Color(.onSurface))
+                    .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 Spacer()
             }
         }
@@ -139,7 +140,7 @@ public struct TimetableDetailView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailArchive", bundle: .module))
                 .font(.title3)
-                .foregroundStyle(Color(.surfaceVariant))
+                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
 
             HStack {
                 Button {
@@ -147,13 +148,13 @@ public struct TimetableDetailView: View {
                 } label: {
                     VStack {
                         Label(
-                            title: { Text(String(localized: "TimeTableDetailSlide", bundle: .module)).foregroundStyle(Color(.onPrimary)) },
+                            title: { Text(String(localized: "TimeTableDetailSlide", bundle: .module)).foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor) },
                             icon: { Image(.icDocument) }
                         )
                     }
                     .frame(height: 40)
                     .frame(maxWidth: .infinity)
-                    .background(Color(.button))
+                    .background(AssetColors.Custom.arcticFox.swiftUIColor)
                     .clipShape(Capsule())
                 }
                 Button {
@@ -161,13 +162,13 @@ public struct TimetableDetailView: View {
                 } label: {
                     VStack {
                         Label(
-                            title: { Text(String(localized: "TimeTableDetailVideo", bundle: .module)).foregroundStyle(Color(.onPrimary)) },
+                            title: { Text(String(localized: "TimeTableDetailVideo", bundle: .module)).foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor) },
                             icon: { Image(.icPlay) }
                         )
                     }
                     .frame(height: 40)
                     .frame(maxWidth: .infinity)
-                    .background(Color(.button))
+                    .background(AssetColors.Custom.arcticFox.swiftUIColor)
                     .clipShape(Capsule())
                 }
             }

@@ -1,4 +1,5 @@
 import SwiftUI
+import Theme
 
 struct InformationRow: View {
     private let icon: Image
@@ -21,12 +22,12 @@ struct InformationRow: View {
             HStack(spacing: 12) {
                 Text(title)
                     .font(.callout)
-                    .foregroundStyle(Color(.surfaceVariant))
+                    .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
                     .bold()
                 HStack {
                     Text(content)
                         .font(.callout)
-                        .foregroundStyle(Color(.onSurface))
+                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 }
 
             }
