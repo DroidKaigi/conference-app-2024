@@ -30,14 +30,14 @@ public struct TimetableView: View {
     }
 }
 
-public struct TimetableListView: View {
+struct TimetableListView: View {
     private let store: StoreOf<TimetableReducer>
 
     public init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
 
-    public var body: some View {
+    var body: some View {
         ScrollView{
             LazyVStack {
                 ForEach(store.timetableItems, id: \.self) { item in
