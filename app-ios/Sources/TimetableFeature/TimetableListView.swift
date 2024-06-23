@@ -16,7 +16,7 @@ public struct TimetableView: View {
                         store.send(.selectDay(tabItem))
                     }, label: {
                         //TODO: Only selected button should be green and underlined
-                        Text(tabItem.rawValue).foregroundColor(Color(.greenSelectColorset))
+                        Text(tabItem.rawValue).foregroundStyle(Color(.greenSelectColorset))
                             .underline()
                     })
                 }
@@ -55,7 +55,7 @@ public struct TimetableListView: View {
 struct TimeGroupMiniList: View {
     let contents: TimetableTimeGroupItems
     
-    public var body: some View {
+    var body: some View {
         HStack {
             VStack {
                 Text(contents.startsTimeString)
@@ -84,7 +84,7 @@ struct ListViewItem: View {
                     TagView(tagText: lang, highlight: false)
                 }
                 Spacer()
-                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundColor(Color(.onSurfaceColorset))
+                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundStyle(Color(.onSurfaceColorset))
             }
             Text(listItem.title).font(.title)
             ForEach(listItem.speakers, id: \.self){ speaker in
@@ -93,7 +93,7 @@ struct ListViewItem: View {
             }
             
             
-        }.foregroundColor(Color(.onSurfaceColorset)).padding(10)
+        }.foregroundStyle(Color(.onSurfaceColorset)).padding(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 5)
                     .stroke(Color(.onSurfaceColorset), lineWidth: 1)
@@ -104,13 +104,13 @@ struct ListViewItem: View {
 struct TagView: View {
     let tagText: String
     let highlight: Bool
-    public var body: some View {
+    var body: some View {
         HStack {
             if highlight {
-                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundColor(Color(.greenSelectColorset))
+                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(Color(.greenSelectColorset))
                     .padding(-3)
             }
-            Text(tagText).foregroundColor(highlight ? Color(.greenSelectColorset) : Color(.onSurfaceColorset))
+            Text(tagText).foregroundStyle(highlight ? Color(.greenSelectColorset) : Color(.onSurfaceColorset))
         }
         .padding(
             EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
@@ -124,9 +124,9 @@ struct PhotoView: View {
     let photo: String
     let name: String
     
-    public var body: some View {
+    var body: some View {
         HStack {
-            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundColor(Color(.greenSelectColorset))
+            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(Color(.greenSelectColorset))
             Text(name)
         }
     }

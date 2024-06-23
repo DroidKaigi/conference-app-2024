@@ -43,8 +43,8 @@ public struct TimetableItem: Equatable, Hashable {
     //TODO: This object is likely to change a lot when we get live data changes
 }
 
-internal struct SampleData {
-    public let day1Results = [
+struct SampleData {
+    let day1Results = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
             TimetableItem(
                 id: "",
@@ -121,7 +121,7 @@ internal struct SampleData {
         ])
     ]
     
-    public let day2Results = [
+    let day2Results = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
             TimetableItem(
                 id: "",
@@ -194,7 +194,7 @@ internal struct SampleData {
         ])
     ]
     
-    public let day3Results = [
+    let day3Results = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
             TimetableItem(
                 id: "",
