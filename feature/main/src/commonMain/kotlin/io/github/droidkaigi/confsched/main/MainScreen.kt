@@ -130,15 +130,15 @@ enum class MainScreenTab(
     ),
 
     @OptIn(ExperimentalResourceApi::class)
-    FloorMap(
+    EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
         selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_map_fill),
-        label = MainStrings.FloorMap.asString(),
-        contentDescription = MainStrings.FloorMap.asString(),
+        label = MainStrings.EventMap.asString(),
+        contentDescription = MainStrings.EventMap.asString(),
     ),
 
     @OptIn(ExperimentalResourceApi::class)
-    Achievements(
+    ProfileCard(
         icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_outline),
         selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_fill),
         label = MainStrings.Achievements.asString(),
@@ -159,17 +159,20 @@ data class MainScreenUiState(
 
 @Composable
 fun MainScreen(
+    @Suppress("UnusedParameter")
     uiState: MainScreenUiState,
+    @Suppress("UnusedParameter")
     snackbarHostState: SnackbarHostState,
     navigationType: NavigationType,
     routeToTab: String.() -> MainScreenTab?,
     onTabSelected: (NavController, MainScreenTab) -> Unit,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val mainNestedNavController = rememberNavController()
     val navBackStackEntry by mainNestedNavController.currentBackStackEntryAsState()
     val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
-    Row(modifier = Modifier.fillMaxSize()) {
+    Row(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
             Column {
                 Text(text = "nav rail")
@@ -187,13 +190,12 @@ fun MainScreen(
                         MainScreenTab.entries.forEach { tab ->
                             Button(
                                 modifier = Modifier.weight(1F),
-                                onClick = { onTabSelected(mainNestedNavController, tab) }
+                                onClick = { onTabSelected(mainNestedNavController, tab) },
                             ) {
                                 Text(text = tab.label + " " + (currentTab == tab))
                             }
                         }
                     }
-
                 }
             },
         ) { padding ->

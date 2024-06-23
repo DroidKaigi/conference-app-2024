@@ -99,6 +99,7 @@ dependencies {
     implementation(projects.feature.main)
     implementation(projects.feature.contributors)
     implementation(projects.feature.sessions)
+    implementation(projects.feature.eventmap)
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
@@ -113,4 +114,5 @@ dependencies {
     implementation(libs.firebaseDynamicLinks)
     debugImplementation(projects.core.testingManifest)
     testImplementation(projects.core.testing)
+    testImplementation(libs.composablePreviewScanner)
 }

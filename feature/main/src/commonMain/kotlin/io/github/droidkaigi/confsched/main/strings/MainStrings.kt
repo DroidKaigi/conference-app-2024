@@ -6,7 +6,7 @@ import io.github.droidkaigi.confsched.designsystem.strings.StringsBindings
 
 sealed class MainStrings : Strings<MainStrings>(Bindings) {
     data object Timetable : MainStrings()
-    data object FloorMap : MainStrings()
+    data object EventMap : MainStrings()
     data object Achievements : MainStrings()
     data object About : MainStrings()
     data object Contributors : MainStrings()
@@ -16,7 +16,7 @@ sealed class MainStrings : Strings<MainStrings>(Bindings) {
         Lang.Japanese to { item, _ ->
             when (item) {
                 Timetable -> "Timetable"
-                FloorMap -> "Floor Map"
+                EventMap -> "Event Map"
                 Achievements -> "Achievements"
                 About -> "About"
                 Contributors -> "Contributors"
@@ -26,7 +26,7 @@ sealed class MainStrings : Strings<MainStrings>(Bindings) {
         Lang.English to { item, bindings ->
             when (item) {
                 Timetable -> "Timetable"
-                FloorMap -> "Floor Map"
+                EventMap -> "Event Map"
                 Achievements -> "Achievements"
                 About -> "About"
                 Contributors -> "Contributors"

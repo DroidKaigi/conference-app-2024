@@ -15,6 +15,7 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://maven.pkg.jetbrains.space/public/p/compose/dev/")
         }
+        maven { url = uri("https://jitpack.io") }
     }
 }
 rootProject.name = "conference-app-2024"
@@ -24,6 +25,7 @@ include(
     ":feature:main",
     ":feature:sessions",
     ":feature:contributors",
+    ":feature:eventmap",
     ":core:designsystem",
     ":core:data",
     ":core:model",

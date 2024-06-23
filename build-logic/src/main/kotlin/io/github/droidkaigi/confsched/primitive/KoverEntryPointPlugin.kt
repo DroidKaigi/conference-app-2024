@@ -21,7 +21,6 @@ class KoverEntryPointPlugin : Plugin<Project> {
                 filters {
                     excludes {
                         packages(
-                            "com.airbnb.android.showkase",
                             "dagger.hilt.*",
                             "hilt_aggregated_deps",
                         )

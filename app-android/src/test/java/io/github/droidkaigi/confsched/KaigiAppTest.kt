@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.RobotTestRule
@@ -9,6 +10,7 @@ import io.github.droidkaigi.confsched.testing.runRobot
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 import javax.inject.Inject
 
 @RunWith(AndroidJUnit4::class)

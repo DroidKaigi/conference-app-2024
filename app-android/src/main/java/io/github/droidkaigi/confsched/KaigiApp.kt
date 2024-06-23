@@ -29,11 +29,13 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.eventmap.eventMapScreens
+import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
-import io.github.droidkaigi.confsched.main.MainScreenTab.Achievements
-import io.github.droidkaigi.confsched.main.MainScreenTab.FloorMap
+import io.github.droidkaigi.confsched.main.MainScreenTab.EventMap
+import io.github.droidkaigi.confsched.main.MainScreenTab.ProfileCard
 import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
@@ -69,6 +71,7 @@ fun KaigiApp(
 @Composable
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
+    @Suppress("UnusedParameter")
     displayFeatures: PersistentList<DisplayFeature>,
     navController: NavHostController = rememberNavController(),
     externalNavController: ExternalNavController = rememberExternalNavController(),
@@ -96,6 +99,7 @@ private fun KaigiNavHost(
 private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     navController: NavHostController,
+    @Suppress("UnusedParameter")
     externalNavController: ExternalNavController,
 ) {
     mainScreen(
@@ -106,6 +110,10 @@ private fun NavGraphBuilder.mainScreen(
                 modifier = Modifier,
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
                 contentPadding = contentPadding,
+            )
+            eventMapScreens(
+                onNavigationIconClick = navController::popBackStack,
+                onEventMapItemClick = externalNavController::navigate,
             )
         },
     )
@@ -127,9 +135,9 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     ) {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
+            EventMap -> mainNestedNavController.navigateEventMapScreen()
             About -> TODO()
-            FloorMap -> TODO()
-            Achievements -> TODO()
+            ProfileCard -> TODO()
         }
     }
 }

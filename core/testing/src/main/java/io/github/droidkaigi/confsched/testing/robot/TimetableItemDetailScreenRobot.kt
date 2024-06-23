@@ -26,7 +26,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     suspend fun setupScreenContent() {
         val firstSessionId = SessionsAllResponse.Companion.fake().sessions.first().id
         robotTestRule.setContentWithNavigation(
-            startDestination = "timetableItemDetail/${firstSessionId}",
+            startDestination = "timetableItemDetail/$firstSessionId",
             route = timetableItemDetailScreenRoute,
         ) {
             KaigiTheme {

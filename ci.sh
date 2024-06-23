@@ -1,5 +1,7 @@
 #!/bin/sh
-./gradlew testDebugUnitTest
+# this is now in GHA
+# ./gradlew testDebugUnitTest
+./gradlew detekt --auto-correct
 ./gradlew assembleSharedXCFramework --no-configuration-cache
 ./gradlew iosSimulatorArm64Test --no-configuration-cache
 

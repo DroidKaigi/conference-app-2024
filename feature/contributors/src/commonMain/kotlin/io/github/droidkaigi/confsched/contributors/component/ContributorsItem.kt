@@ -29,7 +29,7 @@ private val contributorIconShape = RoundedCornerShape(20.dp)
 fun ContributorsItem(
     contributor: Contributor,
     onClick: (url: String) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
@@ -51,7 +51,7 @@ fun ContributorsItem(
                 .border(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.outline,
-                    shape = contributorIconShape
+                    shape = contributorIconShape,
                 ),
         )
         Text(

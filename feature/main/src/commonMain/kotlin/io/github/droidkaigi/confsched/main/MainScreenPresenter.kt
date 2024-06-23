@@ -8,17 +8,18 @@ import io.github.droidkaigi.confsched.model.localAchievementRepository
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
-sealed interface MainScreenEvent {}
+sealed interface MainScreenEvent
 
 @Composable
 fun mainScreenPresenter(
+    @Suppress("UnusedParameter")
     events: Flow<MainScreenEvent>,
     achievementRepository: AchievementRepository = localAchievementRepository(),
 ): MainScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val isAchievementsEnabled: Boolean by achievementRepository
         .getAchievementEnabledStream()
         .safeCollectAsState(
-            initial = false
+            initial = false,
         )
     MainScreenUiState(
         isAchievementsEnabled = isAchievementsEnabled,

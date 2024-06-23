@@ -18,7 +18,8 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 @Composable
 @OptIn(InternalComposeApi::class)
-fun <T> CompositionLocalProviderWithReturnValue(
+@Suppress("ComposeCompositionLocalUsage")
+fun <T> compositionLocalProviderWithReturnValue(
     value: ProvidedValue<*>,
     content: @Composable () -> T,
 ): T {
@@ -32,6 +33,7 @@ interface ComposeEffectErrorHandler {
     suspend fun emit(throwable: Throwable)
 }
 
+@Suppress("CompositionLocalAllowlist")
 val LocalComposeEffectErrorHandler = staticCompositionLocalOf<ComposeEffectErrorHandler> {
     object : ComposeEffectErrorHandler {
         override suspend fun emit(throwable: Throwable) {

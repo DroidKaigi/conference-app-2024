@@ -91,7 +91,6 @@ fun TimetableScreen(
         events = eventEmitter,
     ),
 ) {
-
     val snackbarHostState = remember { SnackbarHostState() }
 
     SnackbarMessageEffect(
@@ -189,8 +188,9 @@ private fun TimetableScreen(
                 Text(text = "UiType: ${uiState.timetableUiType}")
                 Button(
                     modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
-                    onClick = { onTimetableUiChangeClick() }) {
-                    Text("Change UiType")
+                    onClick = { onTimetableUiChangeClick() },
+                ) {
+                    Text("Change UiType!")
                 }
             }
         },

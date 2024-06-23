@@ -16,10 +16,11 @@ public class RepositoryProvider @Inject constructor(
         .map { (k, v) ->
             k.kotlin to v as Any
         }.toMap()
+
     @Composable
     public fun Provide(content: @Composable () -> Unit) {
         CompositionLocalProvider(
-            LocalRepositories provides repositoriesMap
+            LocalRepositories provides repositoriesMap,
         ) {
             content()
         }

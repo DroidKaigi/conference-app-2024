@@ -32,7 +32,7 @@ class ContributorsScreenTest {
             setupScreenContent()
 
             captureScreenWithChecks(
-                checks = todoChecks("This screen is still empty now. Please add some checks.")
+                checks = todoChecks("This screen is still empty now. Please add some checks."),
             )
         }
     }
@@ -44,7 +44,7 @@ class ContributorsScreenTest {
             setupScreenContent()
 
             captureScreenWithChecks(
-                checks = todoChecks("This screen is still empty now. Please add some checks.")
+                checks = todoChecks("This screen is still empty now. Please add some checks."),
             )
         }
     }

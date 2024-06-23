@@ -1,0 +1,70 @@
+name: screenshot-comparison
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'app-ios/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}
+  cancel-in-progress: true
+
+permissions: { }
+
+jobs:
+  screenshot-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    permissions:
+      contents: read # for clone
+      actions: write # for upload-artifact
+      checks: read # for wait-on-check-action
+
+    steps:
+      - name: Checkout for getting base branch HEAD commit
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+        with:
+          ref: ${{ github.base_ref }}
+      - name: Get base branch HEAD commit for comparison
+        id: get_base_branch_head
+        run: echo "sha=$(git rev-parse origin/${{ github.base_ref }})" >> "$GITHUB_OUTPUT"
+      - name: Checkout merged commit with base and pull-request branch
+        uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
+      - uses: ./.github/actions/setup-java
+      - name: Wait for base unit-test to succeed before downloading base branch screenshot artifact
+        uses: lewagon/wait-on-check-action@ccfb013c15c8afb7bf2b7c028fb74dc5a068cccc # v1.3.4
+        with:
+          ref: ${{ steps.get_base_branch_head.outputs.sha }}
+          check-name: 'unit-test'
+          repo-token: ${{ github.token }}
+          wait-interval: 10
+      - name: Download screenshot artifact from base branch for comparison
+        uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3
+        continue-on-error: true
+        with:
+          name: test-reports
+          workflow: unit-test.yml
+          commit: ${{ steps.get_base_branch_head.outputs.sha }}
+          if_no_artifact_found: fail
+
+      - run: ./gradlew compareRoborazziDebug compareRoborazziDevDebug --stacktrace
+
+      - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        if: always()
+        with:
+          name: screenshot-diff-reports
+          path: |
+            **/reports
+            **/build/outputs/roborazzi
+          retention-days: 30
+
+      - name: Save PR number for comment
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+      - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: pr
+          path: pr/

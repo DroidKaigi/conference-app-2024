@@ -3,8 +3,8 @@ package io.github.droidkaigi.confsched.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import io.github.droidkaigi.confsched.compose.ComposeEffectErrorHandler
-import io.github.droidkaigi.confsched.compose.CompositionLocalProviderWithReturnValue
 import io.github.droidkaigi.confsched.compose.LocalComposeEffectErrorHandler
+import io.github.droidkaigi.confsched.compose.compositionLocalProviderWithReturnValue
 
 @Composable
 fun <T> providePresenterDefaults(
@@ -22,7 +22,7 @@ fun <T> providePresenterDefaults(
             }
         }
     }
-    return CompositionLocalProviderWithReturnValue(LocalComposeEffectErrorHandler provides handler) {
+    return compositionLocalProviderWithReturnValue(LocalComposeEffectErrorHandler provides handler) {
         block(userMessageStateHolder)
     }
 }
