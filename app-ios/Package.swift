@@ -34,6 +34,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", exact: "10.26.0"),
+        .package(url: "https://github.com/cybozu/LicenseList.git", exact: "0.7.0"),
     ],
     targets: [
         .target(
@@ -98,7 +99,8 @@ let package = Package(
         .target(
             name: "AboutFeature",
             dependencies: [
-                .tca
+                .tca,
+                .product(name: "LicenseList", package: "LicenseList")
             ]
         ),
         .testTarget(

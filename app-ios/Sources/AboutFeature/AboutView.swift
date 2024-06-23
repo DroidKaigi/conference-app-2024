@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
+import LicenseList
 
 @ViewAction(for: AboutReducer.self)
 public struct AboutView: View {
@@ -25,7 +26,7 @@ public struct AboutView: View {
             case .sponsors:
                 Text("Sponsors")
             case .acknowledgements:
-                Text("Acknowledgements")
+                LicenseListView()
             }
         }
         .sheet(item: $store.scope(state: \.destination?.codeOfConduct, action: \.presentation.codeOfConduct), content: { _ in
