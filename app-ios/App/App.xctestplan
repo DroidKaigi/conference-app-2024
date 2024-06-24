@@ -44,6 +44,27 @@
         "identifier" : "FavoriteFeatureTests",
         "name" : "FavoriteFeatureTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "ContributorFeatureTests",
+        "name" : "ContributorFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "SponsorFeatureTests",
+        "name" : "SponsorFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "StaffFeatureTests",
+        "name" : "StaffFeatureTests"
+      }
     }
   ],
   "version" : 1
