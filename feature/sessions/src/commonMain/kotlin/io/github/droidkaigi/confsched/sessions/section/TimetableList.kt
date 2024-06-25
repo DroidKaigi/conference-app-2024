@@ -1,18 +1,23 @@
 package io.github.droidkaigi.confsched.sessions.section
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Circle
@@ -26,6 +31,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -33,6 +40,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.seiko.imageloader.rememberImagePainter
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.CIRCLE
@@ -62,6 +71,7 @@ fun TimetableList(
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag),
         state = scrollState,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
         contentPadding = contentPadding,
     ) {
         items(uiState.timetable.timetableItems, key = { it.id.value }) { timetableItem ->
@@ -79,15 +89,17 @@ fun TimetableList(
             val roomColor = timetableItem.room.getColor()
 
             Column(
-                modifier = Modifier.border(border= BorderStroke(width=1.dp,color=Color.White))
-                    .clip(RoundedCornerShape(5.dp))
-                    .padding(15.dp)) {
+                modifier = Modifier
+                    .border(border= BorderStroke(width=1.dp,color=Color.White), shape = RoundedCornerShape(5.dp))
+                    .padding(15.dp)
+                    ) {
                 Row {
                     TagView(tagText=roomName, icon = roomIcon, tagColor=roomColor)
                     Spacer(modifier = Modifier.padding(3.dp))
-                    TagView(tagText="JA", tagColor=Color.White)
-                    Spacer(modifier = Modifier.padding(3.dp))
-                    TagView(tagText="EN", tagColor=Color.White)
+                    timetableItem.language.labels.forEach { label ->
+                        TagView(tagText=label, tagColor=Color.White)
+                        Spacer(modifier = Modifier.padding(3.dp))
+                    }
                     Spacer(modifier = Modifier.weight(1f))
                     TextButton(
                         onClick = { onBookmarkClick(timetableItem, true) },
@@ -97,23 +109,49 @@ fun TimetableList(
                             Icon(
                                 Icons.Filled.Favorite,
                                 contentDescription = "Bookmarked",
-                                tint = Color.Green
+                                tint = Color.Green,
                             )
                         } else {
                             Icon(
                                 Icons.Outlined.FavoriteBorder,
                                 contentDescription = "Not Bookmarked",
-                                tint = Color.White
+                                tint = Color.White,
                             )
                         }
                     }
                 }
                 Text(
                     text = timetableItem.title.currentLangTitle,
+                    fontSize = 24.sp,
                     modifier = Modifier
                         .testTag(TimetableListItemTestTag)
+                        .padding(bottom=5.dp)
                         .clickable { onTimetableItemClick(timetableItem) },
                 )
+                timetableItem.speakers.forEach { speaker ->
+                    Row {
+                        //TODO: This style of image loading was included by default but it seems slow
+                        val painter = rememberImagePainter(speaker.iconUrl)
+                        Image(
+                            painter = painter,
+                            modifier = Modifier
+                                .width(32.dp)
+                                .height(32.dp)
+                                .clip(CircleShape),
+                            contentDescription = "image",
+                        )
+                        Text(
+                            text = speaker.name,
+                            fontSize = 24.sp,
+                            modifier = Modifier
+                                .testTag(TimetableListItemTestTag)
+                                .padding(5.dp)
+                                .align(Alignment.CenterVertically)
+                        )
+                    }
+                }
+                //TODO: There is no data for the warning string right now. (Should go here)
+
             }
         }
     }
