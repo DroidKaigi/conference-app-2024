@@ -6,16 +6,12 @@ struct SessionDescriptionView: View {
     @State private var canBeExpanded: Bool = false
     let content: String
 
-    init(content: String) {
-        self.content = content
-    }
-
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(content)
+                .textStyle(.bodyLarge)
                 .textSelection(.enabled)
                 .lineLimit(isDescriptionExpanded ? nil : 5)
-                .font(.callout)
                 .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
                 .background {
                     ViewThatFits(in: .vertical) {
@@ -34,8 +30,10 @@ struct SessionDescriptionView: View {
                     canBeExpanded = false
                 } label: {
                     Text(String(localized: "TimeTableDetailReadMore", bundle: .module))
+                        .textStyle(.labelLarge)
                         .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
-                        .frame(width: 120, height: 40, alignment: .center)
+                        .frame(height: 40)
+                        .frame(maxWidth: .infinity, alignment: .center)
                         .overlay {
                             Capsule()
                                 .stroke(AssetColors.Outline.outline.swiftUIColor)

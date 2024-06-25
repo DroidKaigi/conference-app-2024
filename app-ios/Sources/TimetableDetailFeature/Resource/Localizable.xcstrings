@@ -12,7 +12,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Applicants"
+            "value" : "Target group"
           }
         },
         "ja" : {
@@ -60,7 +60,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Date"
+            "value" : "Date & Time"
           }
         },
         "ja" : {
@@ -76,7 +76,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Language"
+            "value" : "Languages"
           }
         },
         "ja" : {
@@ -108,7 +108,7 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Read more"
+            "value" : "More"
           }
         },
         "ja" : {
@@ -131,22 +131,6 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "スライド"
-          }
-        }
-      }
-    },
-    "TimeTableDetailSpeaker" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Speaker"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "スピーカー"
           }
         }
       }
