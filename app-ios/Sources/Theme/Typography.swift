@@ -1,9 +1,9 @@
 import SwiftUI
 
 public struct TextStyle: Sendable {
-    public var font: SwiftUI.Font
-    public var lineHeight: CGFloat
-    public var letterSpacing: CGFloat?
+    var font: SwiftUI.Font
+    var lineHeight: CGFloat
+    var letterSpacing: CGFloat?
 }
 
 extension TextStyle {
