@@ -1,9 +1,6 @@
 package io.github.droidkaigi.confsched.model
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 
 @Immutable
 data class TimetableRooms(val rooms: List<TimetableRoom>)
@@ -22,7 +19,7 @@ data class TimetableRoom(
     }
 
     fun getColor(): Color {
-        return when(name.enTitle) {
+        return when (name.enTitle) {
             "Chipmunk" -> {
                 Color(0xFFFF974B)
             }
@@ -42,7 +39,7 @@ data class TimetableRoom(
     }
 
     fun getShape(): Shapes {
-        return when(name.enTitle) {
+        return when (name.enTitle) {
             "Arctic Fox" -> {
                 Shapes.SQUARE
             }
@@ -65,11 +62,8 @@ data class TimetableRoom(
         SQUARE,
         CIRCLE,
         SHARP_DIAMOND,
-        DIAMOND
+        DIAMOND,
     }
-
-
-
 }
 
 val TimetableRoom.nameAndFloor: String
