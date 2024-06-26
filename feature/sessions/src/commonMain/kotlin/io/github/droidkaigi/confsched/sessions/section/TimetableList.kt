@@ -37,7 +37,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.seiko.imageloader.rememberImagePainter
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.CIRCLE
@@ -46,6 +45,7 @@ import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.SHARP_DIAMOND
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.SQUARE
 import io.github.droidkaigi.confsched.sessions.TimetableListItemBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableListItemTestTag
+import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.collections.immutable.PersistentMap
 
 const val TimetableListTestTag = "TimetableList"
@@ -144,7 +144,7 @@ fun TimetableList(
                 timetableItem.speakers.forEach { speaker ->
                     Row {
                         // TODO: This style of image loading was included by default but it seems slow
-                        val painter = rememberImagePainter(speaker.iconUrl)
+                        val painter = rememberAsyncImagePainter(speaker.iconUrl)
                         Image(
                             painter = painter,
                             modifier = Modifier
