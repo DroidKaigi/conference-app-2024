@@ -1,9 +1,12 @@
 import SwiftUI
 
 public struct TextStyle: Sendable {
-    var font: SwiftUI.Font
+    var font: UIFont
     var lineHeight: CGFloat
     var letterSpacing: CGFloat?
+    var lineSpacing: CGFloat {
+        lineHeight - font.lineHeight
+    }
 }
 
 extension TextStyle {
@@ -25,19 +28,19 @@ extension TextStyle {
 }
 
 enum TypographyTokens {
-    static let displayLarge = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 57), lineHeight: 64 - 57, letterSpacing: -0.25)
-    static let displayMedium = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 45), lineHeight: 52 - 45)
-    static let displaySmall = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 36), lineHeight: 44 - 36)
-    static let headlineLarge = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 32), lineHeight: 40 - 32)
-    static let headlineMedium = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 28), lineHeight: 36 - 28)
-    static let headlineSmall = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 24), lineHeight: 32 - 24)
-    static let titleLarge = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 22), lineHeight: 28 - 22)
-    static let titleMedium = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 16), lineHeight: 24 - 16, letterSpacing: 0.15)
-    static let titleSmall = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 14), lineHeight: 20 - 14, letterSpacing: 0.1)
-    static let labelLarge = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 14), lineHeight: 20 - 14, letterSpacing: 0.1)
-    static let labelMedium = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 12), lineHeight: 16 - 12, letterSpacing: 0.5)
-    static let labelSmall = TextStyle(font: FontAssets.DotGothic16.regular.swiftUIFont(size: 11), lineHeight: 16 - 11, letterSpacing: 0.5)
-    static let bodyLarge = TextStyle(font: FontAssets.Roboto.regular.swiftUIFont(size: 16), lineHeight: 24 - 16, letterSpacing: 0.5)
-    static let bodyMedium = TextStyle(font: FontAssets.Roboto.regular.swiftUIFont(size: 14), lineHeight: 20 - 14, letterSpacing: 0.25)
-    static let bodySmall = TextStyle(font: FontAssets.Roboto.regular.swiftUIFont(size: 12), lineHeight: 16 - 12, letterSpacing: 0.4)
+    static let displayLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 57), lineHeight: 64, letterSpacing: -0.25)
+    static let displayMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 45), lineHeight: 52)
+    static let displaySmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 36), lineHeight: 44)
+    static let headlineLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 32), lineHeight: 40)
+    static let headlineMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 28), lineHeight: 36 - 28)
+    static let headlineSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 24), lineHeight: 32)
+    static let titleLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 22), lineHeight: 28)
+    static let titleMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 16), lineHeight: 24, letterSpacing: 0.15)
+    static let titleSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.1)
+    static let labelLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.1)
+    static let labelMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 12), lineHeight: 16, letterSpacing: 0.5)
+    static let labelSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 11), lineHeight: 16, letterSpacing: 0.5)
+    static let bodyLarge = TextStyle(font: FontAssets.Roboto.regular.font(size: 16), lineHeight: 24, letterSpacing: 0.5)
+    static let bodyMedium = TextStyle(font: FontAssets.Roboto.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.25)
+    static let bodySmall = TextStyle(font: FontAssets.Roboto.regular.font(size: 12), lineHeight: 16, letterSpacing: 0.4)
 }
