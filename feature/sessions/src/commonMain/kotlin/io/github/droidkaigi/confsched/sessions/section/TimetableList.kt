@@ -37,6 +37,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
+import coil3.compose.LocalPlatformContext
+import coil3.request.ImageRequest
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.CIRCLE
@@ -145,6 +148,7 @@ fun TimetableList(
                     Row {
                         // TODO: This style of image loading was included by default but it seems slow
                         val painter = rememberAsyncImagePainter(speaker.iconUrl)
+//                        val painter = rememberImagePainter(speaker.iconUrl)
                         Image(
                             painter = painter,
                             modifier = Modifier
@@ -153,6 +157,20 @@ fun TimetableList(
                                 .clip(CircleShape),
                             contentDescription = "image",
                         )
+//                        val imageModel = ImageRequest.Builder(LocalPlatformContext.current)
+//                            .data(data = speaker.iconUrl)
+//                            .build()
+//                        AsyncImage(
+//                            model = imageModel,
+//                            modifier = Modifier
+//                                .width(32.dp)
+//                                .height(32.dp)
+//                                .clip(CircleShape),
+//                            contentDescription = "speaker image",
+//                            onSuccess = { it ->
+//                                val drawable = it.result.image
+//                            }
+//                        )
                         Text(
                             text = speaker.name,
                             fontSize = 24.sp,
@@ -161,6 +179,7 @@ fun TimetableList(
                                 .padding(5.dp)
                                 .align(Alignment.CenterVertically),
                         )
+                        //timetableItem.
                     }
                 }
                 // TODO: There is no data for the warning string right now. (Should go here)
