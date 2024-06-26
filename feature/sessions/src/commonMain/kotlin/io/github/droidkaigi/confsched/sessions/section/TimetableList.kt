@@ -37,9 +37,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.compose.AsyncImage
-import coil3.compose.LocalPlatformContext
-import coil3.request.ImageRequest
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.CIRCLE
@@ -164,7 +161,7 @@ fun TimetableList(
                                 .padding(5.dp)
                                 .align(Alignment.CenterVertically),
                         )
-                        //timetableItem.
+                        // TODO: Message goes here (missing from object we can access here?)
                     }
                 }
                 // TODO: There is no data for the warning string right now. (Should go here)
