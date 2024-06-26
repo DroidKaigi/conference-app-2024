@@ -146,9 +146,8 @@ fun TimetableList(
                 )
                 timetableItem.speakers.forEach { speaker ->
                     Row {
-                        // TODO: This style of image loading was included by default but it seems slow
+                        // TODO: Fixed image loading again but its still slow. Maybe we need smaller images?
                         val painter = rememberAsyncImagePainter(speaker.iconUrl)
-//                        val painter = rememberImagePainter(speaker.iconUrl)
                         Image(
                             painter = painter,
                             modifier = Modifier
@@ -157,20 +156,6 @@ fun TimetableList(
                                 .clip(CircleShape),
                             contentDescription = "image",
                         )
-//                        val imageModel = ImageRequest.Builder(LocalPlatformContext.current)
-//                            .data(data = speaker.iconUrl)
-//                            .build()
-//                        AsyncImage(
-//                            model = imageModel,
-//                            modifier = Modifier
-//                                .width(32.dp)
-//                                .height(32.dp)
-//                                .clip(CircleShape),
-//                            contentDescription = "speaker image",
-//                            onSuccess = { it ->
-//                                val drawable = it.result.image
-//                            }
-//                        )
                         Text(
                             text = speaker.name,
                             fontSize = 24.sp,
