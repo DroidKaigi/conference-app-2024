@@ -1,5 +1,7 @@
 package io.github.droidkaigi.confsched.model
 
+import androidx.compose.ui.graphics.Color
+
 @Immutable
 data class TimetableRooms(val rooms: List<TimetableRoom>)
 
@@ -14,6 +16,53 @@ data class TimetableRoom(
             return name.currentLangTitle.compareTo(other.name.currentLangTitle)
         }
         return sort.compareTo(other.sort)
+    }
+
+    fun getColor(): Color {
+        return when (name.enTitle) {
+            "Chipmunk" -> {
+                Color(0xFFFF974B)
+            }
+            "Dolphin" -> {
+                Color(0xFFBB85FF)
+            }
+            "Bumblebee" -> {
+                Color(0xFFDDD33C)
+            }
+            "Arctic Fox" -> {
+                Color(0xFF45E761)
+            }
+            else -> {
+                Color.White
+            }
+        }
+    }
+
+    fun getShape(): Shapes {
+        return when (name.enTitle) {
+            "Arctic Fox" -> {
+                Shapes.SQUARE
+            }
+            "Bumblebee" -> {
+                Shapes.CIRCLE
+            }
+            "Chipmunk" -> {
+                Shapes.SHARP_DIAMOND
+            }
+            "Dolphin" -> {
+                Shapes.DIAMOND
+            }
+            else -> {
+                Shapes.SQUARE
+            }
+        }
+    }
+
+    enum class Shapes {
+        SQUARE,
+        CIRCLE,
+        SHARP_DIAMOND,
+        DIAMOND,
     }
 }
 

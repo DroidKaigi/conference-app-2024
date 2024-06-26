@@ -17,7 +17,7 @@ kotlin {
                 implementation(projects.core.data)
                 implementation(libs.kermit)
                 api(projects.core.common)
-                api(libs.composeImageLoader)
+                api(libs.coil)
                 api(libs.kotlinxDatetime)
                 implementation(libs.moleculeRuntime)
                 implementation(libs.coreBundle)
