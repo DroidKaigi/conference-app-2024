@@ -18,6 +18,7 @@ kotlin {
                 implementation(libs.kermit)
                 api(projects.core.common)
                 api(libs.coil)
+                api(libs.coilNetwork)
                 api(libs.kotlinxDatetime)
                 implementation(libs.moleculeRuntime)
                 implementation(libs.coreBundle)

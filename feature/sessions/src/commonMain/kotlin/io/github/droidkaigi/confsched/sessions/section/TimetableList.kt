@@ -143,7 +143,7 @@ fun TimetableList(
                 )
                 timetableItem.speakers.forEach { speaker ->
                     Row {
-                        // TODO: This style of image loading was included by default but it seems slow
+                        // TODO: Fixed image loading again but its still slow. Maybe we need smaller images?
                         val painter = rememberAsyncImagePainter(speaker.iconUrl)
                         Image(
                             painter = painter,
@@ -161,6 +161,7 @@ fun TimetableList(
                                 .padding(5.dp)
                                 .align(Alignment.CenterVertically),
                         )
+                        // TODO: Message goes here (missing from object we can access here?)
                     }
                 }
                 // TODO: There is no data for the warning string right now. (Should go here)
