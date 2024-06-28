@@ -17,11 +17,12 @@ public struct StaffView: View {
             })
             .listRowSeparator(.hidden)
         }
-        
         .listStyle(PlainListStyle())
         .onAppear {
             store.send(.onAppear)
         }
+        .navigationBarTitleDisplayMode(.large)
+        .navigationTitle("Staff")
     }
 }
 
