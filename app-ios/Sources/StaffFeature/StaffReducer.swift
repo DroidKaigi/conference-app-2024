@@ -1,11 +1,10 @@
 import ComposableArchitecture
 import Foundation
 import KMPClient
-import Dependencies
 import shared
 
 struct StaffData: Equatable, Identifiable {
-    let id: Int64
+    let id: Int
     let name: String
     let icon: URL
     let github: URL
@@ -43,7 +42,7 @@ public struct StaffReducer {
             case .response(.success(let staffs)):
                 state.list = staffs.map {
                     StaffData(
-                        id: $0.id,
+                        id: Int($0.id),
                         name: $0.username,
                         icon: URL(string: $0.iconUrl)!,
                         github: URL(string: $0.profileUrl)!
