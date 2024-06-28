@@ -9,15 +9,18 @@ public struct StaffView: View {
     }
 
     public var body: some View {
-        List(store.list) { data in
-            Button(action: {
-                // TODO: present GitHub profile page
-            }, label: {
-                StaffLabel(name: data.name, icon: data.icon)
-            })
-            .listRowSeparator(.hidden)
+        ScrollView {
+            LazyVStack {
+                ForEach(store.list, id: \.id) { staff in
+                    Button {
+                        
+                    } label: {
+                        StaffLabel(name: staff.name, icon: staff.icon)
+                    }
+                }
+            }
+            .padding(16)
         }
-        .listStyle(PlainListStyle())
         .onAppear {
             store.send(.onAppear)
         }
