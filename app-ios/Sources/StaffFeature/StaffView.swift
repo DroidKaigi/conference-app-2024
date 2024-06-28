@@ -9,13 +9,22 @@ public struct StaffView: View {
     }
 
     public var body: some View {
-        Text(store.text)
-            .onAppear {
-                store.send(.onAppear)
-            }
+        List(store.list) { data in
+            Button(action: {
+                // TODO: present GitHub profile page
+            }, label: {
+                StaffLabel(name: data.name, icon: data.icon)
+            })
+            .listRowSeparator(.hidden)
+        }
+        
+        .listStyle(PlainListStyle())
+        .onAppear {
+            store.send(.onAppear)
+        }
     }
 }
 
 #Preview {
-    StaffView(store: .init(initialState: .init(text: "Hoge"), reducer: { StaffReducer() }))
+    StaffView(store: .init(initialState: .init(), reducer: { StaffReducer() }))
 }

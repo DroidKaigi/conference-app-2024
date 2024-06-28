@@ -6,7 +6,14 @@ extension TimetableClient: TestDependencyKey {
 }
 
 extension StaffClient: TestDependencyKey {
-    public static let previewValue: Self = Self()
+    public static let previewValue: Self = .init {
+        .init {
+            [
+                .init(id: 0, username: "Hoge", profileUrl: .init(), iconUrl: .init()),
+                
+            ]
+        }
+    }
     public static let testValue: Self = Self()
 }
 

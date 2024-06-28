@@ -155,7 +155,8 @@ let package = Package(
             name: "StaffFeature",
             dependencies: [ 
                 .tca,
-                .kmpClient
+                .kmpClient,
+                .theme
             ]
         ),
         .testTarget(
