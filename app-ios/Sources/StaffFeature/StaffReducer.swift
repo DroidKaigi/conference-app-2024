@@ -30,6 +30,8 @@ public struct StaffReducer {
 
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
+            enum CancelID { case connection }
+            
             switch action {
             case .onAppear:
                 return .run { send in
@@ -37,6 +39,7 @@ public struct StaffReducer {
                         await send(.response(.success(staffs)))
                     }
                 }
+                .cancellable(id: CancelID.connection)
             case .response(.success(let staffs)):
                 state.list = staffs.map {
                     StaffData(
@@ -48,6 +51,7 @@ public struct StaffReducer {
                 }
                 return .none
             case .response(.failure(let error)):
+                print(error)
                 return .none
             }
         }
