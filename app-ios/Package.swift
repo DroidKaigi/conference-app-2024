@@ -153,7 +153,11 @@ let package = Package(
         ),
         .target(
             name: "StaffFeature",
-            dependencies: [ .tca ]
+            dependencies: [ 
+                .tca,
+                .kmpClient,
+                .theme
+            ]
         ),
         .testTarget(
             name: "StaffFeatureTests",
@@ -212,6 +216,7 @@ extension Target.Dependency {
     static let sponsorFeature: Target.Dependency = "SponsorFeature"
     static let contributorFeature: Target.Dependency = "ContributorFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
+    static let kmpClient: Target.Dependency = "KMPClient"
     static let theme: Target.Dependency = "Theme"
 
     static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
