@@ -6,34 +6,32 @@ public struct TimetableDetailView: View {
     private let store: StoreOf<TimetableDetailReducer>
 
     public var body: some View {
-        VStack {
-            ScrollView {
-                sessionDetail
-                    .padding(.horizontal, 16)
+        GeometryReader { proxy in
+            VStack(spacing: 0) {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        AssetColors.Custom.arcticFoxContainer.swiftUIColor
+                            .frame(height: proxy.safeAreaInsets.top)
+                        headLine
+                            .padding(.bottom, 24)
+                    }
+                    detail
+                        .padding(.horizontal, 16)
+                    applicants
+                        .padding(16)
+                    archive
+                        .padding(16)
+                }
                 
-                Divider().background(AssetColors.Outline.outlineVariant.swiftUIColor)
-
-                targetUser
-                    .padding(16)
-
-                Divider().background(AssetColors.Outline.outlineVariant.swiftUIColor)
-                
-                speaker
-                    .padding(16)
-                
-                Divider().background(AssetColors.Outline.outlineVariant.swiftUIColor)
-                
-                archive
-                    .padding(16)
+                footer
             }
-            
-            footer
+            .background(AssetColors.Surface.surface.swiftUIColor)
+            .frame(maxWidth: .infinity)
+            .ignoresSafeArea(edges: [.top])
         }
-        .background(AssetColors.Surface.surface.swiftUIColor)
-        .frame(maxWidth: .infinity)
     }
     
-    var footer: some View {
+    @ViewBuilder var footer: some View {
         HStack(spacing: 8) {
             Button {
                 // do something
@@ -68,38 +66,74 @@ public struct TimetableDetailView: View {
         .padding(.horizontal, 16)
         .background(AssetColors.Surface.surfaceContainer.swiftUIColor)
     }
-    
-    @ViewBuilder var sessionDetail: some View {
-        VStack(alignment: .leading, spacing: 20) {
+
+    @ViewBuilder var headLine: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            HStack(spacing: 4) {
+                RoomTag(.arcticFox)
+                LanguageTag(.japanese)
+                LanguageTag(.english)
+            }
+            .padding(.bottom, 8)
+
             Text(SampleData.title)
-                .font(.title)
+                .textStyle(.headlineSmall)
                 .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
+                .padding(.bottom, 20)
+            
+            HStack(spacing: 12) {
+                Image(.avatar)
+                    .clipShape(Circle())
+                VStack(spacing: 8) {
+                    Text(SampleData.name)
+                        .textStyle(.bodyLarge)
+                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                    Text(SampleData.tagLine)
+                        .textStyle(.bodySmall)
+                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                }
+
+                Spacer()
+            }
+            .padding(.bottom, 20)
+        }
+        .padding(.horizontal, 16)
+        .background(AssetColors.Custom.arcticFoxContainer.swiftUIColor)
+    }
+
+    @ViewBuilder var detail: some View {
+        VStack(alignment: .leading, spacing: 20) {
             VStack(spacing: 16) {
                 InformationRow(
                     icon: Image(.icSchedule),
                     title: String(localized: "TimeTableDetailDate", bundle: .module),
+                    titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
                     content: SampleData.dateValue
                 )
                 InformationRow(
                     icon: Image(.icLocationOn),
                     title: String(localized: "TimeTableDetailLocation", bundle: .module),
+                    titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
                     content: SampleData.locationValue
                 )
                 InformationRow(
                     icon: Image(.icLanguage),
                     title: String(localized: "TimeTableDetailLanguage", bundle: .module),
+                    titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
                     content: SampleData.languageValue
                 )
                 InformationRow(
                     icon: Image(.icCategory),
                     title: String(localized: "TimeTableDetailCategory", bundle: .module),
+                    titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
                     content: SampleData.categoryValue
                 )
             }
             .padding(16)
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
-                    .stroke(AssetColors.Surface.onSurface.swiftUIColor, lineWidth: 1)
+                AssetColors.Custom.arcticFox.swiftUIColor,
+                in: RoundedRectangle(cornerRadius: 4)
+                    .stroke(style: .init(lineWidth: 1, dash: [2, 2]))
             )
             
             SessionDescriptionView(content: SampleData.sessionDescription)
@@ -107,40 +141,23 @@ public struct TimetableDetailView: View {
         }
     }
     
-    @ViewBuilder var targetUser: some View {
+    @ViewBuilder var applicants: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailApplicants", bundle: .module))
-                .font(.title3)
-                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
+                .textStyle(.titleLarge)
+                .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
 
             Text(SampleData.applicants)
-                .font(.callout)
+                .textStyle(.bodyLarge)
                 .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
-        }
-    }
-    
-    @ViewBuilder var speaker: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(String(localized: "TimeTableDetailSpeaker", bundle: .module))
-                .font(.title3)
-                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
-
-            HStack {
-                Image(.avatar)
-                    .padding(.trailing, 24)
-                Text(SampleData.name)
-                    .font(.callout)
-                    .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                Spacer()
-            }
         }
     }
     
     @ViewBuilder var archive: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailArchive", bundle: .module))
-                .font(.title3)
-                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
+                .textStyle(.titleLarge)
+                .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
 
             HStack {
                 Button {
@@ -148,7 +165,11 @@ public struct TimetableDetailView: View {
                 } label: {
                     VStack {
                         Label(
-                            title: { Text(String(localized: "TimeTableDetailSlide", bundle: .module)).foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor) },
+                            title: {
+                                Text(String(localized: "TimeTableDetailSlide", bundle: .module))
+                                    .textStyle(.labelLarge)
+                                    .foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor)
+                            },
                             icon: { Image(.icDocument) }
                         )
                     }
@@ -162,7 +183,11 @@ public struct TimetableDetailView: View {
                 } label: {
                     VStack {
                         Label(
-                            title: { Text(String(localized: "TimeTableDetailVideo", bundle: .module)).foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor) },
+                            title: {
+                                Text(String(localized: "TimeTableDetailVideo", bundle: .module))
+                                    .textStyle(.labelLarge)
+                                    .foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor)
+                            },
                             icon: { Image(.icPlay) }
                         )
                     }

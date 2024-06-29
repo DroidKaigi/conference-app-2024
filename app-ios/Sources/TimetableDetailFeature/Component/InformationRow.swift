@@ -2,31 +2,24 @@ import SwiftUI
 import Theme
 
 struct InformationRow: View {
-    private let icon: Image
-    private let title: String
-    private let content: String
-
-    init(
-        icon: Image,
-        title: String,
-        content: String
-    ) {
-        self.icon = icon
-        self.title = title
-        self.content = content
-    }
+    let icon: Image
+    let title: String
+    let titleColor: Color
+    let content: String
 
     var body: some View {
         HStack {
             icon
+                .renderingMode(.template)
+                .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
             HStack(spacing: 12) {
                 Text(title)
-                    .font(.callout)
-                    .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
+                    .textStyle(.titleSmall)
+                    .foregroundStyle(titleColor)
                     .bold()
                 HStack {
                     Text(content)
-                        .font(.callout)
+                        .textStyle(.bodyMedium)
                         .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 }
 
@@ -43,6 +36,7 @@ struct InformationRow: View {
     InformationRow(
         icon: Image(systemName: "clock"),
         title: String(localized: "TimeTableDetailDate", bundle: .module),
+        titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
         content: SampleData.dateValue
     )
 }
