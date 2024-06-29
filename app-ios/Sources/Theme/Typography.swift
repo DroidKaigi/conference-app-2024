@@ -27,20 +27,20 @@ extension TextStyle {
     public static let labelSmall: TextStyle = TypographyTokens.labelSmall
 }
 
-public enum TypographyTokens {
-    public static let displayLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 57), lineHeight: 64, letterSpacing: -0.25)
-    public static let displayMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 45), lineHeight: 52)
-    public static let displaySmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 36), lineHeight: 44)
-    public static let headlineLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 32), lineHeight: 40)
-    public static let headlineMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 28), lineHeight: 36 - 28)
-    public static let headlineSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 24), lineHeight: 32)
-    public static let titleLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 22), lineHeight: 28)
-    public static let titleMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 16), lineHeight: 24, letterSpacing: 0.15)
-    public static let titleSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.1)
-    public static let labelLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.1)
-    public static let labelMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 12), lineHeight: 16, letterSpacing: 0.5)
-    public static let labelSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 11), lineHeight: 16, letterSpacing: 0.5)
-    public static let bodyLarge = TextStyle(font: FontAssets.Roboto.regular.font(size: 16), lineHeight: 24, letterSpacing: 0.5)
-    public static let bodyMedium = TextStyle(font: FontAssets.Roboto.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.25)
-    public static let bodySmall = TextStyle(font: FontAssets.Roboto.regular.font(size: 12), lineHeight: 16, letterSpacing: 0.4)
+enum TypographyTokens {
+    static let displayLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 57), lineHeight: 64, letterSpacing: -0.25)
+    static let displayMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 45), lineHeight: 52)
+    static let displaySmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 36), lineHeight: 44)
+    static let headlineLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 32), lineHeight: 40)
+    static let headlineMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 28), lineHeight: 36 - 28)
+    static let headlineSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 24), lineHeight: 32)
+    static let titleLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 22), lineHeight: 28)
+    static let titleMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 16), lineHeight: 24, letterSpacing: 0.15)
+    static let titleSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.1)
+    static let labelLarge = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.1)
+    static let labelMedium = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 12), lineHeight: 16, letterSpacing: 0.5)
+    static let labelSmall = TextStyle(font: FontAssets.DotGothic16.regular.font(size: 11), lineHeight: 16, letterSpacing: 0.5)
+    static let bodyLarge = TextStyle(font: FontAssets.Roboto.regular.font(size: 16), lineHeight: 24, letterSpacing: 0.5)
+    static let bodyMedium = TextStyle(font: FontAssets.Roboto.regular.font(size: 14), lineHeight: 20, letterSpacing: 0.25)
+    static let bodySmall = TextStyle(font: FontAssets.Roboto.regular.font(size: 12), lineHeight: 16, letterSpacing: 0.4)
 }

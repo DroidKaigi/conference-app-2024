@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
+import Theme
 
 public struct StaffView: View {
     private let store: StoreOf<StaffReducer>
@@ -17,10 +18,12 @@ public struct StaffView: View {
                     } label: {
                         StaffLabel(name: staff.name, icon: staff.icon)
                     }
+                    .padding(.vertical, 12)
                 }
             }
             .padding(16)
         }
+        .background(AssetColors.Surface.surface.swiftUIColor)
         .onAppear {
             store.send(.onAppear)
         }

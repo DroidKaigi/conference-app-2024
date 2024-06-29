@@ -6,21 +6,19 @@ struct StaffLabel: View {
     let icon: URL
 
     var body: some View {
-        HStack(alignment: .center) {
-            AsyncImage(url: icon) { image in
-                image.resizable()
-            } placeholder: {
-                Color.gray
+        HStack(alignment: .center, spacing: 12) {
+            AsyncImage(url: icon) {
+                $0.image?.resizable()
             }
-            .frame(width: 60, height: 60)
-            .scaledToFill()
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .frame(width: 52, height: 52)
+            .clipShape(Circle())
             .overlay(
-                RoundedRectangle(cornerRadius: 12)
+                Circle()
                     .stroke(AssetColors.Outline.outline.swiftUIColor, lineWidth: 1)
             )
+
             Text(name)
-                .textStyle(TypographyTokens.bodyLarge)
+                .textStyle(.bodyLarge)
                 .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 .lineLimit(2)
         }
