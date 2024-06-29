@@ -28,7 +28,7 @@ public struct StaffView: View {
             store.send(.onAppear)
         }
         .navigationBarTitleDisplayMode(.large)
-        .navigationTitle("Staff")
+        .navigationTitle(String(localized: "Staff", bundle: .module))
     }
 }
 
