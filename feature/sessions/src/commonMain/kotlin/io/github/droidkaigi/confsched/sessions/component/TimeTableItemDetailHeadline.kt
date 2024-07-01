@@ -25,8 +25,9 @@ import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 @Composable
 fun TimeTableItemDetailHeadline(
     timetableItem: TimetableItem,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(modifier = modifier) {
         Row {
             TagView(
                 tagText = timetableItem.room.name.currentLangTitle,

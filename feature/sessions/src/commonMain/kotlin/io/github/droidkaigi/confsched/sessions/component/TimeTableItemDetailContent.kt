@@ -32,19 +32,22 @@ import io.github.droidkaigi.confsched.model.TimetableItem.Special
 @Composable
 fun TimeTableItemDetailContent(
     timetableItem: TimetableItem,
+    modifier: Modifier = Modifier,
     onLinkClick: (url: String) -> Unit,
 ) {
-    DescriptionSection(
-        timetableItem = timetableItem,
-        onLinkClick = onLinkClick,
-    )
-    TargetAudienceSection(timetableItem = timetableItem)
-    if (timetableItem.asset.isAvailable) {
-        ArchiveSection(
+    Column(modifier = modifier) {
+        DescriptionSection(
             timetableItem = timetableItem,
-            onViewSlideClick = onLinkClick,
-            onWatchVideoClick = onLinkClick,
+            onLinkClick = onLinkClick,
         )
+        TargetAudienceSection(timetableItem = timetableItem)
+        if (timetableItem.asset.isAvailable) {
+            ArchiveSection(
+                timetableItem = timetableItem,
+                onViewSlideClick = onLinkClick,
+                onWatchVideoClick = onLinkClick,
+            )
+        }
     }
 }
 
@@ -60,7 +63,7 @@ private fun DescriptionSection(
             .padding(bottom = 16.dp),
     ) {
         ClickableLinkText(
-            content = when(timetableItem) {
+            content = when (timetableItem) {
                 is Session -> timetableItem.description
                 is Special -> timetableItem.description
             }.currentLangTitle,
@@ -89,62 +92,68 @@ private fun DescriptionSection(
 @Composable
 private fun TargetAudienceSection(
     timetableItem: TimetableItem,
+    modifier: Modifier = Modifier,
 ) {
-    Text(
-        text = "対象者",
-        style = MaterialTheme.typography.titleLarge,
-    )
-    Text(
-        modifier = Modifier.padding(vertical = 8.dp),
-        text = timetableItem.targetAudience,
-        style = MaterialTheme.typography.bodyLarge,
-    )
+    Column(modifier = modifier) {
+        Text(
+            text = "対象者",
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Text(
+            modifier = Modifier.padding(vertical = 8.dp),
+            text = timetableItem.targetAudience,
+            style = MaterialTheme.typography.bodyLarge,
+        )
+    }
 }
 
 @Composable
 private fun ArchiveSection(
     timetableItem: TimetableItem,
     onViewSlideClick: (url: String) -> Unit,
+    modifier: Modifier = Modifier,
     onWatchVideoClick: (url: String) -> Unit,
 ) {
-    Spacer(Modifier.height(16.dp))
-    Text(
-        text = "アーカイブ",
-        style = MaterialTheme.typography.titleLarge,
-    )
-    Spacer(Modifier.height(8.dp))
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        timetableItem.asset.slideUrl?.let { slideUrl ->
-            Button(
-                modifier = Modifier.weight(1f),
-                onClick = { onViewSlideClick(slideUrl) },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.Description,
-                    contentDescription = "Slide",
-                )
-                Text(
-                    text = "スライド",
-                    style = MaterialTheme.typography.labelLarge,
-                )
+    Column(modifier = modifier) {
+        Spacer(Modifier.height(16.dp))
+        Text(
+            text = "アーカイブ",
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Spacer(Modifier.height(8.dp))
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            timetableItem.asset.slideUrl?.let { slideUrl ->
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = { onViewSlideClick(slideUrl) },
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Description,
+                        contentDescription = "Slide",
+                    )
+                    Text(
+                        text = "スライド",
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
             }
-        }
-        timetableItem.asset.videoUrl?.let { videoUrl ->
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                modifier = Modifier.weight(1f),
-                onClick = { onWatchVideoClick(videoUrl) },
-            ) {
-                Icon(
-                    imageVector = Icons.Outlined.PlayCircle,
-                    contentDescription = "Video",
-                )
-                Text(
-                    text = "動画",
-                    style = MaterialTheme.typography.labelLarge,
-                )
+            timetableItem.asset.videoUrl?.let { videoUrl ->
+                Spacer(modifier = Modifier.width(8.dp))
+                Button(
+                    modifier = Modifier.weight(1f),
+                    onClick = { onWatchVideoClick(videoUrl) },
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.PlayCircle,
+                        contentDescription = "Video",
+                    )
+                    Text(
+                        text = "動画",
+                        style = MaterialTheme.typography.labelLarge,
+                    )
+                }
             }
         }
     }

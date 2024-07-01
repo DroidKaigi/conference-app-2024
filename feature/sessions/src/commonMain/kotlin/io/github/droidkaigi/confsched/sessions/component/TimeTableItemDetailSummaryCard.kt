@@ -31,9 +31,10 @@ import io.github.droidkaigi.confsched.model.nameAndFloor
 @Composable
 fun TimeTableItemDetailSummaryCard(
     timetableItem: TimetableItem,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(bottom = 16.dp)
             .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp)),
     ) {
@@ -64,7 +65,7 @@ fun TimeTableItemDetailSummaryCard(
             contentDescription = "Language",
             title = "対応言語",
             description = timetableItem.getSupportedLangString(
-                getDefaultLocale() == Locale.JAPAN
+                getDefaultLocale() == Locale.JAPAN,
             ),
         )
         SummaryCardRow(
@@ -82,11 +83,11 @@ fun TimeTableItemDetailSummaryCard(
 
 @Composable
 private fun SummaryCardRow(
-    modifier: Modifier,
     imageVector: ImageVector,
     contentDescription: String,
     title: String,
     description: String,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,

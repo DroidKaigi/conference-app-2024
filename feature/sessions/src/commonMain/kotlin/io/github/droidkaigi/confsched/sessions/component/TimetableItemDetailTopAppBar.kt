@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import io.github.droidkaigi.confsched.model.Lang
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,8 +27,10 @@ fun TimetableItemDetailTopAppBar(
     onNavigationIconClick: () -> Unit,
     onSelectedLanguage: (Lang) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
+    modifier: Modifier = Modifier,
 ) {
     TopAppBar(
+        modifier = modifier,
         title = {},
         navigationIcon = {
             IconButton(onClick = { onNavigationIconClick() }) {

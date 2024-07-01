@@ -21,9 +21,11 @@ fun TimetableItemDetailBottomAppBar(
     isBookmarked: Boolean,
     onBookmarkClick: (TimetableItem) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
+    modifier: Modifier = Modifier,
     onShareClick: (TimetableItem) -> Unit,
 ) {
     BottomAppBar(
+        modifier = modifier,
         actions = {
             IconButton(onClick = { onShareClick(timetableItem) }) {
                 Icon(
