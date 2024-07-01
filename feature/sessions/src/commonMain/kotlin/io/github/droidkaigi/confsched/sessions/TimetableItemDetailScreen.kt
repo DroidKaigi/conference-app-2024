@@ -5,12 +5,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -43,6 +41,7 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBottomAppBar
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -151,35 +150,12 @@ private fun TimetableItemDetailScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             if (uiState is Loaded) {
-                LargeTopAppBar(title = {
-                    Row {
-                        Button(onClick = { onNavigationIconClick() }) {
-                            Text(
-                                text = "Back",
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                        }
-                        Text(
-                            modifier = Modifier.weight(1F),
-                            text = uiState.timetableItem.title.currentLangTitle,
-                            style = MaterialTheme.typography.bodyLarge,
-                        )
-                        if (uiState.isLangSelectable) {
-                            Button(onClick = { onSelectedLanguage(JAPANESE) }) {
-                                Text(
-                                    text = "日本語",
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                            }
-                            Button(onClick = { onSelectedLanguage(Lang.ENGLISH) }) {
-                                Text(
-                                    text = "English",
-                                    style = MaterialTheme.typography.bodySmall,
-                                )
-                            }
-                        }
-                    }
-                })
+                TimetableItemDetailTopAppBar(
+                    isLangSelectable = uiState.isLangSelectable,
+                    onNavigationIconClick = onNavigationIconClick,
+                    onSelectedLanguage = onSelectedLanguage,
+                    scrollBehavior = scrollBehavior,
+                )
             }
         },
         bottomBar = {
