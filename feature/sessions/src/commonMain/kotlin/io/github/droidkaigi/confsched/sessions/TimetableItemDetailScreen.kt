@@ -25,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -43,6 +42,7 @@ import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBottomAppBar
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -184,23 +184,13 @@ private fun TimetableItemDetailScreen(
         },
         bottomBar = {
             if (uiState is Loaded) {
-                Column {
-                    Button(
-                        modifier = Modifier.testTag(TimetableItemDetailBookmarkIconTestTag),
-                        onClick = { onBookmarkClick(uiState.timetableItem) },
-                    ) {
-                        Text(text = "Bookmark: ${uiState.isBookmarked}")
-                    }
-                    Button(
-
-                        onClick = { onCalendarRegistrationClick(uiState.timetableItem) },
-                    ) {
-                        Text(text = "Calendar")
-                    }
-                    Button(onClick = { onShareClick(uiState.timetableItem) }) {
-                        Text(text = "Share")
-                    }
-                }
+                TimetableItemDetailBottomAppBar(
+                    timetableItem = uiState.timetableItem,
+                    isBookmarked = uiState.isBookmarked,
+                    onBookmarkClick = onBookmarkClick,
+                    onCalendarRegistrationClick = onCalendarRegistrationClick,
+                    onShareClick = onShareClick,
+                )
             }
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
