@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -40,6 +41,7 @@ import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
+import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailHeadline
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBottomAppBar
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
@@ -172,27 +174,13 @@ private fun TimetableItemDetailScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
         if (uiState is Loaded) {
-            Column(
-                Modifier.padding(
-                    top = innerPadding.calculateTopPadding(),
-                ),
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
             ) {
-                val currentLang = uiState.currentLang ?: Lang.ENGLISH
-                fun MultiLangText.getByLang(lang: Lang): String {
-                    return if (lang == JAPANESE) {
-                        jaTitle
-                    } else {
-                        enTitle
-                    }
-                }
-                Text(
-                    text = when (val item = uiState.timetableItem) {
-                        is TimetableItem.Session -> item.description.getByLang(currentLang)
-                        is TimetableItem.Special -> item.description.getByLang(currentLang)
-                    },
-                )
-                Button(onClick = { onLinkClick(uiState.timetableItem.url) }) {
-                    Text(text = "Link")
+                item {
+                    TimeTableItemDetailHeadline(
+                        timetableItem = uiState.timetableItem,
+                    )
                 }
             }
         }
