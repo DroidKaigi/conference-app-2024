@@ -4,18 +4,15 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,13 +31,12 @@ import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
 import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Lang
-import io.github.droidkaigi.confsched.model.Lang.JAPANESE
-import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
+import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailContent
 import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailHeadline
 import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBottomAppBar
@@ -187,6 +183,13 @@ private fun TimetableItemDetailScreen(
                 item {
                     TimeTableItemDetailSummaryCard(
                         timetableItem = uiState.timetableItem,
+                    )
+                }
+
+                item {
+                    TimeTableItemDetailContent(
+                        timetableItem = uiState.timetableItem,
+                        onLinkClick = onLinkClick,
                     )
                 }
             }
