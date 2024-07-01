@@ -42,6 +42,7 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
 import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailHeadline
+import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBottomAppBar
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
@@ -179,6 +180,12 @@ private fun TimetableItemDetailScreen(
             ) {
                 item {
                     TimeTableItemDetailHeadline(
+                        timetableItem = uiState.timetableItem,
+                    )
+                }
+
+                item {
+                    TimeTableItemDetailSummaryCard(
                         timetableItem = uiState.timetableItem,
                     )
                 }
