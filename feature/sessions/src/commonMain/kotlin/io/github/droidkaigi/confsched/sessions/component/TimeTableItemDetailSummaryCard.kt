@@ -40,7 +40,12 @@ fun TimeTableItemDetailSummaryCard(
     // TODO: switch color according to room type
     Column(
         modifier = modifier
-            .padding(8.dp)
+            .padding(
+                start = 8.dp,
+                end = 8.dp,
+                top = 16.dp,
+                bottom = 8.dp,
+            )
             .drawBehind {
                 drawRoundRect(
                     color = Color(0xFF45E761),
