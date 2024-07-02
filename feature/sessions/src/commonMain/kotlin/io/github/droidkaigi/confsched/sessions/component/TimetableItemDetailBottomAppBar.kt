@@ -2,7 +2,6 @@ package io.github.droidkaigi.confsched.sessions.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.outlined.EditCalendar
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material3.BottomAppBar
@@ -13,8 +12,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
+import conference_app_2024.feature.sessions.generated.resources.Res
+import conference_app_2024.feature.sessions.generated.resources.calendar_add_on
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun TimetableItemDetailBottomAppBar(
@@ -36,7 +38,7 @@ fun TimetableItemDetailBottomAppBar(
             }
             IconButton(onClick = { onCalendarRegistrationClick(timetableItem) }) {
                 Icon(
-                    imageVector = Icons.Outlined.EditCalendar,
+                    painter = painterResource(Res.drawable.calendar_add_on),
                     contentDescription = "Calendar",
                 )
             }
