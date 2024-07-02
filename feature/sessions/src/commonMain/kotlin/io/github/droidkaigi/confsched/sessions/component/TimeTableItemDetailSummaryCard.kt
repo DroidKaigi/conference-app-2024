@@ -35,32 +35,28 @@ fun TimeTableItemDetailSummaryCard(
 ) {
     Column(
         modifier = modifier
-            .padding(bottom = 16.dp)
-            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp)),
+            .padding(8.dp)
+            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
+            .padding(12.dp),
     ) {
-        Spacer(Modifier.height(8.dp))
         SummaryCardRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             imageVector = Icons.Outlined.Schedule,
             contentDescription = "Schedule",
             title = "日時",
             description = timetableItem.formattedDateTimeString,
         )
+        Spacer(Modifier.height(8.dp))
         SummaryCardRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             imageVector = Icons.Outlined.LocationOn,
             contentDescription = "Location",
             title = "場所",
             description = timetableItem.room.nameAndFloor,
         )
+        Spacer(Modifier.height(8.dp))
         SummaryCardRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             imageVector = Icons.Outlined.Language,
             contentDescription = "Language",
             title = "対応言語",
@@ -68,16 +64,14 @@ fun TimeTableItemDetailSummaryCard(
                 getDefaultLocale() == Locale.JAPAN,
             ),
         )
+        Spacer(Modifier.height(8.dp))
         SummaryCardRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+            modifier = Modifier.fillMaxWidth(),
             imageVector = Icons.Outlined.Category,
             contentDescription = "Category",
             title = "カテゴリ",
             description = timetableItem.category.title.currentLangTitle,
         )
-        Spacer(Modifier.height(8.dp))
     }
 }
 
