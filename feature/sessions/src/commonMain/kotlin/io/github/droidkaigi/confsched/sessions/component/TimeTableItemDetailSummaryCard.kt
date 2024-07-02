@@ -20,7 +20,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.model.Locale
@@ -33,10 +37,20 @@ fun TimeTableItemDetailSummaryCard(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
+    // TODO: switch color according to room type
     Column(
         modifier = modifier
             .padding(8.dp)
-            .border(width = 1.dp, color = Color.White, shape = RoundedCornerShape(4.dp))
+            .drawBehind {
+                drawRoundRect(
+                    color = Color(0xFF45E761),
+                    style = Stroke(
+                        width = 2f,
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f), 0f)
+                    ),
+                    cornerRadius = CornerRadius(4.dp.toPx()),
+                )
+            }
             .padding(12.dp),
     ) {
         SummaryCardRow(
@@ -87,11 +101,12 @@ private fun SummaryCardRow(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(imageVector = imageVector, contentDescription = contentDescription)
+        Icon(imageVector = imageVector, contentDescription = contentDescription, tint = Color(0xFF45E761))
         Spacer(Modifier.width(8.dp))
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
+            color = Color(0xFF45E761),
         )
         Spacer(Modifier.width(8.dp))
         Text(
