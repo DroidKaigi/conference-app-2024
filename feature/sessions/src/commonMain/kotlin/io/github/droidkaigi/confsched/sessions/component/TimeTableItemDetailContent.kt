@@ -93,16 +93,17 @@ private fun TargetAudienceSection(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = "対象者",
             style = MaterialTheme.typography.titleLarge,
         )
+        Spacer(Modifier.height(8.dp))
         Text(
-            modifier = Modifier.padding(vertical = 8.dp),
             text = timetableItem.targetAudience,
             style = MaterialTheme.typography.bodyLarge,
         )
+        Spacer(Modifier.height(8.dp))
     }
 }
 
