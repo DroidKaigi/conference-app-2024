@@ -57,10 +57,9 @@ private fun DescriptionSection(
     onLinkClick: (url: String) -> Unit,
 ) {
     var isExpand by remember { mutableStateOf(false) }
+
     Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
+        modifier = Modifier.padding(8.dp)
     ) {
         ClickableLinkText(
             content = when (timetableItem) {
@@ -73,11 +72,10 @@ private fun DescriptionSection(
             maxLines = if (isExpand) Int.MAX_VALUE else 7,
             overflow = if (isExpand) TextOverflow.Clip else TextOverflow.Ellipsis,
         )
+        Spacer(Modifier.height(16.dp))
         if (isExpand.not()) {
             OutlinedButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
                 onClick = { isExpand = true },
             ) {
                 Text(
@@ -86,6 +84,7 @@ private fun DescriptionSection(
                 )
             }
         }
+        Spacer(Modifier.height(16.dp))
     }
 }
 
