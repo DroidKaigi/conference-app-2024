@@ -189,6 +189,7 @@ private fun TimetableItemDetailScreen(
                 item {
                     TimeTableItemDetailContent(
                         timetableItem = uiState.timetableItem,
+                        currentLang = uiState.currentLang,
                         onLinkClick = onLinkClick,
                     )
                 }

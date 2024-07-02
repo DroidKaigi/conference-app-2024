@@ -25,6 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
+import io.github.droidkaigi.confsched.model.Lang
+import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableItem.Special
@@ -32,14 +34,23 @@ import io.github.droidkaigi.confsched.model.TimetableItem.Special
 @Composable
 fun TimeTableItemDetailContent(
     timetableItem: TimetableItem,
+    currentLang: Lang?,
     modifier: Modifier = Modifier,
     onLinkClick: (url: String) -> Unit,
 ) {
     Column(modifier = modifier) {
         when (timetableItem) {
             is Session -> {
+                val currentLang = currentLang ?: Lang.ENGLISH
+                fun MultiLangText.getByLang(lang: Lang): String {
+                    return if (lang == Lang.JAPANESE) {
+                        jaTitle
+                    } else {
+                        enTitle
+                    }
+                }
                 DescriptionSection(
-                    timetableItem = timetableItem,
+                    description = timetableItem.description.getByLang(currentLang),
                     onLinkClick = onLinkClick,
                 )
                 TargetAudienceSection(timetableItem = timetableItem)
@@ -62,7 +73,7 @@ fun TimeTableItemDetailContent(
 
 @Composable
 private fun DescriptionSection(
-    timetableItem: TimetableItem,
+    description: String,
     onLinkClick: (url: String) -> Unit,
 ) {
     var isExpand by remember { mutableStateOf(false) }
@@ -71,10 +82,7 @@ private fun DescriptionSection(
         modifier = Modifier.padding(8.dp)
     ) {
         ClickableLinkText(
-            content = when (timetableItem) {
-                is Session -> timetableItem.description
-                is Special -> timetableItem.description
-            }.currentLangTitle,
+            content = description,
             regex = "(https)(://[\\w/:%#$&?()~.=+\\-]+)".toRegex(),
             onLinkClick = onLinkClick,
             style = MaterialTheme.typography.bodyLarge,
