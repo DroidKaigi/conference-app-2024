@@ -9,6 +9,7 @@ import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -44,6 +45,7 @@ fun TimetableItemDetailBottomAppBar(
             FloatingActionButton(
                 modifier = Modifier.testTag(TimetableItemDetailBookmarkIconTestTag),
                 onClick = { onBookmarkClick(timetableItem) },
+                containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
                 Icon(
                     imageVector = if (isBookmarked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
