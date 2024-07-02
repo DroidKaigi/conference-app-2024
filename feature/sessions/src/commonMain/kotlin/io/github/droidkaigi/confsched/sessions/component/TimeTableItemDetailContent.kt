@@ -36,18 +36,27 @@ fun TimeTableItemDetailContent(
     onLinkClick: (url: String) -> Unit,
 ) {
     Column(modifier = modifier) {
-        DescriptionSection(
-            timetableItem = timetableItem,
-            onLinkClick = onLinkClick,
-        )
-        TargetAudienceSection(timetableItem = timetableItem)
-        if (timetableItem.asset.isAvailable) {
-            ArchiveSection(
-                timetableItem = timetableItem,
-                onViewSlideClick = onLinkClick,
-                onWatchVideoClick = onLinkClick,
-            )
+        when (timetableItem) {
+            is Session -> {
+                DescriptionSection(
+                    timetableItem = timetableItem,
+                    onLinkClick = onLinkClick,
+                )
+                TargetAudienceSection(timetableItem = timetableItem)
+                if (timetableItem.asset.isAvailable) {
+                    ArchiveSection(
+                        timetableItem = timetableItem,
+                        onViewSlideClick = onLinkClick,
+                        onWatchVideoClick = onLinkClick,
+                    )
+                }
+            }
+
+            is Special -> {
+                Text("Special")
+            }
         }
+
     }
 }
 
