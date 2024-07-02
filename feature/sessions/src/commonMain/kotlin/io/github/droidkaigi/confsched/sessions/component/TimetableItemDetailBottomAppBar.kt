@@ -9,12 +9,17 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import conference_app_2024.feature.sessions.generated.resources.Res
 import conference_app_2024.feature.sessions.generated.resources.calendar_add_on
+import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import org.jetbrains.compose.resources.painterResource
 
@@ -56,4 +61,38 @@ fun TimetableItemDetailBottomAppBar(
             }
         },
     )
+}
+
+@Composable
+@MultiThemePreviews
+@MultiLanguagePreviews
+fun TimetableItemDetailBottomAppBarPreview() {
+    KaigiTheme {
+        Surface {
+            TimetableItemDetailBottomAppBar(
+                timetableItem = TimetableItem.Session.fake(),
+                isBookmarked = false,
+                onBookmarkClick = {},
+                onCalendarRegistrationClick = {},
+                onShareClick = {},
+            )
+        }
+    }
+}
+
+@Composable
+@MultiThemePreviews
+@MultiLanguagePreviews
+fun TimetableItemDetailBottomAppBarBookmarkedPreview() {
+    KaigiTheme {
+        Surface {
+            TimetableItemDetailBottomAppBar(
+                timetableItem = TimetableItem.Session.fake(),
+                isBookmarked = true,
+                onBookmarkClick = {},
+                onCalendarRegistrationClick = {},
+                onShareClick = {},
+            )
+        }
+    }
 }

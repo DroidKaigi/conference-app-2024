@@ -14,6 +14,7 @@ import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,8 +26,12 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Locale
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.model.getDefaultLocale
 import io.github.droidkaigi.confsched.model.nameAndFloor
 
@@ -116,5 +121,18 @@ private fun SummaryCardRow(
             text = description,
             style = MaterialTheme.typography.bodyMedium,
         )
+    }
+}
+
+@Composable
+@MultiThemePreviews
+@MultiLanguagePreviews
+fun TimeTableItemDetailSummaryCardPreview() {
+    KaigiTheme {
+        Surface {
+            TimeTableItemDetailSummaryCard(
+                timetableItem = TimetableItem.Session.fake(),
+            )
+        }
     }
 }

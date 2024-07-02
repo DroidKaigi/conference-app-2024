@@ -15,6 +15,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -27,11 +28,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
+import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableItem.Special
+import io.github.droidkaigi.confsched.model.fake
 
 @Composable
 fun TimeTableItemDetailContent(
@@ -182,6 +187,51 @@ private fun ArchiveSection(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+@MultiThemePreviews
+@MultiLanguagePreviews
+fun TimeTableItemDetailContentPreview() {
+    KaigiTheme {
+        Surface {
+            TimeTableItemDetailContent(
+                timetableItem = Session.fake(),
+                currentLang = Lang.JAPANESE,
+                onLinkClick = {},
+            )
+        }
+    }
+}
+
+@Composable
+@MultiThemePreviews
+@MultiLanguagePreviews
+fun TimeTableItemDetailContentWithEnglishPreview() {
+    KaigiTheme {
+        Surface {
+            TimeTableItemDetailContent(
+                timetableItem = Session.fake(),
+                currentLang = Lang.ENGLISH,
+                onLinkClick = {},
+            )
+        }
+    }
+}
+
+@Composable
+@MultiThemePreviews
+@MultiLanguagePreviews
+fun TimeTableItemDetailContentWithMixedPreview() {
+    KaigiTheme {
+        Surface {
+            TimeTableItemDetailContent(
+                timetableItem = Session.fake(),
+                currentLang = Lang.MIXED,
+                onLinkClick = {},
+            )
         }
     }
 }
