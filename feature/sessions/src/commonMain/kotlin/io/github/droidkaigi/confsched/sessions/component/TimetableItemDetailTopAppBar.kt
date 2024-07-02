@@ -11,6 +11,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,6 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import io.github.droidkaigi.confsched.model.Lang
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -31,6 +34,11 @@ fun TimetableItemDetailTopAppBar(
 ) {
     TopAppBar(
         modifier = modifier,
+        // TODO: switch color according to room type
+        colors =  TopAppBarDefaults.topAppBarColors().copy(
+            containerColor = Color(0xFF132417),
+            scrolledContainerColor = Color(0xFF132417),
+        ),
         title = {},
         navigationIcon = {
             IconButton(onClick = { onNavigationIconClick() }) {

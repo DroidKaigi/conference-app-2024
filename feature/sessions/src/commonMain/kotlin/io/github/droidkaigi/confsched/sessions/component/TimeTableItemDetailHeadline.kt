@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.sessions.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,17 +28,21 @@ fun TimeTableItemDetailHeadline(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier) {
+    // TODO: switch color according to room type
+    Column(modifier = modifier
+        .background(Color(0xFF132417))
+        .padding(8.dp),
+    ) {
         Row {
             TagView(
                 tagText = timetableItem.room.name.currentLangTitle,
-                tagColor = Color.White,
+                tagColor = Color(0xFF45E761),
             )
             timetableItem.language.labels.forEach { label ->
                 Spacer(modifier = Modifier.padding(4.dp))
                 TagView(
                     tagText = label,
-                    tagColor = Color.White,
+                    tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
