@@ -11,6 +11,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -22,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
@@ -76,6 +79,7 @@ private fun DescriptionSection(
     description: String,
     onLinkClick: (url: String) -> Unit,
 ) {
+    // TODO: switch color according to room type
     var isExpand by remember { mutableStateOf(false) }
 
     Column(
@@ -98,6 +102,7 @@ private fun DescriptionSection(
                 Text(
                     text = "続きを読む",
                     style = MaterialTheme.typography.labelLarge,
+                    color = Color(0xFF45E761),
                 )
             }
         }
@@ -110,10 +115,12 @@ private fun TargetAudienceSection(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
+    // TODO: switch color according to room type
     Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = "対象者",
             style = MaterialTheme.typography.titleLarge,
+            color = Color(0xFF45E761),
         )
         Spacer(Modifier.height(8.dp))
         Text(
@@ -131,10 +138,12 @@ private fun ArchiveSection(
     modifier: Modifier = Modifier,
     onWatchVideoClick: (url: String) -> Unit,
 ) {
+    // TODO: switch color according to room type
     Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = "アーカイブ",
             style = MaterialTheme.typography.titleLarge,
+            color = Color(0xFF45E761),
         )
         Spacer(Modifier.height(8.dp))
         Row(
@@ -144,6 +153,9 @@ private fun ArchiveSection(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = { onViewSlideClick(slideUrl) },
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = Color(0xFF45E761),
+                    ),
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Description,
@@ -160,6 +172,9 @@ private fun ArchiveSection(
                 Button(
                     modifier = Modifier.weight(1f),
                     onClick = { onWatchVideoClick(videoUrl) },
+                    colors = ButtonDefaults.buttonColors().copy(
+                        containerColor = Color(0xFF45E761),
+                    ),
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.PlayCircle,
