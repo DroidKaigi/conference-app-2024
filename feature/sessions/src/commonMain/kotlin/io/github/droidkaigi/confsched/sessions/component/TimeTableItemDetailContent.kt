@@ -114,8 +114,7 @@ private fun ArchiveSection(
     modifier: Modifier = Modifier,
     onWatchVideoClick: (url: String) -> Unit,
 ) {
-    Column(modifier = modifier) {
-        Spacer(Modifier.height(16.dp))
+    Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = "アーカイブ",
             style = MaterialTheme.typography.titleLarge,
