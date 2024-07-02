@@ -11,7 +11,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.PlayCircle
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -70,7 +69,6 @@ fun TimeTableItemDetailContent(
                 Text("Special")
             }
         }
-
     }
 }
 
@@ -82,9 +80,7 @@ private fun DescriptionSection(
     // TODO: switch color according to room type
     var isExpand by remember { mutableStateOf(false) }
 
-    Column(
-        modifier = Modifier.padding(8.dp)
-    ) {
+    Column(modifier = Modifier.padding(8.dp)) {
         ClickableLinkText(
             content = description,
             regex = "(https)(://[\\w/:%#$&?()~.=+\\-]+)".toRegex(),

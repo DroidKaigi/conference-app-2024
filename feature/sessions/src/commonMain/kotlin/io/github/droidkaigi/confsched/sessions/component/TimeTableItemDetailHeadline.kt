@@ -29,9 +29,10 @@ fun TimeTableItemDetailHeadline(
     modifier: Modifier = Modifier,
 ) {
     // TODO: switch color according to room type
-    Column(modifier = modifier
-        .background(Color(0xFF132417))
-        .padding(8.dp),
+    Column(
+        modifier = modifier
+            .background(Color(0xFF132417))
+            .padding(8.dp),
     ) {
         Row {
             TagView(

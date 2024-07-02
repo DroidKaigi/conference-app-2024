@@ -11,7 +11,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -32,10 +31,10 @@ fun TimetableItemDetailTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
 ) {
+    // TODO: switch color according to room type
     TopAppBar(
         modifier = modifier,
-        // TODO: switch color according to room type
-        colors =  TopAppBarDefaults.topAppBarColors().copy(
+        colors = TopAppBarDefaults.topAppBarColors().copy(
             containerColor = Color(0xFF132417),
             scrolledContainerColor = Color(0xFF132417),
         ),

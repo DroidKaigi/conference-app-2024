@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.sessions.component
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Language
@@ -51,7 +49,7 @@ fun TimeTableItemDetailSummaryCard(
                     color = Color(0xFF45E761),
                     style = Stroke(
                         width = 2f,
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f), 0f)
+                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f), 0f),
                     ),
                     cornerRadius = CornerRadius(4.dp.toPx()),
                 )
