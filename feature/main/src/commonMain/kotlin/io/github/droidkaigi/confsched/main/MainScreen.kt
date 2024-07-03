@@ -137,18 +137,19 @@ enum class MainScreenTab(
         contentDescription = MainStrings.EventMap.asString(),
     ),
 
-    @OptIn(ExperimentalResourceApi::class)
-    ProfileCard(
-        icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_outline),
-        selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_fill),
-        label = MainStrings.Achievements.asString(),
-        contentDescription = MainStrings.Achievements.asString(),
-    ),
     About(
         icon = IconRepresentation.Vector(Icons.Outlined.Info),
         selectedIcon = IconRepresentation.Vector(Icons.Filled.Info),
         label = MainStrings.About.asString(),
         contentDescription = MainStrings.About.asString(),
+    ),
+
+    @OptIn(ExperimentalResourceApi::class)
+    ProfileCard(
+        icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_outline),
+        selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_fill),
+        label = MainStrings.ProfileCard.asString(),
+        contentDescription = MainStrings.ProfileCard.asString(),
     ),
 }
 
