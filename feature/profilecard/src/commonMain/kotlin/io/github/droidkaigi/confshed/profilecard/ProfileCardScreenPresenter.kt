@@ -31,7 +31,7 @@ internal fun profileCardScreenPresenter(
     var isLoading by remember { mutableStateOf(false) }
     var contentUiState by remember {
         mutableStateOf(
-            profileCard?.toUiState() ?: ProfileCardUiState.Edit.initial()
+            profileCard?.toUiState() ?: ProfileCardUiState.Edit.initial(),
         )
     }
 
@@ -65,6 +65,6 @@ internal fun profileCardScreenPresenter(
     ProfileCardScreenUiState(
         isLoading = isLoading,
         contentUiState = contentUiState,
-        userMessageStateHolder = userMessageStateHolder
+        userMessageStateHolder = userMessageStateHolder,
     )
 }

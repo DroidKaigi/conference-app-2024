@@ -1,7 +1,6 @@
 plugins {
- id("droidkaigi.convention.kmpfeature")
+    id("droidkaigi.convention.kmpfeature")
 }
-
 
 android.namespace = "io.github.droidkaigi.confsched.feature.profilecard"
 kotlin {

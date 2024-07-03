@@ -132,7 +132,7 @@ internal fun ProfileCardScreen(
             top = contentPadding.calculateTopPadding(),
             right = contentPadding.calculateRightPadding(layoutDirection),
             bottom = contentPadding.calculateBottomPadding(),
-        )
+        ),
     ) { padding ->
         when (val contentUiState = uiState.contentUiState) {
             is ProfileCardUiState.Edit -> {
@@ -141,8 +141,7 @@ internal fun ProfileCardScreen(
                     onClickCreate = {
                         eventEmitter.tryEmit(EditScreenEvent.CreateProfileCard(it))
                     },
-                    modifier = modifier,
-                    contentPadding = padding
+                    contentPadding = padding,
                 )
             }
 
@@ -153,14 +152,13 @@ internal fun ProfileCardScreen(
                         eventEmitter.tryEmit(CardScreenEvent.Reset)
                     },
                     contentPadding = padding,
-                    modifier = modifier
                 )
             }
         }
         if (uiState.isLoading) {
             Box(
                 contentAlignment = Alignment.Center,
-                modifier = Modifier.padding(padding).fillMaxSize()
+                modifier = Modifier.padding(padding).fillMaxSize(),
             ) {
                 CircularProgressIndicator()
             }
@@ -206,8 +204,8 @@ internal fun EditScreen(
                     occupation = occupation,
                     link = link,
                     imageUri = imageUri,
-                    theme = uiState.theme
-                )
+                    theme = uiState.theme,
+                ),
             )
         }) {
             Text("Create")
