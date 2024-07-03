@@ -33,15 +33,16 @@ fun TimeTableItemDetailHeadline(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
-    // TODO: switch color according to room type
     Column(
         modifier = modifier
+            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
             .background(Color(0xFF132417))
             .padding(8.dp),
     ) {
         Row {
             TagView(
                 tagText = timetableItem.room.name.currentLangTitle,
+                // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
                 tagColor = Color(0xFF45E761),
             )
             timetableItem.language.labels.forEach { label ->
