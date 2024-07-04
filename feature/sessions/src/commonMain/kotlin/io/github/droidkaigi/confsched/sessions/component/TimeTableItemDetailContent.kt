@@ -82,7 +82,6 @@ private fun DescriptionSection(
     description: String,
     onLinkClick: (url: String) -> Unit,
 ) {
-    // TODO: switch color according to room type
     var isExpand by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(8.dp)) {
@@ -103,6 +102,7 @@ private fun DescriptionSection(
                 Text(
                     text = "続きを読む",
                     style = MaterialTheme.typography.labelLarge,
+                    // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
                     color = Color(0xFF45E761),
                 )
             }
@@ -116,11 +116,11 @@ private fun TargetAudienceSection(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
-    // TODO: switch color according to room type
     Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = "対象者",
             style = MaterialTheme.typography.titleLarge,
+            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
             color = Color(0xFF45E761),
         )
         Spacer(Modifier.height(8.dp))
@@ -139,11 +139,11 @@ private fun ArchiveSection(
     modifier: Modifier = Modifier,
     onWatchVideoClick: (url: String) -> Unit,
 ) {
-    // TODO: switch color according to room type
     Column(modifier = modifier.padding(8.dp)) {
         Text(
             text = "アーカイブ",
             style = MaterialTheme.typography.titleLarge,
+            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
             color = Color(0xFF45E761),
         )
         Spacer(Modifier.height(8.dp))
@@ -155,6 +155,7 @@ private fun ArchiveSection(
                     modifier = Modifier.weight(1f),
                     onClick = { onViewSlideClick(slideUrl) },
                     colors = ButtonDefaults.buttonColors().copy(
+                        // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
                         containerColor = Color(0xFF45E761),
                     ),
                 ) {
@@ -174,6 +175,7 @@ private fun ArchiveSection(
                     modifier = Modifier.weight(1f),
                     onClick = { onWatchVideoClick(videoUrl) },
                     colors = ButtonDefaults.buttonColors().copy(
+                        // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
                         containerColor = Color(0xFF45E761),
                     ),
                 ) {

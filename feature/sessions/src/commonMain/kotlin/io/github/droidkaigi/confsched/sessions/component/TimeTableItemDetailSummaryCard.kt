@@ -40,7 +40,6 @@ fun TimeTableItemDetailSummaryCard(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
-    // TODO: switch color according to room type
     Column(
         modifier = modifier
             .padding(
@@ -51,6 +50,7 @@ fun TimeTableItemDetailSummaryCard(
             )
             .drawBehind {
                 drawRoundRect(
+                    // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
                     color = Color(0xFF45E761),
                     style = Stroke(
                         width = 2f,
@@ -109,11 +109,13 @@ private fun SummaryCardRow(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
         Icon(imageVector = imageVector, contentDescription = contentDescription, tint = Color(0xFF45E761))
         Spacer(Modifier.width(8.dp))
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
+            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
             color = Color(0xFF45E761),
         )
         Spacer(Modifier.width(8.dp))

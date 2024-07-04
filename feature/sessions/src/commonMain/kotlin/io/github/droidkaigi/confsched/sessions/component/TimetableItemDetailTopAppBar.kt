@@ -35,10 +35,10 @@ fun TimetableItemDetailTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
 ) {
-    // TODO: switch color according to room type
     TopAppBar(
         modifier = modifier,
         colors = TopAppBarDefaults.topAppBarColors().copy(
+            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
             containerColor = Color(0xFF132417),
             scrolledContainerColor = Color(0xFF132417),
         ),
