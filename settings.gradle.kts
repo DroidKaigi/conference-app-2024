@@ -26,6 +26,7 @@ include(
     ":feature:sessions",
     ":feature:contributors",
     ":feature:eventmap",
+    ":feature:profilecard",
     ":core:designsystem",
     ":core:data",
     ":core:model",

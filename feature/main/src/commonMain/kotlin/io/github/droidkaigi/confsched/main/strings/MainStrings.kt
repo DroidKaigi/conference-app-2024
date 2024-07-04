@@ -7,7 +7,7 @@ import io.github.droidkaigi.confsched.designsystem.strings.StringsBindings
 sealed class MainStrings : Strings<MainStrings>(Bindings) {
     data object Timetable : MainStrings()
     data object EventMap : MainStrings()
-    data object Achievements : MainStrings()
+    data object ProfileCard : MainStrings()
     data object About : MainStrings()
     data object Contributors : MainStrings()
     class Time(val hours: Int, val minutes: Int) : MainStrings()
@@ -17,7 +17,7 @@ sealed class MainStrings : Strings<MainStrings>(Bindings) {
             when (item) {
                 Timetable -> "Timetable"
                 EventMap -> "Event Map"
-                Achievements -> "Achievements"
+                ProfileCard -> "Profile Card"
                 About -> "About"
                 Contributors -> "Contributors"
                 is Time -> "${item.hours}時${item.minutes}分"
@@ -27,7 +27,7 @@ sealed class MainStrings : Strings<MainStrings>(Bindings) {
             when (item) {
                 Timetable -> "Timetable"
                 EventMap -> "Event Map"
-                Achievements -> "Achievements"
+                ProfileCard -> "Profile Card"
                 About -> "About"
                 Contributors -> "Contributors"
                 is Time -> "${item.hours}:${item.minutes}"

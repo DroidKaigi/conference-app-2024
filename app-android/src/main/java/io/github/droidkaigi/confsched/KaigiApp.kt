@@ -47,6 +47,9 @@ import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confshed.profilecard.navigateProfileCardScreen
+import io.github.droidkaigi.confshed.profilecard.profileCardScreen
+import io.github.droidkaigi.confshed.profilecard.profileCardScreenRoute
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -115,6 +118,7 @@ private fun NavGraphBuilder.mainScreen(
                 onNavigationIconClick = navController::popBackStack,
                 onEventMapItemClick = externalNavController::navigate,
             )
+            profileCardScreen(contentPadding)
         },
     )
 }
@@ -125,6 +129,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     override fun routeToTab(route: String): MainScreenTab? {
         return when (route) {
             timetableScreenRoute -> Timetable
+            profileCardScreenRoute -> ProfileCard
             else -> null
         }
     }
@@ -137,7 +142,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
             About -> TODO()
-            ProfileCard -> TODO()
+            ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }
     }
 }
