@@ -66,7 +66,7 @@ jobs:
           # Check for invalid file names and add only valid ones
           exist_valid_files="false"
           for file in "${files_to_add[@]}"; do
-            if [[ $file =~ ^[a-zA-Z0-9_./\[\]\-]+$ ]]; then
+            if [[ $file =~ ^[a-zA-Z0-9_./\[\]\- ]+$ ]]; then
               exist_valid_files="true"
               break
             fi
@@ -83,7 +83,7 @@ jobs:
           
           # Check for invalid file names and add only valid ones
           for file in $files_to_add; do
-            if [[ "$file" =~ ^[a-zA-Z0-9_./\[\]\-]+$ ]]; then
+            if [[ "$file" =~ ^[a-zA-Z0-9_./\[\]\- ]+$ ]]; then
               git add "$file"
             fi
           done
