@@ -35,7 +35,7 @@ class TimetableScreenTest(private val testCase: DescribedTestCase<TimetableScree
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
-        fun tests(): List<DescribedTestCase<TimetableScreenRobot>> {
+        fun testCases(): List<DescribedTestCase<TimetableScreenRobot>> {
             return describeTests<TimetableScreenRobot> {
                 describe("when server is operational") {
                     run {
