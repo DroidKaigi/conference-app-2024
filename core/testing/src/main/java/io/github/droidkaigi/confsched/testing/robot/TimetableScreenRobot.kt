@@ -12,6 +12,7 @@ import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.TimetableListItemBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableListItemTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableScreen
@@ -31,12 +32,16 @@ class TimetableScreenRobot @Inject constructor(
     private val timetableServerRobot: DefaultTimetableServerRobot,
 ) : ScreenRobot by screenRobot,
     TimetableServerRobot by timetableServerRobot {
+    val clickedItems = mutableSetOf<TimetableItem>()
+
     fun setupTimetableScreenContent() {
         robotTestRule.setContent {
             CompositionLocalProvider(LocalClock provides FakeClock) {
                 KaigiTheme {
                     TimetableScreen(
-                        onTimetableItemClick = { },
+                        onTimetableItemClick = {
+                            clickedItems.add(it)
+                        },
                     )
                 }
             }
@@ -64,6 +69,7 @@ class TimetableScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(TimetableUiTypeChangeButtonTestTag))
             .performClick()
+        waitUntilIdle()
     }
 
     fun clickTimetableTab(
@@ -84,6 +90,10 @@ class TimetableScreenRobot @Inject constructor(
                     endY = visibleSize.height / 2F,
                 )
             }
+    }
+
+    fun checkClickedItemsExists() {
+        assert(clickedItems.isNotEmpty())
     }
 
     fun checkTimetableItemsDisplayed() {

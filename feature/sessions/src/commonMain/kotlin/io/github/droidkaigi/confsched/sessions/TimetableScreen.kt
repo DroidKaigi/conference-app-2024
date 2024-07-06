@@ -180,10 +180,6 @@ private fun TimetableScreen(
             },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-//            TimetableTopArea(
-//                timetableUiType = uiState.timetableUiType,
-//                onTimetableUiChangeClick = onTimetableUiChangeClick,
-//            )
             Row {
                 Text(text = "UiType: ${uiState.timetableUiType}")
                 Button(
