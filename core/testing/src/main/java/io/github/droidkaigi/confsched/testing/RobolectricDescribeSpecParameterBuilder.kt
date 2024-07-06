@@ -26,8 +26,8 @@ fun <T> DescribedTestCase<T>.execute(robot: T) {
 
 sealed class TestNode<T> {
     data class Describe<T>(val description: String, val children: List<TestNode<T>>) : TestNode<T>()
-    data class Run<T>(val action: (T) -> Unit) : TestNode<T>()
-    data class Check<T>(val description: String, val action: (T) -> Unit) : TestNode<T>()
+    data class Run<T>(val action: T.() -> Unit) : TestNode<T>()
+    data class Check<T>(val description: String, val action: T.() -> Unit) : TestNode<T>()
 }
 
 data class DescribedTestCase<T>(
@@ -59,12 +59,12 @@ class TestCaseTreeBuilder<T> {
         children.add(TestNode.Describe(description, builder.children))
     }
 
-    fun run(action: (T) -> Unit) {
-        children.add(TestNode.Run { robot -> action(robot as T) })
+    fun run(action: T.() -> Unit) {
+        children.add(TestNode.Run { action() })
     }
 
-    fun check(description: String, action: (T) -> Unit) {
-        children.add(TestNode.Check(description) { robot -> action(robot as T) })
+    fun check(description: String, action: T.() -> Unit) {
+        children.add(TestNode.Check(description) { action() })
     }
 
     fun build(): TestNode.Describe<T> = TestNode.Describe("", children)
@@ -95,7 +95,7 @@ private fun <T> collectCheckNodes(root: TestNode.Describe<T>): List<CheckNode<T>
 
             is TestNode.Check -> {
                 val fullDescription = if (parentDescription.isNotBlank()) {
-                    "$parentDescription-${node.description}"
+                    "$parentDescription - ${node.description}"
                 } else {
                     node.description
                 }
