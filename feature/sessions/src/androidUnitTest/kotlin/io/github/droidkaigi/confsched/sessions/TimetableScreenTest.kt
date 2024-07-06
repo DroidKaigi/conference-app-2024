@@ -37,54 +37,52 @@ class TimetableScreenTest(private val testCase: DescribedTestCase<TimetableScree
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun tests(): List<DescribedTestCase<TimetableScreenRobot>> {
             return describeTests<TimetableScreenRobot> {
-                describe("TimetableScreenTest") {
-                    describe("when server is operational") {
-                        run { robot ->
-                            robot.setupTimetableServer(ServerStatus.Operational)
-                            robot.setupTimetableScreenContent()
-                        }
-                        check("should show timetable items") { robot ->
-                            robot.captureScreenWithChecks(checks = {
-                                robot.checkTimetableItemsDisplayed()
-                            })
-                        }
-                        describe("click first session bookmark") {
-                            run { robot ->
-                                robot.clickFirstSessionBookmark()
-                            }
-                            check("should show bookmarked session") { robot ->
-                                // FIXME: Add check for bookmarked session
-                                robot.captureScreenWithChecks()
-                            }
-                        }
-                        describe("click first session") {
-                            run { robot ->
-                                robot.clickFirstSession()
-                            }
-                            check("should show session detail") { robot ->
-                                // FIXME: Add check for navigation to session detail
-                                robot.captureScreenWithChecks()
-                            }
-                        }
-                        describe("click timetable ui type change button") {
-                            run { robot ->
-                                robot.clickTimetableUiTypeChangeButton()
-                            }
-                            check("should change timetable ui type") { robot ->
-                                // FIXME: Add check for timetable ui type change
-                                robot.captureScreenWithChecks()
-                            }
-                        }
+                describe("when server is operational") {
+                    run { robot ->
+                        robot.setupTimetableServer(ServerStatus.Operational)
+                        robot.setupTimetableScreenContent()
                     }
-                    describe("when server is down") {
+                    check("should show timetable items") { robot ->
+                        robot.captureScreenWithChecks(checks = {
+                            robot.checkTimetableItemsDisplayed()
+                        })
+                    }
+                    describe("click first session bookmark") {
                         run { robot ->
-                            robot.setupTimetableServer(ServerStatus.Error)
-                            robot.setupTimetableScreenContent()
+                            robot.clickFirstSessionBookmark()
                         }
-                        check("should show error message") { robot ->
-                            // FIXME: Add check for error message
+                        check("should show bookmarked session") { robot ->
+                            // FIXME: Add check for bookmarked session
                             robot.captureScreenWithChecks()
                         }
+                    }
+                    describe("click first session") {
+                        run { robot ->
+                            robot.clickFirstSession()
+                        }
+                        check("should show session detail") { robot ->
+                            // FIXME: Add check for navigation to session detail
+                            robot.captureScreenWithChecks()
+                        }
+                    }
+                    describe("click timetable ui type change button") {
+                        run { robot ->
+                            robot.clickTimetableUiTypeChangeButton()
+                        }
+                        check("should change timetable ui type") { robot ->
+                            // FIXME: Add check for timetable ui type change
+                            robot.captureScreenWithChecks()
+                        }
+                    }
+                }
+                describe("when server is down") {
+                    run { robot ->
+                        robot.setupTimetableServer(ServerStatus.Error)
+                        robot.setupTimetableScreenContent()
+                    }
+                    check("should show error message") { robot ->
+                        // FIXME: Add check for error message
+                        robot.captureScreenWithChecks()
                     }
                 }
             }
