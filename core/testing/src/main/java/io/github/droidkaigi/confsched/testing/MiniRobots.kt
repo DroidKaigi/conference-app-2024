@@ -9,6 +9,7 @@ import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import kotlinx.coroutines.test.TestDispatcher
+import org.robolectric.RuntimeEnvironment
 import org.robolectric.shadows.ShadowLooper
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
@@ -92,6 +93,16 @@ class DefaultWaitRobot @Inject constructor(
             testDispatcher.scheduler.advanceUntilIdle()
             ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
         }
+    }
+}
+
+interface FontScaleRobot {
+    fun setFontScale(fontScale: Float)
+}
+
+class DefaultFontScaleRobot @Inject constructor() : FontScaleRobot {
+    override fun setFontScale(fontScale: Float) {
+        RuntimeEnvironment.setFontScale(fontScale)
     }
 }
 

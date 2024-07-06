@@ -7,7 +7,7 @@ inline fun <reified T> describeTests(block: TestCaseTreeBuilder<T>.() -> Unit): 
     return generateTestCases(root)
 }
 
-fun <T> DescribedTestCase<T>.execute(robot: T) {
+suspend fun <T> DescribedTestCase<T>.execute(robot: T) {
     for ((index, step) in steps.withIndex()) {
         println("Executing step: $index ($description)")
         when (step) {
@@ -26,8 +26,8 @@ fun <T> DescribedTestCase<T>.execute(robot: T) {
 
 sealed class TestNode<T> {
     data class Describe<T>(val description: String, val children: List<TestNode<T>>) : TestNode<T>()
-    data class Run<T>(val action: T.() -> Unit) : TestNode<T>()
-    data class Check<T>(val description: String, val action: T.() -> Unit) : TestNode<T>()
+    data class Run<T>(val action: suspend T.() -> Unit) : TestNode<T>()
+    data class Check<T>(val description: String, val action: suspend T.() -> Unit) : TestNode<T>()
 }
 
 data class DescribedTestCase<T>(
@@ -59,11 +59,11 @@ class TestCaseTreeBuilder<T> {
         children.add(TestNode.Describe(description, builder.children))
     }
 
-    fun run(action: T.() -> Unit) {
+    fun run(action: suspend T.() -> Unit) {
         children.add(TestNode.Run { action() })
     }
 
-    fun check(description: String, action: T.() -> Unit) {
+    fun check(description: String, action: suspend T.() -> Unit) {
         children.add(TestNode.Check(description) { action() })
     }
 
