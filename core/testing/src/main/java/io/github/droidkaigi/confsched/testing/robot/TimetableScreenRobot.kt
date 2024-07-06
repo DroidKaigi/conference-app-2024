@@ -69,6 +69,7 @@ class TimetableScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(TimetableUiTypeChangeButtonTestTag))
             .performClick()
+        waitUntilIdle()
     }
 
     fun clickTimetableTab(
