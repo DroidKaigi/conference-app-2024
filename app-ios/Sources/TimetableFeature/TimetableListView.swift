@@ -15,7 +15,8 @@ public struct TimetableView: View {
                     Button(action: {
                         store.send(.selectDay(tabItem))
                     }, label: {
-                        Text(tabItem.rawValue).foregroundColor(.green)
+                        //TODO: Only selected button should be green and underlined
+                        Text(tabItem.rawValue).foregroundStyle(Color(.greenSelectColorset))
                             .underline()
                     })
                 }
@@ -24,23 +25,51 @@ public struct TimetableView: View {
             TimetableListView(store: store)
             Spacer()
         }
+        .background(Color(.backgroundColorset))
+        .frame(maxWidth: .infinity)
     }
 }
 
-public struct TimetableListView: View {
+struct TimetableListView: View {
     private let store: StoreOf<TimetableReducer>
 
     public init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
 
-    public var body: some View {
-        ForEach(store.timetableItems, id: \.self) { item in
-            ListViewItem(listItem: item)
+    var body: some View {
+        ScrollView{
+            LazyVStack {
+                ForEach(store.timetableItems, id: \.self) { item in
+                    TimeGroupMiniList(contents: item)
+                }
+            }.scrollContentBackground(.hidden)
+            
+                .onAppear {
+                    store.send(.onAppear)
+                }.background(Color(.backgroundColorset))
         }
-        .onAppear {
-            store.send(.onAppear)
-        }
+    }
+}
+
+struct TimeGroupMiniList: View {
+    let contents: TimetableTimeGroupItems
+    
+    var body: some View {
+        HStack {
+            VStack {
+                Text(contents.startsTimeString)
+                Text("|")
+                Text(contents.endsTimeString)
+                Spacer()
+            }.padding(10).foregroundStyle(Color(.onSurfaceColorset))
+            VStack {
+                ForEach(contents.items, id: \.self) { item in
+                    ListViewItem(listItem: item)
+                }
+            }
+        }.background(Color.clear)
+            
     }
 }
 
@@ -55,16 +84,19 @@ struct ListViewItem: View {
                     TagView(tagText: lang, highlight: false)
                 }
                 Spacer()
-                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundColor(Color.gray)
+                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundStyle(Color(.onSurfaceColorset))
             }
             Text(listItem.title).font(.title)
-            PhotoView(photo:"person.circle.fill",
-                      name: listItem.speaker)
+            ForEach(listItem.speakers, id: \.self){ speaker in
+                PhotoView(photo:"person.circle.fill",
+                          name: speaker)
+            }
             
-        }.padding(10)
+            
+        }.foregroundStyle(Color(.onSurfaceColorset)).padding(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 5)
-                    .stroke(Color.gray, lineWidth: 1)
+                    .stroke(Color(.onSurfaceColorset), lineWidth: 1)
             )
     }
 }
@@ -72,14 +104,18 @@ struct ListViewItem: View {
 struct TagView: View {
     let tagText: String
     let highlight: Bool
-    public var body: some View {
+    var body: some View {
         HStack {
             if highlight {
-                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundColor(.green)
+                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(Color(.greenSelectColorset))
                     .padding(-3)
             }
-            Text(tagText).foregroundColor (highlight ? Color.green : Color.gray)
-        }.padding(EdgeInsets(top: 2,leading: 7,bottom: 2,trailing: 7)).border(highlight ? Color.green : Color.gray).padding(-2)
+            Text(tagText).foregroundStyle(highlight ? Color(.greenSelectColorset) : Color(.onSurfaceColorset))
+        }
+        .padding(
+            EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
+        .border(highlight ? Color(.greenSelectColorset) : Color(.onSurfaceColorset))
+        .padding(-2)
     }
 }
 
@@ -88,9 +124,9 @@ struct PhotoView: View {
     let photo: String
     let name: String
     
-    public var body: some View {
+    var body: some View {
         HStack {
-            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundColor(.green)
+            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(Color(.greenSelectColorset))
             Text(name)
         }
     }
@@ -98,7 +134,7 @@ struct PhotoView: View {
 
 #Preview {
     TimetableView(
-        store: .init(initialState: .init(timetableItems: SampleData.init().day1Data),
+        store: .init(initialState: .init(timetableItems: SampleData.init().day1Results),
                      reducer: { TimetableReducer() })
     )
 }
@@ -107,7 +143,7 @@ struct PhotoView: View {
     TimetableListView(
         store: .init(
             initialState: 
-                    .init(timetableItems: SampleData.init().day1Data),
+                    .init(timetableItems: SampleData.init().day1Results),
             reducer: { TimetableReducer() }
         )
     )

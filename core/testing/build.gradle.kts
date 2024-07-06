@@ -18,6 +18,7 @@ dependencies {
     implementation(libs.daggerHiltAndroidTesting)
     implementation(libs.roborazzi)
     implementation(libs.kermit)
+    implementation(libs.coilTest)
     api(projects.core.testingManifest)
     api(libs.composeNavigation)
     api(libs.roborazziRule)

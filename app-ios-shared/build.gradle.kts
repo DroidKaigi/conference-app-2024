@@ -55,6 +55,7 @@ kotlin {
                 api(projects.feature.sessions)
                 api(projects.feature.eventmap)
                 api(projects.feature.contributors)
+                api(projects.feature.profilecard)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(libs.skieAnnotation)
             }

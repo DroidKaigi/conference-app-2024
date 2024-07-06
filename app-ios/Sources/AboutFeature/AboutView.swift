@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
+import LicenseList
 
 @ViewAction(for: AboutReducer.self)
 public struct AboutView: View {
@@ -25,23 +26,28 @@ public struct AboutView: View {
             case .sponsors:
                 Text("Sponsors")
             case .acknowledgements:
-                Text("Acknowledgements")
+                LicenseListView()
             }
         }
         .sheet(item: $store.scope(state: \.destination?.codeOfConduct, action: \.presentation.codeOfConduct), content: { _ in
-            Text("CodeOfConduct")
+            SafariView(url: .codeOfConduct)
+                .ignoresSafeArea()
         })
         .sheet(item: $store.scope(state: \.destination?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
-            Text("PrivacyPolicy")
+            SafariView(url: .privacyPolicy)
+                .ignoresSafeArea()
         })
         .sheet(item: $store.scope(state: \.destination?.youtube, action: \.presentation.youtube), content: { _ in
-            Text("Youtube")
+            SafariView(url: .youtube)
+                .ignoresSafeArea()
         })
         .sheet(item: $store.scope(state: \.destination?.xcom, action: \.presentation.xcom), content: { _ in
-            Text("X.com")
+            SafariView(url: .xcom)
+                .ignoresSafeArea()
         })
         .sheet(item: $store.scope(state: \.destination?.medium, action: \.presentation.medium), content: { _ in
-            Text("Medium")
+            SafariView(url: .medium)
+                .ignoresSafeArea()
         })
     }
     

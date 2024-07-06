@@ -29,16 +29,36 @@ let package = Package(
         .library(
             name: "AboutFeature",
             targets: ["AboutFeature"]
-        )
+        ),
+        .library(
+            name: "FavoriteFeature",
+            targets: ["FavoriteFeature"]
+        ),
+        .library(
+            name: "StaffFeature",
+            targets: ["StaffFeature"]
+        ),
+        .library(
+            name: "SponsorFeature",
+            targets: ["SponsorFeature"]
+        ),
+        .library(
+            name: "ContributorFeature",
+            targets: ["ContributorFeature"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", exact: "10.26.0"),
+        .package(url: "https://github.com/cybozu/LicenseList.git", exact: "0.7.0"),
+        .package(url: "https://github.com/SwiftGen/SwiftGenPlugin", from: "6.6.2"),
     ],
     targets: [
         .target(
             name: "App",
             dependencies: [
+                .aboutFeature,
+                .favoriteFeature,
                 .timetableFeature,
                 .timetableDetailFeature,
                 .tca,
@@ -89,6 +109,7 @@ let package = Package(
             name: "TimetableDetailFeature",
             dependencies: [
                 .tca,
+                .theme,
             ]
         ),
         .testTarget(
@@ -98,13 +119,72 @@ let package = Package(
         .target(
             name: "AboutFeature",
             dependencies: [
-                .tca
+                .tca,
+                .product(name: "LicenseList", package: "LicenseList")
             ]
         ),
         .testTarget(
             name: "AboutFeatureTests",
             dependencies: [
                 .aboutFeature,
+                .tca
+            ]
+        ),
+        .target(
+            name: "FavoriteFeature",
+            dependencies: [
+                .tca,
+            ]
+        ),
+        .testTarget(
+            name: "FavoriteFeatureTests",
+            dependencies: [
+                .favoriteFeature,
+                .tca
+            ]
+        ),
+        .target(
+            name: "Theme",
+            resources: [
+                .process("Resources"),
+                .process("swiftgen.yml"),
+            ],
+            plugins: [.plugin(name: "SwiftGenPlugin", package: "SwiftGenPlugin")]
+        ),
+        .target(
+            name: "StaffFeature",
+            dependencies: [ 
+                .tca,
+                .kmpClient,
+                .theme
+            ]
+        ),
+        .testTarget(
+            name: "StaffFeatureTests",
+            dependencies: [
+                .staffFeature,
+                .tca
+            ]
+        ),
+        .target(
+            name: "SponsorFeature",
+            dependencies: [ .tca ]
+        ),
+        .testTarget(
+            name: "SponsorFeatureTests",
+            dependencies: [
+                .sponsorFeature,
+                .tca
+            ]
+        ),
+        .target(
+            name: "ContributorFeature",
+            dependencies: [ .tca ]
+        ),
+        .testTarget(
+            name: "ContributorFeatureTests",
+            dependencies: [
+                .contributorFeature,
                 .tca
             ]
         ),
@@ -131,7 +211,13 @@ extension Target.Dependency {
     static let timetableDetailFeature: Target.Dependency = "TimetableDetailFeature"
     static let timetableFeature: Target.Dependency = "TimetableFeature"
     static let aboutFeature: Target.Dependency = "AboutFeature"
+    static let favoriteFeature: Target.Dependency = "FavoriteFeature"
+    static let staffFeature: Target.Dependency = "StaffFeature"
+    static let sponsorFeature: Target.Dependency = "SponsorFeature"
+    static let contributorFeature: Target.Dependency = "ContributorFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
+    static let kmpClient: Target.Dependency = "KMPClient"
+    static let theme: Target.Dependency = "Theme"
 
     static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
     static let firebaseRemoteConfig: Target.Dependency = .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk")

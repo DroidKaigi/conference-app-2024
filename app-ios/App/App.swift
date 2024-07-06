@@ -3,6 +3,7 @@ import SwiftUI
 #if canImport(App)
 import App
 import ComposableArchitecture
+import Theme
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
     let store = Store(
@@ -19,6 +20,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
 @main
 struct DroidKaigi2024AppApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
+
+    init() { FontAssets.registerAllCustomFonts() }
 
     var body: some Scene {
         WindowGroup {
