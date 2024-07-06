@@ -13,12 +13,7 @@ public struct StaffView: View {
         ScrollView {
             LazyVStack {
                 ForEach(store.list, id: \.id) { staff in
-                    Button {
-                        
-                    } label: {
-                        StaffLabel(name: staff.name, icon: staff.icon)
-                    }
-                    .padding(.vertical, 12)
+                    StaffItem(data: staff)
                 }
             }
             .padding(16)
