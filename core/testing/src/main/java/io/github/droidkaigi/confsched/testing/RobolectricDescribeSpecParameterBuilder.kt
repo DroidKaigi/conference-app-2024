@@ -1,13 +1,16 @@
 package io.github.droidkaigi.confsched.testing
 
-inline fun <reified T> describeTests(block: TestCaseTreeBuilder<T>.() -> Unit): List<DescribedTestCase<T>> {
+inline fun <reified T> describeBehaviors(
+    name: String,
+    block: TestCaseTreeBuilder<T>.() -> Unit,
+): List<DescribedBehavior<T>> {
     val builder = TestCaseTreeBuilder<T>()
     builder.block()
-    val root = builder.build()
+    val root = builder.build(name = name)
     return generateTestCases(root)
 }
 
-suspend fun <T> DescribedTestCase<T>.execute(robot: T) {
+suspend fun <T> DescribedBehavior<T>.execute(robot: T) {
     for ((index, step) in steps.withIndex()) {
         println("Executing step: $index ($description)")
         when (step) {
@@ -30,7 +33,7 @@ sealed class TestNode<T> {
     data class It<T>(val description: String, val action: suspend T.() -> Unit) : TestNode<T>()
 }
 
-data class DescribedTestCase<T>(
+data class DescribedBehavior<T>(
     val description: String,
     val steps: List<TestNode<T>>,
     val targetCheckDescription: String,
@@ -67,10 +70,10 @@ class TestCaseTreeBuilder<T> {
         children.add(TestNode.It(description) { action() })
     }
 
-    fun build(): TestNode.Describe<T> = TestNode.Describe("", children)
+    fun build(name: String): TestNode.Describe<T> = TestNode.Describe(name, children)
 }
 
-fun <T> generateTestCases(root: TestNode.Describe<T>): List<DescribedTestCase<T>> {
+fun <T> generateTestCases(root: TestNode.Describe<T>): List<DescribedBehavior<T>> {
     val checkNodes = collectCheckNodes(root)
     return checkNodes.map { createTestCase(it) }
 }
@@ -115,7 +118,7 @@ private fun <T> collectCheckNodes(root: TestNode.Describe<T>): List<CheckNode<T>
  * We only run the steps that are necessary to reach the check node
  * so the time complexity might be O(logN)
  */
-private fun <T> createTestCase(checkNode: CheckNode<T>): DescribedTestCase<T> {
+private fun <T> createTestCase(checkNode: CheckNode<T>): DescribedBehavior<T> {
     val steps = mutableListOf<TestNode<T>>()
 
     fun processNode(node: TestNode<T>, ancestry: List<TestNode<T>>, depth: Int) {
@@ -146,5 +149,5 @@ private fun <T> createTestCase(checkNode: CheckNode<T>): DescribedTestCase<T> {
 
     processNode(checkNode.ancestry.first().node, emptyList(), 0)
 
-    return DescribedTestCase(checkNode.fullDescription, steps, checkNode.description)
+    return DescribedBehavior(checkNode.fullDescription, steps, checkNode.description)
 }
