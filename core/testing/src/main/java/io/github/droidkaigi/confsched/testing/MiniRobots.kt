@@ -83,7 +83,7 @@ class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: R
         replaceWith = ReplaceWith("captureScreenWithChecks(checks)"),
     )
     override fun captureScreenWithChecks() {
-        captureScreenWithChecks {  }
+        captureScreenWithChecks { }
     }
 }
 
