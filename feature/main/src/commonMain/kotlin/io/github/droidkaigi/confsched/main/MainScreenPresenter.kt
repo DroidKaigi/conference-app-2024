@@ -2,7 +2,7 @@ package io.github.droidkaigi.confsched.main
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import io.github.droidkaigi.confsched.compose.safeCollectAsState
+import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.model.localAchievementRepository
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
@@ -18,7 +18,7 @@ fun mainScreenPresenter(
 ): MainScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val isAchievementsEnabled: Boolean by achievementRepository
         .getAchievementEnabledStream()
-        .safeCollectAsState(
+        .safeCollectAsRetainedState(
             initial = false,
         )
     MainScreenUiState(

@@ -8,7 +8,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
-import io.github.droidkaigi.confsched.compose.safeCollectAsState
+import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.data.user.UserDataStore
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
@@ -82,10 +82,10 @@ public class DefaultSessionsRepository(
                 sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
                 emitAll(sessionCacheDataStore.getTimetableStream())
             }
-        }.safeCollectAsState(Timetable())
+        }.safeCollectAsRetainedState(Timetable())
         val favoriteSessions by remember {
             userDataStore.getFavoriteSessionStream()
-        }.safeCollectAsState(persistentSetOf())
+        }.safeCollectAsRetainedState(persistentSetOf())
 
         Logger.d { "DefaultSessionsRepository timetable() count=${timetable.timetableItems.size}" }
         return timetable.copy(bookmarks = favoriteSessions)

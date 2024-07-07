@@ -3,7 +3,7 @@ package io.github.droidkaigi.confsched.data.contributors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
-import io.github.droidkaigi.confsched.compose.safeCollectAsState
+import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.model.ContributorsRepository
 import kotlinx.collections.immutable.PersistentList
@@ -19,7 +19,7 @@ public class DefaultContributorsRepository(
 
     @Composable
     override fun contributors(): PersistentList<Contributor> {
-        val contributors by contributorsStateFlow.safeCollectAsState()
+        val contributors by contributorsStateFlow.safeCollectAsRetainedState()
         SafeLaunchedEffect(Unit) {
             if (contributors.isEmpty()) {
                 refresh()
