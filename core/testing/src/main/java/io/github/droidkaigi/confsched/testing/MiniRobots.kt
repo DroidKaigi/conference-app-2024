@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.testing
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import com.github.takahirom.roborazzi.roboOutputName
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.FakeContributorsApiClient
 import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
@@ -66,6 +67,13 @@ fun todoChecks(@Suppress("UNUSED_PARAMETER") reason: String): () -> Unit {
 class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: RobotTestRule) :
     CaptureScreenRobot {
     override fun captureScreenWithChecks(checks: () -> Unit) {
+        val roboOutputName = roboOutputName()
+        if (roboOutputName.contains("[") && roboOutputName.contains("]")) {
+            val name = roboOutputName.substringAfter("[").substringBefore("]")
+            robotTestRule.captureScreen(name)
+            checks()
+            return
+        }
         robotTestRule.captureScreen()
         checks()
     }
@@ -75,12 +83,13 @@ class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: R
         replaceWith = ReplaceWith("captureScreenWithChecks(checks)"),
     )
     override fun captureScreenWithChecks() {
-        robotTestRule.captureScreen()
+        captureScreenWithChecks { }
     }
 }
 
 interface WaitRobot {
     fun waitUntilIdle()
+    fun wait5Seconds()
 }
 
 class DefaultWaitRobot @Inject constructor(
@@ -91,6 +100,14 @@ class DefaultWaitRobot @Inject constructor(
         repeat(5) {
             robotTestRule.composeTestRule.waitForIdle()
             testDispatcher.scheduler.advanceUntilIdle()
+            ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
+        }
+    }
+
+    override fun wait5Seconds() {
+        repeat(5) {
+            testDispatcher.scheduler.advanceTimeBy(1.seconds)
+            robotTestRule.composeTestRule.mainClock.advanceTimeBy(1000)
             ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
         }
     }
