@@ -12,7 +12,7 @@ suspend fun <T> DescribedTestCase<T>.execute(robot: T) {
         println("Executing step: $index ($description)")
         when (step) {
             is TestNode.Run -> step.action(robot)
-            is TestNode.Check -> {
+            is TestNode.It -> {
                 if (step.description == targetCheckDescription) {
                     step.action(robot)
                 }
@@ -27,7 +27,7 @@ suspend fun <T> DescribedTestCase<T>.execute(robot: T) {
 sealed class TestNode<T> {
     data class Describe<T>(val description: String, val children: List<TestNode<T>>) : TestNode<T>()
     data class Run<T>(val action: suspend T.() -> Unit) : TestNode<T>()
-    data class Check<T>(val description: String, val action: suspend T.() -> Unit) : TestNode<T>()
+    data class It<T>(val description: String, val action: suspend T.() -> Unit) : TestNode<T>()
 }
 
 data class DescribedTestCase<T>(
@@ -46,7 +46,7 @@ data class AncestryNode<T>(
 data class CheckNode<T>(
     val description: String,
     val fullDescription: String,
-    val node: TestNode.Check<T>,
+    val node: TestNode.It<T>,
     val ancestry: List<AncestryNode<T>>,
 )
 
@@ -63,8 +63,8 @@ class TestCaseTreeBuilder<T> {
         children.add(TestNode.Run { action() })
     }
 
-    fun check(description: String, action: suspend T.() -> Unit) {
-        children.add(TestNode.Check(description) { action() })
+    fun it(description: String, action: suspend T.() -> Unit) {
+        children.add(TestNode.It(description) { action() })
     }
 
     fun build(): TestNode.Describe<T> = TestNode.Describe("", children)
@@ -93,9 +93,9 @@ private fun <T> collectCheckNodes(root: TestNode.Describe<T>): List<CheckNode<T>
                 }
             }
 
-            is TestNode.Check -> {
+            is TestNode.It -> {
                 val fullDescription = if (parentDescription.isNotBlank()) {
-                    "$parentDescription - ${node.description}"
+                    "$parentDescription - it ${node.description}"
                 } else {
                     node.description
                 }
@@ -136,7 +136,7 @@ private fun <T> createTestCase(checkNode: CheckNode<T>): DescribedTestCase<T> {
                 steps.add(node)
             }
 
-            is TestNode.Check -> {
+            is TestNode.It -> {
                 if (node == checkNode.node) {
                     steps.add(node)
                 }
