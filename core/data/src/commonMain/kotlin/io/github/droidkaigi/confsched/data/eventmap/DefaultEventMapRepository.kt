@@ -3,7 +3,7 @@ package io.github.droidkaigi.confsched.data.eventmap
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
-import io.github.droidkaigi.confsched.compose.safeCollectAsState
+import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.model.EventMapRepository
 import kotlinx.collections.immutable.PersistentList
@@ -19,7 +19,7 @@ public class DefaultEventMapRepository(
 
     @Composable
     override fun eventMapEvents(): PersistentList<EventMapEvent> {
-        val eventMap by eventMapStateFlow.safeCollectAsState()
+        val eventMap by eventMapStateFlow.safeCollectAsRetainedState()
         SafeLaunchedEffect(Unit) {
             if (eventMap.isEmpty()) {
                 refresh()
