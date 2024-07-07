@@ -42,7 +42,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         setupTimetableServer(ServerStatus.Operational)
                         setupTimetableScreenContent()
                     }
-                    it("should show timetable items") {
+                    itShould("show timetable items") {
                         captureScreenWithChecks(checks = {
                             checkTimetableItemsDisplayed()
                         })
@@ -51,7 +51,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         run {
                             clickFirstSessionBookmark()
                         }
-                        it("should show bookmarked session") {
+                        itShould("show bookmarked session") {
                             // FIXME: Add check for bookmarked session
                             captureScreenWithChecks()
                         }
@@ -60,7 +60,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         run {
                             clickFirstSession()
                         }
-                        it("should show session detail") {
+                        itShould("show session detail") {
                             checkClickedItemsExists()
                         }
                     }
@@ -68,7 +68,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         run {
                             clickTimetableUiTypeChangeButton()
                         }
-                        it("should change timetable ui type") {
+                        itShould("change timetable ui type") {
                             // FIXME: Add check for timetable ui type change
                             captureScreenWithChecks()
                         }
@@ -79,7 +79,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         setupTimetableServer(ServerStatus.Error)
                         setupTimetableScreenContent()
                     }
-                    it("should show error message") {
+                    itShould("show error message") {
                         // FIXME: Add check for error message
                         captureScreenWithChecks()
                     }

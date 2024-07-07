@@ -7,7 +7,7 @@ inline fun <reified T> describeBehaviors(
     val builder = TestCaseTreeBuilder<T>()
     builder.block()
     val root = builder.build(name = name)
-    return generateTestCases(root)
+    return generateBehaviors(root)
 }
 
 suspend fun <T> DescribedBehavior<T>.execute(robot: T) {
@@ -15,7 +15,7 @@ suspend fun <T> DescribedBehavior<T>.execute(robot: T) {
         println("Executing step: $index ($description)")
         when (step) {
             is TestNode.Run -> step.action(robot)
-            is TestNode.It -> {
+            is TestNode.ItShould -> {
                 if (step.description == targetCheckDescription) {
                     step.action(robot)
                 }
@@ -30,7 +30,7 @@ suspend fun <T> DescribedBehavior<T>.execute(robot: T) {
 sealed class TestNode<T> {
     data class Describe<T>(val description: String, val children: List<TestNode<T>>) : TestNode<T>()
     data class Run<T>(val action: suspend T.() -> Unit) : TestNode<T>()
-    data class It<T>(val description: String, val action: suspend T.() -> Unit) : TestNode<T>()
+    data class ItShould<T>(val description: String, val action: suspend T.() -> Unit) : TestNode<T>()
 }
 
 data class DescribedBehavior<T>(
@@ -49,7 +49,7 @@ data class AncestryNode<T>(
 data class CheckNode<T>(
     val description: String,
     val fullDescription: String,
-    val node: TestNode.It<T>,
+    val node: TestNode.ItShould<T>,
     val ancestry: List<AncestryNode<T>>,
 )
 
@@ -66,21 +66,20 @@ class TestCaseTreeBuilder<T> {
         children.add(TestNode.Run { action() })
     }
 
-    fun it(description: String, action: suspend T.() -> Unit) {
-        children.add(TestNode.It(description) { action() })
+    fun itShould(description: String, action: suspend T.() -> Unit) {
+        children.add(TestNode.ItShould(description) { action() })
     }
 
     fun build(name: String): TestNode.Describe<T> = TestNode.Describe(name, children)
 }
 
-fun <T> generateTestCases(root: TestNode.Describe<T>): List<DescribedBehavior<T>> {
+fun <T> generateBehaviors(root: TestNode.Describe<T>): List<DescribedBehavior<T>> {
     val checkNodes = collectCheckNodes(root)
     return checkNodes.map { createTestCase(it) }
 }
 
 /**
  * Collect all check nodes from the test tree
- * it will be O(N)
  */
 private fun <T> collectCheckNodes(root: TestNode.Describe<T>): List<CheckNode<T>> {
     val checkNodes = mutableListOf<CheckNode<T>>()
@@ -96,9 +95,9 @@ private fun <T> collectCheckNodes(root: TestNode.Describe<T>): List<CheckNode<T>
                 }
             }
 
-            is TestNode.It -> {
+            is TestNode.ItShould -> {
                 val fullDescription = if (parentDescription.isNotBlank()) {
-                    "$parentDescription - it ${node.description}"
+                    "$parentDescription - it should ${node.description}"
                 } else {
                     node.description
                 }
@@ -115,8 +114,6 @@ private fun <T> collectCheckNodes(root: TestNode.Describe<T>): List<CheckNode<T>
 
 /**
  * Create a test case from a check node
- * We only run the steps that are necessary to reach the check node
- * so the time complexity might be O(logN)
  */
 private fun <T> createTestCase(checkNode: CheckNode<T>): DescribedBehavior<T> {
     val steps = mutableListOf<TestNode<T>>()
@@ -139,7 +136,7 @@ private fun <T> createTestCase(checkNode: CheckNode<T>): DescribedBehavior<T> {
                 steps.add(node)
             }
 
-            is TestNode.It -> {
+            is TestNode.ItShould -> {
                 if (node == checkNode.node) {
                     steps.add(node)
                 }
