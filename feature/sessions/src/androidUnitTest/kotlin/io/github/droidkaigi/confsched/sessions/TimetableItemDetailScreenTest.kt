@@ -54,18 +54,18 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedTestCase<Time
                         run {
                             setupScreenContent()
                         }
-                        check("should show session detail title") {
+                        it("should show session detail title") {
                             // FIXME: Add check for session detail title
                             captureScreenWithChecks()
                         }
-                        check("check accessibility") {
+                        it("check accessibility") {
                             checkAccessibilityCapture()
                         }
                         describe("click bookmark button") {
                             run {
                                 clickBookmarkButton()
                             }
-                            check("should show bookmarked session") {
+                            it("should show bookmarked session") {
                                 // FIXME: Add check for bookmarked session
                                 captureScreenWithChecks()
                             }
@@ -73,7 +73,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedTestCase<Time
                                 run {
                                     clickBookmarkButton()
                                 }
-                                check("should show unbookmarked session") {
+                                it("should show unbookmarked session") {
                                     // FIXME: Add check for unbookmarked session
                                     captureScreenWithChecks()
                                 }
@@ -83,7 +83,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedTestCase<Time
                             run {
                                 scroll()
                             }
-                            check("should show scrolled session detail") {
+                            it("should show scrolled session detail") {
                                 // FIXME: Add check for scrolled session detail
                                 captureScreenWithChecks()
                             }
@@ -94,7 +94,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedTestCase<Time
                             setFontScale(0.5f)
                             setupScreenContent()
                         }
-                        check("should show session detail with small font scale") {
+                        it("should show session detail with small font scale") {
                             captureScreenWithChecks()
                         }
                     }
@@ -103,7 +103,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedTestCase<Time
                             setFontScale(1.5f)
                             setupScreenContent()
                         }
-                        check("should show session detail with large font scale") {
+                        it("should show session detail with large font scale") {
                             captureScreenWithChecks()
                         }
                     }
@@ -112,7 +112,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedTestCase<Time
                             setFontScale(2.0f)
                             setupScreenContent()
                         }
-                        check("should show session detail with huge font scale") {
+                        it("should show session detail with huge font scale") {
                             captureScreenWithChecks()
                         }
                     }
