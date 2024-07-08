@@ -1,7 +1,12 @@
 import AboutFeature
-import FavoriteFeature
 import ComposableArchitecture
+import ContributorFeature
+import FavoriteFeature
+import LicenseList
+import SponsorFeature
+import StaffFeature
 import SwiftUI
+import TimetableDetailFeature
 import TimetableFeature
 
 private enum Tab {
@@ -13,7 +18,7 @@ private enum Tab {
 }
 
 public struct RootView: View {
-    private let store: StoreOf<RootReducer>
+    @Bindable private var store: StoreOf<RootReducer>
     @State private var selection: Tab = .timetable
 
     public init(store: StoreOf<RootReducer>) {
@@ -22,19 +27,14 @@ public struct RootView: View {
 
     public var body: some View {
         TabView(selection: $selection) {
-            TimetableView(
-                store: store.scope(
-                    state: \.timetable,
-                    action: \.timetable
-                )
-            )
-            .tag(Tab.timetable)
-            .tabItem {
-                Label(
-                    title: { Text("Timetable") },
-                    icon: { Image(systemName: "42.circle") }
-                )
-            }
+            timetableTab
+                .tag(Tab.timetable)
+                .tabItem {
+                    Label(
+                        title: { Text("Timetable") },
+                        icon: { Image(systemName: "42.circle") }
+                    )
+                }
 
             Text("Map Feature")
                 .tag(Tab.map)
@@ -59,19 +59,14 @@ public struct RootView: View {
                 )
             }
 
-            AboutView(
-                store: store.scope(
-                    state: \.about,
-                    action: \.about
-                )
-            )
-            .tag(Tab.about)
-            .tabItem {
-                Label(
-                    title: { Text("About") },
-                    icon: { Image(systemName: "42.circle") }
-                )
-            }
+            aboutTab
+                .tag(Tab.about)
+                .tabItem {
+                    Label(
+                        title: { Text("About") },
+                        icon: { Image(systemName: "42.circle") }
+                    )
+                }
 
             Text("ID Card Feature")
                 .tag(Tab.idCard)
@@ -81,6 +76,59 @@ public struct RootView: View {
                         icon: { Image(systemName: "42.circle") }
                     )
                 }
+        }
+    }
+
+    @MainActor
+    private var timetableTab: some View {
+        NavigationStack(
+            path: $store.scope(
+                state: \.paths.timetable,
+                action: \.paths.timetable
+            )
+        ) {
+            TimetableView(
+                store: store.scope(
+                    state: \.timetable,
+                    action: \.timetable
+                )
+            )
+        } destination: { store in
+            switch store.case {
+            case let .timetableDetail(store):
+                TimetableDetailView(store: store)
+            }
+        }
+    }
+
+    @MainActor
+    private var aboutTab: some View {
+        NavigationStack(
+            path: $store.scope(
+                state: \.paths.about,
+                action: \.paths.about
+            )
+        ) {
+            AboutView(
+                store: store.scope(
+                    state: \.about,
+                    action: \.about
+                )
+            )
+        } destination: { store in
+            switch store.case {
+            case let .staff(store):
+                StaffView(store: store)
+
+            case let .contributor(store):
+                ContributorView(store: store)
+
+            case let .sponsor(store):
+                SponsorView(store: store)
+
+            case .acknowledgements:
+                LicenseListView()
+            }
         }
     }
 }

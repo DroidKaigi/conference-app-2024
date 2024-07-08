@@ -15,40 +15,27 @@ public struct AboutView: View {
     }
 
     public var body: some View {
-        NavigationStack(path: $store.scope(state: \.path, action: \.path)) {
-            content
-        } destination: { store in
-            switch store.state {
-            case .staffs:
-                Text("Staffs")
-            case .contributers:
-                Text("Contributers")
-            case .sponsors:
-                Text("Sponsors")
-            case .acknowledgements:
-                LicenseListView()
-            }
-        }
-        .sheet(item: $store.scope(state: \.destination?.codeOfConduct, action: \.presentation.codeOfConduct), content: { _ in
-            SafariView(url: .codeOfConduct)
-                .ignoresSafeArea()
-        })
-        .sheet(item: $store.scope(state: \.destination?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
-            SafariView(url: .privacyPolicy)
-                .ignoresSafeArea()
-        })
-        .sheet(item: $store.scope(state: \.destination?.youtube, action: \.presentation.youtube), content: { _ in
-            SafariView(url: .youtube)
-                .ignoresSafeArea()
-        })
-        .sheet(item: $store.scope(state: \.destination?.xcom, action: \.presentation.xcom), content: { _ in
-            SafariView(url: .xcom)
-                .ignoresSafeArea()
-        })
-        .sheet(item: $store.scope(state: \.destination?.medium, action: \.presentation.medium), content: { _ in
-            SafariView(url: .medium)
-                .ignoresSafeArea()
-        })
+        content
+            .sheet(item: $store.scope(state: \.destination?.codeOfConduct, action: \.presentation.codeOfConduct), content: { _ in
+                SafariView(url: .codeOfConduct)
+                    .ignoresSafeArea()
+            })
+            .sheet(item: $store.scope(state: \.destination?.privacyPolicy, action: \.presentation.privacyPolicy), content: { _ in
+                SafariView(url: .privacyPolicy)
+                    .ignoresSafeArea()
+            })
+            .sheet(item: $store.scope(state: \.destination?.youtube, action: \.presentation.youtube), content: { _ in
+                SafariView(url: .youtube)
+                    .ignoresSafeArea()
+            })
+            .sheet(item: $store.scope(state: \.destination?.xcom, action: \.presentation.xcom), content: { _ in
+                SafariView(url: .xcom)
+                    .ignoresSafeArea()
+            })
+            .sheet(item: $store.scope(state: \.destination?.medium, action: \.presentation.medium), content: { _ in
+                SafariView(url: .medium)
+                    .ignoresSafeArea()
+            })
     }
     
     @ViewBuilder var content: some View {

@@ -58,11 +58,15 @@ let package = Package(
             name: "App",
             dependencies: [
                 .aboutFeature,
+                .contributorFeature,
                 .favoriteFeature,
+                .staffFeature,
+                .sponsorFeature,
                 .timetableFeature,
                 .timetableDetailFeature,
                 .tca,
                 "KMPClient",
+                .product(name: "LicenseList", package: "LicenseList"),
             ]
         ),
         .testTarget(
@@ -120,7 +124,6 @@ let package = Package(
             name: "AboutFeature",
             dependencies: [
                 .tca,
-                .product(name: "LicenseList", package: "LicenseList")
             ]
         ),
         .testTarget(
