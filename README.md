@@ -123,7 +123,8 @@ Describes the flow of updated session data back to the screen presenter, highlig
 <img width="518" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/9ad59696-0b94-4d3f-84c4-71ae0402680b">
 
 
-```                 Timetable
+```
+                 Timetable
 SessionsRepository ----> timetableScreenPresenter
 ```
 
@@ -188,7 +189,7 @@ For ensuring the stability and correctness of the DroidKaigi 2024 official app, 
 
 At the heart of our testing setup lies Robolectric, a framework that allows us to execute Android tests directly on the JVM. This eliminates the dependency on physical devices or emulators, resulting in significantly faster test execution times.
 
-```
+```kotlin
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @HiltAndroidTest
 class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScreenRobot>) {
@@ -213,7 +214,7 @@ In the provided snippet, `@RunWith(ParameterizedRobolectricTestRunner::class)` i
 
 To ensure our tests are easily understandable and maintainable, we've embraced BDD principles. BDD encourages expressing test cases in a clear, human-readable format, much like those commonly seen in Ruby and JavaScript testing frameworks. 
 
-```
+```kotlin
 companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
@@ -272,7 +273,7 @@ While functional correctness is paramount, preventing visual regressions is equa
 
 Test Class ---------> UI Interaction ---------> captureScreenWithChecks() ---------> Image Comparison
 
-```
+```kotlin
 fun captureScreenWithChecks(checks: () -> Unit) {
         robotTestRule.captureScreen()
         checks()
