@@ -31,7 +31,6 @@ fun EventMapTab() {
     val selectedColor = Color(0xFF4AFF82)
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
-
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,

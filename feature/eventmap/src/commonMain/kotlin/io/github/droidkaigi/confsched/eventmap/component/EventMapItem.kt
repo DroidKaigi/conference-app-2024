@@ -54,19 +54,19 @@ fun EventMapItem(
             ToolTip(
                 text = eventMapEvent.roomName,
                 icon = Icons.Filled.Star,
-                color = green
+                color = green,
             )
             Spacer(Modifier.width(4.dp))
             ToolTip(
                 text = eventMapEvent.dateLabel,
-                color = Color(0xFFBFC9C2)
+                color = Color(0xFFBFC9C2),
             )
             Spacer(Modifier.weight(1F))
             Icon(
                 imageVector = Icons.Default.Star,
                 contentDescription = null,
                 modifier = Modifier.size(24.dp).clickable { onClickFavorite(eventMapEvent) },
-                tint = if (eventMapEvent.isFavorite) green else gray
+                tint = if (eventMapEvent.isFavorite) green else gray,
             )
         }
         Spacer(Modifier.height(8.dp))
@@ -76,7 +76,7 @@ fun EventMapItem(
             lineHeight = 23.8.sp,
             fontWeight = FontWeight.W600,
             letterSpacing = 0.1.sp,
-            color = gray
+            color = gray,
         )
         Spacer(Modifier.height(8.dp))
         Text(
@@ -85,7 +85,7 @@ fun EventMapItem(
             lineHeight = 20.sp,
             fontWeight = FontWeight.W400,
             letterSpacing = 0.25.sp,
-            color = Color.White.copy(alpha = 0.7F)
+            color = Color.White.copy(alpha = 0.7F),
         )
         Spacer(Modifier.height(8.dp))
         Text(
@@ -94,7 +94,7 @@ fun EventMapItem(
             lineHeight = 15.sp,
             fontWeight = FontWeight.W600,
             letterSpacing = 0.1.sp,
-            color = green
+            color = green,
         )
     }
 }
@@ -111,14 +111,14 @@ private fun ToolTip(
         modifier = Modifier
             .border(1.dp, color)
             .background(backgroundColor, RoundedCornerShape(0.dp))
-            .padding(vertical = 4.5.dp, horizontal = 8.dp)
+            .padding(vertical = 4.5.dp, horizontal = 8.dp),
     ) {
         icon?.let {
             Icon(
                 imageVector = icon,
                 contentDescription = null,
                 tint = color,
-                modifier = Modifier.size(12.dp)
+                modifier = Modifier.size(12.dp),
             )
             Spacer(Modifier.width(3.dp))
         }
@@ -128,7 +128,7 @@ private fun ToolTip(
             lineHeight = 16.sp,
             letterSpacing = 0.5.sp,
             fontWeight = FontWeight.W500,
-            color = color
+            color = color,
         )
     }
 }
