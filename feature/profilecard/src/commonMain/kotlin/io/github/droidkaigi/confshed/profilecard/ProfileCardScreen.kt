@@ -34,7 +34,26 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confshed.profilecard.ProfileCardUiState.Edit
 
 const val profileCardScreenRoute = "profilecard"
-internal const val ProfileCardScreenTestTag = "ProfileCardTestTag"
+
+object ProfileCardTestTag {
+    private const val suffix = "TestTag"
+    private const val prefix = "ProfileCard"
+
+    object EditScreen {
+        private const val editScreenPrefix = "${prefix}_EditScreen"
+        const val SCREEN = "${editScreenPrefix}_${suffix}"
+        const val NICKNAME_TEXT_FIELD = "${editScreenPrefix}_NicknameTextField_${suffix}"
+        const val OCCUPATION_TEXT_FIELD = "${editScreenPrefix}_OccupationTextField_${suffix}"
+        const val LINK_TEXT_FIELD = "${editScreenPrefix}_LinkTextField_${suffix}"
+        const val SELECT_IMAGE_BUTTON = "${editScreenPrefix}_SelectImageButton_${suffix}"
+        const val CREATE_BUTTON = "${editScreenPrefix}_CreateButton_${suffix}"
+    }
+
+    object CardScreen {
+        private const val cardScreenPrefix = "${prefix}_CardScreen"
+        const val SCREEN = "${cardScreenPrefix}_${suffix}"
+    }
+}
 
 fun NavGraphBuilder.profileCardScreen(
     contentPadding: PaddingValues,
