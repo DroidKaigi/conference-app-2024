@@ -119,8 +119,8 @@ internal fun ProfileCard.toUiState() =
 
 @Composable
 fun ProfileCardScreen(
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     ProfileCardScreen(
         contentPadding = contentPadding,
