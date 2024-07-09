@@ -1,10 +1,12 @@
 package io.github.droidkaigi.confsched.eventmap
 
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons.AutoMirrored.Filled
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,6 +24,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -29,6 +33,7 @@ import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.eventmap.component.EventMapItem
+import io.github.droidkaigi.confsched.eventmap.component.EventMapTab
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -123,7 +128,7 @@ fun EventMapScreen(
             if (scrollBehavior != null) {
                 LargeTopAppBar(
                     title = {
-                        Text(text = "EventMapEvent")
+                        Text(text = "イベントマップ")
                     },
                     navigationIcon = {
                         IconButton(
@@ -164,14 +169,31 @@ private fun EventMap(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.padding(horizontal = 16.dp),
     ) {
-        items(eventMapEvents) {
+        item {
+            EventMapTab()
+            Spacer(Modifier.height(26.dp))
+        }
+        itemsIndexed(eventMapEvents) { index, eventMapEvent ->
             EventMapItem(
-                eventMapEvent = it,
+                eventMapEvent = eventMapEvent,
                 onClick = onEventMapItemClick,
+                onClickFavorite = { /* TODO */ },
                 modifier = Modifier.fillMaxWidth(),
             )
+            if (eventMapEvents.lastIndex != index) {
+                Spacer(modifier = Modifier.height(12.dp))
+            }
         }
     }
+}
+
+@Composable
+@Preview
+fun PreviewEventMapScreen() {
+    EventMapScreen(
+        onNavigationIconClick = { },
+        onEventMapItemClick = { },
+    )
 }

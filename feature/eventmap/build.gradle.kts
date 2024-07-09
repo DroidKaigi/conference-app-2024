@@ -12,6 +12,8 @@ kotlin {
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(projects.core.designsystem)
                 implementation(libs.moleculeRuntime)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
             }
         }
         androidUnitTest {
