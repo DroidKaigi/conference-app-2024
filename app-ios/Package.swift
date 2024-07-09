@@ -124,6 +124,7 @@ let package = Package(
             name: "AboutFeature",
             dependencies: [
                 .tca,
+                .commonComponents,
             ]
         ),
         .testTarget(
@@ -159,7 +160,8 @@ let package = Package(
             dependencies: [ 
                 .tca,
                 .kmpClient,
-                .theme
+                .theme,
+                .commonComponents
             ]
         ),
         .testTarget(
@@ -191,7 +193,7 @@ let package = Package(
                 .tca
             ]
         ),
-
+        .target(name: "CommonComponents"),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -221,6 +223,7 @@ extension Target.Dependency {
     static let kmpModule: Target.Dependency = "KmpModule"
     static let kmpClient: Target.Dependency = "KMPClient"
     static let theme: Target.Dependency = "Theme"
+    static let commonComponents: Target.Dependency = "CommonComponents"
 
     static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
     static let firebaseRemoteConfig: Target.Dependency = .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk")
