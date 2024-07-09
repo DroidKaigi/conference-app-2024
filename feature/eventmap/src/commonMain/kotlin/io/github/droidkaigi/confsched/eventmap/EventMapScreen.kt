@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -39,6 +38,7 @@ import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val eventMapScreenRoute = "eventMap"
 const val EventMapScreenTestTag = "EventMapScreenTestTag"
