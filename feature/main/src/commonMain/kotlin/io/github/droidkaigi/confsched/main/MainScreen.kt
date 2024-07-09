@@ -40,10 +40,12 @@ import conference_app_2024.feature.main.generated.resources.Res
 import conference_app_2024.feature.main.generated.resources.icon_achievement_fill
 import conference_app_2024.feature.main.generated.resources.icon_achievement_outline
 import conference_app_2024.feature.main.generated.resources.icon_map_fill
+import dev.chrisbanes.haze.HazeState
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
+import io.github.droidkaigi.confsched.main.bottom.navigation.GlassLikeBottomNavigation
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -69,12 +71,18 @@ fun NavGraphBuilder.mainScreen(
 
 interface MainNestedGraphStateHolder {
     val startDestination: String
+
     fun routeToTab(route: String): MainScreenTab?
-    fun onTabSelected(mainNestedNavController: NavController, tab: MainScreenTab)
+
+    fun onTabSelected(
+        mainNestedNavController: NavController,
+        tab: MainScreenTab,
+    )
 }
 
 enum class NavigationType {
-    BottomNavigation, NavigationRail
+    BottomNavigation,
+    NavigationRail,
 }
 
 @Composable
@@ -87,12 +95,13 @@ fun MainScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val navigationType: NavigationType = when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> BottomNavigation
-        WindowWidthSizeClass.Medium -> NavigationRail
-        WindowWidthSizeClass.Expanded -> NavigationRail
-        else -> BottomNavigation
-    }
+    val navigationType: NavigationType =
+        when (windowSize.widthSizeClass) {
+            WindowWidthSizeClass.Compact -> BottomNavigation
+            WindowWidthSizeClass.Medium -> NavigationRail
+            WindowWidthSizeClass.Expanded -> NavigationRail
+            else -> BottomNavigation
+        }
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
@@ -184,9 +193,12 @@ fun MainScreen(
                 }
             }
         }
+
+        val hazeState = remember { HazeState() }
+
         Scaffold(
             bottomBar = {
-                AnimatedVisibility(visible = navigationType == BottomNavigation) {
+                /*AnimatedVisibility(visible = navigationType == BottomNavigation) {
                     Row {
                         MainScreenTab.entries.forEach { tab ->
                             Button(
@@ -197,7 +209,8 @@ fun MainScreen(
                             }
                         }
                     }
-                }
+                }*/
+                GlassLikeBottomNavigation(hazeState)
             },
         ) { padding ->
             NavHost(
@@ -213,25 +226,31 @@ fun MainScreen(
     }
 }
 
-private fun materialFadeThroughIn(): EnterTransition = fadeIn(
-    animationSpec = tween(
-        durationMillis = 195,
-        delayMillis = 105,
-        easing = LinearOutSlowInEasing,
-    ),
-) + scaleIn(
-    animationSpec = tween(
-        durationMillis = 195,
-        delayMillis = 105,
-        easing = LinearOutSlowInEasing,
-    ),
-    initialScale = 0.92f,
-)
+private fun materialFadeThroughIn(): EnterTransition =
+    fadeIn(
+        animationSpec =
+            tween(
+                durationMillis = 195,
+                delayMillis = 105,
+                easing = LinearOutSlowInEasing,
+            ),
+    ) +
+        scaleIn(
+            animationSpec =
+                tween(
+                    durationMillis = 195,
+                    delayMillis = 105,
+                    easing = LinearOutSlowInEasing,
+                ),
+            initialScale = 0.92f,
+        )
 
-private fun materialFadeThroughOut(): ExitTransition = fadeOut(
-    animationSpec = tween(
-        durationMillis = 105,
-        delayMillis = 0,
-        easing = FastOutLinearInEasing,
-    ),
-)
+private fun materialFadeThroughOut(): ExitTransition =
+    fadeOut(
+        animationSpec =
+            tween(
+                durationMillis = 105,
+                delayMillis = 0,
+                easing = FastOutLinearInEasing,
+            ),
+    )

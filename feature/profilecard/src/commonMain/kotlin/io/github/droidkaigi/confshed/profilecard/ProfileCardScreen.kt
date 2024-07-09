@@ -36,9 +36,7 @@ import io.github.droidkaigi.confshed.profilecard.ProfileCardUiState.Edit
 const val profileCardScreenRoute = "profilecard"
 internal const val ProfileCardScreenTestTag = "ProfileCardTestTag"
 
-fun NavGraphBuilder.profileCardScreen(
-    contentPadding: PaddingValues,
-) {
+fun NavGraphBuilder.profileCardScreen(contentPadding: PaddingValues) {
     composable(profileCardScreenRoute) {
         ProfileCardScreen(contentPadding)
     }
@@ -63,13 +61,14 @@ internal sealed interface ProfileCardUiState {
         val theme: ProfileCardTheme,
     ) : ProfileCardUiState {
         companion object {
-            fun initial() = Edit(
-                nickname = "",
-                occupation = null,
-                link = null,
-                imageUri = null,
-                theme = ProfileCardTheme.Default,
-            )
+            fun initial() =
+                Edit(
+                    nickname = "",
+                    occupation = null,
+                    link = null,
+                    imageUri = null,
+                    theme = ProfileCardTheme.Default,
+                )
         }
     }
 
@@ -127,12 +126,13 @@ internal fun ProfileCardScreen(
     Scaffold(
         modifier = modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        contentWindowInsets = WindowInsets(
-            left = contentPadding.calculateLeftPadding(layoutDirection),
-            top = contentPadding.calculateTopPadding(),
-            right = contentPadding.calculateRightPadding(layoutDirection),
-            bottom = contentPadding.calculateBottomPadding(),
-        ),
+        contentWindowInsets =
+            WindowInsets(
+                left = contentPadding.calculateLeftPadding(layoutDirection),
+                top = contentPadding.calculateTopPadding(),
+                right = contentPadding.calculateRightPadding(layoutDirection),
+                bottom = contentPadding.calculateBottomPadding(),
+            ),
     ) { padding ->
         when (val contentUiState = uiState.contentUiState) {
             is ProfileCardUiState.Edit -> {

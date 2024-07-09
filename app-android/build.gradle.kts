@@ -62,11 +62,12 @@ android {
         }
         create("prod") {
             dimension = "network"
-            signingConfig = if (keystoreExits) {
-                signingConfigs.getByName("prod")
-            } else {
-                signingConfigs.getByName("dev")
-            }
+            signingConfig =
+                if (keystoreExits) {
+                    signingConfigs.getByName("prod")
+                } else {
+                    signingConfigs.getByName("dev")
+                }
             buildConfigField(
                 type = "String",
                 name = "SERVER_URL",
