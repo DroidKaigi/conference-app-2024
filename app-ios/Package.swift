@@ -15,10 +15,6 @@ let package = Package(
             targets: ["App"]
         ),
         .library(
-            name: "AppExperiments",
-            targets: ["AppExperiments"]
-        ),
-        .library(
             name: "TimetableFeature",
             targets: ["TimetableFeature"]
         ),
@@ -72,12 +68,6 @@ let package = Package(
         .testTarget(
             name: "AppTests",
             dependencies: [.app]
-        ),
-        .target(
-            name: "AppExperiments",
-            dependencies: [
-                .kmpModule,
-            ]
         ),
 
         .target(
@@ -139,6 +129,7 @@ let package = Package(
             name: "FavoriteFeature",
             dependencies: [
                 .tca,
+                .kmpClient,
             ]
         ),
         .testTarget(
@@ -185,7 +176,10 @@ let package = Package(
         ),
         .target(
             name: "ContributorFeature",
-            dependencies: [ .tca ]
+            dependencies: [ 
+                .tca,
+                .kmpClient,
+            ]
         ),
         .testTarget(
             name: "ContributorFeatureTests",
