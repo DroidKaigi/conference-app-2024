@@ -1,7 +1,6 @@
 package io.github.droidkaigi.confsched.designsystem.preview
 
 import androidx.annotation.VisibleForTesting
-import androidx.compose.ui.tooling.preview.Preview
 import kotlin.annotation.AnnotationRetention.SOURCE
 import kotlin.annotation.AnnotationTarget.CLASS
 import kotlin.annotation.AnnotationTarget.FUNCTION

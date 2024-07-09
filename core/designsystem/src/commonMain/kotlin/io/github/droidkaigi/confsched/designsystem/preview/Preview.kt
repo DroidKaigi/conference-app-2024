@@ -1,4 +1,4 @@
-package androidx.compose.ui.tooling.preview
+package io.github.droidkaigi.confsched.designsystem.preview
 
 @Retention(AnnotationRetention.BINARY)
 @Target(
