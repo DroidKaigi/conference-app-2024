@@ -223,6 +223,12 @@ internal fun EditScreen(
             modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.LINK_TEXT_FIELD),
         )
         Button(
+            onClick = {},
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.SELECT_IMAGE_BUTTON),
+        ) {
+            Text("画像を選択")
+        }
+        Button(
             onClick = {
                 onClickCreate(
                     ProfileCard(
