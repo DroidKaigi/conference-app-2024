@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -198,35 +199,43 @@ internal fun EditScreen(
     var imageUri by remember { mutableStateOf(uiState.imageUri) }
 
     Column(
-        modifier = modifier.padding(contentPadding),
+        modifier = modifier
+            .testTag(ProfileCardTestTag.EditScreen.SCREEN)
+            .padding(contentPadding),
     ) {
         Text("ProfileCardEdit")
         TextField(
             value = nickname,
             onValueChange = { nickname = it },
             placeholder = { Text("Nickname") },
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.NICKNAME_TEXT_FIELD),
         )
         TextField(
             value = occupation ?: "",
             onValueChange = { occupation = it },
             placeholder = { Text("Occupation") },
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.OCCUPATION_TEXT_FIELD),
         )
         TextField(
             value = link ?: "",
             onValueChange = { link = it },
             placeholder = { Text("Link") },
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.LINK_TEXT_FIELD),
         )
-        Button({
-            onClickCreate(
-                ProfileCard(
-                    nickname = nickname,
-                    occupation = occupation,
-                    link = link,
-                    imageUri = imageUri,
-                    theme = uiState.theme,
-                ),
-            )
-        }) {
+        Button(
+            onClick = {
+                onClickCreate(
+                    ProfileCard(
+                        nickname = nickname,
+                        occupation = occupation,
+                        link = link,
+                        imageUri = imageUri,
+                        theme = uiState.theme,
+                    ),
+                )
+            },
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.CREATE_BUTTON),
+        ) {
             Text("Create")
         }
     }
@@ -240,7 +249,9 @@ internal fun CardScreen(
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column(
-        modifier = modifier.padding(contentPadding),
+        modifier = modifier
+            .testTag(ProfileCardTestTag.CardScreen.SCREEN)
+            .padding(contentPadding),
     ) {
         Text("ProfileCard")
         Text(uiState.nickname)
