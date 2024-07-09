@@ -7,6 +7,10 @@ public struct ContributorReducer {
     @ObservableState
     public struct State: Equatable {
         var text: String
+
+        public init(text: String) {
+            self.text = text
+        }
     }
 
     public enum Action {
