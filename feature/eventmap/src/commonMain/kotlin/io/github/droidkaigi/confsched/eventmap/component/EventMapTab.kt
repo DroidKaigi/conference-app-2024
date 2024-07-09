@@ -27,11 +27,14 @@ import conference_app_2024.feature.eventmap.generated.resources.event_map
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun EventMapTab() {
+fun EventMapTab(
+    modifier: Modifier = Modifier,
+) {
     val selectedColor = Color(0xFF4AFF82)
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
     ) {
