@@ -35,26 +35,26 @@ struct RoomTag: View {
 extension RoomTag.Room {
     var name: String {
         switch self {
-        case .arcticFox: "Arctic Fox"
-        case .bumblebee: "Bumblebee"
-        case .chipmunk: "Chipmunk"
-        case .dolphin: "Dolphin"
-        case .electricEel: "Electric eel"
+        case .flamingo: "Flamingo"
+        case .giraffe: "Giraffe"
+        case .hedgehog: "Hedgehog"
+        case .iguana: "Iguana"
+        case .jellyfish: "Jellyfish"
         }
     }
 
     var color: Color {
         switch self {
-        case .arcticFox: AssetColors.Custom.arcticFox.swiftUIColor
-        case .bumblebee: AssetColors.Custom.bumblebee.swiftUIColor
-        case .chipmunk: AssetColors.Custom.chipmunk.swiftUIColor
-        case .dolphin: AssetColors.Custom.dolphin.swiftUIColor
-        case .electricEel: AssetColors.Custom.electricEel.swiftUIColor
+        case .flamingo: AssetColors.Custom.flamingo.swiftUIColor
+        case .giraffe: AssetColors.Custom.giraffe.swiftUIColor
+        case .hedgehog: AssetColors.Custom.hedgehog.swiftUIColor
+        case .iguana: AssetColors.Custom.iguana.swiftUIColor
+        case .jellyfish: AssetColors.Custom.jellyfish.swiftUIColor
         }
     }
 }
 
 
 #Preview {
-    RoomTag(.arcticFox)
+    RoomTag(.flamingo)
 }

@@ -18,18 +18,23 @@ data class TimetableRoom(
         return sort.compareTo(other.sort)
     }
 
+
+    //TODO: These colors need to be reviewed/updated
     fun getColor(): Color {
         return when (name.enTitle) {
-            "Chipmunk" -> {
+            "Hedgehog" -> {
                 Color(0xFFFF974B)
             }
-            "Dolphin" -> {
+            "Iguana" -> {
                 Color(0xFFBB85FF)
             }
-            "Bumblebee" -> {
+            "Giraffe" -> {
                 Color(0xFFDDD33C)
             }
-            "Arctic Fox" -> {
+            "Flamingo" -> {
+                Color(0xFF45E761)
+            }
+            "Jellyfish" -> {
                 Color(0xFF45E761)
             }
             else -> {
@@ -38,18 +43,22 @@ data class TimetableRoom(
         }
     }
 
+    //TODO: Names are updated but the shapes need to be checked
     fun getShape(): Shapes {
         return when (name.enTitle) {
-            "Arctic Fox" -> {
+            "Flamingo" -> {
                 Shapes.SQUARE
             }
-            "Bumblebee" -> {
+            "Giraffe" -> {
                 Shapes.CIRCLE
             }
-            "Chipmunk" -> {
+            "Hedgehog" -> {
                 Shapes.SHARP_DIAMOND
             }
-            "Dolphin" -> {
+            "Iguana" -> {
+                Shapes.DIAMOND
+            }
+            "Jellyfish" -> {
                 Shapes.DIAMOND
             }
             else -> {
