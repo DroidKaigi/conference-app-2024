@@ -7,6 +7,22 @@
     "name" : {
 
     },
+    "TimetableDetailAddBookmark" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added to bookmarks"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "ブックマークに追加されました"
+          }
+        }
+      }
+    },
     "TimeTableDetailApplicants" : {
       "localizations" : {
         "en" : {
