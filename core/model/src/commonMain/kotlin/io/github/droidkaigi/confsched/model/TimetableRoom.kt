@@ -18,8 +18,7 @@ data class TimetableRoom(
         return sort.compareTo(other.sort)
     }
 
-
-    //TODO: These colors need to be reviewed/updated
+    // TODO: These colors need to be reviewed/updated
     fun getColor(): Color {
         return when (name.enTitle) {
             "Hedgehog" -> {
@@ -43,7 +42,7 @@ data class TimetableRoom(
         }
     }
 
-    //TODO: Names are updated but the shapes need to be checked
+    // TODO: Names are updated but the shapes need to be checked
     fun getShape(): Shapes {
         return when (name.enTitle) {
             "Flamingo" -> {
