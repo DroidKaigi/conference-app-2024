@@ -15,6 +15,7 @@ dependencies {
     implementation(projects.core.ui)
     implementation(projects.feature.main)
     implementation(projects.feature.sessions)
+    implementation(projects.feature.profilecard)
     implementation(libs.daggerHiltAndroidTesting)
     implementation(libs.roborazzi)
     implementation(libs.kermit)
