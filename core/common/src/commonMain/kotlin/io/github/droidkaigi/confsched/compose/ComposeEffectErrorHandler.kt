@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.compose
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.runtime.LaunchedEffect
@@ -78,7 +77,7 @@ fun <T : R, R> Flow<T>.safeCollectAsRetainedState(
     }
 }
 
-@SuppressLint("StateFlowValueCalledInComposition")
+@Suppress("StateFlowValueCalledInComposition")
 @Composable
 fun <T : R, R> StateFlow<T>.safeCollectAsRetainedState(
     context: CoroutineContext = EmptyCoroutineContext,
