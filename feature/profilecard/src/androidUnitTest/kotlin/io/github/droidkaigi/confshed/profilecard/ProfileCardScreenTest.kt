@@ -43,7 +43,9 @@ class ProfileCardScreenTest(
                         setupScreenContent()
                     }
                     itShould("show edit screen") {
-                        checkEditScreenDisplayed()
+                        captureScreenWithChecks {
+                            checkEditScreenDisplayed()
+                        }
                     }
                 }
             }
