@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -29,18 +30,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import conference_app_2024.feature.main.generated.resources.Res
-import conference_app_2024.feature.main.generated.resources.icon_achievement_fill
-import conference_app_2024.feature.main.generated.resources.icon_achievement_outline
-import conference_app_2024.feature.main.generated.resources.icon_map_fill
 import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.haze
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
@@ -53,7 +54,6 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 const val mainScreenRoute = "main"
-const val MainScreenTestTag = "MainScreen"
 
 fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
@@ -125,25 +125,35 @@ sealed class IconRepresentation {
 }
 
 enum class MainScreenTab(
-    val icon: IconRepresentation,
+    val icon: IconRepresentation.Vector,
     val selectedIcon: IconRepresentation,
     val label: String,
     val contentDescription: String,
     val testTag: String = "mainScreenTab:$label",
+    val color: Color,
 ) {
     Timetable(
         icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
-        selectedIcon = IconRepresentation.Vector(Icons.Filled.CalendarMonth),
+        selectedIcon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         label = MainStrings.Timetable.asString(),
         contentDescription = MainStrings.Timetable.asString(),
+        color = Color(0xFF67FF8D),
     ),
 
-    @OptIn(ExperimentalResourceApi::class)
     EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
-        selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_map_fill),
+        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Map),
         label = MainStrings.EventMap.asString(),
         contentDescription = MainStrings.EventMap.asString(),
+        color = Color(0xFF67FF8D),
+    ),
+
+    Favorite(
+        icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
+        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Favorite),
+        label = MainStrings.EventMap.asString(),
+        contentDescription = MainStrings.EventMap.asString(),
+        color = Color(0xFF67FF8D),
     ),
 
     About(
@@ -151,16 +161,26 @@ enum class MainScreenTab(
         selectedIcon = IconRepresentation.Vector(Icons.Filled.Info),
         label = MainStrings.About.asString(),
         contentDescription = MainStrings.About.asString(),
+        color = Color(0xFF67FF8D),
     ),
 
-    @OptIn(ExperimentalResourceApi::class)
     ProfileCard(
-        icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_outline),
-        selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_fill),
+        icon = IconRepresentation.Vector(Icons.Outlined.People),
+        selectedIcon = IconRepresentation.Vector(Icons.Outlined.People),
         label = MainStrings.ProfileCard.asString(),
         contentDescription = MainStrings.ProfileCard.asString(),
+        color = Color(0xFF67FF8D),
     ),
 }
+
+val tabs =
+    listOf(
+        MainScreenTab.Timetable,
+        MainScreenTab.EventMap,
+        MainScreenTab.Favorite,
+        MainScreenTab.About,
+        MainScreenTab.ProfileCard,
+    )
 
 data class MainScreenUiState(
     val isAchievementsEnabled: Boolean = false,
@@ -210,13 +230,24 @@ fun MainScreen(
                         }
                     }
                 }*/
-                GlassLikeBottomNavigation(hazeState)
+                GlassLikeBottomNavigation(hazeState) {
+                    onTabSelected(mainNestedNavController, it)
+                }
             },
         ) { padding ->
+            val hazeStyle =
+                HazeStyle(
+                    tint = Color.Black.copy(alpha = .2f),
+                    blurRadius = 30.dp,
+                )
             NavHost(
                 navController = mainNestedNavController,
                 startDestination = "timetable",
-                modifier = Modifier,
+                modifier =
+                    Modifier.haze(
+                        hazeState,
+                        hazeStyle,
+                    ),
                 enterTransition = { materialFadeThroughIn() },
                 exitTransition = { materialFadeThroughOut() },
             ) {

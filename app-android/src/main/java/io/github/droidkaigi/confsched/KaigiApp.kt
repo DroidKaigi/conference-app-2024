@@ -35,6 +35,7 @@ import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
 import io.github.droidkaigi.confsched.main.MainScreenTab.EventMap
+import io.github.droidkaigi.confsched.main.MainScreenTab.Favorite
 import io.github.droidkaigi.confsched.main.MainScreenTab.ProfileCard
 import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
@@ -141,7 +142,8 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
-            About -> TODO()
+            Favorite -> {}
+            About -> {}
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }
     }
@@ -164,14 +166,14 @@ private class ExternalNavController(
     private val context: Context,
     private val shareNavigator: ShareNavigator,
 ) {
-
     fun navigate(url: String) {
         val uri: Uri = url.toUri()
-        val launched = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            navigateToNativeAppApi30(context = context, uri = uri)
-        } else {
-            navigateToNativeApp(context = context, uri = uri)
-        }
+        val launched =
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                navigateToNativeAppApi30(context = context, uri = uri)
+            } else {
+                navigateToNativeApp(context = context, uri = uri)
+            }
         if (launched.not()) {
             navigateToCustomTab(context = context, uri = uri)
         }
@@ -182,18 +184,19 @@ private class ExternalNavController(
      * @param timeTableItem カレンダー登録に必要なタイムラインアイテムの情報
      */
     fun navigateToCalendarRegistration(timeTableItem: TimetableItem) {
-        val calendarIntent = Intent(Intent.ACTION_INSERT).apply {
-            data = CalendarContract.Events.CONTENT_URI
-            putExtras(
-                bundleOf(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME to timeTableItem.startsAt.toEpochMilliseconds(),
-                    CalendarContract.EXTRA_EVENT_END_TIME to timeTableItem.endsAt.toEpochMilliseconds(),
-                    CalendarContract.Events.TITLE to "[${timeTableItem.room.name.currentLangTitle}] ${timeTableItem.title.currentLangTitle}",
-                    CalendarContract.Events.DESCRIPTION to timeTableItem.url,
-                    CalendarContract.Events.EVENT_LOCATION to timeTableItem.room.name.currentLangTitle,
-                ),
-            )
-        }
+        val calendarIntent =
+            Intent(Intent.ACTION_INSERT).apply {
+                data = CalendarContract.Events.CONTENT_URI
+                putExtras(
+                    bundleOf(
+                        CalendarContract.EXTRA_EVENT_BEGIN_TIME to timeTableItem.startsAt.toEpochMilliseconds(),
+                        CalendarContract.EXTRA_EVENT_END_TIME to timeTableItem.endsAt.toEpochMilliseconds(),
+                        CalendarContract.Events.TITLE to "[${timeTableItem.room.name.currentLangTitle}] ${timeTableItem.title.currentLangTitle}",
+                        CalendarContract.Events.DESCRIPTION to timeTableItem.url,
+                        CalendarContract.Events.EVENT_LOCATION to timeTableItem.room.name.currentLangTitle,
+                    ),
+                )
+            }
 
         runCatching {
             context.startActivity(calendarIntent)
@@ -216,10 +219,14 @@ private class ExternalNavController(
 
     @Suppress("SwallowedException")
     @RequiresApi(Build.VERSION_CODES.R)
-    private fun navigateToNativeAppApi30(context: Context, uri: Uri): Boolean {
-        val nativeAppIntent = Intent(Intent.ACTION_VIEW, uri)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER)
+    private fun navigateToNativeAppApi30(
+        context: Context,
+        uri: Uri,
+    ): Boolean {
+        val nativeAppIntent =
+            Intent(Intent.ACTION_VIEW, uri)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER)
         return try {
             context.startActivity(nativeAppIntent)
             true
@@ -229,22 +236,27 @@ private class ExternalNavController(
     }
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun navigateToNativeApp(context: Context, uri: Uri): Boolean {
+    private fun navigateToNativeApp(
+        context: Context,
+        uri: Uri,
+    ): Boolean {
         val pm = context.packageManager
 
         // Get all Apps that resolve a generic url
-        val browserActivityIntent = Intent()
-            .setAction(Intent.ACTION_VIEW)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
-            .setData(Uri.fromParts("http", "", null))
+        val browserActivityIntent =
+            Intent()
+                .setAction(Intent.ACTION_VIEW)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .setData(Uri.fromParts("http", "", null))
         val genericResolvedList: Set<String> =
             pm.queryIntentActivities(browserActivityIntent, 0)
                 .map { it.activityInfo.packageName }
                 .toSet()
 
         // Get all apps that resolve the specific Url
-        val specializedActivityIntent = Intent(Intent.ACTION_VIEW, uri)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
+        val specializedActivityIntent =
+            Intent(Intent.ACTION_VIEW, uri)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
         val resolvedSpecializedList: MutableSet<String> =
             pm.queryIntentActivities(browserActivityIntent, 0)
                 .map { it.activityInfo.packageName }
@@ -264,7 +276,10 @@ private class ExternalNavController(
         return true
     }
 
-    private fun navigateToCustomTab(context: Context, uri: Uri) {
+    private fun navigateToCustomTab(
+        context: Context,
+        uri: Uri,
+    ) {
         CustomTabsIntent.Builder()
             .setShowTitle(true)
             .build()

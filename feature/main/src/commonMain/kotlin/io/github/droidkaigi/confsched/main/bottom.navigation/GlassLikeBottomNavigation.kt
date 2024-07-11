@@ -17,14 +17,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -54,17 +50,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import conference_app_2024.feature.main.generated.resources.Res
-import conference_app_2024.feature.main.generated.resources.icon_map_fill
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.main.IconRepresentation
-import io.github.droidkaigi.confsched.main.IconRepresentation.Drawable
-import org.jetbrains.compose.resources.ExperimentalResourceApi
+import io.github.droidkaigi.confsched.main.MainScreenTab
+import io.github.droidkaigi.confsched.main.tabs
 
 @Composable
-fun GlassLikeBottomNavigation(hazeState: HazeState) {
+fun GlassLikeBottomNavigation(
+    hazeState: HazeState,
+    onTabSelected: (MainScreenTab) -> Unit,
+) {
     var selectedTabIndex by remember { mutableIntStateOf(1) }
     Box(
         modifier =
@@ -91,6 +87,7 @@ fun GlassLikeBottomNavigation(hazeState: HazeState) {
             selectedTab = selectedTabIndex,
             onTabSelected = {
                 selectedTabIndex = tabs.indexOf(it)
+                onTabSelected.invoke(tabs[selectedTabIndex])
             },
         )
 
@@ -172,12 +169,11 @@ fun GlassLikeBottomNavigation(hazeState: HazeState) {
     }
 }
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun BottomBarTabs(
-    tabs: List<BottomBarTab>,
+    tabs: List<MainScreenTab>,
     selectedTab: Int,
-    onTabSelected: (BottomBarTab) -> Unit,
+    onTabSelected: (MainScreenTab) -> Unit,
 ) {
     CompositionLocalProvider(
         LocalTextStyle provides
@@ -220,8 +216,7 @@ fun BottomBarTabs(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    Icon(imageVector = tab.icon, contentDescription = "tab ${tab.title}")
-                    Text(text = tab.title)
+                    Icon(imageVector = tab.icon.imageVector, contentDescription = "tab ${tab.contentDescription}")
                 }
             }
         }
@@ -235,47 +230,10 @@ fun GlassLikeBottomNavigationPreview() {
 
     KaigiTheme {
         Scaffold {
-            GlassLikeBottomNavigation(hazeState = hazeState)
+            GlassLikeBottomNavigation(
+                hazeState = hazeState,
+                {},
+            )
         }
     }
 }
-
-sealed class BottomBarTab(val title: String, val icon: Drawable, val color: Color) {
-    data object Timetable : BottomBarTab(
-        title = "Timetable",
-        icon = IconRepresentation.Drawable(drawableId = Res.drawable.calendar_month),
-        color = Color(0xFFFFA574),
-    )
-
-    data object EventMap : BottomBarTab(
-        title = "Timetable",
-        icon = IconRepresentation.Drawable(drawableId = Res.),
-        color = Color(0xFFFFA574),
-    )
-
-    data object Favorite : BottomBarTab(
-        title = "Favorite",
-        icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_map_fill),
-        color = Color(0xFFFA6FFF),
-    )
-
-    data object Info : BottomBarTab(
-        title = "Settings",
-        icon = Icons.Rounded.Info,
-        color = Color(0xFFADFF64),
-    )
-    data object Settings : BottomBarTab(
-        title = "Settings",
-        icon = Icons.Rounded.Settings,
-        color = Color(0xFFADFF64),
-    )
-}
-
-val tabs =
-    listOf(
-        BottomBarTab.Timetable,
-        BottomBarTab.EventMap,
-        BottomBarTab.Favarite,
-        BottomBarTab.Info,
-        BottomBarTab.Settings,
-    )
