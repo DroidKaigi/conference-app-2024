@@ -11,7 +11,15 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.List
+import androidx.compose.material.icons.automirrored.outlined.ListAlt
+import androidx.compose.material.icons.automirrored.outlined.ViewList
+import androidx.compose.material.icons.automirrored.outlined.ViewQuilt
+import androidx.compose.material.icons.outlined.List
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -43,6 +51,7 @@ import io.github.droidkaigi.confsched.model.TimetableUiType
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheet
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
+import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.ListTimetable
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -163,7 +172,7 @@ private fun TimetableScreen(
     Scaffold(
         modifier = modifier
             .testTag(TimetableScreenTestTag)
-            .background(timetableTopBackground())
+            .background(Color.Black)
             .drawWithCache {
                 onDrawBehind {
                     drawRect(
@@ -181,12 +190,26 @@ private fun TimetableScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             Row {
+                Text(text = "TimeTable")
                 Text(text = "UiType: ${uiState.timetableUiType}")
                 Button(
                     modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
                     onClick = { onTimetableUiChangeClick() },
                 ) {
-                    Text("Change UiType!")
+
+                }
+                Button(
+                    modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
+                    onClick = { onTimetableUiChangeClick() },
+                ) {
+                    when (uiState.contentUiState) {
+                        is ListTimetable -> {
+                            Icon(Icons.AutoMirrored.Outlined., "", tint = Color.Green)
+                        } else -> {
+                        Icon(Icons.AutoMirrored.Outlined.ViewList, "", tint = Color.Green)
+                        }
+                    }
+
                 }
             }
         },
