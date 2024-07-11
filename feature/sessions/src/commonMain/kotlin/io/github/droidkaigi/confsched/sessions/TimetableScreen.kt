@@ -26,6 +26,7 @@ import androidx.compose.material.icons.outlined.Dataset
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -219,6 +220,27 @@ private fun TimetableScreen(
         Box(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
         ) {
+            //TODO: Row not showing yet... there is a layout problem here I need to fix
+            Row {
+                IconButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /** TODO: Search here **/ },
+                ) {
+                    Text("Workday", color=Color.Green)
+                }
+                IconButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /** TODO: Search here **/ },
+                ) {
+                    Text("Day 1", color=Color.Green)
+                }
+                IconButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /** TODO: Search here **/ },
+                ) {
+                    Text("Day 2", color=Color.Green)
+                }
+            }
             TimetableSheet(
                 modifier = Modifier
                     .fillMaxSize(),
