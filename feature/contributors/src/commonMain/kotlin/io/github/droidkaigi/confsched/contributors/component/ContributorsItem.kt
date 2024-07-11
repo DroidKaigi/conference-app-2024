@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.MaterialTheme
@@ -23,7 +23,7 @@ import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.previewOverride
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 
-private val contributorIconShape = RoundedCornerShape(20.dp)
+private val contributorIconShape = CircleShape
 
 @Composable
 fun ContributorsItem(
@@ -46,7 +46,7 @@ fun ContributorsItem(
             },
             contentDescription = null,
             modifier = Modifier
-                .size(60.dp)
+                .size(52.dp)
                 .clip(contributorIconShape)
                 .border(
                     width = 1.dp,
