@@ -5,18 +5,26 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.AutoMirrored.Outlined
 import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.automirrored.outlined.ListAlt
+import androidx.compose.material.icons.automirrored.outlined.ManageSearch
 import androidx.compose.material.icons.automirrored.outlined.ViewList
 import androidx.compose.material.icons.automirrored.outlined.ViewQuilt
+import androidx.compose.material.icons.automirrored.outlined.ViewSidebar
+import androidx.compose.material.icons.outlined.Dataset
 import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Size
@@ -36,6 +45,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -167,46 +177,31 @@ private fun TimetableScreen(
         } else {
             0.5f
         }
-    val timetableTopGradient = timetableTopGradient()
     val bottomPaddingPx = with(density) { contentPadding.calculateBottomPadding().toPx() }
     Scaffold(
         modifier = modifier
             .testTag(TimetableScreenTestTag)
-            .background(Color.Black)
-            .drawWithCache {
-                onDrawBehind {
-                    drawRect(
-                        brush = Brush.verticalGradient(
-                            0f to timetableTopGradient,
-                            gradientEndRatio to Color.Transparent,
-                        ),
-                        size = Size(
-                            size.width,
-                            size.height - bottomPaddingPx,
-                        ),
-                    )
-                }
-            },
+            .background(Color.Black),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             Row {
-                Text(text = "TimeTable")
-                Text(text = "UiType: ${uiState.timetableUiType}")
-                Button(
-                    modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
-                    onClick = { onTimetableUiChangeClick() },
+                Text(text = "TimeTable", fontSize = 24.sp, modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                Spacer(modifier = Modifier.weight(1.0f))
+                IconButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /** TODO: Search here **/ },
                 ) {
-
+                    Icon(Icons.Outlined.Search, "", tint = Color.White)
                 }
-                Button(
-                    modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
+                IconButton(
+                    modifier = Modifier.background(Color.Black),
                     onClick = { onTimetableUiChangeClick() },
                 ) {
                     when (uiState.contentUiState) {
                         is ListTimetable -> {
-                            Icon(Icons.AutoMirrored.Outlined., "", tint = Color.Green)
+                            Icon(Icons.Outlined.Dataset, "", tint = Color.White)
                         } else -> {
-                        Icon(Icons.AutoMirrored.Outlined.ViewList, "", tint = Color.Green)
+                            Icon(Outlined.List, "", tint = Color.White)
                         }
                     }
 
