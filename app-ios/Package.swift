@@ -194,7 +194,7 @@ let package = Package(
                 .tca
             ]
         ),
-        .target(name: "CommonComponents"),
+        .target(name: "CommonComponents", dependencies: [.theme]),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
