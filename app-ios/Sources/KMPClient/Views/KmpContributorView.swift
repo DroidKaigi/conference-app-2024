@@ -28,7 +28,7 @@ public struct KmpContributorView: View {
 
     @MainActor
     private func startListening() async {
-        let uiStateStateFlow = contributorScreenPresenterStateFlow(repositories: repositories.map, events: SkieSwiftFlow(events))
+        let uiStateStateFlow = contributorsScreenPresenterStateFlow(repositories: repositories.map, events: SkieSwiftFlow(events))
 
         for await state in uiStateStateFlow {
             self.currentState = state

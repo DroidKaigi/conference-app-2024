@@ -9,9 +9,9 @@ public struct KmpContributorComposeViewControllerWrapper: UIViewControllerRepres
     }
 
     public func makeUIViewController(context: Context) -> UIViewController {
-        return contributorViewController(
+        return contributorsViewController(
             repositories: repositories,
-            onContributorItemClick: {_ in}
+            onContributorsItemClick: {_ in}
         )
     }
 
