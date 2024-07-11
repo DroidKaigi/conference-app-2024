@@ -100,6 +100,10 @@ public struct RootReducer {
             case .about(.view(.acknowledgementsTapped)):
                 state.paths.about.append(.acknowledgements)
                 return .none
+                
+            case .timetable(.view(.timetableItemTapped)):
+                state.paths.timetable.append(.timetableDetail(TimetableDetailReducer.State()))
+                return .none
 
             default:
                 return .none
