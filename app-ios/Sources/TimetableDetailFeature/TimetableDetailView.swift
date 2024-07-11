@@ -23,7 +23,7 @@ public struct TimetableDetailView: View {
                     archive
                         .padding(16)
                 }
-                .toast($store.toast.sending(\.setToast))
+                .toast($store.toast)
                 
                 footer
             }

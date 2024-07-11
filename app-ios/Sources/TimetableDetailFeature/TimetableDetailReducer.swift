@@ -10,9 +10,9 @@ public struct TimetableDetailReducer {
         var toast: ToastState?
     }
     
-    public enum Action {
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case view(View)
-        case setToast(ToastState?)
 
         public enum View {
             case favoriteButtonTapped
@@ -20,13 +20,13 @@ public struct TimetableDetailReducer {
     }
     
     public var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce { state, action in
             switch action {
             case .view(.favoriteButtonTapped):
                 state.toast = .init(text: String(localized: "TimetableDetailAddBookmark", bundle: .module))
                 return .none
-            case let .setToast(toast):
-                state.toast = toast
+            case .binding:
                 return .none
             }
         }

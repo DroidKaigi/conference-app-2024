@@ -22,9 +22,6 @@ struct ToastModifier: ViewModifier {
                 ToastView(item: $item)
                     .zIndex(1)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .task {
-                        try? await Task.sleep(for: .seconds(animationDelay))
-                    }
                     .onTapGesture {
                         item = nil
                     }
