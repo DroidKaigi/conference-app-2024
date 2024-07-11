@@ -65,8 +65,8 @@ let package = Package(
                 .timetableFeature,
                 .timetableDetailFeature,
                 .tca,
-                "KMPClient",
-                .product(name: "LicenseList", package: "LicenseList"),
+                .kmpClient,
+                .licenseList,
             ]
         ),
         .testTarget(
@@ -114,6 +114,7 @@ let package = Package(
             dependencies: [
                 .tca,
                 .theme,
+                .commonComponents
             ]
         ),
         .testTarget(
@@ -193,7 +194,7 @@ let package = Package(
                 .tca
             ]
         ),
-        .target(name: "CommonComponents"),
+        .target(name: "CommonComponents", dependencies: [.theme]),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -228,6 +229,7 @@ extension Target.Dependency {
     static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
     static let firebaseRemoteConfig: Target.Dependency = .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk")
     static let tca: Target.Dependency = .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+    static let licenseList: Target.Dependency = .product(name: "LicenseList", package: "LicenseList")
 }
 
 /// ref: https://github.com/treastrain/swift-upcomingfeatureflags-cheatsheet?tab=readme-ov-file#short

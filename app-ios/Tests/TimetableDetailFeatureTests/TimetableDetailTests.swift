@@ -4,11 +4,13 @@ import ComposableArchitecture
 
 final class TimetableDetail_iosTests: XCTestCase {
     @MainActor func testExample() async throws {
-        let store = TestStore(initialState: TimetableDetailReducer.State(title: "Test")) {
+        let store = TestStore(initialState: TimetableDetailReducer.State()) {
             TimetableDetailReducer()
         }
-        await store.send(.onAppear) {
-            $0.title = "Timetable Detail"
+        
+        await store.send(.favoriteButtonTapped) {
+            $0.toast = .init(text: String(localized: "TimetableDetailAddBookmark", bundle: .module))
         }
+        
     }
 }

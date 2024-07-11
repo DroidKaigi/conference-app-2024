@@ -1,10 +1,11 @@
 import SwiftUI
 import ComposableArchitecture
 import Theme
+import CommonComponents
 
 public struct TimetableDetailView: View {
-    private let store: StoreOf<TimetableDetailReducer>
-
+    @Bindable private var store: StoreOf<TimetableDetailReducer>
+    
     public var body: some View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
@@ -22,6 +23,7 @@ public struct TimetableDetailView: View {
                     archive
                         .padding(16)
                 }
+                .toast($store.toast)
                 
                 footer
             }
@@ -51,7 +53,7 @@ public struct TimetableDetailView: View {
             }
             Spacer()
             Button {
-                // do something
+                store.send(.view(.favoriteButtonTapped))
             } label: {
                 Group {
                     Image(.icFavorite)
@@ -207,7 +209,7 @@ public struct TimetableDetailView: View {
 
 #Preview {
     TimetableDetailView(
-        store: .init(initialState: .init(title: "")) {
+        store: .init(initialState: .init(toast: nil)) {
             TimetableDetailReducer()
         }
     )
