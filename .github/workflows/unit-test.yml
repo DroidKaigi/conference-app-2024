@@ -38,6 +38,7 @@ jobs:
           path: ${{ github.event_path }}
 
       - run: ./gradlew detekt --stacktrace
+      - run: ./gradlew compileKotlinIosSimulatorArm64
 
       - run: ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace
 
