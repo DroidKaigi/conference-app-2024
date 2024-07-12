@@ -42,13 +42,9 @@ public struct TimetableDetailReducer: Sendable {
             switch action {
             case .view(.bookmarkButtonTapped):
                 return .run { send in
-                    do {
-                        await send(.bookmarkResponse(.success(
-                            try await timetableClient.toggleBookmark(id: TimetableItemId(value: ""))
-                        )))
-                    } catch {
-                        await send(.bookmarkResponse(.failure(error)))
-                    }
+                    await send(.bookmarkResponse(Result {
+                        try await timetableClient.toggleBookmark(id: TimetableItemId(value: ""))
+                    }))
                 }
                 .cancellable(id: CancelID.request)
 
