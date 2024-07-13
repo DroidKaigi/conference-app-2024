@@ -4,13 +4,14 @@
 
 <img width="815" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f0a9a5a2-e10d-470c-9e7d-0ad15128f1f5">
 
-### Understanding the App's Data Flow: A Guide for Contributors
+### A Guide for Contributors 1: Understanding the App's Data Flow
 
-For contributing to the app, it is important to understand the data flow of the app.
+To contribute to the app effectively, understanding its data flow is crucial for comprehending the app's code structure. Let's examine this further.
 
 #### 1. Displaying Sessions on the Timetable Screen
 
-This section explains how the TimetableScreen is set up to display sessions, detailing the flow from the presenter to the UI state.
+This section explains how the TimetableScreen is set up to display sessions, detailing the flow from the presenter to the UI state. We are categorizing UI Composable functions according to [last year's categorization](https://github.com/DroidKaigi/conference-app-2023?tab=readme-ov-file#composable-function-categorization).
+
 
 ```
               TimetableScreenUiState
@@ -99,18 +100,21 @@ userDataStore ----> Repository
 ```
 
 ```kotlin
-    @Composable
+@Composable
 public override fun timetable(): Timetable {
     val timetable by remember {
         ...
-    }.safeCollectAsState(Timetable())
+    }.safeCollectAsRetainedState(Timetable())
     val favoriteSessions by remember {
         userDataStore.getFavoriteSessionStream()
-    }.safeCollectAsState(persistentSetOf())
+    }.safeCollectAsRetainedState(persistentSetOf())
 
     return timetable.copy(bookmarks = favoriteSessions)
 }
 ```
+
+`safeCollectAsRetainedState()` is a utility function that allows us to safely collect a Flow in a Composable function. It retains the state across recompositions and Compose navigation, ensuring that the data is not lost when the Composable function is recomposed.
+For more information, see the [Rin](https://github.com/takahirom/Rin) library.
 
 #### 5. Passing the Updated Timetable to the Presenter
 
@@ -120,7 +124,8 @@ Describes the flow of updated session data back to the screen presenter, highlig
 <img width="518" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/9ad59696-0b94-4d3f-84c4-71ae0402680b">
 
 
-```                 Timetable
+```
+                 Timetable
 SessionsRepository ----> timetableScreenPresenter
 ```
 
@@ -177,211 +182,224 @@ fun TimetableScreen(
         uiState = uiState,
 ```        
 
+###  A Guide for Contributors 2: Understanding the App's Testing
 
-<!--
-### Points to note
-* Use Composable function for ViewModels
-* Use Composable function for Repositories
-* How the Composable function can be lifecycle aware
-* How to handle errors in Composable functions
-* ???
-* Something related to tests?
-  * Roborazzi as debug tool of Robolectric tests
-* Something other challenges?
+The DroidKaigi 2024 official app utilizes a comprehensive testing strategy that combines Behavior Driven Development (BDD), Robolectric, and Roborazzi. This integrated approach enhances app stability, ensures UI correctness, and streamlines the testing process for Android development.
 
-### Things to decide
+#### Key Components
 
-* [DONE] Which name should we use for the ViewModel function? `presenter` or `viewModel`?
+**Robolectric**: A framework that executes Android tests directly on the JVM, allowing tests to run without requiring a physical device or emulator. This approach significantly speeds up test execution and allows for easier integration with continuous integration systems.
 
-The function will be like this. What this function do is ViewModel. But the function returns UiState.
-The thing is Android developers are familiar with Android ViewModel and this function is not ViewModel.
-So I think `presenter` is better.
-
-```
-@Composable
-fun presenter(event: Flow<Event>): UiState
-```
-
-* If we use Composable functions for Repositories, how can iOS app use it?
-
-If we use Composable functions for Repositories, iOS app can't use it directly.
-We can workaround it by using molecule to convert it to flow.
-
-
--------
-
-Work in progress.
-
-### Expanding the Use of Composable Functions Beyond UI
-
-As Coroutines suspend functions replace Callbacks, Compose replaces Kotlin Coroutines Flow.
-Compose can make ViewModel and Repository more readable and maintainable by the Composable function.
-
-#### UI
-
-Now we don't use `ViewModel`. Instead, we use `presenter` which is a Composable function.
 
 ```kotlin
-@Composable
-fun TimetableItemDetailScreen(
-    onNavigationIconClick: () -> Unit,
-    onLinkClick: (url: String) -> Unit,
-    onCalendarRegistrationClick: (TimetableItem) -> Unit,
-    onShareClick: (TimetableItem) -> Unit,
-) {
-    val eventEmitter = rememberEventEmitter<TimetableItemDetailEvent>()
-    val userMessageStateHolder = rememberUserMessageStateHolder()
-    val uiState = timetableItemDetailPresenter(
-        events = eventEmitter,
-        userMessageStateHolder = userMessageStateHolder,
-    )
-    
-        ...
+@RunWith(ParameterizedRobolectricTestRunner::class)
+@HiltAndroidTest
+class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScreenRobot>) {
 
+    @get:Rule
+    @BindValue val robotTestRule: RobotTestRule = RobotTestRule(this)
 
-    TimetableItemDetailScreen(
-        uiState = uiState,
-        onNavigationIconClick = onNavigationIconClick,
-        onBookmarkClick = {
-            eventEmitter.tryEmit(TimetableItemDetailEvent.Bookmark(it))
-        },
-```
+    @Inject
+    lateinit var timetableScreenRobot: TimetableScreenRobot
 
-#### ViewModel Composable functions
-
-`Presenter` handles UI events and return UiStates.
-
-```kotlin
-@Composable
-fun timetableItemDetailViewModel(
-    events: Flow<TimetableItemDetailEvent>,
-    sessionsRepository: SessionsRepository,
-    ..
-): TimetableItemDetailScreenUiState {
-    val timetableItemId by remember {
-        sessionIdFlow
-    }.collectAsState()
-    // Caution: We need to use rememberUpdatedState because the state should be updated in the LaunchedEffect.
-    val timetableItemStateWithBookmark by rememberUpdatedState(
-        sessionsRepository
-            .timetableItemWithBookmark(TimetableItemId(timetableItemId)),
-    )
-    ...
-    LaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is Bookmark -> {
-                    val timetableItemWithBookmark = timetableItemStateWithBookmark
-                    val timetableItem =
-                        timetableItemWithBookmark?.first ?: return@collect
-                    sessionsRepository.toggleBookmark(timetableItem.id)
-                        ...
-                }
-                ...
-            }
+    @Test
+    fun runTest() {
+        runRobot(timetableScreenRobot) {
+            testCase.execute(timetableScreenRobot)
         }
     }
-        ...
-    val (timetableItem, bookmarked) = timetableItemStateWithBookmarkValue
-    return TimetableItemDetailScreenUiState.Loaded(
-        timetableItem = timetableItem,
-        ...
-    )
+```
+
+**BDD**: Expresses clear behavior of the app.
+
+We will delve into BDD aspect in the next section.
+
+```kotlin
+companion object {
+        @JvmStatic
+        @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
+        fun behaviors(): List<DescribedBehavior<TimetableScreenRobot>> {
+            return describeBehaviors<TimetableScreenRobot>(name = "TimetableScreen") {
+                describe("when server is operational") {
+                    run {
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupTimetableScreenContent()
+                    }
+                    itShould("show timetable items") {
+                        captureScreenWithChecks(checks = {
+                            checkTimetableItemsDisplayed()
+                        })
+```
+
+This will generate test names like `TimetableScreen - when the server is operational - it should display timetable items`.  
+And generate a image named `TimetableScreen - when the server is operational - it should display timetable items.png`.
+
+**Robot Pattern**: Robots separate the "what" (test intent) from the "how" (UI interactions).
+
+Test Cases (What):
+
+```kotlin
+itShould("show timetable items") {
+    captureScreenWithChecks(checks = {
+        checkTimetableItemsDisplayed() 
+    })
 }
 ```
 
-#### Repository Composable functions
-
-Repository can also use Composable function. It allows you to use `remember` and `LaunchedEffect` in the Repository.
+Robot Implementation (How):
 
 ```kotlin
-public class DefaultSessionsRepository(
-    private val sessionsApi: SessionsApiClient,
-    private val userDataStore: UserDataStore,
-    private val sessionCacheDataStore: SessionCacheDataStore,
-) : SessionsRepository {
-    @Composable
-    public override fun timetable(): Timetable {
-        ...
-
-        val timetable by remember {
-            sessionCacheDataStore.getTimetableStream()
-                .catch { e ->
-                    ...
-                }
-        }.safeCollectAsState(Timetable())
-        val favoriteSessions by remember {
-            userDataStore.getFavoriteSessionStream()
-        }.safeCollectAsState(persistentSetOf())
-
-        return timetable.copy(bookmarks = favoriteSessions)
+class TimetableScreenRobot {
+    ...
+    fun clickFirstSessionBookmark() {
+        composeTestRule 
+            .onAllNodes(hasTestTag(TimetableListItemBookmarkIconTestTag))
+            .onFirst()
+            .performClick()
+        waitUntilIdle() 
     }
+    ...
+}
 ```
 
-#### Lifecycle aware ViewModel Composable functions
+**Roborazzi Integration**: Roborazzi captures screenshots during tests for visual regression detection.
 
-ViewModels are not lifecycle aware by default. 
-For example, there are screens A and B, Screen**A**ViewModel will continue to work even if the screen is not visible.
+```kotlin
+fun captureScreenWithChecks(checks: () -> Unit) {
+        robotTestRule.captureScreen()
+        checks()
+}
+```
 
-Screen A(Screen**A**ViewModel) -> Screen B(Screen**B**ViewModel)
+**Advantages**
 
-To solve this problem, you can pass the `Lifecycle` to ViewModel in the screen.
+* Speed: JVM-based tests run significantly faster than traditional instrumented tests, allowing for quicker feedback during development.
+* Clarity: BDD improves test readability, making it easier for both developers and non-technical stakeholders to understand test scenarios.
+* Maintainability: The Robot Pattern simplifies UI test maintenance by centralizing UI interaction logic, reducing the impact of UI changes on test code.
+* Visual Consistency: Roborazzi's screenshot comparison feature helps detect unintended UI changes early in the development process, ensuring a consistent user experience.
 
-```kotin
+### This Year's Experimental Challenges
+
+#### Rewriting Coroutine Flow to Composable Function
+
+This year, we've taken a significant step in our app architecture by leveraging Composable functions not just for UI, but also for ViewModels and Repositories. This approach aligns with the growing understanding in the Android community that Compose's runtime is a powerful tool for managing tree-like structures and state, extending far beyond its initial UI-focused perception.  
+Our motivation stems from the belief that Composable functions can lead to more readable, maintainable, and conceptually unified code across our application layers. This shift represents a move towards treating our entire app as a composable structure, not just its visual elements.
+Let's look at how this transformation has impacted our Repository implementation:
+
+Flow-based Repository (Old version)
+
+```kotlin
+override fun getTimetableStream(): Flow<Timetable> = flow {
+    var first = true
+    combine(
+        sessionCacheDataStore.getTimetableStream().catch { e ->
+            Logger.d(
+                "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
+                e,
+            )
+            sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+            emitAll(sessionCacheDataStore.getTimetableStream())
+        },
+        userDataStore.getFavoriteSessionStream(),
+    ) { timetable, favorites ->
+        timetable.copy(bookmarks = favorites)
+    }.collect {
+        if (!it.isEmpty()) {
+            emit(it)
+        }
+        if (first) {
+            first = false
+            Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
+            sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+            Logger.d("DefaultSessionsRepository onStart fetched")
+        }
+    }
+}
+```
+
+Now we can write a Repository like this. We don't need to use combine.
+
+Composable Function-based Repository (New version)
+
+```kotlin
 @Composable
-fun TimetableItemDetailScreen(
-...
-    viewModel: TimetableItemDetailViewModel = hiltViewModel(),
-) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    LaunchedEffect(lifecycleOwner) {
-        // pass the lifecycle to ViewModel
-        viewModel.activeLifecycleWhile(lifecycleOwner.lifecycle)
+public override fun timetable(): Timetable {
+    var first by remember { mutableStateOf(true) }
+    SafeLaunchedEffect(first) {
+        if (first) {
+            Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
+            sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+            Logger.d("DefaultSessionsRepository onStart fetched")
+            first = false
+        }
     }
-    val uiState by viewModel.uiState.collectAsState()
-```
 
-The mechanism is implemented in `DefaultComposeViewModel`. 
-We uses [PausableMonotonicFrameClock](https://developer.android.com/reference/kotlin/androidx/compose/runtime/PausableMonotonicFrameClock) to pause and resume the Composable function.
+    val timetable by remember {
+        sessionCacheDataStore.getTimetableStream().catch { e ->
+            Logger.d(
+                "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
+                e,
+            )
+            sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+            emitAll(sessionCacheDataStore.getTimetableStream())
+        }
+    }.safeCollectAsRetainedState(Timetable())
+    val favoriteSessions by remember {
+        userDataStore.getFavoriteSessionStream()
+    }.safeCollectAsRetainedState(persistentSetOf())
 
-> PausableMonotonicFrameClock should be used in cases where frames should not be produced under some conditions, such as when a window hosting a UI is not currently visible.
-
-https://developer.android.com/reference/kotlin/androidx/compose/runtime/PausableMonotonicFrameClock
-
-```kotlin
-// When the screen is not visible, the ViewModel will be paused.
-(composeCoroutineContext.monotonicFrameClock as PausableMonotonicFrameClock).pause()
-
-// When the screen is visible, the ViewModel will be resumed.
-(composeCoroutineContext.monotonicFrameClock as PausableMonotonicFrameClock).resume()
-```
-
-### Error handling of ViewModel Composable functions
-
-Composable functions don't allow throwing exceptions and catching them in the parent function.
-And if you don't handle errors in `LaunchedEffect` or `Flow.collectAsState` in the Composable function, the app will crash.
-
-To handle errors in Composable functions, we provide `ComposeEffectErrorHandler` by CompositionLocal.
-
-```kotlin
-interface ComposeEffectErrorHandler {
-    val errors: Flow<Throwable>
-    suspend fun emit(throwable: Throwable)
+    Logger.d { "DefaultSessionsRepository timetable() count=${timetable.timetableItems.size}" }
+    return timetable.copy(bookmarks = favoriteSessions)
 }
 ```
 
-And for handling errors in the Composable function, you can use `SafeLaunchedEffect{}` and `safeCollectAsState()`.
-The function will catch the error and emit it to the `ComposeEffectErrorHandler`.
+We are exploring the possibility of using Compose.
+
+#### Behavior driven development and screenshot testing
+
+We aim to enhance our app's quality by adopting BDD methodologies similar to Ruby and JavaScript, alongside implementing screenshot testing.   
+We used to have a test like `launchTimetableShot()` that captures a screenshot of the timetable screen. But we found that we don't know what to check in the screenshot.
+The reason why we chose BDD is that it clearly defines the app's behavior and ensures that the app functions as expected.  
+To effectively capture screenshots, we utilize Robolectric integrated with Roborazzi. Below is the Kotlin code snippet we employ for our BDD tests:  
 
 ```kotlin
-SafeLaunchedEffect(first) {
-    if (first) {
-        Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
-        sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
-        Logger.d("DefaultSessionsRepository onStart fetched")
-        first = false
-    }
-}
+companion object {
+@JvmStatic
+@ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
+fun behaviors(): List<DescribedBehavior<TimetableScreenRobot>> {
+    return describeBehaviors<TimetableScreenRobot>(name = "TimetableScreen") {
+        describe("when server is operational") {
+            run {
+                setupTimetableServer(ServerStatus.Operational)
+                setupTimetableScreenContent()
+            }
+            itShould("show timetable items") {
+                captureScreenWithChecks(checks = {
+                    checkTimetableItemsDisplayed()
+                })
+            }
+            describe("click first session bookmark") {
+                run {
+                    clickFirstSessionBookmark()
+                }
+                itShould("show bookmarked session") {
+                    captureScreenWithChecks{
+                        checkFirstSessionBookmarked()
+                    }
+                }
+            }
 ```
 
--->
+The test names are formatted as follows: `TimetableScreen - when the server is operational - it should display timetable items`.   
+Correspondingly, screenshots are saved with names like `TimetableScreen - when the server is operational - it should display timetable items.png`.   
+While screenshots are invaluable for debugging, they alone do not suffice to ensure app quality, as changes can be missed. Therefore, we enforce rigorous content checks during screenshot capture using the `captureScreenWithChecks` function.
+
+#### Flexible Integration of Compose Multiplatform in iOS Apps
+This feature demonstrates the practicality of Compose Multiplatform by showcasing its adaptability at various levels within an iOS application.  
+We introduce a settings screen that allows toggling Compose Multiplatform integration for:
+
+* Full app integration (runs the entire app on iOS)
+* Screen-level integration (e.g., Using @ContributorScreen in the iOS app)
+* Presenter (ViewModel) integration (e.g., Using @contributorScreenPresenter in the iOS app with SwiftUI)
+
+This approach demonstrates flexible adaptation between iOS and Android platforms, enabling performance optimization by using native components and versatile development strategies.
