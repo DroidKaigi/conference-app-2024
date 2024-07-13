@@ -395,10 +395,11 @@ Correspondingly, screenshots are saved with names like `TimetableScreen - when t
 While screenshots are invaluable for debugging, they alone do not suffice to ensure app quality, as changes can be missed. Therefore, we enforce rigorous content checks during screenshot capture using the `captureScreenWithChecks` function.
 
 #### Flexible Integration of Compose Multiplatform in iOS Apps
-This chapter demonstrates the practicality of Compose Multiplatform by showcasing its adaptability at various levels within an iOS application. We introduce a settings screen that allows toggling Compose Multiplatform integration for:
+This feature demonstrates the practicality of Compose Multiplatform by showcasing its adaptability at various levels within an iOS application.  
+We introduce a settings screen that allows toggling Compose Multiplatform integration for:
 
-* Full app integration (default: off, runs natively on iOS)
-* Screen-level integration (e.g., Screen A)
-* Component-level integration (e.g., Screen B's presenter)
+* Full app integration (runs the entire app on iOS)
+* Screen-level integration (e.g., Using @ContributorScreen in the iOS app)
+* Presenter (ViewModel) integration (e.g., Using @contributorScreenPresenter in the iOS app with SwiftUI)
 
-This approach demonstrates flexible adaptation between iOS and Android platforms, enabling performance optimization and versatile development strategies.
+This approach demonstrates flexible adaptation between iOS and Android platforms, enabling performance optimization by using native components and versatile development strategies.
