@@ -12,21 +12,12 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.Icons.AutoMirrored.Outlined
 import androidx.compose.material.icons.automirrored.outlined.List
-import androidx.compose.material.icons.automirrored.outlined.ListAlt
-import androidx.compose.material.icons.automirrored.outlined.ManageSearch
-import androidx.compose.material.icons.automirrored.outlined.ViewList
-import androidx.compose.material.icons.automirrored.outlined.ViewQuilt
-import androidx.compose.material.icons.automirrored.outlined.ViewSidebar
 import androidx.compose.material.icons.outlined.Dataset
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Search
-import androidx.compose.material3.Button
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -39,9 +30,6 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -206,7 +194,6 @@ private fun TimetableScreen(
                             Icon(Outlined.List, "", tint = Color.White)
                         }
                     }
-
                 }
             }
         },
@@ -221,25 +208,25 @@ private fun TimetableScreen(
         Box(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
         ) {
-            //TODO: Row not showing yet... there is a layout problem here I need to fix
+            // TODO: Row not showing yet... there is a layout problem here I need to fix
             Row {
                 IconButton(
                     modifier = Modifier.background(Color.Black),
                     onClick = { /** TODO: Search here **/ },
                 ) {
-                    Text("Workday", color=Color.Green)
+                    Text("Workday", color = Color.Green)
                 }
                 IconButton(
                     modifier = Modifier.background(Color.Black),
                     onClick = { /** TODO: Search here **/ },
                 ) {
-                    Text("Day 1", color=Color.Green)
+                    Text("Day 1", color = Color.Green)
                 }
                 IconButton(
                     modifier = Modifier.background(Color.Black),
                     onClick = { /** TODO: Search here **/ },
                 ) {
-                    Text("Day 2", color=Color.Green)
+                    Text("Day 2", color = Color.Green)
                 }
             }
             TimetableSheet(
