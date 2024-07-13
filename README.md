@@ -10,7 +10,8 @@ To contribute to the app effectively, understanding its data flow is crucial for
 
 #### 1. Displaying Sessions on the Timetable Screen
 
-This section explains how the TimetableScreen is set up to display sessions, detailing the flow from the presenter to the UI state.
+This section explains how the TimetableScreen is set up to display sessions, detailing the flow from the presenter to the UI state. We are categorizing UI Composable functions according to [last year's categorization](https://github.com/DroidKaigi/conference-app-2023?tab=readme-ov-file#composable-function-categorization).
+
 
 ```
               TimetableScreenUiState
