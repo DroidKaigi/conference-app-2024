@@ -3,23 +3,37 @@ package io.github.droidkaigi.confsched.sessions
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.AutoMirrored
+import androidx.compose.material.icons.Icons.Outlined
+import androidx.compose.material.icons.automirrored.outlined.List
+import androidx.compose.material.icons.outlined.Dataset
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Size
@@ -28,6 +42,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextDecoration.Companion
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -43,6 +60,7 @@ import io.github.droidkaigi.confsched.model.TimetableUiType
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheet
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
+import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.ListTimetable
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -163,30 +181,31 @@ private fun TimetableScreen(
     Scaffold(
         modifier = modifier
             .testTag(TimetableScreenTestTag)
-            .background(timetableTopBackground())
-            .drawWithCache {
-                onDrawBehind {
-                    drawRect(
-                        brush = Brush.verticalGradient(
-                            0f to timetableTopGradient,
-                            gradientEndRatio to Color.Transparent,
-                        ),
-                        size = Size(
-                            size.width,
-                            size.height - bottomPaddingPx,
-                        ),
-                    )
-                }
-            },
+            .background(Color.Black),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             Row {
-                Text(text = "UiType: ${uiState.timetableUiType}")
-                Button(
-                    modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
+                Text(text = "TimeTable", fontSize = 24.sp, modifier = Modifier.align(alignment = Alignment.CenterVertically))
+                Spacer(modifier = Modifier.weight(1.0f))
+                /** TODO: Search here **/
+                IconButton(
+                    modifier = Modifier.background(Color.Black)
+                        .testTag(TimetableUiTypeChangeButtonTestTag),
+                    onClick = { /** TODO: Search here **/ },
+                ) {
+                    Icon(Icons.Outlined.Search, "", tint = Color.White)
+                }
+                IconButton(
+                    modifier = Modifier.background(Color.Black),
                     onClick = { onTimetableUiChangeClick() },
                 ) {
-                    Text("Change UiType!")
+                    when (uiState.contentUiState) {
+                        is ListTimetable -> {
+                            Icon(Icons.Outlined.Dataset, "", tint = Color.White)
+                        } else -> {
+                        Icon(AutoMirrored.Outlined.List, "", tint = Color.White)
+                    }
+                    }
                 }
             }
         },
@@ -198,9 +217,30 @@ private fun TimetableScreen(
         ),
         containerColor = Color.Transparent,
     ) { innerPadding ->
-        Box(
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+        Column (
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()).fillMaxWidth(),
         ) {
+            // TODO: Row not showing yet... there is a layout problem here I need to fix
+            Row {
+                TextButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /** TODO: Search here **/ },
+                ) {
+                    Text("Workday", color = Color.Green)
+                }
+                TextButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /** TODO: Search here **/ },
+                ) {
+                    Text("Day 1", color = Color.Green)
+                }
+                TextButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /** TODO: Search here **/ },
+                ) {
+                    Text("Day 2", color = Color.Green$$)
+                }
+            }
             TimetableSheet(
                 modifier = Modifier
                     .fillMaxSize(),
