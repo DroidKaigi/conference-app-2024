@@ -6,7 +6,7 @@
 
 ### A Guide for Contributors 1: Understanding the App's Data Flow
 
-For contributing to the app, it is important to understand the data flow of the app.
+To contribute to the app effectively, understanding its data flow is crucial for comprehending the app's code structure. Let's examine this further.
 
 #### 1. Displaying Sessions on the Timetable Screen
 
@@ -183,11 +183,12 @@ fun TimetableScreen(
 
 ###  A Guide for Contributors 2: Understanding the App's Testing
 
-For ensuring the stability and correctness of the DroidKaigi 2024 official app, we have a robust testing strategy in place, centered around Behavior Driven Development (BDD), Robolectric, and Roborazzi. This guide will walk you through the key aspects of our testing approach, demonstrating how these tools work together to facilitate reliable UI testing.
+The DroidKaigi 2024 official app utilizes a comprehensive testing strategy that combines Behavior Driven Development (BDD), Robolectric, and Roborazzi. This integrated approach enhances app stability, ensures UI correctness, and streamlines the testing process for Android development.
 
- 1. Setting the Stage with Robolectric
+#### Key Components
 
-At the heart of our testing setup lies Robolectric, a framework that allows us to execute Android tests directly on the JVM. This eliminates the dependency on physical devices or emulators, resulting in significantly faster test execution times.
+**Robolectric**: A framework that executes Android tests directly on the JVM, allowing tests to run without requiring a physical device or emulator. This approach significantly speeds up test execution and allows for easier integration with continuous integration systems.
+
 
 ```kotlin
 @RunWith(ParameterizedRobolectricTestRunner::class)
@@ -208,11 +209,9 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
     }
 ```
 
-In the provided snippet, `@RunWith(ParameterizedRobolectricTestRunner::class)` indicates that our test class will be executed using Robolectric. `@HiltAndroidTest`, on the other hand, signals that Hilt, our dependency injection framework, will be actively participating in the test setup.
+**BDD**: Expresses clear behavior of the app.
 
- 2. Humanizing the Tests with BDD
-
-To ensure our tests are easily understandable and maintainable, we've embraced BDD principles. BDD encourages expressing test cases in a clear, human-readable format, much like those commonly seen in Ruby and JavaScript testing frameworks. 
+We will delve into BDD aspect in the next section.
 
 ```kotlin
 companion object {
@@ -231,28 +230,24 @@ companion object {
                         })
 ```
 
-Here, `describeBehaviors`, `describe', and `itShould` constructs not only structure our tests but also form part of the test names themselves. This human-readable format enhances the clarity of our tests.
+This will generate test names like `TimetableScreen - when the server is operational - it should display timetable items`.  
+And generate a image named `TimetableScreen - when the server is operational - it should display timetable items.png`.
 
- 3. Streamlining Interactions with Robots
+**Robot Pattern**: Robots separate the "what" (test intent) from the "how" (UI interactions).
 
-Central to our BDD implementation is the concept of "Robots." But these are not just any robots; they are meticulously crafted to embody the principles of clear, maintainable testing. Each Robot is dedicated to a specific screen or UI component and operates under a fundamental philosophy: separate the "what" from the "how."
+Test Cases (What):
 
- The "What" - Declaring Intent in Test Cases
-
- In our test cases, we focus on expressing the "what" – the desired behavior of the application. Consider this example:
-
+```kotlin
 itShould("show timetable items") {
     captureScreenWithChecks(checks = {
         checkTimetableItemsDisplayed() 
     })
 }
+```
 
-The meaning is evident even without diving into implementation details. We are stating that when certain conditions are met (perhaps "when the server is operational"), we expect the timetable items to be displayed. 
+Robot Implementation (How):
 
- The "How" -  Abstraction within Robots
-
-The "how" – the intricate steps to interact with UI elements – is neatly tucked away within our Robots. These Robots act as intermediaries, shielding the test cases from the complexities of UI manipulation.
-
+```kotlin
 class TimetableScreenRobot {
     ...
     fun clickFirstSessionBookmark() {
@@ -264,14 +259,9 @@ class TimetableScreenRobot {
     }
     ...
 }
+```
 
-Looking at the `TimetableScreenRobot`, the `clickFirstSessionBookmark` function demonstrates this encapsulation. It handles locating the bookmark icon (using `hasTestTag`), performing the click action, and even waiting for the UI to settle (with `waitUntilIdle`).
-
- 4. Integrating Roborazzi for Visual Validation
-
-While functional correctness is paramount, preventing visual regressions is equally important for a polished user experience. This is where Roborazzi comes into play. Roborazzi seamlessly integrates with our Robolectric tests, allowing us to capture screenshots during test execution and compare them against previously approved baseline images.
-
-Test Class ---------> UI Interaction ---------> captureScreenWithChecks() ---------> Image Comparison
+**Roborazzi Integration**: Roborazzi captures screenshots during tests for visual regression detection.
 
 ```kotlin
 fun captureScreenWithChecks(checks: () -> Unit) {
@@ -280,28 +270,20 @@ fun captureScreenWithChecks(checks: () -> Unit) {
 }
 ```
 
-We employ `captureScreenWithChecks` to initiate screenshot capture after a specific action is performed. This function is especially powerful when paired with BDD.  Consider the test name `TimetableScreen - when the server is operational - it should display timetable items`. After executing the test actions, `captureScreenWithChecks` takes a screenshot and saves it with the same name, providing a clear visual record of the app's state at that point in the test. 
+**Advantages**
 
-Furthermore, the `checks` parameter allows for additional assertions after the screenshot is captured. This ensures we're not solely relying on visual comparisons, adding an extra layer of verification to guarantee both functional and visual correctness.
-
- 5. The Power of This Approach
-
-The combined utilization of Robolectric, Roborazzi, BDD, and Robots offers compelling advantages for maintaining the DroidKaigi app:
-
- Unmatched Speed:  Robolectric minimizes test execution time by running tests directly on the JVM, allowing for quick feedback during development.
- Enhanced Clarity: BDD, coupled with descriptive test names, makes our tests self-documenting, improving readability and maintainability.
- Robust UI Testing:  Robots promote code reuse in UI tests and simplify test maintenance when the UI layout changes.
- Guard Against Visual Regressions: Roborazzi provides a visual safety net, ensuring we catch and address any unintended UI changes early in the development process. 
-
-By understanding and utilizing this testing framework, you contribute to the stability and quality of the DroidKaigi 2024 app, providing attendees with a seamless and enjoyable conference experience. 
+* Speed: JVM-based tests run significantly faster than traditional instrumented tests, allowing for quicker feedback during development.
+* Clarity: BDD improves test readability, making it easier for both developers and non-technical stakeholders to understand test scenarios.
+* Maintainability: The Robot Pattern simplifies UI test maintenance by centralizing UI interaction logic, reducing the impact of UI changes on test code.
+* Visual Consistency: Roborazzi's screenshot comparison feature helps detect unintended UI changes early in the development process, ensuring a consistent user experience.
 
 ### This Year's Experimental Challenges
 
 #### Rewriting Coroutine Flow to Composable Function
 
-In the app, we use Composable functions for ViewModels and Repositories. I believe Composable functions allow us to write more readable and maintainable code.
-
-For example, we used to write a Repository like this.
+This year, we've taken a significant step in our app architecture by leveraging Composable functions not just for UI, but also for ViewModels and Repositories. This approach aligns with the growing understanding in the Android community that Compose's runtime is a powerful tool for managing tree-like structures and state, extending far beyond its initial UI-focused perception.  
+Our motivation stems from the belief that Composable functions can lead to more readable, maintainable, and conceptually unified code across our application layers. This shift represents a move towards treating our entire app as a composable structure, not just its visual elements.
+Let's look at how this transformation has impacted our Repository implementation:
 
 Flow-based Repository (Old version)
 
@@ -375,6 +357,7 @@ We are exploring the possibility of using Compose.
 #### Behavior driven development and screenshot testing
 
 We aim to enhance our app's quality by adopting BDD methodologies similar to Ruby and JavaScript, alongside implementing screenshot testing.   
+We used to have a test like `launchTimetableShot()` that captures a screenshot of the timetable screen. But we found that we don't know what to check in the screenshot.
 The reason why we chose BDD is that it clearly defines the app's behavior and ensures that the app functions as expected.  
 To effectively capture screenshots, we utilize Robolectric integrated with Roborazzi. Below is the Kotlin code snippet we employ for our BDD tests:  
 
