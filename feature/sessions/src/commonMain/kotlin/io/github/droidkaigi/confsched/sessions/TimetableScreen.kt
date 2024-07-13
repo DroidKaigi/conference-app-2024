@@ -189,7 +189,8 @@ private fun TimetableScreen(
                 Text(text = "TimeTable", fontSize = 24.sp, modifier = Modifier.align(alignment = Alignment.CenterVertically))
                 Spacer(modifier = Modifier.weight(1.0f))
                 IconButton(
-                    modifier = Modifier.background(Color.Black),
+                    modifier = Modifier.background(Color.Black)
+                        .testTag(TimetableUiTypeChangeButtonTestTag),
                     onClick = { /** TODO: Search here **/ },
                 ) {
                     Icon(Icons.Outlined.Search, "", tint = Color.White)
