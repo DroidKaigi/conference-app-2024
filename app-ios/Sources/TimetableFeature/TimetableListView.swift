@@ -13,7 +13,7 @@ public struct TimetableView: View {
             HStack {
                 ForEach(DayTab.allCases) { tabItem in
                     Button(action: {
-                        store.send(.selectDay(tabItem))
+                        store.send(.view(.selectDay(tabItem)))
                     }, label: {
                         //TODO: Only selected button should be green and underlined
                         Text(tabItem.rawValue).foregroundStyle(Color(.greenSelectColorset))
@@ -41,7 +41,11 @@ struct TimetableListView: View {
         ScrollView{
             LazyVStack {
                 ForEach(store.timetableItems, id: \.self) { item in
-                    TimeGroupMiniList(contents: item)
+                    Button {
+                        store.send(.view(.timetableItemTapped))
+                    } label: {
+                        TimeGroupMiniList(contents: item)
+                    }
                 }
             }.scrollContentBackground(.hidden)
             
