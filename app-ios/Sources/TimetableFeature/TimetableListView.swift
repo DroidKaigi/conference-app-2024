@@ -8,25 +8,73 @@ public struct TimetableView: View {
         self.store = store
     }
     
+    @State var timetableMode = TimetableMode.List
+    @State var switchModeIcon: String = "square.grid.2x2"
+    
     public var body: some View {
-        VStack {
-            HStack {
-                ForEach(DayTab.allCases) { tabItem in
-                    Button(action: {
-                        store.send(.selectDay(tabItem))
-                    }, label: {
-                        //TODO: Only selected button should be green and underlined
-                        Text(tabItem.rawValue).foregroundStyle(Color(.greenSelectColorset))
-                            .underline()
-                    })
+        NavigationView {
+            VStack {
+                HStack {
+                    ForEach(DayTab.allCases) { tabItem in
+                        Button(action: {
+                            store.send(.selectDay(tabItem))
+                        }, label: {
+                            //TODO: Only selected button should be green and underlined
+                            Text(tabItem.rawValue).foregroundStyle(Color(.greenSelectColorset))
+                                .underline()
+                        })
+                    }
+                    Spacer()
+                }.padding(5)
+                switch(timetableMode) {
+                case TimetableMode.List:
+                    TimetableListView(store: store)
+                case TimetableMode.Grid:
+                    Text("Grid view placeholder")
+                        .foregroundStyle(Color(.onSurfaceColorset))
                 }
                 Spacer()
-            }.padding(5)
-            TimetableListView(store: store)
-            Spacer()
+            }
+            .background(Color(.backgroundColorset))
+            .frame(maxWidth: .infinity)
+            .toolbar{
+                ToolbarItem(placement: .topBarLeading) {
+                    Text("Timetable")
+                        .font(.title)
+                        .foregroundStyle(Color(.onSurfaceColorset))
+                    
+                }
+                ToolbarItem(placement:.topBarTrailing) {
+                    HStack {
+                        Button {
+                            // TODO: Search?
+                        } label: {
+                            Group {
+                                Image(systemName:"magnifyingglass").foregroundStyle(Color(.onSurfaceColorset))
+                            }
+                            .frame(width: 40, height: 40)
+                        }
+                        
+                        Button {
+                            switch(timetableMode){
+                            case .List:
+                                timetableMode = .Grid
+                                switchModeIcon = "list.bullet.indent"
+                            case .Grid:
+                                timetableMode = .List
+                                switchModeIcon = "square.grid.2x2"
+                            }
+                        } label: {
+                            Group {
+                                Image(systemName:switchModeIcon).foregroundStyle(Color(.onSurfaceColorset))
+                            }
+                            .frame(width: 40, height: 40)
+                        }
+                    }
+                }
+                
+            }
         }
-        .background(Color(.backgroundColorset))
-        .frame(maxWidth: .infinity)
     }
 }
 
@@ -134,7 +182,7 @@ struct PhotoView: View {
 
 #Preview {
     TimetableView(
-        store: .init(initialState: .init(timetableItems: SampleData.init().day1Results),
+        store: .init(initialState: .init(timetableItems: SampleData.init().workdayResults),
                      reducer: { TimetableReducer() })
     )
 }
@@ -143,7 +191,7 @@ struct PhotoView: View {
     TimetableListView(
         store: .init(
             initialState: 
-                    .init(timetableItems: SampleData.init().day1Results),
+                    .init(timetableItems: SampleData.init().workdayResults),
             reducer: { TimetableReducer() }
         )
     )
