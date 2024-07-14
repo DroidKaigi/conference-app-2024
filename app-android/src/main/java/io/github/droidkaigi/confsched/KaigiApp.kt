@@ -39,7 +39,10 @@ import io.github.droidkaigi.confsched.main.MainScreenTab.ProfileCard
 import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
+import io.github.droidkaigi.confsched.model.AboutItem
+import io.github.droidkaigi.confsched.model.Lang.JAPANESE
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.defaultLang
 import io.github.droidkaigi.confsched.sessions.navigateTimetableScreen
 import io.github.droidkaigi.confsched.sessions.navigateToTimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
@@ -47,6 +50,9 @@ import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confshed.about.aboutScreen
+import io.github.droidkaigi.confshed.about.aboutScreenRoute
+import io.github.droidkaigi.confshed.about.navigateAboutScreen
 import io.github.droidkaigi.confshed.profilecard.navigateProfileCardScreen
 import io.github.droidkaigi.confshed.profilecard.profileCardScreen
 import io.github.droidkaigi.confshed.profilecard.profileCardScreenRoute
@@ -118,6 +124,45 @@ private fun NavGraphBuilder.mainScreen(
                 onNavigationIconClick = navController::popBackStack,
                 onEventMapItemClick = externalNavController::navigate,
             )
+            aboutScreen(
+                contentPadding = contentPadding,
+                onAboutItemClick = { aboutItem ->
+                    val portalBaseUrl = if (defaultLang() == JAPANESE) {
+                        "https://portal.droidkaigi.jp"
+                    } else {
+                        "https://portal.droidkaigi.jp/en"
+                    }
+                    when (aboutItem) {
+                        AboutItem.Sponsors -> TODO()
+                        AboutItem.CodeOfConduct -> {
+                            externalNavController.navigate(
+                                url = "$portalBaseUrl/about/code-of-conduct"
+                            )
+                        }
+
+                        AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
+                        AboutItem.License -> externalNavController.navigateToLicenseScreen()
+                        AboutItem.Medium -> externalNavController.navigate(
+                            url = "https://medium.com/droidkaigi"
+                        )
+
+                        AboutItem.PrivacyPolicy -> {
+                            externalNavController.navigate(
+                                url = "$portalBaseUrl/about/privacy"
+                            )
+                        }
+
+                        AboutItem.Staff -> TODO()
+                        AboutItem.X -> externalNavController.navigate(
+                            url = "https://twitter.com/DroidKaigi"
+                        )
+
+                        AboutItem.YouTube -> externalNavController.navigate(
+                            url = "https://www.youtube.com/c/DroidKaigi"
+                        )
+                    }
+                },
+            )
             profileCardScreen(contentPadding)
         },
     )
@@ -130,6 +175,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         return when (route) {
             timetableScreenRoute -> Timetable
             profileCardScreenRoute -> ProfileCard
+            aboutScreenRoute -> About
             else -> null
         }
     }
@@ -141,7 +187,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
-            About -> TODO()
+            About -> mainNestedNavController.navigateAboutScreen()
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }
     }
