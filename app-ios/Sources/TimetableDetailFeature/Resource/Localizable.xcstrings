@@ -1,10 +1,7 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "DroidKaigiアプリで見るアーキテクチャの変遷" : {
-
-    },
-    "name" : {
+    "" : {
 
     },
     "TimetableDetailAddBookmark" : {
@@ -19,6 +16,22 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "ブックマークに追加されました"
+          }
+        }
+      }
+    },
+    "TimetableDetailAddEvent" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add to calendar"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "カレンダーに追加する"
           }
         }
       }
@@ -166,9 +179,6 @@
           }
         }
       }
-    },
-    "手を動かして実践してひとへのヒントとなります\nCoroutinesを使いたいと感じているひと\nよりモダンで効率的なAndroidアプリ開発に興味があるひと\n新しいパラダイムをいち早く知りたいひと\nアプリ開発が複雑だと感じるひと\nアプリ開発経験を前提としてあったほうが楽しめます" : {
-
     }
   },
   "version" : "1.0"

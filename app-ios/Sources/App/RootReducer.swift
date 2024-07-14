@@ -6,6 +6,7 @@ import StaffFeature
 import SponsorFeature
 import TimetableFeature
 import TimetableDetailFeature
+import shared
 
 @Reducer
 public struct RootReducer {
@@ -102,7 +103,7 @@ public struct RootReducer {
                 return .none
                 
             case .timetable(.view(.timetableItemTapped)):
-                state.paths.timetable.append(.timetableDetail(TimetableDetailReducer.State()))
+                state.paths.timetable.append(.timetableDetail(TimetableDetailReducer.State(timetableItem: shared.TimetableItem.Session.companion.fake())))
                 return .none
 
             default:
