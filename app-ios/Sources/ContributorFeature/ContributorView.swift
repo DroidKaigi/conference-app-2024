@@ -7,6 +7,19 @@ public struct ContributorView: View {
         case swift
         case kmpPresenter
         case fullKmp
+
+        var title: String {
+            switch self {
+            case .swift:
+                "Swift"
+
+            case .kmpPresenter:
+                "KMP Presenter"
+
+            case .fullKmp:
+                "KMP Compose view"
+            }
+        }
     }
 
     @State private var viewType: ViewType = .swift
