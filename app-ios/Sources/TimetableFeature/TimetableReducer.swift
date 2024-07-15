@@ -17,8 +17,13 @@ public struct TimetableReducer {
     }
 
     public enum Action {
+        case view(View)
         case onAppear
-        case selectDay(DayTab)
+        
+        public enum View {
+            case selectDay(DayTab)
+            case timetableItemTapped
+        }
     }
 
     public var body: some Reducer<State, Action> {
@@ -27,7 +32,9 @@ public struct TimetableReducer {
             case .onAppear:
                 state.timetableItems = sampleData.workdayResults
                 return .none
-            case .selectDay(let dayTab):
+            case .view(.timetableItemTapped):
+                return .none
+            case .view(.selectDay(let dayTab)):
                 //TODO: Replace with real data
                 
                 switch dayTab {
