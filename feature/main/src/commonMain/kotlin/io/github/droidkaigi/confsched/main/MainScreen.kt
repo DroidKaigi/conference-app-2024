@@ -135,35 +135,35 @@ enum class MainScreenTab(
         icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         selectedIcon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         label = MainStrings.Timetable.asString(),
-        contentDescription = MainStrings.Timetable.asString()
+        contentDescription = MainStrings.Timetable.asString(),
     ),
 
     EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
         selectedIcon = IconRepresentation.Vector(Icons.Outlined.Map),
         label = MainStrings.EventMap.asString(),
-        contentDescription = MainStrings.EventMap.asString()
+        contentDescription = MainStrings.EventMap.asString(),
     ),
 
     Favorite(
         icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
         selectedIcon = IconRepresentation.Vector(Icons.Outlined.Favorite),
         label = MainStrings.EventMap.asString(),
-        contentDescription = MainStrings.EventMap.asString()
+        contentDescription = MainStrings.EventMap.asString(),
     ),
 
     About(
         icon = IconRepresentation.Vector(Icons.Outlined.Info),
         selectedIcon = IconRepresentation.Vector(Icons.Filled.Info),
         label = MainStrings.About.asString(),
-        contentDescription = MainStrings.About.asString()
+        contentDescription = MainStrings.About.asString(),
     ),
 
     ProfileCard(
         icon = IconRepresentation.Vector(Icons.Outlined.People),
         selectedIcon = IconRepresentation.Vector(Icons.Outlined.People),
         label = MainStrings.ProfileCard.asString(),
-        contentDescription = MainStrings.ProfileCard.asString()
+        contentDescription = MainStrings.ProfileCard.asString(),
     ),
     ;
 
