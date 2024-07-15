@@ -61,14 +61,13 @@ internal sealed interface ProfileCardUiState {
         val theme: ProfileCardTheme,
     ) : ProfileCardUiState {
         companion object {
-            fun initial() =
-                Edit(
-                    nickname = "",
-                    occupation = null,
-                    link = null,
-                    imageUri = null,
-                    theme = ProfileCardTheme.Default,
-                )
+            fun initial() = Edit(
+                nickname = "",
+                occupation = null,
+                link = null,
+                imageUri = null,
+                theme = ProfileCardTheme.Default,
+            )
         }
     }
 
