@@ -21,6 +21,7 @@ jobs:
       - name: Download PR event artifact
         uses: actions/github-script@v6
         with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
           script: |
             const fs = require('fs')
             const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
