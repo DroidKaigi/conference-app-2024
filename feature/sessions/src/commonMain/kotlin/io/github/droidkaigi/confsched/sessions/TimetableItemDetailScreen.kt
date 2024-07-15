@@ -27,8 +27,6 @@ import androidx.navigation.compose.composable
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.component.LoadingText
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -44,6 +42,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopA
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val timetableItemDetailScreenRoute =
@@ -212,8 +211,7 @@ private fun TimetableItemDetailScreen(
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 fun TimetableItemDetailScreenPreview() {
     var isBookMarked by remember { mutableStateOf(false) }
     val fakeSession = Session.fake()

@@ -34,7 +34,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
 import io.github.droidkaigi.confsched.model.Timetable
@@ -50,6 +49,7 @@ import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.ui.getScreenSizeInfo
 import kotlinx.collections.immutable.toPersistentMap
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
 const val TimetableListItemBookmarkIconTestTag = "TimetableListItemBookmarkIcon"
@@ -217,7 +217,7 @@ private fun TimetableScreen(
     }
 }
 
-@MultiThemePreviews
+@Preview
 @Composable
 fun PreviewTimetableScreenDark() {
     CompositionLocalProvider(LocalClock provides FakeClock) {

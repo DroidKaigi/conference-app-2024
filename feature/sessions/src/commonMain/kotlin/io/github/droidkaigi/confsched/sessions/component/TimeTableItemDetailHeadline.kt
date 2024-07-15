@@ -20,13 +20,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.section.TagView
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TimeTableItemDetailHeadline(
@@ -89,8 +88,7 @@ fun TimeTableItemDetailHeadline(
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 fun TimeTableItemDetailHeadlinePreview() {
     KaigiTheme {
         Surface {
