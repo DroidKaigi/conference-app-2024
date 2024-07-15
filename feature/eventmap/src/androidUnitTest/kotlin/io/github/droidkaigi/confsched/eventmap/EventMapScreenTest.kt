@@ -39,7 +39,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun behaviors(): List<DescribedBehavior<EventMapScreenRobot>> {
-            return describeBehaviors<EventMapScreenRobot>(name = "TimetableScreen") {
+            return describeBehaviors<EventMapScreenRobot>(name = "EventMapScreenRobot") {
                 describe("when server is operational") {
                     run {
                         setupEventMapServer(Operational)
