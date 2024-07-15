@@ -12,7 +12,7 @@ kotlin {
                 implementation(projects.core.model)
                 implementation(projects.core.designsystem)
                 implementation(projects.core.ui)
-                implementation(libs.hazePlugin)
+                implementation(libs.haze)
             }
         }
     }

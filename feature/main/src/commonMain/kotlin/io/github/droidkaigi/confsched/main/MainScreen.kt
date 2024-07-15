@@ -46,7 +46,7 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
-import io.github.droidkaigi.confsched.main.bottom.navigation.GlassLikeBottomNavigation
+import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -171,16 +171,14 @@ enum class MainScreenTab(
         contentDescription = MainStrings.ProfileCard.asString(),
         color = Color(0xFF67FF8D),
     ),
-}
+    ;
 
-val tabs =
-    listOf(
-        MainScreenTab.Timetable,
-        MainScreenTab.EventMap,
-        MainScreenTab.Favorite,
-        MainScreenTab.About,
-        MainScreenTab.ProfileCard,
-    )
+    companion object {
+        val size: Int get() = values().size
+        fun indexOf(tab: MainScreenTab): Int = values().indexOf(tab)
+        fun fromIndex(index: Int): MainScreenTab = values()[index]
+    }
+}
 
 data class MainScreenUiState(
     val isAchievementsEnabled: Boolean = false,
@@ -230,9 +228,12 @@ fun MainScreen(
                         }
                     }
                 }*/
-                GlassLikeBottomNavigation(hazeState) {
-                    onTabSelected(mainNestedNavController, it)
-                }
+                GlassLikeBottomNavigation(
+                    hazeState = hazeState,
+                    onTabSelected = {
+                        onTabSelected(mainNestedNavController, it)
+                    },
+                )
             },
         ) { padding ->
             val hazeStyle =
@@ -244,10 +245,10 @@ fun MainScreen(
                 navController = mainNestedNavController,
                 startDestination = "timetable",
                 modifier =
-                    Modifier.haze(
-                        hazeState,
-                        hazeStyle,
-                    ),
+                Modifier.haze(
+                    hazeState,
+                    hazeStyle,
+                ),
                 enterTransition = { materialFadeThroughIn() },
                 exitTransition = { materialFadeThroughOut() },
             ) {
@@ -260,28 +261,28 @@ fun MainScreen(
 private fun materialFadeThroughIn(): EnterTransition =
     fadeIn(
         animationSpec =
+        tween(
+            durationMillis = 195,
+            delayMillis = 105,
+            easing = LinearOutSlowInEasing,
+        ),
+    ) +
+        scaleIn(
+            animationSpec =
             tween(
                 durationMillis = 195,
                 delayMillis = 105,
                 easing = LinearOutSlowInEasing,
             ),
-    ) +
-        scaleIn(
-            animationSpec =
-                tween(
-                    durationMillis = 195,
-                    delayMillis = 105,
-                    easing = LinearOutSlowInEasing,
-                ),
             initialScale = 0.92f,
         )
 
 private fun materialFadeThroughOut(): ExitTransition =
     fadeOut(
         animationSpec =
-            tween(
-                durationMillis = 105,
-                delayMillis = 0,
-                easing = FastOutLinearInEasing,
-            ),
+        tween(
+            durationMillis = 105,
+            delayMillis = 0,
+            easing = FastOutLinearInEasing,
+        ),
     )
