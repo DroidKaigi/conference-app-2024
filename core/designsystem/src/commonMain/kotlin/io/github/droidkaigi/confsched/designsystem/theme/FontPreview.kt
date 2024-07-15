@@ -10,7 +10,7 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 @Preview
-fun FontPreview() {
+private fun FontPreview() {
     Column(
         Modifier.background(color = Color.White),
     ) {
