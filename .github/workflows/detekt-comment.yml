@@ -1,10 +1,14 @@
-name: Detekt Comment
+name: detekt-comment
 
 on:
   workflow_run:
-    workflows: ["Detekt"]
+    workflows: ["detekt"]
     types:
       - completed
+
+permissions:
+  actions: read
+  pull-requests: write
 
 jobs:
   comment:
