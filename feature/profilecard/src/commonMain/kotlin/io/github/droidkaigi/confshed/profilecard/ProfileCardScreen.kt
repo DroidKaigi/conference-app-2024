@@ -127,12 +127,12 @@ internal fun ProfileCardScreen(
         modifier = modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets =
-            WindowInsets(
-                left = contentPadding.calculateLeftPadding(layoutDirection),
-                top = contentPadding.calculateTopPadding(),
-                right = contentPadding.calculateRightPadding(layoutDirection),
-                bottom = contentPadding.calculateBottomPadding(),
-            ),
+        WindowInsets(
+            left = contentPadding.calculateLeftPadding(layoutDirection),
+            top = contentPadding.calculateTopPadding(),
+            right = contentPadding.calculateRightPadding(layoutDirection),
+            bottom = contentPadding.calculateBottomPadding(),
+        ),
     ) { padding ->
         when (val contentUiState = uiState.contentUiState) {
             is ProfileCardUiState.Edit -> {

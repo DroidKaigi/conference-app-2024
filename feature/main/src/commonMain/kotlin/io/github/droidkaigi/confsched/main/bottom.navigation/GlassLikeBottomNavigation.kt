@@ -61,26 +61,26 @@ fun GlassLikeBottomNavigation(
     hazeState: HazeState,
     onTabSelected: (MainScreenTab) -> Unit,
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(1) }
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
     Box(
         modifier =
-            Modifier
-                .padding(vertical = 24.dp, horizontal = 64.dp)
-                .fillMaxWidth()
-                .height(64.dp)
-                .hazeChild(state = hazeState, shape = CircleShape)
-                .border(
-                    width = Dp.Hairline,
-                    brush =
-                        Brush.verticalGradient(
-                            colors =
-                                listOf(
-                                    Color.White.copy(alpha = .8f),
-                                    Color.White.copy(alpha = .2f),
-                                ),
-                        ),
-                    shape = CircleShape,
+        Modifier
+            .padding(vertical = 24.dp, horizontal = 64.dp)
+            .fillMaxWidth()
+            .height(64.dp)
+            .hazeChild(state = hazeState, shape = CircleShape)
+            .border(
+                width = Dp.Hairline,
+                brush =
+                Brush.verticalGradient(
+                    colors =
+                    listOf(
+                        Color.White.copy(alpha = .8f),
+                        Color.White.copy(alpha = .2f),
+                    ),
                 ),
+                shape = CircleShape,
+            ),
     ) {
         BottomBarTabs(
             tabs,
@@ -95,45 +95,45 @@ fun GlassLikeBottomNavigation(
             targetValue = selectedTabIndex.toFloat(),
             label = "animatedSelectedTabIndex",
             animationSpec =
-                spring(
-                    stiffness = Spring.StiffnessLow,
-                    dampingRatio = Spring.DampingRatioLowBouncy,
-                ),
+            spring(
+                stiffness = Spring.StiffnessLow,
+                dampingRatio = Spring.DampingRatioLowBouncy,
+            ),
         )
 
         val animatedColor by animateColorAsState(
             targetValue = tabs[selectedTabIndex].color,
             label = "animatedColor",
             animationSpec =
-                spring(
-                    stiffness = Spring.StiffnessLow,
-                ),
+            spring(
+                stiffness = Spring.StiffnessLow,
+            ),
         )
 
         Canvas(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .clip(CircleShape)
-                    .blur(50.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
+            Modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+                .blur(50.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
         ) {
             val tabWidth = size.width / tabs.size
             drawCircle(
                 color = animatedColor.copy(alpha = .6f),
                 radius = size.height / 2,
                 center =
-                    Offset(
-                        (tabWidth * animatedSelectedTabIndex) + tabWidth / 2,
-                        size.height / 2,
-                    ),
+                Offset(
+                    (tabWidth * animatedSelectedTabIndex) + tabWidth / 2,
+                    size.height / 2,
+                ),
             )
         }
 
         Canvas(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .clip(CircleShape),
+            Modifier
+                .fillMaxSize()
+                .clip(CircleShape),
         ) {
             val path =
                 Path().apply {
@@ -145,25 +145,25 @@ fun GlassLikeBottomNavigation(
             drawPath(
                 path,
                 brush =
-                    Brush.horizontalGradient(
-                        colors =
-                            listOf(
-                                animatedColor.copy(alpha = 0f),
-                                animatedColor.copy(alpha = 1f),
-                                animatedColor.copy(alpha = 1f),
-                                animatedColor.copy(alpha = 0f),
-                            ),
-                        startX = tabWidth * animatedSelectedTabIndex,
-                        endX = tabWidth * (animatedSelectedTabIndex + 1),
+                Brush.horizontalGradient(
+                    colors =
+                    listOf(
+                        animatedColor.copy(alpha = 0f),
+                        animatedColor.copy(alpha = 1f),
+                        animatedColor.copy(alpha = 1f),
+                        animatedColor.copy(alpha = 0f),
                     ),
+                    startX = tabWidth * animatedSelectedTabIndex,
+                    endX = tabWidth * (animatedSelectedTabIndex + 1),
+                ),
                 style =
-                    Stroke(
-                        width = 6f,
-                        pathEffect =
-                            PathEffect.dashPathEffect(
-                                intervals = floatArrayOf(length / 2, length),
-                            ),
+                Stroke(
+                    width = 6f,
+                    pathEffect =
+                    PathEffect.dashPathEffect(
+                        intervals = floatArrayOf(length / 2, length),
                     ),
+                ),
             )
         }
     }
@@ -195,24 +195,24 @@ fun BottomBarTabs(
                     targetValue = if (selectedTab == tabs.indexOf(tab)) 1f else .98f,
                     visibilityThreshold = .000001f,
                     animationSpec =
-                        spring(
-                            stiffness = Spring.StiffnessLow,
-                            dampingRatio = Spring.DampingRatioMediumBouncy,
-                        ),
+                    spring(
+                        stiffness = Spring.StiffnessLow,
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                    ),
                     label = "scale",
                 )
                 Column(
                     modifier =
-                        Modifier
-                            .scale(scale)
-                            .alpha(alpha)
-                            .fillMaxHeight()
-                            .weight(1f)
-                            .pointerInput(Unit) {
-                                detectTapGestures {
-                                    onTabSelected(tab)
-                                }
-                            },
+                    Modifier
+                        .scale(scale)
+                        .alpha(alpha)
+                        .fillMaxHeight()
+                        .weight(1f)
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                onTabSelected(tab)
+                            }
+                        },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {

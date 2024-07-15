@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
@@ -126,7 +125,6 @@ sealed class IconRepresentation {
 
 enum class MainScreenTab(
     val icon: IconRepresentation.Vector,
-    val selectedIcon: IconRepresentation,
     val label: String,
     val contentDescription: String,
     val testTag: String = "mainScreenTab:$label",
@@ -134,7 +132,6 @@ enum class MainScreenTab(
 ) {
     Timetable(
         icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         label = MainStrings.Timetable.asString(),
         contentDescription = MainStrings.Timetable.asString(),
         color = Color(0xFF67FF8D),
@@ -142,7 +139,6 @@ enum class MainScreenTab(
 
     EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Map),
         label = MainStrings.EventMap.asString(),
         contentDescription = MainStrings.EventMap.asString(),
         color = Color(0xFF67FF8D),
@@ -150,7 +146,6 @@ enum class MainScreenTab(
 
     Favorite(
         icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Favorite),
         label = MainStrings.EventMap.asString(),
         contentDescription = MainStrings.EventMap.asString(),
         color = Color(0xFF67FF8D),
@@ -158,7 +153,6 @@ enum class MainScreenTab(
 
     About(
         icon = IconRepresentation.Vector(Icons.Outlined.Info),
-        selectedIcon = IconRepresentation.Vector(Icons.Filled.Info),
         label = MainStrings.About.asString(),
         contentDescription = MainStrings.About.asString(),
         color = Color(0xFF67FF8D),
@@ -166,7 +160,6 @@ enum class MainScreenTab(
 
     ProfileCard(
         icon = IconRepresentation.Vector(Icons.Outlined.People),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.People),
         label = MainStrings.ProfileCard.asString(),
         contentDescription = MainStrings.ProfileCard.asString(),
         color = Color(0xFF67FF8D),
@@ -244,10 +237,10 @@ fun MainScreen(
                 navController = mainNestedNavController,
                 startDestination = "timetable",
                 modifier =
-                    Modifier.haze(
-                        hazeState,
-                        hazeStyle,
-                    ),
+                Modifier.haze(
+                    hazeState,
+                    hazeStyle,
+                ),
                 enterTransition = { materialFadeThroughIn() },
                 exitTransition = { materialFadeThroughOut() },
             ) {
@@ -260,28 +253,28 @@ fun MainScreen(
 private fun materialFadeThroughIn(): EnterTransition =
     fadeIn(
         animationSpec =
+        tween(
+            durationMillis = 195,
+            delayMillis = 105,
+            easing = LinearOutSlowInEasing,
+        ),
+    ) +
+        scaleIn(
+            animationSpec =
             tween(
                 durationMillis = 195,
                 delayMillis = 105,
                 easing = LinearOutSlowInEasing,
             ),
-    ) +
-        scaleIn(
-            animationSpec =
-                tween(
-                    durationMillis = 195,
-                    delayMillis = 105,
-                    easing = LinearOutSlowInEasing,
-                ),
             initialScale = 0.92f,
         )
 
 private fun materialFadeThroughOut(): ExitTransition =
     fadeOut(
         animationSpec =
-            tween(
-                durationMillis = 105,
-                delayMillis = 0,
-                easing = FastOutLinearInEasing,
-            ),
+        tween(
+            durationMillis = 105,
+            delayMillis = 0,
+            easing = FastOutLinearInEasing,
+        ),
     )
