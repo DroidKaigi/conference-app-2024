@@ -8,6 +8,13 @@ final class StaffFeatureTests: XCTestCase {
     func testExample() async throws {
         let store = TestStore(initialState: StaffReducer.State()) {
             StaffReducer()
+        } withDependencies: {
+            $0.staffClient.streamStaffs = {
+                AsyncThrowingStream {
+                    $0.yield([.init(id: 0, username: "testValue", profileUrl: "https://2024.droidkaigi.jp/", iconUrl: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4"),])
+                    $0.finish()
+                }
+            }
         }
         await store.send(.onAppear)
         await store.receive(\.response.success) {

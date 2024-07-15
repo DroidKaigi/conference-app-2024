@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import KMPClient
 import SwiftUI
 
 public struct FavoriteScreen: View {
@@ -9,10 +10,8 @@ public struct FavoriteScreen: View {
     }
 
     public var body: some View {
-        Text(store.text)
-            .onAppear {
-                store.send(.onAppear)
-            }
+        // Once, favorite as fullly kmp compose app
+        KmpAppComposeViewControllerWrapper()
     }
 }
 

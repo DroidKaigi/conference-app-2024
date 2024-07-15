@@ -1,13 +1,13 @@
 import Firebase
 import ObjectiveC
-import shared
+@preconcurrency import shared
 
 public func prepareFirebase() {
     FirebaseApp.configure()
 }
 
-struct Container {
-    static let shared: Container = .init()
+public struct Container {
+    public static let shared: Container = .init()
 
     private let entryPoint: KmpEntryPoint
     private init() {
@@ -18,7 +18,7 @@ struct Container {
         )
     }
 
-    func get<TypeProtocol, ReturnType>(type: TypeProtocol) -> ReturnType where TypeProtocol: Protocol {
+    public func get<TypeProtocol, ReturnType>(type: TypeProtocol) -> ReturnType where TypeProtocol: Protocol {
             guard let object = entryPoint.get(objCProtocol: type) as? ReturnType else {
                 fatalError("Not found instance for \(type)")
             }

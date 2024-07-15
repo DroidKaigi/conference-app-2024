@@ -56,9 +56,7 @@ object ProfileCardTestTag {
     }
 }
 
-fun NavGraphBuilder.profileCardScreen(
-    contentPadding: PaddingValues,
-) {
+fun NavGraphBuilder.profileCardScreen(contentPadding: PaddingValues) {
     composable(profileCardScreenRoute) {
         ProfileCardScreen(contentPadding)
     }

@@ -37,6 +37,7 @@ okHttp = "4.12.0"
 ktorfit = "1.12.0"
 ossLicensesPlugin = "0.10.6"
 ossLicenses = "17.1.0"
+haze = "0.7.2"
 detekt = "1.23.6"
 twitterComposeRule = "0.0.26"
 lottie = "6.1.0"
@@ -115,6 +116,7 @@ composeShimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version =
 rin = { module = "io.github.takahirom.rin:rin", version.ref = "rin" }
 lottieCompose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version = "1.5.1" }
+haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
 
 androidxFragment = { module = "androidx.fragment:fragment", version.ref = "androidxFragment" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
