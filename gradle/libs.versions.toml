@@ -44,7 +44,7 @@ molecule = "1.4.1"
 kover = "0.7.6"
 androidxLifecycleProcess = "2.8.2"
 skie = "0.8.2"
-composablePreviewScanner = "0.1.3"
+composablePreviewScanner = "0.1.2"
 coil = "3.0.0-alpha06"
 
 [libraries]
