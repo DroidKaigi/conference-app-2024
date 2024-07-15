@@ -216,18 +216,6 @@ fun MainScreen(
 
         Scaffold(
             bottomBar = {
-                /*AnimatedVisibility(visible = navigationType == BottomNavigation) {
-                    Row {
-                        MainScreenTab.entries.forEach { tab ->
-                            Button(
-                                modifier = Modifier.weight(1F),
-                                onClick = { onTabSelected(mainNestedNavController, tab) },
-                            ) {
-                                Text(text = tab.label + " " + (currentTab == tab))
-                            }
-                        }
-                    }
-                }*/
                 GlassLikeBottomNavigation(
                     hazeState = hazeState,
                     onTabSelected = {
