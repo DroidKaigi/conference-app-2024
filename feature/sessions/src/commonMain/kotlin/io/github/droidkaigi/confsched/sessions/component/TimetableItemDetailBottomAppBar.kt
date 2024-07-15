@@ -20,6 +20,7 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TimetableItemDetailBottomAppBar(
