@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.eventmap
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DefaultEventMapServerRobot
