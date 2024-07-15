@@ -15,9 +15,6 @@ jobs:
   comment:
     runs-on: ubuntu-latest
     if: github.event.workflow_run.conclusion == 'failure'
-    permissions:
-      pull-requests: write
-
     steps:
       - name: Download PR event artifact
         uses: actions/github-script@v6
