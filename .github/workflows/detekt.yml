@@ -1,0 +1,22 @@
+name: Detekt
+
+on:
+  pull_request:
+    paths-ignore:
+      - 'app-ios/**'
+
+jobs:
+  detekt:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/setup-java
+
+      - name: Run detekt
+        id: detekt
+        run: ./gradlew detekt --stacktrace
