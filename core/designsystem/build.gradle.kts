@@ -11,8 +11,16 @@ android.namespace = "io.github.droidkaigi.confsched.core.designsystem"
 
 kotlin {
     sourceSets {
-        commonMain {
-            dependencies {}
+        commonMain{
+            dependencies {
+                api(compose.components.uiToolingPreview)
+            }
+        }
+
+        androidMain{
+            dependencies {
+                api(compose.preview)
+            }
         }
     }
 }
