@@ -1,10 +1,11 @@
 import SwiftUI
 import ComposableArchitecture
 import Theme
+import CommonComponents
 
 public struct TimetableDetailView: View {
-    private let store: StoreOf<TimetableDetailReducer>
-
+    @Bindable private var store: StoreOf<TimetableDetailReducer>
+    
     public var body: some View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
@@ -22,6 +23,7 @@ public struct TimetableDetailView: View {
                     archive
                         .padding(16)
                 }
+                .toast($store.toast)
                 
                 footer
             }
@@ -29,12 +31,13 @@ public struct TimetableDetailView: View {
             .frame(maxWidth: .infinity)
             .ignoresSafeArea(edges: [.top])
         }
+        .toolbarBackground(AssetColors.Surface.surface.swiftUIColor, for: .navigationBar)
     }
     
-    @ViewBuilder var footer: some View {
+    @MainActor var footer: some View {
         HStack(spacing: 8) {
             Button {
-                // do something
+                store.send(.view(.shareButtonTapped))
             } label: {
                 Group {
                     Image(.icShare)
@@ -42,7 +45,7 @@ public struct TimetableDetailView: View {
                 .frame(width: 40, height: 40)
             }
             Button {
-                // do something
+                store.send(.view(.calendarButtonTapped))
             } label: {
                 Group {
                     Image(.icAddCalendar)
@@ -51,13 +54,18 @@ public struct TimetableDetailView: View {
             }
             Spacer()
             Button {
-                // do something
+                store.send(.view(.bookmarkButtonTapped))
             } label: {
                 Group {
-                    Image(.icFavorite)
+                    if store.isBookmarked {
+                        Image(.icFavoriteFill)
+                    } else {
+                        Image(.icFavoriteOutline)
+                    }
+                    
                 }
                 .frame(width: 56, height: 56)
-                .background(AssetColors.Surface.surfaceContainer.swiftUIColor)
+                .background(AssetColors.Secondary.secondaryContainer.swiftUIColor)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }
         }
@@ -67,7 +75,7 @@ public struct TimetableDetailView: View {
         .background(AssetColors.Surface.surfaceContainer.swiftUIColor)
     }
 
-    @ViewBuilder var headLine: some View {
+    @MainActor var headLine: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
                 RoomTag(.arcticFox)
@@ -97,11 +105,11 @@ public struct TimetableDetailView: View {
             }
             .padding(.bottom, 20)
         }
-        .padding(.horizontal, 16)
+        .padding([.top, .horizontal], 16)
         .background(AssetColors.Custom.arcticFoxContainer.swiftUIColor)
     }
 
-    @ViewBuilder var detail: some View {
+    @MainActor var detail: some View {
         VStack(alignment: .leading, spacing: 20) {
             VStack(spacing: 16) {
                 InformationRow(
@@ -141,7 +149,7 @@ public struct TimetableDetailView: View {
         }
     }
     
-    @ViewBuilder var applicants: some View {
+    @MainActor var applicants: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailApplicants", bundle: .module))
                 .textStyle(.titleLarge)
@@ -153,7 +161,7 @@ public struct TimetableDetailView: View {
         }
     }
     
-    @ViewBuilder var archive: some View {
+    @MainActor var archive: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailArchive", bundle: .module))
                 .textStyle(.titleLarge)
@@ -161,7 +169,7 @@ public struct TimetableDetailView: View {
 
             HStack {
                 Button {
-                    // do something
+                    store.send(.view(.slideButtonTapped))
                 } label: {
                     VStack {
                         Label(
@@ -179,7 +187,7 @@ public struct TimetableDetailView: View {
                     .clipShape(Capsule())
                 }
                 Button {
-                    // do something
+                    store.send(.view(.videoButtonTapped))
                 } label: {
                     VStack {
                         Label(
@@ -207,7 +215,7 @@ public struct TimetableDetailView: View {
 
 #Preview {
     TimetableDetailView(
-        store: .init(initialState: .init(title: "")) {
+        store: .init(initialState: .init()) {
             TimetableDetailReducer()
         }
     )

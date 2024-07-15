@@ -1,19 +1,19 @@
 import SwiftUI
-import shared
+@preconcurrency import shared
 
-struct ContributorsViewWithKmpPresenter: View {
+public struct KmpContributorView: View {
     private let repositories: any Repositories
     private let events: SkieSwiftMutableSharedFlow<any ContributorsScreenEvent>
     @State private var currentState: ContributorsUiState? = nil
 
-    init(repositories: any Repositories) {
-        self.repositories = repositories
+    public init() {
+        self.repositories = Container.shared.get(type: (any Repositories).self)
+
         self.events = SkieKotlinSharedFlowFactory<any ContributorsScreenEvent>()
             .createSkieKotlinSharedFlow(replay: 0, extraBufferCapacity: 0)
-        
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             if let state = currentState {
                 Text("Current State: \(state.description)")
@@ -21,18 +21,17 @@ struct ContributorsViewWithKmpPresenter: View {
                 Text("Loading...")
             }
         }
-        .onAppear {
-            startListening()
+        .task {
+            await startListening()
         }
     }
-    
-    private func startListening() {
-        Task {
-            let uiStateStateFlow =  contributorsScreenPresenterStateFlow(repositories: repositories.map, events: SkieSwiftFlow(events))
-            for await state in uiStateStateFlow
-            {
-                self.currentState = state
-            }
+
+    @MainActor
+    private func startListening() async {
+        let uiStateStateFlow = contributorsScreenPresenterStateFlow(repositories: repositories.map, events: SkieSwiftFlow(events))
+
+        for await state in uiStateStateFlow {
+            self.currentState = state
         }
     }
 }

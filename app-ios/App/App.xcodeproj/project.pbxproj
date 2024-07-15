@@ -7,12 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		834AC6DB2BD4C8860085199F /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DACB22BCBCCB0002C298A /* App.swift */; };
-		834AC6DF2BD4C8860085199F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C7DACB32BCBCCB0002C298A /* Assets.xcassets */; };
-		834AC6E02BD4C8860085199F /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C7DACB02BCBCCB0002C298A /* Preview Assets.xcassets */; };
-		8C31F4692BF3CF01003F1BBA /* AppExperiments in Frameworks */ = {isa = PBXBuildFile; productRef = 8C31F4682BF3CF01003F1BBA /* AppExperiments */; };
 		8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */; };
-		8C31F46C2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */; };
 		8C7DACB72BCBCCB0002C298A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C7DACB02BCBCCB0002C298A /* Preview Assets.xcassets */; };
 		8C7DACB82BCBCCB0002C298A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DACB22BCBCCB0002C298A /* App.swift */; };
 		8C7DACB92BCBCCB0002C298A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C7DACB32BCBCCB0002C298A /* Assets.xcassets */; };
@@ -20,7 +15,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		834AC6E42BD4C8860085199F /* DroidKaigi2024AppWithKmpBuild.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DroidKaigi2024AppWithKmpBuild.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8C772B152BCBCBCA00F2BADC /* DroidKaigi2024App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DroidKaigi2024App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C7DACB02BCBCCB0002C298A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -34,14 +28,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		834AC6DC2BD4C8860085199F /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				8C31F4692BF3CF01003F1BBA /* AppExperiments in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8C772B122BCBCBCA00F2BADC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -68,7 +54,6 @@
 			isa = PBXGroup;
 			children = (
 				8C772B152BCBCBCA00F2BADC /* DroidKaigi2024App.app */,
-				834AC6E42BD4C8860085199F /* DroidKaigi2024AppWithKmpBuild.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -105,31 +90,11 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		834AC6D82BD4C8860085199F /* DroidKaigi2024AppWithKmpBuild */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 834AC6E12BD4C8860085199F /* Build configuration list for PBXNativeTarget "DroidKaigi2024AppWithKmpBuild" */;
-			buildPhases = (
-				834AC6E52BD4C8A10085199F /* ShellScript */,
-				834AC6DA2BD4C8860085199F /* Sources */,
-				834AC6DC2BD4C8860085199F /* Frameworks */,
-				834AC6DE2BD4C8860085199F /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = DroidKaigi2024AppWithKmpBuild;
-			packageProductDependencies = (
-				8C31F4682BF3CF01003F1BBA /* AppExperiments */,
-			);
-			productName = DroidKaigi2024App;
-			productReference = 834AC6E42BD4C8860085199F /* DroidKaigi2024AppWithKmpBuild.app */;
-			productType = "com.apple.product-type.application";
-		};
 		8C772B142BCBCBCA00F2BADC /* DroidKaigi2024App */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8C772B242BCBCBCB00F2BADC /* Build configuration list for PBXNativeTarget "DroidKaigi2024App" */;
 			buildPhases = (
+				8C619CE72C405A97003E28A8 /* ShellScript */,
 				8C772B112BCBCBCA00F2BADC /* Sources */,
 				8C772B122BCBCBCA00F2BADC /* Frameworks */,
 				8C772B132BCBCBCA00F2BADC /* Resources */,
@@ -175,22 +140,11 @@
 			projectRoot = "";
 			targets = (
 				8C772B142BCBCBCA00F2BADC /* DroidKaigi2024App */,
-				834AC6D82BD4C8860085199F /* DroidKaigi2024AppWithKmpBuild */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		834AC6DE2BD4C8860085199F /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				834AC6DF2BD4C8860085199F /* Assets.xcassets in Resources */,
-				834AC6E02BD4C8860085199F /* Preview Assets.xcassets in Resources */,
-				8C31F46C2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8C772B132BCBCBCA00F2BADC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -204,7 +158,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		834AC6E52BD4C8A10085199F /* ShellScript */ = {
+		8C619CE72C405A97003E28A8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -218,20 +172,12 @@
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
+			shellPath = /bin/zsh;
 			shellScript = "cd ${SRCROOT}/../..\n./gradlew assembleSharedXCFramework --no-configuration-cache\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		834AC6DA2BD4C8860085199F /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				834AC6DB2BD4C8860085199F /* App.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		8C772B112BCBCBCA00F2BADC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -243,80 +189,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		834AC6E22BD4C8860085199F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = App.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Preview Content\"";
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.github.droidkaigi.DroidKaigi2024;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		834AC6E32BD4C8860085199F /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = App.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"Preview Content\"";
-				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
-				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
-				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
-				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
-				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
-				MACOSX_DEPLOYMENT_TARGET = 14.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = io.github.droidkaigi.DroidKaigi2024;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = auto;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = NO;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
-		};
 		8C772B222BCBCBCB00F2BADC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -512,15 +384,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		834AC6E12BD4C8860085199F /* Build configuration list for PBXNativeTarget "DroidKaigi2024AppWithKmpBuild" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				834AC6E22BD4C8860085199F /* Debug */,
-				834AC6E32BD4C8860085199F /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		8C772B102BCBCBCA00F2BADC /* Build configuration list for PBXProject "App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -542,10 +405,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		8C31F4682BF3CF01003F1BBA /* AppExperiments */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AppExperiments;
-		};
 		8C7DACC42BCBD18A002C298A /* App */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = App;

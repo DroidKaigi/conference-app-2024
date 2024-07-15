@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -34,7 +35,26 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confshed.profilecard.ProfileCardUiState.Edit
 
 const val profileCardScreenRoute = "profilecard"
-internal const val ProfileCardScreenTestTag = "ProfileCardTestTag"
+
+object ProfileCardTestTag {
+    private const val suffix = "TestTag"
+    private const val prefix = "ProfileCard"
+
+    object EditScreen {
+        private const val editScreenPrefix = "${prefix}_EditScreen"
+        const val SCREEN = "${editScreenPrefix}_$suffix"
+        const val NICKNAME_TEXT_FIELD = "${editScreenPrefix}_NicknameTextField_$suffix"
+        const val OCCUPATION_TEXT_FIELD = "${editScreenPrefix}_OccupationTextField_$suffix"
+        const val LINK_TEXT_FIELD = "${editScreenPrefix}_LinkTextField_$suffix"
+        const val SELECT_IMAGE_BUTTON = "${editScreenPrefix}_SelectImageButton_$suffix"
+        const val CREATE_BUTTON = "${editScreenPrefix}_CreateButton_$suffix"
+    }
+
+    object CardScreen {
+        private const val cardScreenPrefix = "${prefix}_CardScreen"
+        const val SCREEN = "${cardScreenPrefix}_$suffix"
+    }
+}
 
 fun NavGraphBuilder.profileCardScreen(
     contentPadding: PaddingValues,
@@ -99,8 +119,8 @@ internal fun ProfileCard.toUiState() =
 
 @Composable
 fun ProfileCardScreen(
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     ProfileCardScreen(
         contentPadding = contentPadding,
@@ -179,35 +199,49 @@ internal fun EditScreen(
     var imageUri by remember { mutableStateOf(uiState.imageUri) }
 
     Column(
-        modifier = modifier.padding(contentPadding),
+        modifier = modifier
+            .testTag(ProfileCardTestTag.EditScreen.SCREEN)
+            .padding(contentPadding),
     ) {
         Text("ProfileCardEdit")
         TextField(
             value = nickname,
             onValueChange = { nickname = it },
             placeholder = { Text("Nickname") },
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.NICKNAME_TEXT_FIELD),
         )
         TextField(
             value = occupation ?: "",
             onValueChange = { occupation = it },
             placeholder = { Text("Occupation") },
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.OCCUPATION_TEXT_FIELD),
         )
         TextField(
             value = link ?: "",
             onValueChange = { link = it },
             placeholder = { Text("Link") },
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.LINK_TEXT_FIELD),
         )
-        Button({
-            onClickCreate(
-                ProfileCard(
-                    nickname = nickname,
-                    occupation = occupation,
-                    link = link,
-                    imageUri = imageUri,
-                    theme = uiState.theme,
-                ),
-            )
-        }) {
+        Button(
+            onClick = {},
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.SELECT_IMAGE_BUTTON),
+        ) {
+            Text("画像を選択")
+        }
+        Button(
+            onClick = {
+                onClickCreate(
+                    ProfileCard(
+                        nickname = nickname,
+                        occupation = occupation,
+                        link = link,
+                        imageUri = imageUri,
+                        theme = uiState.theme,
+                    ),
+                )
+            },
+            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.CREATE_BUTTON),
+        ) {
             Text("Create")
         }
     }
@@ -221,7 +255,9 @@ internal fun CardScreen(
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column(
-        modifier = modifier.padding(contentPadding),
+        modifier = modifier
+            .testTag(ProfileCardTestTag.CardScreen.SCREEN)
+            .padding(contentPadding),
     ) {
         Text("ProfileCard")
         Text(uiState.nickname)
