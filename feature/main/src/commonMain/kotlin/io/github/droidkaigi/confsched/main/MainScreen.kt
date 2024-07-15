@@ -130,46 +130,40 @@ enum class MainScreenTab(
     val label: String,
     val contentDescription: String,
     val testTag: String = "mainScreenTab:$label",
-    val color: Color,
 ) {
     Timetable(
         icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         selectedIcon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         label = MainStrings.Timetable.asString(),
-        contentDescription = MainStrings.Timetable.asString(),
-        color = Color(0xFF67FF8D),
+        contentDescription = MainStrings.Timetable.asString()
     ),
 
     EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
         selectedIcon = IconRepresentation.Vector(Icons.Outlined.Map),
         label = MainStrings.EventMap.asString(),
-        contentDescription = MainStrings.EventMap.asString(),
-        color = Color(0xFF67FF8D),
+        contentDescription = MainStrings.EventMap.asString()
     ),
 
     Favorite(
         icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
         selectedIcon = IconRepresentation.Vector(Icons.Outlined.Favorite),
         label = MainStrings.EventMap.asString(),
-        contentDescription = MainStrings.EventMap.asString(),
-        color = Color(0xFF67FF8D),
+        contentDescription = MainStrings.EventMap.asString()
     ),
 
     About(
         icon = IconRepresentation.Vector(Icons.Outlined.Info),
         selectedIcon = IconRepresentation.Vector(Icons.Filled.Info),
         label = MainStrings.About.asString(),
-        contentDescription = MainStrings.About.asString(),
-        color = Color(0xFF67FF8D),
+        contentDescription = MainStrings.About.asString()
     ),
 
     ProfileCard(
         icon = IconRepresentation.Vector(Icons.Outlined.People),
         selectedIcon = IconRepresentation.Vector(Icons.Outlined.People),
         label = MainStrings.ProfileCard.asString(),
-        contentDescription = MainStrings.ProfileCard.asString(),
-        color = Color(0xFF67FF8D),
+        contentDescription = MainStrings.ProfileCard.asString()
     ),
     ;
 

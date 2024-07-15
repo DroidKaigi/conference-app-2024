@@ -100,7 +100,8 @@ fun GlassLikeBottomNavigation(
         )
 
         val animatedColor by animateColorAsState(
-            targetValue = MainScreenTab.fromIndex(selectedTabIndex).color,
+            // FIXME: apply theme
+            targetValue = Color(0xFF67FF8D),
             label = "animatedColor",
             animationSpec =
             spring(
