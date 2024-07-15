@@ -20,3 +20,15 @@ jobs:
       - name: Run detekt
         id: detekt
         run: ./gradlew detekt --stacktrace
+
+      - name: Save PR event
+        if: failure()
+        run: |
+          mkdir -p ./pr
+          echo '${{ toJson(github.event) }}' > ./pr/event.json
+
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: pr
+          path: pr/
