@@ -21,8 +21,11 @@ public struct TimetableDetailView: View {
                         .padding(.horizontal, 16)
                     targetAudience
                         .padding(16)
-                    archive
-                        .padding(16)
+                    if store.timetableItem.asset.videoUrl != nil || 
+                       store.timetableItem.asset.slideUrl != nil {
+                        archive
+                            .padding(16)
+                    }
                 }
                 .toast($store.toast)
                 
@@ -39,7 +42,7 @@ public struct TimetableDetailView: View {
                 action: \.confirmationDialog
             )
         )
-        .sheet(item: $store.tappedUrl) { url in
+        .sheet(item: $store.url) { url in
             SafariView(url: url.id)
                 .ignoresSafeArea()
         }
@@ -92,8 +95,9 @@ public struct TimetableDetailView: View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
                 RoomTag(.arcticFox)
-                LanguageTag(.japanese)
-                LanguageTag(.english)
+                ForEach(store.timetableItem.language.labels, id: \.self) { label in
+                    LanguageTag(label)
+                }
             }
             .padding(.bottom, 8)
 
@@ -192,41 +196,47 @@ public struct TimetableDetailView: View {
                 .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
 
             HStack {
-                Button {
-                    store.send(.view(.slideButtonTapped))
-                } label: {
-                    VStack {
-                        Label(
-                            title: {
-                                Text(String(localized: "TimeTableDetailSlide", bundle: .module))
-                                    .textStyle(.labelLarge)
-                                    .foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor)
-                            },
-                            icon: { Image(.icDocument) }
-                        )
+                if let slideUrlString = store.timetableItem.asset.slideUrl,
+                   let slideUrl = URL(string: slideUrlString) {
+                    Button {
+                        store.send(.view(.slideButtonTapped(slideUrl)))
+                    } label: {
+                        VStack {
+                            Label(
+                                title: {
+                                    Text(String(localized: "TimeTableDetailSlide", bundle: .module))
+                                        .textStyle(.labelLarge)
+                                        .foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor)
+                                },
+                                icon: { Image(.icDocument) }
+                            )
+                        }
+                        .frame(height: 40)
+                        .frame(maxWidth: .infinity)
+                        .background(AssetColors.Custom.arcticFox.swiftUIColor)
+                        .clipShape(Capsule())
                     }
-                    .frame(height: 40)
-                    .frame(maxWidth: .infinity)
-                    .background(AssetColors.Custom.arcticFox.swiftUIColor)
-                    .clipShape(Capsule())
                 }
-                Button {
-                    store.send(.view(.videoButtonTapped))
-                } label: {
-                    VStack {
-                        Label(
-                            title: {
-                                Text(String(localized: "TimeTableDetailVideo", bundle: .module))
-                                    .textStyle(.labelLarge)
-                                    .foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor)
-                            },
-                            icon: { Image(.icPlay) }
-                        )
+                if let videoUrlString = store.timetableItem.asset.videoUrl,
+                   let videoUrl = URL(string: videoUrlString) {
+                    Button {
+                        store.send(.view(.videoButtonTapped(videoUrl)))
+                    } label: {
+                        VStack {
+                            Label(
+                                title: {
+                                    Text(String(localized: "TimeTableDetailVideo", bundle: .module))
+                                        .textStyle(.labelLarge)
+                                        .foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor)
+                                },
+                                icon: { Image(.icPlay) }
+                            )
+                        }
+                        .frame(height: 40)
+                        .frame(maxWidth: .infinity)
+                        .background(AssetColors.Custom.arcticFox.swiftUIColor)
+                        .clipShape(Capsule())
                     }
-                    .frame(height: 40)
-                    .frame(maxWidth: .infinity)
-                    .background(AssetColors.Custom.arcticFox.swiftUIColor)
-                    .clipShape(Capsule())
                 }
             }
         }

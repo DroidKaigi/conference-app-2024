@@ -23,7 +23,7 @@ public struct TimetableDetailReducer: Sendable {
         var timetableItem: TimetableItem
         var isBookmarked = false
         var toast: ToastState?
-        var tappedUrl: IdentifiableURL?
+        var url: IdentifiableURL?
         @Presents var confirmationDialog: ConfirmationDialogState<ConfirmationDialog>?
     }
 
@@ -38,8 +38,8 @@ public struct TimetableDetailReducer: Sendable {
         public enum View {
             case bookmarkButtonTapped
             case calendarButtonTapped
-            case slideButtonTapped
-            case videoButtonTapped
+            case slideButtonTapped(URL)
+            case videoButtonTapped(URL)
             case urlTapped(URL)
         }
     }
@@ -90,14 +90,16 @@ public struct TimetableDetailReducer: Sendable {
                 print(error.localizedDescription)
                 return .none
 
-            case .view(.slideButtonTapped):
+            case let .view(.slideButtonTapped(url)):
+                state.url = IdentifiableURL(url)
                 return .none
 
-            case .view(.videoButtonTapped):
+            case let .view(.videoButtonTapped(url)):
+                state.url = IdentifiableURL(url)
                 return .none
                 
             case let .view(.urlTapped(url)):
-                state.tappedUrl = IdentifiableURL(url)
+                state.url = IdentifiableURL(url)
                 return .none
 
             case .bookmarkResponse(.success):
