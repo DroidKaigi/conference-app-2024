@@ -9,6 +9,7 @@ on:
 permissions:
   actions: read
   pull-requests: write
+  contents: read
 
 jobs:
   comment:
