@@ -1,4 +1,4 @@
-name: Detekt
+name: detekt
 
 on:
   pull_request:
