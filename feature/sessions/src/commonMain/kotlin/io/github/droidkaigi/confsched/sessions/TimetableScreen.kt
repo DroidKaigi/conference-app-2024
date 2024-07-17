@@ -214,7 +214,7 @@ private fun TimetableScreen(
                             contentDescription = null,
                             modifier = Modifier.padding(8.dp).clickable {
                                 onTimetableUiChangeClick()
-                            },
+                            }.testTag(TimetableUiTypeChangeButtonTestTag),
                         )
                     }
                 },
