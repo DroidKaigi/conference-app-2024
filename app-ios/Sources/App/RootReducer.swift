@@ -103,7 +103,11 @@ public struct RootReducer {
                 return .none
                 
             case .timetable(.view(.timetableItemTapped)):
-                state.paths.timetable.append(.timetableDetail(TimetableDetailReducer.State(timetableItem: shared.TimetableItem.Session.companion.fake())))
+                state.paths.timetable.append(.timetableDetail(
+                    TimetableDetailReducer.State(
+                        timetableItem: shared.TimetableItem.Session.companion.fake()
+                    )
+                ))
                 return .none
 
             default:
