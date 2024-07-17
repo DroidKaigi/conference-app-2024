@@ -217,3 +217,22 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF1A1C1C)
 val surfaceContainerDarkHighContrast = Color(0xFF1F2020)
 val surfaceContainerHighDarkHighContrast = Color(0xFF292A2A)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF343535)
+
+val md_theme_light_room_hall_a = Color(0xFF0A57A4)
+val md_theme_light_room_hall_b = Color(0xFF5E5504)
+val md_theme_light_room_hall_c = Color(0xFF552E21)
+val md_theme_light_room_hall_d = Color(0xFF026066)
+val md_theme_light_room_hall_e = Color(0xFF494E5A)
+val md_theme_light_room_hall_text = Color(0xFFFFFFFF)
+
+val md_theme_dark_room_hall_a = Color(0xFFB2D1FF)
+val md_theme_dark_room_hall_b = Color(0xFFF0DF63)
+val md_theme_dark_room_hall_c = Color(0xFFE7BB92)
+val md_theme_dark_room_hall_d = Color(0xFFB4DDDD)
+val md_theme_dark_room_hall_e = Color(0xFFB8B9BD)
+val md_theme_dark_room_hall_text = Color(0xFF000000)
+
+val md_theme_light_onSurfaceVariant = Color(0xFF404944)
+val md_theme_dark_onSurfaceVariant = Color(0xFFBFC9C2)
+
+val md_theme_light_outline = Color(0xFF707974)
