@@ -69,10 +69,9 @@ fun TimetableGridTab(
                                 Color(0xFF4AFF82)
                             } else {
                                 Color.White
-                            }
+                            },
                         )
                     }
-
                 }
                 Tab(
                     modifier = Modifier.height(64.dp),

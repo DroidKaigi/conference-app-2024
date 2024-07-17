@@ -201,24 +201,23 @@ private fun TimetableScreen(
                             fontSize = 24.sp,
                             lineHeight = 32.sp,
                             fontWeight = FontWeight.W400,
-                            modifier = Modifier.weight(1F)
+                            modifier = Modifier.weight(1F),
                         )
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = null,
                             modifier = Modifier.padding(8.dp).clickable {
-
-                            }
+                            },
                         )
                         Icon(
                             imageVector = Icons.Default.Grid3x3,
                             contentDescription = null,
                             modifier = Modifier.padding(8.dp).clickable {
                                 onTimetableUiChangeClick()
-                            }
+                            },
                         )
                     }
-                }
+                },
             )
         },
         contentWindowInsets = WindowInsets(
