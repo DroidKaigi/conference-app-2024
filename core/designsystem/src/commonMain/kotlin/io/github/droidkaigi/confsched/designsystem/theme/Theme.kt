@@ -278,8 +278,7 @@ fun hallColors() = HallColorScheme.Dark()
 @Composable
 fun KaigiTheme(
     content:
-    @Composable()
-        () -> Unit,
+    @Composable () -> Unit,
 ) {
     val colorScheme = darkScheme
 //  val view = LocalView.current
