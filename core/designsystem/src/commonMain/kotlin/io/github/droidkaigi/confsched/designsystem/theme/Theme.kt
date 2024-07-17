@@ -252,11 +252,33 @@ val unspecified_scheme = ColorFamily(
     Color.Unspecified,
 )
 
+sealed class HallColorScheme {
+    abstract val hallA: Color
+    abstract val hallB: Color
+    abstract val hallC: Color
+    abstract val hallD: Color
+    abstract val hallE: Color
+    abstract val hallText: Color
+    abstract val hallTextWhenWithoutSpeakers: Color
+
+    data class Dark(
+        override val hallA: Color = md_theme_dark_room_hall_a,
+        override val hallB: Color = md_theme_dark_room_hall_b,
+        override val hallC: Color = md_theme_dark_room_hall_c,
+        override val hallD: Color = md_theme_dark_room_hall_d,
+        override val hallE: Color = md_theme_dark_room_hall_e,
+        override val hallText: Color = md_theme_dark_room_hall_text,
+        override val hallTextWhenWithoutSpeakers: Color = md_theme_dark_onSurfaceVariant,
+    ) : HallColorScheme()
+}
+
+@Composable
+fun hallColors() = HallColorScheme.Dark()
+
 @Composable
 fun KaigiTheme(
     content:
-    @Composable()
-    () -> Unit,
+    @Composable () -> Unit,
 ) {
     val colorScheme = darkScheme
 //  val view = LocalView.current

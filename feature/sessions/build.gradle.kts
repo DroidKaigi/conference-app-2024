@@ -13,6 +13,7 @@ kotlin {
 
                 implementation(libs.composeNavigation)
                 implementation(compose.materialIconsExtended)
+                implementation(compose.components.uiToolingPreview)
             }
         }
         androidTarget {
