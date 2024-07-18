@@ -44,7 +44,7 @@ final class TimetableDetail_iosTests: XCTestCase {
         }
         let url = URL(string: "https://github.com/DroidKaigi/conference-app-2023")!
         await store.send(.view(.urlTapped(url))) {
-            $0.tappedUrl = IdentifiableURL(url)
+            $0.url = IdentifiableURL(url)
         }
     }
     
@@ -71,6 +71,26 @@ final class TimetableDetail_iosTests: XCTestCase {
             $0.confirmationDialog = nil
         }
         await store.receive(\.addEventResponse)
+    }
+    
+    @MainActor func testTappedVideoButton() async throws {
+        let store = TestStore(initialState: TimetableDetailReducer.State(timetableItem: TimetableItem.Session.companion.fake(), isBookmarked: false)) {
+            TimetableDetailReducer()
+        }
+        let videoUrl = URL(string: "https://www.youtube.com/watch?v=hFdKCyJ-Z9A")!
+        await store.send(.view(.videoButtonTapped(videoUrl))) {
+            $0.url = IdentifiableURL(videoUrl)
+        }
+    }
+    
+    @MainActor func testTappedSlideButton() async throws {
+        let store = TestStore(initialState: TimetableDetailReducer.State(timetableItem: TimetableItem.Session.companion.fake(), isBookmarked: false)) {
+            TimetableDetailReducer()
+        }
+        let videoUrl = URL(string: "https://droidkaigi.jp/2021/")!
+        await store.send(.view(.slideButtonTapped(videoUrl))) {
+            $0.url = IdentifiableURL(videoUrl)
+        }
     }
 }
 
