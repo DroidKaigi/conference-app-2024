@@ -59,5 +59,4 @@ extension ContributorClient: DependencyKey {
     } refresh: {
         try await contributorRepository.refresh()
     }
-
 }
