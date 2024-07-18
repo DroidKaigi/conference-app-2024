@@ -1,14 +1,14 @@
 import SwiftUI
 import Theme
 
-struct LanguageTag: View {
+public struct LanguageTag: View {
     let languageLabel: String
     
-    init(_ languageLabel: String) {
+    public init(_ languageLabel: String) {
         self.languageLabel = languageLabel
     }
 
-    var body: some View {
+    public var body: some View {
         Text(languageLabel)
             .textStyle(.labelMedium)
             .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
