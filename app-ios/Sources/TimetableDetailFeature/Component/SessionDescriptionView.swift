@@ -8,7 +8,7 @@ struct SessionDescriptionView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(content)
+            Text(.init(content))
                 .textStyle(.bodyLarge)
                 .textSelection(.enabled)
                 .lineLimit(isDescriptionExpanded ? nil : 5)
@@ -46,7 +46,7 @@ struct SessionDescriptionView: View {
 
 #Preview {
     VStack {
-        SessionDescriptionView(content: SampleData.sessionDescription)
+        SessionDescriptionView(content: "Kotlin Coroutinesは非同期処理をシンプルに記述できるKotlinの言語機能です。実験的な機能としてこれまでも提供されてきましたがKotlin 1.3で正式にリリース予定です。Androidの誕生から10年たちアプリの利用シーンが増えたKotlin Coroutinesは非同期処理をシンプルに記述できるKotlinの言語機能です。実験的な機能としてこれまでも提供されてきましたがKotlin 1.3で正式にリリース予定です。Androidの誕生から10年たちアプリの利用シーンが増えた.")
             .padding(.horizontal, 16)
     }
     .background(AssetColors.Surface.surface.swiftUIColor)

@@ -2,25 +2,14 @@ import SwiftUI
 import Theme
 
 struct LanguageTag: View {
-    enum Language {
-        case japanese, english
-        
-        var text: String {
-            switch self {
-            case .japanese: "JA"
-            case .english: "EN"
-            }
-        }
-    }
-
-    let language: Language
+    let languageLabel: String
     
-    init(_ language: Language) {
-        self.language = language
+    init(_ languageLabel: String) {
+        self.languageLabel = languageLabel
     }
 
     var body: some View {
-        Text(language.text)
+        Text(languageLabel)
             .textStyle(.labelMedium)
             .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
             .padding(.horizontal, 4)
@@ -32,5 +21,5 @@ struct LanguageTag: View {
 }
 
 #Preview {
-    LanguageTag(.english)
+    LanguageTag("EN")
 }
