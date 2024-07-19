@@ -26,7 +26,7 @@ public struct TimetableView: View {
                     }
                     Spacer()
                 }.padding(5)
-                switch(timetableMode) {
+                switch timetableMode {
                 case TimetableMode.List:
                     TimetableListView(store: store)
                 case TimetableMode.Grid:
