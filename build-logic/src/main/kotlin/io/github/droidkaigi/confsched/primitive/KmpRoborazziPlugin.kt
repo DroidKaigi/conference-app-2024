@@ -3,13 +3,13 @@ package io.github.droidkaigi.confsched.primitive
 import io.github.takahirom.roborazzi.RoborazziExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByType
+import kotlin.collections.listOf
+import kotlin.collections.set
 
 @Suppress("unused")
 class KmpRoborazziPlugin : Plugin<Project> {
@@ -26,7 +26,8 @@ class KmpRoborazziPlugin : Plugin<Project> {
                             all { test ->
                                 test.jvmArgs("-noverify")
                                 test.systemProperties["robolectric.graphicsMode"] = "NATIVE"
-                                test.systemProperties["robolectric.pixelCopyRenderMode"] = "hardware"
+                                test.systemProperties["robolectric.pixelCopyRenderMode"] =
+                                    "hardware"
 
                                 test.maxParallelForks = Runtime.getRuntime().availableProcessors()
                                 test.testLogging {
@@ -43,19 +44,21 @@ class KmpRoborazziPlugin : Plugin<Project> {
             project.extensions.getByType<RoborazziExtension>().apply {
                 generateComposePreviewRobolectricTests {
                     enable.set(true)
-                    packages.add("io.github.droidkaigi.confsched")
+                    testerQualifiedClassName.set("io.github.droidkaigi.confsched.testing.DroidKaigiKmpPreviewTester")
                 }
             }
             kotlin {
                 if (plugins.hasPlugin("com.android.library")) {
                     sourceSets.getByName("androidUnitTest") {
                         dependencies {
+                            implementation(project(":core:testing"))
                             implementation(libs.library("androidxTestEspressoEspressoCore"))
                             implementation(libs.library("junit"))
                             implementation(libs.library("robolectric"))
                             implementation(libs.library("androidxTestExtJunit"))
                             implementation(libs.library("roborazzi"))
                             implementation(libs.library("roborazziCompose"))
+                            implementation(libs.library("composablePreviewScannerJvm"))
                             implementation(libs.library("composablePreviewScanner"))
                             implementation(libs.library("roborazziPreviewScannerSupport"))
                         }

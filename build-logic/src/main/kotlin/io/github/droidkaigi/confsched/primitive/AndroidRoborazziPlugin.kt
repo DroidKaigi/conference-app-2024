@@ -36,12 +36,6 @@ class AndroidRoborazziPlugin : Plugin<Project> {
                     }
                 }
             }
-            project.extensions.getByType<RoborazziExtension>().apply {
-                generateComposePreviewRobolectricTests {
-                    enable.set(true)
-                    packages.add("io.github.droidkaigi.confsched")
-                }
-            }
             dependencies {
                 testImplementation(libs.library("androidxTestEspressoEspressoCore"))
                 testImplementation(libs.library("junit"))
@@ -50,6 +44,7 @@ class AndroidRoborazziPlugin : Plugin<Project> {
                 testImplementation(libs.library("roborazzi"))
                 testImplementation(libs.library("roborazziCompose"))
                 testImplementation(libs.library("composablePreviewScanner"))
+                testImplementation(libs.library("composablePreviewScannerJvm"))
                 testImplementation(libs.library("roborazziPreviewScannerSupport"))
             }
         }
