@@ -2,7 +2,7 @@ import SwiftUI
 import Theme
 import class shared.TimetableItem
 
-public struct TimetableItemView: View {
+public struct TimetableCard: View {
     let timetableItem: TimetableItem
     let isFavorite: Bool
     let onTap: (TimetableItem) -> Void
@@ -83,7 +83,7 @@ public struct TimetableItemView: View {
 
 #Preview {
     VStack {
-        TimetableItemView(
+        TimetableCard(
             timetableItem: TimetableItem.Session.companion.fake(),
             isFavorite: true,
             onTap: { _ in },
