@@ -175,7 +175,6 @@ roborazziRule = { module = "io.github.takahirom.roborazzi:roborazzi-junit-rule",
 roborazziPreviewScannerSupport = { module = "io.github.takahirom.roborazzi:roborazzi-compose-preview-scanner-support", version.ref = "roborazzi" }
 composablePreviewScanner = { module = "com.github.sergio-sastre.ComposablePreviewScanner:android", version.ref = "composablePreviewScanner" }
 composablePreviewScannerJvm = { module = "com.github.sergio-sastre.ComposablePreviewScanner:jvm", version.ref = "composablePreviewScanner" }
-kotlinReflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 
 [plugins]
 androidGradlePlugin = { id = "com.android.application", version.ref = "androidGradlePlugin" }
