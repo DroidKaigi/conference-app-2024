@@ -56,7 +56,7 @@ public struct TimetableView: View {
                         }
                         
                         Button {
-                            switch(timetableMode){
+                            switch timetableMode {
                             case .List:
                                 timetableMode = .Grid
                                 switchModeIcon = "list.bullet.indent"
