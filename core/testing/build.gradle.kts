@@ -30,5 +30,4 @@ dependencies {
     implementation(libs.composablePreviewScanner)
     implementation(libs.composablePreviewScannerJvm)
     implementation(libs.roborazziPreviewScannerSupport)
-    implementation(libs.kotlinReflect)
 }
