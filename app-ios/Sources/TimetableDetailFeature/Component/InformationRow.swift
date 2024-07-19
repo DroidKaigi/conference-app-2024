@@ -37,7 +37,7 @@ struct InformationRow: View {
         icon: Image(systemName: "clock"),
         title: String(localized: "TimeTableDetailDate", bundle: .module),
         titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
-        content: SampleData.dateValue
+        content: "2024.09.14 / 11:20 ~ 12:00"
     )
 }
 

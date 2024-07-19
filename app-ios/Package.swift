@@ -79,6 +79,13 @@ let package = Package(
                 .tca,
             ]
         ),
+        
+        .target(
+            name: "EventKitClient",
+            dependencies: [
+                .tca
+            ]
+        ),
 
         .target(
             name: "TimetableFeature",
@@ -107,11 +114,12 @@ let package = Package(
                 .commonComponents,
                 .kmpClient,
                 .kmpModule,
+                .eventKitClient,
             ]
         ),
         .testTarget(
             name: "TimetableDetailFeatureTests",
-            dependencies: [.timetableDetailFeature, .tca]
+            dependencies: [.timetableDetailFeature, .tca, .kmpModule]
         ),
         .target(
             name: "AboutFeature",
@@ -219,6 +227,7 @@ extension Target.Dependency {
     static let contributorFeature: Target.Dependency = "ContributorFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
     static let kmpClient: Target.Dependency = "KMPClient"
+    static let eventKitClient: Target.Dependency = "EventKitClient"
     static let theme: Target.Dependency = "Theme"
     static let commonComponents: Target.Dependency = "CommonComponents"
 
