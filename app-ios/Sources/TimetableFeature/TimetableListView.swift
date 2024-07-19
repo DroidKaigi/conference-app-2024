@@ -65,9 +65,7 @@ public struct TimetableView: View {
                                 switchModeIcon = "square.grid.2x2"
                             }
                         } label: {
-                            Group {
-                                Image(systemName:switchModeIcon).foregroundStyle(Color(.onSurfaceColorset))
-                            }
+                            Image(systemName:switchModeIcon).foregroundStyle(Color(.onSurfaceColorset))
                             .frame(width: 40, height: 40)
                         }
                     }
