@@ -19,3 +19,11 @@ extension SponsorsClient: TestDependencyKey {
     public static let previewValue: Self = Self()
     public static let testValue: Self = Self(streamSponsors: unimplemented("SponsorsClient.streamSponsors"))
 }
+
+extension ContributorClient: TestDependencyKey {
+    public static let previewValue: Self = Self()
+    public static let testValue: Self = Self(
+        streamContributors: unimplemented("ContributorClient.streamContributors"),
+        refresh: unimplemented("ContributorClient.refresh")
+    )
+}

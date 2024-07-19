@@ -35,6 +35,7 @@ import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
 import io.github.droidkaigi.confsched.main.MainScreenTab.EventMap
+import io.github.droidkaigi.confsched.main.MainScreenTab.Favorite
 import io.github.droidkaigi.confsched.main.MainScreenTab.ProfileCard
 import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
@@ -141,7 +142,8 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
-            About -> TODO()
+            Favorite -> {}
+            About -> {}
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }
     }
@@ -164,7 +166,6 @@ private class ExternalNavController(
     private val context: Context,
     private val shareNavigator: ShareNavigator,
 ) {
-
     fun navigate(url: String) {
         val uri: Uri = url.toUri()
         val launched = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -216,10 +217,14 @@ private class ExternalNavController(
 
     @Suppress("SwallowedException")
     @RequiresApi(Build.VERSION_CODES.R)
-    private fun navigateToNativeAppApi30(context: Context, uri: Uri): Boolean {
-        val nativeAppIntent = Intent(Intent.ACTION_VIEW, uri)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER)
+    private fun navigateToNativeAppApi30(
+        context: Context,
+        uri: Uri,
+    ): Boolean {
+        val nativeAppIntent =
+            Intent(Intent.ACTION_VIEW, uri)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_REQUIRE_NON_BROWSER)
         return try {
             context.startActivity(nativeAppIntent)
             true
@@ -229,7 +234,10 @@ private class ExternalNavController(
     }
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun navigateToNativeApp(context: Context, uri: Uri): Boolean {
+    private fun navigateToNativeApp(
+        context: Context,
+        uri: Uri,
+    ): Boolean {
         val pm = context.packageManager
 
         // Get all Apps that resolve a generic url
@@ -264,7 +272,10 @@ private class ExternalNavController(
         return true
     }
 
-    private fun navigateToCustomTab(context: Context, uri: Uri) {
+    private fun navigateToCustomTab(
+        context: Context,
+        uri: Uri,
+    ) {
         CustomTabsIntent.Builder()
             .setShowTitle(true)
             .build()

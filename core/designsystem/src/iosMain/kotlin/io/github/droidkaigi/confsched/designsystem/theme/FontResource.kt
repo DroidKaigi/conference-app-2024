@@ -2,7 +2,6 @@ package io.github.droidkaigi.confsched.designsystem.theme
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 val fontMap: HashMap<String, FontFamily?> = HashMap()
 
@@ -10,7 +9,6 @@ val fontMap: HashMap<String, FontFamily?> = HashMap()
 // FIXME We initially planned to use this implementation on the iOS side.
 // However, when shared.swift is output by XCFramework, methods with Compose annotations are not output.
 // Therefore, this implementation cannot be referenced from the iOS side.
-@ExperimentalResourceApi
 @Composable
 actual fun fontFamilyResource(fontResource: FontResource): FontFamily? {
     // FIXME: Load the custom font in resources directory

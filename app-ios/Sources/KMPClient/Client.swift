@@ -17,6 +17,11 @@ extension DependencyValues {
         get { self[SponsorsClient.self] }
         set { self[SponsorsClient.self] = newValue }
     }
+    
+    public var contributorClient: ContributorClient {
+        get { self[ContributorClient.self] }
+        set { self[ContributorClient.self] = newValue }
+    }
 }
 
 @DependencyClient
@@ -34,4 +39,10 @@ public struct StaffClient: Sendable {
 @DependencyClient
 public struct SponsorsClient: Sendable {
     public var streamSponsors: @Sendable () throws -> AsyncThrowingStream<[Sponsor], any Error>
+}
+
+@DependencyClient
+public struct ContributorClient: Sendable {
+    public var streamContributors: @Sendable () throws -> AsyncThrowingStream<[Contributor], any Error>
+    public var refresh: @Sendable () async throws -> Void
 }

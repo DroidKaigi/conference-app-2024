@@ -1,8 +1,8 @@
 import SwiftUI
 import Theme
 
-struct RoomTag: View {
-    enum Room {
+public struct RoomTag: View {
+    public enum Room {
         case arcticFox
         case bumblebee
         case chipmunk
@@ -12,11 +12,11 @@ struct RoomTag: View {
 
     let room: Room
 
-    init(_ room: Room) {
+    public init(_ room: Room) {
         self.room = room
     }
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 5) {
             Rectangle()
                 .frame(width: 10, height: 10)

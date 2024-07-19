@@ -3,6 +3,7 @@ plugins {
 }
 
 android.namespace = "io.github.droidkaigi.confsched.feature.contributors"
+roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.contributors")
 kotlin {
     sourceSets {
         commonMain {

@@ -26,14 +26,13 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Locale
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.model.getDefaultLocale
 import io.github.droidkaigi.confsched.model.nameAndFloor
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TimeTableItemDetailSummaryCard(
@@ -127,8 +126,7 @@ private fun SummaryCardRow(
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 fun TimeTableItemDetailSummaryCardPreview() {
     KaigiTheme {
         Surface {

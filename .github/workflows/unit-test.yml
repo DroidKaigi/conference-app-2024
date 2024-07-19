@@ -37,8 +37,6 @@ jobs:
           name: event-payload
           path: ${{ github.event_path }}
 
-      - run: ./gradlew detekt --stacktrace
-
       - run: ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace
 
       # Saving cost

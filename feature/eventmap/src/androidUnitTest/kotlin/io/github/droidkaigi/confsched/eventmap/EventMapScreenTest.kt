@@ -1,23 +1,27 @@
 package io.github.droidkaigi.confsched.eventmap
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DefaultEventMapServerRobot
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
+import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.EventMapServerRobot
+import io.github.droidkaigi.confsched.testing.EventMapServerRobot.ServerStatus.Operational
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.ScreenRobot
+import io.github.droidkaigi.confsched.testing.describeBehaviors
+import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.runRobot
 import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.ParameterizedRobolectricTestRunner
 import javax.inject.Inject
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(ParameterizedRobolectricTestRunner::class)
 @HiltAndroidTest
-class EventMapScreenTest {
+class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
 
     @get:Rule
     @BindValue val robotTestRule: RobotTestRule = RobotTestRule(this)
@@ -26,26 +30,38 @@ class EventMapScreenTest {
     lateinit var eventMapScreenRobot: EventMapScreenRobot
 
     @Test
-    fun checkScreenContent() {
-        runRobot(eventMapScreenRobot) {
-            setupEventMapServer(EventMapServerRobot.ServerStatus.Operational)
-            setupScreenContent()
-
-            captureScreenWithChecks(
-                checks = todoChecks("This screen is still empty now. Please add some checks."),
-            )
-        }
+    fun test() = runRobot(eventMapScreenRobot) {
+        behavior.execute(eventMapScreenRobot)
     }
 
-    @Test
-    fun checkErrorScreenContent() {
-        runRobot(eventMapScreenRobot) {
-            setupEventMapServer(EventMapServerRobot.ServerStatus.Error)
-            setupScreenContent()
-
-            captureScreenWithChecks(
-                checks = todoChecks("This screen is still empty now. Please add some checks."),
-            )
+    companion object {
+        @JvmStatic
+        @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
+        fun behaviors(): List<DescribedBehavior<EventMapScreenRobot>> {
+            return describeBehaviors<EventMapScreenRobot>(name = "EventMapScreenRobot") {
+                describe("when server is operational") {
+                    run {
+                        setupEventMapServer(Operational)
+                        setupScreenContent()
+                    }
+                    itShould("show event map items") {
+                        captureScreenWithChecks(
+                            checks = todoChecks("This screen is still empty now. Please add some checks."),
+                        )
+                    }
+                }
+                describe("when server is error") {
+                    run {
+                        setupEventMapServer(EventMapServerRobot.ServerStatus.Error)
+                        setupScreenContent()
+                    }
+                    itShould("show error message") {
+                        captureScreenWithChecks(
+                            checks = todoChecks("This screen is still empty now. Please add some checks."),
+                        )
+                    }
+                }
+            }
         }
     }
 }

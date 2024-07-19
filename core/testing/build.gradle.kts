@@ -23,7 +23,11 @@ dependencies {
     api(projects.core.testingManifest)
     api(libs.composeNavigation)
     api(libs.roborazziRule)
+    api(libs.roborazziCompose)
     api(libs.robolectric)
     api(libs.composeUiTestJunit4)
     implementation(libs.composeMaterialWindowSize)
+    implementation(libs.composablePreviewScanner)
+    implementation(libs.composablePreviewScannerJvm)
+    implementation(libs.roborazziPreviewScannerSupport)
 }
