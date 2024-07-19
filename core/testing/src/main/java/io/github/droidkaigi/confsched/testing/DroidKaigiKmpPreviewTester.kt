@@ -21,6 +21,7 @@ class DroidKaigiKmpPreviewTester : ComposePreviewTester<JvmAnnotationScanner.Des
 
     override fun test(preview: ComposablePreview<JvmAnnotationScanner.DesktopPreviewInfo>) {
         captureRoboImage {
+            println(preview.methodName)
             preview()
         }
     }

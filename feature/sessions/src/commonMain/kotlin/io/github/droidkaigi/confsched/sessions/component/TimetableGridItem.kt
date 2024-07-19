@@ -458,22 +458,6 @@ fun PreviewTimetableGridMultiSpeakersItem() {
 
 @Preview
 @Composable
-internal fun PreviewTimetableGridItem(
-    @PreviewParameter(PreviewTimeTableItemRoomProvider::class) timetableItem: TimetableItem,
-) {
-    KaigiTheme {
-        Surface {
-            TimetableGridItem(
-                timetableItem = timetableItem,
-                onTimetableItemClick = {},
-                gridItemHeightPx = 350,
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
 fun PreviewTimetableGridItemWelcomeTalk() {
     KaigiTheme {
         Surface {
