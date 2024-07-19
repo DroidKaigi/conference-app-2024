@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     if: contains(github.event.pull_request.labels.*.name, 'iOS 🍎')
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Danger
         uses: 417-72KI/danger-swiftlint@v5.10
         with:
