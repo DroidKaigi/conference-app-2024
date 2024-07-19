@@ -8,11 +8,11 @@ public struct TimetableView: View {
         self.store = store
     }
     
-    @State var timetableMode = TimetableMode.List
+    @State var timetableMode = TimetableMode.list
     @State var switchModeIcon: String = "square.grid.2x2"
     
     public var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 HStack {
                     ForEach(DayTab.allCases) { tabItem in
@@ -27,9 +27,9 @@ public struct TimetableView: View {
                     Spacer()
                 }.padding(5)
                 switch timetableMode {
-                case TimetableMode.List:
+                case TimetableMode.list:
                     TimetableListView(store: store)
-                case TimetableMode.Grid:
+                case TimetableMode.grid:
                     Text("Grid view placeholder")
                         .foregroundStyle(Color(.onSurfaceColorset))
                 }
@@ -57,11 +57,11 @@ public struct TimetableView: View {
                         
                         Button {
                             switch timetableMode {
-                            case .List:
-                                timetableMode = .Grid
+                            case .list:
+                                timetableMode = .grid
                                 switchModeIcon = "list.bullet.indent"
-                            case .Grid:
-                                timetableMode = .List
+                            case .grid:
+                                timetableMode = .list
                                 switchModeIcon = "square.grid.2x2"
                             }
                         } label: {

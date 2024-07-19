@@ -3,7 +3,7 @@ import Foundation
 public enum DayTab: String, CaseIterable, Identifiable {
     public var id : RawValue { rawValue }
     
-    case workday = "Workday"
+    case workshopDay = "WorkshopDay"
     case day1 = "Day 1"
     case day2 = "Day 2"
 }

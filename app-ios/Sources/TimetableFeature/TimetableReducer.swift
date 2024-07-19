@@ -38,7 +38,7 @@ public struct TimetableReducer {
                 //TODO: Replace with real data
                 
                 switch dayTab {
-                case .workday:
+                case .workshopDay:
                     state.timetableItems = sampleData.workdayResults
                     return .none
                 case .day1:
