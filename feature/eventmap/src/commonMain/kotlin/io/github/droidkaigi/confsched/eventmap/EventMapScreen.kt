@@ -37,7 +37,9 @@ import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
+import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val eventMapScreenRoute = "eventMap"
@@ -193,7 +195,10 @@ private fun EventMap(
 @Preview
 fun PreviewEventMapScreen() {
     EventMapScreen(
-        onNavigationIconClick = { },
-        onEventMapItemClick = { },
+        uiState = EventMapUiState(persistentListOf(), rememberUserMessageStateHolder()),
+        snackbarHostState = SnackbarHostState(),
+        isTopAppBarHidden = false,
+        onBackClick = {},
+        onEventMapItemClick = {},
     )
 }
