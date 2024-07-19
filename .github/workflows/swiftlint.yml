@@ -8,7 +8,7 @@ on:
 jobs:
   swift-lint:
     runs-on: ubuntu-latest
-    if: github.event_name != 'pull_request' && contains(github.event.pull_request.labels.*.name, 'iOS 🍎')
+    if: contains(github.event.pull_request.labels.*.name, 'iOS 🍎')
     steps:
       - uses: actions/checkout@v3
       - name: Danger
