@@ -42,6 +42,10 @@ let package = Package(
             name: "ContributorFeature",
             targets: ["ContributorFeature"]
         ),
+        .library(
+            name: "CommonComponents",
+            targets: ["CommonComponents"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -94,6 +98,7 @@ let package = Package(
                 .firebaseAuth,
                 .firebaseRemoteConfig,
                 .tca,
+                .commonComponents,
             ]
         ),
         .testTarget(
@@ -198,7 +203,7 @@ let package = Package(
                 .tca
             ]
         ),
-        .target(name: "CommonComponents", dependencies: [.theme]),
+        .target(name: "CommonComponents", dependencies: [.theme, .kmpModule]),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
