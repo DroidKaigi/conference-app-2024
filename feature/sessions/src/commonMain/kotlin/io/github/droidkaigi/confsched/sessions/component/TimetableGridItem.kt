@@ -35,8 +35,6 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.hallColors
 import io.github.droidkaigi.confsched.designsystem.theme.md_theme_light_outline
@@ -65,6 +63,7 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.toInstant
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
 import kotlin.math.ceil
 import kotlin.math.roundToInt
@@ -399,7 +398,7 @@ object TimetableGridItemSizes {
     val minTitleLineHeight = 12.sp
 }
 
-@MultiLanguagePreviews
+@Preview
 @Composable
 fun PreviewTimetableGridItem() {
     KaigiTheme {
@@ -414,7 +413,7 @@ fun PreviewTimetableGridItem() {
     }
 }
 
-@MultiLanguagePreviews
+@Preview
 @Composable
 fun PreviewTimetableGridLongTitleItem() {
     val fake = Session.fake()
@@ -443,7 +442,7 @@ fun PreviewTimetableGridLongTitleItem() {
     }
 }
 
-@MultiThemePreviews
+@Preview
 @Composable
 fun PreviewTimetableGridMultiSpeakersItem() {
     KaigiTheme {
@@ -457,7 +456,7 @@ fun PreviewTimetableGridMultiSpeakersItem() {
     }
 }
 
-@MultiThemePreviews
+@Preview
 @Composable
 internal fun PreviewTimetableGridItem(
     @PreviewParameter(PreviewTimeTableItemRoomProvider::class) timetableItem: TimetableItem,
@@ -473,7 +472,7 @@ internal fun PreviewTimetableGridItem(
     }
 }
 
-@MultiThemePreviews
+@Preview
 @Composable
 fun PreviewTimetableGridItemWelcomeTalk() {
     KaigiTheme {

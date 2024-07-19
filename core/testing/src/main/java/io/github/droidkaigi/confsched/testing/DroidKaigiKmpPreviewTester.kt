@@ -13,8 +13,9 @@ class DroidKaigiKmpPreviewTester : ComposePreviewTester<JvmAnnotationScanner.Des
             .getPreviews()
             .filter { preview ->
                 System.getProperties()
-                Class.forName(preview.declaringClass).declaredMethods.first { it.name == preview.methodName }.kotlinFunction?.visibility == kotlin.reflect.KVisibility.PUBLIC
-
+                Class.forName(preview.declaringClass).declaredMethods.first {
+                    it.name == preview.methodName
+                }.kotlinFunction?.visibility == kotlin.reflect.KVisibility.PUBLIC
             }
     }
 
