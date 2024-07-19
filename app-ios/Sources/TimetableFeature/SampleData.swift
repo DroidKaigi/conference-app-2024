@@ -9,8 +9,8 @@ public enum DayTab: String, CaseIterable, Identifiable {
 }
 
 public enum TimetableMode {
-    case List
-    case Grid
+    case list
+    case grid
 }
 
 public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
