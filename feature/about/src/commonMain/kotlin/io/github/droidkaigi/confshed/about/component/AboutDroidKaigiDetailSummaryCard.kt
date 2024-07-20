@@ -16,9 +16,9 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.Preview
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun AboutDroidKaigiDetailSummaryCard(

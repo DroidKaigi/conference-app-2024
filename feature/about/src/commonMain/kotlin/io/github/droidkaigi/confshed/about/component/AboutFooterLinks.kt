@@ -17,9 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.Preview
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val AboutFooterLinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItem"
 const val AboutFooterLinksXItemTestTag = "AboutFooterLinksXItem"
