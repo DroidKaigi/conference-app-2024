@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
@@ -45,7 +44,7 @@ fun TimetableSheet(
     modifier: Modifier = Modifier,
 ) {
     val clock = LocalClock.current
-    var selectedDay by rememberSaveable { mutableStateOf(DroidKaigi2023Day.initialSelectedDay(clock)) }
+    val selectedDay by rememberSaveable { mutableStateOf(DroidKaigi2023Day.initialSelectedDay(clock)) }
     val layoutDirection = LocalLayoutDirection.current
     Surface(
         modifier = modifier.padding(contentPadding.calculateTopPadding()),

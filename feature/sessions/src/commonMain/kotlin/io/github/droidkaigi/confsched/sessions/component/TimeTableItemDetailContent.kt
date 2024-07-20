@@ -28,8 +28,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.MultiLangText
@@ -37,6 +35,7 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableItem.Special
 import io.github.droidkaigi.confsched.model.fake
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TimeTableItemDetailContent(
@@ -194,8 +193,7 @@ private fun ArchiveSection(
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 fun TimeTableItemDetailContentPreview() {
     KaigiTheme {
         Surface {
@@ -209,8 +207,7 @@ fun TimeTableItemDetailContentPreview() {
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 fun TimeTableItemDetailContentWithEnglishPreview() {
     KaigiTheme {
         Surface {
@@ -224,8 +221,7 @@ fun TimeTableItemDetailContentWithEnglishPreview() {
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 fun TimeTableItemDetailContentWithMixedPreview() {
     KaigiTheme {
         Surface {

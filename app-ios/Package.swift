@@ -42,6 +42,10 @@ let package = Package(
             name: "ContributorFeature",
             targets: ["ContributorFeature"]
         ),
+        .library(
+            name: "CommonComponents",
+            targets: ["CommonComponents"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -79,6 +83,13 @@ let package = Package(
                 .tca,
             ]
         ),
+        
+        .target(
+            name: "EventKitClient",
+            dependencies: [
+                .tca
+            ]
+        ),
 
         .target(
             name: "TimetableFeature",
@@ -87,6 +98,7 @@ let package = Package(
                 .firebaseAuth,
                 .firebaseRemoteConfig,
                 .tca,
+                .commonComponents,
             ]
         ),
         .testTarget(
@@ -107,11 +119,12 @@ let package = Package(
                 .commonComponents,
                 .kmpClient,
                 .kmpModule,
+                .eventKitClient,
             ]
         ),
         .testTarget(
             name: "TimetableDetailFeatureTests",
-            dependencies: [.timetableDetailFeature, .tca]
+            dependencies: [.timetableDetailFeature, .tca, .kmpModule]
         ),
         .target(
             name: "AboutFeature",
@@ -190,7 +203,7 @@ let package = Package(
                 .tca
             ]
         ),
-        .target(name: "CommonComponents", dependencies: [.theme]),
+        .target(name: "CommonComponents", dependencies: [.theme, .kmpModule]),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -219,6 +232,7 @@ extension Target.Dependency {
     static let contributorFeature: Target.Dependency = "ContributorFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
     static let kmpClient: Target.Dependency = "KMPClient"
+    static let eventKitClient: Target.Dependency = "EventKitClient"
     static let theme: Target.Dependency = "Theme"
     static let commonComponents: Target.Dependency = "CommonComponents"
 

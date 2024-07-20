@@ -1,40 +1,45 @@
 package io.github.droidkaigi.confsched.sessions
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Grid3x3
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithCache
-import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
 import io.github.droidkaigi.confsched.model.Timetable
@@ -48,8 +53,8 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import io.github.droidkaigi.confsched.ui.getScreenSizeInfo
 import kotlinx.collections.immutable.toPersistentMap
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
 const val TimetableListItemBookmarkIconTestTag = "TimetableListItemBookmarkIcon"
@@ -118,28 +123,7 @@ data class TimetableScreenUiState(
     val userMessageStateHolder: UserMessageStateHolder,
 )
 
-private val timetableTopBackgroundLight = Color(0xFFF6FFD3)
-private val timetableTopBackgroundDark = Color(0xFF2D4625)
-
-@Composable
-@ReadOnlyComposable
-private fun timetableTopBackground() = if (!isSystemInDarkTheme()) {
-    timetableTopBackgroundLight
-} else {
-    timetableTopBackgroundDark
-}
-
-private val timetableTopGradientLight = Color(0xFFA9E5FF)
-private val timetableTopGradientDark = Color(0xFF050D10)
-
-@Composable
-@ReadOnlyComposable
-private fun timetableTopGradient() = if (!isSystemInDarkTheme()) {
-    timetableTopGradientLight
-} else {
-    timetableTopGradientDark
-}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimetableScreen(
     uiState: TimetableScreenUiState,
@@ -150,45 +134,41 @@ private fun TimetableScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val density = LocalDensity.current
     val layoutDirection = LocalLayoutDirection.current
-    val gradientEndRatio =
-        if (getScreenSizeInfo().isPort) {
-            0.2f
-        } else {
-            0.5f
-        }
-    val timetableTopGradient = timetableTopGradient()
-    val bottomPaddingPx = with(density) { contentPadding.calculateBottomPadding().toPx() }
     Scaffold(
         modifier = modifier
             .testTag(TimetableScreenTestTag)
-            .background(timetableTopBackground())
-            .drawWithCache {
-                onDrawBehind {
-                    drawRect(
-                        brush = Brush.verticalGradient(
-                            0f to timetableTopGradient,
-                            gradientEndRatio to Color.Transparent,
-                        ),
-                        size = Size(
-                            size.width,
-                            size.height - bottomPaddingPx,
-                        ),
-                    )
-                }
-            },
+            .background(Color.Black),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            Row {
-                Text(text = "UiType: ${uiState.timetableUiType}")
-                Button(
-                    modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
-                    onClick = { onTimetableUiChangeClick() },
-                ) {
-                    Text("Change UiType!")
-                }
-            }
+            TopAppBar(
+                title = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text(
+                            text = "タイムテーブル",
+                            fontSize = 24.sp,
+                            lineHeight = 32.sp,
+                            fontWeight = FontWeight.W400,
+                            modifier = Modifier.weight(1F),
+                        )
+                        Icon(
+                            imageVector = Icons.Default.Search,
+                            contentDescription = null,
+                            modifier = Modifier.padding(8.dp).clickable {
+                            },
+                        )
+                        Icon(
+                            imageVector = Icons.Default.Grid3x3,
+                            contentDescription = null,
+                            modifier = Modifier.padding(8.dp).clickable {
+                                onTimetableUiChangeClick()
+                            }.testTag(TimetableUiTypeChangeButtonTestTag),
+                        )
+                    }
+                },
+            )
         },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
@@ -198,9 +178,30 @@ private fun TimetableScreen(
         ),
         containerColor = Color.Transparent,
     ) { innerPadding ->
-        Box(
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+        Column(
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()).fillMaxWidth(),
         ) {
+            // TODO: Row not showing yet... there is a layout problem here I need to fix
+            Row {
+                TextButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /* TODO: Search here */ },
+                ) {
+                    Text("Workday", color = Color.Green)
+                }
+                TextButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /* TODO: Search here */ },
+                ) {
+                    Text("Day 1", color = Color.Green)
+                }
+                TextButton(
+                    modifier = Modifier.background(Color.Black),
+                    onClick = { /* TODO: Search here */ },
+                ) {
+                    Text("Day 2", color = Color.Green)
+                }
+            }
             TimetableSheet(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -217,7 +218,7 @@ private fun TimetableScreen(
     }
 }
 
-@MultiThemePreviews
+@Preview
 @Composable
 fun PreviewTimetableScreenDark() {
     CompositionLocalProvider(LocalClock provides FakeClock) {

@@ -25,6 +25,7 @@ import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
 import io.github.droidkaigi.confsched.main.MainScreenTab.EventMap
+import io.github.droidkaigi.confsched.main.MainScreenTab.Favorite
 import io.github.droidkaigi.confsched.main.MainScreenTab.ProfileCard
 import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
@@ -142,6 +143,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
             EventMap -> mainNestedNavController.navigateEventMapScreen()
             About -> TODO()
             ProfileCard -> TODO()
+            Favorite -> TODO()
         }
     }
 }
