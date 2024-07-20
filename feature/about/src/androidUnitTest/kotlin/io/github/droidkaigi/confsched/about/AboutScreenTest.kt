@@ -1,35 +1,57 @@
 package io.github.droidkaigi.confsched.about
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.RobotTestRule
+import io.github.droidkaigi.confsched.testing.describeBehaviors
+import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.AboutScreenRobot
 import io.github.droidkaigi.confsched.testing.runRobot
-import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.ParameterizedRobolectricTestRunner
 import javax.inject.Inject
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(ParameterizedRobolectricTestRunner::class)
 @HiltAndroidTest
-class AboutScreenTest {
+class AboutScreenTest(
+    private val testCase: DescribedBehavior<AboutScreenRobot>,
+) {
 
     @get:Rule
-    @BindValue val robotTestRule: RobotTestRule = RobotTestRule(this)
+    @BindValue
+    val robotTestRule: RobotTestRule = RobotTestRule(this)
 
     @Inject
     lateinit var aboutScreenRobot: AboutScreenRobot
 
     @Test
-    fun checkScreenContent() {
+    fun runTest() {
         runRobot(aboutScreenRobot) {
-            setupScreenContent()
+            testCase.execute(aboutScreenRobot)
+        }
+    }
 
-            captureScreenWithChecks(
-                checks = todoChecks("This screen is still empty now. Please add some checks."),
-            )
+    companion object {
+        @JvmStatic
+        @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
+        fun behaviors(): List<DescribedBehavior<AboutScreenRobot>> {
+            return describeBehaviors("AboutScreen") {
+                describe("when launch") {
+                    run {
+                        captureScreenWithChecks {
+                            setupScreenContent()
+                        }
+                    }
+                    itShould("show detail screen") {
+                        captureScreenWithChecks {
+                            checkDetailScreenDisplayed()
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -9,9 +9,7 @@ import androidx.compose.material.icons.outlined.SentimentVerySatisfied
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confshed.about.AboutTestTag
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
 
 const val AboutCreditsStaffItemTestTag = "AboutCreditsStaffItem"
@@ -33,8 +31,7 @@ fun LazyListScope.aboutCredits(
                     start = 16.dp,
                     top = 32.dp,
                     end = 16.dp,
-                )
-                .testTag(AboutTestTag.CreditsScreen.SCREEN),
+                ),
         )
     }
     item {
