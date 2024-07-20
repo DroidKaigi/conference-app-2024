@@ -43,7 +43,8 @@ public struct TimetableView: View {
             .toolbar{
                 ToolbarItem(placement: .topBarLeading) {
                     Text("Timetable")
-                        .font(.title)
+                        //.font(.title)
+                        .textStyle(.headlineMedium)
                         .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     
                 }
