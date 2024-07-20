@@ -13,8 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.Preview
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
 
@@ -23,6 +22,7 @@ const val AboutOthersLicenseItemTestTag = "AboutOthersLicenseItem"
 const val AboutOthersPrivacyPolicyItemTestTag = "AboutOthersPrivacyPolicyItem"
 
 fun LazyListScope.aboutOthers(
+    modifier: Modifier = Modifier,
     onCodeOfConductItemClick: () -> Unit,
     onLicenseItemClick: () -> Unit,
     onPrivacyPolicyItemClick: () -> Unit,
@@ -31,7 +31,7 @@ fun LazyListScope.aboutOthers(
         Text(
             text = AboutStrings.OthersTitle.asString(),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
+            modifier = modifier
                 .padding(
                     start = 16.dp,
                     top = 32.dp,
@@ -45,7 +45,7 @@ fun LazyListScope.aboutOthers(
             label = AboutStrings.CodeOfConduct.asString(),
             testTag = AboutOthersCodeOfConductItemTestTag,
             onClickAction = onCodeOfConductItemClick,
-            modifier = Modifier
+            modifier = modifier
                 .padding(
                     horizontal = 16.dp,
                 ),
@@ -57,7 +57,7 @@ fun LazyListScope.aboutOthers(
             label = AboutStrings.License.asString(),
             testTag = AboutOthersLicenseItemTestTag,
             onClickAction = onLicenseItemClick,
-            modifier = Modifier
+            modifier = modifier
                 .padding(
                     horizontal = 16.dp,
                 ),
@@ -69,7 +69,7 @@ fun LazyListScope.aboutOthers(
             label = AboutStrings.PrivacyPolicy.asString(),
             testTag = AboutOthersPrivacyPolicyItemTestTag,
             onClickAction = onPrivacyPolicyItemClick,
-            modifier = Modifier
+            modifier = modifier
                 .padding(
                     horizontal = 16.dp,
                 ),
@@ -77,8 +77,7 @@ fun LazyListScope.aboutOthers(
     }
 }
 
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 @Composable
 internal fun AboutOthersPreview() {
     KaigiTheme {

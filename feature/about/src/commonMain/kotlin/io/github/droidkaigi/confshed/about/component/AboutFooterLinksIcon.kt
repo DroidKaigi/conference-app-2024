@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.Preview
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 
 @Composable
@@ -27,7 +27,7 @@ fun AboutFooterLinksIcon(
             .testTag(testTag)
             .size(48.dp),
     ) {
-        //TODO
+        // TODO
         Icon(
             Icons.Filled.Favorite,
             contentDescription = contentDescription,
@@ -36,7 +36,7 @@ fun AboutFooterLinksIcon(
     }
 }
 
-@MultiThemePreviews
+@Preview
 @Composable
 fun AboutFooterLinksIconPreview() {
     KaigiTheme {

@@ -17,8 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.Preview
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
 
@@ -85,8 +84,7 @@ fun AboutFooterLinks(
     }
 }
 
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 @Composable
 fun AboutFooterLinksPreview() {
     KaigiTheme {

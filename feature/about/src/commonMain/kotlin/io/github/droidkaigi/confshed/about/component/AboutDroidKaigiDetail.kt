@@ -10,13 +10,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.Res
 import conference_app_2024.feature.about.generated.resources.about_header
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.Preview
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confshed.about.AboutTestTag
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
 import org.jetbrains.compose.resources.painterResource
 
@@ -25,7 +26,7 @@ fun AboutDroidKaigiDetail(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.testTag(AboutTestTag.DetailScreen.SCREEN),
     ) {
         Image(
             painter = painterResource(Res.drawable.about_header),
@@ -57,8 +58,7 @@ fun AboutDroidKaigiDetail(
     }
 }
 
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 @Composable
 fun AboutDroidKaigiDetailPreview() {
     KaigiTheme {

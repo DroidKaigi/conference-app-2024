@@ -9,7 +9,9 @@ import androidx.compose.material.icons.outlined.SentimentVerySatisfied
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confshed.about.AboutTestTag
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
 
 const val AboutCreditsStaffItemTestTag = "AboutCreditsStaffItem"
@@ -17,6 +19,7 @@ const val AboutCreditsContributorsItemTestTag = "AboutCreditsContributorsItem"
 const val AboutCreditsSponsorsItemTestTag = "AboutCreditsSponsorsItem"
 
 fun LazyListScope.aboutCredits(
+    modifier: Modifier = Modifier,
     onStaffItemClick: () -> Unit,
     onContributorsItemClick: () -> Unit,
     onSponsorsItemClick: () -> Unit,
@@ -25,12 +28,13 @@ fun LazyListScope.aboutCredits(
         Text(
             text = AboutStrings.CreditsTitle.asString(),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
+            modifier = modifier
                 .padding(
                     start = 16.dp,
                     top = 32.dp,
                     end = 16.dp,
-                ),
+                )
+                .testTag(AboutTestTag.CreditsScreen.SCREEN),
         )
     }
     item {
@@ -39,7 +43,7 @@ fun LazyListScope.aboutCredits(
             label = AboutStrings.Contributor.asString(),
             testTag = AboutCreditsContributorsItemTestTag,
             onClickAction = onContributorsItemClick,
-            modifier = Modifier
+            modifier = modifier
                 .padding(
                     horizontal = 16.dp,
                 ),
@@ -51,7 +55,7 @@ fun LazyListScope.aboutCredits(
             label = AboutStrings.Staff.asString(),
             testTag = AboutCreditsStaffItemTestTag,
             onClickAction = onStaffItemClick,
-            modifier = Modifier
+            modifier = modifier
                 .padding(
                     horizontal = 16.dp,
                 ),
@@ -63,7 +67,7 @@ fun LazyListScope.aboutCredits(
             label = AboutStrings.Sponsor.asString(),
             testTag = AboutCreditsSponsorsItemTestTag,
             onClickAction = onSponsorsItemClick,
-            modifier = Modifier
+            modifier = modifier
                 .padding(
                     horizontal = 16.dp,
                 ),

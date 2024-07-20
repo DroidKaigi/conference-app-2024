@@ -16,8 +16,7 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.Preview
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
 
@@ -54,8 +53,7 @@ fun AboutDroidKaigiDetailSummaryCard(
     }
 }
 
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 @Composable
 fun AboutDroidKaigiDetailSummaryCardPreview() {
     KaigiTheme {

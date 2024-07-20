@@ -20,8 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
+import io.github.droidkaigi.confsched.designsystem.preview.Preview
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confshed.about.strings.AboutStrings
 
@@ -55,6 +54,7 @@ fun AboutContentColumn(
                     .padding(
                         horizontal = 12.dp,
                     ),
+                // TODO: Migrate this to theme's color
                 tint = Color.Green,
             )
             Text(
@@ -69,13 +69,12 @@ fun AboutContentColumn(
         }
         HorizontalDivider(
             thickness = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant
+            color = MaterialTheme.colorScheme.outlineVariant,
         )
     }
 }
 
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 @Composable
 fun AboutContentColumnPreview() {
     KaigiTheme {

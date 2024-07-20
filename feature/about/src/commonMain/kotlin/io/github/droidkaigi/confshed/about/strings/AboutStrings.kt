@@ -4,6 +4,7 @@ import io.github.droidkaigi.confsched.designsystem.strings.Lang
 import io.github.droidkaigi.confsched.designsystem.strings.Strings
 import io.github.droidkaigi.confsched.designsystem.strings.StringsBindings
 
+// TODO: Please migrate this to Compose Multiplatform resources instead of this
 sealed class AboutStrings : Strings<AboutStrings>(Bindings) {
     data object Description : AboutStrings()
     data object DateTitle : AboutStrings()

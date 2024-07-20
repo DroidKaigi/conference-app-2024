@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -25,6 +26,31 @@ import io.github.droidkaigi.confshed.about.component.aboutOthers
 
 const val aboutScreenRoute = "about"
 
+object AboutTestTag {
+    private const val suffix = "TestTag"
+    private const val prefix = "ProfileCard"
+
+    object DetailScreen {
+        private const val detailScreenPrefix = "${prefix}_DetailScreen"
+        const val SCREEN = "${detailScreenPrefix}_$suffix"
+    }
+
+    object CreditsScreen {
+        private const val creditsScreenPrefix = "${prefix}_CreditsScreen"
+        const val SCREEN = "${creditsScreenPrefix}_$suffix"
+    }
+
+    object OthersScreen {
+        private const val othersScreenPrefix = "${prefix}_OthersScreen"
+        const val SCREEN = "${othersScreenPrefix}_$suffix"
+    }
+
+    object FooterLinksScreen {
+        private const val footerLinksScreenPrefix = "${prefix}_FooterLinksScreen"
+        const val SCREEN = "${footerLinksScreenPrefix}_$suffix"
+    }
+}
+
 fun NavGraphBuilder.aboutScreen(
     contentPadding: PaddingValues,
     onAboutItemClick: (AboutItem) -> Unit,
@@ -32,7 +58,7 @@ fun NavGraphBuilder.aboutScreen(
     composable(aboutScreenRoute) {
         AboutScreen(
             contentPadding = contentPadding,
-            onAboutItemClick = onAboutItemClick
+            onAboutItemClick = onAboutItemClick,
         )
     }
 }
@@ -50,8 +76,8 @@ fun NavController.navigateAboutScreen() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
-    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
     onAboutItemClick: (AboutItem) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -85,6 +111,7 @@ fun AboutScreen(
                 onStaffItemClick = {
                     onAboutItemClick(AboutItem.Staff)
                 },
+                modifier = Modifier.testTag(AboutTestTag.CreditsScreen.SCREEN),
             )
             aboutOthers(
                 onCodeOfConductItemClick = {
@@ -96,9 +123,11 @@ fun AboutScreen(
                 onPrivacyPolicyItemClick = {
                     onAboutItemClick(AboutItem.PrivacyPolicy)
                 },
+                modifier = Modifier.testTag(AboutTestTag.OthersScreen.SCREEN),
             )
             item {
                 AboutFooterLinks(
+                    // TODO: Inject the right version name
                     versionName = "1.6.0",
                     onYouTubeClick = {
                         onAboutItemClick(AboutItem.YouTube)
@@ -109,6 +138,7 @@ fun AboutScreen(
                     onMediumClick = {
                         onAboutItemClick(AboutItem.Medium)
                     },
+                    modifier = Modifier.testTag(AboutTestTag.FooterLinksScreen.SCREEN),
                 )
             }
         }

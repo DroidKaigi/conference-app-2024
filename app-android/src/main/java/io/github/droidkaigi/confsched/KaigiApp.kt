@@ -136,29 +136,29 @@ private fun NavGraphBuilder.mainScreen(
                         AboutItem.Sponsors -> TODO()
                         AboutItem.CodeOfConduct -> {
                             externalNavController.navigate(
-                                url = "$portalBaseUrl/about/code-of-conduct"
+                                url = "$portalBaseUrl/about/code-of-conduct",
                             )
                         }
 
                         AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
                         AboutItem.License -> externalNavController.navigateToLicenseScreen()
                         AboutItem.Medium -> externalNavController.navigate(
-                            url = "https://medium.com/droidkaigi"
+                            url = "https://medium.com/droidkaigi",
                         )
 
                         AboutItem.PrivacyPolicy -> {
                             externalNavController.navigate(
-                                url = "$portalBaseUrl/about/privacy"
+                                url = "$portalBaseUrl/about/privacy",
                             )
                         }
 
                         AboutItem.Staff -> TODO()
                         AboutItem.X -> externalNavController.navigate(
-                            url = "https://twitter.com/DroidKaigi"
+                            url = "https://twitter.com/DroidKaigi",
                         )
 
                         AboutItem.YouTube -> externalNavController.navigate(
-                            url = "https://www.youtube.com/c/DroidKaigi"
+                            url = "https://www.youtube.com/c/DroidKaigi",
                         )
                     }
                 },
