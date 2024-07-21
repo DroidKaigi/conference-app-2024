@@ -71,7 +71,12 @@ class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: R
         val roboOutputName = roboOutputName()
         if (roboOutputName.contains("[") && roboOutputName.contains("]")) {
             val name = roboOutputName.substringAfter("[").substringBefore("]")
-            val className = provideRoborazziContext().description?.javaClass?.simpleName
+            val className = provideRoborazziContext().description?.className?.substringAfterLast(".")
+            if (className == null) {
+                robotTestRule.captureScreen(name)
+                checks()
+                return
+            }
             robotTestRule.captureScreen("$className[$name]")
             checks()
             return
