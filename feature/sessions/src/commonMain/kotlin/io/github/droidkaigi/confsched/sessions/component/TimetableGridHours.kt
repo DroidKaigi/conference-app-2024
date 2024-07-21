@@ -274,12 +274,12 @@ private val horizontalLineTopOffset = 48.dp
 private val hoursWidth = 75.dp
 private val hoursItemTopOffset = 11.dp
 private val hoursList by lazy {
-    val now = Clock.System.now().toLocalDateTime(TimeZone.of("Asia/Tokyo"))
+    val now = Clock.System.now().toLocalDateTime(TimeZone.of("UTC+9"))
     (10..19).map {
         val dateTime = LocalDateTime(
             date = now.date,
             time = LocalTime(hour = it, minute = 0),
-        ).toInstant(TimeZone.of("Asia/Tokyo"))
+        ).toInstant(TimeZone.of("UTC+9"))
         val localDate = dateTime.toLocalDateTime(TimeZone.currentSystemDefault())
         "${localDate.hour}".padStart(2, '0') + ":" + "${localDate.minute}".padStart(2, '0')
     }

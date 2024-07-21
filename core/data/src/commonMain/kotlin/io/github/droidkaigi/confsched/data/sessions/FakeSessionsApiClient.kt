@@ -8,12 +8,16 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionAssetRespons
 import io.github.droidkaigi.confsched.data.sessions.response.SessionResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SpeakerResponse
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import kotlinx.datetime.Instant
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
+import kotlinx.datetime.offsetAt
 import kotlinx.datetime.toLocalDateTime
 import okio.IOException
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 public class FakeSessionsApiClient : SessionsApiClient {
 
@@ -82,40 +86,38 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
         ),
     )
 
-    sessions.add(
-        SessionResponse(
-            id = "0570556a-8a53-49d6-916c-26ff85635d86",
-            title = LocaledResponse(ja = "Welcome Talk", en = "Welcome Talk"),
-            description = null,
-            startsAt = "2023-09-14T10:30:00+09:00",
-            endsAt = "2023-09-14T11:00:00+09:00",
-            isServiceSession = true,
-            isPlenumSession = false,
-            speakers = emptyList(),
-            roomId = 2,
-            targetAudience = "TBW",
-            language = "JAPANESE",
-            sessionCategoryItemId = 1,
-            interpretationTarget = false,
-            asset = SessionAssetResponse(videoUrl = null, slideUrl = null),
-            message = null,
-            sessionType = "WELCOME_TALK",
-            levels = listOf("UNSPECIFIED"),
-        ),
-    )
+    (0..2).forEach { dayIndex ->
+        sessions.add(
+            SessionResponse(
+                id = "0570556a-8a53-49d6-916c-26ff85635d86",
+                title = LocaledResponse(ja = "Demo Welcome Talk $dayIndex", en = "Demo Welcome Talk $dayIndex"),
+                description = null,
+                startsAt = (DroidKaigi2024Day.Workday.start + 10.hours + 30.minutes + dayIndex.days)
+                    .toCustomIsoString(),
+                endsAt = (DroidKaigi2024Day.Workday.start + 11.hours + dayIndex.days).toCustomIsoString(),
+                isServiceSession = true,
+                isPlenumSession = false,
+                speakers = emptyList(),
+                roomId = 2,
+                targetAudience = "TBW",
+                language = "JAPANESE",
+                sessionCategoryItemId = 1,
+                interpretationTarget = false,
+                asset = SessionAssetResponse(videoUrl = null, slideUrl = null),
+                message = null,
+                sessionType = "WELCOME_TALK",
+                levels = listOf("UNSPECIFIED"),
+            ),
+        )
+
+    }
 
     for (day in 0 until 3) {
         val dayOffset = day * 24 * 60 * 60
         for (room in rooms) {
             for (index in 0 until 4) {
-                val start = Instant.fromEpochSeconds(
-                    LocalDateTime.parse("2023-09-14T11:00:00")
-                        .toInstant(TimeZone.of("UTC+9")).epochSeconds + index * 30 * 60 + dayOffset,
-                ).toLocalDateTime(TimeZone.of("UTC+9"))
-                val end = Instant.fromEpochSeconds(
-                    LocalDateTime.parse("2023-09-14T11:30:00")
-                        .toInstant(TimeZone.of("UTC+9")).epochSeconds + index * 30 * 60 + dayOffset,
-                ).toLocalDateTime(TimeZone.of("UTC+9"))
+                val start = (DroidKaigi2024Day.Workday.start + (index * 30 * 60 + dayOffset).seconds)
+                val end = (DroidKaigi2024Day.Workday.start + (index * 30 * 60 + dayOffset + 30 * 60).seconds)
 
                 val session = SessionResponse(
                     id = "$day$room$index",
@@ -133,8 +135,8 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                         en = "This is a description\nThis is a description\nThis is a description\n" +
                             "This is a description\nThis is a description\nThis is a description\n",
                     ),
-                    startsAt = start.toString(),
-                    endsAt = end.toString(),
+                    startsAt = start.toCustomIsoString(),
+                    endsAt = end.toCustomIsoString(),
                     language = "JAPANESE",
                     roomId = room.id,
                     sessionCategoryItemId = 1,
@@ -160,4 +162,21 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
         speakers = speakers,
         categories = categories,
     )
+}
+
+private fun Instant.toCustomIsoString(): String {
+    val timezone = TimeZone.of("Asia/Tokyo")
+    val zonedDateTime = this.toLocalDateTime(timezone)
+    val offset = timezone.offsetAt(this)
+
+    return buildString {
+        append(zonedDateTime.date)
+        append('T')
+        append(zonedDateTime.hour.toString().padStart(2, '0'))
+        append(':')
+        append(zonedDateTime.minute.toString().padStart(2, '0'))
+        append(':')
+        append(zonedDateTime.second.toString().padStart(2, '0'))
+        append(offset.toString())
+    }
 }
