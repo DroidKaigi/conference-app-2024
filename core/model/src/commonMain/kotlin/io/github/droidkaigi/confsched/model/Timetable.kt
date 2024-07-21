@@ -160,10 +160,10 @@ public fun Timetable.Companion.fake(): Timetable {
             ),
         )
         for (day in -1..1) {
+            val dayOffsetSeconds = day * 24 * 60 * 60 + 10 * 60 * 60 + (0.5 * 60 * 60).toInt()
             for (index in 0..20) {
-                val dayOffset = day * 24 * 60 * 60
-                val start = DroidKaigi2024Day.Workday.start + (index * 25 * 60 + dayOffset).seconds
-                val end = DroidKaigi2024Day.Workday.start + (index * 25 * 60 + dayOffset + 40 * 60).seconds
+                val start = DroidKaigi2024Day.Workday.start + (index * 60 * 60 + dayOffsetSeconds).seconds
+                val end = DroidKaigi2024Day.Workday.start + (index * 60 * 60 + dayOffsetSeconds + 40 * 60).seconds
                 val fake = Session.fake()
                 add(
                     fake

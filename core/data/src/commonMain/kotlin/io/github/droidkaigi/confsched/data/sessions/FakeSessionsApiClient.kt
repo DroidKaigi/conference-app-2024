@@ -112,11 +112,11 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
     }
 
     for (day in 0 until 3) {
-        val dayOffset = day * 24 * 60 * 60
+        val dayOffsetSeconds = day * 24 * 60 * 60 + 10 * 60 * 60 + (0.5 * 60 * 60).toInt()
         for (room in rooms) {
             for (index in 0 until 4) {
-                val start = (DroidKaigi2024Day.Workday.start + (index * 30 * 60 + dayOffset).seconds)
-                val end = (DroidKaigi2024Day.Workday.start + (index * 30 * 60 + dayOffset + 30 * 60).seconds)
+                val start = (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds).seconds)
+                val end = (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds + 30 * 60).seconds)
 
                 val session = SessionResponse(
                     id = "$day$room$index",
