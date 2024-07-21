@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.about.strings
+package io.github.droidkaigi.confsched.about.strings
 
 import io.github.droidkaigi.confsched.designsystem.strings.Lang
 import io.github.droidkaigi.confsched.designsystem.strings.Strings

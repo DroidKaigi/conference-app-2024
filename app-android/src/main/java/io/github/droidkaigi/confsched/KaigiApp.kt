@@ -26,6 +26,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.DisplayFeature
 import co.touchlab.kermit.Logger
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import io.github.droidkaigi.confsched.about.aboutScreen
+import io.github.droidkaigi.confsched.about.aboutScreenRoute
+import io.github.droidkaigi.confsched.about.navigateAboutScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -51,9 +54,6 @@ import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confshed.about.aboutScreen
-import io.github.droidkaigi.confshed.about.aboutScreenRoute
-import io.github.droidkaigi.confshed.about.navigateAboutScreen
 import io.github.droidkaigi.confshed.profilecard.navigateProfileCardScreen
 import io.github.droidkaigi.confshed.profilecard.profileCardScreen
 import io.github.droidkaigi.confshed.profilecard.profileCardScreenRoute

@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.about.component
+package io.github.droidkaigi.confsched.about.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -15,9 +15,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.Res
 import conference_app_2024.feature.about.generated.resources.about_header
+import io.github.droidkaigi.confsched.about.AboutTestTag
+import io.github.droidkaigi.confsched.about.strings.AboutStrings
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confshed.about.AboutTestTag
-import io.github.droidkaigi.confshed.about.strings.AboutStrings
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.about.component
+package io.github.droidkaigi.confsched.about.component
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -20,8 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confsched.about.strings.AboutStrings
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confshed.about.strings.AboutStrings
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

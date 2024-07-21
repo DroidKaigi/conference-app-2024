@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.about
+package io.github.droidkaigi.confsched.about
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -18,11 +18,11 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetail
+import io.github.droidkaigi.confsched.about.component.AboutFooterLinks
+import io.github.droidkaigi.confsched.about.component.aboutCredits
+import io.github.droidkaigi.confsched.about.component.aboutOthers
 import io.github.droidkaigi.confsched.model.AboutItem
-import io.github.droidkaigi.confshed.about.component.AboutDroidKaigiDetail
-import io.github.droidkaigi.confshed.about.component.AboutFooterLinks
-import io.github.droidkaigi.confshed.about.component.aboutCredits
-import io.github.droidkaigi.confshed.about.component.aboutOthers
 
 const val aboutScreenRoute = "about"
 

@@ -2,11 +2,11 @@ package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
+import io.github.droidkaigi.confsched.about.AboutScreen
+import io.github.droidkaigi.confsched.about.AboutTestTag
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.ScreenRobot
-import io.github.droidkaigi.confshed.about.AboutScreen
-import io.github.droidkaigi.confshed.about.AboutTestTag
 import javax.inject.Inject
 
 class AboutScreenRobot @Inject constructor(

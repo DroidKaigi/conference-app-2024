@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.about.component
+package io.github.droidkaigi.confsched.about.component
 
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons

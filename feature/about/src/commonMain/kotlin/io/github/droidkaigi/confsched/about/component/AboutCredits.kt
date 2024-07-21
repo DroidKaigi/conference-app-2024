@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.about.component
+package io.github.droidkaigi.confsched.about.component
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
@@ -10,7 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confshed.about.strings.AboutStrings
+import io.github.droidkaigi.confsched.about.strings.AboutStrings
 
 const val AboutCreditsStaffItemTestTag = "AboutCreditsStaffItem"
 const val AboutCreditsContributorsItemTestTag = "AboutCreditsContributorsItem"
