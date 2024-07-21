@@ -16,7 +16,7 @@ public enum class DroidKaigi2024Day(
 ) {
     Workday(
         dayIndex = 1,
-        dayOfMonth = 14,
+        dayOfMonth = 11,
         start = LocalDateTime
             .parse("2024-09-11T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
@@ -26,7 +26,7 @@ public enum class DroidKaigi2024Day(
     ),
     ConferenceDay1(
         dayIndex = 2,
-        dayOfMonth = 15,
+        dayOfMonth = 12,
         start = LocalDateTime
             .parse("2024-09-12T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
@@ -36,7 +36,7 @@ public enum class DroidKaigi2024Day(
     ),
     ConferenceDay2(
         dayIndex = 3,
-        dayOfMonth = 16,
+        dayOfMonth = 13,
         start = LocalDateTime
             .parse("2024-09-13T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
