@@ -6,41 +6,42 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import kotlin.time.Duration.Companion.days
 
-public enum class DroidKaigi2023Day(
-    public val day: Int,
+public enum class DroidKaigi2024Day(
+    public val dayIndex: Int,
     public val dayOfMonth: Int,
     public val start: Instant,
     public val end: Instant,
 ) {
-    Day1(
-        day = 1,
+    Workday(
+        dayIndex = 1,
         dayOfMonth = 14,
         start = LocalDateTime
-            .parse("2023-09-14T00:00:00")
+            .parse("2024-09-11T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
         end = LocalDateTime
-            .parse("2023-09-15T00:00:00")
+            .parse("2024-09-12T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
     ),
-    Day2(
-        day = 2,
+    ConferenceDay1(
+        dayIndex = 2,
         dayOfMonth = 15,
         start = LocalDateTime
-            .parse("2023-09-15T00:00:00")
+            .parse("2024-09-12T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
         end = LocalDateTime
-            .parse("2023-09-16T00:00:00")
+            .parse("2024-09-13T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
     ),
-    Day3(
-        day = 3,
+    ConferenceDay2(
+        dayIndex = 3,
         dayOfMonth = 16,
         start = LocalDateTime
-            .parse("2023-09-16T00:00:00")
+            .parse("2024-09-13T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
         end = LocalDateTime
-            .parse("2023-09-17T00:00:00")
+            .parse("2024-09-14T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
     ),
     ;
@@ -72,7 +73,7 @@ public enum class DroidKaigi2023Day(
     }
 
     public companion object {
-        public fun ofOrNull(time: Instant): DroidKaigi2023Day? {
+        public fun ofOrNull(time: Instant): DroidKaigi2024Day? {
             return entries.firstOrNull {
                 time in it.start..it.end
             }
@@ -81,8 +82,9 @@ public enum class DroidKaigi2023Day(
         /**
          * @return appropriate initial day for now
          */
-        fun initialSelectedDay(clock: Clock): DroidKaigi2023Day {
-            val reversedEntries = entries.sortedByDescending { it.day }
+        fun initialSelectedDay(clock: Clock): DroidKaigi2024Day {
+            if (clock.now() < Workday.start.minus(1.days)) return ConferenceDay1
+            val reversedEntries = entries.sortedByDescending { it.dayIndex }
             var selectedDay = reversedEntries.last()
             for (entry in reversedEntries) {
                 if (clock.now() <= entry.end) selectedDay = entry

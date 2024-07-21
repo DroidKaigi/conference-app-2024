@@ -45,10 +45,10 @@ public data class Timetable(
             .sortedBy { it.isInterpretationTarget }
     }
 
-    public fun dayTimetable(droidKaigi2023Day: DroidKaigi2023Day): Timetable {
+    public fun dayTimetable(droidKaigi2024Day: DroidKaigi2024Day): Timetable {
         var timetableItems = timetableItems.toList()
         timetableItems = timetableItems.filter { timetableItem ->
-            timetableItem.day == droidKaigi2023Day
+            timetableItem.day == droidKaigi2024Day
         }
         return copy(timetableItems = TimetableItemList(timetableItems.toPersistentList()))
     }
