@@ -81,7 +81,7 @@ fun TimetableSheet(
                 TextButton(
                     modifier = Modifier.background(Color.Black),
                     onClick = {
-                        selectedDay  = DroidKaigi2024Day.ConferenceDay2
+                        selectedDay = DroidKaigi2024Day.ConferenceDay2
                     },
                 ) {
                     Text("Day 2", color = Color.Green)
