@@ -90,11 +90,14 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
         sessions.add(
             SessionResponse(
                 id = "0570556a-8a53-49d6-916c-26ff85635d86",
-                title = LocaledResponse(ja = "Demo Welcome Talk $dayIndex", en = "Demo Welcome Talk $dayIndex"),
+                title = LocaledResponse(
+                    ja = "Demo Welcome Talk $dayIndex",
+                    en = "Demo Welcome Talk $dayIndex",
+                ),
                 description = null,
-                startsAt = (DroidKaigi2024Day.Workday.start + 10.hours + 30.minutes + dayIndex.days)
+                startsAt = (DroidKaigi2024Day.Workday.start + 10.hours + dayIndex.days)
                     .toCustomIsoString(),
-                endsAt = (DroidKaigi2024Day.Workday.start + 11.hours + dayIndex.days).toCustomIsoString(),
+                endsAt = (DroidKaigi2024Day.Workday.start + 10.hours + 30.minutes + dayIndex.days).toCustomIsoString(),
                 isServiceSession = true,
                 isPlenumSession = false,
                 speakers = emptyList(),
@@ -115,8 +118,10 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
         val dayOffsetSeconds = day * 24 * 60 * 60 + 10 * 60 * 60 + (0.5 * 60 * 60).toInt()
         for (room in rooms) {
             for (index in 0 until 4) {
-                val start = (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds).seconds)
-                val end = (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds + 30 * 60).seconds)
+                val start =
+                    (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds).seconds)
+                val end =
+                    (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds + 30 * 60).seconds)
 
                 val session = SessionResponse(
                     id = "$day$room$index",
