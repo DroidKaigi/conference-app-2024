@@ -86,7 +86,7 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
         ),
     )
 
-    (0..2).forEach { dayIndex ->
+    for (dayIndex in 0..2) {
         sessions.add(
             SessionResponse(
                 id = "0570556a-8a53-49d6-916c-26ff85635d86",
@@ -109,7 +109,6 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                 levels = listOf("UNSPECIFIED"),
             ),
         )
-
     }
 
     for (day in 0 until 3) {

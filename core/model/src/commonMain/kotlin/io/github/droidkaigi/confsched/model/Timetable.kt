@@ -175,7 +175,7 @@ public fun Timetable.Companion.fake(): Timetable {
                             ),
                             room = roomsIterator.next(),
                             startsAt = start,
-                            endsAt = end
+                            endsAt = end,
                         ),
                 )
             }
