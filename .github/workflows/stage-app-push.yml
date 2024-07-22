@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@@v4.1.7
+      - uses: actions/checkout@v4.1.7
         with:
           repository: droidkaigi/conference-app-2024
           ref: gh-actions
