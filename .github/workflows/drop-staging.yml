@@ -27,5 +27,5 @@ jobs:
           api-token: ${{ secrets.DEPLOYGATE_API_TOKEN }}
           app-owner-name: droidkaigi
           platform: android
-          app-id: io.github.droidkaigi.confsched2023.dev
+          app-id: io.github.droidkaigi.confsched2024.dev
           distribution-name: ${{ format('debug/refs/pull/{0}/head', github.event.pull_request.number) }}
