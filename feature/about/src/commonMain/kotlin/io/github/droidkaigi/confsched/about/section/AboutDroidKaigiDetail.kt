@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.about.component
+package io.github.droidkaigi.confsched.about.section
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.Res
 import conference_app_2024.feature.about.generated.resources.about_header
 import io.github.droidkaigi.confsched.about.AboutTestTag
+import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetailSummaryCard
 import io.github.droidkaigi.confsched.about.strings.AboutStrings
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.painterResource
@@ -26,7 +27,7 @@ fun AboutDroidKaigiDetail(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.testTag(AboutTestTag.DetailScreen.SCREEN),
+        modifier = modifier.testTag(AboutTestTag.DetailSection.Name),
     ) {
         Image(
             painter = painterResource(Res.drawable.about_header),
