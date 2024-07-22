@@ -6,7 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.droidkaigi.confsched.data.di.AppAndroidBuildConfig
 import io.github.droidkaigi.confsched.model.BuildConfigProvider
-import io.github.droidkaigi.confsched2023.BuildConfig
+import io.github.droidkaigi.confsched2024.BuildConfig
 import kotlinx.datetime.Clock
 import javax.inject.Singleton
 

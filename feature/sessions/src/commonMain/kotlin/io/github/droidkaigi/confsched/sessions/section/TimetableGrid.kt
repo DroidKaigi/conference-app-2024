@@ -60,7 +60,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableRoom
@@ -363,7 +363,7 @@ private data class TimetableItemLayout(
     val dayStartTime: Instant,
     val density: Density,
     val minutePx: Float,
-    val dayToStartTime: Map<DroidKaigi2023Day, Instant>,
+    val dayToStartTime: Map<DroidKaigi2024Day, Instant>,
 ) {
     val dayStart = run {
         val tz = TimeZone.of("Asia/Tokyo")
@@ -414,7 +414,7 @@ private data class TimetableLayout(
     var timetableWidth = 0
     val minutePx = with(density) { TimetableSizes.minuteHeight.times(verticalScale).toPx() }
     val dayToStartTime = run {
-        val dayToStartTime = mutableMapOf<DroidKaigi2023Day, Instant>()
+        val dayToStartTime = mutableMapOf<DroidKaigi2024Day, Instant>()
         timetable.timetableItems.forEach { timetableItem ->
             timetableItem.day?.let {
                 dayToStartTime[it] = minOf(
