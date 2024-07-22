@@ -101,6 +101,7 @@ dependencies {
     implementation(projects.feature.sessions)
     implementation(projects.feature.eventmap)
     implementation(projects.feature.profilecard)
+    implementation(projects.feature.about)
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
