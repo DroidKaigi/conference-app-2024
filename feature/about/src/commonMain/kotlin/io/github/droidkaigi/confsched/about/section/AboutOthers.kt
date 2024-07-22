@@ -1,9 +1,9 @@
-package io.github.droidkaigi.confsched.about.component
+package io.github.droidkaigi.confsched.about.section
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.outlined.FileCopy
 import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.PrivacyTip
@@ -13,7 +13,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confsched.about.component.AboutContentColumn
 import io.github.droidkaigi.confsched.about.strings.AboutStrings
+import io.github.droidkaigi.confsched.about.strings.AboutStrings.CodeOfConduct
+import io.github.droidkaigi.confsched.about.strings.AboutStrings.License
+import io.github.droidkaigi.confsched.about.strings.AboutStrings.PrivacyPolicy
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -41,8 +45,8 @@ fun LazyListScope.aboutOthers(
     }
     item {
         AboutContentColumn(
-            leadingIcon = Icons.Outlined.Gavel,
-            label = AboutStrings.CodeOfConduct.asString(),
+            leadingIcon = Outlined.Gavel,
+            label = CodeOfConduct.asString(),
             testTag = AboutOthersCodeOfConductItemTestTag,
             onClickAction = onCodeOfConductItemClick,
             modifier = modifier
@@ -53,8 +57,8 @@ fun LazyListScope.aboutOthers(
     }
     item {
         AboutContentColumn(
-            leadingIcon = Icons.Outlined.FileCopy,
-            label = AboutStrings.License.asString(),
+            leadingIcon = Outlined.FileCopy,
+            label = License.asString(),
             testTag = AboutOthersLicenseItemTestTag,
             onClickAction = onLicenseItemClick,
             modifier = modifier
@@ -65,8 +69,8 @@ fun LazyListScope.aboutOthers(
     }
     item {
         AboutContentColumn(
-            leadingIcon = Icons.Outlined.PrivacyTip,
-            label = AboutStrings.PrivacyPolicy.asString(),
+            leadingIcon = Outlined.PrivacyTip,
+            label = PrivacyPolicy.asString(),
             testTag = AboutOthersPrivacyPolicyItemTestTag,
             onClickAction = onPrivacyPolicyItemClick,
             modifier = modifier

@@ -23,27 +23,27 @@ class AboutScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun checkDetailScreenDisplayed() {
+    fun checkDetailSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.DetailScreen.SCREEN))
+            .onNode(hasTestTag(AboutTestTag.DetailSection.Section))
             .assertIsDisplayed()
     }
 
-    fun checkCreditsScreenDisplayed() {
+    fun checkCreditsSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.CreditsScreen.SCREEN))
+            .onNode(hasTestTag(AboutTestTag.CreditsSection.Section))
             .assertIsDisplayed()
     }
 
-    fun checkOthersScreenDisplayed() {
+    fun checkOthersSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.OthersScreen.SCREEN))
+            .onNode(hasTestTag(AboutTestTag.OthersSection.Section))
             .assertIsDisplayed()
     }
 
-    fun checkFooterLinksScreenDisplayed() {
+    fun checkFooterLinksSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.FooterLinksScreen.SCREEN))
+            .onNode(hasTestTag(AboutTestTag.FooterLinksSection.Section))
             .assertIsDisplayed()
     }
 }

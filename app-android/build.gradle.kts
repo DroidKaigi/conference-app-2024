@@ -19,7 +19,7 @@ val keystoreExits = keystorePropertiesFile.exists()
 
 android {
     // For firebase we are using 2023 now
-    namespace = "io.github.droidkaigi.confsched2023"
+    namespace = "io.github.droidkaigi.confsched2024"
 
     flavorDimensions += "network"
     buildFeatures {

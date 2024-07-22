@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.about.component
+package io.github.droidkaigi.confsched.about.section
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confsched.about.component.AboutFooterLinksIcon
 import io.github.droidkaigi.confsched.about.strings.AboutStrings
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview

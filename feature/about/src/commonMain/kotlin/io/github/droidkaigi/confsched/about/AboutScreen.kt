@@ -18,11 +18,14 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetail
-import io.github.droidkaigi.confsched.about.component.AboutFooterLinks
-import io.github.droidkaigi.confsched.about.component.aboutCredits
-import io.github.droidkaigi.confsched.about.component.aboutOthers
+import io.github.droidkaigi.confsched.about.section.AboutDroidKaigiDetail
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinks
+import io.github.droidkaigi.confsched.about.section.aboutCredits
+import io.github.droidkaigi.confsched.about.section.aboutOthers
 import io.github.droidkaigi.confsched.model.AboutItem
+import io.github.droidkaigi.confsched.model.AboutItem.Medium
+import io.github.droidkaigi.confsched.model.AboutItem.X
+import io.github.droidkaigi.confsched.model.AboutItem.YouTube
 
 const val aboutScreenRoute = "about"
 
@@ -30,24 +33,24 @@ object AboutTestTag {
     private const val suffix = "TestTag"
     private const val prefix = "ProfileCard"
 
-    object DetailScreen {
-        private const val detailScreenPrefix = "${prefix}_DetailScreen"
-        const val SCREEN = "${detailScreenPrefix}_$suffix"
+    object DetailSection {
+        private const val detailSectionPrefix = "${prefix}_DetailSection"
+        const val Section = "${detailSectionPrefix}_$suffix"
     }
 
-    object CreditsScreen {
-        private const val creditsScreenPrefix = "${prefix}_CreditsScreen"
-        const val SCREEN = "${creditsScreenPrefix}_$suffix"
+    object CreditsSection {
+        private const val creditsSectionPrefix = "${prefix}_CreditsSection"
+        const val Section = "${creditsSectionPrefix}_$suffix"
     }
 
-    object OthersScreen {
-        private const val othersScreenPrefix = "${prefix}_OthersScreen"
-        const val SCREEN = "${othersScreenPrefix}_$suffix"
+    object OthersSection {
+        private const val othersSectionPrefix = "${prefix}_OthersSection"
+        const val Section = "${othersSectionPrefix}_$suffix"
     }
 
-    object FooterLinksScreen {
-        private const val footerLinksScreenPrefix = "${prefix}_FooterLinksScreen"
-        const val SCREEN = "${footerLinksScreenPrefix}_$suffix"
+    object FooterLinksSection {
+        private const val footerLinksSectionPrefix = "${prefix}_FooterLinksSection"
+        const val Section = "${footerLinksSectionPrefix}_$suffix"
     }
 }
 
@@ -111,7 +114,7 @@ fun AboutScreen(
                 onStaffItemClick = {
                     onAboutItemClick(AboutItem.Staff)
                 },
-                modifier = Modifier.testTag(AboutTestTag.CreditsScreen.SCREEN),
+                modifier = Modifier.testTag(AboutTestTag.CreditsSection.Section),
             )
             aboutOthers(
                 onCodeOfConductItemClick = {
@@ -123,22 +126,22 @@ fun AboutScreen(
                 onPrivacyPolicyItemClick = {
                     onAboutItemClick(AboutItem.PrivacyPolicy)
                 },
-                modifier = Modifier.testTag(AboutTestTag.OthersScreen.SCREEN),
+                modifier = Modifier.testTag(AboutTestTag.OthersSection.Section),
             )
             item {
                 AboutFooterLinks(
                     // TODO: Inject the right version name
                     versionName = "1.6.0",
                     onYouTubeClick = {
-                        onAboutItemClick(AboutItem.YouTube)
+                        onAboutItemClick(YouTube)
                     },
                     onXClick = {
-                        onAboutItemClick(AboutItem.X)
+                        onAboutItemClick(X)
                     },
                     onMediumClick = {
-                        onAboutItemClick(AboutItem.Medium)
+                        onAboutItemClick(Medium)
                     },
-                    modifier = Modifier.testTag(AboutTestTag.FooterLinksScreen.SCREEN),
+                    modifier = Modifier.testTag(AboutTestTag.FooterLinksSection.Section),
                 )
             }
         }
