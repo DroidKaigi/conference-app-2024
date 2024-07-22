@@ -35,22 +35,22 @@ object AboutTestTag {
 
     object DetailSection {
         private const val detailSectionPrefix = "${prefix}_DetailSection"
-        const val Name = "${detailSectionPrefix}_$suffix"
+        const val Section = "${detailSectionPrefix}_$suffix"
     }
 
     object CreditsSection {
         private const val creditsSectionPrefix = "${prefix}_CreditsSection"
-        const val Name = "${creditsSectionPrefix}_$suffix"
+        const val Section = "${creditsSectionPrefix}_$suffix"
     }
 
     object OthersSection {
         private const val othersSectionPrefix = "${prefix}_OthersSection"
-        const val Name = "${othersSectionPrefix}_$suffix"
+        const val Section = "${othersSectionPrefix}_$suffix"
     }
 
     object FooterLinksSection {
         private const val footerLinksSectionPrefix = "${prefix}_FooterLinksSection"
-        const val Name = "${footerLinksSectionPrefix}_$suffix"
+        const val Section = "${footerLinksSectionPrefix}_$suffix"
     }
 }
 
@@ -114,7 +114,7 @@ fun AboutScreen(
                 onStaffItemClick = {
                     onAboutItemClick(AboutItem.Staff)
                 },
-                modifier = Modifier.testTag(AboutTestTag.CreditsSection.Name),
+                modifier = Modifier.testTag(AboutTestTag.CreditsSection.Section),
             )
             aboutOthers(
                 onCodeOfConductItemClick = {
@@ -126,7 +126,7 @@ fun AboutScreen(
                 onPrivacyPolicyItemClick = {
                     onAboutItemClick(AboutItem.PrivacyPolicy)
                 },
-                modifier = Modifier.testTag(AboutTestTag.OthersSection.Name),
+                modifier = Modifier.testTag(AboutTestTag.OthersSection.Section),
             )
             item {
                 AboutFooterLinks(
@@ -141,7 +141,7 @@ fun AboutScreen(
                     onMediumClick = {
                         onAboutItemClick(Medium)
                     },
-                    modifier = Modifier.testTag(AboutTestTag.FooterLinksSection.Name),
+                    modifier = Modifier.testTag(AboutTestTag.FooterLinksSection.Section),
                 )
             }
         }

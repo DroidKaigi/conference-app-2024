@@ -25,25 +25,25 @@ class AboutScreenRobot @Inject constructor(
 
     fun checkDetailSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.DetailSection.Name))
+            .onNode(hasTestTag(AboutTestTag.DetailSection.Section))
             .assertIsDisplayed()
     }
 
     fun checkCreditsSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.CreditsSection.Name))
+            .onNode(hasTestTag(AboutTestTag.CreditsSection.Section))
             .assertIsDisplayed()
     }
 
     fun checkOthersSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.OthersSection.Name))
+            .onNode(hasTestTag(AboutTestTag.OthersSection.Section))
             .assertIsDisplayed()
     }
 
     fun checkFooterLinksSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.FooterLinksSection.Name))
+            .onNode(hasTestTag(AboutTestTag.FooterLinksSection.Section))
             .assertIsDisplayed()
     }
 }

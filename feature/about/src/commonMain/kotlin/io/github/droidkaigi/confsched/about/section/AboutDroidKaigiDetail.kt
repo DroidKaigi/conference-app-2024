@@ -27,7 +27,7 @@ fun AboutDroidKaigiDetail(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.testTag(AboutTestTag.DetailSection.Name),
+        modifier = modifier.testTag(AboutTestTag.DetailSection.Section),
     ) {
         Image(
             painter = painterResource(Res.drawable.about_header),
