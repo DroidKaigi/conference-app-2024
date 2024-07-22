@@ -142,7 +142,8 @@ struct ListViewItem: View {
             Text(listItem.title).font(.title)
             ForEach(listItem.speakers, id: \.self){ speaker in
                 PhotoView(photo:"person.circle.fill",
-                          name: speaker)
+                          name: speaker,
+                          color: AssetColors.Surface.onSurface.swiftUIColor)
             }
             
             
@@ -176,12 +177,46 @@ struct PhotoView: View {
     //TODO: Replace this with an actual photo render
     let photo: String
     let name: String
+    let color: Color
     
     var body: some View {
         HStack {
             Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
             Text(name)
+                .foregroundStyle(color)
         }
+    }
+}
+
+//TODO: Figure out best way to handle room selection, and all rooms (fills width)
+struct TimetableGridItem: View {
+    let listItem: TimetableItem
+    let isColorType: Bool
+    
+    var body: some View {
+        VStack {
+            HStack {
+                //TODO: Replace shape with our actual shapes
+                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+                    .padding(EdgeInsets(top: 0,leading: 7, bottom: 0, trailing: 2))
+                Text("\(listItem.startsAt.formatted(.dateTime.hour().minute())) - \(listItem.endsAt.formatted(.dateTime.hour().minute()))").foregroundStyle(isColorType ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+                Spacer()
+                
+            }
+            Text(listItem.title).foregroundStyle(isColorType ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+            Spacer()
+            ForEach(listItem.speakers, id: \.self){ speaker in
+                PhotoView(photo:"person.circle.fill",
+                          name: speaker,
+                          color: AssetColors.Surface.onSurface.swiftUIColor)
+            }
+        }
+        .padding(
+            EdgeInsets(top: 10,leading: 10, bottom: 10, trailing: 10))
+        .border(isColorType ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+        .frame(width: 192, height: 153, alignment: .center)
+        .padding(5)
+        .background(isColorType ? AssetColors.Custom.arcticFoxContainer.swiftUIColor:AssetColors.Surface.surface.swiftUIColor)
     }
 }
 
@@ -200,4 +235,26 @@ struct PhotoView: View {
             reducer: { TimetableReducer() }
         )
     )
+}
+
+#Preview {
+    ZStack {
+        Color(AssetColors.Surface.surface.swiftUIColor)
+
+        TimetableGridItem(
+            listItem: TimetableItem(
+                id: "",
+                title: "DroidKaigiアプリで見るアーキテクチャの変遷",
+                startsAt: try! Date("2024-09-11T12:00:00Z", strategy: .iso8601),
+                endsAt: try! Date("2024-09-11T13:00:00Z", strategy: .iso8601),
+                category: "",
+                sessionType: "",
+                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                asset:"", levels: [""],
+                speakers: ["Maria Rodriguez"],
+                isFavorite:false
+             ),
+            isColorType: true
+        )
+    }
 }
