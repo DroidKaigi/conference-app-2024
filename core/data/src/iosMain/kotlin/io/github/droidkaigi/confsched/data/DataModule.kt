@@ -93,7 +93,7 @@ public val dataModule: Module = module {
                     create = false,
                     error = null,
                 )
-                requireNotNull(documentDirectory).path + "/confsched2023.preferences_pb"
+                requireNotNull(documentDirectory).path + "/confsched2024.preferences_pb"
             },
         )
         UserDataStore(dataStore)
@@ -109,7 +109,7 @@ public val dataModule: Module = module {
                     create = false,
                     error = null,
                 )
-                requireNotNull(documentDirectory).path + "/confsched2023.cache.preferences_pb"
+                requireNotNull(documentDirectory).path + "/confsched2024.cache.preferences_pb"
             },
         )
         SessionCacheDataStore(dataStore, get())
@@ -125,7 +125,7 @@ public val dataModule: Module = module {
                     create = false,
                     error = null,
                 )
-                requireNotNull(documentDirectory).path + "/confsched2023.achievements.preferences_pb"
+                requireNotNull(documentDirectory).path + "/confsched2024.achievements.preferences_pb"
             },
         )
         AchievementsDataStore(dataStore)

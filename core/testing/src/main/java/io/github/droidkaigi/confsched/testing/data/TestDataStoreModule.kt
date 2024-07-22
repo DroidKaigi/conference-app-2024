@@ -65,6 +65,6 @@ class TestDataStoreModule {
         private const val TEST_DATASTORE_NAME = "test_datastore.preferences_pb"
         private const val TEST_DATASTORE_CACHE_NAME = "test_datastore_cache.preferences_pb"
         private const val TEST_DATASTORE_ACHIEVEMENTS_NAME =
-            "confsched2023.achievements.preferences_pb"
+            "confsched2024.achievements.preferences_pb"
     }
 }

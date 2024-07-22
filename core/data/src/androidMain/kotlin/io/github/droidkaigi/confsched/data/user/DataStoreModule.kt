@@ -59,10 +59,10 @@ public class DataStoreModule {
     )
 
     public companion object {
-        private const val DATA_STORE_PREFERENCE_FILE_NAME = "confsched2023.preferences_pb"
+        private const val DATA_STORE_PREFERENCE_FILE_NAME = "confsched2024.preferences_pb"
         private const val DATA_STORE_CACHE_PREFERENCE_FILE_NAME =
-            "confsched2023.cache.preferences_pb"
+            "confsched2024.cache.preferences_pb"
         private const val DATA_STORE_ACHIEVEMENTS_FILE_NAME =
-            "confsched2023.achievements.preferences_pb"
+            "confsched2024.achievements.preferences_pb"
     }
 }

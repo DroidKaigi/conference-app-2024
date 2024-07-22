@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1046519477136:android:4c7faf114baa88b8a8f915",
+        "mobilesdk_app_id": "1:1046519477136:android:08032060aa18822ba8f915",
         "android_client_info": {
-          "package_name": "io.github.droidkaigi.confsched2023"
+          "package_name": "io.github.droidkaigi.confsched2024"
         }
       },
       "oauth_client": [
@@ -21,7 +21,7 @@
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB6krIXmsPcPdnG7eZMvx1O17TC3xrE5vk"
+          "current_key": "AIzaSyBNLnxxd_SmTj2OspJE4GmfJbViAv_k8fs"
         }
       ],
       "services": {
