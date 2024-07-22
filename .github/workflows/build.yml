@@ -30,7 +30,7 @@ jobs:
 
       - uses: ./.github/actions/setup-java
 
-      - run: ./gradlew :app-android:assembleDebug --stacktrace
+      - run: ./gradlew :app-android:assembleDevDebug --stacktrace
 
       - name: Upload build outputs (APKs)
         uses: actions/upload-artifact@v4.3.4
