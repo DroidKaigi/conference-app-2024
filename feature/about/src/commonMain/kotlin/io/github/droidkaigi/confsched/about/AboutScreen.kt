@@ -114,7 +114,7 @@ fun AboutScreen(
                 onStaffItemClick = {
                     onAboutItemClick(AboutItem.Staff)
                 },
-                modifier = Modifier.testTag(AboutTestTag.CreditsSction.Name),
+                modifier = Modifier.testTag(AboutTestTag.CreditsSection.Name),
             )
             aboutOthers(
                 onCodeOfConductItemClick = {
@@ -126,7 +126,7 @@ fun AboutScreen(
                 onPrivacyPolicyItemClick = {
                     onAboutItemClick(AboutItem.PrivacyPolicy)
                 },
-                modifier = Modifier.testTag(AboutTestTag.OthersSction.Name),
+                modifier = Modifier.testTag(AboutTestTag.OthersSection.Name),
             )
             item {
                 AboutFooterLinks(
@@ -141,7 +141,7 @@ fun AboutScreen(
                     onMediumClick = {
                         onAboutItemClick(Medium)
                     },
-                    modifier = Modifier.testTag(AboutTestTag.FooterLinksSction.Name),
+                    modifier = Modifier.testTag(AboutTestTag.FooterLinksSection.Name),
                 )
             }
         }
