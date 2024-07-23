@@ -106,7 +106,10 @@ private fun KaigiNavHost(
             onContributorItemClick = externalNavController::navigate,
         )
 
-        staffScreens()
+        staffScreens(
+            onNavigationIconClick = navController::popBackStack,
+            onStaffItemClick = externalNavController::navigate,
+        )
     }
 }
 
