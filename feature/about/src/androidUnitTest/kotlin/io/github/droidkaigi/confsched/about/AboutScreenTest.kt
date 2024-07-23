@@ -45,7 +45,7 @@ class AboutScreenTest(
                             setupScreenContent()
                         }
                     }
-                    itShould("show scr") {
+                    itShould("show detail section") {
                         captureScreenWithChecks {
                             checkDetailSectionDisplayed()
                         }
