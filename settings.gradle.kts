@@ -28,6 +28,7 @@ include(
     ":feature:eventmap",
     ":feature:profilecard",
     ":feature:about",
+    ":feature:staff",
     ":core:designsystem",
     ":core:data",
     ":core:model",
