@@ -41,9 +41,7 @@ class AboutScreenTest(
             return describeBehaviors("AboutScreen") {
                 describe("when launch") {
                     run {
-                        captureScreenWithChecks {
-                            setupScreenContent()
-                        }
+                        setupScreenContent()
                     }
                     itShould("show detail section") {
                         captureScreenWithChecks {
