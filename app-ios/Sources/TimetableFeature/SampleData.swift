@@ -1,4 +1,6 @@
 import Foundation
+import SwiftUI
+import Theme
 
 public enum DayTab: String, CaseIterable, Identifiable {
     public var id : RawValue { rawValue }
@@ -29,6 +31,51 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
     }
 }
 
+public enum Room: String {
+    public var id : RawValue { rawValue }
+    
+    case allRooms = ""
+    case giraffe = "Giraffe"
+    case hedgeHog = "Hedgehog"
+    case flamingo = "Flamingo"
+    case jellyfish = "Jellyfish"
+    case iguana = "Iguana"
+    
+    public func getBackgroundColor() -> Color {
+        switch(self) {
+        case .allRooms:
+            return AssetColors.Surface.surfaceContainer.swiftUIColor
+        case .giraffe:
+            return AssetColors.Custom.bumblebeeContainer.swiftUIColor
+        case .hedgeHog:
+            return AssetColors.Custom.chipmunkContainer.swiftUIColor
+        case .flamingo:
+            return AssetColors.Custom.dolphinContainer.swiftUIColor
+        case .jellyfish:
+            return AssetColors.Custom.electricEelContainer.swiftUIColor
+        case .iguana:
+            return AssetColors.Custom.arcticFoxContainer.swiftUIColor
+        }
+    }
+    
+    public func getForegroundColor() -> Color {
+        switch(self) {
+        case .allRooms:
+            return AssetColors.Surface.onSurface.swiftUIColor
+        case .giraffe:
+            return AssetColors.Custom.bumblebee.swiftUIColor
+        case .hedgeHog:
+            return AssetColors.Custom.chipmunk.swiftUIColor
+        case .flamingo:
+            return AssetColors.Custom.dolphin.swiftUIColor
+        case .jellyfish:
+            return AssetColors.Custom.electricEel.swiftUIColor
+        case .iguana:
+            return AssetColors.Custom.arcticFox.swiftUIColor
+        }
+    }
+}
+
 public struct TimetableItem: Equatable, Hashable {
     let id: String //Not used yet
     let title: String
@@ -36,7 +83,7 @@ public struct TimetableItem: Equatable, Hashable {
     let endsAt: Date
     let category: String
     let sessionType: String
-    let room: String
+    let room: Room
     let targetAudience: String
     let languages: [String]
     let asset: String
@@ -58,7 +105,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-11T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
@@ -70,7 +117,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-11T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
@@ -82,7 +129,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-11T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false)
@@ -95,7 +142,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-11T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
@@ -107,7 +154,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-11T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
@@ -119,7 +166,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-11T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false)
@@ -135,7 +182,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-12T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Kelvin Lueilwitz"],
                 isFavorite:false),
@@ -146,7 +193,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-12T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Mallory Turner"],
                 isFavorite:false),
@@ -157,7 +204,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-12T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Clementina Mills"],
                 isFavorite:false)
@@ -170,7 +217,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-12T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Kelvin Lueilwitz"],
                 isFavorite:false),
@@ -181,7 +228,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-12T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Mallory Turner"],
                 isFavorite:false),
@@ -192,7 +239,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-12T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Clementina Mills"],
                 isFavorite:false)
@@ -208,7 +255,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-13T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Waldo Torp"],
                 isFavorite:false),
@@ -219,7 +266,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-13T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Baron Stracke"],
                 isFavorite:false),
@@ -230,7 +277,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-13T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Carole Volkman"],
                 isFavorite:false)
@@ -243,7 +290,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-13T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Waldo Torp"],
                 isFavorite:false),
@@ -254,7 +301,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-13T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Baron Stracke"],
                 isFavorite:false),
@@ -265,7 +312,7 @@ struct SampleData {
                 endsAt: try! Date("2024-09-13T14:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Carole Volkman"],
                 isFavorite:false)

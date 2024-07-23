@@ -132,7 +132,7 @@ struct ListViewItem: View {
     public var body: some View {
         VStack(alignment: .leading) {
             HStack {
-                TagView(tagText: listItem.room, highlight: true)
+                TagView(tagText: listItem.room.rawValue, highlight: true)
                 ForEach(listItem.languages, id: \.self) { lang in
                     TagView(tagText: lang, highlight: false)
                 }
@@ -191,7 +191,7 @@ struct PhotoView: View {
 //TODO: Figure out best way to handle room selection, and all rooms (fills width)
 struct TimetableGridItem: View {
     let listItem: TimetableItem
-    let isColorType: Bool
+    //let isColorType: Bool
     
     var body: some View {
         VStack {
@@ -199,11 +199,11 @@ struct TimetableGridItem: View {
                 //TODO: Replace shape with our actual shapes
                 Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
                     .padding(EdgeInsets(top: 0,leading: 7, bottom: 0, trailing: 2))
-                Text("\(listItem.startsAt.formatted(.dateTime.hour().minute())) - \(listItem.endsAt.formatted(.dateTime.hour().minute()))").foregroundStyle(isColorType ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+                Text("\(listItem.startsAt.formatted(.dateTime.hour().minute())) - \(listItem.endsAt.formatted(.dateTime.hour().minute()))").foregroundStyle(listItem.room.getForegroundColor())
                 Spacer()
                 
             }
-            Text(listItem.title).foregroundStyle(isColorType ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+            Text(listItem.title).foregroundStyle(listItem.room.getForegroundColor())
             Spacer()
             ForEach(listItem.speakers, id: \.self){ speaker in
                 PhotoView(photo:"person.circle.fill",
@@ -213,10 +213,10 @@ struct TimetableGridItem: View {
         }
         .padding(
             EdgeInsets(top: 10,leading: 10, bottom: 10, trailing: 10))
-        .border(isColorType ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+        .border(listItem.room.getForegroundColor())
         .frame(width: 192, height: 153, alignment: .center)
         .padding(5)
-        .background(isColorType ? AssetColors.Custom.arcticFoxContainer.swiftUIColor:AssetColors.Surface.surface.swiftUIColor)
+        .background(listItem.room.getBackgroundColor())
     }
 }
 
@@ -249,12 +249,11 @@ struct TimetableGridItem: View {
                 endsAt: try! Date("2024-09-11T13:00:00Z", strategy: .iso8601),
                 category: "",
                 sessionType: "",
-                room: "Arctic Fox", targetAudience: "", languages: ["EN", "JA"],
+                room: Room.iguana, targetAudience: "", languages: ["EN", "JA"],
                 asset:"", levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
-             ),
-            isColorType: true
+             )
         )
     }
 }
