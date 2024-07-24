@@ -104,7 +104,7 @@ fun StaffScreen(
         topBar = {
             LargeTopAppBar(
                 title = {
-                    Text(text = "Contributor")
+                    Text(text = "Staff")
                 },
                 navigationIcon = {
                     IconButton(
