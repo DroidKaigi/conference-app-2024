@@ -1,6 +1,13 @@
 import ComposableArchitecture
+import Foundation
 import KMPClient
 import shared
+
+struct SponsorData: Equatable, Identifiable {
+    let id: String
+    let logo: URL
+    let link: URL
+}
 
 @Reducer
 public struct SponsorReducer {
@@ -10,6 +17,10 @@ public struct SponsorReducer {
     
     @ObservableState
     public struct State: Equatable {
+        var platinums = [SponsorData]()
+        var golds = [SponsorData]()
+        var supporters = [SponsorData]()
+
         public init() { }
     }
 
@@ -31,7 +42,26 @@ public struct SponsorReducer {
                 }
                 .cancellable(id: CancelID.connection)
             case .response(.success(let sponsors)):
-                print(sponsors)
+                var platinums = [SponsorData]()
+                var golds = [SponsorData]()
+                var supporters = [SponsorData]()
+                
+                sponsors.forEach {
+                    switch $0.plan {
+                    case .platinum:
+                        platinums.append(.init(id: $0.name, logo: .init(string: $0.logo)!, link: .init(string: $0.link)!))
+                    case .gold:
+                        golds.append(.init(id: $0.name, logo: .init(string: $0.logo)!, link: .init(string: $0.link)!))
+                    case .supporter:
+                        supporters.append(.init(id: $0.name, logo: .init(string: $0.logo)!, link: .init(string: $0.link)!))
+                    }
+                }
+                
+                state.platinums = platinums
+                state.golds = golds
+                state.supporters = supporters
+                
+                print(state)
                 return .none
             case .response(.failure(let error)):
                 print(error)
