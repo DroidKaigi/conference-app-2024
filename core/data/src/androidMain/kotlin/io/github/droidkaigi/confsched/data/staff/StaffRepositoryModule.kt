@@ -30,6 +30,5 @@ public abstract class StaffRepositoryModule {
                 staffApi = staffApi,
             )
         }
-
     }
 }
