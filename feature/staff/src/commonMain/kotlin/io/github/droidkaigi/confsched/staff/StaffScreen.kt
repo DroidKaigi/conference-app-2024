@@ -25,6 +25,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.fakes
@@ -69,7 +70,8 @@ fun StaffScreen(
     modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
 ) {
-    val uiState = StaffUiState(staff = Staff.fakes(), userMessageStateHolder = UserMessageStateHolderImpl())
+    val eventEmitter = rememberEventEmitter<StaffScreenEvent>()
+    val uiState = staffScreenPresenter(events = eventEmitter)
 
     val snackbarHostState = remember { SnackbarHostState() }
 
