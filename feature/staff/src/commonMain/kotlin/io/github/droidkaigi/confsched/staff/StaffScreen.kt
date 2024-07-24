@@ -84,6 +84,7 @@ fun StaffScreen(
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
         onStaffItemClick = onStaffItemClick,
+        modifier = modifier,
     )
 }
 
