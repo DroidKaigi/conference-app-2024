@@ -9,7 +9,7 @@ public struct SponsorView: View {
     }
 
     public var body: some View {
-        Text(store.text)
+        Text("HOGE")
             .onAppear {
                 store.send(.onAppear)
             }
@@ -17,5 +17,5 @@ public struct SponsorView: View {
 }
 
 #Preview {
-    SponsorView(store: .init(initialState: .init(text: "Hoge"), reducer: { SponsorReducer() }))
+    SponsorView(store: .init(initialState: .init(), reducer: { SponsorReducer() }))
 }

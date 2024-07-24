@@ -180,7 +180,10 @@ let package = Package(
         ),
         .target(
             name: "SponsorFeature",
-            dependencies: [ .tca ]
+            dependencies: [
+                .tca,
+                .kmpClient
+            ]
         ),
         .testTarget(
             name: "SponsorFeatureTests",
