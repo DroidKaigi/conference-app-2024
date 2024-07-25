@@ -30,7 +30,7 @@ public struct TimetableReducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.timetableItems = sampleData.day1Results
+                state.timetableItems = sampleData.workdayResults
                 return .none
             case .view(.timetableItemTapped):
                 return .none
@@ -38,14 +38,14 @@ public struct TimetableReducer {
                 //TODO: Replace with real data
                 
                 switch dayTab {
+                case .workshopDay:
+                    state.timetableItems = sampleData.workdayResults
+                    return .none
                 case .day1:
                     state.timetableItems = sampleData.day1Results
                     return .none
                 case .day2:
                     state.timetableItems = sampleData.day2Results
-                    return .none
-                case .day3:
-                    state.timetableItems = sampleData.day3Results
                     return .none
                 }
             }
