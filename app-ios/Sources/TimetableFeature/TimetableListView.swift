@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SwiftUI
+import Theme
 
 public struct TimetableView: View {
     private let store: StoreOf<TimetableReducer>
@@ -8,25 +9,73 @@ public struct TimetableView: View {
         self.store = store
     }
     
+    @State var timetableMode = TimetableMode.list
+    @State var switchModeIcon: String = "square.grid.2x2"
+    
     public var body: some View {
-        VStack {
-            HStack {
-                ForEach(DayTab.allCases) { tabItem in
-                    Button(action: {
-                        store.send(.view(.selectDay(tabItem)))
-                    }, label: {
-                        //TODO: Only selected button should be green and underlined
-                        Text(tabItem.rawValue).foregroundStyle(Color(.greenSelectColorset))
-                            .underline()
-                    })
+        NavigationStack {
+            VStack {
+                HStack {
+                    ForEach(DayTab.allCases) { tabItem in
+                        Button(action: {
+                            store.send(.view(.selectDay(tabItem)))
+                        }, label: {
+                            //TODO: Only selected button should be green and underlined
+                            Text(tabItem.rawValue).foregroundStyle(
+                                AssetColors.Custom.arcticFox.swiftUIColor)
+                                .underline()
+                        })
+                    }
+                    Spacer()
+                }.padding(5)
+                switch timetableMode {
+                case TimetableMode.list:
+                    TimetableListView(store: store)
+                case TimetableMode.grid:
+                    Text("Grid view placeholder")
+                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 }
                 Spacer()
-            }.padding(5)
-            TimetableListView(store: store)
-            Spacer()
+            }
+            
+            .background(AssetColors.Surface.surface.swiftUIColor)
+            .frame(maxWidth: .infinity)
+            .toolbar{
+                ToolbarItem(placement: .topBarLeading) {
+                    Text("Timetable")
+                        .textStyle(.headlineMedium)
+                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                    
+                }
+                ToolbarItem(placement:.topBarTrailing) {
+                    HStack {
+                        Button {
+                            // TODO: Search?
+                        } label: {
+                            Group {
+                                Image(systemName:"magnifyingglass").foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                            }
+                            .frame(width: 40, height: 40)
+                        }
+                        
+                        Button {
+                            switch timetableMode {
+                            case .list:
+                                timetableMode = .grid
+                                switchModeIcon = "list.bullet.indent"
+                            case .grid:
+                                timetableMode = .list
+                                switchModeIcon = "square.grid.2x2"
+                            }
+                        } label: {
+                            Image(systemName:switchModeIcon).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                            .frame(width: 40, height: 40)
+                        }
+                    }
+                }
+                
+            }
         }
-        .background(Color(.backgroundColorset))
-        .frame(maxWidth: .infinity)
     }
 }
 
@@ -51,7 +100,7 @@ struct TimetableListView: View {
             
                 .onAppear {
                     store.send(.onAppear)
-                }.background(Color(.backgroundColorset))
+                }.background(AssetColors.Surface.surface.swiftUIColor)
         }
     }
 }
@@ -66,7 +115,7 @@ struct TimeGroupMiniList: View {
                 Text("|")
                 Text(contents.endsTimeString)
                 Spacer()
-            }.padding(10).foregroundStyle(Color(.onSurfaceColorset))
+            }.padding(10).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
             VStack {
                 ForEach(contents.items, id: \.self) { item in
                     ListViewItem(listItem: item)
@@ -88,7 +137,7 @@ struct ListViewItem: View {
                     TagView(tagText: lang, highlight: false)
                 }
                 Spacer()
-                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundStyle(Color(.onSurfaceColorset))
+                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
             }
             Text(listItem.title).font(.title)
             ForEach(listItem.speakers, id: \.self){ speaker in
@@ -97,10 +146,10 @@ struct ListViewItem: View {
             }
             
             
-        }.foregroundStyle(Color(.onSurfaceColorset)).padding(10)
+        }.foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor).padding(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 5)
-                    .stroke(Color(.onSurfaceColorset), lineWidth: 1)
+                    .stroke(AssetColors.Surface.onSurface.swiftUIColor, lineWidth: 1)
             )
     }
 }
@@ -111,14 +160,14 @@ struct TagView: View {
     var body: some View {
         HStack {
             if highlight {
-                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(Color(.greenSelectColorset))
+                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
                     .padding(-3)
             }
-            Text(tagText).foregroundStyle(highlight ? Color(.greenSelectColorset) : Color(.onSurfaceColorset))
+            Text(tagText).foregroundStyle(highlight ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
         }
         .padding(
             EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
-        .border(highlight ? Color(.greenSelectColorset) : Color(.onSurfaceColorset))
+        .border(highlight ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
         .padding(-2)
     }
 }
@@ -130,7 +179,7 @@ struct PhotoView: View {
     
     var body: some View {
         HStack {
-            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(Color(.greenSelectColorset))
+            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
             Text(name)
         }
     }
@@ -138,7 +187,7 @@ struct PhotoView: View {
 
 #Preview {
     TimetableView(
-        store: .init(initialState: .init(timetableItems: SampleData.init().day1Results),
+        store: .init(initialState: .init(timetableItems: SampleData.init().workdayResults),
                      reducer: { TimetableReducer() })
     )
 }
@@ -147,7 +196,7 @@ struct PhotoView: View {
     TimetableListView(
         store: .init(
             initialState: 
-                    .init(timetableItems: SampleData.init().day1Results),
+                    .init(timetableItems: SampleData.init().workdayResults),
             reducer: { TimetableReducer() }
         )
     )
