@@ -68,7 +68,7 @@ fun TimetableSheet(
                         selectedDay = Workday
                     },
                 ) {
-                    Text("Workday", color = Color.Green)
+                    Text("Workday 9/11", color = Color.Green)
                 }
                 TextButton(
                     modifier = Modifier.background(Color.Black),
@@ -76,7 +76,7 @@ fun TimetableSheet(
                         selectedDay = ConferenceDay1
                     },
                 ) {
-                    Text("Day 1", color = Color.Green)
+                    Text("9/12", color = Color.Green)
                 }
                 TextButton(
                     modifier = Modifier.background(Color.Black),
@@ -84,7 +84,7 @@ fun TimetableSheet(
                         selectedDay = DroidKaigi2024Day.ConferenceDay2
                     },
                 ) {
-                    Text("Day 2", color = Color.Green)
+                    Text("9/13", color = Color.Green)
                 }
             }
             when (uiState) {
