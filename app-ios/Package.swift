@@ -120,6 +120,7 @@ let package = Package(
                 .kmpClient,
                 .kmpModule,
                 .eventKitClient,
+                .model,
             ]
         ),
         .testTarget(
@@ -194,6 +195,8 @@ let package = Package(
             dependencies: [ 
                 .tca,
                 .kmpClient,
+                .theme,
+                .model,
             ]
         ),
         .testTarget(
@@ -204,6 +207,7 @@ let package = Package(
             ]
         ),
         .target(name: "CommonComponents", dependencies: [.theme, .kmpModule]),
+        .target(name: "Model"),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -235,6 +239,7 @@ extension Target.Dependency {
     static let eventKitClient: Target.Dependency = "EventKitClient"
     static let theme: Target.Dependency = "Theme"
     static let commonComponents: Target.Dependency = "CommonComponents"
+    static let model: Target.Dependency = "Model"
 
     static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
     static let firebaseRemoteConfig: Target.Dependency = .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk")
