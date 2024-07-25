@@ -32,8 +32,9 @@ public struct TimetableView: View {
                 case TimetableMode.list:
                     TimetableListView(store: store)
                 case TimetableMode.grid:
-                    Text("Grid view placeholder")
-                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                    TimeTableGridView(store: store)
+//                    Text("Grid view placeholder")
+//                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 }
                 Spacer()
             }
@@ -188,10 +189,41 @@ struct PhotoView: View {
     }
 }
 
+//TODO:  Figure out sorting and displaying grid items...
+struct TimeTableGridView: View {
+    private let store: StoreOf<TimetableReducer>
+
+    public init(store: StoreOf<TimetableReducer>) {
+        self.store = store
+    }
+    
+    var body: some View {
+            
+        ScrollView([.vertical]) {
+            Grid {
+                ForEach(store.timetableItems, id: \.self) { item in
+                    HStack {
+                        VStack {
+                            Text(item.startsTimeString)
+                            Spacer()
+                        }.padding(10).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                        ScrollView([.horizontal]) {
+                            GridRow {
+                                ForEach(item.items) { rowItem in
+                                    TimetableGridItem(listItem: rowItem)
+                                }
+                            }//.frame(width: 192, height: 153)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 //TODO: Figure out best way to handle room selection, and all rooms (fills width)
 struct TimetableGridItem: View {
     let listItem: TimetableItem
-    //let isColorType: Bool
     
     var body: some View {
         VStack {
@@ -214,7 +246,7 @@ struct TimetableGridItem: View {
         .padding(
             EdgeInsets(top: 10,leading: 10, bottom: 10, trailing: 10))
         .border(listItem.room.getForegroundColor())
-        .frame(width: 192, height: 153, alignment: .center)
+        .frame(width: listItem.room==Room.allRooms ? .infinity : 192, height: 153, alignment: .center)
         .padding(5)
         .background(listItem.room.getBackgroundColor())
     }
@@ -254,6 +286,20 @@ struct TimetableGridItem: View {
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
              )
+        )
+    }
+}
+
+#Preview {
+    ZStack {
+        Color(AssetColors.Surface.surface.swiftUIColor)
+
+        TimeTableGridView(
+            store: .init(
+                initialState:
+                        .init(timetableItems: SampleData.init().workdayResults),
+                reducer: { TimetableReducer() }
+            )
         )
     }
 }

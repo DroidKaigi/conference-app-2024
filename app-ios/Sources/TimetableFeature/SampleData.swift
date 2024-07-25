@@ -76,8 +76,8 @@ public enum Room: String {
     }
 }
 
-public struct TimetableItem: Equatable, Hashable {
-    let id: String //Not used yet
+public struct TimetableItem: Identifiable, Equatable, Hashable {
+    public let id: String //Not used yet
     let title: String
     let startsAt: Date
     let endsAt: Date
