@@ -42,10 +42,10 @@ public struct TimetableDetailView: View {
                 action: \.confirmationDialog
             )
         )
-        .sheet(item: $store.url) { url in
+        .sheet(item: $store.url, content: { url in
             SafariView(url: url.id)
                 .ignoresSafeArea()
-        }
+        })
         .environment(\.openURL, OpenURLAction { url in
             store.send(.view(.urlTapped(url)))
             return .handled

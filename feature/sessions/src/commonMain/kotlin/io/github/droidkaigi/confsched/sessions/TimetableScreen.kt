@@ -21,7 +21,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -41,7 +40,7 @@ import androidx.navigation.compose.composable
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
@@ -181,27 +180,6 @@ private fun TimetableScreen(
         Column(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()).fillMaxWidth(),
         ) {
-            // TODO: Row not showing yet... there is a layout problem here I need to fix
-            Row {
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = { /* TODO: Search here */ },
-                ) {
-                    Text("Workday", color = Color.Green)
-                }
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = { /* TODO: Search here */ },
-                ) {
-                    Text("Day 1", color = Color.Green)
-                }
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = { /* TODO: Search here */ },
-                ) {
-                    Text("Day 2", color = Color.Green)
-                }
-            }
             TimetableSheet(
                 modifier = Modifier
                     .fillMaxSize(),
@@ -227,11 +205,11 @@ fun PreviewTimetableScreenDark() {
                 uiState = TimetableScreenUiState(
                     contentUiState = TimetableSheetUiState.ListTimetable(
                         mapOf(
-                            DroidKaigi2023Day.Day1 to TimetableListUiState(
+                            DroidKaigi2024Day.Workday to TimetableListUiState(
                                 mapOf<String, List<TimetableItem>>().toPersistentMap(),
                                 Timetable(),
                             ),
-                            DroidKaigi2023Day.Day2 to TimetableListUiState(
+                            DroidKaigi2024Day.ConferenceDay1 to TimetableListUiState(
                                 mapOf<String, List<TimetableItem>>().toPersistentMap(),
                                 Timetable(),
                             ),

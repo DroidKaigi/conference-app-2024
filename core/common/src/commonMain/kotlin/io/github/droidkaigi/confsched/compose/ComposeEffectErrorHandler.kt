@@ -50,6 +50,7 @@ fun SafeLaunchedEffect(key: Any?, block: suspend CoroutineScope.() -> Unit) {
             block()
         } catch (e: Exception) {
             ensureActive()
+            e.printStackTrace()
             composeEffectErrorHandler.emit(e)
         }
     }

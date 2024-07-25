@@ -7,7 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
-import io.github.droidkaigi.confsched.model.DroidKaigi2023Day
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
@@ -79,7 +79,7 @@ fun timetableSheet(
     }
     return if (uiType == TimetableUiType.List) {
         TimetableSheetUiState.ListTimetable(
-            DroidKaigi2023Day.entries.associateWith { day ->
+            DroidKaigi2024Day.entries.associateWith { day ->
                 val sortAndGroupedTimetableItems = sessionTimetable.filtered(
                     Filters(
                         days = listOf(day),
@@ -99,7 +99,7 @@ fun timetableSheet(
         )
     } else {
         TimetableSheetUiState.GridTimetable(
-            DroidKaigi2023Day.entries.associateWith { day ->
+            DroidKaigi2024Day.entries.associateWith { day ->
                 TimetableGridUiState(
                     timetable = sessionTimetable.dayTimetable(day),
                 )

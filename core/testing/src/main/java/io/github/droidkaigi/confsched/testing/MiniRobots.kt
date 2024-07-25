@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.testing
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.github.takahirom.roborazzi.roboOutputName
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.FakeContributorsApiClient
@@ -70,7 +71,13 @@ class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: R
         val roboOutputName = roboOutputName()
         if (roboOutputName.contains("[") && roboOutputName.contains("]")) {
             val name = roboOutputName.substringAfter("[").substringBefore("]")
-            robotTestRule.captureScreen(name)
+            val className = provideRoborazziContext().description?.className?.substringAfterLast(".")
+            if (className == null) {
+                robotTestRule.captureScreen(name)
+                checks()
+                return
+            }
+            robotTestRule.captureScreen("$className[$name]")
             checks()
             return
         }
