@@ -38,9 +38,13 @@ public struct ContributorReducer: Sendable {
             switch action {
             case .onAppear:
                 return .run { send in
-                    try await contributorClient.refresh()
-                    for try await contributors in try contributorClient.streamContributors() {
-                        await send(.response(.success(contributors)))
+                    do {
+                        try await contributorClient.refresh()
+                        for try await contributors in try contributorClient.streamContributors() {
+                            await send(.response(.success(contributors)))
+                        }
+                    } catch {
+                        await send(.response(.failure(error)))
                     }
                 }
                 .cancellable(id: CancelID.request)
