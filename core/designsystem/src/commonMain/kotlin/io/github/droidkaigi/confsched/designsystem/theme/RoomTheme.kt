@@ -36,36 +36,33 @@ sealed interface RoomTheme {
         override val containerColor = Color(0xFF44ADE7).copy(alpha = 0.1f)
         override val dimColor = Color(0xFF121E25)
     }
+
     val primaryColor: Color
     val containerColor: Color
     val dimColor: Color
 
     companion object {
-        fun of(roomName: String): RoomTheme {
+        fun ofOrNull(roomName: String): RoomTheme? {
             return when (roomName.lowercase()) {
                 "iguana" -> Iguana
                 "hedgehog" -> Hedgehog
                 "giraffe" -> Giraffe
                 "flamingo" -> Flamingo
                 "jellyfish" -> Jellyfish
-                else -> throw IllegalArgumentException("Unknown room name: $roomName")
+                else -> null
             }
         }
     }
 }
 
+@Suppress("CompositionLocalAllowlist")
 val LocalRoomTheme: ProvidableCompositionLocal<RoomTheme> = staticCompositionLocalOf<RoomTheme> {
-    error("No RoomTheme provided") 
+    error("No RoomTheme provided")
 }
 
 @Composable
 fun ProvideRoomTheme(roomName: String, content: @Composable () -> Unit) {
-    val roomTheme = try {
-        RoomTheme.of(roomName)
-    } catch (e: IllegalArgumentException) {
-        RoomTheme.Iguana
-    }
-
+    val roomTheme = RoomTheme.ofOrNull(roomName) ?: RoomTheme.Iguana
     CompositionLocalProvider(LocalRoomTheme provides roomTheme) {
         content()
     }
