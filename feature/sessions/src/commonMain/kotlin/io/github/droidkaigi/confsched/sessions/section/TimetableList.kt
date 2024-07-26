@@ -37,6 +37,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
+import io.github.droidkaigi.confsched.designsystem.theme.RoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.CIRCLE
@@ -96,72 +99,72 @@ fun TimetableList(
                     Icons.Filled.Star
                 }
             }
-            val roomColor = timetableItem.room.getColor()
-
-            Column(
-                modifier = Modifier
-                    .border(
-                        border = BorderStroke(width = 1.dp, color = Color.White),
-                        shape = RoundedCornerShape(5.dp),
-                    )
-                    .padding(15.dp),
-            ) {
-                Row {
-                    TagView(tagText = roomName, icon = roomIcon, tagColor = roomColor)
-                    Spacer(modifier = Modifier.padding(3.dp))
-                    timetableItem.language.labels.forEach { label ->
-                        TagView(tagText = label, tagColor = Color.White)
+            ProvideRoomTheme(timetableItem.room.getThemeKey()) {
+                Column(
+                    modifier = Modifier
+                        .border(
+                            border = BorderStroke(width = 1.dp, color = Color.White),
+                            shape = RoundedCornerShape(5.dp),
+                        )
+                        .padding(15.dp),
+                ) {
+                    Row {
+                        TagView(tagText = roomName, icon = roomIcon, tagColor = LocalRoomTheme.current.primaryColor)
                         Spacer(modifier = Modifier.padding(3.dp))
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                    TextButton(
-                        onClick = { onBookmarkClick(timetableItem, true) },
-                        modifier = Modifier.testTag(TimetableListItemBookmarkIconTestTag),
-                    ) {
-                        if (isBookmarked) {
-                            Icon(
-                                Icons.Filled.Favorite,
-                                contentDescription = "Bookmarked",
-                                tint = Color.Green,
-                            )
-                        } else {
-                            Icon(
-                                Icons.Outlined.FavoriteBorder,
-                                contentDescription = "Not Bookmarked",
-                                tint = Color.White,
-                            )
+                        timetableItem.language.labels.forEach { label ->
+                            TagView(tagText = label, tagColor = Color.White)
+                            Spacer(modifier = Modifier.padding(3.dp))
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                        TextButton(
+                            onClick = { onBookmarkClick(timetableItem, true) },
+                            modifier = Modifier.testTag(TimetableListItemBookmarkIconTestTag),
+                        ) {
+                            if (isBookmarked) {
+                                Icon(
+                                    Icons.Filled.Favorite,
+                                    contentDescription = "Bookmarked",
+                                    tint = Color.Green,
+                                )
+                            } else {
+                                Icon(
+                                    Icons.Outlined.FavoriteBorder,
+                                    contentDescription = "Not Bookmarked",
+                                    tint = Color.White,
+                                )
+                            }
                         }
                     }
-                }
-                Text(
-                    text = timetableItem.title.currentLangTitle,
-                    fontSize = 24.sp,
-                    modifier = Modifier
-                        .testTag(TimetableListItemTestTag)
-                        .padding(bottom = 5.dp)
-                        .clickable { onTimetableItemClick(timetableItem) },
-                )
-                timetableItem.speakers.forEach { speaker ->
-                    Row {
-                        // TODO: Fixed image loading again but its still slow. Maybe we need smaller images?
-                        val painter = rememberAsyncImagePainter(speaker.iconUrl)
-                        Image(
-                            painter = painter,
-                            modifier = Modifier
-                                .width(32.dp)
-                                .height(32.dp)
-                                .clip(CircleShape),
-                            contentDescription = "image",
-                        )
-                        Text(
-                            text = speaker.name,
-                            fontSize = 24.sp,
-                            modifier = Modifier
-                                .testTag(TimetableListItemTestTag)
-                                .padding(5.dp)
-                                .align(Alignment.CenterVertically),
-                        )
-                        // TODO: Message goes here (missing from object we can access here?)
+                    Text(
+                        text = timetableItem.title.currentLangTitle,
+                        fontSize = 24.sp,
+                        modifier = Modifier
+                            .testTag(TimetableListItemTestTag)
+                            .padding(bottom = 5.dp)
+                            .clickable { onTimetableItemClick(timetableItem) },
+                    )
+                    timetableItem.speakers.forEach { speaker ->
+                        Row {
+                            // TODO: Fixed image loading again but its still slow. Maybe we need smaller images?
+                            val painter = rememberAsyncImagePainter(speaker.iconUrl)
+                            Image(
+                                painter = painter,
+                                modifier = Modifier
+                                    .width(32.dp)
+                                    .height(32.dp)
+                                    .clip(CircleShape),
+                                contentDescription = "image",
+                            )
+                            Text(
+                                text = speaker.name,
+                                fontSize = 24.sp,
+                                modifier = Modifier
+                                    .testTag(TimetableListItemTestTag)
+                                    .padding(5.dp)
+                                    .align(Alignment.CenterVertically),
+                            )
+                            // TODO: Message goes here (missing from object we can access here?)
+                        }
                     }
                 }
                 // TODO: There is no data for the warning string right now. (Should go here)

@@ -9,7 +9,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import io.github.droidkaigi.confsched.data.createDataStore
-import io.github.droidkaigi.confsched.data.user.AchievementsDataStoreQualifier
 import io.github.droidkaigi.confsched.data.user.DataStoreModule
 import io.github.droidkaigi.confsched.data.user.SessionCacheDataStoreQualifier
 import io.github.droidkaigi.confsched.data.user.UserDataStoreQualifier
@@ -48,23 +47,8 @@ class TestDataStoreModule {
         },
     )
 
-    @Provides
-    @Singleton
-    @AchievementsDataStoreQualifier
-    fun provideAchievementsDataStore(
-        @ApplicationContext context: Context,
-        testDispatcher: TestDispatcher,
-    ): DataStore<Preferences> = createDataStore(
-        coroutineScope = CoroutineScope(testDispatcher + Job()),
-        producePath = {
-            context.cacheDir.resolve(TEST_DATASTORE_ACHIEVEMENTS_NAME).path
-        },
-    )
-
     companion object {
         private const val TEST_DATASTORE_NAME = "test_datastore.preferences_pb"
         private const val TEST_DATASTORE_CACHE_NAME = "test_datastore_cache.preferences_pb"
-        private const val TEST_DATASTORE_ACHIEVEMENTS_NAME =
-            "confsched2024.achievements.preferences_pb"
     }
 }

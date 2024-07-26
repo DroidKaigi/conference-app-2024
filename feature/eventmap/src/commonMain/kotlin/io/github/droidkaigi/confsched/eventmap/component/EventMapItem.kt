@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.EventMapEvent
 
 @Composable
@@ -34,7 +35,7 @@ fun EventMapItem(
     onClickFavorite: (eventMapEvent: EventMapEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val green = Color(0xFF45E761)
+    val green = LocalRoomTheme.current.primaryColor
     val gray = Color(0xFFC5C7C4)
     Column(
         modifier = modifier

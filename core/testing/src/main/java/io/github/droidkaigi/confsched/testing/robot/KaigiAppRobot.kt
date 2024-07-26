@@ -26,15 +26,4 @@ class KaigiAppRobot @Inject constructor(
             .performClick()
         waitUntilIdle()
     }
-
-    fun goToAchievements() {
-        composeTestRule
-            .onAllNodes(
-                matcher = hasTestTag(MainScreenTab.ProfileCard.testTag),
-                useUnmergedTree = true,
-            )
-            .onFirst()
-            .performClick()
-        waitUntilIdle()
-    }
 }

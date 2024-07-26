@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.section.TagView
@@ -36,15 +37,14 @@ fun TimeTableItemDetailHeadline(
     Column(
         modifier = modifier
             // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-            .background(Color(0xFF132417))
+            .background(LocalRoomTheme.current.dimColor)
             .padding(8.dp)
             .fillMaxWidth(),
     ) {
         Row {
             TagView(
                 tagText = timetableItem.room.name.currentLangTitle,
-                // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-                tagColor = Color(0xFF45E761),
+                tagColor = LocalRoomTheme.current.primaryColor,
             )
             timetableItem.language.labels.forEach { label ->
                 Spacer(modifier = Modifier.padding(4.dp))
