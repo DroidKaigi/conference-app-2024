@@ -21,9 +21,6 @@ public annotation class UserDataStoreQualifier
 @Qualifier
 public annotation class SessionCacheDataStoreQualifier
 
-@Qualifier
-public annotation class AchievementsDataStoreQualifier
-
 @InstallIn(SingletonComponent::class)
 @Module
 public class DataStoreModule {
@@ -48,21 +45,9 @@ public class DataStoreModule {
         producePath = { context.cacheDir.resolve(DATA_STORE_CACHE_PREFERENCE_FILE_NAME).path },
     )
 
-    @AchievementsDataStoreQualifier
-    @Provides
-    @Singleton
-    public fun provideAchievementsDataStore(
-        @ApplicationContext context: Context,
-    ): DataStore<Preferences> = createDataStore(
-        coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-        producePath = { context.filesDir.resolve(DATA_STORE_ACHIEVEMENTS_FILE_NAME).path },
-    )
-
     public companion object {
         private const val DATA_STORE_PREFERENCE_FILE_NAME = "confsched2024.preferences_pb"
         private const val DATA_STORE_CACHE_PREFERENCE_FILE_NAME =
             "confsched2024.cache.preferences_pb"
-        private const val DATA_STORE_ACHIEVEMENTS_FILE_NAME =
-            "confsched2024.achievements.preferences_pb"
     }
 }

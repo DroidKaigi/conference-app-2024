@@ -28,16 +28,17 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.component.LoadingText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
-import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailContent
-import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailHeadline
-import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBottomAppBar
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailContent
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadline
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -113,12 +114,14 @@ sealed interface TimetableItemDetailScreenUiState {
     data class Loading(
         override val userMessageStateHolder: UserMessageStateHolder,
     ) : TimetableItemDetailScreenUiState
+
     data class Loaded(
         val timetableItem: TimetableItem,
         val timetableItemDetailSectionUiState: TimetableItemDetailSectionUiState,
         val isBookmarked: Boolean,
         val isLangSelectable: Boolean,
         val currentLang: Lang?,
+        val roomThemeKey: String,
         override val userMessageStateHolder: UserMessageStateHolder,
     ) : TimetableItemDetailScreenUiState
 
@@ -148,12 +151,14 @@ private fun TimetableItemDetailScreen(
             .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             if (uiState is Loaded) {
-                TimetableItemDetailTopAppBar(
-                    isLangSelectable = uiState.isLangSelectable,
-                    onNavigationIconClick = onNavigationIconClick,
-                    onSelectedLanguage = onSelectedLanguage,
-                    scrollBehavior = scrollBehavior,
-                )
+                ProvideRoomTheme(uiState.roomThemeKey) {
+                    TimetableItemDetailTopAppBar(
+                        isLangSelectable = uiState.isLangSelectable,
+                        onNavigationIconClick = onNavigationIconClick,
+                        onSelectedLanguage = onSelectedLanguage,
+                        scrollBehavior = scrollBehavior,
+                    )
+                }
             }
         },
         bottomBar = {
@@ -170,27 +175,29 @@ private fun TimetableItemDetailScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
         if (uiState is Loaded) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
-            ) {
-                item {
-                    TimeTableItemDetailHeadline(
-                        timetableItem = uiState.timetableItem,
-                    )
-                }
+            ProvideRoomTheme(uiState.roomThemeKey) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize().padding(innerPadding),
+                ) {
+                    item {
+                        TimetableItemDetailHeadline(
+                            timetableItem = uiState.timetableItem,
+                        )
+                    }
 
-                item {
-                    TimeTableItemDetailSummaryCard(
-                        timetableItem = uiState.timetableItem,
-                    )
-                }
+                    item {
+                        TimetableItemDetailSummaryCard(
+                            timetableItem = uiState.timetableItem,
+                        )
+                    }
 
-                item {
-                    TimeTableItemDetailContent(
-                        timetableItem = uiState.timetableItem,
-                        currentLang = uiState.currentLang,
-                        onLinkClick = onLinkClick,
-                    )
+                    item {
+                        TimetableItemDetailContent(
+                            timetableItem = uiState.timetableItem,
+                            currentLang = uiState.currentLang,
+                            onLinkClick = onLinkClick,
+                        )
+                    }
                 }
             }
         }
@@ -227,6 +234,7 @@ fun TimetableItemDetailScreenPreview() {
                     isBookmarked = isBookMarked,
                     isLangSelectable = true,
                     currentLang = Lang.JAPANESE,
+                    roomThemeKey = "iguana",
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
                 onNavigationIconClick = {},

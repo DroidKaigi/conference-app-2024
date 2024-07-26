@@ -24,11 +24,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -38,7 +39,7 @@ import io.github.droidkaigi.confsched.model.fake
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun TimeTableItemDetailContent(
+fun TimetableItemDetailContent(
     timetableItem: TimetableItem,
     currentLang: Lang?,
     modifier: Modifier = Modifier,
@@ -101,8 +102,7 @@ private fun DescriptionSection(
                 Text(
                     text = "続きを読む",
                     style = MaterialTheme.typography.labelLarge,
-                    // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-                    color = Color(0xFF45E761),
+                    color = LocalRoomTheme.current.primaryColor,
                 )
             }
         }
@@ -119,8 +119,7 @@ private fun TargetAudienceSection(
         Text(
             text = "対象者",
             style = MaterialTheme.typography.titleLarge,
-            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-            color = Color(0xFF45E761),
+            color = LocalRoomTheme.current.primaryColor,
         )
         Spacer(Modifier.height(8.dp))
         Text(
@@ -142,8 +141,7 @@ private fun ArchiveSection(
         Text(
             text = "アーカイブ",
             style = MaterialTheme.typography.titleLarge,
-            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-            color = Color(0xFF45E761),
+            color = LocalRoomTheme.current.primaryColor,
         )
         Spacer(Modifier.height(8.dp))
         Row(
@@ -154,8 +152,7 @@ private fun ArchiveSection(
                     modifier = Modifier.weight(1f),
                     onClick = { onViewSlideClick(slideUrl) },
                     colors = ButtonDefaults.buttonColors().copy(
-                        // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-                        containerColor = Color(0xFF45E761),
+                        containerColor = LocalRoomTheme.current.primaryColor,
                     ),
                 ) {
                     Icon(
@@ -174,8 +171,7 @@ private fun ArchiveSection(
                     modifier = Modifier.weight(1f),
                     onClick = { onWatchVideoClick(videoUrl) },
                     colors = ButtonDefaults.buttonColors().copy(
-                        // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-                        containerColor = Color(0xFF45E761),
+                        containerColor = LocalRoomTheme.current.primaryColor,
                     ),
                 ) {
                     Icon(
@@ -194,42 +190,55 @@ private fun ArchiveSection(
 
 @Composable
 @Preview
-fun TimeTableItemDetailContentPreview() {
+fun TimetableItemDetailContentPreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailContent(
-                timetableItem = Session.fake(),
-                currentLang = Lang.JAPANESE,
-                onLinkClick = {},
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailContent(
+                    timetableItem = Session.fake(),
+                    currentLang = Lang.JAPANESE,
+                    onLinkClick = {},
+                )
+            }
         }
     }
 }
 
 @Composable
 @Preview
-fun TimeTableItemDetailContentWithEnglishPreview() {
+fun TimetableItemDetailContentWithEnglishPreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailContent(
-                timetableItem = Session.fake(),
-                currentLang = Lang.ENGLISH,
-                onLinkClick = {},
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailContent(
+                    timetableItem = Session.fake(),
+                    currentLang = Lang.ENGLISH,
+                    onLinkClick = {},
+                )
+            }
         }
     }
 }
 
 @Composable
 @Preview
-fun TimeTableItemDetailContentWithMixedPreview() {
+fun TimetableItemDetailContentWithMixedPreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailContent(
-                timetableItem = Session.fake(),
-                currentLang = Lang.MIXED,
-                onLinkClick = {},
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailContent(
+                    timetableItem = Session.fake(),
+                    currentLang = Lang.MIXED,
+                    onLinkClick = {},
+                )
+            }
         }
+    }
+}
+
+@Composable
+fun ProvideFakeRoomTheme(content: @Composable () -> Unit) {
+    ProvideRoomTheme(Session.fake().room.getThemeKey()) {
+        content()
     }
 }

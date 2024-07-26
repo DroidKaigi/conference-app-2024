@@ -175,7 +175,6 @@ enum class MainScreenTab(
 }
 
 data class MainScreenUiState(
-    val isAchievementsEnabled: Boolean = false,
     val userMessageStateHolder: UserMessageStateHolder,
 )
 
