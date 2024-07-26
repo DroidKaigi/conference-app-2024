@@ -35,7 +35,7 @@ import io.github.droidkaigi.confsched.model.nameAndFloor
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun TimeTableItemDetailSummaryCard(
+fun TimetableItemDetailSummaryCard(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
@@ -125,12 +125,14 @@ private fun SummaryCardRow(
 
 @Composable
 @Preview
-fun TimeTableItemDetailSummaryCardPreview() {
+fun TimetableItemDetailSummaryCardPreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailSummaryCard(
-                timetableItem = TimetableItem.Session.fake(),
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailSummaryCard(
+                    timetableItem = TimetableItem.Session.fake(),
+                )
+            }
         }
     }
 }

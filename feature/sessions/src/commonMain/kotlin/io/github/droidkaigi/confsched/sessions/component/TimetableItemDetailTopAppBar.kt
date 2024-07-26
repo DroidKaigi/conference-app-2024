@@ -100,13 +100,15 @@ fun TimetableItemDetailTopAppBar(
 @Preview
 fun TimetableItemDetailTopAppBarPreview() {
     KaigiTheme {
-        Surface {
-            TimetableItemDetailTopAppBar(
-                isLangSelectable = true,
-                onNavigationIconClick = {},
-                onSelectedLanguage = {},
-                scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailTopAppBar(
+                    isLangSelectable = true,
+                    onNavigationIconClick = {},
+                    onSelectedLanguage = {},
+                    scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+                )
+            }
         }
     }
 }
@@ -116,13 +118,15 @@ fun TimetableItemDetailTopAppBarPreview() {
 @Preview
 fun TimetableItemDetailTopAppBarUnSelectablePreview() {
     KaigiTheme {
-        Surface {
-            TimetableItemDetailTopAppBar(
-                isLangSelectable = false,
-                onNavigationIconClick = {},
-                onSelectedLanguage = {},
-                scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailTopAppBar(
+                    isLangSelectable = false,
+                    onNavigationIconClick = {},
+                    onSelectedLanguage = {},
+                    scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+                )
+            }
         }
     }
 }

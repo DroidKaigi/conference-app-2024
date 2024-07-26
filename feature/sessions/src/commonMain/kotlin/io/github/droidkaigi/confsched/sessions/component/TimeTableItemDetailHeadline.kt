@@ -29,7 +29,7 @@ import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun TimeTableItemDetailHeadline(
+fun TimetableItemDetailHeadline(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
@@ -90,12 +90,14 @@ fun TimeTableItemDetailHeadline(
 
 @Composable
 @Preview
-fun TimeTableItemDetailHeadlinePreview() {
+fun TimetableItemDetailHeadlinePreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailHeadline(
-                timetableItem = TimetableItem.Session.fake(),
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailHeadline(
+                    timetableItem = TimetableItem.Session.fake(),
+                )
+            }
         }
     }
 }

@@ -35,10 +35,10 @@ import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
-import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailContent
-import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailHeadline
-import io.github.droidkaigi.confsched.sessions.component.TimeTableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailBottomAppBar
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailContent
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadline
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -180,19 +180,19 @@ private fun TimetableItemDetailScreen(
                     modifier = Modifier.fillMaxSize().padding(innerPadding),
                 ) {
                     item {
-                        TimeTableItemDetailHeadline(
+                        TimetableItemDetailHeadline(
                             timetableItem = uiState.timetableItem,
                         )
                     }
 
                     item {
-                        TimeTableItemDetailSummaryCard(
+                        TimetableItemDetailSummaryCard(
                             timetableItem = uiState.timetableItem,
                         )
                     }
 
                     item {
-                        TimeTableItemDetailContent(
+                        TimetableItemDetailContent(
                             timetableItem = uiState.timetableItem,
                             currentLang = uiState.currentLang,
                             onLinkClick = onLinkClick,

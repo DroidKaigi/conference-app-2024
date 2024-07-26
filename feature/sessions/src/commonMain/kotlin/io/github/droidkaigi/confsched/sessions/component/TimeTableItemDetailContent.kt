@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -38,7 +39,7 @@ import io.github.droidkaigi.confsched.model.fake
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun TimeTableItemDetailContent(
+fun TimetableItemDetailContent(
     timetableItem: TimetableItem,
     currentLang: Lang?,
     modifier: Modifier = Modifier,
@@ -189,42 +190,55 @@ private fun ArchiveSection(
 
 @Composable
 @Preview
-fun TimeTableItemDetailContentPreview() {
+fun TimetableItemDetailContentPreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailContent(
-                timetableItem = Session.fake(),
-                currentLang = Lang.JAPANESE,
-                onLinkClick = {},
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailContent(
+                    timetableItem = Session.fake(),
+                    currentLang = Lang.JAPANESE,
+                    onLinkClick = {},
+                )
+            }
         }
     }
 }
 
 @Composable
 @Preview
-fun TimeTableItemDetailContentWithEnglishPreview() {
+fun TimetableItemDetailContentWithEnglishPreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailContent(
-                timetableItem = Session.fake(),
-                currentLang = Lang.ENGLISH,
-                onLinkClick = {},
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailContent(
+                    timetableItem = Session.fake(),
+                    currentLang = Lang.ENGLISH,
+                    onLinkClick = {},
+                )
+            }
         }
     }
 }
 
 @Composable
 @Preview
-fun TimeTableItemDetailContentWithMixedPreview() {
+fun TimetableItemDetailContentWithMixedPreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailContent(
-                timetableItem = Session.fake(),
-                currentLang = Lang.MIXED,
-                onLinkClick = {},
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailContent(
+                    timetableItem = Session.fake(),
+                    currentLang = Lang.MIXED,
+                    onLinkClick = {},
+                )
+            }
         }
+    }
+}
+
+@Composable
+fun ProvideFakeRoomTheme(content: @Composable () -> Unit) {
+    ProvideRoomTheme(Session.fake().room.getThemeKey()) {
+        content()
     }
 }
