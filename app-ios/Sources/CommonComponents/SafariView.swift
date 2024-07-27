@@ -22,7 +22,7 @@ public struct SafariView: UIViewControllerRepresentable {
 
 #Preview {
     SafariView(
-        url: URL(string: "https://2023.droidkaigi.jp/")!
+        url: URL(string: "https://2024.droidkaigi.jp/")!
     )
 }
 
