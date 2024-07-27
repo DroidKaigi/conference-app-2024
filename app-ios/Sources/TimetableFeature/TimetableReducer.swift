@@ -1,9 +1,14 @@
 import ComposableArchitecture
+import CommonComponents
+import KMPClient
+import shared
 import Foundation
+import EventKitClient
 
 @Reducer
 public struct TimetableReducer {
     let sampleData = SampleData()
+    @Dependency(\.timetableClient) private var timetableClient
     
     public init() {}
 
@@ -30,7 +35,7 @@ public struct TimetableReducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.timetableItems = sampleData.workdayResults
+                state.timetableItems = sampleData.workdayResults //timetableClient.streamTimetable //
                 return .none
             case .view(.timetableItemTapped):
                 return .none
