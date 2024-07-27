@@ -21,7 +21,7 @@ public struct TimetableView: View {
                     }, label: {
                         //TODO: Only selected button should be green and underlined
                         Text(tabItem.rawValue).foregroundStyle(
-                            AssetColors.Custom.arcticFox.swiftUIColor)
+                            AssetColors.Custom.flamingo.swiftUIColor)
                             .underline()
                     })
                 }
@@ -158,14 +158,14 @@ struct TagView: View {
     var body: some View {
         HStack {
             if highlight {
-                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
                     .padding(-3)
             }
-            Text(tagText).foregroundStyle(highlight ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+            Text(tagText).foregroundStyle(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
         }
         .padding(
             EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
-        .border(highlight ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+        .border(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
         .padding(-2)
     }
 }
@@ -177,7 +177,7 @@ struct PhotoView: View {
     
     var body: some View {
         HStack {
-            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
             Text(name)
         }
     }

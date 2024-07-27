@@ -78,7 +78,7 @@ public struct RootView: View {
                     )
                 }
         }
-        .tint(AssetColors.Custom.arcticFox.swiftUIColor)
+        .tint(AssetColors.Custom.flamingo.swiftUIColor)
     }
 
     @MainActor

@@ -11,7 +11,7 @@ struct InformationRow: View {
         HStack {
             icon
                 .renderingMode(.template)
-                .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+                .foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
             HStack(spacing: 12) {
                 Text(title)
                     .textStyle(.titleSmall)
@@ -36,7 +36,7 @@ struct InformationRow: View {
     InformationRow(
         icon: Image(systemName: "clock"),
         title: String(localized: "TimeTableDetailDate", bundle: .module),
-        titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
+        titleColor: AssetColors.Custom.flamingo.swiftUIColor,
         content: "2024.09.14 / 11:20 ~ 12:00"
     )
 }

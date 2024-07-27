@@ -1,6 +1,6 @@
 package io.github.droidkaigi.confsched.model
 
-import io.github.droidkaigi.confsched.model.RoomType.RoomA
+import io.github.droidkaigi.confsched.model.RoomType.RoomF
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableSessionType.NORMAL
 import kotlinx.collections.immutable.PersistentList
@@ -134,7 +134,7 @@ public fun Session.Companion.fake(): Session {
         room = TimetableRoom(
             id = 1,
             name = MultiLangText("Room1", "Room2"),
-            type = RoomA,
+            type = RoomF,
             sort = 1,
         ),
         targetAudience = "For App developer アプリ開発者向け",

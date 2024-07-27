@@ -3,11 +3,11 @@ import Theme
 
 public struct RoomTag: View {
     public enum Room {
-        case arcticFox
-        case bumblebee
-        case chipmunk
-        case dolphin
-        case electricEel
+        case flamingo
+        case giraffe
+        case hedgehog
+        case iguana
+        case jellyfish
     }
 
     let room: Room

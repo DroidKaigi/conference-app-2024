@@ -60,11 +60,11 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
             sort = 2,
         ),
         RoomResponse(
-            name = LocaledResponse(ja = "Bumblebee ja", en = "Bumblebee"),
+            name = LocaledResponse(ja = "Giraffe ja", en = "Giraffe"),
             id = 3,
             sort = 3,
         ),
-        RoomResponse(name = LocaledResponse(ja = "Dolphin ja", en = "Dolphin"), id = 4, sort = 3),
+        RoomResponse(name = LocaledResponse(ja = "Iguana ja", en = "Iguana"), id = 4, sort = 3),
     )
     val categories = listOf(
         CategoryResponse(
