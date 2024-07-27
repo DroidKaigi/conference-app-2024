@@ -41,7 +41,7 @@ class ResolveDynamicLinksActivity : ComponentActivity() {
     }
 
     private fun handleDeepLink(deepLink: Uri?) {
-        if (deepLink == null || deepLink.host != "2023.droidkaigi.jp") {
+        if (deepLink == null || deepLink.host != "2024.droidkaigi.jp") {
             // For a security reason.
             // Activities that can handle ACTION_VIEW must check the authority of Uri.
             finishAndRemoveTask()
