@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.about
+package io.github.droidkaigi.confsched.staff
 
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
