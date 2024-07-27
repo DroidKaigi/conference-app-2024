@@ -69,6 +69,7 @@ fun StaffScreen(
     onNavigationIconClick: () -> Unit,
     modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
+    isTopAppBarHidden: Boolean = false,
 ) {
     val eventEmitter = rememberEventEmitter<StaffScreenEvent>()
     val uiState = staffScreenPresenter(events = eventEmitter)
@@ -85,6 +86,7 @@ fun StaffScreen(
         onBackClick = onNavigationIconClick,
         onStaffItemClick = onStaffItemClick,
         modifier = modifier,
+        isTopAppBarHidden = isTopAppBarHidden,
     )
 }
 
@@ -96,36 +98,49 @@ fun StaffScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
+    isTopAppBarHidden: Boolean,
 ) {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
+    val scrollBehavior =
+        if (!isTopAppBarHidden) {
+            TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+        } else {
+            null
+        }
     Scaffold(
         modifier = modifier.testTag(StaffScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            LargeTopAppBar(
-                title = {
-                    Text(text = "Staff")
-                },
-                navigationIcon = {
-                    IconButton(
-                        onClick = onBackClick,
-                    ) {
-                        Icon(
-                            imageVector = Filled.ArrowBack,
-                            contentDescription = "Back",
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior,
-            )
+            if (scrollBehavior != null) {
+                LargeTopAppBar(
+                    title = {
+                        Text(text = "Staff")
+                    },
+                    navigationIcon = {
+                        IconButton(
+                            onClick = onBackClick,
+                        ) {
+                            Icon(
+                                imageVector = Filled.ArrowBack,
+                                contentDescription = "Back",
+                            )
+                        }
+                    },
+                    scrollBehavior = scrollBehavior,
+                )
+            }
         },
     ) { padding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
+                .let {
+                    if (scrollBehavior != null) {
+                        it.nestedScroll(scrollBehavior.nestedScrollConnection)
+                    } else {
+                        it
+                    }
+                },
         ) {
             items(uiState.staff) { staff ->
                 StaffItem(
@@ -151,6 +166,7 @@ fun StaffScreenPreview() {
                 snackbarHostState = SnackbarHostState(),
                 onStaffItemClick = {},
                 onBackClick = {},
+                isTopAppBarHidden = false,
             )
         }
     }
