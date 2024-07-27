@@ -13,6 +13,11 @@ public struct SponsorView: View {
     public var body: some View {
         ScrollView {
             LazyVStack {
+                Text("PLATINUM SPONSORS")
+                    .textStyle(.headlineSmall)
+                    .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
                 ForEach(store.platinums, id: \.id) { platinum in
                     Button {
                         selectedSponsorData = platinum
@@ -24,7 +29,46 @@ public struct SponsorView: View {
                         }
                         .frame(height: 110)
                     }
-//                    .padding(.vertical, 12)
+                }
+                
+                Text("GOLD SPONSORS")
+                    .textStyle(.headlineSmall)
+                    .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                LazyVGrid(columns: Array(repeating: .init(.fixed(184)), count: 2)) {
+                    ForEach(store.golds, id: \.id) { gold in
+                        Button {
+                            selectedSponsorData = gold
+                        } label: {
+                            AsyncImage(url: gold.logo) {
+                                $0.image?
+                                    .resizable()
+                                    .scaledToFit()
+                            }
+                            .frame(height: 80)
+                        }
+                    }
+                }
+                
+                Text("SUPPORTERS")
+                    .textStyle(.headlineSmall)
+                    .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                LazyVGrid(columns: Array(repeating: .init(.fixed(118)), count: 3)) {
+                    ForEach(store.supporters, id: \.id) { supporter in
+                        Button {
+                            selectedSponsorData = supporter
+                        } label: {
+                            AsyncImage(url: supporter.logo) {
+                                $0.image?
+                                    .resizable()
+                                    .scaledToFit()
+                            }
+                            .frame(height: 80)
+                        }
+                    }
                 }
             }
             .padding(16)

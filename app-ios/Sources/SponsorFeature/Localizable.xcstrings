@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "GOLD SPONSORS" : {
+
+    },
+    "PLATINUM SPONSORS" : {
+
+    },
     "Sponsor" : {
       "localizations" : {
         "ja" : {
@@ -10,6 +16,9 @@
           }
         }
       }
+    },
+    "SUPPORTERS" : {
+
     }
   },
   "version" : "1.0"
