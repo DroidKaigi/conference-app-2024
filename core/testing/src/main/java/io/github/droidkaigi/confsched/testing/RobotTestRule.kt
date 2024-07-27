@@ -119,9 +119,10 @@ class RobotTestRule(
                     val engine = FakeImageLoaderEngine.Builder()
                         .default(ColorDrawable(android.graphics.Color.BLUE))
                         .build()
-                    val imageLoader = ImageLoader.Builder(ApplicationProvider.getApplicationContext())
-                        .components { add(engine) }
-                        .build()
+                    val imageLoader =
+                        ImageLoader.Builder(ApplicationProvider.getApplicationContext())
+                            .components { add(engine) }
+                            .build()
                     SingletonImageLoader.setUnsafe(imageLoader)
                 }
             })
@@ -165,8 +166,12 @@ class RobotTestRule(
         }
     }
 
-    fun captureScreen() {
-        captureScreenRoboImage()
+    fun captureScreen(name: String? = null) {
+        if (name != null) {
+            captureScreenRoboImage("$name.png")
+        } else {
+            captureScreenRoboImage()
+        }
     }
 }
 

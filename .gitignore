@@ -28,6 +28,7 @@ Thumbs.db
 # the project can be imported from settings.gradle.kts
 *.iml
 .idea/*
+!.idea/externalDependencies.xml
 !.idea/copyright
 !.idea/codeInsightSettings.xml
 # Keep the code styles.

@@ -45,7 +45,7 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
-import io.github.droidkaigi.confsched.main.bottom.navigation.GlassLikeBottomNavigation
+import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -128,55 +128,46 @@ enum class MainScreenTab(
     val label: String,
     val contentDescription: String,
     val testTag: String = "mainScreenTab:$label",
-    val color: Color,
 ) {
     Timetable(
         icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         label = MainStrings.Timetable.asString(),
         contentDescription = MainStrings.Timetable.asString(),
-        color = Color(0xFF67FF8D),
     ),
 
     EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
         label = MainStrings.EventMap.asString(),
         contentDescription = MainStrings.EventMap.asString(),
-        color = Color(0xFF67FF8D),
     ),
 
     Favorite(
         icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
         label = MainStrings.EventMap.asString(),
         contentDescription = MainStrings.EventMap.asString(),
-        color = Color(0xFF67FF8D),
     ),
 
     About(
         icon = IconRepresentation.Vector(Icons.Outlined.Info),
         label = MainStrings.About.asString(),
         contentDescription = MainStrings.About.asString(),
-        color = Color(0xFF67FF8D),
     ),
 
     ProfileCard(
         icon = IconRepresentation.Vector(Icons.Outlined.People),
         label = MainStrings.ProfileCard.asString(),
         contentDescription = MainStrings.ProfileCard.asString(),
-        color = Color(0xFF67FF8D),
     ),
+    ;
+
+    companion object {
+        val size: Int get() = values().size
+        fun indexOf(tab: MainScreenTab): Int = values().indexOf(tab)
+        fun fromIndex(index: Int): MainScreenTab = values()[index]
+    }
 }
 
-val tabs =
-    listOf(
-        MainScreenTab.Timetable,
-        MainScreenTab.EventMap,
-        MainScreenTab.Favorite,
-        MainScreenTab.About,
-        MainScreenTab.ProfileCard,
-    )
-
 data class MainScreenUiState(
-    val isAchievementsEnabled: Boolean = false,
     val userMessageStateHolder: UserMessageStateHolder,
 )
 
@@ -211,21 +202,12 @@ fun MainScreen(
 
         Scaffold(
             bottomBar = {
-                /*AnimatedVisibility(visible = navigationType == BottomNavigation) {
-                    Row {
-                        MainScreenTab.entries.forEach { tab ->
-                            Button(
-                                modifier = Modifier.weight(1F),
-                                onClick = { onTabSelected(mainNestedNavController, tab) },
-                            ) {
-                                Text(text = tab.label + " " + (currentTab == tab))
-                            }
-                        }
-                    }
-                }*/
-                GlassLikeBottomNavigation(hazeState) {
-                    onTabSelected(mainNestedNavController, it)
-                }
+                GlassLikeBottomNavigation(
+                    hazeState = hazeState,
+                    onTabSelected = {
+                        onTabSelected(mainNestedNavController, it)
+                    },
+                )
             },
         ) { padding ->
             val hazeStyle =

@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.data.eventmap
 import de.jensklingenberg.ktorfit.http.GET
 import io.github.droidkaigi.confsched.data.eventmap.response.EventMapResponse
 import io.github.droidkaigi.confsched.model.EventMapEvent
+import io.github.droidkaigi.confsched.model.createSampleEventMapEvent
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -17,5 +18,5 @@ public interface EventMapApiClient {
 }
 
 public fun EventMapResponse.toEventMapList(): PersistentList<EventMapEvent> {
-    return listOf(EventMapEvent()).toPersistentList()
+    return listOf(createSampleEventMapEvent()).toPersistentList()
 }

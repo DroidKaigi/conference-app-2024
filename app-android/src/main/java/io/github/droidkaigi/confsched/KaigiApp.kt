@@ -26,6 +26,9 @@ import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.DisplayFeature
 import co.touchlab.kermit.Logger
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import io.github.droidkaigi.confsched.about.aboutScreen
+import io.github.droidkaigi.confsched.about.aboutScreenRoute
+import io.github.droidkaigi.confsched.about.navigateAboutScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -40,7 +43,10 @@ import io.github.droidkaigi.confsched.main.MainScreenTab.ProfileCard
 import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
+import io.github.droidkaigi.confsched.model.AboutItem
+import io.github.droidkaigi.confsched.model.Lang.JAPANESE
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.defaultLang
 import io.github.droidkaigi.confsched.sessions.navigateTimetableScreen
 import io.github.droidkaigi.confsched.sessions.navigateToTimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
@@ -119,6 +125,45 @@ private fun NavGraphBuilder.mainScreen(
                 onNavigationIconClick = navController::popBackStack,
                 onEventMapItemClick = externalNavController::navigate,
             )
+            aboutScreen(
+                contentPadding = contentPadding,
+                onAboutItemClick = { aboutItem ->
+                    val portalBaseUrl = if (defaultLang() == JAPANESE) {
+                        "https://portal.droidkaigi.jp"
+                    } else {
+                        "https://portal.droidkaigi.jp/en"
+                    }
+                    when (aboutItem) {
+                        AboutItem.Sponsors -> TODO()
+                        AboutItem.CodeOfConduct -> {
+                            externalNavController.navigate(
+                                url = "$portalBaseUrl/about/code-of-conduct",
+                            )
+                        }
+
+                        AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
+                        AboutItem.License -> externalNavController.navigateToLicenseScreen()
+                        AboutItem.Medium -> externalNavController.navigate(
+                            url = "https://medium.com/droidkaigi",
+                        )
+
+                        AboutItem.PrivacyPolicy -> {
+                            externalNavController.navigate(
+                                url = "$portalBaseUrl/about/privacy",
+                            )
+                        }
+
+                        AboutItem.Staff -> TODO()
+                        AboutItem.X -> externalNavController.navigate(
+                            url = "https://twitter.com/DroidKaigi",
+                        )
+
+                        AboutItem.YouTube -> externalNavController.navigate(
+                            url = "https://www.youtube.com/c/DroidKaigi",
+                        )
+                    }
+                },
+            )
             profileCardScreen(contentPadding)
         },
     )
@@ -131,6 +176,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         return when (route) {
             timetableScreenRoute -> Timetable
             profileCardScreenRoute -> ProfileCard
+            aboutScreenRoute -> About
             else -> null
         }
     }
@@ -143,7 +189,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
             Favorite -> {}
-            About -> {}
+            About -> mainNestedNavController.navigateAboutScreen()
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }
     }
@@ -168,12 +214,11 @@ private class ExternalNavController(
 ) {
     fun navigate(url: String) {
         val uri: Uri = url.toUri()
-        val launched =
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                navigateToNativeAppApi30(context = context, uri = uri)
-            } else {
-                navigateToNativeApp(context = context, uri = uri)
-            }
+        val launched = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            navigateToNativeAppApi30(context = context, uri = uri)
+        } else {
+            navigateToNativeApp(context = context, uri = uri)
+        }
         if (launched.not()) {
             navigateToCustomTab(context = context, uri = uri)
         }
@@ -181,22 +226,20 @@ private class ExternalNavController(
 
     /**
      * Navigate to Calendar Registration
-     * @param timeTableItem カレンダー登録に必要なタイムラインアイテムの情報
      */
-    fun navigateToCalendarRegistration(timeTableItem: TimetableItem) {
-        val calendarIntent =
-            Intent(Intent.ACTION_INSERT).apply {
-                data = CalendarContract.Events.CONTENT_URI
-                putExtras(
-                    bundleOf(
-                        CalendarContract.EXTRA_EVENT_BEGIN_TIME to timeTableItem.startsAt.toEpochMilliseconds(),
-                        CalendarContract.EXTRA_EVENT_END_TIME to timeTableItem.endsAt.toEpochMilliseconds(),
-                        CalendarContract.Events.TITLE to "[${timeTableItem.room.name.currentLangTitle}] ${timeTableItem.title.currentLangTitle}",
-                        CalendarContract.Events.DESCRIPTION to timeTableItem.url,
-                        CalendarContract.Events.EVENT_LOCATION to timeTableItem.room.name.currentLangTitle,
-                    ),
-                )
-            }
+    fun navigateToCalendarRegistration(timetableItem: TimetableItem) {
+        val calendarIntent = Intent(Intent.ACTION_INSERT).apply {
+            data = CalendarContract.Events.CONTENT_URI
+            putExtras(
+                bundleOf(
+                    CalendarContract.EXTRA_EVENT_BEGIN_TIME to timetableItem.startsAt.toEpochMilliseconds(),
+                    CalendarContract.EXTRA_EVENT_END_TIME to timetableItem.endsAt.toEpochMilliseconds(),
+                    CalendarContract.Events.TITLE to "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.title.currentLangTitle}",
+                    CalendarContract.Events.DESCRIPTION to timetableItem.url,
+                    CalendarContract.Events.EVENT_LOCATION to timetableItem.room.name.currentLangTitle,
+                ),
+            )
+        }
 
         runCatching {
             context.startActivity(calendarIntent)
@@ -209,11 +252,11 @@ private class ExternalNavController(
         context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
     }
 
-    fun onShareClick(timeTableItem: TimetableItem) {
+    fun onShareClick(timetableItem: TimetableItem) {
         shareNavigator.share(
-            "[${timeTableItem.room.name.currentLangTitle}] ${timeTableItem.startsTimeString} - ${timeTableItem.endsTimeString}\n" +
-                "${timeTableItem.title.currentLangTitle}\n" +
-                timeTableItem.url,
+            "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}\n" +
+                "${timetableItem.title.currentLangTitle}\n" +
+                timetableItem.url,
         )
     }
 
@@ -243,20 +286,18 @@ private class ExternalNavController(
         val pm = context.packageManager
 
         // Get all Apps that resolve a generic url
-        val browserActivityIntent =
-            Intent()
-                .setAction(Intent.ACTION_VIEW)
-                .addCategory(Intent.CATEGORY_BROWSABLE)
-                .setData(Uri.fromParts("http", "", null))
+        val browserActivityIntent = Intent()
+            .setAction(Intent.ACTION_VIEW)
+            .addCategory(Intent.CATEGORY_BROWSABLE)
+            .setData(Uri.fromParts("http", "", null))
         val genericResolvedList: Set<String> =
             pm.queryIntentActivities(browserActivityIntent, 0)
                 .map { it.activityInfo.packageName }
                 .toSet()
 
         // Get all apps that resolve the specific Url
-        val specializedActivityIntent =
-            Intent(Intent.ACTION_VIEW, uri)
-                .addCategory(Intent.CATEGORY_BROWSABLE)
+        val specializedActivityIntent = Intent(Intent.ACTION_VIEW, uri)
+            .addCategory(Intent.CATEGORY_BROWSABLE)
         val resolvedSpecializedList: MutableSet<String> =
             pm.queryIntentActivities(browserActivityIntent, 0)
                 .map { it.activityInfo.packageName }

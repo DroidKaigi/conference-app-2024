@@ -15,10 +15,6 @@ let package = Package(
             targets: ["App"]
         ),
         .library(
-            name: "AppExperiments",
-            targets: ["AppExperiments"]
-        ),
-        .library(
             name: "TimetableFeature",
             targets: ["TimetableFeature"]
         ),
@@ -46,6 +42,10 @@ let package = Package(
             name: "ContributorFeature",
             targets: ["ContributorFeature"]
         ),
+        .library(
+            name: "CommonComponents",
+            targets: ["CommonComponents"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -58,22 +58,20 @@ let package = Package(
             name: "App",
             dependencies: [
                 .aboutFeature,
+                .contributorFeature,
                 .favoriteFeature,
+                .staffFeature,
+                .sponsorFeature,
                 .timetableFeature,
                 .timetableDetailFeature,
                 .tca,
-                "KMPClient",
+                .kmpClient,
+                .licenseList,
             ]
         ),
         .testTarget(
             name: "AppTests",
             dependencies: [.app]
-        ),
-        .target(
-            name: "AppExperiments",
-            dependencies: [
-                .kmpModule,
-            ]
         ),
 
         .target(
@@ -85,6 +83,13 @@ let package = Package(
                 .tca,
             ]
         ),
+        
+        .target(
+            name: "EventKitClient",
+            dependencies: [
+                .tca
+            ]
+        ),
 
         .target(
             name: "TimetableFeature",
@@ -93,6 +98,7 @@ let package = Package(
                 .firebaseAuth,
                 .firebaseRemoteConfig,
                 .tca,
+                .commonComponents,
             ]
         ),
         .testTarget(
@@ -110,17 +116,21 @@ let package = Package(
             dependencies: [
                 .tca,
                 .theme,
+                .commonComponents,
+                .kmpClient,
+                .kmpModule,
+                .eventKitClient,
             ]
         ),
         .testTarget(
             name: "TimetableDetailFeatureTests",
-            dependencies: [.timetableDetailFeature, .tca]
+            dependencies: [.timetableDetailFeature, .tca, .kmpModule]
         ),
         .target(
             name: "AboutFeature",
             dependencies: [
                 .tca,
-                .product(name: "LicenseList", package: "LicenseList")
+                .commonComponents,
             ]
         ),
         .testTarget(
@@ -134,6 +144,7 @@ let package = Package(
             name: "FavoriteFeature",
             dependencies: [
                 .tca,
+                .kmpClient,
             ]
         ),
         .testTarget(
@@ -156,7 +167,8 @@ let package = Package(
             dependencies: [ 
                 .tca,
                 .kmpClient,
-                .theme
+                .theme,
+                .commonComponents
             ]
         ),
         .testTarget(
@@ -179,7 +191,10 @@ let package = Package(
         ),
         .target(
             name: "ContributorFeature",
-            dependencies: [ .tca ]
+            dependencies: [ 
+                .tca,
+                .kmpClient,
+            ]
         ),
         .testTarget(
             name: "ContributorFeatureTests",
@@ -188,7 +203,7 @@ let package = Package(
                 .tca
             ]
         ),
-
+        .target(name: "CommonComponents", dependencies: [.theme, .kmpModule]),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
         .binaryTarget(name: "KmpModule", path: "../app-ios-shared/build/XCFrameworks/debug/shared.xcframework"),
     ]
@@ -217,11 +232,14 @@ extension Target.Dependency {
     static let contributorFeature: Target.Dependency = "ContributorFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
     static let kmpClient: Target.Dependency = "KMPClient"
+    static let eventKitClient: Target.Dependency = "EventKitClient"
     static let theme: Target.Dependency = "Theme"
+    static let commonComponents: Target.Dependency = "CommonComponents"
 
     static let firebaseAuth: Target.Dependency = .product(name: "FirebaseAuth", package: "firebase-ios-sdk")
     static let firebaseRemoteConfig: Target.Dependency = .product(name: "FirebaseRemoteConfig", package: "firebase-ios-sdk")
     static let tca: Target.Dependency = .product(name: "ComposableArchitecture", package: "swift-composable-architecture")
+    static let licenseList: Target.Dependency = .product(name: "LicenseList", package: "LicenseList")
 }
 
 /// ref: https://github.com/treastrain/swift-upcomingfeatureflags-cheatsheet?tab=readme-ov-file#short

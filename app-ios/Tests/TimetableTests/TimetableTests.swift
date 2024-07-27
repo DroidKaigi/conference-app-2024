@@ -8,7 +8,7 @@ final class TimetableTests: XCTestCase {
             TimetableReducer()
         }
         await store.send(.onAppear) {
-            $0.timetableItems = SampleData().day1Results
+            $0.timetableItems = SampleData().workdayResults
         }
     }
 }

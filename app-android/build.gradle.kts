@@ -19,7 +19,7 @@ val keystoreExits = keystorePropertiesFile.exists()
 
 android {
     // For firebase we are using 2023 now
-    namespace = "io.github.droidkaigi.confsched2023"
+    namespace = "io.github.droidkaigi.confsched2024"
 
     flavorDimensions += "network"
     buildFeatures {
@@ -62,12 +62,11 @@ android {
         }
         create("prod") {
             dimension = "network"
-            signingConfig =
-                if (keystoreExits) {
-                    signingConfigs.getByName("prod")
-                } else {
-                    signingConfigs.getByName("dev")
-                }
+            signingConfig = if (keystoreExits) {
+                signingConfigs.getByName("prod")
+            } else {
+                signingConfigs.getByName("dev")
+            }
             buildConfigField(
                 type = "String",
                 name = "SERVER_URL",
@@ -102,6 +101,7 @@ dependencies {
     implementation(projects.feature.sessions)
     implementation(projects.feature.eventmap)
     implementation(projects.feature.profilecard)
+    implementation(projects.feature.about)
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)

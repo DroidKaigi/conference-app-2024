@@ -2,13 +2,14 @@ package io.github.droidkaigi.confsched.sessions
 
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.droidkaigi.confsched.testing.DescribedTestCase
+import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.TimetableServerRobot.ServerStatus
-import io.github.droidkaigi.confsched.testing.describeTests
+import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot
 import io.github.droidkaigi.confsched.testing.runRobot
+import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,7 +18,7 @@ import javax.inject.Inject
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @HiltAndroidTest
-class TimetableScreenTest(private val testCase: DescribedTestCase<TimetableScreenRobot>) {
+class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScreenRobot>) {
 
     @get:Rule
     @BindValue val robotTestRule: RobotTestRule = RobotTestRule(this)
@@ -35,14 +36,14 @@ class TimetableScreenTest(private val testCase: DescribedTestCase<TimetableScree
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
-        fun testCases(): List<DescribedTestCase<TimetableScreenRobot>> {
-            return describeTests<TimetableScreenRobot> {
+        fun behaviors(): List<DescribedBehavior<TimetableScreenRobot>> {
+            return describeBehaviors<TimetableScreenRobot>(name = "TimetableScreen") {
                 describe("when server is operational") {
                     run {
                         setupTimetableServer(ServerStatus.Operational)
                         setupTimetableScreenContent()
                     }
-                    it("should show timetable items") {
+                    itShould("show timetable items") {
                         captureScreenWithChecks(checks = {
                             checkTimetableItemsDisplayed()
                         })
@@ -51,7 +52,7 @@ class TimetableScreenTest(private val testCase: DescribedTestCase<TimetableScree
                         run {
                             clickFirstSessionBookmark()
                         }
-                        it("should show bookmarked session") {
+                        itShould("show bookmarked session") {
                             // FIXME: Add check for bookmarked session
                             captureScreenWithChecks()
                         }
@@ -60,17 +61,18 @@ class TimetableScreenTest(private val testCase: DescribedTestCase<TimetableScree
                         run {
                             clickFirstSession()
                         }
-                        it("should show session detail") {
+                        itShould("show session detail") {
                             checkClickedItemsExists()
                         }
                     }
-                    describe("click timetable ui type change button") {
+                    describe("click timetable ui type change") {
                         run {
                             clickTimetableUiTypeChangeButton()
                         }
-                        it("should change timetable ui type") {
-                            // FIXME: Add check for timetable ui type change
-                            captureScreenWithChecks()
+                        itShould("change timetable ui type") {
+                            captureScreenWithChecks(
+                                checks = todoChecks("This screen is roughly created. Please add some checks."),
+                            )
                         }
                     }
                 }
@@ -79,7 +81,7 @@ class TimetableScreenTest(private val testCase: DescribedTestCase<TimetableScree
                         setupTimetableServer(ServerStatus.Error)
                         setupTimetableScreenContent()
                     }
-                    it("should show error message") {
+                    itShould("show error message") {
                         // FIXME: Add check for error message
                         captureScreenWithChecks()
                     }

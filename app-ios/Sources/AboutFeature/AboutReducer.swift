@@ -6,16 +6,12 @@ public struct AboutReducer {
     
     @ObservableState
     public struct State: Equatable {
-        var path = StackState<Path.State>()
         @Presents var destination: Destination.State?
         
-        public init(path: StackState<Path.State> = .init()) {
-          self.path = path
-        }
+        public init() {}
     }
 
     public enum Action: ViewAction {
-        case path(StackAction<Path.State, Path.Action>)
         case view(View)
         case presentation(PresentationAction<Destination.Action>)
         
@@ -42,31 +38,11 @@ public struct AboutReducer {
         case medium
     }
 
-    @Reducer(state: .equatable)
-    public enum Path {
-        case staffs
-        case contributers
-        case sponsors
-        case acknowledgements
-    }
-
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .view(.staffsTapped):
-                state.path.append(.staffs)
-                return .none
-            case .view(.contributersTapped):
-                state.path.append(.contributers)
-                return .none
-            case .view(.sponsorsTapped):
-                state.path.append(.sponsors)
-                return .none
             case .view(.codeOfConductTapped):
                 state.destination = .codeOfConduct
-                return .none
-            case .view(.acknowledgementsTapped):
-                state.path.append(.acknowledgements)
                 return .none
             case .view(.privacyPolicyTapped):
                 state.destination = .privacyPolicy
@@ -80,12 +56,11 @@ public struct AboutReducer {
             case .view(.mediumTapped):
                 state.destination = .medium
                 return .none
-            case .presentation:
+            case .view:
                 return .none
-            case .path:
+            case .presentation:
                 return .none
             }
         }
-        .forEach(\.path, action: \.path)
     }
 }

@@ -13,6 +13,10 @@ private var sponsorsRepository: any SponsorsRepository {
     Container.shared.get(type: (any SponsorsRepository).self)
 }
 
+private var contributorRepository: any ContributorsRepository {
+    Container.shared.get(type: (any ContributorsRepository).self)
+}
+
 extension TimetableClient: DependencyKey {
     public static let liveValue: TimetableClient = .init(
         streamTimetable: {
@@ -47,4 +51,12 @@ extension SponsorsClient: DependencyKey {
             sponsorsRepository.sponsors().eraseToThrowingStream()
         }
     )
+}
+
+extension ContributorClient: DependencyKey {
+    public static let liveValue: ContributorClient = Self {
+        contributorRepository.getContributorStream().eraseToThrowingStream()
+    } refresh: {
+        try await contributorRepository.refresh()
+    }
 }

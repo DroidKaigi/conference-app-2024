@@ -50,13 +50,14 @@ fun SafeLaunchedEffect(key: Any?, block: suspend CoroutineScope.() -> Unit) {
             block()
         } catch (e: Exception) {
             ensureActive()
+            e.printStackTrace()
             composeEffectErrorHandler.emit(e)
         }
     }
 }
 
 @Composable
-fun <T : R, R> Flow<T>.safeCollectAsState(
+fun <T : R, R> Flow<T>.safeCollectAsRetainedState(
     initial: R,
     context: CoroutineContext = EmptyCoroutineContext,
 ): State<R> {
@@ -65,10 +66,10 @@ fun <T : R, R> Flow<T>.safeCollectAsState(
     return produceRetainedState(initial, this, context) {
         try {
             if (context == EmptyCoroutineContext) {
-                collect { value = it as R }
+                collect { value = it }
             } else {
                 withContext(context) {
-                    collect { value = it as R }
+                    collect { value = it }
                 }
             }
         } catch (e: Throwable) {
@@ -77,9 +78,10 @@ fun <T : R, R> Flow<T>.safeCollectAsState(
     }
 }
 
+@Suppress("StateFlowValueCalledInComposition")
 @Composable
-fun <T : R, R> StateFlow<T>.safeCollectAsState(
+fun <T : R, R> StateFlow<T>.safeCollectAsRetainedState(
     context: CoroutineContext = EmptyCoroutineContext,
 ): State<R> {
-    return safeCollectAsState(value, context)
+    return safeCollectAsRetainedState(value, context)
 }

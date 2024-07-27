@@ -1,0 +1,50 @@
+name: stage-app-push
+
+on:
+  workflow_run:
+    workflows:
+      - build
+    types:
+      - completed
+
+# Disable all permissions. We have to enable required permissions at job-level.
+permissions: {}
+
+jobs:
+  stage-default:
+    if: >
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.conclusion == 'success'
+
+    permissions:
+      actions: read # for listing workflow run artifacts
+      contents: read # for checkout
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+        with:
+          repository: droidkaigi/conference-app-2024
+          ref: gh-actions
+          path: gh-actions
+      - name: Download build outputs (APKs)
+        uses: actions/download-artifact@v4.1.8
+        with:
+          name: build-outputs
+          path: ~/build-outputs
+      - uses: ./gh-actions/actions/find-files
+        id: find-dev-debug-apk
+        with:
+          pattern: "~/build-outputs/**/app-android-dev-debug.apk"
+      - uses: jmatsu/dg-upload-app-action@v0.2
+        id: upload
+        with:
+          app_owner_name: droidkaigi
+          api_token: ${{ secrets.DEPLOYGATE_API_TOKEN }}
+          app_file_path: ${{ fromJSON(steps.find-dev-debug-apk.outputs.paths)[0] }}
+          message: GitHub Actions have staged an artifact of ${{ github.ref }} / ${{ github.sha }}
+          distribution_find_by: name
+          distribution_id: ${{ format('staging/{0}', github.ref) }}
+          release_note: ${{ format('[main] Workflow {0}/{1} based on {2}', github.run_id , github.run_number , github.sha) }}
+          pin: false

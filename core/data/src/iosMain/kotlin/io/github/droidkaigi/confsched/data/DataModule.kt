@@ -1,8 +1,6 @@
 package io.github.droidkaigi.confsched.data
 
 import de.jensklingenberg.ktorfit.Ktorfit
-import io.github.droidkaigi.confsched.data.achievements.AchievementsDataStore
-import io.github.droidkaigi.confsched.data.achievements.DefaultAchievementRepository
 import io.github.droidkaigi.confsched.data.auth.AuthApi
 import io.github.droidkaigi.confsched.data.auth.DefaultAuthApi
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
@@ -21,7 +19,6 @@ import io.github.droidkaigi.confsched.data.staff.DefaultStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.DefaultStaffRepository
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
 import io.github.droidkaigi.confsched.data.user.UserDataStore
-import io.github.droidkaigi.confsched.model.AchievementRepository
 import io.github.droidkaigi.confsched.model.ContributorsRepository
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.SponsorsRepository
@@ -93,7 +90,7 @@ public val dataModule: Module = module {
                     create = false,
                     error = null,
                 )
-                requireNotNull(documentDirectory).path + "/confsched2023.preferences_pb"
+                requireNotNull(documentDirectory).path + "/confsched2024.preferences_pb"
             },
         )
         UserDataStore(dataStore)
@@ -109,26 +106,10 @@ public val dataModule: Module = module {
                     create = false,
                     error = null,
                 )
-                requireNotNull(documentDirectory).path + "/confsched2023.cache.preferences_pb"
+                requireNotNull(documentDirectory).path + "/confsched2024.cache.preferences_pb"
             },
         )
         SessionCacheDataStore(dataStore, get())
-    }
-    single {
-        val dataStore = createDataStore(
-            coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
-            producePath = {
-                val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
-                    directory = NSDocumentDirectory,
-                    inDomain = NSUserDomainMask,
-                    appropriateForURL = null,
-                    create = false,
-                    error = null,
-                )
-                requireNotNull(documentDirectory).path + "/confsched2023.achievements.preferences_pb"
-            },
-        )
-        AchievementsDataStore(dataStore)
     }
 
     singleOf(::DefaultAuthApi) bind AuthApi::class
@@ -138,7 +119,6 @@ public val dataModule: Module = module {
     singleOf(::DefaultStaffApiClient) bind StaffApiClient::class
 
     singleOf(::NetworkService)
-    singleOf(::DefaultAchievementRepository) bind AchievementRepository::class
     singleOf(::DefaultSessionsRepository) bind SessionsRepository::class
     singleOf(::DefaultContributorsRepository) bind ContributorsRepository::class
     singleOf(::DefaultStaffRepository) bind StaffRepository::class
@@ -146,7 +126,6 @@ public val dataModule: Module = module {
     single<Repositories> {
         DefaultRepositories(
             mapOf(
-                AchievementRepository::class to get<AchievementRepository>(),
                 SessionsRepository::class to get<SessionsRepository>(),
                 ContributorsRepository::class to get<ContributorsRepository>(),
                 StaffRepository::class to get<StaffRepository>(),
