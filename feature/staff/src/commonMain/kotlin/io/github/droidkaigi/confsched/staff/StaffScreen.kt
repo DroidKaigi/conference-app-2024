@@ -67,8 +67,8 @@ data class StaffUiState(
 @Composable
 fun StaffScreen(
     onNavigationIconClick: () -> Unit,
-    modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
+    modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
     val eventEmitter = rememberEventEmitter<StaffScreenEvent>()
@@ -96,9 +96,9 @@ fun StaffScreen(
     uiState: StaffUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
+    isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
-    isTopAppBarHidden: Boolean,
 ) {
     val scrollBehavior =
         if (!isTopAppBarHidden) {
