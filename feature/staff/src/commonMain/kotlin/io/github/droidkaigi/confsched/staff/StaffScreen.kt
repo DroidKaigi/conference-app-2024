@@ -91,10 +91,10 @@ fun StaffScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StaffScreen(
-    modifier: Modifier = Modifier,
     uiState: StaffUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
