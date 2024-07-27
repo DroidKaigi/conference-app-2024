@@ -45,7 +45,7 @@ extension RoomTag.Room {
 
     var color: Color {
         switch self {
-        case .flamingo: AssetColors. .Custom.flamingo.swiftUIColor
+        case .flamingo: AssetColors.Custom.flamingo.swiftUIColor
         case .giraffe: AssetColors.Custom.giraffe.swiftUIColor
         case .hedgehog: AssetColors.Custom.hedgehog.swiftUIColor
         case .iguana: AssetColors.Custom.iguana.swiftUIColor
