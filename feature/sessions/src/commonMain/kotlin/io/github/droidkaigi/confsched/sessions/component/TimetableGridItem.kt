@@ -40,7 +40,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.md_theme_light_outline
 import io.github.droidkaigi.confsched.model.MultiLangText
-import io.github.droidkaigi.confsched.model.RoomType.RoomC
+import io.github.droidkaigi.confsched.model.RoomType.RoomH
 import io.github.droidkaigi.confsched.model.TimetableAsset
 import io.github.droidkaigi.confsched.model.TimetableCategory
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -460,7 +460,7 @@ fun PreviewTimetableGridItemWelcomeTalk() {
                         title = MultiLangText("その他", "Other"),
                     ),
                     sessionType = TimetableSessionType.WELCOME_TALK,
-                    room = TimetableRoom(3, MultiLangText("Chipmunk", "Chipmunk"), RoomC, 1),
+                    room = TimetableRoom(3, MultiLangText("Hedgehog", "Hedgehog"), RoomH, 1),
                     targetAudience = "TBW",
                     language = TimetableLanguage(
                         langOfSpeaker = "JAPANESE",
