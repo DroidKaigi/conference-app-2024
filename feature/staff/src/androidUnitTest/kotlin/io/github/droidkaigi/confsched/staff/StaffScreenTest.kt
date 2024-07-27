@@ -48,7 +48,7 @@ class StaffScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("TODO") {
+                        itShould("show staff screen") {
                             captureScreenWithChecks(
                                 checks = todoChecks("This screen is still empty now. Please add some checks."),
                             )
@@ -64,7 +64,7 @@ class StaffScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("TODO") {
+                        itShould("show snackbar") {
                             captureScreenWithChecks(
                                 checks = todoChecks("This screen is still empty now. Please add some checks."),
                             )
