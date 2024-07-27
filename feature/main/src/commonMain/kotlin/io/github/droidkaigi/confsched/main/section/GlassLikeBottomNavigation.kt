@@ -61,7 +61,7 @@ fun GlassLikeBottomNavigation(
     onTabSelected: (MainScreenTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(1) }
+    var selectedTabIndex by remember { mutableIntStateOf(0) }
     Box(
         modifier = modifier
             .padding(vertical = 24.dp, horizontal = 64.dp)

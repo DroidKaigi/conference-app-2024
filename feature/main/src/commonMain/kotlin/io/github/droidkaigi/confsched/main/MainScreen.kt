@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
@@ -126,42 +125,36 @@ sealed class IconRepresentation {
 
 enum class MainScreenTab(
     val icon: IconRepresentation.Vector,
-    val selectedIcon: IconRepresentation,
     val label: String,
     val contentDescription: String,
     val testTag: String = "mainScreenTab:$label",
 ) {
     Timetable(
         icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         label = MainStrings.Timetable.asString(),
         contentDescription = MainStrings.Timetable.asString(),
     ),
 
     EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Map),
         label = MainStrings.EventMap.asString(),
         contentDescription = MainStrings.EventMap.asString(),
     ),
 
     Favorite(
         icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Favorite),
         label = MainStrings.EventMap.asString(),
         contentDescription = MainStrings.EventMap.asString(),
     ),
 
     About(
         icon = IconRepresentation.Vector(Icons.Outlined.Info),
-        selectedIcon = IconRepresentation.Vector(Icons.Filled.Info),
         label = MainStrings.About.asString(),
         contentDescription = MainStrings.About.asString(),
     ),
 
     ProfileCard(
         icon = IconRepresentation.Vector(Icons.Outlined.People),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.People),
         label = MainStrings.ProfileCard.asString(),
         contentDescription = MainStrings.ProfileCard.asString(),
     ),
