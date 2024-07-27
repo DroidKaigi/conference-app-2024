@@ -233,18 +233,17 @@ private class ExternalNavController(
 
     /**
      * Navigate to Calendar Registration
-     * @param timeTableItem カレンダー登録に必要なタイムラインアイテムの情報
      */
-    fun navigateToCalendarRegistration(timeTableItem: TimetableItem) {
+    fun navigateToCalendarRegistration(timetableItem: TimetableItem) {
         val calendarIntent = Intent(Intent.ACTION_INSERT).apply {
             data = CalendarContract.Events.CONTENT_URI
             putExtras(
                 bundleOf(
-                    CalendarContract.EXTRA_EVENT_BEGIN_TIME to timeTableItem.startsAt.toEpochMilliseconds(),
-                    CalendarContract.EXTRA_EVENT_END_TIME to timeTableItem.endsAt.toEpochMilliseconds(),
-                    CalendarContract.Events.TITLE to "[${timeTableItem.room.name.currentLangTitle}] ${timeTableItem.title.currentLangTitle}",
-                    CalendarContract.Events.DESCRIPTION to timeTableItem.url,
-                    CalendarContract.Events.EVENT_LOCATION to timeTableItem.room.name.currentLangTitle,
+                    CalendarContract.EXTRA_EVENT_BEGIN_TIME to timetableItem.startsAt.toEpochMilliseconds(),
+                    CalendarContract.EXTRA_EVENT_END_TIME to timetableItem.endsAt.toEpochMilliseconds(),
+                    CalendarContract.Events.TITLE to "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.title.currentLangTitle}",
+                    CalendarContract.Events.DESCRIPTION to timetableItem.url,
+                    CalendarContract.Events.EVENT_LOCATION to timetableItem.room.name.currentLangTitle,
                 ),
             )
         }
@@ -260,11 +259,11 @@ private class ExternalNavController(
         context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
     }
 
-    fun onShareClick(timeTableItem: TimetableItem) {
+    fun onShareClick(timetableItem: TimetableItem) {
         shareNavigator.share(
-            "[${timeTableItem.room.name.currentLangTitle}] ${timeTableItem.startsTimeString} - ${timeTableItem.endsTimeString}\n" +
-                "${timeTableItem.title.currentLangTitle}\n" +
-                timeTableItem.url,
+            "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}\n" +
+                "${timetableItem.title.currentLangTitle}\n" +
+                timetableItem.url,
         )
     }
 

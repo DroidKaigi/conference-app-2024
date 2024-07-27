@@ -53,18 +53,18 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
         SpeakerResponse(fullName = "ry", id = "2", isTopSpeaker = true),
     )
     val rooms = listOf(
-        RoomResponse(name = LocaledResponse(ja = "Chipmunk ja", en = "Chipmunk"), id = 1, sort = 1),
+        RoomResponse(name = LocaledResponse(ja = "Hedgehog ja", en = "Hedgehog"), id = 1, sort = 1),
         RoomResponse(
-            name = LocaledResponse(ja = "Arctic Fox ja", en = "Arctic Fox"),
+            name = LocaledResponse(ja = "Flamingo ja", en = "Flamingo"),
             id = 2,
             sort = 2,
         ),
         RoomResponse(
-            name = LocaledResponse(ja = "Bumblebee ja", en = "Bumblebee"),
+            name = LocaledResponse(ja = "Giraffe ja", en = "Giraffe"),
             id = 3,
             sort = 3,
         ),
-        RoomResponse(name = LocaledResponse(ja = "Dolphin ja", en = "Dolphin"), id = 4, sort = 3),
+        RoomResponse(name = LocaledResponse(ja = "Iguana ja", en = "Iguana"), id = 4, sort = 3),
     )
     val categories = listOf(
         CategoryResponse(

@@ -13,68 +13,66 @@ public struct TimetableView: View {
     @State var switchModeIcon: String = "square.grid.2x2"
     
     public var body: some View {
-        NavigationStack {
-            VStack {
-                HStack {
-                    ForEach(DayTab.allCases) { tabItem in
-                        Button(action: {
-                            store.send(.view(.selectDay(tabItem)))
-                        }, label: {
-                            //TODO: Only selected button should be green and underlined
-                            Text(tabItem.rawValue).foregroundStyle(
-                                AssetColors.Custom.arcticFox.swiftUIColor)
-                                .underline()
-                        })
-                    }
-                    Spacer()
-                }.padding(5)
-                switch timetableMode {
-                case TimetableMode.list:
-                    TimetableListView(store: store)
-                case TimetableMode.grid:
-                    Text("Grid view placeholder")
-                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+        VStack {
+            HStack {
+                ForEach(DayTab.allCases) { tabItem in
+                    Button(action: {
+                        store.send(.view(.selectDay(tabItem)))
+                    }, label: {
+                        //TODO: Only selected button should be green and underlined
+                        Text(tabItem.rawValue).foregroundStyle(
+                            AssetColors.Custom.flamingo.swiftUIColor)
+                            .underline()
+                    })
                 }
                 Spacer()
+            }.padding(5)
+            switch timetableMode {
+            case TimetableMode.list:
+                TimetableListView(store: store)
+            case TimetableMode.grid:
+                Text("Grid view placeholder")
+                    .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
             }
-            
-            .background(AssetColors.Surface.surface.swiftUIColor)
-            .frame(maxWidth: .infinity)
-            .toolbar{
-                ToolbarItem(placement: .topBarLeading) {
-                    Text("Timetable")
-                        .textStyle(.headlineMedium)
-                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                    
-                }
-                ToolbarItem(placement:.topBarTrailing) {
-                    HStack {
-                        Button {
-                            // TODO: Search?
-                        } label: {
-                            Group {
-                                Image(systemName:"magnifyingglass").foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                            }
-                            .frame(width: 40, height: 40)
-                        }
-                        
-                        Button {
-                            switch timetableMode {
-                            case .list:
-                                timetableMode = .grid
-                                switchModeIcon = "list.bullet.indent"
-                            case .grid:
-                                timetableMode = .list
-                                switchModeIcon = "square.grid.2x2"
-                            }
-                        } label: {
-                            Image(systemName:switchModeIcon).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                            .frame(width: 40, height: 40)
-                        }
-                    }
-                }
+            Spacer()
+        }
+        
+        .background(AssetColors.Surface.surface.swiftUIColor)
+        .frame(maxWidth: .infinity)
+        .toolbar{
+            ToolbarItem(placement: .topBarLeading) {
+                Text("Timetable")
+                    .textStyle(.headlineMedium)
+                    .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 
             }
+            ToolbarItem(placement:.topBarTrailing) {
+                HStack {
+                    Button {
+                        // TODO: Search?
+                    } label: {
+                        Group {
+                            Image(systemName:"magnifyingglass").foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                        }
+                        .frame(width: 40, height: 40)
+                    }
+                    
+                    Button {
+                        switch timetableMode {
+                        case .list:
+                            timetableMode = .grid
+                            switchModeIcon = "list.bullet.indent"
+                        case .grid:
+                            timetableMode = .list
+                            switchModeIcon = "square.grid.2x2"
+                        }
+                    } label: {
+                        Image(systemName:switchModeIcon).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                        .frame(width: 40, height: 40)
+                    }
+                }
+            }
+            
         }
     }
 }
@@ -160,14 +158,14 @@ struct TagView: View {
     var body: some View {
         HStack {
             if highlight {
-                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
                     .padding(-3)
             }
-            Text(tagText).foregroundStyle(highlight ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+            Text(tagText).foregroundStyle(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
         }
         .padding(
             EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
-        .border(highlight ? AssetColors.Custom.arcticFox.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+        .border(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
         .padding(-2)
     }
 }
@@ -179,7 +177,7 @@ struct PhotoView: View {
     
     var body: some View {
         HStack {
-            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
             Text(name)
         }
     }

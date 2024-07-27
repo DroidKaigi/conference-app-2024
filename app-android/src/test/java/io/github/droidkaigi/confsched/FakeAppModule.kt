@@ -18,7 +18,7 @@ class FakeAppModule {
     @Singleton
     fun provideClockProvider(): ClockProvider = object : ClockProvider {
         override fun clock(): Clock = object : Clock {
-            override fun now() = Instant.parse("2023-09-14T10:00:00.00Z")
+            override fun now() = Instant.parse("2024-09-12T11:00:00.00Z")
         }
     }
 }

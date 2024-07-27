@@ -19,7 +19,7 @@ fun createSampleEventMapEvent(
     isFavorite: Boolean = false,
 ) = EventMapEvent(
     name = "ランチミートアップ",
-    roomName = "Arctic Fox",
+    roomName = "Iguana",
     dateLabel = "DAY1",
     isFavorite = isFavorite,
     description = "様々なテーマごとに集まって、一緒にランチを食べながらお話ししましょう。席に限りがありますので、お弁当受け取り後お早めにお越しください。",

@@ -1,3 +1,5 @@
+![image](https://github.com/user-attachments/assets/695c1709-2cd4-4189-896e-75b2c1bed9b3)
+
 # DroidKaigi 2024 official app
 
 ## Development

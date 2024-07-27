@@ -113,7 +113,6 @@ dependencies {
     implementation(libs.androidxBrowser)
     implementation(libs.androidxWindow)
     implementation(libs.kermit)
-    implementation(libs.androidxSplashScreen)
     implementation(libs.firebaseDynamicLinks)
     debugImplementation(projects.core.testingManifest)
     testImplementation(projects.core.testing)

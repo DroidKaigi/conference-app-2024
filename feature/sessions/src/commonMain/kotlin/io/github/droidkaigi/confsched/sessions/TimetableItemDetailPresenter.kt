@@ -88,6 +88,7 @@ fun timetableItemDetailPresenter(
         isBookmarked = bookmarked,
         isLangSelectable = timetableItem.sessionType == NORMAL,
         currentLang = selectedDescriptionLanguage,
+        roomThemeKey = timetableItem.room.getThemeKey(),
         userMessageStateHolder = userMessageStateHolder,
     )
 }

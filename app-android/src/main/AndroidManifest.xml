@@ -24,7 +24,7 @@
         <activity
             android:name="io.github.droidkaigi.confsched.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.DroidKaigi.SplashTheme">
+            android:theme="@style/Theme.KaigiApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

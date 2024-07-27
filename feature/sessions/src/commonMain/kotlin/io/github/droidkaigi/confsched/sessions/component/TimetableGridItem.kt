@@ -36,10 +36,11 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.designsystem.theme.hallColors
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.md_theme_light_outline
 import io.github.droidkaigi.confsched.model.MultiLangText
-import io.github.droidkaigi.confsched.model.RoomType.RoomC
+import io.github.droidkaigi.confsched.model.RoomType.RoomH
 import io.github.droidkaigi.confsched.model.TimetableAsset
 import io.github.droidkaigi.confsched.model.TimetableCategory
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -81,122 +82,108 @@ fun TimetableGridItem(
     val speaker = timetableItem.speakers.firstOrNull()
     val speakers = timetableItem.speakers
 
-    val hallColor = hallColors()
-    val backgroundColor = timetableItem.room.getColor()
-    val textColor = if (speaker != null) {
-        hallColor.hallText
-    } else {
-        hallColor.hallTextWhenWithoutSpeakers
-    }
-
     val height = with(localDensity) { gridItemHeightPx.toDp() }
-    val titleTextStyle = MaterialTheme.typography.labelLarge.let {
-        check(it.fontSize.isSp)
-        val (titleFontSize, titleLineHeight) = calculateFontSizeAndLineHeight(
-            textStyle = it,
-            localDensity = localDensity,
-            gridItemHeightPx = gridItemHeightPx,
-            speaker = speaker,
-            titleLength = timetableItem.title.currentLangTitle.length,
-        )
-        it.copy(fontSize = titleFontSize, lineHeight = titleLineHeight, color = textColor)
-    }
 
-    Column(
-        modifier = modifier
-            .background(
-                color = if (speakers.isEmpty()) {
-                    MaterialTheme.colorScheme.surfaceVariant
-                } else {
-                    backgroundColor
-                },
-                shape = RoundedCornerShape(4.dp),
+    ProvideRoomTheme(timetableItem.room.getThemeKey()) {
+        val titleTextStyle = MaterialTheme.typography.labelLarge.let {
+            check(it.fontSize.isSp)
+            val (titleFontSize, titleLineHeight) = calculateFontSizeAndLineHeight(
+                textStyle = it,
+                localDensity = localDensity,
+                gridItemHeightPx = gridItemHeightPx,
+                speaker = speaker,
+                titleLength = timetableItem.title.currentLangTitle.length,
             )
-            .width(TimetableGridItemSizes.width)
-            .height(height)
-            .clickable {
-                onTimetableItemClick(timetableItem)
-            }
-            .padding(TimetableGridItemSizes.padding),
-    ) {
-        Column(
-            modifier = Modifier.weight(3f),
-            verticalArrangement = Arrangement.Top,
-        ) {
-            Text(
-                modifier = Modifier.weight(1f, fill = false),
-                text = timetableItem.title.currentLangTitle,
-                style = titleTextStyle,
-                overflow = TextOverflow.Ellipsis,
-            )
-
-            Row(
-                modifier = Modifier
-                    .weight(1f, fill = false)
-                    .padding(top = TimetableGridItemSizes.titleToSchedulePadding),
-            ) {
-                Icon(
-                    modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
-                    imageVector = Icons.Default.Schedule,
-                    tint = if (speaker != null) {
-                        hallColor.hallText
-                    } else {
-                        hallColor.hallTextWhenWithoutSpeakers
-                    },
-                    contentDescription = ScheduleIcon.asString(),
-                )
-                Spacer(modifier = Modifier.width(4.dp))
-                var scheduleTextStyle = MaterialTheme.typography.bodySmall
-                if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
-                    scheduleTextStyle = scheduleTextStyle.copy(fontSize = titleTextStyle.fontSize)
-                }
-                Text(
-                    text = "${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}",
-                    style = scheduleTextStyle,
-                    color = textColor,
-                )
-            }
+            it.copy(fontSize = titleFontSize, lineHeight = titleLineHeight, color = LocalRoomTheme.current.primaryColor)
         }
-
-        val shouldShowError = timetableItem is Session && timetableItem.message != null
-
-        if (speakers.isNotEmpty() || shouldShowError) {
-            Row(
-                modifier = Modifier.weight(1f, fill = false),
-                verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = modifier
+                .background(
+                    color = LocalRoomTheme.current.containerColor,
+                    shape = RoundedCornerShape(4.dp),
+                )
+                .width(TimetableGridItemSizes.width)
+                .height(height)
+                .clickable {
+                    onTimetableItemClick(timetableItem)
+                }
+                .padding(TimetableGridItemSizes.padding),
+        ) {
+            Column(
+                modifier = Modifier.weight(3f),
+                verticalArrangement = Arrangement.Top,
             ) {
-                if (speakers.isNotEmpty()) {
-                    val speakerModifier = Modifier.weight(1f)
-                    if (speakers.size == 1) {
-                        var speakerTextStyle = MaterialTheme.typography.labelMedium
-                        if (titleTextStyle.fontSize < speakerTextStyle.fontSize) {
-                            speakerTextStyle =
-                                speakerTextStyle.copy(fontSize = titleTextStyle.fontSize)
+                Text(
+                    modifier = Modifier.weight(1f, fill = false),
+                    text = timetableItem.title.currentLangTitle,
+                    style = titleTextStyle,
+                    overflow = TextOverflow.Ellipsis,
+                )
+
+                Row(
+                    modifier = Modifier
+                        .weight(1f, fill = false)
+                        .padding(top = TimetableGridItemSizes.titleToSchedulePadding),
+                ) {
+                    Icon(
+                        modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
+                        imageVector = Icons.Default.Schedule,
+                        contentDescription = ScheduleIcon.asString(),
+                    )
+                    Spacer(modifier = Modifier.width(4.dp))
+                    var scheduleTextStyle = MaterialTheme.typography.bodySmall
+                    if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
+                        scheduleTextStyle =
+                            scheduleTextStyle.copy(fontSize = titleTextStyle.fontSize)
+                    }
+                    Text(
+                        text = "${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}",
+                        style = scheduleTextStyle,
+                        color = LocalRoomTheme.current.primaryColor,
+                    )
+                }
+            }
+
+            val shouldShowError = timetableItem is Session && timetableItem.message != null
+
+            if (speakers.isNotEmpty() || shouldShowError) {
+                Row(
+                    modifier = Modifier.weight(1f, fill = false),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    if (speakers.isNotEmpty()) {
+                        val speakerModifier = Modifier.weight(1f)
+                        if (speakers.size == 1) {
+                            var speakerTextStyle = MaterialTheme.typography.labelMedium
+                            if (titleTextStyle.fontSize < speakerTextStyle.fontSize) {
+                                speakerTextStyle =
+                                    speakerTextStyle.copy(fontSize = titleTextStyle.fontSize)
+                            }
+                            SingleSpeaker(
+                                speaker = speakers.first(),
+                                textColor = MaterialTheme.colorScheme.onSurface,
+                                textStyle = speakerTextStyle,
+                                modifier = speakerModifier,
+                            )
+                        } else {
+                            MultiSpeakers(
+                                speakers = speakers,
+                                modifier = speakerModifier,
+                            )
                         }
-                        SingleSpeaker(
-                            speaker = speakers.first(),
-                            textColor = textColor,
-                            textStyle = speakerTextStyle,
-                            modifier = speakerModifier,
-                        )
                     } else {
-                        MultiSpeakers(
-                            speakers = speakers,
-                            modifier = speakerModifier,
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+
+                    if (shouldShowError) {
+                        Icon(
+                            modifier = Modifier
+                                .size(TimetableGridItemSizes.errorHeight),
+                            imageVector = Icons.Default.Error,
+                            contentDescription = SessionsStrings.ErrorIcon.asString(),
+                            tint = MaterialTheme.colorScheme.errorContainer,
                         )
                     }
-                } else {
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-
-                if (shouldShowError) {
-                    Icon(
-                        modifier = Modifier
-                            .size(TimetableGridItemSizes.errorHeight),
-                        imageVector = Icons.Default.Error,
-                        contentDescription = SessionsStrings.ErrorIcon.asString(),
-                        tint = MaterialTheme.colorScheme.errorContainer,
-                    )
                 }
             }
         }
@@ -473,7 +460,7 @@ fun PreviewTimetableGridItemWelcomeTalk() {
                         title = MultiLangText("その他", "Other"),
                     ),
                     sessionType = TimetableSessionType.WELCOME_TALK,
-                    room = TimetableRoom(3, MultiLangText("Chipmunk", "Chipmunk"), RoomC, 1),
+                    room = TimetableRoom(3, MultiLangText("Hedgehog", "Hedgehog"), RoomH, 1),
                     targetAudience = "TBW",
                     language = TimetableLanguage(
                         langOfSpeaker = "JAPANESE",

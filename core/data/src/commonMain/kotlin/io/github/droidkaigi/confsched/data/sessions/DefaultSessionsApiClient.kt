@@ -8,12 +8,12 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionAssetRespons
 import io.github.droidkaigi.confsched.data.sessions.response.SessionMessageResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.model.MultiLangText
-import io.github.droidkaigi.confsched.model.RoomType.RoomA
-import io.github.droidkaigi.confsched.model.RoomType.RoomB
-import io.github.droidkaigi.confsched.model.RoomType.RoomC
-import io.github.droidkaigi.confsched.model.RoomType.RoomD
-import io.github.droidkaigi.confsched.model.RoomType.RoomDE
-import io.github.droidkaigi.confsched.model.RoomType.RoomE
+import io.github.droidkaigi.confsched.model.RoomType.RoomF
+import io.github.droidkaigi.confsched.model.RoomType.RoomG
+import io.github.droidkaigi.confsched.model.RoomType.RoomH
+import io.github.droidkaigi.confsched.model.RoomType.RoomI
+import io.github.droidkaigi.confsched.model.RoomType.RoomIJ
+import io.github.droidkaigi.confsched.model.RoomType.RoomJ
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableAsset
 import io.github.droidkaigi.confsched.model.TimetableCategory
@@ -174,13 +174,13 @@ private fun LocaledResponse.toMultiLangText() =
 private fun SessionMessageResponse.toMultiLangText() = MultiLangText(jaTitle = ja, enTitle = en)
 private fun SessionAssetResponse.toTimetableAsset() = TimetableAsset(videoUrl, slideUrl)
 private fun LocaledResponse.toRoomType() = when (en?.lowercase()) {
-    "arctic fox" -> RoomA
-    "bumblebee" -> RoomB
-    "chipmunk" -> RoomC
-    "dolphin" -> RoomD
-    "electric eel" -> RoomE
+    "flamingo" -> RoomF
+    "giraffe" -> RoomG
+    "hedgehog" -> RoomH
+    "iguana" -> RoomI
+    "jellyfish" -> RoomJ
     // Assume the room on the third day.
-    else -> RoomDE
+    else -> RoomIJ
 }
 
 internal fun String.toInstantAsJST(): Instant {

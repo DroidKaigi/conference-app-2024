@@ -31,7 +31,7 @@ struct SessionDescriptionView: View {
                 } label: {
                     Text(String(localized: "TimeTableDetailReadMore", bundle: .module))
                         .textStyle(.labelLarge)
-                        .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+                        .foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
                         .frame(height: 40)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .overlay {

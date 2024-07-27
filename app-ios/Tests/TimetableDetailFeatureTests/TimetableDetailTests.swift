@@ -42,7 +42,7 @@ final class TimetableDetail_iosTests: XCTestCase {
         let store = TestStore(initialState: TimetableDetailReducer.State(timetableItem: TimetableItem.Session.companion.fake(), isBookmarked: false)) {
             TimetableDetailReducer()
         }
-        let url = URL(string: "https://github.com/DroidKaigi/conference-app-2023")!
+        let url = URL(string: "https://github.com/DroidKaigi/conference-app-2024")!
         await store.send(.view(.urlTapped(url))) {
             $0.url = IdentifiableURL(url)
         }

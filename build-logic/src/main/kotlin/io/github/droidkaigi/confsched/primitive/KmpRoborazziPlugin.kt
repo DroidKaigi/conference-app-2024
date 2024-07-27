@@ -7,6 +7,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.gradle.api.tasks.testing.logging.TestLogEvent.FAILED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.PASSED
 import org.gradle.api.tasks.testing.logging.TestLogEvent.SKIPPED
+import org.gradle.api.tasks.testing.logging.TestLogEvent.STARTED
 import org.gradle.kotlin.dsl.getByType
 import kotlin.collections.listOf
 import kotlin.collections.set
@@ -31,7 +32,7 @@ class KmpRoborazziPlugin : Plugin<Project> {
 
                                 test.maxParallelForks = Runtime.getRuntime().availableProcessors()
                                 test.testLogging {
-                                    events.addAll(listOf(PASSED, SKIPPED, FAILED))
+                                    events.addAll(listOf(STARTED, PASSED, SKIPPED, FAILED))
                                     showCauses = true
                                     showExceptions = true
                                     exceptionFormat = FULL
