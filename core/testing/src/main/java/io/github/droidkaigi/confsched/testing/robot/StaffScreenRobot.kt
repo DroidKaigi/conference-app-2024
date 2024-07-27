@@ -11,9 +11,8 @@ import javax.inject.Inject
 class StaffScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val staffServerRobot: DefaultStaffServerRobot,
-): ScreenRobot by screenRobot,
-    StaffServerRobot by staffServerRobot
-{
+) : ScreenRobot by screenRobot,
+    StaffServerRobot by staffServerRobot {
     suspend fun setupScreenContent() {
         robotTestRule.setContent {
             KaigiTheme {

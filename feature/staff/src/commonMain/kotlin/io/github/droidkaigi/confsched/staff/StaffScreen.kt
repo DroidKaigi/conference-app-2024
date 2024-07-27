@@ -123,9 +123,9 @@ fun StaffScreen(
     ) { padding ->
         LazyColumn(
             modifier = Modifier
-                            .fillMaxSize()
-                            .padding(padding)
-                            .nestedScroll(scrollBehavior.nestedScrollConnection),
+                .fillMaxSize()
+                .padding(padding)
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
         ) {
             items(uiState.staff) { staff ->
                 StaffItem(
