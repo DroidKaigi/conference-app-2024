@@ -1,8 +1,6 @@
-import SwiftUI
-
-#if canImport(App)
 import App
 import ComposableArchitecture
+import SwiftUI
 import Theme
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
@@ -29,18 +27,4 @@ struct DroidKaigi2024AppApp: App {
         }
     }
 }
-
-#elseif canImport(AppExperiments)
-import AppExperiments
-
-@main
-struct DroidKaigi2024AppApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
-}
-
-#endif
 

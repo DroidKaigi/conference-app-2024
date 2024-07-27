@@ -1,7 +1,5 @@
 package io.github.droidkaigi.confsched.model
 
-import androidx.compose.ui.graphics.Color
-
 @Immutable
 data class TimetableRooms(val rooms: List<TimetableRoom>)
 
@@ -18,29 +16,7 @@ data class TimetableRoom(
         return sort.compareTo(other.sort)
     }
 
-    // TODO: These colors need to be reviewed/updated
-    fun getColor(): Color {
-        return when (name.enTitle) {
-            "Hedgehog" -> {
-                Color(0xFFFF974B)
-            }
-            "Iguana" -> {
-                Color(0xFFBB85FF)
-            }
-            "Giraffe" -> {
-                Color(0xFFDDD33C)
-            }
-            "Flamingo" -> {
-                Color(0xFF45E761)
-            }
-            "Jellyfish" -> {
-                Color(0xFF45E761)
-            }
-            else -> {
-                Color.White
-            }
-        }
-    }
+    fun getThemeKey(): String = name.enTitle.lowercase()
 
     // TODO: Names are updated but the shapes need to be checked
     fun getShape(): Shapes {

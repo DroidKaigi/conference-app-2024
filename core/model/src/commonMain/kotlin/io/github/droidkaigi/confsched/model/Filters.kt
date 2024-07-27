@@ -1,7 +1,7 @@
 package io.github.droidkaigi.confsched.model
 
 public data class Filters(
-    val days: List<DroidKaigi2023Day> = emptyList(),
+    val days: List<DroidKaigi2024Day> = emptyList(),
     val categories: List<TimetableCategory> = emptyList(),
     val sessionTypes: List<TimetableSessionType> = emptyList(),
     val languages: List<Lang> = emptyList(),

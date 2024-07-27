@@ -1,0 +1,58 @@
+name: detekt-comment
+
+on:
+  workflow_run:
+    workflows: ["detekt"]
+    types:
+      - completed
+
+permissions:
+  actions: read
+  pull-requests: write
+  contents: read
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.conclusion == 'failure'
+    steps:
+      - name: Download PR event artifact
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            const fs = require('fs')
+            const artifacts = await github.rest.actions.listWorkflowRunArtifacts({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: ${{ github.event.workflow_run.id }}
+            })
+            const matchArtifact = artifacts.data.artifacts.find(artifact => artifact.name === "pr")
+            const download = await github.rest.actions.downloadArtifact({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              artifact_id: matchArtifact.id,
+              archive_format: 'zip'
+            })
+            fs.writeFileSync('pr.zip', Buffer.from(download.data))
+
+      - run: unzip pr.zip
+
+      - name: Get PR number
+        id: pr
+        run: |
+          PR_NUMBER=$(jq -r '.number' event.json)
+          echo "number=$PR_NUMBER" >> $GITHUB_OUTPUT
+
+      - name: Comment PR
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: ${{ steps.pr.outputs.number }},
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: "Detekt check failed. Please run `./gradlew detekt --auto-correct` to fix the issues."
+            })
+

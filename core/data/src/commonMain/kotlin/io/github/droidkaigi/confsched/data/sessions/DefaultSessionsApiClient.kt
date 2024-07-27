@@ -34,7 +34,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 
 internal interface SessionApi {
-    @GET("events/droidkaigi2023/timetable")
+    @GET("events/droidkaigi2024/timetable")
     suspend fun getTimetable(): SessionsAllResponse
 }
 

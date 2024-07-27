@@ -25,7 +25,7 @@ public sealed class TimetableItem {
     public abstract val asset: TimetableAsset
     public abstract val levels: PersistentList<String>
     public abstract val speakers: PersistentList<TimetableSpeaker>
-    public val day: DroidKaigi2023Day? get() = DroidKaigi2023Day.ofOrNull(startsAt)
+    public val day: DroidKaigi2024Day? get() = DroidKaigi2024Day.ofOrNull(startsAt)
 
     @Serializable
     public data class Session(

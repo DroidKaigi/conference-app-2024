@@ -15,13 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import conference_app_2024.feature.sessions.generated.resources.Res
 import conference_app_2024.feature.sessions.generated.resources.calendar_add_on
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TimetableItemDetailBottomAppBar(
@@ -64,8 +63,7 @@ fun TimetableItemDetailBottomAppBar(
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 fun TimetableItemDetailBottomAppBarPreview() {
     KaigiTheme {
         Surface {
@@ -81,8 +79,7 @@ fun TimetableItemDetailBottomAppBarPreview() {
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
+@Preview
 fun TimetableItemDetailBottomAppBarBookmarkedPreview() {
     KaigiTheme {
         Surface {

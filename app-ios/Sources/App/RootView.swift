@@ -8,6 +8,7 @@ import StaffFeature
 import SwiftUI
 import TimetableDetailFeature
 import TimetableFeature
+import Theme
 
 private enum Tab {
     case timetable
@@ -32,7 +33,7 @@ public struct RootView: View {
                 .tabItem {
                     Label(
                         title: { Text("Timetable") },
-                        icon: { Image(systemName: "42.circle") }
+                        icon: { Image(.icTimetable).renderingMode(.template) }
                     )
                 }
 
@@ -41,7 +42,7 @@ public struct RootView: View {
                 .tabItem {
                     Label(
                         title: { Text("Event Map") },
-                        icon: { Image(systemName: "42.circle") }
+                        icon: { Image(.icMap).renderingMode(.template) }
                     )
                 }
 
@@ -55,7 +56,7 @@ public struct RootView: View {
             .tabItem {
                 Label(
                     title: { Text("Favorite") },
-                    icon: { Image(systemName: "42.circle") }
+                    icon: { Image(.icFav).renderingMode(.template) }
                 )
             }
 
@@ -64,7 +65,7 @@ public struct RootView: View {
                 .tabItem {
                     Label(
                         title: { Text("About") },
-                        icon: { Image(systemName: "42.circle") }
+                        icon: { Image(.icInfo).renderingMode(.template) }
                     )
                 }
 
@@ -73,10 +74,11 @@ public struct RootView: View {
                 .tabItem {
                     Label(
                         title: { Text("ID Card") },
-                        icon: { Image(systemName: "42.circle") }
+                        icon: { Image(.icProfileCard).renderingMode(.template) }
                     )
                 }
         }
+        .tint(AssetColors.Custom.arcticFox.swiftUIColor)
     }
 
     @MainActor

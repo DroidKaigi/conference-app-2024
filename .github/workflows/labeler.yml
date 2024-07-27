@@ -1,0 +1,22 @@
+name: 'PR Labeler'
+
+on:
+  pull_request:
+
+jobs:
+  label:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Add label
+        uses: actions/labeler@v5
+        with:
+          configuration-path: .github/configs/labeler.yml

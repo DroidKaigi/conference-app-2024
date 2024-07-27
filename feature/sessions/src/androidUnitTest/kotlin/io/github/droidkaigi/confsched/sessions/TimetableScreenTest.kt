@@ -9,6 +9,7 @@ import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot
 import io.github.droidkaigi.confsched.testing.runRobot
+import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -69,8 +70,9 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             clickTimetableUiTypeChangeButton()
                         }
                         itShould("change timetable ui type") {
-                            // FIXME: Add check for timetable ui type change
-                            captureScreenWithChecks()
+                            captureScreenWithChecks(
+                                checks = todoChecks("This screen is roughly created. Please add some checks."),
+                            )
                         }
                     }
                 }

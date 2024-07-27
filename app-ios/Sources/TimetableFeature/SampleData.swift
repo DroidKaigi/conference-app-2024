@@ -3,9 +3,14 @@ import Foundation
 public enum DayTab: String, CaseIterable, Identifiable {
     public var id : RawValue { rawValue }
     
-    case day1 = "Day1"
-    case day2 = "Day2"
-    case day3 = "Day3"
+    case workshopDay = "WorkshopDay"
+    case day1 = "Day 1"
+    case day2 = "Day 2"
+}
+
+public enum TimetableMode {
+    case list
+    case grid
 }
 
 public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
@@ -44,7 +49,7 @@ public struct TimetableItem: Equatable, Hashable {
 }
 
 struct SampleData {
-    let day1Results = [
+    let workdayResults = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
             TimetableItem(
                 id: "",
@@ -121,7 +126,7 @@ struct SampleData {
         ])
     ]
     
-    let day2Results = [
+    let day1Results = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
             TimetableItem(
                 id: "",
@@ -194,7 +199,7 @@ struct SampleData {
         ])
     ]
     
-    let day3Results = [
+    let day2Results = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
             TimetableItem(
                 id: "",

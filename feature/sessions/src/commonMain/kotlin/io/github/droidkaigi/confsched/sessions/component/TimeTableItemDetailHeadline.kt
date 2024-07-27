@@ -19,33 +19,31 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.section.TagView
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun TimeTableItemDetailHeadline(
+fun TimetableItemDetailHeadline(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-            .background(Color(0xFF132417))
+            .background(LocalRoomTheme.current.dimColor)
             .padding(8.dp)
             .fillMaxWidth(),
     ) {
         Row {
             TagView(
                 tagText = timetableItem.room.name.currentLangTitle,
-                // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-                tagColor = Color(0xFF45E761),
+                tagColor = LocalRoomTheme.current.primaryColor,
             )
             timetableItem.language.labels.forEach { label ->
                 Spacer(modifier = Modifier.padding(4.dp))
@@ -91,14 +89,15 @@ fun TimeTableItemDetailHeadline(
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
-fun TimeTableItemDetailHeadlinePreview() {
+@Preview
+fun TimetableItemDetailHeadlinePreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailHeadline(
-                timetableItem = TimetableItem.Session.fake(),
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailHeadline(
+                    timetableItem = TimetableItem.Session.fake(),
+                )
+            }
         }
     }
 }

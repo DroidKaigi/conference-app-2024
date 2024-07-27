@@ -3,6 +3,7 @@ plugins {
 }
 
 android.namespace = "io.github.droidkaigi.confsched.feature.main"
+roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.main")
 
 kotlin {
     sourceSets {
@@ -12,6 +13,7 @@ kotlin {
                 implementation(projects.core.model)
                 implementation(projects.core.designsystem)
                 implementation(projects.core.ui)
+                implementation(libs.haze)
             }
         }
     }

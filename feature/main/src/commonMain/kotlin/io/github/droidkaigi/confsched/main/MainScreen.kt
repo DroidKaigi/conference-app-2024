@@ -14,11 +14,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.CalendarMonth
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Map
+import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -29,21 +30,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import conference_app_2024.feature.main.generated.resources.Res
-import conference_app_2024.feature.main.generated.resources.icon_achievement_fill
-import conference_app_2024.feature.main.generated.resources.icon_achievement_outline
-import conference_app_2024.feature.main.generated.resources.icon_map_fill
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.haze
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
+import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
 import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -51,7 +54,6 @@ import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 const val mainScreenRoute = "main"
-const val MainScreenTestTag = "MainScreen"
 
 fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
@@ -69,12 +71,18 @@ fun NavGraphBuilder.mainScreen(
 
 interface MainNestedGraphStateHolder {
     val startDestination: String
+
     fun routeToTab(route: String): MainScreenTab?
-    fun onTabSelected(mainNestedNavController: NavController, tab: MainScreenTab)
+
+    fun onTabSelected(
+        mainNestedNavController: NavController,
+        tab: MainScreenTab,
+    )
 }
 
 enum class NavigationType {
-    BottomNavigation, NavigationRail
+    BottomNavigation,
+    NavigationRail,
 }
 
 @Composable
@@ -87,12 +95,13 @@ fun MainScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    val navigationType: NavigationType = when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> BottomNavigation
-        WindowWidthSizeClass.Medium -> NavigationRail
-        WindowWidthSizeClass.Expanded -> NavigationRail
-        else -> BottomNavigation
-    }
+    val navigationType: NavigationType =
+        when (windowSize.widthSizeClass) {
+            WindowWidthSizeClass.Compact -> BottomNavigation
+            WindowWidthSizeClass.Medium -> NavigationRail
+            WindowWidthSizeClass.Expanded -> NavigationRail
+            else -> BottomNavigation
+        }
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
@@ -116,7 +125,7 @@ sealed class IconRepresentation {
 }
 
 enum class MainScreenTab(
-    val icon: IconRepresentation,
+    val icon: IconRepresentation.Vector,
     val selectedIcon: IconRepresentation,
     val label: String,
     val contentDescription: String,
@@ -124,15 +133,21 @@ enum class MainScreenTab(
 ) {
     Timetable(
         icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
-        selectedIcon = IconRepresentation.Vector(Icons.Filled.CalendarMonth),
+        selectedIcon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
         label = MainStrings.Timetable.asString(),
         contentDescription = MainStrings.Timetable.asString(),
     ),
 
-    @OptIn(ExperimentalResourceApi::class)
     EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
-        selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_map_fill),
+        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Map),
+        label = MainStrings.EventMap.asString(),
+        contentDescription = MainStrings.EventMap.asString(),
+    ),
+
+    Favorite(
+        icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
+        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Favorite),
         label = MainStrings.EventMap.asString(),
         contentDescription = MainStrings.EventMap.asString(),
     ),
@@ -144,17 +159,22 @@ enum class MainScreenTab(
         contentDescription = MainStrings.About.asString(),
     ),
 
-    @OptIn(ExperimentalResourceApi::class)
     ProfileCard(
-        icon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_outline),
-        selectedIcon = IconRepresentation.Drawable(drawableId = Res.drawable.icon_achievement_fill),
+        icon = IconRepresentation.Vector(Icons.Outlined.People),
+        selectedIcon = IconRepresentation.Vector(Icons.Outlined.People),
         label = MainStrings.ProfileCard.asString(),
         contentDescription = MainStrings.ProfileCard.asString(),
     ),
+    ;
+
+    companion object {
+        val size: Int get() = values().size
+        fun indexOf(tab: MainScreenTab): Int = values().indexOf(tab)
+        fun fromIndex(index: Int): MainScreenTab = values()[index]
+    }
 }
 
 data class MainScreenUiState(
-    val isAchievementsEnabled: Boolean = false,
     val userMessageStateHolder: UserMessageStateHolder,
 )
 
@@ -184,26 +204,32 @@ fun MainScreen(
                 }
             }
         }
+
+        val hazeState = remember { HazeState() }
+
         Scaffold(
             bottomBar = {
-                AnimatedVisibility(visible = navigationType == BottomNavigation) {
-                    Row {
-                        MainScreenTab.entries.forEach { tab ->
-                            Button(
-                                modifier = Modifier.weight(1F),
-                                onClick = { onTabSelected(mainNestedNavController, tab) },
-                            ) {
-                                Text(text = tab.label + " " + (currentTab == tab))
-                            }
-                        }
-                    }
-                }
+                GlassLikeBottomNavigation(
+                    hazeState = hazeState,
+                    onTabSelected = {
+                        onTabSelected(mainNestedNavController, it)
+                    },
+                )
             },
         ) { padding ->
+            val hazeStyle =
+                HazeStyle(
+                    tint = Color.Black.copy(alpha = .2f),
+                    blurRadius = 30.dp,
+                )
             NavHost(
                 navController = mainNestedNavController,
                 startDestination = "timetable",
-                modifier = Modifier,
+                modifier =
+                Modifier.haze(
+                    hazeState,
+                    hazeStyle,
+                ),
                 enterTransition = { materialFadeThroughIn() },
                 exitTransition = { materialFadeThroughOut() },
             ) {
@@ -213,25 +239,31 @@ fun MainScreen(
     }
 }
 
-private fun materialFadeThroughIn(): EnterTransition = fadeIn(
-    animationSpec = tween(
-        durationMillis = 195,
-        delayMillis = 105,
-        easing = LinearOutSlowInEasing,
-    ),
-) + scaleIn(
-    animationSpec = tween(
-        durationMillis = 195,
-        delayMillis = 105,
-        easing = LinearOutSlowInEasing,
-    ),
-    initialScale = 0.92f,
-)
+private fun materialFadeThroughIn(): EnterTransition =
+    fadeIn(
+        animationSpec =
+        tween(
+            durationMillis = 195,
+            delayMillis = 105,
+            easing = LinearOutSlowInEasing,
+        ),
+    ) +
+        scaleIn(
+            animationSpec =
+            tween(
+                durationMillis = 195,
+                delayMillis = 105,
+                easing = LinearOutSlowInEasing,
+            ),
+            initialScale = 0.92f,
+        )
 
-private fun materialFadeThroughOut(): ExitTransition = fadeOut(
-    animationSpec = tween(
-        durationMillis = 105,
-        delayMillis = 0,
-        easing = FastOutLinearInEasing,
-    ),
-)
+private fun materialFadeThroughOut(): ExitTransition =
+    fadeOut(
+        animationSpec =
+        tween(
+            durationMillis = 105,
+            delayMillis = 0,
+            easing = FastOutLinearInEasing,
+        ),
+    )

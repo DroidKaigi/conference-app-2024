@@ -21,25 +21,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.designsystem.preview.MultiLanguagePreviews
-import io.github.droidkaigi.confsched.designsystem.preview.MultiThemePreviews
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Locale
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.model.getDefaultLocale
 import io.github.droidkaigi.confsched.model.nameAndFloor
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
-fun TimeTableItemDetailSummaryCard(
+fun TimetableItemDetailSummaryCard(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
+    val primaryColor = LocalRoomTheme.current.primaryColor
     Column(
         modifier = modifier
             .padding(
@@ -50,8 +50,7 @@ fun TimeTableItemDetailSummaryCard(
             )
             .drawBehind {
                 drawRoundRect(
-                    // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-                    color = Color(0xFF45E761),
+                    color = primaryColor,
                     style = Stroke(
                         width = 2f,
                         pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f), 0f),
@@ -109,14 +108,12 @@ private fun SummaryCardRow(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-        Icon(imageVector = imageVector, contentDescription = contentDescription, tint = Color(0xFF45E761))
+        Icon(imageVector = imageVector, contentDescription = contentDescription, tint = LocalRoomTheme.current.primaryColor)
         Spacer(Modifier.width(8.dp))
         Text(
             text = title,
             style = MaterialTheme.typography.titleSmall,
-            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-            color = Color(0xFF45E761),
+            color = LocalRoomTheme.current.primaryColor,
         )
         Spacer(Modifier.width(8.dp))
         Text(
@@ -127,14 +124,15 @@ private fun SummaryCardRow(
 }
 
 @Composable
-@MultiThemePreviews
-@MultiLanguagePreviews
-fun TimeTableItemDetailSummaryCardPreview() {
+@Preview
+fun TimetableItemDetailSummaryCardPreview() {
     KaigiTheme {
-        Surface {
-            TimeTableItemDetailSummaryCard(
-                timetableItem = TimetableItem.Session.fake(),
-            )
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailSummaryCard(
+                    timetableItem = TimetableItem.Session.fake(),
+                )
+            }
         }
     }
 }
