@@ -30,8 +30,31 @@ jobs:
           repository: droidkaigi/conference-app-2024
           ref: gh-actions
           path: gh-actions
+      - uses: actions/github-script@7.0.1
+        id: get-pr
+        with:
+          script: |
+            const headBranch = '${{ format('{0}:{1}', github.event.workflow_run.head_repository.owner.login, github.event.workflow_run.head_branch) }}'
+
+            const { data: pulls } = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: headBranch,
+              direction: 'desc',
+              sort: 'updated',
+              per_page: 1
+            })
+
+            if (pulls.length === 0) {
+              return '[halt]'
+            } else {
+              return pulls[0]
+            }
       - name: Download build outputs (APKs)
         uses: actions/download-artifact@v4
+        id: download-artifact-id
+        if: steps.get-pr.outputs.result != '[halt]'
         with:
           name: build-outputs
           path: ~/build-outputs
