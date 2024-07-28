@@ -17,7 +17,7 @@ import conference_app_2024.feature.sessions.generated.resources.calendar_add_on
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
-import io.github.droidkaigi.confsched.sessions.SessionRes
+import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -42,7 +42,7 @@ fun TimetableItemDetailBottomAppBar(
             }
             IconButton(onClick = { onCalendarRegistrationClick(timetableItem) }) {
                 Icon(
-                    painter = painterResource(SessionRes.drawable.calendar_add_on),
+                    painter = painterResource(SessionsRes.drawable.calendar_add_on),
                     contentDescription = "Calendar",
                 )
             }
