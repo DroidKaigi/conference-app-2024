@@ -79,14 +79,6 @@ fun AboutFooterLinks(
             )
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Text(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            text = stringResource(AboutRes.string.license_description),
-            style = MaterialTheme.typography.labelSmall,
-            textAlign = TextAlign.Center,
-            color = if (isSystemInDarkTheme()) licenseDescriptionDark else licenseDescriptionLight,
-        )
-        Spacer(modifier = Modifier.height(8.dp))
     }
 }
 
