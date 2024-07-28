@@ -95,7 +95,7 @@ public struct RootReducer {
                 return .none
 
             case .about(.view(.sponsorsTapped)):
-                state.paths.about.append(.sponsor(.init(text: "")))
+                state.paths.about.append(.sponsor(.init()))
                 return .none
 
             case .about(.view(.acknowledgementsTapped)):

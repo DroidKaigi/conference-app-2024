@@ -181,7 +181,11 @@ let package = Package(
         ),
         .target(
             name: "SponsorFeature",
-            dependencies: [ .tca ]
+            dependencies: [
+                .tca,
+                .kmpClient,
+                .theme
+            ]
         ),
         .testTarget(
             name: "SponsorFeatureTests",
