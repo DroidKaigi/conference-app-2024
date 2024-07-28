@@ -1,0 +1,5 @@
+<resources>
+    <string name="content_description_schedule_icon">Schedule</string>
+    <string name="content_description_user_icon">User</string>
+    <string name="content_description_error_icon">Error</string>
+</resources>
