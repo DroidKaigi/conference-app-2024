@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.app_version
 import conference_app_2024.feature.about.generated.resources.content_description_youtube
 import conference_app_2024.feature.about.generated.resources.license
+import conference_app_2024.feature.about.generated.resources.license_description
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutFooterLinksIcon
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -80,7 +81,7 @@ fun AboutFooterLinks(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             modifier = Modifier.padding(horizontal = 12.dp),
-            text = stringResource(AboutRes.string.license),
+            text = stringResource(AboutRes.string.license_description),
             style = MaterialTheme.typography.labelSmall,
             textAlign = TextAlign.Center,
             color = if (isSystemInDarkTheme()) licenseDescriptionDark else licenseDescriptionLight,
