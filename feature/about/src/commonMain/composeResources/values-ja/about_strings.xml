@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="description">DroidKaigiはAndroid技術情報の共有とコミュニケーションを目的に開催されるエンジニアが主役のAndroidカンファレンスです。</string>
+    <string name="date_title">日時</string>
+    <string name="date_description">2024.09.11(水) 〜 13(金)</string>
+    <string name="place_title">場所</string>
+    <string name="place_description">ベルサール渋谷ガーデン</string>
+    <string name="place_link">地図を見る</string>
+    <string name="credits_title">Credits</string>
+    <string name="staff">スタッフ</string>
+    <string name="contributor">コントリビューター</string>
+    <string name="sponsor">スポンサー</string>
+    <string name="others_title">Others</string>
+    <string name="code_of_conduct">行動規範</string>
+    <string name="license">ライセンス</string>
+    <string name="privacy_policy">プライバシーポリシー</string>
+    <string name="app_version">アプリバージョン</string>
+    <string name="content_description_youtube">YouTube</string>
+    <string name="content_description_x">X</string>
+    <string name="content_description_medium">Medium</string>
+    <string name="license_description">The Android robot is reproduced or modified from work created and shared by Google and used according to terms described in the Creative Commons 3.0 Attribution License.</string>
+</resources>

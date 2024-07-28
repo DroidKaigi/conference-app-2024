@@ -25,6 +25,10 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.sessions.generated.resources.content_description_category
+import conference_app_2024.feature.sessions.generated.resources.content_description_language
+import conference_app_2024.feature.sessions.generated.resources.content_description_location
+import conference_app_2024.feature.sessions.generated.resources.content_description_schedule
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Locale
@@ -32,6 +36,8 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.model.getDefaultLocale
 import io.github.droidkaigi.confsched.model.nameAndFloor
+import io.github.droidkaigi.confsched.sessions.SessionsRes
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -63,7 +69,7 @@ fun TimetableItemDetailSummaryCard(
         SummaryCardRow(
             modifier = Modifier.fillMaxWidth(),
             imageVector = Icons.Outlined.Schedule,
-            contentDescription = "Schedule",
+            contentDescription = stringResource(SessionsRes.string.content_description_schedule),
             title = "日時",
             description = timetableItem.formattedDateTimeString,
         )
@@ -71,7 +77,7 @@ fun TimetableItemDetailSummaryCard(
         SummaryCardRow(
             modifier = Modifier.fillMaxWidth(),
             imageVector = Icons.Outlined.LocationOn,
-            contentDescription = "Location",
+            contentDescription = stringResource(SessionsRes.string.content_description_location),
             title = "場所",
             description = timetableItem.room.nameAndFloor,
         )
@@ -79,7 +85,7 @@ fun TimetableItemDetailSummaryCard(
         SummaryCardRow(
             modifier = Modifier.fillMaxWidth(),
             imageVector = Icons.Outlined.Language,
-            contentDescription = "Language",
+            contentDescription = stringResource(SessionsRes.string.content_description_language),
             title = "対応言語",
             description = timetableItem.getSupportedLangString(
                 getDefaultLocale() == Locale.JAPAN,
@@ -89,7 +95,7 @@ fun TimetableItemDetailSummaryCard(
         SummaryCardRow(
             modifier = Modifier.fillMaxWidth(),
             imageVector = Icons.Outlined.Category,
-            contentDescription = "Category",
+            contentDescription = stringResource(SessionsRes.string.content_description_category),
             title = "カテゴリ",
             description = timetableItem.category.title.currentLangTitle,
         )

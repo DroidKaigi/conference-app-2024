@@ -37,6 +37,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import conference_app_2024.feature.sessions.generated.resources.bookmarked
+import conference_app_2024.feature.sessions.generated.resources.image
+import conference_app_2024.feature.sessions.generated.resources.not_bookmarked
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
@@ -45,10 +48,12 @@ import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.CIRCLE
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.DIAMOND
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.SHARP_DIAMOND
 import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.SQUARE
+import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.TimetableListItemBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableListItemTestTag
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.collections.immutable.PersistentMap
+import org.jetbrains.compose.resources.stringResource
 
 const val TimetableListTestTag = "TimetableList"
 
@@ -122,13 +127,13 @@ fun TimetableList(
                             if (isBookmarked) {
                                 Icon(
                                     Icons.Filled.Favorite,
-                                    contentDescription = "Bookmarked",
+                                    contentDescription = stringResource(SessionsRes.string.bookmarked),
                                     tint = Color.Green,
                                 )
                             } else {
                                 Icon(
                                     Icons.Outlined.FavoriteBorder,
-                                    contentDescription = "Not Bookmarked",
+                                    contentDescription = stringResource(SessionsRes.string.not_bookmarked),
                                     tint = Color.White,
                                 )
                             }
@@ -152,7 +157,7 @@ fun TimetableList(
                                     .width(32.dp)
                                     .height(32.dp)
                                     .clip(CircleShape),
-                                contentDescription = "image",
+                                contentDescription = stringResource(SessionsRes.string.image),
                             )
                             Text(
                                 text = speaker.name,

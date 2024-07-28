@@ -1,5 +1,0 @@
-<resources>
-    <string name="content_description_schedule_icon">スケジュール</string>
-    <string name="content_description_user_icon">ユーザー</string>
-    <string name="content_description_error_icon">エラー</string>
-</resources>

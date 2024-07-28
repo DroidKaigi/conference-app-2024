@@ -1,0 +1,29 @@
+<resources>
+    <string name="content_description_schedule_icon">Schedule</string>
+    <string name="content_description_user_icon">User</string>
+    <string name="content_description_error_icon">Error</string>
+    <string name="bookmarked_successfully">Bookmarked successfully.</string>
+    <string name="view_bookmark_list">View</string>
+    <string name="empty">Empty</string>
+    <string name="bookmarked">Bookmarked</string>
+    <string name="not_bookmarked">Not Bookmarked</string>
+    <string name="image">image</string>
+    <string name="special">Special</string>
+    <string name="read_more">Read more</string>
+    <string name="target_audience">Target Audience</string>
+    <string name="archive">Archive</string>
+    <string name="slide">Slide</string>
+    <string name="video">Video</string>
+    <string name="workshop">Workshop</string>
+    <string name="back">Back</string>
+    <string name="select_language">Select Language</string>
+    <string name="japanese">日本語</string>
+    <string name="english">English</string>
+    <string name="timetable">Timetable</string>
+    <string name="content_description_share">Share</string>
+    <string name="content_description_calendar">Calendar</string>
+    <string name="content_description_schedule">Schedule</string>
+    <string name="content_description_location">Location</string>
+    <string name="content_description_language">Language</string>
+    <string name="content_description_category">Category</string>
+</resources>

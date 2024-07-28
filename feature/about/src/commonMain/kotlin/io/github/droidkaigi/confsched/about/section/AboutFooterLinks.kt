@@ -17,9 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.about.generated.resources.app_version
+import conference_app_2024.feature.about.generated.resources.content_description_youtube
+import conference_app_2024.feature.about.generated.resources.license
+import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutFooterLinksIcon
-import io.github.droidkaigi.confsched.about.strings.AboutStrings
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val AboutFooterLinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItem"
@@ -47,7 +51,7 @@ fun AboutFooterLinks(
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             AboutFooterLinksIcon(
                 testTag = AboutFooterLinksYouTubeItemTestTag,
-                contentDescription = "YouTube",
+                contentDescription = stringResource(AboutRes.string.content_description_youtube),
                 onClick = onYouTubeClick,
             )
             AboutFooterLinksIcon(
@@ -63,7 +67,7 @@ fun AboutFooterLinks(
         }
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = AboutStrings.AppVersion.asString(),
+            text = stringResource(AboutRes.string.app_version),
             style = MaterialTheme.typography.labelLarge,
         )
         if (versionName != null) {
@@ -76,7 +80,7 @@ fun AboutFooterLinks(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             modifier = Modifier.padding(horizontal = 12.dp),
-            text = AboutStrings.LicenceDescription.asString(),
+            text = stringResource(AboutRes.string.license),
             style = MaterialTheme.typography.labelSmall,
             textAlign = TextAlign.Center,
             color = if (isSystemInDarkTheme()) licenseDescriptionDark else licenseDescriptionLight,
