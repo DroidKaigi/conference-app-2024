@@ -1,4 +1,5 @@
 import Foundation
+import shared
 
 public enum DayTab: String, CaseIterable, Identifiable {
     public var id : RawValue { rawValue }
@@ -20,7 +21,7 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
 
     public let startsTimeString: String
     public let endsTimeString: String
-    public let items: [TimetableItem]
+    public var items: [TimetableItem]
 
     public init(startsTimeString: String, endsTimeString: String, items: [TimetableItem]) {
         self.startsTimeString = startsTimeString
@@ -39,7 +40,7 @@ public struct TimetableItem: Equatable, Hashable {
     let room: String
     let targetAudience: String
     let languages: [String]
-    let asset: String
+    let asset: shared.TimetableAsset?
     let levels: [String]
     let speakers: [String]
     
@@ -59,7 +60,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
             ),
@@ -71,7 +72,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
              ),
@@ -83,7 +84,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false)
              ]),
@@ -96,7 +97,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
             ),
@@ -108,7 +109,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false
              ),
@@ -120,7 +121,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Maria Rodriguez"],
                 isFavorite:false)
         ])
@@ -136,7 +137,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Kelvin Lueilwitz"],
                 isFavorite:false),
             TimetableItem(
@@ -147,7 +148,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Mallory Turner"],
                 isFavorite:false),
             TimetableItem(
@@ -158,7 +159,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Clementina Mills"],
                 isFavorite:false)
         ]),
@@ -171,7 +172,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Kelvin Lueilwitz"],
                 isFavorite:false),
             TimetableItem(
@@ -182,7 +183,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Mallory Turner"],
                 isFavorite:false),
             TimetableItem(
@@ -193,7 +194,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Clementina Mills"],
                 isFavorite:false)
         ])
@@ -209,7 +210,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Waldo Torp"],
                 isFavorite:false),
             TimetableItem(
@@ -220,7 +221,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Baron Stracke"],
                 isFavorite:false),
             TimetableItem(
@@ -231,7 +232,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Carole Volkman"],
                 isFavorite:false)
         ]),
@@ -244,7 +245,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Waldo Torp"],
                 isFavorite:false),
             TimetableItem(
@@ -255,7 +256,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Baron Stracke"],
                 isFavorite:false),
             TimetableItem(
@@ -266,7 +267,7 @@ struct SampleData {
                 category: "",
                 sessionType: "",
                 room: "Flamingo", targetAudience: "", languages: ["EN", "JA"],
-                asset:"", levels: [""],
+                asset:nil, levels: [""],
                 speakers: ["Carole Volkman"],
                 isFavorite:false)
         ])
