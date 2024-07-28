@@ -60,8 +60,6 @@ public struct SponsorReducer {
                 state.platinums = platinums
                 state.golds = golds
                 state.supporters = supporters
-                
-                print(state)
                 return .none
             case .response(.failure(let error)):
                 print(error)
