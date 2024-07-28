@@ -54,7 +54,7 @@ import io.github.droidkaigi.confsched.model.TimetableRoom
 import io.github.droidkaigi.confsched.model.TimetableSessionType
 import io.github.droidkaigi.confsched.model.TimetableSpeaker
 import io.github.droidkaigi.confsched.model.fake
-import io.github.droidkaigi.confsched.sessions.SessionRes
+import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.section.TimetableSizes
 import io.github.droidkaigi.confsched.ui.previewOverride
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
@@ -130,7 +130,7 @@ fun TimetableGridItem(
                     Icon(
                         modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
                         imageVector = Icons.Default.Schedule,
-                        contentDescription = stringResource(SessionRes.string.content_description_schedule_icon),
+                        contentDescription = stringResource(SessionsRes.string.content_description_schedule_icon),
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     var scheduleTextStyle = MaterialTheme.typography.bodySmall
@@ -182,7 +182,7 @@ fun TimetableGridItem(
                             modifier = Modifier
                                 .size(TimetableGridItemSizes.errorHeight),
                             imageVector = Icons.Default.Error,
-                            contentDescription = stringResource(SessionRes.string.content_description_error_icon),
+                            contentDescription = stringResource(SessionsRes.string.content_description_error_icon),
                             tint = MaterialTheme.colorScheme.errorContainer,
                         )
                     }
@@ -238,7 +238,7 @@ private fun SpeakerIcon(
         painter = previewOverride(previewPainter = { rememberVectorPainter(image = Icons.Default.Person) }) {
             rememberAsyncImagePainter(iconUrl)
         },
-        contentDescription = stringResource(SessionRes.string.content_description_user_icon),
+        contentDescription = stringResource(SessionsRes.string.content_description_user_icon),
         modifier = modifier
             .size(TimetableGridItemSizes.speakerHeight)
             .clip(RoundedCornerShape(8.dp))
