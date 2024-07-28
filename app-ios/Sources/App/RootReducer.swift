@@ -90,8 +90,8 @@ public struct RootReducer {
                 state.paths.about.append(.staff(.init()))
                 return .none
 
-            case .about(.view(.contributersTapped)):
-                state.paths.about.append(.contributor(.init(text: "")))
+            case .about(.view(.contributorsTapped)):
+                state.paths.about.append(.contributor(.init()))
                 return .none
 
             case .about(.view(.sponsorsTapped)):

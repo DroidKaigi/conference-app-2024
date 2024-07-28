@@ -66,7 +66,7 @@ public struct AboutView: View {
                         .background(Color(.outlineOutlineVariant))
 
                     Button(action: {
-                        send(.contributersTapped)
+                        send(.contributorsTapped)
                     }, label: {
                         Label(
                             String(localized: "Contributers", bundle: .module),

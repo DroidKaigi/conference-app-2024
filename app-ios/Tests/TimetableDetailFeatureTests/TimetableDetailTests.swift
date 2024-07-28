@@ -1,6 +1,7 @@
 import XCTest
 import ComposableArchitecture
 import shared
+import Model
 @testable import TimetableDetailFeature
 
 final class TimetableDetail_iosTests: XCTestCase {

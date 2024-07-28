@@ -4,6 +4,7 @@ import KMPClient
 import shared
 import Foundation
 import EventKitClient
+import Model
 
 @Reducer
 public struct TimetableDetailReducer: Sendable {
