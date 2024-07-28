@@ -20,14 +20,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import conference_app_2024.feature.sessions.generated.resources.empty
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.GridTimetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.ListTimetable
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
+import org.jetbrains.compose.resources.stringResource
 
 const val TimetableTabTestTag = "TimetableTab"
 
@@ -120,7 +123,7 @@ fun TimetableSheet(
                 }
 
                 Empty -> {
-                    Text("Empty")
+                    Text(stringResource(SessionsRes.string.empty))
                 }
             }
         }
