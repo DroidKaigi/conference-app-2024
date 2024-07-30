@@ -13,13 +13,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import conference_app_2024.feature.sessions.generated.resources.Res
 import conference_app_2024.feature.sessions.generated.resources.calendar_add_on
+import conference_app_2024.feature.sessions.generated.resources.content_description_calendar
+import conference_app_2024.feature.sessions.generated.resources.content_description_share
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
+import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -37,13 +40,13 @@ fun TimetableItemDetailBottomAppBar(
             IconButton(onClick = { onShareClick(timetableItem) }) {
                 Icon(
                     imageVector = Icons.Outlined.Share,
-                    contentDescription = "Share",
+                    contentDescription = stringResource(SessionsRes.string.content_description_share),
                 )
             }
             IconButton(onClick = { onCalendarRegistrationClick(timetableItem) }) {
                 Icon(
-                    painter = painterResource(Res.drawable.calendar_add_on),
-                    contentDescription = "Calendar",
+                    painter = painterResource(SessionsRes.drawable.calendar_add_on),
+                    contentDescription = stringResource(SessionsRes.string.content_description_calendar),
                 )
             }
         },

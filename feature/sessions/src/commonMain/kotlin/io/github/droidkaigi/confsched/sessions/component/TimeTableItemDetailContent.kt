@@ -26,6 +26,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.sessions.generated.resources.archive
+import conference_app_2024.feature.sessions.generated.resources.read_more
+import conference_app_2024.feature.sessions.generated.resources.slide
+import conference_app_2024.feature.sessions.generated.resources.special
+import conference_app_2024.feature.sessions.generated.resources.target_audience
+import conference_app_2024.feature.sessions.generated.resources.video
 import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
@@ -36,6 +42,8 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableItem.Special
 import io.github.droidkaigi.confsched.model.fake
+import io.github.droidkaigi.confsched.sessions.SessionsRes
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -71,7 +79,7 @@ fun TimetableItemDetailContent(
             }
 
             is Special -> {
-                Text("Special")
+                Text(stringResource(SessionsRes.string.special))
             }
         }
     }
@@ -100,7 +108,7 @@ private fun DescriptionSection(
                 onClick = { isExpand = true },
             ) {
                 Text(
-                    text = "続きを読む",
+                    text = stringResource(SessionsRes.string.read_more),
                     style = MaterialTheme.typography.labelLarge,
                     color = LocalRoomTheme.current.primaryColor,
                 )
@@ -117,7 +125,7 @@ private fun TargetAudienceSection(
 ) {
     Column(modifier = modifier.padding(8.dp)) {
         Text(
-            text = "対象者",
+            text = stringResource(SessionsRes.string.target_audience),
             style = MaterialTheme.typography.titleLarge,
             color = LocalRoomTheme.current.primaryColor,
         )
@@ -139,7 +147,7 @@ private fun ArchiveSection(
 ) {
     Column(modifier = modifier.padding(8.dp)) {
         Text(
-            text = "アーカイブ",
+            text = stringResource(SessionsRes.string.archive),
             style = MaterialTheme.typography.titleLarge,
             color = LocalRoomTheme.current.primaryColor,
         )
@@ -157,7 +165,7 @@ private fun ArchiveSection(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Description,
-                        contentDescription = "Slide",
+                        contentDescription = stringResource(SessionsRes.string.slide),
                     )
                     Text(
                         text = "スライド",
@@ -176,7 +184,7 @@ private fun ArchiveSection(
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.PlayCircle,
-                        contentDescription = "Video",
+                        contentDescription = stringResource(SessionsRes.string.video),
                     )
                     Text(
                         text = "動画",

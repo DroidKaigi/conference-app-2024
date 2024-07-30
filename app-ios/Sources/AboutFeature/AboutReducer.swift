@@ -18,7 +18,7 @@ public struct AboutReducer {
         @CasePathable
         public enum View {
             case staffsTapped
-            case contributersTapped
+            case contributorsTapped
             case sponsorsTapped
             case codeOfConductTapped
             case acknowledgementsTapped

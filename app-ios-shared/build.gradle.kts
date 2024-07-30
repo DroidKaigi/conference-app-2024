@@ -57,6 +57,7 @@ kotlin {
                 api(projects.feature.contributors)
                 api(projects.feature.profilecard)
                 api(projects.feature.about)
+                api(projects.feature.staff)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(libs.skieAnnotation)
             }

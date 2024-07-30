@@ -16,8 +16,13 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.about.strings.AboutStrings
+import conference_app_2024.feature.about.generated.resources.date_description
+import conference_app_2024.feature.about.generated.resources.date_title
+import conference_app_2024.feature.about.generated.resources.place_description
+import conference_app_2024.feature.about.generated.resources.place_title
+import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -41,13 +46,13 @@ fun AboutDroidKaigiDetailSummaryCard(
         ) {
             AboutDroidKaigiDetailSummaryCardRow(
                 leadingIcon = Outlined.Schedule,
-                label = AboutStrings.DateTitle.asString(),
-                content = AboutStrings.DateDescription.asString(),
+                label = stringResource(AboutRes.string.date_title),
+                content = stringResource(AboutRes.string.date_description),
             )
             AboutDroidKaigiDetailSummaryCardRow(
                 leadingIcon = Outlined.Place,
-                label = AboutStrings.PlaceTitle.asString(),
-                content = AboutStrings.PlaceDescription.asString(),
+                label = stringResource(AboutRes.string.place_title),
+                content = stringResource(AboutRes.string.place_description),
             )
         }
     }

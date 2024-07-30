@@ -53,6 +53,8 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
+import io.github.droidkaigi.confsched.staff.staffScreenRoute
+import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
 import io.github.droidkaigi.confshed.profilecard.navigateProfileCardScreen
 import io.github.droidkaigi.confshed.profilecard.profileCardScreen
@@ -102,6 +104,11 @@ private fun KaigiNavHost(
         contributorsScreens(
             onNavigationIconClick = navController::popBackStack,
             onContributorItemClick = externalNavController::navigate,
+        )
+
+        staffScreens(
+            onNavigationIconClick = navController::popBackStack,
+            onStaffItemClick = externalNavController::navigate,
         )
     }
 }
@@ -153,7 +160,7 @@ private fun NavGraphBuilder.mainScreen(
                             )
                         }
 
-                        AboutItem.Staff -> TODO()
+                        AboutItem.Staff -> navController.navigate(staffScreenRoute)
                         AboutItem.X -> externalNavController.navigate(
                             url = "https://twitter.com/DroidKaigi",
                         )
