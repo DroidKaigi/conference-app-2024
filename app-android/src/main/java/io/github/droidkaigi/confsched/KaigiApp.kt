@@ -53,6 +53,8 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
+import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
+import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
@@ -110,6 +112,11 @@ private fun KaigiNavHost(
             onNavigationIconClick = navController::popBackStack,
             onStaffItemClick = externalNavController::navigate,
         )
+
+        sponsorsScreens(
+            onNavigationIconClick = navController::popBackStack,
+            onSponsorsItemClick = externalNavController::navigate,
+        )
     }
 }
 
@@ -141,7 +148,7 @@ private fun NavGraphBuilder.mainScreen(
                         "https://portal.droidkaigi.jp/en"
                     }
                     when (aboutItem) {
-                        AboutItem.Sponsors -> TODO()
+                        AboutItem.Sponsors -> navController.navigate(sponsorsScreenRoute)
                         AboutItem.CodeOfConduct -> {
                             externalNavController.navigate(
                                 url = "$portalBaseUrl/about/code-of-conduct",

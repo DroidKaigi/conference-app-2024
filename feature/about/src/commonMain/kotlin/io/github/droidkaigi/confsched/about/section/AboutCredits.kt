@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.contributor
 import conference_app_2024.feature.about.generated.resources.credits_title
+import conference_app_2024.feature.about.generated.resources.sponsor
 import conference_app_2024.feature.about.generated.resources.staff
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutContentColumn
@@ -66,7 +67,7 @@ fun LazyListScope.aboutCredits(
     item {
         AboutContentColumn(
             leadingIcon = Outlined.Apartment,
-            label = stringResource(AboutRes.string.staff),
+            label = stringResource(AboutRes.string.sponsor),
             testTag = AboutCreditsSponsorsItemTestTag,
             onClickAction = onSponsorsItemClick,
             modifier = modifier
