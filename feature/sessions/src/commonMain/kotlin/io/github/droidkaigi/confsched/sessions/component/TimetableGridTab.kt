@@ -119,10 +119,6 @@ fun TimetableGridTab(
                     selectedContentColor = selectedColor,
                     unselectedContentColor = Color.White,
                 ) {
-//                    FloorText(
-//                        text = "9/13",
-//                        isSelected = selectedTabIndex == 2,
-//                    )
                     if (selectedTabIndex == 2) {
                         FloorText(
                             text = "Conference",
