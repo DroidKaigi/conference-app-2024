@@ -30,7 +30,7 @@ jobs:
           repository: droidkaigi/conference-app-2024
           ref: gh-actions
           path: gh-actions
-      - uses: actions/github-script@7
+      - uses: actions/github-script@v7
         id: get-pr
         with:
           script: |
@@ -51,7 +51,7 @@ jobs:
             } else {
               return pulls[0]
             }
-      - uses: actions/github-script@7
+      - uses: actions/github-script@v7
         id: get-artifact-id
         if: steps.get-pr.outputs.result != '[halt]'
         with:
