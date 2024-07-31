@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ComposePlugin.CommonComponentsDependencies
 import org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
@@ -41,6 +42,7 @@ kotlin {
                     export(projects.feature.contributors)
                     export(projects.core.model)
                     export(projects.core.data)
+                    export(CommonComponentsDependencies.resources)
                 }
             }
         }
@@ -57,6 +59,7 @@ kotlin {
                 api(projects.feature.contributors)
                 api(projects.feature.profilecard)
                 api(projects.feature.about)
+                api(projects.feature.staff)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(libs.skieAnnotation)
             }

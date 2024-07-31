@@ -15,11 +15,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.Res
 import conference_app_2024.feature.about.generated.resources.about_header
+import conference_app_2024.feature.about.generated.resources.description
+import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.AboutTestTag
 import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetailSummaryCard
-import io.github.droidkaigi.confsched.about.strings.AboutStrings
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -38,7 +40,7 @@ fun AboutDroidKaigiDetail(
                 .padding(16.dp),
         )
         Text(
-            text = AboutStrings.Description.asString(),
+            text = stringResource(AboutRes.string.description),
             style = MaterialTheme.typography.bodyLarge,
             textAlign = TextAlign.Center,
             modifier = Modifier

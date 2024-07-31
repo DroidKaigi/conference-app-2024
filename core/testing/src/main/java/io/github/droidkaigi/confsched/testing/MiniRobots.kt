@@ -9,6 +9,8 @@ import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
+import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
+import io.github.droidkaigi.confsched.data.staff.StaffApiClient
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
@@ -191,6 +193,28 @@ class DefaultEventMapServerRobot @Inject constructor(contributorsApiClient: Even
             when (serverStatus) {
                 EventMapServerRobot.ServerStatus.Operational -> FakeEventMapApiClient.Status.Operational
                 EventMapServerRobot.ServerStatus.Error -> FakeEventMapApiClient.Status.Error
+            },
+        )
+    }
+}
+
+interface StaffServerRobot {
+    enum class ServerStatus {
+        Operational,
+        Error,
+    }
+
+    fun setupStaffServer(serverStatus: ServerStatus)
+}
+
+class DefaultStaffServerRobot @Inject constructor(staffApiClient: StaffApiClient) :
+    StaffServerRobot {
+    private val fakeStaffApiClient = staffApiClient as FakeStaffApiClient
+    override fun setupStaffServer(serverStatus: StaffServerRobot.ServerStatus) {
+        fakeStaffApiClient.setup(
+            when (serverStatus) {
+                StaffServerRobot.ServerStatus.Operational -> FakeStaffApiClient.Status.Operational
+                StaffServerRobot.ServerStatus.Error -> FakeStaffApiClient.Status.Error
             },
         )
     }

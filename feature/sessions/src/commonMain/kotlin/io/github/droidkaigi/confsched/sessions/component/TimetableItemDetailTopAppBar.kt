@@ -20,9 +20,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import conference_app_2024.feature.sessions.generated.resources.english
+import conference_app_2024.feature.sessions.generated.resources.japanese
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
+import io.github.droidkaigi.confsched.sessions.SessionsRes
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,7 +71,7 @@ fun TimetableItemDetailTopAppBar(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = "日本語",
+                                text = stringResource(SessionsRes.string.japanese),
                                 style = MaterialTheme.typography.bodySmall,
                             )
                         },
@@ -79,7 +83,7 @@ fun TimetableItemDetailTopAppBar(
                     DropdownMenuItem(
                         text = {
                             Text(
-                                text = "English",
+                                text = stringResource(SessionsRes.string.english),
                                 style = MaterialTheme.typography.bodySmall,
                             )
                         },

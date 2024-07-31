@@ -1,5 +1,9 @@
 package io.github.droidkaigi.confsched.data.staff
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.StaffRepository
 import kotlinx.collections.immutable.PersistentList
@@ -27,5 +31,16 @@ public class DefaultStaffRepository(
         staffsStateFlow.value = staffApi
             .getStaff()
             .toPersistentList()
+    }
+
+    @Composable
+    override fun staff(): PersistentList<Staff> {
+        val staff by staffsStateFlow.safeCollectAsRetainedState()
+        SafeLaunchedEffect(Unit) {
+            if (staff.isEmpty()) {
+                refresh()
+            }
+        }
+        return staff
     }
 }

@@ -33,7 +33,7 @@ jobs:
       - run: ./gradlew :app-android:assembleDevDebug --stacktrace
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v4.3.4
+        uses: actions/upload-artifact@v4
         with:
           name: build-outputs
           path: app-android/build/outputs

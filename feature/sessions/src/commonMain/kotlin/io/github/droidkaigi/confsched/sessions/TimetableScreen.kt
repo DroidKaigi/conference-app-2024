@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.sessions.generated.resources.timetable
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -53,6 +54,7 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.toPersistentMap
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
@@ -146,7 +148,7 @@ private fun TimetableScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = "タイムテーブル",
+                            text = stringResource(SessionsRes.string.timetable),
                             fontSize = 24.sp,
                             lineHeight = 32.sp,
                             fontWeight = FontWeight.W400,
