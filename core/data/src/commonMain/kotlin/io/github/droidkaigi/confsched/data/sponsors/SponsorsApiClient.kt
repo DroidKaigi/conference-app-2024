@@ -7,6 +7,7 @@ import io.github.droidkaigi.confsched.data.sponsors.response.SponsorResponse
 import io.github.droidkaigi.confsched.data.sponsors.response.SponsorsResponse
 import io.github.droidkaigi.confsched.model.Plan
 import io.github.droidkaigi.confsched.model.Sponsor
+import io.github.droidkaigi.confsched.model.fakes
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -22,9 +23,11 @@ public class DefaultSponsorsApiClient(
 
     private val sponsorApi = ktorfit.create<SponsorApi>()
     public override suspend fun sponsors(): PersistentList<Sponsor> {
-        return networkService {
-            sponsorApi.getSponsors()
-        }.toSponsorList()
+        // FIXME: When the API is ready, remove the comments below and return the actual data.
+        return Sponsor.fakes()
+//        return networkService {
+//            sponsorApi.getSponsors()
+//        }.toSponsorList()
     }
 }
 
