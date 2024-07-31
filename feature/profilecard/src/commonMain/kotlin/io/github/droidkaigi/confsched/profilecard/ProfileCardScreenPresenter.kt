@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.profilecard
+package io.github.droidkaigi.confsched.profilecard
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
