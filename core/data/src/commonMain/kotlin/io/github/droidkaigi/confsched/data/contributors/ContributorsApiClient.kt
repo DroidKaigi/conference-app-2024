@@ -5,6 +5,7 @@ import de.jensklingenberg.ktorfit.http.GET
 import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.contributors.response.ContributorsResponse
 import io.github.droidkaigi.confsched.model.Contributor
+import io.github.droidkaigi.confsched.model.fakes
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -20,9 +21,11 @@ public class DefaultContributorsApiClient(
 
     private val contributorApi = ktorfit.create<ContributorApi>()
     public override suspend fun contributors(): PersistentList<Contributor> {
-        return networkService {
-            contributorApi.getContributors()
-        }.toContributorList()
+        // FIXME: When the API is ready, remove the comments below and return the actual data.
+        return Contributor.fakes()
+//        return networkService {
+//            contributorApi.getContributors()
+//        }.toContributorList()
     }
 }
 
