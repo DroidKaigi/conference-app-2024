@@ -55,7 +55,7 @@ fun NavGraphBuilder.sponsorsScreens(
     }
 }
 
-data class SponsorsUiState(
+data class SponsorsScreenUiState(
     val sponsors: PersistentList<Sponsor>,
     val userMessageStateHolder: UserMessageStateHolder,
 )
@@ -67,7 +67,7 @@ fun SponsorsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val uiState = SponsorsUiState(
+    val uiState = SponsorsScreenUiState(
         sponsors = Sponsor.fakes(),
         userMessageStateHolder = UserMessageStateHolderImpl(),
     )
@@ -91,7 +91,7 @@ fun SponsorsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SponsorsScreen(
-    uiState: SponsorsUiState,
+    uiState: SponsorsScreenUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
     isTopAppBarHidden: Boolean,
@@ -150,7 +150,7 @@ fun SponsorsScreenPreview() {
     KaigiTheme {
         Surface {
             SponsorsScreen(
-                uiState = SponsorsUiState(
+                uiState = SponsorsScreenUiState(
                     sponsors = Sponsor.fakes(),
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
