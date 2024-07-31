@@ -23,13 +23,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 
 @Composable
 fun TimetableGridTab(
     modifier: Modifier = Modifier,
+    onDaySelected: (day: DroidKaigi2024Day) -> Unit
 ) {
     val selectedColor = Color(0xFF4AFF82)
-    var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
+    var selectedTabIndex by rememberSaveable { mutableStateOf(1) }
     Column(
         modifier = modifier.padding(start = 12.dp),
         verticalArrangement = Arrangement.Center,
@@ -53,24 +58,28 @@ fun TimetableGridTab(
                     selected = true,
                     onClick = {
                         selectedTabIndex = 0
+                        onDaySelected(Workday)
                     },
                     selectedContentColor = selectedColor,
                     unselectedContentColor = Color.White,
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        FloorText(
-                            text = "Workshop",
-                            isSelected = selectedTabIndex == 0,
-                        )
-                        Text(
-                            text = " (9/11)",
-                            fontSize = 11.sp,
-                            color = if (selectedTabIndex == 0) {
-                                Color(0xFF4AFF82)
-                            } else {
-                                Color.White
-                            },
-                        )
+                        if (selectedTabIndex == 0) {
+                            FloorText(
+                                text = "Workshop",
+                                isSelected = selectedTabIndex == 0,
+                            )
+                            Text(
+                                text = " (9/11)",
+                                fontSize = 11.sp,
+                                color = Color(0xFF4AFF82)
+                            )
+                        } else {
+                            FloorText(
+                                text = "9/11",
+                                isSelected = selectedTabIndex == 0,
+                            )
+                        }
                     }
                 }
                 Tab(
@@ -78,28 +87,58 @@ fun TimetableGridTab(
                     selected = false,
                     onClick = {
                         selectedTabIndex = 1
+                        onDaySelected(ConferenceDay1)
                     },
                     selectedContentColor = selectedColor,
                     unselectedContentColor = Color.White,
                 ) {
-                    FloorText(
-                        text = "9/12",
-                        isSelected = selectedTabIndex == 1,
-                    )
+                    if (selectedTabIndex == 1) {
+                        FloorText(
+                            text = "Conference",
+                            isSelected = selectedTabIndex == 1,
+                        )
+                        Text(
+                            text = " (9/12)",
+                            fontSize = 11.sp,
+                            color = Color(0xFF4AFF82)
+                        )
+                    } else {
+                        FloorText(
+                            text = "9/12",
+                            isSelected = selectedTabIndex == 1,
+                        )
+                    }
                 }
                 Tab(
                     modifier = Modifier.height(64.dp),
                     selected = false,
                     onClick = {
                         selectedTabIndex = 2
+                        onDaySelected(ConferenceDay2)
                     },
                     selectedContentColor = selectedColor,
                     unselectedContentColor = Color.White,
                 ) {
-                    FloorText(
-                        text = "9/13",
-                        isSelected = selectedTabIndex == 2,
-                    )
+//                    FloorText(
+//                        text = "9/13",
+//                        isSelected = selectedTabIndex == 2,
+//                    )
+                    if (selectedTabIndex == 2) {
+                        FloorText(
+                            text = "Conference",
+                            isSelected = selectedTabIndex == 2,
+                        )
+                        Text(
+                            text = " (9/13)",
+                            fontSize = 11.sp,
+                            color = Color(0xFF4AFF82)
+                        )
+                    } else {
+                        FloorText(
+                            text = "9/13",
+                            isSelected = selectedTabIndex == 2,
+                        )
+                    }
                 }
             },
         )

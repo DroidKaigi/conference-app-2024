@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Surface
@@ -26,6 +27,7 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.SessionsRes
+import io.github.droidkaigi.confsched.sessions.component.TimetableGridTab
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.GridTimetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.ListTimetable
@@ -63,33 +65,9 @@ fun TimetableSheet(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            // TODO: Row not showing yet... there is a layout problem here I need to fix
-            Row {
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = {
-                        selectedDay = Workday
-                    },
-                ) {
-                    Text("Workday 9/11", color = Color.Green)
-                }
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = {
-                        selectedDay = ConferenceDay1
-                    },
-                ) {
-                    Text("9/12", color = Color.Green)
-                }
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = {
-                        selectedDay = DroidKaigi2024Day.ConferenceDay2
-                    },
-                ) {
-                    Text("9/13", color = Color.Green)
-                }
-            }
+            TimetableGridTab(onDaySelected = { day ->
+                selectedDay = day
+            })
             when (uiState) {
                 is ListTimetable -> {
                     TimetableList(
