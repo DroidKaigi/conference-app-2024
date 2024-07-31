@@ -1,3 +1,6 @@
+// FIXME: When the API is ready, remove Suppress annotation below.
+@file:Suppress("UnusedPrivateProperty", "UnusedPrivateMember")
+
 package io.github.droidkaigi.confsched.data.sponsors
 
 import de.jensklingenberg.ktorfit.Ktorfit
