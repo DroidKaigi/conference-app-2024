@@ -71,7 +71,6 @@ import io.github.droidkaigi.confsched.sessions.component.RoomItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridHours
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridRooms
-import io.github.droidkaigi.confsched.sessions.component.TimetableGridTab
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState.Companion
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -96,7 +95,7 @@ fun TimetableGrid(
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column {
-        //TimetableGridTab()
+        // TimetableGridTab()
         TimetableGrid(
             timetable = uiState.timetable,
             onTimetableItemClick = onTimetableItemClick,

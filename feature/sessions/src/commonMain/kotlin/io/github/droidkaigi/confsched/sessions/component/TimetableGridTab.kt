@@ -31,7 +31,7 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 @Composable
 fun TimetableGridTab(
     modifier: Modifier = Modifier,
-    onDaySelected: (day: DroidKaigi2024Day) -> Unit
+    onDaySelected: (day: DroidKaigi2024Day) -> Unit,
 ) {
     val selectedColor = Color(0xFF4AFF82)
     var selectedTabIndex by rememberSaveable { mutableStateOf(1) }
@@ -72,7 +72,7 @@ fun TimetableGridTab(
                             Text(
                                 text = " (9/11)",
                                 fontSize = 11.sp,
-                                color = Color(0xFF4AFF82)
+                                color = Color(0xFF4AFF82),
                             )
                         } else {
                             FloorText(
@@ -100,7 +100,7 @@ fun TimetableGridTab(
                         Text(
                             text = " (9/12)",
                             fontSize = 11.sp,
-                            color = Color(0xFF4AFF82)
+                            color = Color(0xFF4AFF82),
                         )
                     } else {
                         FloorText(
@@ -127,7 +127,7 @@ fun TimetableGridTab(
                         Text(
                             text = " (9/13)",
                             fontSize = 11.sp,
-                            color = Color(0xFF4AFF82)
+                            color = Color(0xFF4AFF82),
                         )
                     } else {
                         FloorText(
