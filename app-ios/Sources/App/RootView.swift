@@ -78,7 +78,6 @@ public struct RootView: View {
                     )
                 }
         }
-        .tint(AssetColors.Custom.flamingo.swiftUIColor)
         .navigationBarTitleStyle(
             color: AssetColors.Surface.onSurface.swiftUIColor,
             titleTextStyle: .titleMedium,
