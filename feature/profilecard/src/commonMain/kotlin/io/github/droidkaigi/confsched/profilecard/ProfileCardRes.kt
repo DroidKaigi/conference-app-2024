@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.profilecard
+package io.github.droidkaigi.confsched.profilecard
 
 import conference_app_2024.feature.profilecard.generated.resources.Res
 
