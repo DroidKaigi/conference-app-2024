@@ -144,8 +144,11 @@ let package = Package(
         .target(
             name: "FavoriteFeature",
             dependencies: [
+                .commonComponents,
                 .tca,
+                .theme,
                 .kmpClient,
+                .kmpModule,
             ]
         ),
         .testTarget(
