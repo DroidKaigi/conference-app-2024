@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.profilecard
+package io.github.droidkaigi.confsched.profilecard
 
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
