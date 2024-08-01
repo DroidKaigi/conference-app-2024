@@ -35,6 +35,7 @@ public struct FavoriteView: View {
                                 }
                             }
                         }
+                        .padding(.horizontal, 16)
                     }
                 }
             }
