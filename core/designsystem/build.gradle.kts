@@ -22,6 +22,24 @@ kotlin {
         androidMain {
             dependencies {
                 api(compose.preview)
+            }
+        }
+    }
+}
+
+android {
+    sourceSets {
+        named("main") {
+            res.srcDirs("src/commonMain/resources", "src/androidMain/resources")
+            resources.srcDirs("src/commonMain/resources")
+        }
+    }
+}
+
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
                 // Fix https://youtrack.jetbrains.com/issue/KT-41821
                 implementation(libs.kotlinxAtomicfu)
             }

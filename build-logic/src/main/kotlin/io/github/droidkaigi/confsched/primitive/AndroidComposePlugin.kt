@@ -8,11 +8,11 @@ import org.gradle.kotlin.dsl.dependencies
 class AndroidComposePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            with(pluginManager) {
-                apply(libs.plugin("composeCompiler").pluginId)
-            }
             android {
                 buildFeatures.compose = true
+                composeOptions {
+                    kotlinCompilerExtensionVersion = libs.version("composeCompiler")
+                }
             }
             dependencies {
                 implementation(platform(libs.library("composeBom")))
