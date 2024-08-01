@@ -75,12 +75,9 @@ public struct FavoriteReducer {
 
                 case let .toggleFavoriteTapped(id):
                     return .run { send in
-                        do {
+                        await send(.internal(.toggleBookmarkResponse(Result {
                             try await timetableData.toggleBookmark(id: id)
-                            await send(.internal(.toggleBookmarkResponse(.success(()))))
-                        } catch {
-                            await send(.internal(.toggleBookmarkResponse(.failure(error))))
-                        }
+                        })))
                     }
 
                 case let .selectedDayChanged(day):
