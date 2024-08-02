@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.sponsors
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -189,6 +190,7 @@ fun SponsorsScreen(
                         .fillMaxWidth()
                         .height(110.dp),
                     sponsor = sponsor,
+                    onSponsorsItemClick = onSponsorsItemClick,
                 )
             }
 
@@ -214,6 +216,7 @@ fun SponsorsScreen(
                         .fillMaxWidth()
                         .height(77.dp),
                     sponsor = sponsor,
+                    onSponsorsItemClick = onSponsorsItemClick,
                 )
             }
 
@@ -239,6 +242,7 @@ fun SponsorsScreen(
                         .fillMaxWidth()
                         .height(77.dp),
                     sponsor = sponsor,
+                    onSponsorsItemClick = onSponsorsItemClick,
                 )
             }
         }
@@ -249,9 +253,10 @@ fun SponsorsScreen(
 fun SponsorItem(
     modifier: Modifier,
     sponsor: Sponsor,
+    onSponsorsItemClick: (url: String) -> Unit,
 ) {
     Card(
-        modifier = modifier,
+        modifier = modifier.clickable { onSponsorsItemClick(sponsor.link) },
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.inverseSurface,
         ),
