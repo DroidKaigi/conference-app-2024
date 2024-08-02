@@ -1,5 +1,9 @@
 package io.github.droidkaigi.confsched.data.sponsors
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.SponsorsRepository
 import kotlinx.collections.immutable.PersistentList
@@ -27,5 +31,16 @@ public class DefaultSponsorsRepository(
         sponsorsStateFlow.value = sponsorsApi
             .sponsors()
             .toPersistentList()
+    }
+
+    @Composable
+    override fun sponsors(): PersistentList<Sponsor> {
+        val sponsors by sponsorsStateFlow.safeCollectAsRetainedState()
+        SafeLaunchedEffect(Unit) {
+            if (sponsors.isEmpty()) {
+                refresh()
+            }
+        }
+        return sponsors
     }
 }
