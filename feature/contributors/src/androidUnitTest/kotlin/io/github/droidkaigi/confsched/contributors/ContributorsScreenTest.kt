@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.contributors
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.ContributorsServerRobot
@@ -19,7 +18,7 @@ import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
 import javax.inject.Inject
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(ParameterizedRobolectricTestRunner::class)
 @HiltAndroidTest
 class ContributorsScreenTest(private val testCase: DescribedBehavior<ContributorsScreenRobot>) {
 
