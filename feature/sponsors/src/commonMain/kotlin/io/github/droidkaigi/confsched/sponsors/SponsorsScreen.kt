@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.sponsors
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -156,9 +157,12 @@ fun SponsorsScreen(
     ) { padding ->
         LazyVerticalGrid(
             columns = GridCells.Fixed(6),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .padding(horizontal = 12.dp)
                 .let {
                     if (scrollBehavior != null) {
                         it.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -173,10 +177,7 @@ fun SponsorsScreen(
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp,
-                        ),
+                        .padding(vertical = 6.dp),
                 )
             }
             items(
@@ -186,10 +187,6 @@ fun SponsorsScreen(
                 SponsorItem(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp,
-                        )
                         .height(110.dp),
                     sponsor = sponsor,
                 )
@@ -205,10 +202,7 @@ fun SponsorsScreen(
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp,
-                        ),
+                        .padding(vertical = 6.dp),
                 )
             }
             items(
@@ -218,10 +212,6 @@ fun SponsorsScreen(
                 SponsorItem(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp,
-                        )
                         .height(77.dp),
                     sponsor = sponsor,
                 )
@@ -237,10 +227,7 @@ fun SponsorsScreen(
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp,
-                        ),
+                        .padding(vertical = 6.dp),
                 )
             }
             items(
@@ -250,10 +237,6 @@ fun SponsorsScreen(
                 SponsorItem(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(
-                            horizontal = 12.dp,
-                            vertical = 6.dp,
-                        )
                         .height(77.dp),
                     sponsor = sponsor,
                 )
