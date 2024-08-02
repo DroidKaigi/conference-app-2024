@@ -12,6 +12,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons.AutoMirrored.Filled
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -169,23 +171,27 @@ fun SponsorsScreen(
                 Text(
                     text = "PLATINUM SPONSORS",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = 12.dp,
+                            vertical = 6.dp,
+                        ),
                 )
             }
             items(
                 items = uiState.sponsorListUiState.platinumSponsors,
                 span = { GridItemSpan(maxLineSpan) },
             ) { sponsor ->
-                Image(
-                    painter = rememberAsyncImagePainter(sponsor.logo),
-                    contentDescription = null,
+                SponsorItem(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(100.dp)
                         .padding(
                             horizontal = 12.dp,
                             vertical = 6.dp,
-                        ),
+                        )
+                        .height(110.dp),
+                    sponsor = sponsor,
                 )
             }
 
@@ -197,23 +203,27 @@ fun SponsorsScreen(
                 Text(
                     text = "GOLD SPONSORS",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = 12.dp,
+                            vertical = 6.dp,
+                        ),
                 )
             }
             items(
                 items = uiState.sponsorListUiState.goldSponsors,
                 span = { GridItemSpan(3) },
             ) { sponsor ->
-                Image(
-                    painter = rememberAsyncImagePainter(sponsor.logo),
-                    contentDescription = null,
+                SponsorItem(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(100.dp)
                         .padding(
-                            horizontal = 6.dp,
+                            horizontal = 12.dp,
                             vertical = 6.dp,
-                        ),
+                        )
+                        .height(77.dp),
+                    sponsor = sponsor,
                 )
             }
 
@@ -225,26 +235,54 @@ fun SponsorsScreen(
                 Text(
                     text = "SUPPORTERS",
                     style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(
+                            horizontal = 12.dp,
+                            vertical = 6.dp,
+                        ),
                 )
             }
             items(
                 items = uiState.sponsorListUiState.platinumSponsors,
                 span = { GridItemSpan(2) },
             ) { sponsor ->
-                Image(
-                    painter = rememberAsyncImagePainter(sponsor.logo),
-                    contentDescription = null,
+                SponsorItem(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(100.dp)
                         .padding(
-                            horizontal = 6.dp,
+                            horizontal = 12.dp,
                             vertical = 6.dp,
-                        ),
+                        )
+                        .height(77.dp),
+                    sponsor = sponsor,
                 )
             }
         }
+    }
+}
+
+@Composable
+fun SponsorItem(
+    modifier: Modifier,
+    sponsor: Sponsor,
+) {
+    Card(
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.inverseSurface,
+        ),
+    ) {
+        Image(
+            painter = rememberAsyncImagePainter(sponsor.logo),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(
+                    horizontal = 12.dp,
+                    vertical = 6.dp,
+                ),
+        )
     }
 }
 
