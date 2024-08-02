@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
@@ -75,14 +76,8 @@ fun SponsorsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val uiState = SponsorsScreenUiState(
-        sponsorsListUiState = SponsorsListUiState(
-            platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
-            goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
-            supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
-        ),
-        userMessageStateHolder = UserMessageStateHolderImpl(),
-    )
+    val eventEmitter = rememberEventEmitter<SponsorsScreenEvent>()
+    val uiState = sponsorsScreenPresenter(events = eventEmitter)
 
     val snackbarHostState = remember { SnackbarHostState() }
 
