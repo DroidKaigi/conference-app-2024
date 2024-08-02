@@ -9,8 +9,13 @@ import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
+import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
+import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
 import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
+import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus
+import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus.Error
+import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus.Operational
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
@@ -216,6 +221,28 @@ class DefaultStaffServerRobot @Inject constructor(staffApiClient: StaffApiClient
                 StaffServerRobot.ServerStatus.Operational -> FakeStaffApiClient.Status.Operational
                 StaffServerRobot.ServerStatus.Error -> FakeStaffApiClient.Status.Error
             },
+        )
+    }
+}
+
+interface SponsorsServerRobot {
+    enum class ServerStatus {
+        Operational,
+        Error,
+    }
+
+    fun setupSponsorsServer(sererStatus: ServerStatus)
+}
+
+class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: SponsorsApiClient) :
+SponsorsServerRobot {
+    private val fakeSponsorsApiClient = sponsorsApiClient as FakeSponsorsApiClient
+    override fun setupSponsorsServer(sererStatus: ServerStatus) {
+        fakeSponsorsApiClient.setup(
+            when (sererStatus) {
+                Operational -> FakeSponsorsApiClient.Status.Operational
+                Error -> FakeSponsorsApiClient.Status.Error
+            }
         )
     }
 }
