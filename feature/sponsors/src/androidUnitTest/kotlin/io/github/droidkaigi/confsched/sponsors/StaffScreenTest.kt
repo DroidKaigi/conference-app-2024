@@ -4,11 +4,10 @@ import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.RobotTestRule
-import io.github.droidkaigi.confsched.testing.StaffServerRobot.ServerStatus.Error
-import io.github.droidkaigi.confsched.testing.StaffServerRobot.ServerStatus.Operational
+import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
-import io.github.droidkaigi.confsched.testing.robot.StaffScreenRobot
+import io.github.droidkaigi.confsched.testing.robot.SponsorsScreenRobot
 import io.github.droidkaigi.confsched.testing.runRobot
 import io.github.droidkaigi.confsched.testing.todoChecks
 import org.junit.Rule
@@ -42,7 +41,7 @@ class SponsorsScreenTest(
             return describeBehaviors<SponsorsScreenRobot>(name = "SponsorsScreen") {
                 describe("when server is operational") {
                     run {
-                        setupSponsorsServer(Operational)
+                        setupSponsorsServer(ServerStatus.Operational)
                     }
                     describe("when launch") {
                         run {
@@ -58,7 +57,7 @@ class SponsorsScreenTest(
 
                 describe("when server is down") {
                     run {
-                        setupSponsorsServer(Error)
+                        setupSponsorsServer(ServerStatus.Error)
                     }
                     describe("when launch") {
                         run {
