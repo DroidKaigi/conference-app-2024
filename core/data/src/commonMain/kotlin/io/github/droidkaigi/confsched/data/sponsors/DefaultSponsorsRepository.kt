@@ -15,7 +15,7 @@ public class DefaultSponsorsRepository(
     private val sponsorsStateFlow =
         MutableStateFlow<PersistentList<Sponsor>>(persistentListOf())
 
-    override fun sponsors(): Flow<PersistentList<Sponsor>> {
+    override fun getSponsorStream(): Flow<PersistentList<Sponsor>> {
         return sponsorsStateFlow.onStart {
             if (sponsorsStateFlow.value.isEmpty()) {
                 refresh()

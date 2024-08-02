@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.cancellation.CancellationException
 
 public interface SponsorsRepository {
-    public fun sponsors(): Flow<PersistentList<Sponsor>>
+    public fun getSponsorStream(): Flow<PersistentList<Sponsor>>
 
     @Throws(CancellationException::class)
     public suspend fun refresh()
