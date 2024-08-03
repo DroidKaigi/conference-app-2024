@@ -73,10 +73,9 @@ fun <T : R, R> Flow<T>.safeCollectAsRetainedState(
                     collect { value = it }
                 }
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Throwable) {
-            if (e is CancellationException) {
-                throw e
-            }
             composeEffectErrorHandler.emit(e)
         }
     }
