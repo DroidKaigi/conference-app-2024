@@ -8,6 +8,7 @@ public struct RoomTag: View {
         case hedgehog
         case iguana
         case jellyfish
+        case allRooms
     }
 
     let room: Room
@@ -40,6 +41,7 @@ extension RoomTag.Room {
         case .hedgehog: "Hedgehog"
         case .iguana: "Iguana"
         case .jellyfish: "Jellyfish"
+        case .allRooms: "All Rooms" //This value may be wrong
         }
     }
 
@@ -50,6 +52,7 @@ extension RoomTag.Room {
         case .hedgehog: AssetColors.Custom.hedgehog.swiftUIColor
         case .iguana: AssetColors.Custom.iguana.swiftUIColor
         case .jellyfish: AssetColors.Custom.jellyfish.swiftUIColor
+        case .allRooms: AssetColors.Surface.surface.swiftUIColor
         }
     }
 }

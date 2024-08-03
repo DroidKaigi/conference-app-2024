@@ -60,25 +60,10 @@ public struct TimetableReducer : Sendable{
                 }
                 .cancellable(id: CancelID.connection)
             case .response(.success(let timetables)):
-                let sortedItems: [(Date, Date, TimetableItem)] = timetables.map {
+                let sortedItems: [(Date, Date, shared.TimetableItem)] = timetables.map {
                     (Date(timeIntervalSince1970: Double($0.startsAt.epochSeconds)),
                     Date(timeIntervalSince1970: Double($0.endsAt.epochSeconds)),
-                     //try! Date($0.endsTimeString, strategy: .iso8601),
-                     TimetableItem(
-                        id: "", //is there an ID we actually need?
-                        title: $0.title.currentLangTitle,
-                        startsAt: Date(timeIntervalSince1970: Double($0.startsAt.epochSeconds)),
-                        endsAt: Date(timeIntervalSince1970: Double($0.endsAt.epochSeconds)),
-                        category: $0.category.title.currentLangTitle,
-                        sessionType: $0.sessionType.name,
-                        room: $0.room.name.currentLangTitle,
-                        targetAudience: $0.targetAudience.localizedLowercase,
-                        languages: $0.language.labels,
-                        asset: $0.asset,
-                        levels: $0.levels,
-                        speakers: $0.speakers.map {$0.name},
-                        isFavorite: false //TODO: May need to pull this info separately
-                     ))
+                    $0)
                 }
                 
                 let myDict = sortedItems.reduce(into: [Date: TimetableTimeGroupItems]()) {
@@ -97,7 +82,7 @@ public struct TimetableReducer : Sendable{
                 
                 //TODO: this filter shouldn't be necessary but state.timetableItems = myDict.values generates an assignment error
                 state.timetableItems = myDict.values.sorted {
-                    $0.items[0].startsAt < $1.items[0].startsAt
+                    $0.items[0].startsAt.epochSeconds < $1.items[0].startsAt.epochSeconds
                 }
                 
                 return .none
