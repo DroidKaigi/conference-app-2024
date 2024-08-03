@@ -1,3 +1,6 @@
+// FIXME: When the API is ready, remove Suppress annotation below.
+@file:Suppress("UnusedPrivateProperty", "UnusedPrivateMember")
+
 package io.github.droidkaigi.confsched.data.staff
 
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -6,6 +9,7 @@ import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.staff.response.StaffResponse
 import io.github.droidkaigi.confsched.data.staff.response.StaffsResponse
 import io.github.droidkaigi.confsched.model.Staff
+import io.github.droidkaigi.confsched.model.fakes
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -22,9 +26,11 @@ public class DefaultStaffApiClient(
     private val staffApi = ktorfit.create<StaffApi>()
 
     public override suspend fun getStaff(): PersistentList<Staff> {
-        return networkService {
-            staffApi.getStaff()
-        }.toStaffList()
+        // FIXME: When the API is ready, remove the comments below and return the actual data.
+        return Staff.fakes()
+//        return networkService {
+//            staffApi.getStaff()
+//        }.toStaffList()
     }
 }
 
