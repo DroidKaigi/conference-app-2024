@@ -11,10 +11,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.sponsors.generated.resources.content_description_sponsor_logo
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
+import io.github.droidkaigi.confsched.sponsors.SponsorsRes
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -31,7 +34,7 @@ fun SponsorItem(
     ) {
         Image(
             painter = rememberAsyncImagePainter(sponsor.logo),
-            contentDescription = null,
+            contentDescription = stringResource(SponsorsRes.string.content_description_sponsor_logo),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
