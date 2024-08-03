@@ -20,6 +20,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.sponsors.generated.resources.content_description_back
+import conference_app_2024.feature.sponsors.generated.resources.sponsor
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Plan.GOLD
@@ -34,6 +36,7 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val sponsorsScreenRoute = "sponsors"
@@ -118,7 +121,7 @@ fun SponsorsScreen(
             if (scrollBehavior != null) {
                 LargeTopAppBar(
                     title = {
-                        Text(text = "Sponsors")
+                        Text(text = stringResource(SponsorsRes.string.sponsor))
                     },
                     navigationIcon = {
                         IconButton(
@@ -126,7 +129,7 @@ fun SponsorsScreen(
                         ) {
                             Icon(
                                 imageVector = Filled.ArrowBack,
-                                contentDescription = "Back",
+                                contentDescription = stringResource(SponsorsRes.string.content_description_back),
                             )
                         }
                     },

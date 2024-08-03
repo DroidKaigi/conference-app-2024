@@ -19,6 +19,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.sponsors.generated.resources.gold_sponsor
+import conference_app_2024.feature.sponsors.generated.resources.platinum_sponsor
+import conference_app_2024.feature.sponsors.generated.resources.supporters
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
@@ -26,8 +29,10 @@ import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.sponsors.SponsorsListUiState
+import io.github.droidkaigi.confsched.sponsors.SponsorsRes
 import io.github.droidkaigi.confsched.sponsors.component.SponsorItem
 import kotlinx.collections.immutable.toPersistentList
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,7 +61,7 @@ fun SponsorsList(
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             Text(
-                text = "PLATINUM SPONSORS",
+                text = stringResource(SponsorsRes.string.platinum_sponsor),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -82,7 +87,7 @@ fun SponsorsList(
 
         item(span = { GridItemSpan(maxLineSpan) }) {
             Text(
-                text = "GOLD SPONSORS",
+                text = stringResource(SponsorsRes.string.gold_sponsor),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -108,7 +113,7 @@ fun SponsorsList(
 
         item(span = { GridItemSpan(maxLineSpan) }) {
             Text(
-                text = "SUPPORTERS",
+                text = stringResource(SponsorsRes.string.supporters),
                 style = MaterialTheme.typography.titleMedium,
                 modifier = Modifier
                     .fillMaxWidth()
