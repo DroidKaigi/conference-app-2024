@@ -1,63 +1,56 @@
 import SwiftUI
 import Theme
+import shared
+import Model
 
 public struct RoomTag: View {
-    public enum Room {
-        case flamingo
-        case giraffe
-        case hedgehog
-        case iguana
-        case jellyfish
-        case allRooms
-    }
+    let room: TimetableRoom
 
-    let room: Room
-
-    public init(_ room: Room) {
+    public init(_ room: TimetableRoom) {
         self.room = room
     }
 
     public var body: some View {
-        HStack(spacing: 5) {
-            Rectangle()
-                .frame(width: 10, height: 10)
-            Text(room.name)
+        HStack(spacing: 4) {
+            room.shape
+            Text(room.name.currentLangTitle)
                 .textStyle(.labelMedium)
         }
-        .foregroundStyle(room.color)
+        .foregroundStyle(room.roomTheme.primaryColor)
         .padding(.horizontal, 6)
         .overlay(
             RoundedRectangle(cornerRadius: 2)
-                .stroke(room.color, lineWidth: 1)
+                .stroke(room.roomTheme.primaryColor, lineWidth: 1)
         )
     }
 }
 
-extension RoomTag.Room {
-    var name: String {
-        switch self {
-        case .flamingo: "Flamingo"
-        case .giraffe: "Giraffe"
-        case .hedgehog: "Hedgehog"
-        case .iguana: "Iguana"
-        case .jellyfish: "Jellyfish"
-        case .allRooms: "All Rooms" //This value may be wrong
+extension TimetableRoom {
+    var shape: some View {
+        Group {
+            switch getShape() {
+            case .circle: Image(.icCircleFill).renderingMode(.template)
+            case .diamond: Image(.icDiamondFill).renderingMode(.template)
+            case .sharpDiamond: Image(.icSharpDiamondFill).renderingMode(.template)
+            case .square: Image(.icSquareFill).renderingMode(.template)
+            default: Image(.icTriangleFill).renderingMode(.template)
+            }
         }
-    }
-
-    var color: Color {
-        switch self {
-        case .flamingo: AssetColors.Custom.flamingo.swiftUIColor
-        case .giraffe: AssetColors.Custom.giraffe.swiftUIColor
-        case .hedgehog: AssetColors.Custom.hedgehog.swiftUIColor
-        case .iguana: AssetColors.Custom.iguana.swiftUIColor
-        case .jellyfish: AssetColors.Custom.jellyfish.swiftUIColor
-        case .allRooms: AssetColors.Surface.surface.swiftUIColor
-        }
+        .foregroundStyle(roomTheme.primaryColor)
+        .frame(width: 12, height: 12)
     }
 }
 
-
 #Preview {
-    RoomTag(.flamingo)
+    RoomTag(
+        TimetableRoom(
+            id: 1,
+            name: MultiLangText(
+                jaTitle: "Iguana",
+                enTitle: "Iguana"
+            ),
+            type: .roomF,
+            sort: 1
+        )
+    )
 }

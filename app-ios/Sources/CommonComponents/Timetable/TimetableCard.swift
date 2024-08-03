@@ -43,7 +43,7 @@ public struct TimetableCard: View {
         } label: {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
-                    RoomTag(self.roomType)
+                    RoomTag(timetableItem.room)
                     ForEach(timetableItem.language.labels, id: \.self) { label in
                         LanguageTag(label)
                     }
