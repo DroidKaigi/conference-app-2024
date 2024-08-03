@@ -13,10 +13,6 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,12 +25,13 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 
 @Composable
-fun TimetableGridTab(
-    modifier: Modifier = Modifier,
+fun TimetableDayTab(
+    selectedDay: DroidKaigi2024Day,
     onDaySelected: (day: DroidKaigi2024Day) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
+    val selectedTabIndex = selectedDay.dayIndex
     val selectedColor = Color(0xFF4AFF82)
-    var selectedTabIndex by rememberSaveable { mutableStateOf(1) }
     Column(
         modifier = modifier.padding(start = 12.dp),
         verticalArrangement = Arrangement.Center,
@@ -57,7 +54,6 @@ fun TimetableGridTab(
                     modifier = Modifier.height(64.dp),
                     selected = true,
                     onClick = {
-                        selectedTabIndex = 0
                         onDaySelected(Workday)
                     },
                     selectedContentColor = selectedColor,
@@ -86,7 +82,6 @@ fun TimetableGridTab(
                     modifier = Modifier.height(64.dp),
                     selected = false,
                     onClick = {
-                        selectedTabIndex = 1
                         onDaySelected(ConferenceDay1)
                     },
                     selectedContentColor = selectedColor,
@@ -113,7 +108,6 @@ fun TimetableGridTab(
                     modifier = Modifier.height(64.dp),
                     selected = false,
                     onClick = {
-                        selectedTabIndex = 2
                         onDaySelected(ConferenceDay2)
                     },
                     selectedContentColor = selectedColor,

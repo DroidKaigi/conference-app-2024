@@ -20,7 +20,7 @@ import conference_app_2024.feature.sessions.generated.resources.empty
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.SessionsRes
-import io.github.droidkaigi.confsched.sessions.component.TimetableGridTab
+import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.GridTimetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.ListTimetable
@@ -58,9 +58,12 @@ fun TimetableSheet(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            TimetableGridTab(onDaySelected = { day ->
-                selectedDay = day
-            })
+            TimetableDayTab(
+                selectedDay = selectedDay,
+                onDaySelected = { day ->
+                    selectedDay = day
+                },
+            )
             when (uiState) {
                 is ListTimetable -> {
                     TimetableList(
