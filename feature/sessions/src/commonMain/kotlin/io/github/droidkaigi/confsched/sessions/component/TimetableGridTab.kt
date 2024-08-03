@@ -13,23 +13,25 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 
 @Composable
-fun TimetableGridTab(
+fun TimetableDayTab(
+    selectedDay: DroidKaigi2024Day,
+    onDaySelected: (day: DroidKaigi2024Day) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val selectedTabIndex = selectedDay.dayIndex
     val selectedColor = Color(0xFF4AFF82)
-    var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
     Column(
         modifier = modifier.padding(start = 12.dp),
         verticalArrangement = Arrangement.Center,
@@ -52,24 +54,53 @@ fun TimetableGridTab(
                     modifier = Modifier.height(64.dp),
                     selected = true,
                     onClick = {
-                        selectedTabIndex = 0
+                        onDaySelected(Workday)
                     },
                     selectedContentColor = selectedColor,
                     unselectedContentColor = Color.White,
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (selectedTabIndex == 0) {
+                            FloorText(
+                                text = "Workshop",
+                                isSelected = selectedTabIndex == 0,
+                            )
+                            Text(
+                                text = " (9/11)",
+                                fontSize = 11.sp,
+                                color = Color(0xFF4AFF82),
+                            )
+                        } else {
+                            FloorText(
+                                text = "9/11",
+                                isSelected = selectedTabIndex == 0,
+                            )
+                        }
+                    }
+                }
+                Tab(
+                    modifier = Modifier.height(64.dp),
+                    selected = false,
+                    onClick = {
+                        onDaySelected(ConferenceDay1)
+                    },
+                    selectedContentColor = selectedColor,
+                    unselectedContentColor = Color.White,
+                ) {
+                    if (selectedTabIndex == 1) {
                         FloorText(
-                            text = "Workshop",
-                            isSelected = selectedTabIndex == 0,
+                            text = "Conference",
+                            isSelected = selectedTabIndex == 1,
                         )
                         Text(
-                            text = " (9/11)",
+                            text = " (9/12)",
                             fontSize = 11.sp,
-                            color = if (selectedTabIndex == 0) {
-                                Color(0xFF4AFF82)
-                            } else {
-                                Color.White
-                            },
+                            color = Color(0xFF4AFF82),
+                        )
+                    } else {
+                        FloorText(
+                            text = "9/12",
+                            isSelected = selectedTabIndex == 1,
                         )
                     }
                 }
@@ -77,29 +108,27 @@ fun TimetableGridTab(
                     modifier = Modifier.height(64.dp),
                     selected = false,
                     onClick = {
-                        selectedTabIndex = 1
+                        onDaySelected(ConferenceDay2)
                     },
                     selectedContentColor = selectedColor,
                     unselectedContentColor = Color.White,
                 ) {
-                    FloorText(
-                        text = "9/12",
-                        isSelected = selectedTabIndex == 1,
-                    )
-                }
-                Tab(
-                    modifier = Modifier.height(64.dp),
-                    selected = false,
-                    onClick = {
-                        selectedTabIndex = 2
-                    },
-                    selectedContentColor = selectedColor,
-                    unselectedContentColor = Color.White,
-                ) {
-                    FloorText(
-                        text = "9/13",
-                        isSelected = selectedTabIndex == 2,
-                    )
+                    if (selectedTabIndex == 2) {
+                        FloorText(
+                            text = "Conference",
+                            isSelected = selectedTabIndex == 2,
+                        )
+                        Text(
+                            text = " (9/13)",
+                            fontSize = 11.sp,
+                            color = Color(0xFF4AFF82),
+                        )
+                    } else {
+                        FloorText(
+                            text = "9/13",
+                            isSelected = selectedTabIndex == 2,
+                        )
+                    }
                 }
             },
         )

@@ -1,4 +1,4 @@
-name: 'labeler'
+name: 'PR Labeler'
 
 on:
   pull_request:
@@ -20,3 +20,19 @@ jobs:
         uses: actions/labeler@v5
         with:
           configuration-path: .github/configs/labeler.yml
+
+  call_workflow:
+    needs: [label]
+    runs-on: ubuntu-latest
+    steps:
+      - id: labels
+        shell: bash
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          json=$(gh pr view "$PR_NUMBER" --json labels | jq -c '.labels|map(.name)')
+          echo "json=$json" >> "$GITHUB_OUTPUT"
+      - if: contains(fromJSON(steps.labels.outputs.json), 'iOS 🍎')
+        uses: ./.github/workflows/swiftlint.yml
