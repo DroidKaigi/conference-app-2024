@@ -1,7 +1,7 @@
 import Foundation
 import shared
 
-public enum DayTab: String, CaseIterable, Identifiable {
+public enum DayTab: String, CaseIterable, Identifiable, Sendable {
     public var id : RawValue { rawValue }
     
     case workshopDay = "WorkshopDay"
