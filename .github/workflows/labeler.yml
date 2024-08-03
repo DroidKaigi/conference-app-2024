@@ -20,3 +20,7 @@ jobs:
         uses: actions/labeler@v5
         with:
           configuration-path: .github/configs/labeler.yml
+
+  call_workflow:
+    needs: [label]
+    uses: ./.github/workflows/swiftlint.yml
