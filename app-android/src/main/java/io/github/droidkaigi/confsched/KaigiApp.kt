@@ -47,6 +47,9 @@ import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.Lang.JAPANESE
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.defaultLang
+import io.github.droidkaigi.confsched.profilecard.navigateProfileCardScreen
+import io.github.droidkaigi.confsched.profilecard.profileCardScreen
+import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
 import io.github.droidkaigi.confsched.sessions.navigateTimetableScreen
 import io.github.droidkaigi.confsched.sessions.navigateToTimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
@@ -58,9 +61,6 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confshed.profilecard.navigateProfileCardScreen
-import io.github.droidkaigi.confshed.profilecard.profileCardScreen
-import io.github.droidkaigi.confshed.profilecard.profileCardScreenRoute
 import kotlinx.collections.immutable.PersistentList
 
 @Composable

@@ -11,7 +11,7 @@ struct InformationRow: View {
         HStack {
             icon
                 .renderingMode(.template)
-                .foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
+                .foregroundStyle(titleColor)
             HStack(spacing: 12) {
                 Text(title)
                     .textStyle(.titleSmall)

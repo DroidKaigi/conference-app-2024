@@ -1,7 +1,10 @@
-name: SwiftLint
+name: swiftlint
 on:
   workflow_run:
-    workflows: ["PR Labeler"]
+    workflows: 
+      - labeler
+    types:
+      - completed
     paths:
       - '.swiftlint.yml'
       - '**/*.swift'

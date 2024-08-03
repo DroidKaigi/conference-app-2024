@@ -46,19 +46,14 @@ public struct RootView: View {
                     )
                 }
 
-            FavoriteScreen(
-                store: store.scope(
-                    state: \.favorite,
-                    action: \.favorite
-                )
-            )
-            .tag(Tab.favorite)
-            .tabItem {
-                Label(
-                    title: { Text("Favorite") },
-                    icon: { Image(.icFav).renderingMode(.template) }
-                )
-            }
+            favoriteTab
+                .tag(Tab.favorite)
+                .tabItem {
+                    Label(
+                        title: { Text("Favorite") },
+                        icon: { Image(.icFav).renderingMode(.template) }
+                    )
+                }
 
             aboutTab
                 .tag(Tab.about)
@@ -78,7 +73,6 @@ public struct RootView: View {
                     )
                 }
         }
-        .tint(AssetColors.Custom.flamingo.swiftUIColor)
         .navigationBarTitleStyle(
             color: AssetColors.Surface.onSurface.swiftUIColor,
             titleTextStyle: .titleMedium,
@@ -135,6 +129,28 @@ public struct RootView: View {
 
             case .acknowledgements:
                 LicenseListView()
+            }
+        }
+    }
+
+    @MainActor
+    private var favoriteTab: some View {
+        NavigationStack(
+            path: $store.scope(
+                state: \.paths.favorite,
+                action: \.paths.favorite
+            )
+        ) {
+            FavoriteView(
+                store: store.scope(
+                    state: \.favorite,
+                    action: \.favorite
+                )
+            )
+        } destination: { store in
+            switch store.case {
+            case let .timetableDetail(store):
+                TimetableDetailView(store: store)
             }
         }
     }
