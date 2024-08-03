@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.sessions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
@@ -21,6 +20,7 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.Flow
 
@@ -37,7 +37,7 @@ fun timetableScreenPresenter(
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val sessions by rememberUpdatedState(sessionsRepository.timetable())
-    var timetableUiType by remember { mutableStateOf(TimetableUiType.List) }
+    var timetableUiType by rememberRetained { mutableStateOf(TimetableUiType.List) }
     val timetableUiState by rememberUpdatedState(
         timetableSheet(
             sessionTimetable = sessions,

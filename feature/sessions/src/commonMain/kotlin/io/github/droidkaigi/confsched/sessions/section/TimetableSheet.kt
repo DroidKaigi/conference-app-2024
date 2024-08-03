@@ -1,9 +1,7 @@
 package io.github.droidkaigi.confsched.sessions.section
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,21 +9,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import conference_app_2024.feature.sessions.generated.resources.empty
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
-import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
-import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.SessionsRes
+import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.GridTimetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.ListTimetable
@@ -63,33 +58,12 @@ fun TimetableSheet(
             modifier = Modifier
                 .fillMaxSize(),
         ) {
-            // TODO: Row not showing yet... there is a layout problem here I need to fix
-            Row {
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = {
-                        selectedDay = Workday
-                    },
-                ) {
-                    Text("Workday 9/11", color = Color.Green)
-                }
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = {
-                        selectedDay = ConferenceDay1
-                    },
-                ) {
-                    Text("9/12", color = Color.Green)
-                }
-                TextButton(
-                    modifier = Modifier.background(Color.Black),
-                    onClick = {
-                        selectedDay = DroidKaigi2024Day.ConferenceDay2
-                    },
-                ) {
-                    Text("9/13", color = Color.Green)
-                }
-            }
+            TimetableDayTab(
+                selectedDay = selectedDay,
+                onDaySelected = { day ->
+                    selectedDay = day
+                },
+            )
             when (uiState) {
                 is ListTimetable -> {
                     TimetableList(
