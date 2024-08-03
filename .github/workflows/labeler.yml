@@ -34,5 +34,7 @@ jobs:
         run: |
           json=$(gh pr view "$PR_NUMBER" --json labels | jq -c '.labels|map(.name)')
           echo "json=$json" >> "$GITHUB_OUTPUT"
+      - name: Echo Label
+        run: echo "${{steps.labels.outputs.json}}"
       - if: contains(fromJSON(steps.labels.outputs.json), 'iOS 🍎')
         uses: ./.github/workflows/swiftlint.yml
