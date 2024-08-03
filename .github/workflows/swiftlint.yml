@@ -1,7 +1,9 @@
 name: SwiftLint
 on:
-  workflow_call:
-
+  pull_request:
+    paths:
+      - '.swiftlint.yml'
+      - '**/*.swift'
 jobs:
   swift-lint:
     runs-on: ubuntu-latest
