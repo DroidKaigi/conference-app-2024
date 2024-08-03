@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sample">!!Please remove this resource when you add string resource!!</string>
+    <string name="sponsor">Sponsor</string>
+    <string name="platinum_sponsor">PLATINUM SPONSORS</string>
+    <string name="gold_sponsor">GOLD SPONSORS</string>
+    <string name="supporters">SUPPORTERS</string>
+    <string name="content_description_back">Back</string>
 </resources>

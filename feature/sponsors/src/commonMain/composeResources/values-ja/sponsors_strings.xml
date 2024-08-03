@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sample">!!Please remove this resource when you add string resource!!</string>
+    <string name="sponsor">スポンサー</string>
+    <string name="platinum_sponsor">プラチナスポンサー</string>
+    <string name="gold_sponsor">ゴールドスポンサー</string>
+    <string name="supporters">サポーター</string>
+    <string name="content_description_back">戻る</string>
 </resources>
