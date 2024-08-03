@@ -11,9 +11,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -30,6 +28,7 @@ import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.sponsors.SponsorsListUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsRes
+import io.github.droidkaigi.confsched.sponsors.component.SponsorHeader
 import io.github.droidkaigi.confsched.sponsors.component.SponsorItem
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
@@ -60,12 +59,9 @@ fun SponsorsList(
             },
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
-            Text(
+            SponsorHeader(
                 text = stringResource(SponsorsRes.string.platinum_sponsor),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 6.dp),
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         items(
@@ -86,12 +82,9 @@ fun SponsorsList(
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
-            Text(
+            SponsorHeader(
                 text = stringResource(SponsorsRes.string.gold_sponsor),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 6.dp),
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         items(
@@ -112,12 +105,9 @@ fun SponsorsList(
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
-            Text(
+            SponsorHeader(
                 text = stringResource(SponsorsRes.string.supporters),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 6.dp),
+                modifier = Modifier.fillMaxWidth(),
             )
         }
         items(
