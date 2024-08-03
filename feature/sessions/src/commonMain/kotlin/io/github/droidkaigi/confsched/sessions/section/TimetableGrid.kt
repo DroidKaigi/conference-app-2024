@@ -95,7 +95,6 @@ fun TimetableGrid(
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column {
-        // TimetableGridTab()
         TimetableGrid(
             timetable = uiState.timetable,
             onTimetableItemClick = onTimetableItemClick,
