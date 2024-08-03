@@ -63,7 +63,7 @@ class SponsorsScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("show snackbar") {
+                        itShould("show error message") {
                             captureScreenWithChecks(
                                 checks = todoChecks("This screen is still empty now. Please add some checks."),
                             )
