@@ -7,17 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - id: labels
-        shell: bash
-        env:
-          GH_REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
-          PR_NUMBER: ${{ github.event.number }}
-        run: |
-          json=$(gh pr view "$PR_NUMBER" --json labels | jq -c '.labels|map(.name)')
-          echo "json=$json" >> "$GITHUB_OUTPUT"
       - name: Danger
-        if: contains(fromJSON(steps.labels.outputs.json), 'iOS 🍎')
         uses: 417-72KI/danger-swiftlint@v5.10
         with:
           dangerfile: app-ios/Dangerfile.swift
