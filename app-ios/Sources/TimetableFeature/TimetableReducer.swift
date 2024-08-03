@@ -3,11 +3,9 @@ import CommonComponents
 import KMPClient
 import shared
 import Foundation
-//import EventKitClient
 
 @Reducer
 public struct TimetableReducer : Sendable{
-    let sampleData = SampleData()
     @Dependency(\.timetableClient) private var timetableClient
     enum CancelID { case connection }
     
