@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confshed.profilecard
+package io.github.droidkaigi.confsched.profilecard
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,9 +30,9 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Edit
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confshed.profilecard.ProfileCardUiState.Edit
 
 const val profileCardScreenRoute = "profilecard"
 

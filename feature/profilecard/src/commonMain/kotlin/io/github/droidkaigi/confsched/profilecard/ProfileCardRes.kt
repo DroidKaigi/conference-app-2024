@@ -1,8 +1,8 @@
-package io.github.droidkaigi.confshed.profilecard
+package io.github.droidkaigi.confsched.profilecard
 
 import conference_app_2024.feature.profilecard.generated.resources.Res
 
-internal object ProfileCardRes {
+object ProfileCardRes {
     val drawable = Res.drawable
     val string = Res.string
 }

@@ -26,7 +26,7 @@ class KmpComposePlugin : Plugin<Project> {
             }
             val compose = extensions.get("compose") as org.jetbrains.compose.ComposeExtension
             compose.extensions.configure<ResourcesExtension> {
-                publicResClass = false
+                publicResClass = true
             }
             kotlin {
                 with(sourceSets) {

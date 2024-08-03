@@ -1,3 +1,4 @@
+import org.jetbrains.compose.ComposePlugin.CommonComponentsDependencies
 import org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
 import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
@@ -41,6 +42,7 @@ kotlin {
                     export(projects.feature.contributors)
                     export(projects.core.model)
                     export(projects.core.data)
+                    export(CommonComponentsDependencies.resources)
                 }
             }
         }

@@ -19,6 +19,11 @@ public struct RootReducer {
         }
 
         @Reducer(state: .equatable)
+        public enum Favorite {
+            case timetableDetail(TimetableDetailReducer)
+        }
+
+        @Reducer(state: .equatable)
         public enum About {
             case staff(StaffReducer)
             case contributor(ContributorReducer)
@@ -37,6 +42,7 @@ public struct RootReducer {
 
         public struct Paths: Equatable {
             public var timetable = StackState<Path.Timetable.State>()
+            public var favorite = StackState<Path.Favorite.State>()
             public var about = StackState<Path.About.State>()
         }
 
@@ -63,6 +69,7 @@ public struct RootReducer {
         @CasePathable
         public enum Paths {
             case timetable(StackActionOf<RootReducer.Path.Timetable>)
+            case favorite(StackActionOf<RootReducer.Path.Favorite>)
             case about(StackActionOf<RootReducer.Path.About>)
         }
     }
@@ -110,11 +117,26 @@ public struct RootReducer {
                 ))
                 return .none
 
+            case let .favorite(.destination(destination)):
+                switch destination {
+                case let .timetableDetail(timetableItemWithFavorite):
+                    state.paths.favorite.append(
+                        .timetableDetail(
+                            .init(
+                                timetableItem: timetableItemWithFavorite.timetableItem,
+                                isBookmarked: timetableItemWithFavorite.isFavorited
+                            )
+                        )
+                    )
+                    return .none
+                }
+
             default:
                 return .none
             }
         }
         .forEach(\.paths.about, action: \.paths.about)
+        .forEach(\.paths.favorite, action: \.paths.favorite)
         .forEach(\.paths.timetable, action: \.paths.timetable)
     }
 }
