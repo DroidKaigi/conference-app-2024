@@ -36,5 +36,5 @@ jobs:
           echo "json=$json" >> "$GITHUB_OUTPUT"
       - name: Echo Label
         run: echo "${{steps.labels.outputs.json}}"
-      - if: contains(fromJSON(steps.labels.outputs.json), 'iOS 🍎')
+      - if: contains(fromJSON(steps.labels.outputs.json), 'type:iOS 🍎')
         uses: ./.github/workflows/swiftlint.yml
