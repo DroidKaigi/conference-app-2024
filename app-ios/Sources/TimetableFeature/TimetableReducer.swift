@@ -36,7 +36,7 @@ public struct TimetableReducer : Sendable{
         Reduce { state, action in
             switch action {
             case .onAppear:
-                 state.timetableItems = sampleData.workdayResults //TODO: Replace with a "loading" text?
+                state.timetableItems = SampleData().day1Results //TODO: Replace with a "loading" text?
 
                  return .run { send in
                      await send(.requestDay(.selectDay(.day1)))

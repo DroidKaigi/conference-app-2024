@@ -8,8 +8,6 @@ public struct TimetableCard: View {
     let onTap: (TimetableItem) -> Void
     let onTapFavorite: (TimetableItem) -> Void
     
-    let roomType: RoomTag.Room
-    
     public init(
         timetableItem: TimetableItem,
         isFavorite: Bool,
@@ -20,21 +18,6 @@ public struct TimetableCard: View {
         self.isFavorite = isFavorite
         self.onTap = onTap
         self.onTapFavorite = onTapFavorite
-        
-        self.roomType = switch(timetableItem.room.type) {
-        case .roomF:
-            RoomTag.Room.flamingo
-        case .roomG:
-            RoomTag.Room.giraffe
-        case .roomH:
-            RoomTag.Room.hedgehog
-        case .roomI:
-            RoomTag.Room.iguana
-        case .roomJ:
-            RoomTag.Room.jellyfish
-        case .roomIj:
-            RoomTag.Room.allRooms //This may need adjustment
-        }
     }
 
     public var body: some View {
