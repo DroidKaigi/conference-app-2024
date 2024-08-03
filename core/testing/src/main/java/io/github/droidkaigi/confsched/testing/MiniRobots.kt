@@ -234,15 +234,14 @@ interface SponsorsServerRobot {
     fun setupSponsorsServer(sererStatus: ServerStatus)
 }
 
-class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: SponsorsApiClient) :
-SponsorsServerRobot {
+class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: SponsorsApiClient) : SponsorsServerRobot {
     private val fakeSponsorsApiClient = sponsorsApiClient as FakeSponsorsApiClient
     override fun setupSponsorsServer(sererStatus: ServerStatus) {
         fakeSponsorsApiClient.setup(
             when (sererStatus) {
                 Operational -> FakeSponsorsApiClient.Status.Operational
                 Error -> FakeSponsorsApiClient.Status.Error
-            }
+            },
         )
     }
 }

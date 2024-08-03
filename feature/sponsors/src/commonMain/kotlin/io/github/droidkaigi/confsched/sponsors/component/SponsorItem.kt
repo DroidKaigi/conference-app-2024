@@ -19,8 +19,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun SponsorItem(
-    modifier: Modifier = Modifier,
     sponsor: Sponsor,
+    modifier: Modifier = Modifier,
     onSponsorsItemClick: (url: String) -> Unit,
 ) {
     Card(

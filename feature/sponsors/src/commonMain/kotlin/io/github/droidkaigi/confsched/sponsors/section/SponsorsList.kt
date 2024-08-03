@@ -37,11 +37,11 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SponsorsList(
-    modifier: Modifier = Modifier,
     padding: PaddingValues,
     uiState: SponsorsListUiState,
     onSponsorsItemClick: (url: String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior?,
+    modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(6),

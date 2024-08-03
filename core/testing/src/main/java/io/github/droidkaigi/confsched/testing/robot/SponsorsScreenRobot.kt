@@ -11,8 +11,8 @@ import javax.inject.Inject
 class SponsorsScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val sponsorsServerRobot: DefaultSponsorsServerRobot,
-): ScreenRobot by screenRobot,
-SponsorsServerRobot by sponsorsServerRobot {
+) : ScreenRobot by screenRobot,
+    SponsorsServerRobot by sponsorsServerRobot {
     fun setupScreenContent() {
         robotTestRule.setContent {
             KaigiTheme {
