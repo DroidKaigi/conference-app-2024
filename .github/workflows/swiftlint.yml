@@ -1,8 +1,8 @@
-name: swiftlint
+name: SwiftLint
 on:
   workflow_run:
     workflows: 
-      - labeler
+      - PR Labeler
     types:
       - completed
     paths:
