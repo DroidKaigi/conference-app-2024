@@ -47,7 +47,7 @@ class SponsorsScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("show sponsors screen") {
+                        itShould("display sponsors") {
                             captureScreenWithChecks(
                                 checks = todoChecks("This screen is still empty now. Please add some checks."),
                             )
