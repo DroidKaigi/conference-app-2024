@@ -3,7 +3,10 @@ package io.github.droidkaigi.confsched.testing.robot
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import io.github.droidkaigi.confsched.about.AboutScreen
-import io.github.droidkaigi.confsched.about.AboutTestTag
+import io.github.droidkaigi.confsched.about.section.AboutCreditsSectionTestTag
+import io.github.droidkaigi.confsched.about.section.AboutDetailSectionTestTag
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag
+import io.github.droidkaigi.confsched.about.section.AboutOthersSectionTestTag
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.ScreenRobot
@@ -25,25 +28,25 @@ class AboutScreenRobot @Inject constructor(
 
     fun checkDetailSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.DetailSection.Section))
+            .onNode(hasTestTag(AboutDetailSectionTestTag.Section))
             .assertIsDisplayed()
     }
 
-    fun checkCreditsSectionDisplayed() {
+    fun checkCreditsSectionTitleDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.CreditsSection.Section))
+            .onNode(hasTestTag(AboutCreditsSectionTestTag.Title))
             .assertIsDisplayed()
     }
 
-    fun checkOthersSectionDisplayed() {
+    fun checkOthersSectionTitleDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.OthersSection.Section))
+            .onNode(hasTestTag(AboutOthersSectionTestTag.Title))
             .assertIsDisplayed()
     }
 
     fun checkFooterLinksSectionDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(AboutTestTag.FooterLinksSection.Section))
+            .onNode(hasTestTag(AboutFooterLinksSectionTestTag.Section))
             .assertIsDisplayed()
     }
 }
