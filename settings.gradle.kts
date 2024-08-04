@@ -29,6 +29,7 @@ include(
     ":feature:profilecard",
     ":feature:about",
     ":feature:staff",
+    ":feature:favorites",
     ":core:designsystem",
     ":core:data",
     ":core:model",
