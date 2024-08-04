@@ -13,7 +13,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.contributor
 import conference_app_2024.feature.about.generated.resources.credits_title
-import conference_app_2024.feature.about.generated.resources.sponsor
 import conference_app_2024.feature.about.generated.resources.staff
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutContentColumn
