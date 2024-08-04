@@ -34,6 +34,9 @@ import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
+import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
+import io.github.droidkaigi.confsched.favorites.favoritesScreens
+import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
@@ -101,6 +104,10 @@ private fun KaigiNavHost(
             },
         )
 
+        favoritesScreens(
+            onNavigationIconClick = navController::popBackStack,
+        )
+
         contributorsScreens(
             onNavigationIconClick = navController::popBackStack,
             onContributorItemClick = externalNavController::navigate,
@@ -131,6 +138,9 @@ private fun NavGraphBuilder.mainScreen(
             eventMapScreens(
                 onNavigationIconClick = navController::popBackStack,
                 onEventMapItemClick = externalNavController::navigate,
+            )
+            favoritesScreens(
+                onNavigationIconClick = navController::popBackStack,
             )
             aboutScreen(
                 contentPadding = contentPadding,
@@ -184,6 +194,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
             timetableScreenRoute -> Timetable
             profileCardScreenRoute -> ProfileCard
             aboutScreenRoute -> About
+            favoritesScreenRoute -> Favorite
             else -> null
         }
     }
@@ -195,7 +206,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
-            Favorite -> {}
+            Favorite -> mainNestedNavController.navigateFavoritesScreen()
             About -> mainNestedNavController.navigateAboutScreen()
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }
