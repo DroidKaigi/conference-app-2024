@@ -18,6 +18,7 @@ dependencies {
     implementation(projects.feature.profilecard)
     implementation(projects.feature.about)
     implementation(projects.feature.staff)
+    implementation(projects.feature.sponsors)
     implementation(libs.daggerHiltAndroidTesting)
     implementation(libs.roborazzi)
     implementation(libs.kermit)
