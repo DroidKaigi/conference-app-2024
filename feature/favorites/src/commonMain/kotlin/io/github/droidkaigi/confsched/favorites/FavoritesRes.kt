@@ -1,6 +1,6 @@
 package io.github.droidkaigi.confsched.favorites
 
-import conference_app_2024.feature.staff.generated.resources.Res
+import conference_app_2024.feature.favorites.generated.resources.Res
 
 object FavoritesRes {
     val drawable = Res.drawable
