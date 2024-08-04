@@ -33,7 +33,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +50,7 @@ import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.SQUARE
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.TimetableListItemBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableListItemTestTag
+import io.github.droidkaigi.confsched.ui.component.TimeTableItemTag
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.collections.immutable.PersistentMap
 import org.jetbrains.compose.resources.stringResource
@@ -174,30 +174,5 @@ fun TimetableList(
                 // TODO: There is no data for the warning string right now. (Should go here)
             }
         }
-    }
-}
-
-@Composable
-fun TimeTableItemTag(
-    tagText: String,
-    tagColor: Color,
-    modifier: Modifier = Modifier,
-    icon: ImageVector? = null,
-) {
-    Row(
-        modifier = modifier
-            .border(border = BorderStroke(width = 1.dp, color = tagColor))
-            .clip(RoundedCornerShape(15.dp))
-            .padding(5.dp),
-    ) {
-        icon?.let { ico ->
-            Icon(ico, "", tint = tagColor)
-        }
-        Spacer(modifier = Modifier.padding(3.dp))
-        Text(
-            color = tagColor,
-            text = tagText,
-            modifier = Modifier.padding(end = 5.dp),
-        )
     }
 }

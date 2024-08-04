@@ -24,7 +24,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
-import io.github.droidkaigi.confsched.sessions.section.TimeTableItemTag
+import io.github.droidkaigi.confsched.ui.component.TimeTableItemTag
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
