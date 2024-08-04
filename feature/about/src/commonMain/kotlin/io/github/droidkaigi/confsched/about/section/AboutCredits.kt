@@ -22,7 +22,7 @@ import io.github.droidkaigi.confsched.about.section.AboutCreditsSectionTestTag.S
 import io.github.droidkaigi.confsched.about.section.AboutCreditsSectionTestTag.StaffItem
 import org.jetbrains.compose.resources.stringResource
 
-
+@Suppress("ConstPropertyName")
 object AboutCreditsSectionTestTag {
     const val Title = "AboutCreditsTitle"
     const val StaffItem = "AboutCreditsStaffItem"

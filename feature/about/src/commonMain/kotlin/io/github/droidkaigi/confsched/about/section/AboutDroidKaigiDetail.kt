@@ -23,6 +23,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Suppress("ConstPropertyName")
 object AboutDetailSectionTestTag {
     const val Section = "DetailSection"
 }

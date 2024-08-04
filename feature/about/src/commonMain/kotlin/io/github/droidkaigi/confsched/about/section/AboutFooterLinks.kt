@@ -27,6 +27,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Suppress("ConstPropertyName")
 object AboutFooterLinksSectionTestTag {
     const val Section = "FooterLinksSection"
     const val LinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItem"
