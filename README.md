@@ -2,6 +2,37 @@
 
 # DroidKaigi 2024 official app
 
+[DroidKaigi](https://2024.droidkaigi.jp/) is celebrating 10th year this time! This is a conference tailored for Android developers for enhancing sharing knowledge and communication.
+It's scheduled to take place for 3 days, on 11-13 September 2024.
+
+## Features
+
+In addition to the standard features of a conference app, the DroidKaigi 2024 official app offers the following functionalities:
+
+- **Timetable**: View the conference schedule and bookmark sessions.
+- **Profile cards**: Create and share your profile card with other attendees.
+- **Contributors**: Discover the contributors behind the app.
+...and more!
+
+## Try the app
+
+You can try the app on your device by clicking the button below. 
+[<img src="https://dply.me/wfhpc2/button/large" alt="Try it on your device via DeployGate">](https://dply.me/wfhpc2#install)
+
+## Contributing
+
+We always welcome any and all contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
+
+For Japanese speakers, please see [CONTRIBUTING.ja.md](CONTRIBUTING.ja.md).
+
+## Requirements
+Stable Android Studio Koala or higher. You can download it from [this page](https://developer.android.com/studio).
+
+## Design
+
+You can check out the design on Figma.
+TBD
+
 ## Development
 
 <img width="815" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f0a9a5a2-e10d-470c-9e7d-0ad15128f1f5">
@@ -360,7 +391,7 @@ We are exploring the possibility of using Compose.
 #### Behavior driven development and screenshot testing
 
 We aim to enhance our app's quality by adopting BDD methodologies similar to Ruby and JavaScript, alongside implementing screenshot testing.   
-We used to have a test like `launchTimetableShot()` that captures a screenshot of the timetable screen. But we found that we don't know what to check in the screenshot.
+We used to have a test like `@Test fun launchTimetableShot(){}` that captures a screenshot of the timetable screen. But we found that we don't know what to check in the screenshot.
 The reason why we chose BDD is that it clearly defines the app's behavior and ensures that the app functions as expected.  
 To effectively capture screenshots, we utilize Robolectric integrated with Roborazzi. Below is the Kotlin code snippet we employ for our BDD tests:  
 
