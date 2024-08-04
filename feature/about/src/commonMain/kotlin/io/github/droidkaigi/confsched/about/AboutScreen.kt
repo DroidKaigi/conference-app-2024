@@ -29,29 +29,8 @@ import io.github.droidkaigi.confsched.model.AboutItem.YouTube
 
 const val aboutScreenRoute = "about"
 
-object AboutTestTag {
-    private const val suffix = "TestTag"
-    private const val prefix = "ProfileCard"
-
-    object DetailSection {
-        private const val detailSectionPrefix = "${prefix}_DetailSection"
-        const val Section = "${detailSectionPrefix}_$suffix"
-    }
-
-    object CreditsSection {
-        private const val creditsSectionPrefix = "${prefix}_CreditsSection"
-        const val Section = "${creditsSectionPrefix}_$suffix"
-    }
-
-    object OthersSection {
-        private const val othersSectionPrefix = "${prefix}_OthersSection"
-        const val Section = "${othersSectionPrefix}_$suffix"
-    }
-
-    object FooterLinksSection {
-        private const val footerLinksSectionPrefix = "${prefix}_FooterLinksSection"
-        const val Section = "${footerLinksSectionPrefix}_$suffix"
-    }
+object AboutScreenTestTag {
+    const val Screen = "AboutScreen"
 }
 
 fun NavGraphBuilder.aboutScreen(
@@ -88,7 +67,7 @@ fun AboutScreen(
     val layoutDirection = LocalLayoutDirection.current
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.testTag(AboutScreenTestTag.Screen),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
@@ -114,7 +93,6 @@ fun AboutScreen(
                 onStaffItemClick = {
                     onAboutItemClick(AboutItem.Staff)
                 },
-                modifier = Modifier.testTag(AboutTestTag.CreditsSection.Section),
             )
             aboutOthers(
                 onCodeOfConductItemClick = {
@@ -126,7 +104,6 @@ fun AboutScreen(
                 onPrivacyPolicyItemClick = {
                     onAboutItemClick(AboutItem.PrivacyPolicy)
                 },
-                modifier = Modifier.testTag(AboutTestTag.OthersSection.Section),
             )
             item {
                 AboutFooterLinks(
@@ -141,7 +118,6 @@ fun AboutScreen(
                     onMediumClick = {
                         onAboutItemClick(Medium)
                     },
-                    modifier = Modifier.testTag(AboutTestTag.FooterLinksSection.Section),
                 )
             }
         }

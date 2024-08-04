@@ -113,10 +113,10 @@ fun TimetableList(
                         .padding(15.dp),
                 ) {
                     Row {
-                        TagView(tagText = roomName, icon = roomIcon, tagColor = LocalRoomTheme.current.primaryColor)
+                        TimeTableItemTag(tagText = roomName, icon = roomIcon, tagColor = LocalRoomTheme.current.primaryColor)
                         Spacer(modifier = Modifier.padding(3.dp))
                         timetableItem.language.labels.forEach { label ->
-                            TagView(tagText = label, tagColor = Color.White)
+                            TimeTableItemTag(tagText = label, tagColor = Color.White)
                             Spacer(modifier = Modifier.padding(3.dp))
                         }
                         Spacer(modifier = Modifier.weight(1f))
@@ -178,7 +178,7 @@ fun TimetableList(
 }
 
 @Composable
-fun TagView(
+fun TimeTableItemTag(
     tagText: String,
     tagColor: Color,
     modifier: Modifier = Modifier,
