@@ -3,23 +3,18 @@ package io.github.droidkaigi.confsched.ui.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.filled.Diamond
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Square
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,13 +31,8 @@ import androidx.compose.ui.unit.sp
 import conference_app_2024.core.ui.generated.resources.bookmarked
 import conference_app_2024.core.ui.generated.resources.image
 import conference_app_2024.core.ui.generated.resources.not_bookmarked
-import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.CIRCLE
-import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.DIAMOND
-import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.SHARP_DIAMOND
-import io.github.droidkaigi.confsched.model.TimetableRoom.Shapes.SQUARE
 import io.github.droidkaigi.confsched.ui.UiRes
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
@@ -55,33 +45,10 @@ fun TimeTableItemCard(
     modifier: Modifier = Modifier,
     isBookmarked: Boolean,
     timetableItem: TimetableItem,
+    tags: @Composable RowScope.() -> Unit,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
 ) {
-    val roomName = timetableItem.room.name.currentLangTitle
-
-    // TODO: Replace with the real icons. Probably need to embed them.
-    val roomIcon = when (timetableItem.room.getShape()) {
-        SQUARE -> {
-            Icons.Filled.Square
-        }
-
-        CIRCLE -> {
-            Icons.Filled.Circle
-        }
-
-        DIAMOND -> {
-            Icons.Filled.Thermostat
-        }
-
-        SHARP_DIAMOND -> {
-            Icons.Filled.Diamond
-        }
-
-        else -> {
-            Icons.Filled.Star
-        }
-    }
     ProvideRoomTheme(timetableItem.room.getThemeKey()) {
         Column(
             modifier = modifier
@@ -91,22 +58,13 @@ fun TimeTableItemCard(
                 )
                 .padding(15.dp),
         ) {
-            Row {
-                TimeTableItemTag(
-                    tagText = roomName,
-                    icon = roomIcon,
-                    tagColor = LocalRoomTheme.current.primaryColor,
-                    modifier = Modifier.background(LocalRoomTheme.current.containerColor),
-                )
-                Spacer(modifier = Modifier.padding(3.dp))
-                timetableItem.language.labels.forEach { label ->
-                    TimeTableItemTag(tagText = label, tagColor = MaterialTheme.colorScheme.onSurfaceVariant)
-                    Spacer(modifier = Modifier.padding(3.dp))
-                }
-                Spacer(modifier = Modifier.weight(1f))
+            Box {
+                Row(content = tags)
                 TextButton(
                     onClick = { onBookmarkClick(timetableItem, true) },
-                    modifier = Modifier.testTag(TimetableItemCardBookmarkIconTestTag),
+                    modifier = Modifier
+                        .testTag(TimetableItemCardBookmarkIconTestTag)
+                        .align(Alignment.TopEnd),
                 ) {
                     if (isBookmarked) {
                         Icon(
@@ -123,6 +81,7 @@ fun TimeTableItemCard(
                     }
                 }
             }
+
             Text(
                 text = timetableItem.title.currentLangTitle,
                 fontSize = 24.sp,
