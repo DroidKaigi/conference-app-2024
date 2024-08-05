@@ -64,10 +64,9 @@ public struct TimetableReducer : Sendable{
                     $0)
                 }
                 
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "HH:mm"
                 let myDict = sortedItems.reduce(into: [Date: TimetableTimeGroupItems]()) {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "HH:mm"
-                    
                     if $0[$1.0] == nil {
                         $0[$1.0] = TimetableTimeGroupItems(
                             startsTimeString:dateFormatter.string(from: $1.0),

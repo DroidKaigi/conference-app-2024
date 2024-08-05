@@ -121,7 +121,6 @@ struct TimeGroupMiniList: View {
             }.padding(10).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
             VStack {
                 ForEach(contents.items, id: \.self) { item in
-                    //ListViewItem(listItem: item)
                     TimetableCard(
                         timetableItem: item,
                         isFavorite: false,
