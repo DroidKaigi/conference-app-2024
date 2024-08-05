@@ -13,7 +13,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 internal interface ContributorApi {
-    @GET("/events/droidkaigi2023/contributors")
+    @GET("/events/droidkaigi2024/contributors")
     suspend fun getContributors(): ContributorsResponse
 }
 
@@ -24,11 +24,9 @@ public class DefaultContributorsApiClient(
 
     private val contributorApi = ktorfit.create<ContributorApi>()
     public override suspend fun contributors(): PersistentList<Contributor> {
-        // FIXME: When the API is ready, remove the comments below and return the actual data.
-        return Contributor.fakes()
-//        return networkService {
-//            contributorApi.getContributors()
-//        }.toContributorList()
+        return networkService {
+            contributorApi.getContributors()
+        }.toContributorList()
     }
 }
 
