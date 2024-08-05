@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.ui.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,14 +14,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material.icons.filled.Diamond
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Square
-import androidx.compose.material.icons.filled.Circle
-import androidx.compose.material.icons.filled.Thermostat
-import androidx.compose.material.icons.filled.Diamond
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.Thermostat
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -84,16 +86,21 @@ fun TimeTableItemCard(
         Column(
             modifier = modifier
                 .border(
-                    border = BorderStroke(width = 1.dp, color = Color.White),
+                    border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant),
                     shape = RoundedCornerShape(5.dp),
                 )
                 .padding(15.dp),
         ) {
             Row {
-                TimeTableItemTag(tagText = roomName, icon = roomIcon, tagColor = LocalRoomTheme.current.primaryColor)
+                TimeTableItemTag(
+                    tagText = roomName,
+                    icon = roomIcon,
+                    tagColor = LocalRoomTheme.current.primaryColor,
+                    modifier = Modifier.background(LocalRoomTheme.current.containerColor),
+                )
                 Spacer(modifier = Modifier.padding(3.dp))
                 timetableItem.language.labels.forEach { label ->
-                    TimeTableItemTag(tagText = label, tagColor = Color.White)
+                    TimeTableItemTag(tagText = label, tagColor = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.padding(3.dp))
                 }
                 Spacer(modifier = Modifier.weight(1f))
@@ -111,7 +118,7 @@ fun TimeTableItemCard(
                         Icon(
                             Icons.Outlined.FavoriteBorder,
                             contentDescription = stringResource(UiRes.string.not_bookmarked),
-                            tint = Color.White,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
                 }
@@ -139,6 +146,7 @@ fun TimeTableItemCard(
                     Text(
                         text = speaker.name,
                         fontSize = 24.sp,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier
                             .testTag(TimetableItemCardTestTag)
                             .padding(5.dp)
