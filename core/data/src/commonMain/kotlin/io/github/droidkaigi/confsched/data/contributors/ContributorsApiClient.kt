@@ -8,7 +8,6 @@ import de.jensklingenberg.ktorfit.http.GET
 import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.contributors.response.ContributorsResponse
 import io.github.droidkaigi.confsched.model.Contributor
-import io.github.droidkaigi.confsched.model.fakes
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
