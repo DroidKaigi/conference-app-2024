@@ -13,6 +13,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(projects.core.model)
                 implementation(projects.core.designsystem)
                 implementation(projects.core.data)
                 implementation(libs.kermit)
