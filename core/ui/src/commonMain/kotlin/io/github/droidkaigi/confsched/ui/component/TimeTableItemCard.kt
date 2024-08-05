@@ -42,11 +42,11 @@ const val TimetableItemCardTestTag = "TimetableListItem"
 
 @Composable
 fun TimeTableItemCard(
-    modifier: Modifier = Modifier,
     isBookmarked: Boolean,
     timetableItem: TimetableItem,
     tags: @Composable RowScope.() -> Unit,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     onTimetableItemClick: (TimetableItem) -> Unit,
 ) {
     ProvideRoomTheme(timetableItem.room.getThemeKey()) {
