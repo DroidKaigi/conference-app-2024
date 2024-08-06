@@ -13,18 +13,27 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.app_version
 import conference_app_2024.feature.about.generated.resources.content_description_youtube
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutFooterLinksIcon
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksMediumItemTestTag
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksXItemTestTag
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksYouTubeItemTestTag
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.Section
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-const val AboutFooterLinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItem"
-const val AboutFooterLinksXItemTestTag = "AboutFooterLinksXItem"
-const val AboutFooterLinksMediumItemTestTag = "AboutFooterLinksMediumItem"
+@Suppress("ConstPropertyName")
+object AboutFooterLinksSectionTestTag {
+    const val Section = "FooterLinksSection"
+    const val LinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItem"
+    const val LinksXItemTestTag = "AboutFooterLinksXItem"
+    const val LinksMediumItemTestTag = "AboutFooterLinksMediumItem"
+}
 
 @Composable
 fun AboutFooterLinks(
@@ -38,22 +47,23 @@ fun AboutFooterLinks(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .testTag(Section)
             .fillMaxWidth()
             .padding(top = 24.dp, bottom = 16.dp),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             AboutFooterLinksIcon(
-                testTag = AboutFooterLinksYouTubeItemTestTag,
+                testTag = LinksYouTubeItemTestTag,
                 contentDescription = stringResource(AboutRes.string.content_description_youtube),
                 onClick = onYouTubeClick,
             )
             AboutFooterLinksIcon(
-                testTag = AboutFooterLinksXItemTestTag,
+                testTag = LinksXItemTestTag,
                 contentDescription = "X",
                 onClick = onXClick,
             )
             AboutFooterLinksIcon(
-                testTag = AboutFooterLinksMediumItemTestTag,
+                testTag = LinksMediumItemTestTag,
                 contentDescription = "Medium",
                 onClick = onMediumClick,
             )
