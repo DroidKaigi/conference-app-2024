@@ -24,7 +24,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
-import io.github.droidkaigi.confsched.ui.component.TimeTableItemTag
+import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -41,13 +41,13 @@ fun TimetableItemDetailHeadline(
             .fillMaxWidth(),
     ) {
         Row {
-            TimeTableItemTag(
+            TimetableItemTag(
                 tagText = timetableItem.room.name.currentLangTitle,
                 tagColor = LocalRoomTheme.current.primaryColor,
             )
             timetableItem.language.labels.forEach { label ->
                 Spacer(modifier = Modifier.padding(4.dp))
-                TimeTableItemTag(
+                TimetableItemTag(
                     tagText = label,
                     tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

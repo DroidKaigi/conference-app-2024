@@ -16,7 +16,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TimeTableItemTag(
+fun TimetableItemTag(
     tagText: String,
     tagColor: Color,
     modifier: Modifier = Modifier,

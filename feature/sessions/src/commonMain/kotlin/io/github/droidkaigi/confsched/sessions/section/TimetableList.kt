@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.ui.component.TimeTableItemCard
-import io.github.droidkaigi.confsched.ui.component.TimeTableItemTag
+import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
+import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.ui.icon
 import kotlinx.collections.immutable.PersistentMap
 
@@ -45,12 +45,12 @@ fun TimetableList(
     ) {
         items(uiState.timetable.timetableItems, key = { it.id.value }) { timetableItem ->
             val isBookmarked = uiState.timetable.bookmarks.contains(timetableItem.id)
-            TimeTableItemCard(
+            TimetableItemCard(
                 isBookmarked = isBookmarked,
                 timetableItem = timetableItem,
                 onBookmarkClick = onBookmarkClick,
                 tags = {
-                    TimeTableItemTag(
+                    TimetableItemTag(
                         tagText = timetableItem.room.name.currentLangTitle,
                         icon = timetableItem.room.icon,
                         tagColor = LocalRoomTheme.current.primaryColor,
@@ -58,7 +58,7 @@ fun TimetableList(
                     )
                     Spacer(modifier = Modifier.padding(3.dp))
                     timetableItem.language.labels.forEach { label ->
-                        TimeTableItemTag(tagText = label, tagColor = MaterialTheme.colorScheme.onSurfaceVariant)
+                        TimetableItemTag(tagText = label, tagColor = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.padding(3.dp))
                     }
                     Spacer(modifier = Modifier.weight(1f))

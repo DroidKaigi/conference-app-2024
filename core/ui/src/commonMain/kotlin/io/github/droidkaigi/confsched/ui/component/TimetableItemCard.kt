@@ -41,7 +41,7 @@ const val TimetableItemCardBookmarkIconTestTag = "TimetableListItemBookmarkIcon"
 const val TimetableItemCardTestTag = "TimetableListItem"
 
 @Composable
-fun TimeTableItemCard(
+fun TimetableItemCard(
     isBookmarked: Boolean,
     timetableItem: TimetableItem,
     tags: @Composable RowScope.() -> Unit,
