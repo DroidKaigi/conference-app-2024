@@ -21,9 +21,9 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
 
     public let startsTimeString: String
     public let endsTimeString: String
-    public var items: [shared.TimetableItem]
+    public var items: [shared.TimetableItemWithFavorite]
 
-    public init(startsTimeString: String, endsTimeString: String, items: [shared.TimetableItem]) {
+    public init(startsTimeString: String, endsTimeString: String, items: [shared.TimetableItemWithFavorite]) {
         self.startsTimeString = startsTimeString
         self.endsTimeString = endsTimeString
         self.items = items
@@ -33,34 +33,34 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
 struct SampleData {
     let workdayResults = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake()]),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false)]),
         TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake()]),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false)]),
     ]
     
     let day1Results = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake()]),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false)]),
         TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake()]),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false)]),
     ]
     
     let day2Results = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake()]),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false)]),
         TimetableTimeGroupItems(startsTimeString:"13:00", endsTimeString:"14:00", items: [
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake(),
-            shared.TimetableItem.Session.companion.fake()]),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false),
+            TimetableItemWithFavorite(timetableItem: TimetableItem.Session.companion.fake(), isFavorited: false)]),
     ]
 }

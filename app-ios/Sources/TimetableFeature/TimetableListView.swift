@@ -109,7 +109,7 @@ struct TimetableListView: View {
 
 struct TimeGroupMiniList: View {
     let contents: TimetableTimeGroupItems
-    let onItemTap: (shared.TimetableItem) -> Void
+    let onItemTap: (shared.TimetableItemWithFavorite) -> Void
     
     var body: some View {
         HStack {
@@ -122,8 +122,8 @@ struct TimeGroupMiniList: View {
             VStack {
                 ForEach(contents.items, id: \.self) { item in
                     TimetableCard(
-                        timetableItem: item,
-                        isFavorite: false,
+                        timetableItem: item.timetableItem,
+                        isFavorite: item.isFavorited,
                         onTap: {_ in
                             onItemTap(item)
                         },

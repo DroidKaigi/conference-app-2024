@@ -24,7 +24,7 @@ public struct TimetableReducer : Sendable{
         case view(View)
         case onAppear
         case requestDay(View)
-        case response(Result<[shared.TimetableItem], any Error>)
+        case response(Result<[shared.TimetableItemWithFavorite], any Error>)
         
         public enum View : Sendable {
             case selectDay(DayTab)
@@ -53,14 +53,14 @@ public struct TimetableReducer : Sendable{
                     }
                     
                     for try await timetables in try timetableClient.streamTimetable() {
-                        await send(.response(.success(timetables.dayTimetable(droidKaigi2024Day: internalDay).timetableItems)))
+                        await send(.response(.success(timetables.dayTimetable(droidKaigi2024Day: internalDay).contents)))
                     }
                 }
                 .cancellable(id: CancelID.connection)
             case .response(.success(let timetables)):
-                let sortedItems: [(Date, Date, shared.TimetableItem)] = timetables.map {
-                    (Date(timeIntervalSince1970: Double($0.startsAt.epochSeconds)),
-                    Date(timeIntervalSince1970: Double($0.endsAt.epochSeconds)),
+                let sortedItems: [(Date, Date, shared.TimetableItemWithFavorite)] = timetables.map {
+                    (Date(timeIntervalSince1970: Double($0.timetableItem.startsAt.epochSeconds)),
+                     Date(timeIntervalSince1970: Double($0.timetableItem.endsAt.epochSeconds)),
                     $0)
                 }
                 
@@ -79,7 +79,7 @@ public struct TimetableReducer : Sendable{
                 
                 //TODO: this filter shouldn't be necessary but state.timetableItems = myDict.values generates an assignment error
                 state.timetableItems = myDict.values.sorted {
-                    $0.items[0].startsAt.epochSeconds < $1.items[0].startsAt.epochSeconds
+                    $0.items[0].timetableItem.startsAt.epochSeconds < $1.items[0].timetableItem.startsAt.epochSeconds
                 }
                 
                 return .none
