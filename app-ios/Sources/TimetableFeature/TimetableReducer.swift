@@ -24,7 +24,7 @@ public struct TimetableReducer : Sendable{
         case view(View)
         case onAppear
         case requestDay(View)
-        case response(Result<[shared.TimetableItemWithFavorite], any Error>)
+        case response(Result<[TimetableItemWithFavorite], any Error>)
         
         public enum View : Sendable {
             case selectDay(DayTab)
@@ -58,7 +58,7 @@ public struct TimetableReducer : Sendable{
                 }
                 .cancellable(id: CancelID.connection)
             case .response(.success(let timetables)):
-                let sortedItems: [(Date, Date, shared.TimetableItemWithFavorite)] = timetables.map {
+                let sortedItems: [(Date, Date, TimetableItemWithFavorite)] = timetables.map {
                     (Date(timeIntervalSince1970: Double($0.timetableItem.startsAt.epochSeconds)),
                      Date(timeIntervalSince1970: Double($0.timetableItem.endsAt.epochSeconds)),
                     $0)

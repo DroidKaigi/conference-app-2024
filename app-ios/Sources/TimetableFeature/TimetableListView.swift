@@ -109,7 +109,7 @@ struct TimetableListView: View {
 
 struct TimeGroupMiniList: View {
     let contents: TimetableTimeGroupItems
-    let onItemTap: (shared.TimetableItemWithFavorite) -> Void
+    let onItemTap: (TimetableItemWithFavorite) -> Void
     
     var body: some View {
         HStack {
