@@ -22,9 +22,11 @@ fun favoritesScreenPresenter(
     events: Flow<FavoritesScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): FavoritesScreenUiState = providePresenterDefaults { userMessageStateHolder ->
-    val favoriteSessions = sessionsRepository
-        .timetable()
-        .filtered(Filters(filterFavorite = true))
+    val favoriteSessions by rememberUpdatedState(
+        sessionsRepository
+            .timetable()
+            .filtered(Filters(filterFavorite = true)),
+    )
     val favoritesSheetUiState by rememberUpdatedState(
         favoritesSheet(
             favoriteSessions = favoriteSessions,
