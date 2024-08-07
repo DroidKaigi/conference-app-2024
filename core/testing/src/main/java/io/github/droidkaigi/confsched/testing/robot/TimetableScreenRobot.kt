@@ -13,8 +13,6 @@ import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.sessions.TimetableListItemBookmarkIconTestTag
-import io.github.droidkaigi.confsched.sessions.TimetableListItemTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableScreen
 import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableUiTypeChangeButtonTestTag
@@ -23,6 +21,8 @@ import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.DefaultTimetableServerRobot
 import io.github.droidkaigi.confsched.testing.ScreenRobot
 import io.github.droidkaigi.confsched.testing.TimetableServerRobot
+import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkIconTestTag
+import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import javax.inject.Inject
@@ -51,7 +51,7 @@ class TimetableScreenRobot @Inject constructor(
 
     fun clickFirstSession() {
         composeTestRule
-            .onAllNodes(hasTestTag(TimetableListItemTestTag))
+            .onAllNodes(hasTestTag(TimetableItemCardTestTag))
             .onFirst()
             .performClick()
         waitUntilIdle()
@@ -59,7 +59,7 @@ class TimetableScreenRobot @Inject constructor(
 
     fun clickFirstSessionBookmark() {
         composeTestRule
-            .onAllNodes(hasTestTag(TimetableListItemBookmarkIconTestTag))
+            .onAllNodes(hasTestTag(TimetableItemCardBookmarkIconTestTag))
             .onFirst()
             .performClick()
         waitUntilIdle()
@@ -98,7 +98,7 @@ class TimetableScreenRobot @Inject constructor(
 
     fun checkTimetableItemsDisplayed() {
         composeTestRule
-            .onAllNodes(hasTestTag(TimetableListItemTestTag))
+            .onAllNodes(hasTestTag(TimetableItemCardTestTag))
             .onFirst()
             .assertIsDisplayed()
     }

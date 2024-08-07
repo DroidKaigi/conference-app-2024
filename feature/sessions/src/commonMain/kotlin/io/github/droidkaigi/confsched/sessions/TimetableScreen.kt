@@ -58,8 +58,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
-const val TimetableListItemBookmarkIconTestTag = "TimetableListItemBookmarkIcon"
-const val TimetableListItemTestTag = "TimetableListItem"
 const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
 fun NavGraphBuilder.nestedSessionScreens(
     onTimetableItemClick: (TimetableItem) -> Unit,

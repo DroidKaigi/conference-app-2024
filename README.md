@@ -286,7 +286,7 @@ class TimetableScreenRobot {
     ...
     fun clickFirstSessionBookmark() {
         composeTestRule 
-            .onAllNodes(hasTestTag(TimetableListItemBookmarkIconTestTag))
+            .onAllNodes(hasTestTag(TimetableItemCardBookmarkIconTestTag))
             .onFirst()
             .performClick()
         waitUntilIdle() 
