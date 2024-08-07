@@ -4,14 +4,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Bookmark
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
+import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
-sealed interface FavoritesScreenEvent
+sealed interface FavoritesScreenEvent {
+    data class Bookmark(val timetableItem: TimetableItem): FavoritesScreenEvent
+}
 
 @Composable
 fun favoritesScreenPresenter(
@@ -28,7 +32,13 @@ fun favoritesScreenPresenter(
     )
 
     SafeLaunchedEffect(Unit) {
-        events.collect {}
+        events.collect { event ->
+            when (event) {
+                is Bookmark -> {
+                    sessionsRepository.toggleBookmark(event.timetableItem.id)
+                }
+            }
+        }
     }
 
     FavoritesScreenUiState(

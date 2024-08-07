@@ -50,6 +50,7 @@ import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
+import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -134,6 +135,9 @@ fun FavoritesScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
+        onBookmarkClick = { timetableItem ->
+            eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
+        },
         modifier = modifier,
         isTopAppBarHidden = isTopAppBarHidden,
     )
@@ -145,6 +149,7 @@ fun FavoritesScreen(
     uiState: FavoritesScreenUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
+    onBookmarkClick: (TimetableItem) -> Unit,
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -285,7 +290,7 @@ fun FavoritesScreen(
                                 },
                                 timetableItem = timetableItem,
                                 onTimetableItemClick = {},
-                                onBookmarkClick = { timetableItem, isBookmarked -> },
+                                onBookmarkClick = { item, _ -> onBookmarkClick(item) },
                             )
                         }
                     }
@@ -353,6 +358,7 @@ fun FavoritesScreenPreview() {
                 ),
                 snackbarHostState = SnackbarHostState(),
                 onBackClick = {},
+                onBookmarkClick = {},
                 isTopAppBarHidden = false,
             )
         }
