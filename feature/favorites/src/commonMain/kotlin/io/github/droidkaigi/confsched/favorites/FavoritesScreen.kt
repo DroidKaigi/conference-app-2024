@@ -66,6 +66,7 @@ const val FavoritesScreenTestTag = "FavoritesScreenTestTag"
 
 fun NavGraphBuilder.favoritesScreens(
     onNavigationIconClick: () -> Unit,
+    onTimetableItemClick: (TimetableItem) -> Unit,
 ) {
     composable(favoritesScreenRoute) {
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -77,6 +78,7 @@ fun NavGraphBuilder.favoritesScreens(
                     onNavigationIconClick,
                 )
             },
+            onTimetableItemClick = onTimetableItemClick,
         )
     }
 }
@@ -120,6 +122,7 @@ data class FavoritesScreenUiState(
 @Composable
 fun FavoritesScreen(
     onNavigationIconClick: () -> Unit,
+    onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
     eventEmitter: EventEmitter<FavoritesScreenEvent> = rememberEventEmitter(),
@@ -135,6 +138,7 @@ fun FavoritesScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
+        onTimetableItemClick = onTimetableItemClick,
         onBookmarkClick = { timetableItem ->
             eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
         },
@@ -149,6 +153,7 @@ fun FavoritesScreen(
     uiState: FavoritesScreenUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
+    onTimetableItemClick: (TimetableItem) -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
@@ -289,7 +294,7 @@ fun FavoritesScreen(
                                     Spacer(modifier = Modifier.weight(1f))
                                 },
                                 timetableItem = timetableItem,
-                                onTimetableItemClick = {},
+                                onTimetableItemClick = onTimetableItemClick,
                                 onBookmarkClick = { item, _ -> onBookmarkClick(item) },
                             )
                         }
@@ -358,6 +363,7 @@ fun FavoritesScreenPreview() {
                 ),
                 snackbarHostState = SnackbarHostState(),
                 onBackClick = {},
+                onTimetableItemClick = {},
                 onBookmarkClick = {},
                 isTopAppBarHidden = false,
             )

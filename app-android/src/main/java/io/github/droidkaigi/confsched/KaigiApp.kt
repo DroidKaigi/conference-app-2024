@@ -106,10 +106,6 @@ private fun KaigiNavHost(
             },
         )
 
-        favoritesScreens(
-            onNavigationIconClick = navController::popBackStack,
-        )
-
         contributorsScreens(
             onNavigationIconClick = navController::popBackStack,
             onContributorItemClick = externalNavController::navigate,
@@ -148,6 +144,7 @@ private fun NavGraphBuilder.mainScreen(
             )
             favoritesScreens(
                 onNavigationIconClick = navController::popBackStack,
+                onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
             )
             aboutScreen(
                 contentPadding = contentPadding,
