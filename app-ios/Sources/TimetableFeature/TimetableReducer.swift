@@ -9,7 +9,12 @@ public struct TimetableReducer : Sendable{
     @Dependency(\.timetableClient) private var timetableClient
     enum CancelID { case connection }
     
-    public init() {}
+    //let dateFormatter: DateFormatter
+    
+    public init() {
+//       dateFormatter = DateFormatter()
+//       dateFormatter.dateFormat = "HH:mm"
+    }
 
     @ObservableState
     public struct State: Equatable {
@@ -19,6 +24,8 @@ public struct TimetableReducer : Sendable{
             self.timetableItems = timetableItems
         }
     }
+    
+
 
     public enum Action : Sendable{
         case view(View)
@@ -64,13 +71,12 @@ public struct TimetableReducer : Sendable{
                     $0)
                 }
                 
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "HH:mm"
+
                 let myDict = sortedItems.reduce(into: [Date: TimetableTimeGroupItems]()) {
                     if $0[$1.0] == nil {
                         $0[$1.0] = TimetableTimeGroupItems(
-                            startsTimeString:dateFormatter.string(from: $1.0),
-                            endsTimeString:dateFormatter.string(from: $1.1),
+                            startsTimeString:$1.0.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()),
+                            endsTimeString:$1.1.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()),
                             items:[]
                         )
                     }
