@@ -48,7 +48,7 @@ extension StaffClient: DependencyKey {
 extension SponsorsClient: DependencyKey {
     public static let liveValue: SponsorsClient = .init(
         streamSponsors: {
-            sponsorsRepository.sponsors().eraseToThrowingStream()
+            sponsorsRepository.getSponsorStream().eraseToThrowingStream()
         }
     )
 }

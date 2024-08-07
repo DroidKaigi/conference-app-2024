@@ -7,6 +7,7 @@ import io.github.droidkaigi.confsched.data.remoteconfig.RemoteConfigApi
 import co.touchlab.skie.configuration.annotations.DefaultArgumentInterop
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
+import org.koin.core.context.stopKoin
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import kotlin.reflect.KClass
@@ -31,6 +32,7 @@ class KmpEntryPoint {
         authenticator: Authenticator,
         dataModuleOverride: Module,
     ) {
+        stopKoin()
         koinApplication = startKoin {
             modules(
                 dataModule,

@@ -28,6 +28,7 @@ include(
     ":feature:eventmap",
     ":feature:profilecard",
     ":feature:about",
+    ":feature:sponsors",
     ":feature:staff",
     ":feature:favorites",
     ":core:designsystem",

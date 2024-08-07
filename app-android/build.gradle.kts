@@ -102,6 +102,7 @@ dependencies {
     implementation(projects.feature.eventmap)
     implementation(projects.feature.profilecard)
     implementation(projects.feature.about)
+    implementation(projects.feature.sponsors)
     implementation(projects.feature.staff)
     implementation(projects.feature.favorites)
     implementation(projects.core.model)
