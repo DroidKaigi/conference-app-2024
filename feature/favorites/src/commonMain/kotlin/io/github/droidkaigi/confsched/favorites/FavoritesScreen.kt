@@ -45,6 +45,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import io.github.droidkaigi.confsched.compose.EventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
@@ -119,6 +121,8 @@ fun FavoritesScreen(
     onNavigationIconClick: () -> Unit,
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
+    eventEmitter: EventEmitter<FavoritesScreenEvent> = rememberEventEmitter(),
+    uiState: FavoritesScreenUiState = favoritesScreenPresenter(events = eventEmitter),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -127,15 +131,7 @@ fun FavoritesScreen(
         userMessageStateHolder = UserMessageStateHolderImpl(),
     )
     FavoritesScreen(
-        uiState = FavoritesScreenUiState(
-            favoritesSheetUiState = FavoritesSheetUiState.Empty(
-                allFilterSelected = false,
-                workDayFilterSelected = true,
-                day1FilterSelected = true,
-                day2FilterSelected = false,
-            ),
-            userMessageStateHolder = UserMessageStateHolderImpl(),
-        ),
+        uiState = uiState,
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
         modifier = modifier,
