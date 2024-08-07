@@ -14,6 +14,8 @@ In addition to the standard features of a conference app, the DroidKaigi 2024 of
 - **Contributors**: Discover the contributors behind the app.
 ...and more!
 
+![image](https://github.com/user-attachments/assets/c8dd3dc3-8571-453f-b871-54cbb4f51b87)
+
 ## Try the app
 
 You can try the app on your device by clicking the button below. 
@@ -37,7 +39,7 @@ TBD
 
 <img width="815" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f0a9a5a2-e10d-470c-9e7d-0ad15128f1f5">
 
-### A Guide for Contributors 1: Understanding the App's Data Flow
+### Understanding the App's Data Flow
 
 To contribute to the app effectively, understanding its data flow is crucial for comprehending the app's code structure. Let's examine this further.
 
@@ -215,9 +217,16 @@ fun TimetableScreen(
         uiState = uiState,
 ```        
 
-###  A Guide for Contributors 2: Understanding the App's Testing
+###  Understanding the App's Testing
 
-The DroidKaigi 2024 official app utilizes a comprehensive testing strategy that combines Behavior Driven Development (BDD), Robolectric, and Roborazzi. This integrated approach enhances app stability, ensures UI correctness, and streamlines the testing process for Android development.
+The DroidKaigi 2024 official app utilizes a comprehensive testing strategy that combines:
+
+- **Behavior Driven Development (BDD)**: For clear, readable test scenarios
+- **Robolectric**: For fast, JVM-based Android tests
+- **Roborazzi**: For visual regression testing and providing debugging hints through screenshots
+- **Robot Pattern**: For maintainable UI test code
+
+This integrated approach enhances app stability, ensures UI correctness, and streamlines the testing process.
 
 #### Key Components
 
@@ -303,13 +312,6 @@ fun captureScreenWithChecks(checks: () -> Unit) {
         checks()
 }
 ```
-
-**Advantages**
-
-* Speed: JVM-based tests run significantly faster than traditional instrumented tests, allowing for quicker feedback during development.
-* Clarity: BDD improves test readability, making it easier for both developers and non-technical stakeholders to understand test scenarios.
-* Maintainability: The Robot Pattern simplifies UI test maintenance by centralizing UI interaction logic, reducing the impact of UI changes on test code.
-* Visual Consistency: Roborazzi's screenshot comparison feature helps detect unintended UI changes early in the development process, ensuring a consistent user experience.
 
 ### This Year's Experimental Challenges
 
