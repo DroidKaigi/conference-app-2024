@@ -4,11 +4,12 @@ import com.github.takahirom.roborazzi.ComposePreviewTester
 import com.github.takahirom.roborazzi.captureRoboImage
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 import sergio.sastre.composable.preview.scanner.jvm.JvmAnnotationScanner
+import sergio.sastre.composable.preview.scanner.jvm.JvmAnnotationScanner.DesktopPreviewInfo
 
 class DroidKaigiKmpPreviewTester : ComposePreviewTester<JvmAnnotationScanner.DesktopPreviewInfo> {
-    override fun previews(vararg packages: String): List<ComposablePreview<JvmAnnotationScanner.DesktopPreviewInfo>> {
+    override fun previews(): List<ComposablePreview<DesktopPreviewInfo>> {
         return JvmAnnotationScanner("org.jetbrains.compose.ui.tooling.preview.Preview")
-            .scanPackageTrees(*packages)
+            .scanPackageTrees(*options().scanOptions.packages.toTypedArray())
             .getPreviews()
     }
 
