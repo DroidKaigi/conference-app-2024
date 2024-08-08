@@ -50,7 +50,7 @@ public struct TimetableReducer : Sendable{
                  }
             case .requestDay(.selectDay(let dayTab)):
                 return .run { send in
-                    let internalDay = switch(dayTab) {
+                    let internalDay = switch dayTab {
                     case DayTab.workshopDay:
                         DroidKaigi2024Day.workday
                     case DayTab.day1:
