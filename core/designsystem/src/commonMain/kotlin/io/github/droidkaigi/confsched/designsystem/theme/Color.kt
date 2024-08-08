@@ -217,15 +217,3 @@ val surfaceContainerLowDarkHighContrast = Color(0xFF1A1C1C)
 val surfaceContainerDarkHighContrast = Color(0xFF1F2020)
 val surfaceContainerHighDarkHighContrast = Color(0xFF292A2A)
 val surfaceContainerHighestDarkHighContrast = Color(0xFF343535)
-
-// FIXME: Use this year's color and room name
-val md_theme_dark_room_hall_a = Color(0xFFB2D1FF)
-val md_theme_dark_room_hall_b = Color(0xFFF0DF63)
-val md_theme_dark_room_hall_c = Color(0xFFE7BB92)
-val md_theme_dark_room_hall_d = Color(0xFFB4DDDD)
-val md_theme_dark_room_hall_e = Color(0xFFB8B9BD)
-val md_theme_dark_room_hall_text = Color(0xFF000000)
-
-val md_theme_dark_onSurfaceVariant = Color(0xFFBFC9C2)
-
-val md_theme_light_outline = Color(0xFF707974)
