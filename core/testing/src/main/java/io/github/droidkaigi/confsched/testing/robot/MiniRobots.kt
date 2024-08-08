@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.testing
+package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import com.github.takahirom.roborazzi.provideRoborazziContext
@@ -14,7 +14,6 @@ import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
 import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
 import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus
-import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus.Error
 import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus.Operational
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import kotlinx.coroutines.test.TestDispatcher
