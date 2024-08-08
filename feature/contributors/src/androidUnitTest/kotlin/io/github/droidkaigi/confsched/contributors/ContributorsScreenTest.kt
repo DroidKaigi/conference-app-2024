@@ -2,16 +2,16 @@ package io.github.droidkaigi.confsched.contributors
 
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
-import io.github.droidkaigi.confsched.testing.ContributorsServerRobot
-import io.github.droidkaigi.confsched.testing.DefaultContributorsServerRobot
-import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
-import io.github.droidkaigi.confsched.testing.RobotTestRule
-import io.github.droidkaigi.confsched.testing.ScreenRobot
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
-import io.github.droidkaigi.confsched.testing.runRobot
-import io.github.droidkaigi.confsched.testing.todoChecks
+import io.github.droidkaigi.confsched.testing.robot.ContributorsServerRobot
+import io.github.droidkaigi.confsched.testing.robot.DefaultContributorsServerRobot
+import io.github.droidkaigi.confsched.testing.robot.DefaultScreenRobot
+import io.github.droidkaigi.confsched.testing.robot.ScreenRobot
+import io.github.droidkaigi.confsched.testing.robot.runRobot
+import io.github.droidkaigi.confsched.testing.robot.todoChecks
+import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

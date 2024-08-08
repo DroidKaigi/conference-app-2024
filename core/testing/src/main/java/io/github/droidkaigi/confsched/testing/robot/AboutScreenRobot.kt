@@ -8,8 +8,6 @@ import io.github.droidkaigi.confsched.about.section.AboutDetailSectionTestTag
 import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag
 import io.github.droidkaigi.confsched.about.section.AboutOthersSectionTestTag
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
-import io.github.droidkaigi.confsched.testing.ScreenRobot
 import javax.inject.Inject
 
 class AboutScreenRobot @Inject constructor(

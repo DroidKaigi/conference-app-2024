@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.testing
+package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
 import com.github.takahirom.roborazzi.provideRoborazziContext
@@ -13,10 +13,9 @@ import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
 import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
 import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
-import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus
-import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus.Error
-import io.github.droidkaigi.confsched.testing.SponsorsServerRobot.ServerStatus.Operational
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
+import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
+import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.shadows.ShadowLooper
@@ -239,8 +238,8 @@ class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: Sponsors
     override fun setupSponsorsServer(sererStatus: ServerStatus) {
         fakeSponsorsApiClient.setup(
             when (sererStatus) {
-                Operational -> FakeSponsorsApiClient.Status.Operational
-                Error -> FakeSponsorsApiClient.Status.Error
+                ServerStatus.Operational -> FakeSponsorsApiClient.Status.Operational
+                ServerStatus.Error -> FakeSponsorsApiClient.Status.Error
             },
         )
     }

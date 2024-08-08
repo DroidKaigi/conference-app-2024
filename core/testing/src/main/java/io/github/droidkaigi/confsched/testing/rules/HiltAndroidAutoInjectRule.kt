@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.testing
+package io.github.droidkaigi.confsched.testing.rules
 
 import dagger.hilt.android.testing.HiltAndroidRule
 import org.junit.rules.RuleChain

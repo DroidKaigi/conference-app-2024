@@ -3,8 +3,6 @@ package io.github.droidkaigi.confsched.testing.robot
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.performClick
 import io.github.droidkaigi.confsched.main.MainScreenTab
-import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
-import io.github.droidkaigi.confsched.testing.ScreenRobot
 import javax.inject.Inject
 
 class KaigiAppRobot @Inject constructor(

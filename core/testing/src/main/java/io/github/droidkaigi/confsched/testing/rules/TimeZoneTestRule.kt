@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.testing
+package io.github.droidkaigi.confsched.testing.rules
 
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description

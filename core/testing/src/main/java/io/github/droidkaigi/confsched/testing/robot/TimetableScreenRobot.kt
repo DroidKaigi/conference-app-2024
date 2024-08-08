@@ -17,10 +17,6 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreen
 import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableUiTypeChangeButtonTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
-import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
-import io.github.droidkaigi.confsched.testing.DefaultTimetableServerRobot
-import io.github.droidkaigi.confsched.testing.ScreenRobot
-import io.github.droidkaigi.confsched.testing.TimetableServerRobot
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkIconTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
