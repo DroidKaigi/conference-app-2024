@@ -1,9 +1,6 @@
+import Model
 import SwiftUI
 import Theme
-
-public protocol Selectable: CaseIterable, Equatable, Identifiable {
-    var title: String { get }
-}
 
 public struct SelectionChips<SelectableCase: Selectable>: View where SelectableCase.AllCases: RandomAccessCollection {
     @Binding public var selected: SelectableCase?
@@ -18,13 +15,21 @@ public struct SelectionChips<SelectableCase: Selectable>: View where SelectableC
         ScrollView(.horizontal) {
             HStack(spacing: 6) {
                 if let notSelectedTitle {
-                    SelectionChip(title: notSelectedTitle, isSelected: selected == nil) {
+                    SelectionChip(
+                        title: notSelectedTitle,
+                        isMultiSelect: false,
+                        isSelected: selected == nil
+                    ) {
                         selected = nil
                     }
                 }
 
-                ForEach(SelectableCase.allCases) { selection in
-                    SelectionChip(title: selection.title, isSelected: selected == selection) {
+                ForEach(SelectableCase.allCases, id: \.id) { selection in
+                    SelectionChip(
+                        title: selection.caseTitle,
+                        isMultiSelect: false,
+                        isSelected: selected == selection
+                    ) {
                         selected = selection
                     }
                 }
@@ -38,11 +43,13 @@ public struct SelectionChips<SelectableCase: Selectable>: View where SelectableC
 
 public struct SelectionChip: View {
     public let title: String
+    public let isMultiSelect: Bool
     public let isSelected: Bool
     public let onTap: () -> Void
 
-    public init(title: String, isSelected: Bool, onTap: @escaping () -> Void) {
+    public init(title: String, isMultiSelect: Bool, isSelected: Bool, onTap: @escaping () -> Void) {
         self.title = title
+        self.isMultiSelect = isMultiSelect
         self.isSelected = isSelected
         self.onTap = onTap
     }
@@ -51,31 +58,41 @@ public struct SelectionChip: View {
         Button {
             onTap()
         } label: {
-            if isSelected {
-                HStack {
+            let foregroundColor = isSelected
+                ? AssetColors.Secondary.onSecondaryContainer.swiftUIColor
+                : AssetColors.Surface.onSurfaceVariant.swiftUIColor
+            let backgroundColor = isSelected
+                ? AssetColors.Secondary.secondaryContainer.swiftUIColor
+                : Color.clear
+            let padding = isSelected
+                ? EdgeInsets(top: 6, leading: 8, bottom: 6, trailing: 16)
+                : EdgeInsets(top: 6, leading: 16, bottom: 6, trailing: 16)
+
+            HStack {
+                if isSelected {
                     Image(.icCheck)
                         .renderingMode(.template)
                         .resizable()
                         .frame(width: 18, height: 18)
-
-                    Text(title)
-                        .textStyle(.labelLarge)
                 }
-                .foregroundStyle(AssetColors.Secondary.onSecondaryContainer.swiftUIColor)
-                .padding(EdgeInsets(top: 6, leading: 8, bottom: 6, trailing: 16))
-                .background(AssetColors.Secondary.secondaryContainer.swiftUIColor)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-            } else {
+
                 Text(title)
                     .textStyle(.labelLarge)
-                    .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 6)
-                    .background(AssetColors.Surface.surface.swiftUIColor)
-                    .overlay {
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(AssetColors.Outline.outline.swiftUIColor, lineWidth: 1)
-                    }
+
+                if isMultiSelect {
+                    Image(.arrowDropDown)
+                        .renderingMode(.template)
+                }
+            }
+            .padding(padding)
+            .foregroundStyle(foregroundColor)
+            .background(backgroundColor)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .overlay {
+                if !isSelected {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(AssetColors.Outline.outline.swiftUIColor, lineWidth: 1)
+                }
             }
         }
         .animation(.easeInOut, value: isSelected)
@@ -83,5 +100,5 @@ public struct SelectionChip: View {
 }
 
 #Preview {
-    SelectionChip(title: "Title", isSelected: false) {}
+    SelectionChip(title: "Title", isMultiSelect: false, isSelected: false) {}
 }
