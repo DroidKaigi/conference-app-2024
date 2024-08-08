@@ -15,10 +15,12 @@ public struct SearchView: View {
 
     public var body: some View {
         let timetableItems = store.timetableItems
+        let _ = store.filters
         VStack {
             filters
             Group {
                 if timetableItems.isEmpty {
+                    empty
                 } else {
                     ScrollView {
                         LazyVStack {
@@ -43,16 +45,40 @@ public struct SearchView: View {
         .searchable(
             text: .init(
                 get: {
-                    store.filters?.searchWord ?? ""
+                    store.filters.searchWord
                 }, set: {
                     store.send(.view(.searchWordChanged($0)))
                 }
             ),
             placement: .navigationBarDrawer(displayMode: .always)
         )
+        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
         .onAppear {
             store.send(.view(.onAppear))
         }
+    }
+
+    @ViewBuilder
+    private var empty: some View {
+        let searchWord = store.filters.searchWord
+
+        Group {
+            if !searchWord.isEmpty {
+                VStack(spacing: 32) {
+                    Image(.searchEmpty)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 165)
+
+                    Text(String(localized: "「\(searchWord)」と一致する検索結果がありません", bundle: .module))
+                        .textStyle(.titleMedium)
+                        .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                }
+            } else {
+                Color.clear
+            }
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
 
     private var filters: some View {
@@ -60,19 +86,31 @@ public struct SearchView: View {
             HStack(spacing: 6) {
                 searchFilterChip(
                     selection: store.selectedDay,
-                    defaultTitle: "開催日"
+                    defaultTitle: String(localized: "開催日", bundle: .module),
+                    onSelect: {
+                        store.send(.view(.selectedDayChanged($0)))
+                    }
                 )
                 searchFilterChip(
                     selection: store.selectedCategory,
-                    defaultTitle: "カテゴリ"
+                    defaultTitle: String(localized: "カテゴリ", bundle: .module),
+                    onSelect: {
+                        store.send(.view(.selectedCategoryChanged($0)))
+                    }
                 )
                 searchFilterChip(
                     selection: store.selectedSessionType,
-                    defaultTitle: "セッション種別"
+                    defaultTitle: String(localized: "セッション種別", bundle: .module),
+                    onSelect: {
+                        store.send(.view(.selectedSessionTypeChanged($0)))
+                    }
                 )
                 searchFilterChip(
                     selection: store.selectedLanguage,
-                    defaultTitle: "対合言語"
+                    defaultTitle: String(localized: "対合言語", bundle: .module),
+                    onSelect: {
+                        store.send(.view(.selectedLanguageChanged($0)))
+                    }
                 )
             }
             .padding(.horizontal, 16)
@@ -81,13 +119,31 @@ public struct SearchView: View {
         }
     }
 
-    private func searchFilterChip<T: Selectable>(selection: T?, defaultTitle: String) -> some View {
-        SelectionChip(
-            title: selection?.caseTitle ?? defaultTitle,
-            isMultiSelect: true,
-            isSelected: selection != nil
-        ) {
-            // TODO: show menu
+    private func searchFilterChip<T: Selectable>(
+        selection: T?,
+        defaultTitle: String,
+        onSelect: @escaping (T) -> Void
+    ) -> some View where T.AllCases: RandomAccessCollection {
+        Menu {
+            ForEach(T.allCases, id: \.id) { menuSelection in
+                Button {
+                    onSelect(menuSelection)
+                } label: {
+                    HStack {
+                        if menuSelection == selection {
+                            Image(.icCheck)
+                        }
+                        Text(menuSelection.caseTitle)
+                    }
+                }
+            }
+
+        } label: {
+            SelectionChip(
+                title: selection?.caseTitle ?? defaultTitle,
+                isMultiSelect: true,
+                isSelected: selection != nil
+            ) {}
         }
     }
 }

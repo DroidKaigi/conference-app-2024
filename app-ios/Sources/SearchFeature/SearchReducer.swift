@@ -10,29 +10,29 @@ public struct SearchReducer {
 
     @ObservableState
     public struct State: Equatable {
-        public var filters: Filters?
+        public var filters: Filters = .init()
         public var timetable: Timetable?
 
         var selectedDay: DroidKaigi2024Day? {
-            filters?.days.first
+            filters.days.first
         }
 
         var selectedCategory: TimetableCategory? {
-            filters?.categories.first
+            filters.categories.first
         }
 
         var selectedSessionType: TimetableSessionType? {
-            filters?.sessionTypes.first
+            filters.sessionTypes.first
         }
 
         var selectedLanguage: Lang? {
-            filters?.languages.first
+            filters.languages.first
         }
 
         public var timetableItems: [TimetableItemWithFavorite] {
             timetable?
                 .filtered(
-                    filters: filters ?? .init()
+                    filters: filters
                 )
                 .contents ?? []
         }
@@ -53,6 +53,9 @@ public struct SearchReducer {
             case timetableItemTapped(TimetableItemWithFavorite)
             case toggleFavoriteTapped(TimetableItemId)
             case selectedDayChanged(DroidKaigi2024Day?)
+            case selectedCategoryChanged(TimetableCategory?)
+            case selectedSessionTypeChanged(TimetableSessionType?)
+            case selectedLanguageChanged(Lang?)
             case searchWordChanged(String)
         }
 
@@ -95,11 +98,33 @@ public struct SearchReducer {
                     }
 
                 case let .selectedDayChanged(day):
-//                    state.selectedDay = day
+                    state.filters = state.filters.copyWith(
+                        days: day.map { [$0] } ?? []
+                    )
+                    return .none
+
+                case let .selectedCategoryChanged(category):
+                    state.filters = state.filters.copyWith(
+                        categories: category.map { [$0] } ?? []
+                    )
+                    return .none
+
+                case let .selectedSessionTypeChanged(sessionType):
+                    state.filters = state.filters.copyWith(
+                        sessionTypes: sessionType.map { [$0] } ?? []
+                    )
+                    return .none
+
+                case let .selectedLanguageChanged(language):
+                    state.filters = state.filters.copyWith(
+                        languages: language.map { [$0] } ?? []
+                    )
                     return .none
 
                 case let .searchWordChanged(searchWord):
-                    state.filters = .init(searchWord: searchWord)
+                    state.filters = state.filters.copyWith(
+                        searchWord: searchWord
+                    )
                     return .none
                 }
 
@@ -120,6 +145,7 @@ public struct SearchReducer {
                 return .none
             }
         }
+        ._printChanges()
     }
 }
 
@@ -138,6 +164,22 @@ private extension Filters {
             languages: languages,
             filterFavorite: false,
             searchWord: searchWord
+        )
+    }
+
+    func copyWith(
+        days: [DroidKaigi2024Day]? = nil,
+        categories: [TimetableCategory]? = nil,
+        sessionTypes: [TimetableSessionType]? = nil,
+        languages: [Lang]? = nil,
+        searchWord: String? = nil
+    ) -> Filters {
+        Filters(
+            days: days ?? self.days,
+            categories: categories ?? self.categories,
+            sessionTypes: sessionTypes ?? self.sessionTypes,
+            languages: languages ?? self.languages,
+            searchWord: searchWord ?? self.searchWord
         )
     }
 }
