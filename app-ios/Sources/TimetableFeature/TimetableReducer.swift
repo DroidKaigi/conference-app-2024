@@ -9,12 +9,7 @@ public struct TimetableReducer : Sendable{
     @Dependency(\.timetableClient) private var timetableClient
     enum CancelID { case connection }
     
-    //let dateFormatter: DateFormatter
-    
-    public init() {
-//       dateFormatter = DateFormatter()
-//       dateFormatter.dateFormat = "HH:mm"
-    }
+    public init() {}
 
     @ObservableState
     public struct State: Equatable {
@@ -64,7 +59,6 @@ public struct TimetableReducer : Sendable{
         Reduce { state, action in
             switch action {
             case .onAppear:
-                state.timetableItems = SampleData().day1Results //TODO: Replace with a "loading" text?
 
                  return .run { send in
                      await send(.requestDay(.selectDay(.day1)))
@@ -95,7 +89,6 @@ public struct TimetableReducer : Sendable{
             case .view(.timetableItemTapped):
                 return .none
             case .view(.selectDay(let dayTab)):
-                //TODO: Replace with real data
                 
                 return .run { send in
                     await send(.requestDay(.selectDay(dayTab)))

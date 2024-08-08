@@ -30,6 +30,7 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
     }
 }
 
+// This exists only for previews now.
 struct SampleData {
     let workdayResults = [
         TimetableTimeGroupItems(startsTimeString:"12:00", endsTimeString:"13:00", items: [
