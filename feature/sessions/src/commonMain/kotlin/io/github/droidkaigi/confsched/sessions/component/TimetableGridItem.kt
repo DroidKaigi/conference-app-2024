@@ -41,7 +41,6 @@ import conference_app_2024.feature.sessions.generated.resources.content_descript
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
-import io.github.droidkaigi.confsched.designsystem.theme.md_theme_light_outline
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.RoomType.RoomH
 import io.github.droidkaigi.confsched.model.TimetableAsset
@@ -243,7 +242,7 @@ private fun SpeakerIcon(
             .size(TimetableGridItemSizes.speakerHeight)
             .clip(RoundedCornerShape(8.dp))
             .border(
-                BorderStroke(1.dp, md_theme_light_outline),
+                BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 RoundedCornerShape(8.dp),
             ),
     )
