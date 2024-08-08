@@ -25,8 +25,6 @@ public struct TimetableReducer : Sendable{
         }
     }
     
-
-
     public enum Action : Sendable{
         case view(View)
         case onAppear
@@ -36,6 +34,29 @@ public struct TimetableReducer : Sendable{
         public enum View : Sendable {
             case selectDay(DayTab)
             case timetableItemTapped
+        }
+    }
+    
+    private func sortListIntoTimeGroups(timetableItems: [TimetableItemWithFavorite]) -> [TimetableTimeGroupItems] {
+        let sortedItems: [(Date, Date, TimetableItemWithFavorite)] = timetableItems.map {
+            (Date(timeIntervalSince1970: Double($0.timetableItem.startsAt.epochSeconds)),
+             Date(timeIntervalSince1970: Double($0.timetableItem.endsAt.epochSeconds)),
+            $0)
+        }
+
+        let myDict = sortedItems.reduce(into: [Date: TimetableTimeGroupItems]()) {
+            if $0[$1.0] == nil {
+                $0[$1.0] = TimetableTimeGroupItems(
+                    startsTimeString:$1.0.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()),
+                    endsTimeString:$1.1.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()),
+                    items:[]
+                )
+            }
+            $0[$1.0]?.items.append($1.2)
+        }
+        
+        return myDict.values.sorted {
+            $0.items[0].timetableItem.startsAt.epochSeconds < $1.items[0].timetableItem.startsAt.epochSeconds
         }
     }
 
@@ -65,28 +86,7 @@ public struct TimetableReducer : Sendable{
                 }
                 .cancellable(id: CancelID.connection)
             case .response(.success(let timetables)):
-                let sortedItems: [(Date, Date, TimetableItemWithFavorite)] = timetables.map {
-                    (Date(timeIntervalSince1970: Double($0.timetableItem.startsAt.epochSeconds)),
-                     Date(timeIntervalSince1970: Double($0.timetableItem.endsAt.epochSeconds)),
-                    $0)
-                }
-                
-
-                let myDict = sortedItems.reduce(into: [Date: TimetableTimeGroupItems]()) {
-                    if $0[$1.0] == nil {
-                        $0[$1.0] = TimetableTimeGroupItems(
-                            startsTimeString:$1.0.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()),
-                            endsTimeString:$1.1.formatted(.dateTime.hour(.twoDigits(amPM: .omitted)).minute()),
-                            items:[]
-                        )
-                    }
-                    $0[$1.0]?.items.append($1.2)
-                }
-                
-                //TODO: this filter shouldn't be necessary but state.timetableItems = myDict.values generates an assignment error
-                state.timetableItems = myDict.values.sorted {
-                    $0.items[0].timetableItem.startsAt.epochSeconds < $1.items[0].timetableItem.startsAt.epochSeconds
-                }
+                state.timetableItems = sortListIntoTimeGroups(timetableItems: timetables)
                 
                 return .none
             case .response(.failure(let error)):
