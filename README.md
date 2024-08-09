@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/695c1709-2cd4-4189-896e-75b2c1bed9b3)
+![image](https://github.com/user-attachments/assets/11e73360-7a23-4e95-a549-da612aa20d7d)
 
 # DroidKaigi 2024 official app
 
@@ -33,7 +33,10 @@ Stable Android Studio Koala or higher. You can download it from [this page](http
 ## Design
 
 You can check out the design on Figma.
-TBD
+
+[DroidKaigi 2024 App UI](https://www.figma.com/design/XUk8WMbKCeIdWD5cz9P9JC/DroidKaigi-2024-App-UI?node-id=54795-26746&t=DgZuFVd0sduq6vUy-0)
+
+**Designer:**: [nobonobopurin](https://github.com/nobonobopurin)
 
 ## Development
 
