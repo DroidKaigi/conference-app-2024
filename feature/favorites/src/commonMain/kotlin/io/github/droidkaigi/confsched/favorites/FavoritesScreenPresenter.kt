@@ -21,7 +21,9 @@ import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.Flow
 
 sealed interface FavoritesScreenEvent {
@@ -48,7 +50,7 @@ fun favoritesScreenPresenter(
         favoritesSheet(
             favoriteSessions = favoriteSessions,
             allFilterSelected = allFilterSelected,
-            selectedDayFilters = currentDayFilters,
+            selectedDayFilters = currentDayFilters.toPersistentSet(),
         ),
     )
 
@@ -93,7 +95,7 @@ fun favoritesScreenPresenter(
 private fun favoritesSheet(
     favoriteSessions: Timetable,
     allFilterSelected: Boolean,
-    selectedDayFilters: Set<DroidKaigi2024Day>,
+    selectedDayFilters: PersistentSet<DroidKaigi2024Day>,
 ): FavoritesSheetUiState {
     val filteredSessions by rememberUpdatedState(
         favoriteSessions
