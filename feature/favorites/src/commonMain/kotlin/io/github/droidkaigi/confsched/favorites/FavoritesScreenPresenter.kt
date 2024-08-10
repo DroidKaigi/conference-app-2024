@@ -11,11 +11,9 @@ import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.AllFilter
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Bookmark
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Day1Filter
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Day2Filter
-import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.WorkDayFilter
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
-import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
@@ -28,7 +26,6 @@ sealed interface FavoritesScreenEvent {
     data class Bookmark(val timetableItem: TimetableItem): FavoritesScreenEvent
 
     data object AllFilter: FavoritesScreenEvent
-    data object WorkDayFilter: FavoritesScreenEvent
     data object Day1Filter: FavoritesScreenEvent
     data object Day2Filter: FavoritesScreenEvent
 }
@@ -67,9 +64,8 @@ fun favoritesScreenPresenter(
                     }
                 }
 
-                WorkDayFilter, Day1Filter, Day2Filter -> {
+                Day1Filter, Day2Filter -> {
                     val dayType = when (event) {
-                        WorkDayFilter -> Workday
                         Day1Filter -> ConferenceDay1
                         Day2Filter -> ConferenceDay2
                         else -> throw IllegalStateException()
@@ -108,14 +104,12 @@ private fun favoritesSheet(
     return if (favoriteSessions.isEmpty()) {
         FavoritesSheetUiState.Empty(
             allFilterSelected = allFilterSelected,
-            workDayFilterSelected = allFilterSelected.not() && selectedDayFilters.contains(Workday),
             day1FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay1),
             day2FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay2),
         )
     } else {
         FavoritesSheetUiState.FavoriteListUiState(
             allFilterSelected = allFilterSelected,
-            workDayFilterSelected = allFilterSelected.not() && selectedDayFilters.contains(Workday),
             day1FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay1),
             day2FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay2),
             timeTable = filteredSessions,

@@ -95,13 +95,11 @@ fun NavController.navigateFavoritesScreen() {
 
 sealed interface FavoritesSheetUiState {
     val allFilterSelected: Boolean
-    val workDayFilterSelected: Boolean
     val day1FilterSelected: Boolean
     val day2FilterSelected: Boolean
 
     data class FavoriteListUiState(
         override val allFilterSelected: Boolean,
-        override val workDayFilterSelected: Boolean,
         override val day1FilterSelected: Boolean,
         override val day2FilterSelected: Boolean,
         val timeTable: Timetable,
@@ -109,7 +107,6 @@ sealed interface FavoritesSheetUiState {
 
     data class Empty(
         override val allFilterSelected: Boolean,
-        override val workDayFilterSelected: Boolean,
         override val day1FilterSelected: Boolean,
         override val day2FilterSelected: Boolean,
     ): FavoritesSheetUiState
@@ -140,14 +137,8 @@ fun FavoritesScreen(
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
         onTimetableItemClick = onTimetableItemClick,
-        onBookmarkClick = { timetableItem ->
-            eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
-        },
         onAllFilterChipClick = {
             eventEmitter.tryEmit(FavoritesScreenEvent.AllFilter)
-        },
-        onWorkDayFilterChipClick = {
-            eventEmitter.tryEmit(FavoritesScreenEvent.WorkDayFilter)
         },
         onDay1FilterChipClick = {
             eventEmitter.tryEmit(FavoritesScreenEvent.Day1Filter)
@@ -155,8 +146,11 @@ fun FavoritesScreen(
         onDay2FilterChipClick = {
             eventEmitter.tryEmit(FavoritesScreenEvent.Day2Filter)
         },
-        modifier = modifier,
+        onBookmarkClick = { timetableItem ->
+            eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
+        },
         isTopAppBarHidden = isTopAppBarHidden,
+        modifier = modifier,
     )
 }
 
@@ -168,7 +162,6 @@ fun FavoritesScreen(
     onBackClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onAllFilterChipClick: () -> Unit,
-    onWorkDayFilterChipClick: () -> Unit,
     onDay1FilterChipClick: () -> Unit,
     onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
@@ -225,19 +218,6 @@ fun FavoritesScreen(
                     label = { Text("すべて") },
                     leadingIcon = {
                         if (uiState.favoritesSheetUiState.allFilterSelected) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                )
-                FilterChip(
-                    selected = uiState.favoritesSheetUiState.workDayFilterSelected,
-                    onClick = onWorkDayFilterChipClick,
-                    label = { Text("9/11") },
-                    leadingIcon = {
-                        if (uiState.favoritesSheetUiState.workDayFilterSelected) {
                             Icon(
                                 imageVector = Icons.Filled.Check,
                                 contentDescription = null,
@@ -371,7 +351,6 @@ fun FavoritesScreenPreview() {
                 uiState = FavoritesScreenUiState(
                     favoritesSheetUiState = FavoritesSheetUiState.FavoriteListUiState(
                         allFilterSelected = false,
-                        workDayFilterSelected = true,
                         day1FilterSelected = true,
                         day2FilterSelected = false,
                         timeTable = Timetable.fake(),
@@ -381,11 +360,10 @@ fun FavoritesScreenPreview() {
                 snackbarHostState = SnackbarHostState(),
                 onBackClick = {},
                 onTimetableItemClick = {},
-                onBookmarkClick = {},
                 onAllFilterChipClick = {},
-                onWorkDayFilterChipClick = {},
                 onDay1FilterChipClick = {},
                 onDay2FilterChipClick = {},
+                onBookmarkClick = {},
                 isTopAppBarHidden = false,
             )
         }
