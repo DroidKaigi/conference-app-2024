@@ -29,6 +29,7 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.section.FavoriteSheet
+import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
@@ -41,7 +42,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val favoritesScreenRoute = "favorites"
 const val FavoritesScreenTestTag = "FavoritesScreenTestTag"
-const val FavoritesScreenEmptyViewTestTag = "FavoritesScreenEmptyViewTestTag"
 
 fun NavGraphBuilder.favoritesScreens(
     onNavigationIconClick: () -> Unit,
@@ -69,25 +69,6 @@ fun NavController.navigateFavoritesScreen() {
         }
         launchSingleTop = true
         restoreState = true    }
-}
-
-sealed interface FavoritesSheetUiState {
-    val allFilterSelected: Boolean
-    val day1FilterSelected: Boolean
-    val day2FilterSelected: Boolean
-
-    data class FavoriteListUiState(
-        override val allFilterSelected: Boolean,
-        override val day1FilterSelected: Boolean,
-        override val day2FilterSelected: Boolean,
-        val timeTable: Timetable,
-    ): FavoritesSheetUiState
-
-    data class Empty(
-        override val allFilterSelected: Boolean,
-        override val day1FilterSelected: Boolean,
-        override val day2FilterSelected: Boolean,
-    ): FavoritesSheetUiState
 }
 
 data class FavoritesScreenUiState(

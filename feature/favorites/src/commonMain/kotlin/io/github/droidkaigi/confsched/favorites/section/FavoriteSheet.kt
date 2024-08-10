@@ -26,14 +26,33 @@ import conference_app_2024.feature.favorites.generated.resources.empty_descripti
 import conference_app_2024.feature.favorites.generated.resources.empty_guide
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.FavoritesRes
-import io.github.droidkaigi.confsched.favorites.FavoritesScreenEmptyViewTestTag
-import io.github.droidkaigi.confsched.favorites.FavoritesSheetUiState
 import io.github.droidkaigi.confsched.favorites.component.FavoriteFilters
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val FavoritesScreenEmptyViewTestTag = "FavoritesScreenEmptyViewTestTag"
+
+sealed interface FavoritesSheetUiState {
+    val allFilterSelected: Boolean
+    val day1FilterSelected: Boolean
+    val day2FilterSelected: Boolean
+
+    data class FavoriteListUiState(
+        override val allFilterSelected: Boolean,
+        override val day1FilterSelected: Boolean,
+        override val day2FilterSelected: Boolean,
+        val timeTable: Timetable,
+    ): FavoritesSheetUiState
+
+    data class Empty(
+        override val allFilterSelected: Boolean,
+        override val day1FilterSelected: Boolean,
+        override val day2FilterSelected: Boolean,
+    ): FavoritesSheetUiState
+}
 
 @Composable
 fun FavoriteSheet(

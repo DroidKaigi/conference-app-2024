@@ -4,7 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.FavoritesScreen
-import io.github.droidkaigi.confsched.favorites.FavoritesScreenEmptyViewTestTag
+import io.github.droidkaigi.confsched.favorites.section.FavoritesScreenEmptyViewTestTag
 import javax.inject.Inject
 
 class FavoritesScreenRobot @Inject constructor(
