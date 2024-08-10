@@ -11,7 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.favorites.generated.resources.filter_all
+import conference_app_2024.feature.favorites.generated.resources.filter_day1
+import conference_app_2024.feature.favorites.generated.resources.filter_day2
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.favorites.FavoritesRes
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -31,7 +36,7 @@ fun FavoriteFilters(
         FilterChip(
             selected = allFilterSelected,
             onClick = onAllFilterChipClick,
-            label = { Text("すべて") },
+            label = { Text(stringResource(FavoritesRes.string.filter_all)) },
             leadingIcon = {
                 if (allFilterSelected) {
                     Icon(
@@ -44,7 +49,7 @@ fun FavoriteFilters(
         FilterChip(
             selected = day1FilterSelected,
             onClick = onDay1FilterChipClick,
-            label = { Text("9/12") },
+            label = { Text(stringResource(FavoritesRes.string.filter_day1)) },
             leadingIcon = {
                 if (day1FilterSelected) {
                     Icon(
@@ -57,7 +62,7 @@ fun FavoriteFilters(
         FilterChip(
             selected = day2FilterSelected,
             onClick = onDay2FilterChipClick,
-            label = { Text("9/13") },
+            label = { Text(stringResource(FavoritesRes.string.filter_day2)) },
             leadingIcon = {
                 if (day2FilterSelected) {
                     Icon(
