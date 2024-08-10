@@ -8,6 +8,7 @@ import StaffFeature
 import SwiftUI
 import TimetableDetailFeature
 import TimetableFeature
+import EventMapFeature
 import Theme
 
 private enum Tab {
@@ -37,7 +38,7 @@ public struct RootView: View {
                     )
                 }
 
-            Text("Map Feature")
+            eventMapTab
                 .tag(Tab.map)
                 .tabItem {
                     Label(
@@ -152,6 +153,15 @@ public struct RootView: View {
             case let .timetableDetail(store):
                 TimetableDetailView(store: store)
             }
+        }
+    }
+    
+    @MainActor
+    private var eventMapTab: some View {
+        NavigationStack {
+            EventMapView(store: Store(initialState: .init(), reducer: {
+                EventMapReducer()
+            }))
         }
     }
 }
