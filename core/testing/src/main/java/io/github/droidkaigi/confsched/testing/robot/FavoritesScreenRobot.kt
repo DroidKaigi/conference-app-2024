@@ -1,7 +1,10 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.FavoritesScreen
+import io.github.droidkaigi.confsched.favorites.FavoritesScreenEmptyViewTestTag
 import javax.inject.Inject
 
 class FavoritesScreenRobot @Inject constructor(
@@ -19,5 +22,11 @@ class FavoritesScreenRobot @Inject constructor(
                 )
             }
         }
+    }
+
+    fun checkEmptyViewDisplayed() {
+        composeTestRule
+            .onNode(hasTestTag(FavoritesScreenEmptyViewTestTag))
+            .assertIsDisplayed()
     }
 }

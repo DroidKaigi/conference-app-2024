@@ -47,11 +47,11 @@ class FavoritesScreenTest(
                         run {
                             setupFavoritesScreenContent()
                         }
-                        itShould("display favorite sessions") {
-                            captureScreenWithChecks(
-                                checks = todoChecks("This screen is still empty now. Please add some checks."),
-                            )
-                        }
+                         itShould("display empty view") {
+                             captureScreenWithChecks(
+                                 checks = { checkEmptyViewDisplayed() },
+                             )
+                         }
                     }
                 }
 

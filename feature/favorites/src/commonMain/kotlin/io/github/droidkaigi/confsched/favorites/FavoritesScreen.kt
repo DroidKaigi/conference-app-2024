@@ -63,6 +63,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val favoritesScreenRoute = "favorites"
 const val FavoritesScreenTestTag = "FavoritesScreenTestTag"
+const val FavoritesScreenEmptyViewTestTag = "FavoritesScreenEmptyViewTestTag"
 
 fun NavGraphBuilder.favoritesScreens(
     onNavigationIconClick: () -> Unit,
@@ -324,7 +325,7 @@ fun FavoritesScreen(
 @Composable
 private fun EmptyView(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.testTag(FavoritesScreenEmptyViewTestTag).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
