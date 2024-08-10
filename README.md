@@ -23,9 +23,13 @@ You can try the app on your device by clicking the button below.
 
 ## Contributing
 
-We always welcome any and all contributions! See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
+We always welcome contributions!
 
-For Japanese speakers, please see [CONTRIBUTING.ja.md](CONTRIBUTING.ja.md).
+For a detailed step-by-step guide on how to contribute, please see [CONTRIBUTING.md](CONTRIBUTING.md). This guide will walk you through the process from setting up your environment to submitting your pull request.
+
+For Japanese speakers, a Japanese version of the contribution guide is available at [CONTRIBUTING.ja.md](CONTRIBUTING.ja.md).
+
+コントリビューションの詳細な手順については、[CONTRIBUTING.ja.md](CONTRIBUTING.ja.md)をご覧ください。初めての方でも分かりやすいステップバイステップのガイドを用意しています。
 
 ## Requirements
 Stable Android Studio Koala or higher. You can download it from [this page](https://developer.android.com/studio).
