@@ -151,7 +151,7 @@ public override fun timetable(): Timetable {
 ```
 
 `safeCollectAsRetainedState()` is a utility function that allows us to safely collect a Flow in a Composable function. It retains the state across recompositions and Compose navigation, ensuring that the data is not lost when the Composable function is recomposed.
-For more information, see the [Rin](https://github.com/takahirom/Rin) library.
+For more information about retained states, refer to the [Rin](https://github.com/takahirom/Rin) library.
 
 #### 5. Passing the Updated Timetable to the Presenter
 
@@ -393,10 +393,10 @@ We are exploring the possibility of using Compose.
 
 #### Behavior driven development and screenshot testing
 
-We aim to enhance our app's quality by adopting BDD methodologies similar to Ruby and JavaScript, alongside implementing screenshot testing.   
+We aim to enhance our app's quality by adopting BDD methodologies similar to Ruby and JavaScript tests, alongside implementing screenshot testing.   
 We used to have a test like `@Test fun launchTimetableShot(){}` that captures a screenshot of the timetable screen. But we found that we don't know what to check in the screenshot.
 The reason why we chose BDD is that it clearly defines the app's behavior and ensures that the app functions as expected.  
-To effectively capture screenshots, we utilize Robolectric integrated with Roborazzi. Below is the Kotlin code snippet we employ for our BDD tests:  
+To effectively capture screenshots, we utilize Robolectric integrated with [Roborazzi](https://github.com/takahirom/roborazzi). Below is the Kotlin code snippet we employ for our BDD tests. The `describeBehaviors()` function used here is from the [RoboSpec](https://github.com/takahirom/robospec) library:
 
 ```kotlin
 companion object {
