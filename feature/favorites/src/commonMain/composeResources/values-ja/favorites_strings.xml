@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sample">!!Please remove this resource when you add string resource!!</string>
+    <string name="favorite">お気に入り</string>
+    <string name="empty_description">登録されたセッションがありません</string>
+    <string name="empty_guide">気になるセッションをお気に入り登録しましょう</string>
+    <string name="filter_all">すべて</string>
+    <string name="content_description_back">戻る</string>
 </resources>
