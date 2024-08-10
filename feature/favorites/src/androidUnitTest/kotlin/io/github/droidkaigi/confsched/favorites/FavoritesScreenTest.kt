@@ -6,8 +6,10 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.RobotTestRule
 import io.github.droidkaigi.confsched.testing.StaffServerRobot.ServerStatus.Error
 import io.github.droidkaigi.confsched.testing.StaffServerRobot.ServerStatus.Operational
+import io.github.droidkaigi.confsched.testing.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
+import io.github.droidkaigi.confsched.testing.robot.FavoritesScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.StaffScreenRobot
 import io.github.droidkaigi.confsched.testing.runRobot
 import io.github.droidkaigi.confsched.testing.todoChecks
@@ -42,11 +44,11 @@ class FavoritesScreenTest(
             return describeBehaviors<FavoritesScreenRobot>(name = "FavoritesScreen") {
                 describe("when server is operational") {
                     run {
-                        setupStaffServer(Operational)
+                        setupTimetableServer(ServerStatus.Operational)
                     }
                     describe("when launch") {
                         run {
-                            setupScreenContent()
+                            setupFavoritesScreenContent()
                         }
                         itShould("display favorite sessions") {
                             captureScreenWithChecks(
@@ -58,11 +60,11 @@ class FavoritesScreenTest(
 
                 describe("when server is down") {
                     run {
-                        setupStaffServer(Error)
+                        setupTimetableServer(ServerStatus.Error)
                     }
                     describe("when launch") {
                         run {
-                            setupScreenContent()
+                            setupFavoritesScreenContent()
                         }
                         itShould("show error message") {
                             captureScreenWithChecks(
