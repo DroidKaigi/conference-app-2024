@@ -94,6 +94,7 @@ let package = Package(
         .target(
             name: "TimetableFeature",
             dependencies: [
+                .kmpClient,
                 .kmpModule,
                 .firebaseAuth,
                 .firebaseRemoteConfig,
