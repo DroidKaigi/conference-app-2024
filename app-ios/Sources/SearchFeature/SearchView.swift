@@ -15,7 +15,7 @@ public struct SearchView: View {
 
     public var body: some View {
         let timetableItems = store.timetableItems
-        let _ = store.filters
+
         VStack {
             filters
             Group {

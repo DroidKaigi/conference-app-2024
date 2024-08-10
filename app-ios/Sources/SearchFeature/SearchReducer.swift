@@ -145,7 +145,6 @@ public struct SearchReducer {
                 return .none
             }
         }
-        ._printChanges()
     }
 }
 
