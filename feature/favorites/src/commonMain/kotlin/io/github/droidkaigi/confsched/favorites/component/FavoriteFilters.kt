@@ -33,46 +33,43 @@ fun FavoriteFilters(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        FilterChip(
+        FavoriteFilterChip(
             selected = allFilterSelected,
             onClick = onAllFilterChipClick,
-            label = { Text(stringResource(FavoritesRes.string.filter_all)) },
-            leadingIcon = {
-                if (allFilterSelected) {
-                    Icon(
-                        imageVector = Icons.Filled.Check,
-                        contentDescription = null,
-                    )
-                }
-            },
+            text = stringResource(FavoritesRes.string.filter_all),
         )
-        FilterChip(
+        FavoriteFilterChip(
             selected = day1FilterSelected,
             onClick = onDay1FilterChipClick,
-            label = { Text(stringResource(FavoritesRes.string.filter_day1)) },
-            leadingIcon = {
-                if (day1FilterSelected) {
-                    Icon(
-                        imageVector = Icons.Filled.Check,
-                        contentDescription = null,
-                    )
-                }
-            },
+            text = stringResource(FavoritesRes.string.filter_day1),
         )
-        FilterChip(
+        FavoriteFilterChip(
             selected = day2FilterSelected,
             onClick = onDay2FilterChipClick,
-            label = { Text(stringResource(FavoritesRes.string.filter_day2)) },
-            leadingIcon = {
-                if (day2FilterSelected) {
-                    Icon(
-                        imageVector = Icons.Filled.Check,
-                        contentDescription = null,
-                    )
-                }
-            },
+            text = stringResource(FavoritesRes.string.filter_day2),
         )
     }
+}
+
+@Composable
+private fun FavoriteFilterChip(
+    selected: Boolean,
+    text: String,
+    onClick: () -> Unit,
+) {
+    FilterChip(
+        selected = selected,
+        onClick = onClick,
+        label = { Text(text) },
+        leadingIcon = {
+            if (selected) {
+                Icon(
+                    imageVector = Icons.Filled.Check,
+                    contentDescription = null,
+                )
+            }
+        },
+    )
 }
 
 @Composable
