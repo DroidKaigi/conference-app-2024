@@ -8,7 +8,7 @@ import kotlinx.datetime.toInstant
 
 public enum class DroidKaigi2024Day(
     public val dayIndex: Int,
-    public val visibleInTab: Boolean,
+    public val visibleForUsers: Boolean,
     public val dayOfMonth: Int,
     public val start: Instant,
     public val end: Instant,
@@ -16,35 +16,35 @@ public enum class DroidKaigi2024Day(
     // We are not using Workday sessions in the app
     Workday(
         dayIndex = 0,
-        visibleInTab = false,
+        visibleForUsers = false,
         dayOfMonth = 11,
         start = LocalDateTime
             .parse("2024-09-11T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
         end = LocalDateTime
-            .parse("2024-09-12T00:00:00")
+            .parse("2024-09-11T23:59:59")
             .toInstant(TimeZone.of("UTC+9")),
     ),
     ConferenceDay1(
         dayIndex = 1,
-        visibleInTab = true,
+        visibleForUsers = true,
         dayOfMonth = 12,
         start = LocalDateTime
             .parse("2024-09-12T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
         end = LocalDateTime
-            .parse("2024-09-13T00:00:00")
+            .parse("2024-09-12T23:59:59")
             .toInstant(TimeZone.of("UTC+9")),
     ),
     ConferenceDay2(
         dayIndex = 2,
-        visibleInTab = true,
+        visibleForUsers = true,
         dayOfMonth = 13,
         start = LocalDateTime
             .parse("2024-09-13T00:00:00")
             .toInstant(TimeZone.of("UTC+9")),
         end = LocalDateTime
-            .parse("2024-09-14T00:00:00")
+            .parse("2024-09-13T23:59:59")
             .toInstant(TimeZone.of("UTC+9")),
     ),
     ;
@@ -52,7 +52,7 @@ public enum class DroidKaigi2024Day(
     fun tabIndex(): Int {
         return entries
             .sortedBy { it.dayIndex }
-            .filter { it.visibleInTab }
+            .filter { it.visibleForUsers }
             .indexOf(this)
     }
 
@@ -67,15 +67,15 @@ public enum class DroidKaigi2024Day(
             }
         }
 
-        fun tabDays(): List<DroidKaigi2024Day> {
-            return entries.filter { it.visibleInTab }
+        fun visibleDays(): List<DroidKaigi2024Day> {
+            return entries.filter { it.visibleForUsers }
         }
 
         /**
          * @return appropriate initial day for now
          */
         fun initialSelectedTabDay(clock: Clock): DroidKaigi2024Day {
-            val reversedEntries = tabDays().sortedByDescending { it.dayIndex }
+            val reversedEntries = visibleDays().sortedByDescending { it.dayIndex }
             var selectedDay = reversedEntries.last()
             for (entry in reversedEntries) {
                 if (clock.now() <= entry.end) selectedDay = entry

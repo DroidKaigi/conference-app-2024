@@ -47,7 +47,7 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
 import io.github.droidkaigi.confsched.sessions.section.Timetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
+import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -117,7 +117,7 @@ fun TimetableScreen(
 }
 
 data class TimetableScreenUiState(
-    val contentUiState: TimetableSheetUiState,
+    val contentUiState: TimetableUiState,
     val timetableUiType: TimetableUiType,
     val userMessageStateHolder: UserMessageStateHolder,
 )
@@ -203,7 +203,7 @@ fun PreviewTimetableScreenDark() {
         KaigiTheme {
             TimetableScreen(
                 uiState = TimetableScreenUiState(
-                    contentUiState = TimetableSheetUiState.ListTimetable(
+                    contentUiState = TimetableUiState.ListTimetable(
                         mapOf(
                             DroidKaigi2024Day.Workday to TimetableListUiState(
                                 mapOf<String, List<TimetableItem>>().toPersistentMap(),

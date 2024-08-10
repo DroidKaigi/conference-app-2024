@@ -49,7 +49,7 @@ fun TimetableDayTab(
                 }
             },
             tabs = {
-                DroidKaigi2024Day.tabDays().forEach { conferenceDay ->
+                DroidKaigi2024Day.visibleDays().forEach { conferenceDay ->
                     Tab(
                         modifier = Modifier.height(64.dp),
                         selected = false,
