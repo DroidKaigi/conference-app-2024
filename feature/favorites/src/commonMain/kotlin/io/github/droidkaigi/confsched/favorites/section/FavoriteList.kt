@@ -32,7 +32,7 @@ fun FavoriteList(
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         items(timetable.timetableItems) { timetableItem ->
             TimetableItemCard(
@@ -49,7 +49,7 @@ fun FavoriteList(
                     timetableItem.language.labels.forEach { label ->
                         TimetableItemTag(
                             tagText = label,
-                            tagColor = MaterialTheme.colorScheme.outline
+                            tagColor = MaterialTheme.colorScheme.outline,
                         )
                         Spacer(modifier = Modifier.padding(3.dp))
                     }

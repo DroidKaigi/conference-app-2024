@@ -25,11 +25,11 @@ import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 
 sealed interface FavoritesScreenEvent {
-    data class Bookmark(val timetableItem: TimetableItem): FavoritesScreenEvent
+    data class Bookmark(val timetableItem: TimetableItem) : FavoritesScreenEvent
 
-    data object AllFilter: FavoritesScreenEvent
-    data object Day1Filter: FavoritesScreenEvent
-    data object Day2Filter: FavoritesScreenEvent
+    data object AllFilter : FavoritesScreenEvent
+    data object Day1Filter : FavoritesScreenEvent
+    data object Day2Filter : FavoritesScreenEvent
 }
 
 @Composable
@@ -49,7 +49,7 @@ fun favoritesScreenPresenter(
             favoriteSessions = favoriteSessions,
             allFilterSelected = allFilterSelected,
             selectedDayFilters = currentDayFilters,
-        )
+        ),
     )
 
     SafeLaunchedEffect(Unit) {

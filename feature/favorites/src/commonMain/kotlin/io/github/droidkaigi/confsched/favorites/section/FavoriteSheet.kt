@@ -53,13 +53,13 @@ sealed interface FavoritesSheetUiState {
     data class FavoriteListUiState(
         override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
         override val allFilterSelected: Boolean,
-    val timeTable: Timetable,
-    ): FavoritesSheetUiState
+        val timeTable: Timetable,
+    ) : FavoritesSheetUiState
 
     data class Empty(
         override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
         override val allFilterSelected: Boolean,
-    ): FavoritesSheetUiState
+    ) : FavoritesSheetUiState
 }
 
 @Composable

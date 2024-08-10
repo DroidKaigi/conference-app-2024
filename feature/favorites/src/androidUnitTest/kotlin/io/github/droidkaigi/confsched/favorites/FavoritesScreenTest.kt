@@ -47,11 +47,11 @@ class FavoritesScreenTest(
                         run {
                             setupFavoritesScreenContent()
                         }
-                         itShould("display empty view") {
-                             captureScreenWithChecks(
-                                 checks = { checkEmptyViewDisplayed() },
-                             )
-                         }
+                        itShould("display empty view") {
+                            captureScreenWithChecks(
+                                checks = { checkEmptyViewDisplayed() },
+                            )
+                        }
                     }
                 }
 

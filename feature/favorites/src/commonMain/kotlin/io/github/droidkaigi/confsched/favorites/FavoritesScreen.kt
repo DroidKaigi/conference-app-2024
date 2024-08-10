@@ -70,7 +70,8 @@ fun NavController.navigateFavoritesScreen() {
             saveState = true
         }
         launchSingleTop = true
-        restoreState = true    }
+        restoreState = true
+    }
 }
 
 data class FavoritesScreenUiState(
