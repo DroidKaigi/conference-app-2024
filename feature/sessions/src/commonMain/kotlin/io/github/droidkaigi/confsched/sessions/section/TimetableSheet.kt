@@ -41,7 +41,7 @@ sealed interface TimetableSheetUiState {
 }
 
 @Composable
-fun TimetableSheet(
+fun Timetable(
     uiState: TimetableSheetUiState,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onFavoriteClick: (TimetableItem, Boolean) -> Unit,
@@ -49,7 +49,7 @@ fun TimetableSheet(
     modifier: Modifier = Modifier,
 ) {
     val clock = LocalClock.current
-    var selectedDay by rememberSaveable { mutableStateOf(DroidKaigi2024Day.initialSelectedDay(clock)) }
+    var selectedDay by rememberSaveable { mutableStateOf(DroidKaigi2024Day.initialSelectedTabDay(clock)) }
     val layoutDirection = LocalLayoutDirection.current
     Surface(
         modifier = modifier.padding(contentPadding.calculateTopPadding()),

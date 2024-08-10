@@ -79,7 +79,7 @@ fun timetableSheet(
     }
     return if (uiType == TimetableUiType.List) {
         TimetableSheetUiState.ListTimetable(
-            DroidKaigi2024Day.entries.associateWith { day ->
+            DroidKaigi2024Day.tabDays().associateWith { day ->
                 val sortAndGroupedTimetableItems = sessionTimetable.filtered(
                     Filters(
                         days = listOf(day),
@@ -99,7 +99,7 @@ fun timetableSheet(
         )
     } else {
         TimetableSheetUiState.GridTimetable(
-            DroidKaigi2024Day.entries.associateWith { day ->
+            DroidKaigi2024Day.tabDays().associateWith { day ->
                 TimetableGridUiState(
                     timetable = sessionTimetable.dayTimetable(day),
                 )

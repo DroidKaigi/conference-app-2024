@@ -2,7 +2,6 @@ package io.github.droidkaigi.confsched.sessions.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,10 +18,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import conference_app_2024.feature.sessions.generated.resources.conference
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
-import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
-import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
-import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
+import io.github.droidkaigi.confsched.sessions.SessionsRes
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun TimetableDayTab(
@@ -30,7 +29,7 @@ fun TimetableDayTab(
     onDaySelected: (day: DroidKaigi2024Day) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val selectedTabIndex = selectedDay.dayIndex
+    val selectedTabIndex = selectedDay.tabIndex()
     val selectedColor = Color(0xFF4AFF82)
     Column(
         modifier = modifier.padding(start = 12.dp),
@@ -50,84 +49,33 @@ fun TimetableDayTab(
                 }
             },
             tabs = {
-                Tab(
-                    modifier = Modifier.height(64.dp),
-                    selected = true,
-                    onClick = {
-                        onDaySelected(Workday)
-                    },
-                    selectedContentColor = selectedColor,
-                    unselectedContentColor = Color.White,
-                ) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (selectedTabIndex == 0) {
+                DroidKaigi2024Day.tabDays().forEach { conferenceDay ->
+                    Tab(
+                        modifier = Modifier.height(64.dp),
+                        selected = false,
+                        onClick = {
+                            onDaySelected(conferenceDay)
+                        },
+                        selectedContentColor = selectedColor,
+                        unselectedContentColor = Color.White,
+                    ) {
+                        val isSelected = conferenceDay == selectedDay
+                        if (isSelected) {
                             FloorText(
-                                text = "Workshop",
-                                isSelected = selectedTabIndex == 0,
+                                text = stringResource(SessionsRes.string.conference),
+                                isSelected = isSelected,
                             )
                             Text(
-                                text = " (9/11)",
+                                text = " (${conferenceDay.monthAndDay()})",
                                 fontSize = 11.sp,
                                 color = Color(0xFF4AFF82),
                             )
                         } else {
                             FloorText(
-                                text = "9/11",
-                                isSelected = selectedTabIndex == 0,
+                                text = conferenceDay.monthAndDay(),
+                                isSelected = isSelected,
                             )
                         }
-                    }
-                }
-                Tab(
-                    modifier = Modifier.height(64.dp),
-                    selected = false,
-                    onClick = {
-                        onDaySelected(ConferenceDay1)
-                    },
-                    selectedContentColor = selectedColor,
-                    unselectedContentColor = Color.White,
-                ) {
-                    if (selectedTabIndex == 1) {
-                        FloorText(
-                            text = "Conference",
-                            isSelected = selectedTabIndex == 1,
-                        )
-                        Text(
-                            text = " (9/12)",
-                            fontSize = 11.sp,
-                            color = Color(0xFF4AFF82),
-                        )
-                    } else {
-                        FloorText(
-                            text = "9/12",
-                            isSelected = selectedTabIndex == 1,
-                        )
-                    }
-                }
-                Tab(
-                    modifier = Modifier.height(64.dp),
-                    selected = false,
-                    onClick = {
-                        onDaySelected(ConferenceDay2)
-                    },
-                    selectedContentColor = selectedColor,
-                    unselectedContentColor = Color.White,
-                ) {
-                    if (selectedTabIndex == 2) {
-                        FloorText(
-                            text = "Conference",
-                            isSelected = selectedTabIndex == 2,
-                        )
-                        Text(
-                            text = " (9/13)",
-                            fontSize = 11.sp,
-                            color = Color(0xFF4AFF82),
-                        )
-                    } else {
-                        FloorText(
-                            text = "9/13",
-                            isSelected = selectedTabIndex == 2,
-                        )
                     }
                 }
             },
