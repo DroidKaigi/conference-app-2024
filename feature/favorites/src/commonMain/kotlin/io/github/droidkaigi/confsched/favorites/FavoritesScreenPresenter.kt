@@ -21,6 +21,7 @@ import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 
 sealed interface FavoritesScreenEvent {
@@ -42,12 +43,12 @@ fun favoritesScreenPresenter(
             .filtered(Filters(filterFavorite = true)),
     )
     var allFilterSelected by remember { mutableStateOf(true) }
-    var selectedDayFilters by remember { mutableStateOf(emptySet<DroidKaigi2024Day>()) }
+    var currentDayFilters by remember { mutableStateOf(emptySet<DroidKaigi2024Day>()) }
     val favoritesSheetUiState by rememberUpdatedState(
         favoritesSheet(
             favoriteSessions = favoriteSessions,
             allFilterSelected = allFilterSelected,
-            selectedDayFilters = selectedDayFilters,
+            selectedDayFilters = currentDayFilters,
         )
     )
 
@@ -59,26 +60,23 @@ fun favoritesScreenPresenter(
                 }
 
                 AllFilter -> {
-                    if (allFilterSelected.not()) {
-                        allFilterSelected = true
-                        selectedDayFilters = emptySet()
-                    }
+                    allFilterSelected = true
+                    currentDayFilters = emptySet()
                 }
 
                 Day1Filter, Day2Filter -> {
-                    val dayType = when (event) {
-                        Day1Filter -> ConferenceDay1
-                        Day2Filter -> ConferenceDay2
-                        else -> throw IllegalStateException()
-                    }
-                    if (selectedDayFilters.contains(dayType)) {
-                        selectedDayFilters = selectedDayFilters - dayType
-                        if (selectedDayFilters.isEmpty()) {
-                            allFilterSelected = true
-                        }
+                    allFilterSelected = false
+
+                    val dayType = if (event is Day1Filter) {
+                        ConferenceDay1
                     } else {
-                        allFilterSelected = false
-                        selectedDayFilters = selectedDayFilters + dayType
+                        ConferenceDay2
+                    }
+
+                    currentDayFilters = if (currentDayFilters.contains(dayType) && currentDayFilters.size >= 2) {
+                        currentDayFilters - dayType
+                    } else {
+                        currentDayFilters + dayType
                     }
                 }
             }
@@ -104,15 +102,13 @@ private fun favoritesSheet(
 
     return if (favoriteSessions.isEmpty()) {
         FavoritesSheetUiState.Empty(
+            currentDayFilter = selectedDayFilters.toPersistentList(),
             allFilterSelected = allFilterSelected,
-            day1FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay1),
-            day2FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay2),
         )
     } else {
         FavoritesSheetUiState.FavoriteListUiState(
+            currentDayFilter = selectedDayFilters.toPersistentList(),
             allFilterSelected = allFilterSelected,
-            day1FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay1),
-            day2FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay2),
             timeTable = filteredSessions,
         )
     }

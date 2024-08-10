@@ -27,30 +27,38 @@ import conference_app_2024.feature.favorites.generated.resources.empty_guide
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.FavoritesRes
 import io.github.droidkaigi.confsched.favorites.component.FavoriteFilters
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val FavoritesScreenEmptyViewTestTag = "FavoritesScreenEmptyViewTestTag"
 
 sealed interface FavoritesSheetUiState {
+    val currentDayFilter: PersistentList<DroidKaigi2024Day>
     val allFilterSelected: Boolean
-    val day1FilterSelected: Boolean
-    val day2FilterSelected: Boolean
+    val isAllFilterSelected: Boolean
+        get() = allFilterSelected
+    val isDay1FilterSelected: Boolean
+        get() = allFilterSelected.not() && currentDayFilter.contains(ConferenceDay1)
+    val isDay2FilterSelected: Boolean
+        get() = allFilterSelected.not() && currentDayFilter.contains(ConferenceDay2)
 
     data class FavoriteListUiState(
+        override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
         override val allFilterSelected: Boolean,
-        override val day1FilterSelected: Boolean,
-        override val day2FilterSelected: Boolean,
-        val timeTable: Timetable,
+    val timeTable: Timetable,
     ): FavoritesSheetUiState
 
     data class Empty(
+        override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
         override val allFilterSelected: Boolean,
-        override val day1FilterSelected: Boolean,
-        override val day2FilterSelected: Boolean,
     ): FavoritesSheetUiState
 }
 
@@ -66,9 +74,9 @@ fun FavoriteSheet(
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         FavoriteFilters(
-            allFilterSelected = uiState.allFilterSelected,
-            day1FilterSelected = uiState.day1FilterSelected,
-            day2FilterSelected = uiState.day2FilterSelected,
+            allFilterSelected = uiState.isAllFilterSelected,
+            day1FilterSelected = uiState.isDay1FilterSelected,
+            day2FilterSelected = uiState.isDay2FilterSelected,
             onAllFilterChipClick = onAllFilterChipClick,
             onDay1FilterChipClick = onDay1FilterChipClick,
             onDay2FilterChipClick = onDay2FilterChipClick,
@@ -138,8 +146,7 @@ fun FavoriteSheetPreview() {
             FavoriteSheet(
                 uiState = FavoritesSheetUiState.FavoriteListUiState(
                     allFilterSelected = true,
-                    day1FilterSelected = false,
-                    day2FilterSelected = false,
+                    currentDayFilter = persistentListOf(ConferenceDay1, ConferenceDay2),
                     timeTable = Timetable.fake(),
                 ),
                 onAllFilterChipClick = {},
@@ -159,9 +166,8 @@ fun FavoriteSheetNoFavoritesPreview() {
         Surface {
             FavoriteSheet(
                 uiState = FavoritesSheetUiState.Empty(
-                    allFilterSelected = true,
-                    day1FilterSelected = false,
-                    day2FilterSelected = false,
+                    allFilterSelected = false,
+                    currentDayFilter = persistentListOf(ConferenceDay1, ConferenceDay2),
                 ),
                 onAllFilterChipClick = {},
                 onDay1FilterChipClick = {},
