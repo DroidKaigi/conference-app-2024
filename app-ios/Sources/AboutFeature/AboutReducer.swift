@@ -58,6 +58,9 @@ public struct AboutReducer {
                 return .none
             case .view:
                 return .none
+            case .presentation(.dismiss):
+                state.destination = nil
+                return .none
             case .presentation:
                 return .none
             }
