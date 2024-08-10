@@ -40,7 +40,7 @@ You can check out the design on Figma.
 
 ## Development
 
-<img width="815" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f0a9a5a2-e10d-470c-9e7d-0ad15128f1f5">
+<img width="813" alt="image" src="https://github.com/user-attachments/assets/28532593-025b-476b-8a2d-af2367dcbdd0">
 
 ### Understanding the App's Data Flow
 
@@ -56,8 +56,7 @@ This section explains how the TimetableScreen is set up to display sessions, det
 timetableScreenPresenter ----> TimetableScreen
 ```
 
-<img width="603" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f8b2b564-6a0b-4617-83cb-02068459dc0a">
-
+<img width="711" alt="image" src="https://github.com/user-attachments/assets/2032e34b-933d-4964-92a8-831ea254cedd">
 
 ```kotlin
 @Composable
@@ -80,11 +79,11 @@ fun TimetableScreen(
 
 Here, the interaction of bookmarking a session is detailed, showcasing how events trigger updates within the presenter.
 
-<img width="428" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/23109f98-dd7c-4d8c-bc2b-55ad7f259680">
+<img width="494" alt="image" src="https://github.com/user-attachments/assets/715c053a-1b06-4523-8016-44d16f1a34f2">
 
 ```
       TimetableScreenEvent.Bookmark
-TimetableScreen ----> timetableScreenPresenter
+TimetableScreen ----> timetableScreenPresenter -> sessionsRepository
 ```
 
 ```kotlin
@@ -159,8 +158,7 @@ For more information, see the [Rin](https://github.com/takahirom/Rin) library.
 Describes the flow of updated session data back to the screen presenter, highlighting how the UI state is refreshed.
 
 
-<img width="518" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/9ad59696-0b94-4d3f-84c4-71ae0402680b">
-
+<img width="386" alt="image" src="https://github.com/user-attachments/assets/6b69304a-ee4f-4ed7-93ff-6c4256264f8a">
 
 ```
                  Timetable
