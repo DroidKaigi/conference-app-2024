@@ -49,6 +49,7 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.favorites.section.FavoriteSheet
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
@@ -206,138 +207,14 @@ fun FavoritesScreen(
             }
         },
     ) { padding ->
-        Column(
-            modifier = Modifier.fillMaxSize().padding(padding)
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                FilterChip(
-                    selected = uiState.favoritesSheetUiState.allFilterSelected,
-                    onClick = onAllFilterChipClick,
-                    label = { Text("すべて") },
-                    leadingIcon = {
-                        if (uiState.favoritesSheetUiState.allFilterSelected) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                )
-                FilterChip(
-                    selected = uiState.favoritesSheetUiState.day1FilterSelected,
-                    onClick = onDay1FilterChipClick,
-                    label = { Text("9/12") },
-                    leadingIcon = {
-                        if (uiState.favoritesSheetUiState.day1FilterSelected) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                )
-                FilterChip(
-                    selected = uiState.favoritesSheetUiState.day2FilterSelected,
-                    onClick = onDay2FilterChipClick,
-                    label = { Text("9/13") },
-                    leadingIcon = {
-                        if (uiState.favoritesSheetUiState.day2FilterSelected) {
-                            Icon(
-                                imageVector = Icons.Filled.Check,
-                                contentDescription = null,
-                            )
-                        }
-                    },
-                )
-            }
-
-            when (uiState.favoritesSheetUiState) {
-                is FavoritesSheetUiState.Empty -> {
-                    EmptyView()
-                }
-
-                is FavoritesSheetUiState.FavoriteListUiState -> {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        items(uiState.favoritesSheetUiState.timeTable.timetableItems) { timetableItem ->
-                            TimetableItemCard(
-                                modifier = Modifier.fillMaxWidth(),
-                                isBookmarked = true,
-                                tags = {
-                                    TimetableItemTag(
-                                        tagText = timetableItem.room.name.currentLangTitle,
-                                        icon = timetableItem.room.icon,
-                                        tagColor = LocalRoomTheme.current.primaryColor,
-                                        modifier = Modifier.background(LocalRoomTheme.current.containerColor),
-                                    )
-                                    Spacer(modifier = Modifier.padding(3.dp))
-                                    timetableItem.language.labels.forEach { label ->
-                                        TimetableItemTag(
-                                            tagText = label,
-                                            tagColor = MaterialTheme.colorScheme.outline
-                                        )
-                                        Spacer(modifier = Modifier.padding(3.dp))
-                                    }
-                                    timetableItem.day?.let {
-                                        TimetableItemTag(
-                                            tagText = "9/${it.dayOfMonth}",
-                                            tagColor = MaterialTheme.colorScheme.outline,
-                                        )
-                                    }
-                                    Spacer(modifier = Modifier.weight(1f))
-                                },
-                                timetableItem = timetableItem,
-                                onTimetableItemClick = onTimetableItemClick,
-                                onBookmarkClick = { item, _ -> onBookmarkClick(item) },
-                            )
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-private fun EmptyView(modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier.testTag(FavoritesScreenEmptyViewTestTag).fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    shape = RoundedCornerShape(24.dp),
-                )
-                .size(84.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                modifier = Modifier.size(36.dp),
-                imageVector = Icons.Filled.Favorite,
-                contentDescription = null,
-                tint = Color.Green,
-            )
-        }
-        Spacer(Modifier.height(12.dp))
-        Text(
-            text = "登録されたセッションがありません",
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(Modifier.height(6.dp))
-        Text(
-            text = "気になるセッションをお気に入り登録しましょう",
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
+        FavoriteSheet(
+            uiState = uiState.favoritesSheetUiState,
+            onTimetableItemClick = onTimetableItemClick,
+            onAllFilterChipClick = onAllFilterChipClick,
+            onDay1FilterChipClick = onDay1FilterChipClick,
+            onDay2FilterChipClick = onDay2FilterChipClick,
+            onBookmarkClick = onBookmarkClick,
+            modifier = Modifier.padding(padding),
         )
     }
 }
