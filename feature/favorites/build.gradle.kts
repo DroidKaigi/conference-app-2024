@@ -2,8 +2,8 @@ plugins {
     id("droidkaigi.convention.kmpfeature")
 }
 
-android.namespace = "io.github.droidkaigi.confsched.feature.staff"
-roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.staff")
+android.namespace = "io.github.droidkaigi.confsched.feature.favorites"
+roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.favorites")
 kotlin {
     sourceSets {
         commonMain {
