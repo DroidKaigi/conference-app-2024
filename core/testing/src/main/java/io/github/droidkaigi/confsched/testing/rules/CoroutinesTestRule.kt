@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.testing
+package io.github.droidkaigi.confsched.testing.rules
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

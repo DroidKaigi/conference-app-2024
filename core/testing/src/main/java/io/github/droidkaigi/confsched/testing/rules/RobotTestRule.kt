@@ -1,7 +1,6 @@
-package io.github.droidkaigi.confsched.testing
+package io.github.droidkaigi.confsched.testing.rules
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
@@ -13,10 +12,6 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import co.touchlab.kermit.CommonWriter
 import co.touchlab.kermit.Logger
-import coil3.ImageLoader
-import coil3.SingletonImageLoader
-import coil3.test.FakeImageLoaderEngine
-import coil3.test.default
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.PixelBitConfig
@@ -29,6 +24,7 @@ import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
+import io.github.droidkaigi.confsched.testing.HiltTestActivity
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
@@ -113,19 +109,7 @@ class RobotTestRule(
                     ),
                 ),
             )
-            .around(object : TestWatcher() {
-                override fun starting(description: Description?) {
-                    super.starting(description)
-                    val engine = FakeImageLoaderEngine.Builder()
-                        .default(ColorDrawable(android.graphics.Color.BLUE))
-                        .build()
-                    val imageLoader =
-                        ImageLoader.Builder(ApplicationProvider.getApplicationContext())
-                            .components { add(engine) }
-                            .build()
-                    SingletonImageLoader.setUnsafe(imageLoader)
-                }
-            })
+            .around(CoilRule())
             .around(composeTestRule)
             .apply(base, description)
     }

@@ -62,8 +62,7 @@ class IosComposeKaigiTest {
                     )
                 }
             }
-            // We are investigating error about Json format
-//            onRoot().captureRoboImage(this, filePath = "ios_compose_launch.png")
+            onRoot().captureRoboImage(this, filePath = "ios_compose_launch.png")
         }
     }
 }
