@@ -11,8 +11,7 @@ public struct EventMapReducer {
         public init() { }
     }
     
-    public enum Action: BindableAction {
-        case binding(BindingAction<State>)
+    public enum Action {
         case view(View)
 
         @CasePathable
@@ -22,14 +21,10 @@ public struct EventMapReducer {
     }
     
     public var body: some ReducerOf<Self> {
-        BindingReducer()
         Reduce { state, action in
             switch action {
             case let .view(.selectFloorMap(floor)):
                 state.selectedFloorMap = floor
-                return .none
-                
-            case .binding:
                 return .none
             }
         }
