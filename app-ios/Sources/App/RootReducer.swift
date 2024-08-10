@@ -64,6 +64,7 @@ public struct RootReducer {
         case timetable(TimetableReducer.Action)
         case favorite(FavoriteReducer.Action)
         case about(AboutReducer.Action)
+        case view(View)
         case paths(Paths)
 
         @CasePathable
@@ -71,6 +72,10 @@ public struct RootReducer {
             case timetable(StackActionOf<RootReducer.Path.Timetable>)
             case favorite(StackActionOf<RootReducer.Path.Favorite>)
             case about(StackActionOf<RootReducer.Path.About>)
+        }
+        
+        public enum View {
+            case sameTabTapped(Tab)
         }
     }
 
@@ -130,7 +135,18 @@ public struct RootReducer {
                     )
                     return .none
                 }
-
+                
+            case let .view(.sameTabTapped(tab)):
+                switch tab {
+                case .timetable: state.paths.timetable.removeAll()
+                case .favorite: state.paths.favorite.removeAll()
+                case .about: state.paths.about.removeAll()
+                case .map: break
+                case .idCard: break
+                }
+                
+                return .none
+                
             default:
                 return .none
             }
