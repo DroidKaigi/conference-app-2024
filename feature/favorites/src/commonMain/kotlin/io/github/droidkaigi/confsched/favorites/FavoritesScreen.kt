@@ -142,6 +142,18 @@ fun FavoritesScreen(
         onBookmarkClick = { timetableItem ->
             eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
         },
+        onAllFilterChipClick = {
+            eventEmitter.tryEmit(FavoritesScreenEvent.AllFilter)
+        },
+        onWorkDayFilterChipClick = {
+            eventEmitter.tryEmit(FavoritesScreenEvent.WorkDayFilter)
+        },
+        onDay1FilterChipClick = {
+            eventEmitter.tryEmit(FavoritesScreenEvent.Day1Filter)
+        },
+        onDay2FilterChipClick = {
+            eventEmitter.tryEmit(FavoritesScreenEvent.Day2Filter)
+        },
         modifier = modifier,
         isTopAppBarHidden = isTopAppBarHidden,
     )
@@ -154,6 +166,10 @@ fun FavoritesScreen(
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
+    onAllFilterChipClick: () -> Unit,
+    onWorkDayFilterChipClick: () -> Unit,
+    onDay1FilterChipClick: () -> Unit,
+    onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
@@ -204,7 +220,7 @@ fun FavoritesScreen(
             ) {
                 FilterChip(
                     selected = uiState.favoritesSheetUiState.allFilterSelected,
-                    onClick = {},
+                    onClick = onAllFilterChipClick,
                     label = { Text("すべて") },
                     leadingIcon = {
                         if (uiState.favoritesSheetUiState.allFilterSelected) {
@@ -217,7 +233,7 @@ fun FavoritesScreen(
                 )
                 FilterChip(
                     selected = uiState.favoritesSheetUiState.workDayFilterSelected,
-                    onClick = {},
+                    onClick = onWorkDayFilterChipClick,
                     label = { Text("9/11") },
                     leadingIcon = {
                         if (uiState.favoritesSheetUiState.workDayFilterSelected) {
@@ -230,7 +246,7 @@ fun FavoritesScreen(
                 )
                 FilterChip(
                     selected = uiState.favoritesSheetUiState.day1FilterSelected,
-                    onClick = {},
+                    onClick = onDay1FilterChipClick,
                     label = { Text("9/12") },
                     leadingIcon = {
                         if (uiState.favoritesSheetUiState.day1FilterSelected) {
@@ -243,7 +259,7 @@ fun FavoritesScreen(
                 )
                 FilterChip(
                     selected = uiState.favoritesSheetUiState.day2FilterSelected,
-                    onClick = {},
+                    onClick = onDay2FilterChipClick,
                     label = { Text("9/13") },
                     leadingIcon = {
                         if (uiState.favoritesSheetUiState.day2FilterSelected) {
@@ -365,6 +381,10 @@ fun FavoritesScreenPreview() {
                 onBackClick = {},
                 onTimetableItemClick = {},
                 onBookmarkClick = {},
+                onAllFilterChipClick = {},
+                onWorkDayFilterChipClick = {},
+                onDay1FilterChipClick = {},
+                onDay2FilterChipClick = {},
                 isTopAppBarHidden = false,
             )
         }
