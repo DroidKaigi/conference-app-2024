@@ -1,7 +1,7 @@
 #!/bin/bash
 cd "$(dirname "$0")"
 cp $1/keystore.properties .
-cp $1/droidkaigi2023.keystore .
+cp $1/droidkaigi2024.keystore .
 mkdir src/prod/
 cp $1/google-services.json src/prod/google-services.json
 
