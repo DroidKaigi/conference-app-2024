@@ -2,13 +2,20 @@ package io.github.droidkaigi.confsched.favorites
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.AllFilter
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Bookmark
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Day1Filter
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Day2Filter
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.WorkDayFilter
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.Workday
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
@@ -36,9 +43,13 @@ fun favoritesScreenPresenter(
             .timetable()
             .filtered(Filters(filterFavorite = true)),
     )
+    var allFilterSelected by remember { mutableStateOf(true) }
+    var selectedDayFilters by remember { mutableStateOf(emptySet<DroidKaigi2024Day>()) }
     val favoritesSheetUiState by rememberUpdatedState(
         favoritesSheet(
             favoriteSessions = favoriteSessions,
+            allFilterSelected = allFilterSelected,
+            selectedDayFilters = selectedDayFilters,
         )
     )
 
@@ -50,15 +61,28 @@ fun favoritesScreenPresenter(
                 }
 
                 AllFilter -> {
+                    if (allFilterSelected.not()) {
+                        allFilterSelected = true
+                        selectedDayFilters = emptySet()
+                    }
                 }
 
-                WorkDayFilter -> {
-                }
-
-                Day1Filter -> {
-                }
-
-                Day2Filter -> {
+                WorkDayFilter, Day1Filter, Day2Filter -> {
+                    val dayType = when (event) {
+                        WorkDayFilter -> Workday
+                        Day1Filter -> ConferenceDay1
+                        Day2Filter -> ConferenceDay2
+                        else -> throw IllegalStateException()
+                    }
+                    if (selectedDayFilters.contains(dayType)) {
+                        selectedDayFilters = selectedDayFilters - dayType
+                        if (selectedDayFilters.isEmpty()) {
+                            allFilterSelected = true
+                        }
+                    } else {
+                        allFilterSelected = false
+                        selectedDayFilters = selectedDayFilters + dayType
+                    }
                 }
             }
         }
@@ -71,21 +95,30 @@ fun favoritesScreenPresenter(
 }
 
 @Composable
-private fun favoritesSheet(favoriteSessions: Timetable): FavoritesSheetUiState {
+private fun favoritesSheet(
+    favoriteSessions: Timetable,
+    allFilterSelected: Boolean,
+    selectedDayFilters: Set<DroidKaigi2024Day>,
+): FavoritesSheetUiState {
+    val filteredSessions by rememberUpdatedState(
+        favoriteSessions
+            .filtered(Filters(days = selectedDayFilters.toList())),
+    )
+
     return if (favoriteSessions.isEmpty()) {
         FavoritesSheetUiState.Empty(
-            allFilterSelected = true,
-            workDayFilterSelected = true,
-            day1FilterSelected = true,
-            day2FilterSelected = true,
+            allFilterSelected = allFilterSelected,
+            workDayFilterSelected = allFilterSelected.not() && selectedDayFilters.contains(Workday),
+            day1FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay1),
+            day2FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay2),
         )
     } else {
         FavoritesSheetUiState.FavoriteListUiState(
-            allFilterSelected = true,
-            workDayFilterSelected = true,
-            day1FilterSelected = true,
-            day2FilterSelected = true,
-            timeTable = favoriteSessions,
+            allFilterSelected = allFilterSelected,
+            workDayFilterSelected = allFilterSelected.not() && selectedDayFilters.contains(Workday),
+            day1FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay1),
+            day2FilterSelected = allFilterSelected.not() && selectedDayFilters.contains(ConferenceDay2),
+            timeTable = filteredSessions,
         )
     }
 }
