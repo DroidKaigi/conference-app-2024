@@ -5,7 +5,6 @@ SCHEME_NAME_APP := DroidKaigi2024App
 setup:
 	brew bundle --no-lock
 
-
 .PHONY: open
 open:
 	open $(PROJECT_FILE)
@@ -21,6 +20,11 @@ build-app-debug: build-kmp-module
 		xcodebuild -project $(PROJECT_FILE) \
 		-scheme $(SCHEME_NAME_APP) \
 		-configuration Debug \
-		-destination 'generic/platform=iOS Simulator' \
-		clean build
+		-destination "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.5" \
+		clean build | xcbeautify
 
+# Gradle Utility
+.PHONY: gradle-clean
+gradle-clean:
+	cd .. && \
+	./gradlew --stop && ./gradlew clean
