@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class TimeTableItem(
     @SerialName("timetableItemId")
-    val timetableItemId: String
+    val timetableItemId: String,
 )
