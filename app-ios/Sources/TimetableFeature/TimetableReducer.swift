@@ -96,6 +96,9 @@ public struct TimetableReducer : Sendable{
                 }
             case .requestDay(.timetableItemTapped):
                 return .none
+
+            case .requestDay(.searchTapped):
+                return .none
             }
         }
     }
