@@ -35,7 +35,6 @@ public struct TimetableDetailView: View {
             .frame(maxWidth: .infinity)
             .ignoresSafeArea(edges: [.top])
         }
-        .toolbarBackground(AssetColors.Surface.surface.swiftUIColor, for: .navigationBar)
         .tint(store.timetableItem.room.roomTheme.primaryColor)
         .confirmationDialog(
             $store.scope(
