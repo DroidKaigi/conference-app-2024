@@ -64,7 +64,7 @@ fun GlassLikeBottomNavigation(
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     Box(
         modifier = modifier
-            .padding(vertical = 24.dp, horizontal = 64.dp)
+            .padding(vertical = 24.dp, horizontal = 48.dp)
             .fillMaxWidth()
             .height(64.dp)
             .hazeChild(state = hazeState, shape = CircleShape)

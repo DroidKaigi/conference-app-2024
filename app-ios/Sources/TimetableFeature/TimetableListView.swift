@@ -1,6 +1,8 @@
 import ComposableArchitecture
+import CommonComponents
 import SwiftUI
 import Theme
+import shared
 
 public struct TimetableView: View {
     private let store: StoreOf<TimetableReducer>
@@ -49,7 +51,7 @@ public struct TimetableView: View {
             ToolbarItem(placement:.topBarTrailing) {
                 HStack {
                     Button {
-                        // TODO: Search?
+                        store.send(.view(.searchTapped))
                     } label: {
                         Group {
                             Image(systemName:"magnifyingglass").foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
@@ -91,7 +93,9 @@ struct TimetableListView: View {
                     Button {
                         store.send(.view(.timetableItemTapped))
                     } label: {
-                        TimeGroupMiniList(contents: item)
+                        TimeGroupMiniList(contents: item, onItemTap: { item in
+                            store.send(.view(.timetableItemTapped))
+                        })
                     }
                 }
             }.scrollContentBackground(.hidden)
@@ -105,6 +109,7 @@ struct TimetableListView: View {
 
 struct TimeGroupMiniList: View {
     let contents: TimetableTimeGroupItems
+    let onItemTap: (TimetableItemWithFavorite) -> Void
     
     var body: some View {
         HStack {
@@ -116,7 +121,14 @@ struct TimeGroupMiniList: View {
             }.padding(10).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
             VStack {
                 ForEach(contents.items, id: \.self) { item in
-                    ListViewItem(listItem: item)
+                    TimetableCard(
+                        timetableItem: item.timetableItem,
+                        isFavorite: item.isFavorited,
+                        onTap: {_ in
+                            onItemTap(item)
+                        },
+                        onTapFavorite: {_ in
+                        })
                 }
             }
         }.background(Color.clear)
@@ -124,37 +136,10 @@ struct TimeGroupMiniList: View {
     }
 }
 
-struct ListViewItem: View {
-    let listItem: TimetableItem
-    
-    public var body: some View {
-        VStack(alignment: .leading) {
-            HStack {
-                TagView(tagText: listItem.room, highlight: true)
-                ForEach(listItem.languages, id: \.self) { lang in
-                    TagView(tagText: lang, highlight: false)
-                }
-                Spacer()
-                Image(systemName: listItem.isFavorite ? "heart.fill" : "heart").foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-            }
-            Text(listItem.title).font(.title)
-            ForEach(listItem.speakers, id: \.self){ speaker in
-                PhotoView(photo:"person.circle.fill",
-                          name: speaker)
-            }
-            
-            
-        }.foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor).padding(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 5)
-                    .stroke(AssetColors.Surface.onSurface.swiftUIColor, lineWidth: 1)
-            )
-    }
-}
-
 struct TagView: View {
     let tagText: String
     let highlight: Bool
+    
     var body: some View {
         HStack {
             if highlight {

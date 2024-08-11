@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bookmarked">ブックマーク済み</string>
+    <string name="not_bookmarked">ブックマークされていません</string>
+    <string name="image">画像</string>
+</resources>

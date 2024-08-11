@@ -69,3 +69,7 @@ app-ios/fastlane/report.xml
 app-android/src/prod/google-services.json
 keystore.properties
 droidkaigi2023.keystore
+*.keystore
+
+# Kotlin Gradle Plugin cache
+.kotlin

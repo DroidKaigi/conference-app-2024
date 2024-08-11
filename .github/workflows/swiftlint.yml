@@ -1,14 +1,12 @@
 name: SwiftLint
 on:
-  workflow_run:
-    workflows: ["PR Labeler"]
+  pull_request:
     paths:
       - '.swiftlint.yml'
       - '**/*.swift'
 jobs:
   swift-lint:
     runs-on: ubuntu-latest
-    if: contains(github.event.pull_request.labels.*.name, 'iOS 🍎')
     steps:
       - uses: actions/checkout@v4
       - name: Danger

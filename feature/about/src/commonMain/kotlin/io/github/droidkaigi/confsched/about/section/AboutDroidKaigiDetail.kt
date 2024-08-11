@@ -17,19 +17,24 @@ import conference_app_2024.feature.about.generated.resources.Res
 import conference_app_2024.feature.about.generated.resources.about_header
 import conference_app_2024.feature.about.generated.resources.description
 import io.github.droidkaigi.confsched.about.AboutRes
-import io.github.droidkaigi.confsched.about.AboutTestTag
 import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetailSummaryCard
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@Suppress("ConstPropertyName")
+object AboutDetailSectionTestTag {
+    const val Section = "DetailSection"
+}
+
 @Composable
 fun AboutDroidKaigiDetail(
     modifier: Modifier = Modifier,
+    onViewMapClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier.testTag(AboutTestTag.DetailSection.Section),
+        modifier = modifier.testTag(AboutDetailSectionTestTag.Section),
     ) {
         Image(
             painter = painterResource(Res.drawable.about_header),
@@ -57,6 +62,7 @@ fun AboutDroidKaigiDetail(
                     top = 12.dp,
                     end = 16.dp,
                 ),
+            onViewMapClick = onViewMapClick,
         )
     }
 }
@@ -66,7 +72,9 @@ fun AboutDroidKaigiDetail(
 fun AboutDroidKaigiDetailPreview() {
     KaigiTheme {
         Surface {
-            AboutDroidKaigiDetail()
+            AboutDroidKaigiDetail(
+                onViewMapClick = {},
+            )
         }
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
@@ -41,7 +42,6 @@ import conference_app_2024.feature.sessions.generated.resources.content_descript
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
-import io.github.droidkaigi.confsched.designsystem.theme.md_theme_light_outline
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.RoomType.RoomH
 import io.github.droidkaigi.confsched.model.TimetableAsset
@@ -241,10 +241,10 @@ private fun SpeakerIcon(
         contentDescription = stringResource(SessionsRes.string.content_description_user_icon),
         modifier = modifier
             .size(TimetableGridItemSizes.speakerHeight)
-            .clip(RoundedCornerShape(8.dp))
+            .clip(CircleShape)
             .border(
-                BorderStroke(1.dp, md_theme_light_outline),
-                RoundedCornerShape(8.dp),
+                BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                CircleShape,
             ),
     )
 }
