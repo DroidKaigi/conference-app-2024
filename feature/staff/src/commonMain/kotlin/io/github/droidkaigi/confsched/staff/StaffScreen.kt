@@ -1,5 +1,8 @@
 package io.github.droidkaigi.confsched.staff
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -23,6 +26,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
@@ -116,26 +120,45 @@ fun StaffScreen(
         }
     var navigationIconWidthDp by remember { mutableStateOf(0f) }
     val isCenterTitle = remember(scrollBehavior?.state?.collapsedFraction) {
-        scrollBehavior?.let { it.state.collapsedFraction > 0.7f }
+        scrollBehavior?.let {
+            // Hide title position because it doesn't look smooth if it is displayed when collapsed
+            when (scrollBehavior.state.collapsedFraction) {
+                in 0.7f..1.0f -> true
+                in 0.0f..0.5f -> false
+                else -> null // Don't display while on the move.
+            }
+        }
     }
     Scaffold(
         modifier = modifier.testTag(StaffScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            if (scrollBehavior != null) {
+            if (!isTopAppBarHidden) {
                 LargeTopAppBar(
                     title = {
-                        Text(
-                            text = "Staff",
-                            modifier = Modifier.then(
-                                if (isCenterTitle == true) {
-                                    Modifier.padding(end = navigationIconWidthDp.dp).fillMaxWidth()
-                                } else {
-                                    Modifier
-                                },
-                            ),
-                            textAlign = TextAlign.Center,
-                        )
+                        AnimatedVisibility(
+                            visible = isCenterTitle != null,
+                            enter = fadeIn(),
+                            // No animation required as it is erased with alpha
+                            exit = ExitTransition.None,
+                        ) {
+                            Text(
+                                text = "Staff",
+                                modifier = Modifier.then(
+                                    when (isCenterTitle) {
+                                        true -> {
+                                            Modifier
+                                                .padding(end = navigationIconWidthDp.dp)
+                                                .fillMaxWidth()
+                                        }
+
+                                        false -> Modifier
+                                        null -> Modifier.alpha(0f)
+                                    },
+                                ),
+                                textAlign = TextAlign.Center,
+                            )
+                        }
                     },
                     navigationIcon = {
                         IconButton(
