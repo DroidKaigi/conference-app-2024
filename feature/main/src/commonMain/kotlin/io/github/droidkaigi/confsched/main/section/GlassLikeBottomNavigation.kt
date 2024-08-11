@@ -53,6 +53,7 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -215,7 +216,10 @@ fun BottomBarTabs(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    Icon(imageVector = tab.icon.imageVector, contentDescription = "tab ${tab.contentDescription}")
+                    Icon(
+                        imageVector = tab.icon.imageVector,
+                        contentDescription = "tab ${stringResource(tab.contentDescription)}",
+                    )
                 }
             }
         }

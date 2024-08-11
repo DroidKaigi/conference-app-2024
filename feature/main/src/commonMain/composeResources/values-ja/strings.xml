@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sample">!!Please remove this resource when you add string resource!!</string>
+    <string name="timetable">タイムテーブル</string>
+    <string name="event_map">イベントマップ</string>
+    <string name="profile_card">プロフィールカード</string>
+    <string name="about">DroidKaigiについて</string>
+    <string name="contributor">コントリビュータ</string>
+    <string name="time">%1$s時%2$s</string>
 </resources>
