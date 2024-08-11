@@ -2,6 +2,7 @@ import AboutFeature
 import ComposableArchitecture
 import ContributorFeature
 import FavoriteFeature
+import SearchFeature
 import StaffFeature
 import SponsorFeature
 import TimetableFeature
@@ -16,6 +17,7 @@ public struct RootReducer {
         @Reducer(state: .equatable)
         public enum Timetable {
             case timetableDetail(TimetableDetailReducer)
+            case search(SearchReducer)
         }
 
         @Reducer(state: .equatable)
@@ -115,6 +117,10 @@ public struct RootReducer {
                         timetableItem: shared.TimetableItem.Session.companion.fake()
                     )
                 ))
+                return .none
+
+            case .timetable(.view(.searchTapped)):
+                state.paths.timetable.append(.search(.init()))
                 return .none
 
             case let .favorite(.destination(destination)):

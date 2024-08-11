@@ -29,6 +29,7 @@ public struct TimetableReducer : Sendable{
         public enum View : Sendable {
             case selectDay(DayTab)
             case timetableItemTapped
+            case searchTapped
         }
     }
     
@@ -86,7 +87,7 @@ public struct TimetableReducer : Sendable{
             case .response(.failure(let error)):
                 print(error)
                 return .none
-            case .view(.timetableItemTapped):
+            case .view(.timetableItemTapped), .view(.searchTapped):
                 return .none
             case .view(.selectDay(let dayTab)):
                 

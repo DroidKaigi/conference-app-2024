@@ -51,7 +51,7 @@ public struct TimetableView: View {
             ToolbarItem(placement:.topBarTrailing) {
                 HStack {
                     Button {
-                        // TODO: Search?
+                        store.send(.view(.searchTapped))
                     } label: {
                         Group {
                             Image(systemName:"magnifyingglass").foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)

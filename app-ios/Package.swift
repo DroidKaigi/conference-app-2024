@@ -64,6 +64,7 @@ let package = Package(
                 .aboutFeature,
                 .contributorFeature,
                 .favoriteFeature,
+                .searchFeature,
                 .staffFeature,
                 .sponsorFeature,
                 .timetableFeature,
@@ -173,6 +174,15 @@ let package = Package(
             plugins: [.plugin(name: "SwiftGenPlugin", package: "SwiftGenPlugin")]
         ),
         .target(
+            name: "SearchFeature",
+            dependencies: [
+                .tca,
+                .kmpClient,
+                .theme,
+                .commonComponents
+            ]
+        ),
+        .target(
             name: "StaffFeature",
             dependencies: [ 
                 .tca,
@@ -259,6 +269,7 @@ extension Target.Dependency {
     static let timetableFeature: Target.Dependency = "TimetableFeature"
     static let aboutFeature: Target.Dependency = "AboutFeature"
     static let favoriteFeature: Target.Dependency = "FavoriteFeature"
+    static let searchFeature: Target.Dependency = "SearchFeature"
     static let staffFeature: Target.Dependency = "StaffFeature"
     static let sponsorFeature: Target.Dependency = "SponsorFeature"
     static let contributorFeature: Target.Dependency = "ContributorFeature"

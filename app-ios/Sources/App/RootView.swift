@@ -3,6 +3,7 @@ import ComposableArchitecture
 import ContributorFeature
 import FavoriteFeature
 import LicenseList
+import SearchFeature
 import SponsorFeature
 import StaffFeature
 import SwiftUI
@@ -99,6 +100,9 @@ public struct RootView: View {
             switch store.case {
             case let .timetableDetail(store):
                 TimetableDetailView(store: store)
+
+            case let .search(store):
+                SearchView(store: store)
             }
         }
     }
