@@ -8,6 +8,9 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.Default
+import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.High
+import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.Medium
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -251,9 +254,14 @@ private val fixedAccentColors = FixedAccentColors(
 
 @Composable
 fun KaigiTheme(
+    colorContrast: ColorContrast = Default,
     content: @Composable () -> Unit,
 ) {
-    val colorScheme = darkScheme
+    val colorScheme = when (colorContrast) {
+        Default -> darkScheme
+        Medium -> mediumContrastDarkColorScheme
+        High -> highContrastDarkColorScheme
+    }
 
     MaterialTheme(
         colorScheme = colorScheme,
@@ -265,4 +273,8 @@ fun KaigiTheme(
             )
         },
     )
+}
+
+enum class ColorContrast {
+    Default, Medium, High
 }
