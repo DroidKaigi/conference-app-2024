@@ -7,8 +7,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -25,6 +23,7 @@ import io.github.droidkaigi.confsched.about.section.AboutDroidKaigiDetail
 import io.github.droidkaigi.confsched.about.section.AboutFooterLinks
 import io.github.droidkaigi.confsched.about.section.aboutCredits
 import io.github.droidkaigi.confsched.about.section.aboutOthers
+import io.github.droidkaigi.confsched.designsystem.component.AnimatedTextTopAppBar
 import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.AboutItem.Medium
 import io.github.droidkaigi.confsched.model.AboutItem.X
@@ -72,7 +71,12 @@ fun AboutScreen(
 
     Scaffold(
         modifier = modifier.testTag(AboutScreenTestTag.Screen),
-        topBar = { TopAppBar(title = { Text(stringResource(AboutRes.string.about_droidkaigi)) }) },
+        topBar = {
+            AnimatedTextTopAppBar(
+                title = stringResource(AboutRes.string.about_droidkaigi),
+                scrollBehavior = scrollBehavior,
+            )
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
