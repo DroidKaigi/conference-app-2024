@@ -10,10 +10,6 @@ on:
 
 run-name: "unit-test by ${{ github.actor }}"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.head_ref }}
-  cancel-in-progress: true
-
 permissions: { }
 
 jobs:
