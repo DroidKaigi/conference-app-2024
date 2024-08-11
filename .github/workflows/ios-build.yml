@@ -18,6 +18,5 @@ jobs:
       - uses: ./.github/actions/setup-java
       - name: Set up XCFramework arch filter
         run: echo "arch=x86_64" >> local.properties
-      - uses: ./.github/actions/spm
       - run: make build-app-debug
         working-directory: app-ios
