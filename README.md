@@ -40,9 +40,13 @@ You can check out the design on Figma.
 
 [DroidKaigi 2024 App UI](https://www.figma.com/design/XUk8WMbKCeIdWD5cz9P9JC/DroidKaigi-2024-App-UI?node-id=54795-26746&t=DgZuFVd0sduq6vUy-0)
 
-**Designer:**: [nobonobopurin](https://github.com/nobonobopurin)
+**Designer**: [nobonobopurin](https://github.com/nobonobopurin)
 
 ## Development
+
+### Overview of the architecture
+
+In addition to general Android practices, we are exploring and implementing various concepts. Details for each are discussed further in this README.
 
 <img width="813" alt="image" src="https://github.com/user-attachments/assets/28532593-025b-476b-8a2d-af2367dcbdd0">
 

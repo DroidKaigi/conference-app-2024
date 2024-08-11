@@ -107,8 +107,7 @@ fun AboutScreen(
             )
             item {
                 AboutFooterLinks(
-                    // TODO: Inject the right version name
-                    versionName = "1.6.0",
+                    versionName = "0.1.0",
                     onYouTubeClick = {
                         onAboutItemClick(YouTube)
                     },
