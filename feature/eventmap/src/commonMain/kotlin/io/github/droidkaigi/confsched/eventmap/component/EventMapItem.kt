@@ -59,11 +59,6 @@ fun EventMapItem(
                     icon = Icons.Filled.Star,
                     color = green,
                 )
-                Spacer(Modifier.width(4.dp))
-                ToolTip(
-                    text = eventMapEvent.dateLabel,
-                    color = Color(0xFFBFC9C2),
-                )
             }
             Spacer(Modifier.height(8.dp))
             Text(
