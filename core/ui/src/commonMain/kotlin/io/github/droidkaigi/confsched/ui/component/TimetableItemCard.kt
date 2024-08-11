@@ -83,7 +83,7 @@ fun TimetableItemCard(
             }
 
             Text(
-                text = timetableItem.title.currentLangTitle,
+                text = timetableItem.title.currentLangTitle + ":test",
                 fontSize = 24.sp,
                 modifier = Modifier
                     .testTag(TimetableItemCardTestTag)
