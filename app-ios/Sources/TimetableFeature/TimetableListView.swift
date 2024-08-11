@@ -91,10 +91,10 @@ struct TimetableListView: View {
             LazyVStack {
                 ForEach(store.timetableItems, id: \.self) { item in
                     Button {
-                        store.send(.view(.timetableItemTapped))
+                        //store.send(.view(.timetableItemTapped))
                     } label: {
                         TimeGroupMiniList(contents: item, onItemTap: { item in
-                            store.send(.view(.timetableItemTapped))
+                            store.send(.view(.timetableItemTapped(item)))
                         })
                     }
                 }
