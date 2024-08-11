@@ -164,9 +164,9 @@ private fun TimetableScreen(
                         Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
                             Icon(
                                 imageVector = if (timetableUiType == Grid) {
-                                    Icons.Default.GridView
-                                } else {
                                     Icons.Default.ViewTimeline
+                                } else {
+                                    Icons.Default.GridView
                                 },
                                 contentDescription = null,
                                 modifier = Modifier.padding(8.dp).clickable {
