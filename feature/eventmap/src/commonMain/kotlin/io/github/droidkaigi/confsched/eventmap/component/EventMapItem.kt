@@ -22,27 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import conference_app_2024.core.designsystem.generated.resources.ic_circle
-import conference_app_2024.core.designsystem.generated.resources.ic_diamond
-import conference_app_2024.core.designsystem.generated.resources.ic_rhombus
-import conference_app_2024.core.designsystem.generated.resources.ic_square
-import conference_app_2024.core.designsystem.generated.resources.ic_triangle
 import conference_app_2024.feature.eventmap.generated.resources.read_more
-import io.github.droidkaigi.confsched.designsystem.DesignSystemRes
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.eventmap.EventMapRes
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.model.RoomIcon
-import io.github.droidkaigi.confsched.model.RoomIcon.Circle
-import io.github.droidkaigi.confsched.model.RoomIcon.Diamond
-import io.github.droidkaigi.confsched.model.RoomIcon.None
-import io.github.droidkaigi.confsched.model.RoomIcon.Rhombus
-import io.github.droidkaigi.confsched.model.RoomIcon.Square
-import io.github.droidkaigi.confsched.model.RoomIcon.Triangle
-import io.github.droidkaigi.confsched.ui.UiRes
 import io.github.droidkaigi.confsched.ui.toResDrawable
-import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
