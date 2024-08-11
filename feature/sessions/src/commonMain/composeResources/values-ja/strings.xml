@@ -26,4 +26,8 @@
     <string name="content_description_location">場所</string>
     <string name="content_description_language">言語</string>
     <string name="content_description_category">カテゴリ</string>
+    <string name="schedule_title">日時</string>
+    <string name="location_title">場所</string>
+    <string name="language_title">対応言語</string>
+    <string name="category_title">カテゴリ</string>
 </resources>
