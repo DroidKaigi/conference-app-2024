@@ -45,7 +45,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                     }
                     itShould("show timetable items") {
                         captureScreenWithChecks(checks = {
-                            checkTimetableItemsDisplayed()
+                            checkTimetableListItemsDisplayed()
                         })
                     }
                     describe("click first session bookmark") {
@@ -65,6 +65,16 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             checkClickedItemsExists()
                         }
                     }
+                    describe("click conference day2 tab") {
+                        run {
+                            clickTimetableTab(2)
+                        }
+                        itShould("change displayed day") {
+                            captureScreenWithChecks(checks = {
+                                checkTimetableListItemsDisplayed()
+                            })
+                        }
+                    }
                     describe("click timetable ui type change") {
                         run {
                             clickTimetableUiTypeChangeButton()
@@ -73,6 +83,16 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             captureScreenWithChecks(
                                 checks = todoChecks("This screen is roughly created. Please add some checks."),
                             )
+                        }
+                        describe("click conference day2 tab") {
+                            run {
+                                clickTimetableTab(2)
+                            }
+                            itShould("change displayed day") {
+                                captureScreenWithChecks(checks = {
+                                    checkTimetableGridItemsDisplayed()
+                                })
+                            }
                         }
                     }
                 }
