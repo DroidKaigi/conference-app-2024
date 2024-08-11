@@ -244,7 +244,7 @@ private fun SpeakerIcon(
             .clip(CircleShape)
             .border(
                 BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-                RoundedCornerShape(8.dp),
+                CircleShape,
             ),
     )
 }
