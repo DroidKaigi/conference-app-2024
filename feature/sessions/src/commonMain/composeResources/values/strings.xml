@@ -26,4 +26,8 @@
     <string name="content_description_location">Location</string>
     <string name="content_description_language">Language</string>
     <string name="content_description_category">Category</string>
+    <string name="schedule_title">Date/Time</string>
+    <string name="location_title">Location</string>
+    <string name="language_title">Supported Languages</string>
+    <string name="category_title">Category</string>
 </resources>

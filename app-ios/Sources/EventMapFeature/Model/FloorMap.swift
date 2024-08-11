@@ -1,5 +1,5 @@
 import Foundation
-import CommonComponents
+import Model
 import SwiftUI
 
 public enum FloorMap {
@@ -10,7 +10,7 @@ public enum FloorMap {
 extension FloorMap: Selectable {
     public var id: Self { self }
 
-    public var title: String {
+    public var caseTitle: String {
         switch self {
         case .first: "1F"
         case .firstBasement: "B1F"
