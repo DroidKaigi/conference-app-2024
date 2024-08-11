@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Density
@@ -100,6 +101,7 @@ fun TimetableGridItem(
         }
         Column(
             modifier = modifier
+                .testTag(TimetableGridItemTestTag)
                 .background(
                     color = LocalRoomTheme.current.containerColor,
                     shape = RoundedCornerShape(4.dp),
