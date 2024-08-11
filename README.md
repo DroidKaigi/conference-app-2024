@@ -14,7 +14,7 @@ In addition to the standard features of a conference app, the DroidKaigi 2024 of
 - **Contributors**: Discover the contributors behind the app.
 ...and more!
 
-![image](https://github.com/user-attachments/assets/c8dd3dc3-8571-453f-b871-54cbb4f51b87)
+![image](https://github.com/user-attachments/assets/ffed2cb2-455b-4de8-a9d2-be9ca0842b99)
 
 ## Try the app
 
@@ -40,9 +40,13 @@ You can check out the design on Figma.
 
 [DroidKaigi 2024 App UI](https://www.figma.com/design/XUk8WMbKCeIdWD5cz9P9JC/DroidKaigi-2024-App-UI?node-id=54795-26746&t=DgZuFVd0sduq6vUy-0)
 
-**Designer:**: [nobonobopurin](https://github.com/nobonobopurin)
+**Designer**: [nobonobopurin](https://github.com/nobonobopurin)
 
 ## Development
+
+### Overview of the architecture
+
+In addition to general Android practices, we are exploring and implementing various concepts. Details for each are discussed further in this README.
 
 <img width="813" alt="image" src="https://github.com/user-attachments/assets/28532593-025b-476b-8a2d-af2367dcbdd0">
 
@@ -221,6 +225,23 @@ fun TimetableScreen(
     TimetableScreen(
         uiState = uiState,
 ```        
+
+### How to Check Composable Preview
+
+
+Currently, Android Studio doesn't support Composable Preview in the commonMain sourceset. Therefore, we are using the Roborazzi IDE Plugin to check Composable Preview.
+
+When you open a Composable file, you can see the RoborazziPreview on the right side of the file.
+
+<img width="48" alt="image" src="https://github.com/user-attachments/assets/3d0308d2-f435-4553-968c-1dcba77f615f">
+
+To capture a screenshot of the Composable Preview, run the Roborazzi Gradle task in the RoborazziPreview.
+
+<img width="319" alt="image" src="https://github.com/user-attachments/assets/52d2d386-188c-4d26-8c33-d8f4f769927e">
+
+After running the task, you should see the screenshot in the RoborazziPreview.
+
+![image](https://github.com/user-attachments/assets/8b38eb69-b737-4c2f-8e86-e3e5805d82e5)
 
 ###  Understanding the App's Testing
 

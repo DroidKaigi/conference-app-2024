@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions.section
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
@@ -7,25 +8,24 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
-import conference_app_2024.feature.sessions.generated.resources.empty
+import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.GridTimetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.ListTimetable
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import org.jetbrains.compose.resources.stringResource
 
 const val TimetableTabTestTag = "TimetableTab"
 
@@ -97,7 +97,15 @@ fun Timetable(
                 }
 
                 Empty -> {
-                    Text(stringResource(SessionsRes.string.empty))
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .padding(16.dp),
+                        )
+                    }
                 }
             }
         }

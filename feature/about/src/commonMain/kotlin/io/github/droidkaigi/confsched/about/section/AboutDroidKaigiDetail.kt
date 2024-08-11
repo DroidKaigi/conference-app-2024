@@ -31,6 +31,7 @@ object AboutDetailSectionTestTag {
 @Composable
 fun AboutDroidKaigiDetail(
     modifier: Modifier = Modifier,
+    onViewMapClick: () -> Unit,
 ) {
     Column(
         modifier = modifier.testTag(AboutDetailSectionTestTag.Section),
@@ -61,6 +62,7 @@ fun AboutDroidKaigiDetail(
                     top = 12.dp,
                     end = 16.dp,
                 ),
+            onViewMapClick = onViewMapClick,
         )
     }
 }
@@ -70,7 +72,9 @@ fun AboutDroidKaigiDetail(
 fun AboutDroidKaigiDetailPreview() {
     KaigiTheme {
         Surface {
-            AboutDroidKaigiDetail()
+            AboutDroidKaigiDetail(
+                onViewMapClick = {},
+            )
         }
     }
 }

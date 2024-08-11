@@ -46,6 +46,10 @@ let package = Package(
             name: "CommonComponents",
             targets: ["CommonComponents"]
         ),
+        .library(
+            name: "EventMapFeature",
+            targets: ["EventMapFeature"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", exact: "1.10.2"),
@@ -60,10 +64,12 @@ let package = Package(
                 .aboutFeature,
                 .contributorFeature,
                 .favoriteFeature,
+                .searchFeature,
                 .staffFeature,
                 .sponsorFeature,
                 .timetableFeature,
                 .timetableDetailFeature,
+                .eventMapFeature,
                 .tca,
                 .kmpClient,
                 .licenseList,
@@ -94,6 +100,7 @@ let package = Package(
         .target(
             name: "TimetableFeature",
             dependencies: [
+                .kmpClient,
                 .kmpModule,
                 .firebaseAuth,
                 .firebaseRemoteConfig,
@@ -167,6 +174,15 @@ let package = Package(
             plugins: [.plugin(name: "SwiftGenPlugin", package: "SwiftGenPlugin")]
         ),
         .target(
+            name: "SearchFeature",
+            dependencies: [
+                .tca,
+                .kmpClient,
+                .theme,
+                .commonComponents
+            ]
+        ),
+        .target(
             name: "StaffFeature",
             dependencies: [ 
                 .tca,
@@ -213,6 +229,21 @@ let package = Package(
                 .tca
             ]
         ),
+        .target(
+            name: "EventMapFeature",
+            dependencies: [
+                .tca,
+                .theme,
+                .commonComponents,
+            ]
+        ),
+        .testTarget(
+            name: "EventMapFeatureTests",
+            dependencies: [
+                .eventMapFeature,
+                .tca
+            ]
+        ),
         .target(name: "CommonComponents", dependencies: [.theme, .kmpModule, .model]),
         .target(name: "Model", dependencies: [.kmpModule, .theme]),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
@@ -238,9 +269,11 @@ extension Target.Dependency {
     static let timetableFeature: Target.Dependency = "TimetableFeature"
     static let aboutFeature: Target.Dependency = "AboutFeature"
     static let favoriteFeature: Target.Dependency = "FavoriteFeature"
+    static let searchFeature: Target.Dependency = "SearchFeature"
     static let staffFeature: Target.Dependency = "StaffFeature"
     static let sponsorFeature: Target.Dependency = "SponsorFeature"
     static let contributorFeature: Target.Dependency = "ContributorFeature"
+    static let eventMapFeature: Target.Dependency = "EventMapFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
     static let kmpClient: Target.Dependency = "KMPClient"
     static let eventKitClient: Target.Dependency = "EventKitClient"
