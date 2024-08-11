@@ -27,6 +27,8 @@ import androidx.compose.ui.unit.sp
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.EventMapEvent
+import io.github.droidkaigi.confsched.model.createSampleEventMapEvent
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun EventMapItem(
@@ -79,6 +81,15 @@ fun EventMapItem(
             )
         }
     }
+}
+
+@Composable
+@Preview
+fun EventMapItemPreview() {
+    EventMapItem(
+        eventMapEvent = createSampleEventMapEvent(),
+        onClick = {},
+    )
 }
 
 @Composable
