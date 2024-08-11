@@ -52,6 +52,7 @@ fun TimetableItemCard(
     ProvideRoomTheme(timetableItem.room.getThemeKey()) {
         Column(
             modifier = modifier
+                .testTag(TimetableItemCardTestTag)
                 .border(
                     border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant),
                     shape = RoundedCornerShape(5.dp),
