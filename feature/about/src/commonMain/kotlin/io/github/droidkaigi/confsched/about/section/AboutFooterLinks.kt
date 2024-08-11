@@ -18,6 +18,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.app_version
 import conference_app_2024.feature.about.generated.resources.content_description_youtube
+import conference_app_2024.feature.about.generated.resources.icon_medium
+import conference_app_2024.feature.about.generated.resources.icon_x
+import conference_app_2024.feature.about.generated.resources.icon_youtube
 import conference_app_2024.feature.about.generated.resources.license_description
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutFooterLinksIcon
@@ -26,6 +29,7 @@ import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestT
 import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksYouTubeItemTestTag
 import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.Section
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -56,16 +60,19 @@ fun AboutFooterLinks(
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             AboutFooterLinksIcon(
                 testTag = LinksYouTubeItemTestTag,
+                painter = painterResource(AboutRes.drawable.icon_youtube),
                 contentDescription = stringResource(AboutRes.string.content_description_youtube),
                 onClick = onYouTubeClick,
             )
             AboutFooterLinksIcon(
                 testTag = LinksXItemTestTag,
+                painter = painterResource(AboutRes.drawable.icon_x),
                 contentDescription = "X",
                 onClick = onXClick,
             )
             AboutFooterLinksIcon(
                 testTag = LinksMediumItemTestTag,
+                painter = painterResource(AboutRes.drawable.icon_medium),
                 contentDescription = "Medium",
                 onClick = onMediumClick,
             )
