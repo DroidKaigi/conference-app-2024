@@ -1,5 +1,6 @@
 import CommonComponents
 import ComposableArchitecture
+import Model
 import KMPClient
 import shared
 import SwiftUI
@@ -84,7 +85,7 @@ extension DroidKaigi2024Day: Selectable {
         self
     }
 
-    public var title: String {
+    public var caseTitle: String {
         switch self {
         case .workday:
             String(localized: "9/11", bundle: .module)
