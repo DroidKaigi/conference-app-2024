@@ -69,7 +69,6 @@ fun AboutDroidKaigiDetailSummaryCard(
                     regex = stringResource(AboutRes.string.place_link).toRegex(),
                 )
             }
-
         }
     }
 }

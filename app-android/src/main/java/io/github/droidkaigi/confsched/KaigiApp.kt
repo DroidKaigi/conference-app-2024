@@ -149,7 +149,7 @@ private fun NavGraphBuilder.mainScreen(
                     }
                     when (aboutItem) {
                         AboutItem.Map -> externalNavController.navigate(
-                            url = "https://goo.gl/maps/vv9sE19JvRjYKtSP9"
+                            url = "https://goo.gl/maps/vv9sE19JvRjYKtSP9",
                         )
                         AboutItem.Sponsors -> navController.navigate(sponsorsScreenRoute)
                         AboutItem.CodeOfConduct -> {
