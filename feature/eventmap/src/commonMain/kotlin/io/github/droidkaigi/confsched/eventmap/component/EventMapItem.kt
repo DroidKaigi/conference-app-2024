@@ -33,7 +33,6 @@ fun EventMapItem(
     eventMapEvent: EventMapEvent,
     @Suppress("UnusedParameter")
     onClick: (url: String) -> Unit,
-    onClickFavorite: (eventMapEvent: EventMapEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ProvideRoomTheme(eventMapEvent.roomName) {

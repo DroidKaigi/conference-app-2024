@@ -25,7 +25,7 @@ public fun EventMapResponse.toEventMapList(): PersistentList<EventMapEvent> {
                 EventMapEvent(
                     name = event.title.ja,
                     roomName = roomName,
-                    description = event.i18nDesc.ja
+                    description = event.i18nDesc.ja,
                 )
             }
         }
