@@ -105,6 +105,7 @@ public struct TimetableDetailView: View {
                 .textStyle(.headlineSmall)
                 .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
                 .padding(.bottom, 20)
+                .frame(maxWidth: .infinity, alignment: .leading)
             
             ForEach(store.timetableItem.speakers, id: \.id) { speaker in
                 HStack(spacing: 12) {
@@ -131,7 +132,6 @@ public struct TimetableDetailView: View {
             .padding(.bottom, 20)
         }
         .padding([.top, .horizontal], 16)
-        .frame(maxWidth: .infinity)
         .background(store.timetableItem.room.roomTheme.containerColor)
     }
 
