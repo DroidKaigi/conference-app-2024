@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched
 
 import android.annotation.SuppressLint
+import android.app.UiModeManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -14,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,9 +33,13 @@ import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
+import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
+import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
+import io.github.droidkaigi.confsched.favorites.favoritesScreens
+import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
@@ -69,7 +75,9 @@ fun KaigiApp(
     displayFeatures: PersistentList<DisplayFeature>,
     modifier: Modifier = Modifier,
 ) {
-    KaigiTheme {
+    KaigiTheme(
+        colorContrast = colorContrast(),
+    ) {
         Surface(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
@@ -139,6 +147,10 @@ private fun NavGraphBuilder.mainScreen(
                 onNavigationIconClick = navController::popBackStack,
                 onEventMapItemClick = externalNavController::navigate,
             )
+            favoritesScreens(
+                onNavigationIconClick = navController::popBackStack,
+                onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+            )
             aboutScreen(
                 contentPadding = contentPadding,
                 onAboutItemClick = { aboutItem ->
@@ -148,6 +160,9 @@ private fun NavGraphBuilder.mainScreen(
                         "https://portal.droidkaigi.jp/en"
                     }
                     when (aboutItem) {
+                        AboutItem.Map -> externalNavController.navigate(
+                            url = "https://goo.gl/maps/vv9sE19JvRjYKtSP9",
+                        )
                         AboutItem.Sponsors -> navController.navigate(sponsorsScreenRoute)
                         AboutItem.CodeOfConduct -> {
                             externalNavController.navigate(
@@ -191,6 +206,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
             timetableScreenRoute -> Timetable
             profileCardScreenRoute -> ProfileCard
             aboutScreenRoute -> About
+            favoritesScreenRoute -> Favorite
             else -> null
         }
     }
@@ -202,7 +218,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
-            Favorite -> {}
+            Favorite -> mainNestedNavController.navigateFavoritesScreen()
             About -> mainNestedNavController.navigateAboutScreen()
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }
@@ -339,5 +355,22 @@ private class ExternalNavController(
             .setShowTitle(true)
             .build()
             .launchUrl(context, uri)
+    }
+}
+
+@Composable
+@ReadOnlyComposable
+private fun colorContrast(): ColorContrast {
+    val uiModeManager =
+        LocalContext.current.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+        when (uiModeManager.contrast) {
+            in 0.0f..0.33f -> ColorContrast.Default
+            in 0.34f..0.66f -> ColorContrast.Medium
+            in 0.67f..1.0f -> ColorContrast.High
+            else -> ColorContrast.Default
+        }
+    } else {
+        ColorContrast.Default
     }
 }

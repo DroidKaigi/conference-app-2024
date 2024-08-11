@@ -10,6 +10,7 @@ import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.data.user.UserDataStore
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -36,7 +37,7 @@ public class DefaultSessionsRepository(
                     "DefaultSessionsRepository sessionCacheDataStore.getTimetableStream catch",
                     e,
                 )
-                sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+                refreshSessionData()
                 emitAll(sessionCacheDataStore.getTimetableStream())
             },
             userDataStore.getFavoriteSessionStream(),
@@ -55,6 +56,19 @@ public class DefaultSessionsRepository(
         }
     }
 
+    private suspend fun refreshSessionData() {
+        val sessionsAllResponse = sessionsApi.sessionsAllResponse()
+        // Remove workday sessions
+        val sessionsAllResponseFiltered = sessionsAllResponse.copy(
+            sessions = sessionsAllResponse.sessions.filter {
+                val startsAt = it.startsAt.toInstantAsJST()
+                DroidKaigi2024Day.visibleDays()
+                    .any { day -> day.start <= startsAt && startsAt < day.end }
+            },
+        )
+        sessionCacheDataStore.save(sessionsAllResponseFiltered)
+    }
+
     override fun getTimetableItemWithBookmarkStream(id: TimetableItemId): Flow<Pair<TimetableItem, Boolean>> {
         return getTimetableStream().map { timetable ->
             timetable.timetableItems.first { it.id == id } to timetable.bookmarks.contains(id)
@@ -67,7 +81,7 @@ public class DefaultSessionsRepository(
         SafeLaunchedEffect(first) {
             if (first) {
                 Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
-                sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+                refreshSessionData()
                 Logger.d("DefaultSessionsRepository onStart fetched")
                 first = false
             }

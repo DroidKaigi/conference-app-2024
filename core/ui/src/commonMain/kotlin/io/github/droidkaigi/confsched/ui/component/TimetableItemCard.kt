@@ -55,10 +55,12 @@ fun TimetableItemCard(
     ProvideRoomTheme(timetableItem.room.getThemeKey()) {
         Column(
             modifier = modifier
+                .testTag(TimetableItemCardTestTag)
                 .border(
                     border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.outlineVariant),
                     shape = RoundedCornerShape(5.dp),
                 )
+                .clickable { onTimetableItemClick(timetableItem) }
                 .padding(15.dp),
         ) {
             Box {
@@ -90,8 +92,7 @@ fun TimetableItemCard(
                 fontSize = 24.sp,
                 modifier = Modifier
                     .testTag(TimetableItemCardTestTag)
-                    .padding(bottom = 5.dp)
-                    .clickable { onTimetableItemClick(timetableItem) },
+                    .padding(bottom = 5.dp),
             )
             timetableItem.speakers.forEach { speaker ->
                 Row {
