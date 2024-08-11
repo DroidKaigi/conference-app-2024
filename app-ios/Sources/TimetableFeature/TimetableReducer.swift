@@ -66,17 +66,23 @@ public struct TimetableReducer : Sendable{
                  }
             case .requestDay(.selectDay(let dayTab)):
                 return .run { send in
-                    let internalDay = switch dayTab {
-                    case DayTab.workshopDay:
-                        DroidKaigi2024Day.workday
+                    let internalDay: DroidKaigi2024Day? = switch dayTab {
+                    case DayTab.all:
+                        nil
                     case DayTab.day1:
                         DroidKaigi2024Day.conferenceDay1
                     case DayTab.day2:
                         DroidKaigi2024Day.conferenceDay2
                     }
                     
-                    for try await timetables in try timetableClient.streamTimetable() {
-                        await send(.response(.success(timetables.dayTimetable(droidKaigi2024Day: internalDay).contents)))
+                    if let selection = internalDay {
+                        for try await timetables in try timetableClient.streamTimetable() {
+                            await send(.response(.success(timetables.dayTimetable(droidKaigi2024Day: selection).contents)))
+                        }
+                    } else {
+                        for try await timetables in try timetableClient.streamTimetable() {
+                            await send(.response(.success(timetables.contents)))
+                        }
                     }
                 }
                 .cancellable(id: CancelID.connection)

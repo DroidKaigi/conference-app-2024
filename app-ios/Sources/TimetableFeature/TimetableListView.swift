@@ -13,6 +13,7 @@ public struct TimetableView: View {
     
     @State var timetableMode = TimetableMode.list
     @State var switchModeIcon: String = "square.grid.2x2"
+    @State var selectedTab: DayTab = DayTab.day1
     
     public var body: some View {
         VStack {
@@ -20,11 +21,16 @@ public struct TimetableView: View {
                 ForEach(DayTab.allCases) { tabItem in
                     Button(action: {
                         store.send(.view(.selectDay(tabItem)))
+                        selectedTab = tabItem
                     }, label: {
                         //TODO: Only selected button should be green and underlined
-                        Text(tabItem.rawValue).foregroundStyle(
-                            AssetColors.Custom.flamingo.swiftUIColor)
+                        if selectedTab == tabItem {
+                            Text(tabItem.rawValue).foregroundStyle(
+                                AssetColors.Custom.iguana.swiftUIColor)
                             .underline()
+                        } else {
+                            Text(tabItem.rawValue)
+                        }
                     })
                 }
                 Spacer()

@@ -4,9 +4,9 @@ import shared
 public enum DayTab: String, CaseIterable, Identifiable, Sendable {
     public var id : RawValue { rawValue }
     
-    case workshopDay = "WorkshopDay"
-    case day1 = "Day 1"
-    case day2 = "Day 2"
+    case all = "All"
+    case day1 = "9/12"
+    case day2 = "9/13"
 }
 
 public enum TimetableMode {
