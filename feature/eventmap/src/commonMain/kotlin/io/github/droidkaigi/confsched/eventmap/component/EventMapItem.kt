@@ -83,15 +83,6 @@ fun EventMapItem(
                 letterSpacing = 0.25.sp,
                 color = Color.White.copy(alpha = 0.7F),
             )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = eventMapEvent.timeDuration,
-                fontSize = 11.sp,
-                lineHeight = 15.sp,
-                fontWeight = FontWeight.W600,
-                letterSpacing = 0.1.sp,
-                color = green,
-            )
         }
     }
 }
