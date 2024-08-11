@@ -148,6 +148,9 @@ private fun NavGraphBuilder.mainScreen(
                         "https://portal.droidkaigi.jp/en"
                     }
                     when (aboutItem) {
+                        AboutItem.Map -> externalNavController.navigate(
+                            url = "https://goo.gl/maps/vv9sE19JvRjYKtSP9"
+                        )
                         AboutItem.Sponsors -> navController.navigate(sponsorsScreenRoute)
                         AboutItem.CodeOfConduct -> {
                             externalNavController.navigate(

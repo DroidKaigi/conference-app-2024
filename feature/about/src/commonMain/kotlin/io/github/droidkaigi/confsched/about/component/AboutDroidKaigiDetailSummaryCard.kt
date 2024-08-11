@@ -2,8 +2,11 @@ package io.github.droidkaigi.confsched.about.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.outlined.Place
@@ -19,8 +22,10 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.date_description
 import conference_app_2024.feature.about.generated.resources.date_title
 import conference_app_2024.feature.about.generated.resources.place_description
+import conference_app_2024.feature.about.generated.resources.place_link
 import conference_app_2024.feature.about.generated.resources.place_title
 import io.github.droidkaigi.confsched.about.AboutRes
+import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -28,6 +33,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun AboutDroidKaigiDetailSummaryCard(
     modifier: Modifier = Modifier,
+    onViewMapClick: () -> Unit,
 ) {
     Card(
         shape = RoundedCornerShape(12.dp),
@@ -49,11 +55,21 @@ fun AboutDroidKaigiDetailSummaryCard(
                 label = stringResource(AboutRes.string.date_title),
                 content = stringResource(AboutRes.string.date_description),
             )
-            AboutDroidKaigiDetailSummaryCardRow(
-                leadingIcon = Outlined.Place,
-                label = stringResource(AboutRes.string.place_title),
-                content = stringResource(AboutRes.string.place_description),
-            )
+            Row {
+                AboutDroidKaigiDetailSummaryCardRow(
+                    leadingIcon = Outlined.Place,
+                    label = stringResource(AboutRes.string.place_title),
+                    content = stringResource(AboutRes.string.place_description),
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+                ClickableLinkText(
+                    style = MaterialTheme.typography.bodyMedium,
+                    content = stringResource(AboutRes.string.place_link),
+                    onLinkClick = { _ -> onViewMapClick() },
+                    regex = stringResource(AboutRes.string.place_link).toRegex(),
+                )
+            }
+
         }
     }
 }
@@ -63,7 +79,9 @@ fun AboutDroidKaigiDetailSummaryCard(
 fun AboutDroidKaigiDetailSummaryCardPreview() {
     KaigiTheme {
         Surface {
-            AboutDroidKaigiDetailSummaryCard()
+            AboutDroidKaigiDetailSummaryCard(
+                onViewMapClick = {},
+            )
         }
     }
 }

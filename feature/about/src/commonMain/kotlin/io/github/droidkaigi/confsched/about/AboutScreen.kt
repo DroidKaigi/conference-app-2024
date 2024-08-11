@@ -81,7 +81,11 @@ fun AboutScreen(
             contentPadding = padding,
         ) {
             item {
-                AboutDroidKaigiDetail()
+                AboutDroidKaigiDetail(
+                    onViewMapClick = {
+                        onAboutItemClick(AboutItem.Map)
+                    }
+                )
             }
             aboutCredits(
                 onSponsorsItemClick = {
