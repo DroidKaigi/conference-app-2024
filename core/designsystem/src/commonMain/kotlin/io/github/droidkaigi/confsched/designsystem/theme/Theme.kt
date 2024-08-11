@@ -6,6 +6,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -45,7 +47,7 @@ private val lightScheme = lightColorScheme(
     surfaceContainerHighest = surfaceContainerHighestLight,
 )
 
-private val darkScheme = darkColorScheme(
+internal val darkScheme = darkColorScheme(
     primary = primaryDark,
     onPrimary = onPrimaryDark,
     primaryContainer = primaryContainerDark,
@@ -235,16 +237,32 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
+private val fixedAccentColors = FixedAccentColors(
+    primaryFixed = Color(0xFF67FF8D),
+    onPrimaryFixed = Color(0xFF002109),
+    secondaryFixed = Color(0xFFA3F5AD),
+    onSecondaryFixed = Color(0xFF002109),
+    tertiaryFixed = Color(0xFFFFD7F0),
+    onTertiaryFixed = Color(0xFF3A0032),
+    primaryFixedDim = Color(0xFF1CE46B),
+    secondaryFixedDim = Color(0xFF88D893),
+    tertiaryFixedDim = Color(0xFFFFACE7),
+)
+
 @Composable
 fun KaigiTheme(
-    content:
-    @Composable () -> Unit,
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = darkScheme
 
     MaterialTheme(
         colorScheme = colorScheme,
         typography = appTypography(),
-        content = content,
+        content = {
+            CompositionLocalProvider(
+                value = LocalFixedAccentColors provides fixedAccentColors,
+                content = content,
+            )
+        },
     )
 }
