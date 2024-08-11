@@ -15,7 +15,7 @@ public class NetworkService(public val httpClient: HttpClient, public val authAp
     public suspend inline operator fun <reified T : Any> invoke(
         block: () -> T,
     ): T = try {
-        authApi.authIfNeeded()
+//        authApi.authIfNeeded()
         block()
     } catch (e: Throwable) {
         throw e.toAppError()
