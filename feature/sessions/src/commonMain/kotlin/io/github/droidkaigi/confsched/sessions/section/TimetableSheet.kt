@@ -22,34 +22,34 @@ import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.Empty
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.GridTimetable
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState.ListTimetable
+import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.Empty
+import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.GridTimetable
+import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.ListTimetable
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 
 const val TimetableTabTestTag = "TimetableTab"
 
-sealed interface TimetableSheetUiState {
-    data object Empty : TimetableSheetUiState
+sealed interface TimetableUiState {
+    data object Empty : TimetableUiState
     data class ListTimetable(
         val timetableListUiStates: Map<DroidKaigi2024Day, TimetableListUiState>,
-    ) : TimetableSheetUiState
+    ) : TimetableUiState
 
     data class GridTimetable(
         val timetableGridUiState: Map<DroidKaigi2024Day, TimetableGridUiState>,
-    ) : TimetableSheetUiState
+    ) : TimetableUiState
 }
 
 @Composable
-fun TimetableSheet(
-    uiState: TimetableSheetUiState,
+fun Timetable(
+    uiState: TimetableUiState,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onFavoriteClick: (TimetableItem, Boolean) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
     val clock = LocalClock.current
-    var selectedDay by rememberSaveable { mutableStateOf(DroidKaigi2024Day.initialSelectedDay(clock)) }
+    var selectedDay by rememberSaveable { mutableStateOf(DroidKaigi2024Day.initialSelectedTabDay(clock)) }
     val layoutDirection = LocalLayoutDirection.current
     Surface(
         modifier = modifier.padding(contentPadding.calculateTopPadding()),
