@@ -48,9 +48,9 @@ import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
 import io.github.droidkaigi.confsched.model.TimetableUiType.Grid
+import io.github.droidkaigi.confsched.sessions.section.Timetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheet
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
+import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -120,7 +120,7 @@ fun TimetableScreen(
 }
 
 data class TimetableScreenUiState(
-    val contentUiState: TimetableSheetUiState,
+    val contentUiState: TimetableUiState,
     val timetableUiType: TimetableUiType,
     val userMessageStateHolder: UserMessageStateHolder,
 )
@@ -189,7 +189,7 @@ private fun TimetableScreen(
         Column(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()).fillMaxWidth(),
         ) {
-            TimetableSheet(
+            Timetable(
                 modifier = Modifier
                     .fillMaxSize(),
                 onTimetableItemClick = onTimetableItemClick,
@@ -212,7 +212,7 @@ fun PreviewTimetableScreenDark() {
         KaigiTheme {
             TimetableScreen(
                 uiState = TimetableScreenUiState(
-                    contentUiState = TimetableSheetUiState.ListTimetable(
+                    contentUiState = TimetableUiState.ListTimetable(
                         mapOf(
                             DroidKaigi2024Day.Workday to TimetableListUiState(
                                 mapOf<Pair<String, String>, List<TimetableItem>>().toPersistentMap(),
