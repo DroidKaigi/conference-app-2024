@@ -37,7 +37,8 @@ import io.github.droidkaigi.confsched.ui.UiRes
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
 
-const val TimetableItemCardBookmarkIconTestTag = "TimetableListItemBookmarkIcon"
+const val TimetableItemCardBookmarkButtonTestTag = "TimetableItemCardBookmarkButton"
+const val TimetableItemCardBookmarkedIconTestTag = "TimetableItemCardBookmarkedIcon"
 const val TimetableItemCardTestTag = "TimetableListItem"
 
 @Composable
@@ -63,7 +64,7 @@ fun TimetableItemCard(
                 TextButton(
                     onClick = { onBookmarkClick(timetableItem, true) },
                     modifier = Modifier
-                        .testTag(TimetableItemCardBookmarkIconTestTag)
+                        .testTag(TimetableItemCardBookmarkButtonTestTag)
                         .align(Alignment.TopEnd),
                 ) {
                     if (isBookmarked) {
@@ -71,6 +72,8 @@ fun TimetableItemCard(
                             Icons.Filled.Favorite,
                             contentDescription = stringResource(UiRes.string.bookmarked),
                             tint = Color.Green,
+                            modifier = Modifier
+                                .testTag(TimetableItemCardBookmarkedIconTestTag)
                         )
                     } else {
                         Icon(
