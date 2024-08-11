@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.EventMapEvent
 
 @Composable
@@ -31,71 +33,51 @@ fun EventMapItem(
     eventMapEvent: EventMapEvent,
     @Suppress("UnusedParameter")
     onClick: (url: String) -> Unit,
-    onClickFavorite: (eventMapEvent: EventMapEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val green = Color(0xFF45E761)
-    val gray = Color(0xFFC5C7C4)
-    Column(
-        modifier = modifier
-            .border(1.dp, gray, RoundedCornerShape(5.dp))
-            .background(Color.Transparent, RoundedCornerShape(5.dp))
-            .clickable {
+    ProvideRoomTheme(eventMapEvent.roomName.currentLangTitle) {
+        val green = LocalRoomTheme.current.primaryColor
+        val gray = Color(0xFFC5C7C4)
+        Column(
+            modifier = modifier
+                .border(1.dp, gray, RoundedCornerShape(5.dp))
+                .background(Color.Transparent, RoundedCornerShape(5.dp))
+                .clickable {
 //                eventMapEvent.profileUrl?.let(onClick)
-            }
-            .padding(12.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start,
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start,
+                }
+                .padding(12.dp),
+            verticalArrangement = Arrangement.Top,
+            horizontalAlignment = Alignment.Start,
         ) {
-            ToolTip(
-                text = eventMapEvent.roomName,
-                icon = Icons.Filled.Star,
-                color = green,
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start,
+            ) {
+                ToolTip(
+                    text = eventMapEvent.roomName.currentLangTitle,
+                    icon = Icons.Filled.Star,
+                    color = green,
+                )
+            }
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = eventMapEvent.name.currentLangTitle,
+                fontSize = 17.sp,
+                lineHeight = 23.8.sp,
+                fontWeight = FontWeight.W600,
+                letterSpacing = 0.1.sp,
+                color = gray,
             )
-            Spacer(Modifier.width(4.dp))
-            ToolTip(
-                text = eventMapEvent.dateLabel,
-                color = Color(0xFFBFC9C2),
-            )
-            Spacer(Modifier.weight(1F))
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = null,
-                modifier = Modifier.size(24.dp).clickable { onClickFavorite(eventMapEvent) },
-                tint = if (eventMapEvent.isFavorite) green else gray,
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = eventMapEvent.description.currentLangTitle,
+                fontSize = 13.sp,
+                lineHeight = 20.sp,
+                fontWeight = FontWeight.W400,
+                letterSpacing = 0.25.sp,
+                color = Color.White.copy(alpha = 0.7F),
             )
         }
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = eventMapEvent.name,
-            fontSize = 17.sp,
-            lineHeight = 23.8.sp,
-            fontWeight = FontWeight.W600,
-            letterSpacing = 0.1.sp,
-            color = gray,
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = eventMapEvent.description,
-            fontSize = 13.sp,
-            lineHeight = 20.sp,
-            fontWeight = FontWeight.W400,
-            letterSpacing = 0.25.sp,
-            color = Color.White.copy(alpha = 0.7F),
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = eventMapEvent.timeDuration,
-            fontSize = 11.sp,
-            lineHeight = 15.sp,
-            fontWeight = FontWeight.W600,
-            letterSpacing = 0.1.sp,
-            color = green,
-        )
     }
 }
 

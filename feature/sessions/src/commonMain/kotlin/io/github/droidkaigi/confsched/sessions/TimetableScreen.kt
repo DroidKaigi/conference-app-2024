@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -13,8 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Grid3x3
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ViewTimeline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -37,6 +39,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.sessions.generated.resources.timetable
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -44,20 +47,20 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
+import io.github.droidkaigi.confsched.model.TimetableUiType.Grid
+import io.github.droidkaigi.confsched.sessions.section.Timetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheet
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
+import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.toPersistentMap
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
-const val TimetableListItemBookmarkIconTestTag = "TimetableListItemBookmarkIcon"
-const val TimetableListItemTestTag = "TimetableListItem"
 const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
 fun NavGraphBuilder.nestedSessionScreens(
     onTimetableItemClick: (TimetableItem) -> Unit,
@@ -117,7 +120,7 @@ fun TimetableScreen(
 }
 
 data class TimetableScreenUiState(
-    val contentUiState: TimetableSheetUiState,
+    val contentUiState: TimetableUiState,
     val timetableUiType: TimetableUiType,
     val userMessageStateHolder: UserMessageStateHolder,
 )
@@ -146,7 +149,7 @@ private fun TimetableScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Text(
-                            text = "タイムテーブル",
+                            text = stringResource(SessionsRes.string.timetable),
                             fontSize = 24.sp,
                             lineHeight = 32.sp,
                             fontWeight = FontWeight.W400,
@@ -158,13 +161,19 @@ private fun TimetableScreen(
                             modifier = Modifier.padding(8.dp).clickable {
                             },
                         )
-                        Icon(
-                            imageVector = Icons.Default.Grid3x3,
-                            contentDescription = null,
-                            modifier = Modifier.padding(8.dp).clickable {
-                                onTimetableUiChangeClick()
-                            }.testTag(TimetableUiTypeChangeButtonTestTag),
-                        )
+                        Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
+                            Icon(
+                                imageVector = if (timetableUiType == Grid) {
+                                    Icons.Default.ViewTimeline
+                                } else {
+                                    Icons.Default.GridView
+                                },
+                                contentDescription = null,
+                                modifier = Modifier.padding(8.dp).clickable {
+                                    onTimetableUiChangeClick()
+                                }.testTag(TimetableUiTypeChangeButtonTestTag),
+                            )
+                        }
                     }
                 },
             )
@@ -180,7 +189,7 @@ private fun TimetableScreen(
         Column(
             modifier = Modifier.padding(top = innerPadding.calculateTopPadding()).fillMaxWidth(),
         ) {
-            TimetableSheet(
+            Timetable(
                 modifier = Modifier
                     .fillMaxSize(),
                 onTimetableItemClick = onTimetableItemClick,
@@ -203,14 +212,14 @@ fun PreviewTimetableScreenDark() {
         KaigiTheme {
             TimetableScreen(
                 uiState = TimetableScreenUiState(
-                    contentUiState = TimetableSheetUiState.ListTimetable(
+                    contentUiState = TimetableUiState.ListTimetable(
                         mapOf(
                             DroidKaigi2024Day.Workday to TimetableListUiState(
-                                mapOf<String, List<TimetableItem>>().toPersistentMap(),
+                                mapOf<Pair<String, String>, List<TimetableItem>>().toPersistentMap(),
                                 Timetable(),
                             ),
                             DroidKaigi2024Day.ConferenceDay1 to TimetableListUiState(
-                                mapOf<String, List<TimetableItem>>().toPersistentMap(),
+                                mapOf<Pair<String, String>, List<TimetableItem>>().toPersistentMap(),
                                 Timetable(),
                             ),
                         ),

@@ -1,6 +1,9 @@
 import ComposableArchitecture
 import KMPClient
 import SwiftUI
+import Theme
+import shared
+import CommonComponents
 
 public struct ContributorView: View {
     private enum ViewType: String, CaseIterable {
@@ -11,7 +14,7 @@ public struct ContributorView: View {
         var title: String {
             switch self {
             case .swift:
-                "Swift"
+                "SwiftUI"
 
             case .kmpPresenter:
                 "KMP Presenter"
@@ -24,20 +27,25 @@ public struct ContributorView: View {
 
     @State private var viewType: ViewType = .swift
 
-    private let store: StoreOf<ContributorReducer>
+    @Bindable var store: StoreOf<ContributorReducer>
 
     public init(store: StoreOf<ContributorReducer>) {
         self.store = store
     }
 
     public var body: some View {
-        Group {
+        VStack(spacing: 0) {
+            Picker("", selection: $viewType) {
+                ForEach(ViewType.allCases, id: \.self) { segment in
+                    Text(segment.title)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(16)
+
             switch viewType {
             case .swift:
-                Text(store.text)
-                    .onAppear {
-                        store.send(.onAppear)
-                    }
+                SwiftUIContributorView(store: store)
 
             case .kmpPresenter:
                 KmpContributorView()
@@ -46,19 +54,16 @@ public struct ContributorView: View {
                 KmpContributorComposeViewControllerWrapper()
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Picker("", selection: $viewType) {
-                    ForEach(ViewType.allCases, id: \.self) { segment in
-                        Text(segment.rawValue)
-                    }
-                }
-                .pickerStyle(.segmented)
-            }
-        }
+        .background(AssetColors.Surface.surface.swiftUIColor)
+        .navigationTitle(String(localized: "Contributor", bundle: .module))
+        .navigationBarTitleDisplayMode(.large)
+        .sheet(item: $store.url, content: { url in
+            SafariView(url: url.id)
+                .ignoresSafeArea()
+        })
     }
 }
 
 #Preview {
-    ContributorView(store: .init(initialState: .init(text: "Hoge"), reducer: { ContributorReducer() }))
+    ContributorView(store: .init(initialState: .init(), reducer: { ContributorReducer() }))
 }

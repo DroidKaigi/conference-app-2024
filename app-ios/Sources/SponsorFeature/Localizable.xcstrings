@@ -1,0 +1,25 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "GOLD SPONSORS" : {
+
+    },
+    "PLATINUM SPONSORS" : {
+
+    },
+    "Sponsor" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "スポンサー"
+          }
+        }
+      }
+    },
+    "SUPPORTERS" : {
+
+    }
+  },
+  "version" : "1.0"
+}

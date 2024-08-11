@@ -4,12 +4,12 @@ import android.os.Bundle
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
-import io.github.droidkaigi.confsched.testing.RobotTestRule
-import io.github.droidkaigi.confsched.testing.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.TimetableItemDetailScreenRobot
-import io.github.droidkaigi.confsched.testing.runRobot
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
+import io.github.droidkaigi.confsched.testing.robot.runRobot
+import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

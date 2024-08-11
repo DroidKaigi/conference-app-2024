@@ -15,12 +15,6 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.timetableItemDetailScreenRoute
-import io.github.droidkaigi.confsched.testing.DefaultFontScaleRobot
-import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
-import io.github.droidkaigi.confsched.testing.DefaultTimetableServerRobot
-import io.github.droidkaigi.confsched.testing.FontScaleRobot
-import io.github.droidkaigi.confsched.testing.ScreenRobot
-import io.github.droidkaigi.confsched.testing.TimetableServerRobot
 import javax.inject.Inject
 
 class TimetableItemDetailScreenRobot @Inject constructor(

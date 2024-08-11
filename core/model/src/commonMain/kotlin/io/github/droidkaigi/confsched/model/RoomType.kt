@@ -4,10 +4,10 @@ package io.github.droidkaigi.confsched.model
  * Please use [TimetableRoom] to get room information.
  */
 enum class RoomType {
-    RoomA,
-    RoomB,
-    RoomC,
-    RoomD,
-    RoomE,
-    RoomDE,
+    RoomF,
+    RoomG,
+    RoomH,
+    RoomI,
+    RoomJ,
+    RoomIJ,
 }

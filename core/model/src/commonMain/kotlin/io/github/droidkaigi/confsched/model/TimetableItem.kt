@@ -1,6 +1,6 @@
 package io.github.droidkaigi.confsched.model
 
-import io.github.droidkaigi.confsched.model.RoomType.RoomA
+import io.github.droidkaigi.confsched.model.RoomType.RoomF
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableSessionType.NORMAL
 import kotlinx.collections.immutable.PersistentList
@@ -94,9 +94,9 @@ public sealed class TimetableItem {
     }
 
     public val url: String get() = if (defaultLang() == Lang.JAPANESE) {
-        "https://2023.droidkaigi.jp/timetable/${id.value}"
+        "https://2024.droidkaigi.jp/timetable/${id.value}"
     } else {
-        "https://2023.droidkaigi.jp/en/timetable/${id.value}"
+        "https://2024.droidkaigi.jp/en/timetable/${id.value}"
     }
 
     fun getSupportedLangString(isJapaneseLocale: Boolean): String {
@@ -119,9 +119,9 @@ public fun Session.Companion.fake(): Session {
     return Session(
         id = TimetableItemId("2"),
         title = MultiLangText("DroidKaigiのアプリのアーキテクチャ", "DroidKaigi App Architecture"),
-        startsAt = LocalDateTime.parse("2023-09-15T10:30:00")
+        startsAt = LocalDateTime.parse("2024-09-12T10:30:00")
             .toInstant(TimeZone.of("UTC+9")),
-        endsAt = LocalDateTime.parse("2023-09-15T10:50:00")
+        endsAt = LocalDateTime.parse("2024-09-12T10:50:00")
             .toInstant(TimeZone.of("UTC+9")),
         category = TimetableCategory(
             id = 28654,
@@ -134,7 +134,7 @@ public fun Session.Companion.fake(): Session {
         room = TimetableRoom(
             id = 1,
             name = MultiLangText("Room1", "Room2"),
-            type = RoomA,
+            type = RoomF,
             sort = 1,
         ),
         targetAudience = "For App developer アプリ開発者向け",
@@ -163,8 +163,8 @@ public fun Session.Companion.fake(): Session {
             ),
         ).toPersistentList(),
         description = MultiLangText(
-            jaTitle = "これはディスクリプションです。\nこれはディスクリプションです。\nhttps://github.com/DroidKaigi/conference-app-2023 これはURLです。\nこれはディスクリプションです。",
-            enTitle = "This is a description.\nThis is a description.\nhttps://github.com/DroidKaigi/conference-app-2023 This is a URL.\nThis is a description.",
+            jaTitle = "これはディスクリプションです。\nこれはディスクリプションです。\nhttps://github.com/DroidKaigi/conference-app-2024 これはURLです。\nこれはディスクリプションです。",
+            enTitle = "This is a description.\nThis is a description.\nhttps://github.com/DroidKaigi/conference-app-2024 This is a URL.\nThis is a description.",
         ),
         message = MultiLangText(
             jaTitle = "このセッションは事情により中止となりました",

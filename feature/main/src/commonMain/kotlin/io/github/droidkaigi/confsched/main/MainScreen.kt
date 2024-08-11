@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Info
@@ -39,6 +38,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import conference_app_2024.feature.main.generated.resources.about
+import conference_app_2024.feature.main.generated.resources.event_map
+import conference_app_2024.feature.main.generated.resources.profile_card
+import conference_app_2024.feature.main.generated.resources.timetable
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.haze
@@ -47,11 +50,12 @@ import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
 import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
-import io.github.droidkaigi.confsched.main.strings.MainStrings
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringResource
 
 const val mainScreenRoute = "main"
 
@@ -126,44 +130,38 @@ sealed class IconRepresentation {
 
 enum class MainScreenTab(
     val icon: IconRepresentation.Vector,
-    val selectedIcon: IconRepresentation,
-    val label: String,
-    val contentDescription: String,
+    val label: StringResource,
+    val contentDescription: StringResource,
     val testTag: String = "mainScreenTab:$label",
 ) {
     Timetable(
         icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
-        label = MainStrings.Timetable.asString(),
-        contentDescription = MainStrings.Timetable.asString(),
+        label = MainRes.string.timetable,
+        contentDescription = MainRes.string.timetable,
     ),
 
     EventMap(
         icon = IconRepresentation.Vector(Icons.Outlined.Map),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Map),
-        label = MainStrings.EventMap.asString(),
-        contentDescription = MainStrings.EventMap.asString(),
+        label = MainRes.string.event_map,
+        contentDescription = MainRes.string.event_map,
     ),
 
     Favorite(
         icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.Favorite),
-        label = MainStrings.EventMap.asString(),
-        contentDescription = MainStrings.EventMap.asString(),
+        label = MainRes.string.event_map,
+        contentDescription = MainRes.string.event_map,
     ),
 
     About(
         icon = IconRepresentation.Vector(Icons.Outlined.Info),
-        selectedIcon = IconRepresentation.Vector(Icons.Filled.Info),
-        label = MainStrings.About.asString(),
-        contentDescription = MainStrings.About.asString(),
+        label = MainRes.string.about,
+        contentDescription = MainRes.string.about,
     ),
 
     ProfileCard(
         icon = IconRepresentation.Vector(Icons.Outlined.People),
-        selectedIcon = IconRepresentation.Vector(Icons.Outlined.People),
-        label = MainStrings.ProfileCard.asString(),
-        contentDescription = MainStrings.ProfileCard.asString(),
+        label = MainRes.string.profile_card,
+        contentDescription = MainRes.string.profile_card,
     ),
     ;
 
@@ -175,7 +173,6 @@ enum class MainScreenTab(
 }
 
 data class MainScreenUiState(
-    val isAchievementsEnabled: Boolean = false,
     val userMessageStateHolder: UserMessageStateHolder,
 )
 
@@ -200,7 +197,7 @@ fun MainScreen(
                 Text(text = "nav rail")
                 MainScreenTab.values().forEach { tab ->
                     Button(onClick = { onTabSelected(mainNestedNavController, tab) }) {
-                        Text(text = tab.label + " " + (currentTab == tab))
+                        Text(text = stringResource(tab.label) + " " + (currentTab == tab))
                     }
                 }
             }

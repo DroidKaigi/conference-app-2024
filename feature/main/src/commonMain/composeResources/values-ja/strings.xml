@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="timetable">タイムテーブル</string>
+    <string name="event_map">イベントマップ</string>
+    <string name="profile_card">プロフィールカード</string>
+    <string name="about">About</string>
+    <string name="contributor">コントリビューター</string>
+    <string name="time">%1$s時%2$s</string>
+</resources>

@@ -1,11 +1,8 @@
 package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import io.github.droidkaigi.confsched.main.MainScreenTab
-import io.github.droidkaigi.confsched.testing.DefaultScreenRobot
-import io.github.droidkaigi.confsched.testing.ScreenRobot
 import javax.inject.Inject
 
 class KaigiAppRobot @Inject constructor(
@@ -23,17 +20,6 @@ class KaigiAppRobot @Inject constructor(
     fun goToFloorMap() {
         composeTestRule
             .onNode(hasTestTag(MainScreenTab.About.testTag))
-            .performClick()
-        waitUntilIdle()
-    }
-
-    fun goToAchievements() {
-        composeTestRule
-            .onAllNodes(
-                matcher = hasTestTag(MainScreenTab.ProfileCard.testTag),
-                useUnmergedTree = true,
-            )
-            .onFirst()
             .performClick()
         waitUntilIdle()
     }

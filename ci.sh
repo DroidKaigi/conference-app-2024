@@ -12,6 +12,6 @@ PLATFORM_IOS="iOS Simulator,name=iPhone 15 Pro,OS=17.4"
 
 set -o pipefail && xcodebuild build \
 -project $PROJECT \
--scheme "DroidKaigi2024AppWithKmpBuild" \
+-scheme "DroidKaigi2024App" \
 -configuration Debug \
 -destination platform="$PLATFORM_IOS"

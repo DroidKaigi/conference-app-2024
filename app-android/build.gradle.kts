@@ -18,7 +18,6 @@ val keystorePropertiesFile = file("keystore.properties")
 val keystoreExits = keystorePropertiesFile.exists()
 
 android {
-    // For firebase we are using 2023 now
     namespace = "io.github.droidkaigi.confsched2024"
 
     flavorDimensions += "network"
@@ -26,8 +25,8 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        versionCode = 11
-        versionName = "1.6.0"
+        versionCode = 1
+        versionName = "0.1.0"
     }
     signingConfigs {
         create("dev") {
@@ -102,6 +101,9 @@ dependencies {
     implementation(projects.feature.eventmap)
     implementation(projects.feature.profilecard)
     implementation(projects.feature.about)
+    implementation(projects.feature.sponsors)
+    implementation(projects.feature.staff)
+    implementation(projects.feature.favorites)
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
@@ -112,7 +114,6 @@ dependencies {
     implementation(libs.androidxBrowser)
     implementation(libs.androidxWindow)
     implementation(libs.kermit)
-    implementation(libs.androidxSplashScreen)
     implementation(libs.firebaseDynamicLinks)
     debugImplementation(projects.core.testingManifest)
     testImplementation(projects.core.testing)

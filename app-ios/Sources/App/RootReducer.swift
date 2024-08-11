@@ -2,6 +2,7 @@ import AboutFeature
 import ComposableArchitecture
 import ContributorFeature
 import FavoriteFeature
+import SearchFeature
 import StaffFeature
 import SponsorFeature
 import TimetableFeature
@@ -15,6 +16,12 @@ public struct RootReducer {
     public enum Path {
         @Reducer(state: .equatable)
         public enum Timetable {
+            case timetableDetail(TimetableDetailReducer)
+            case search(SearchReducer)
+        }
+
+        @Reducer(state: .equatable)
+        public enum Favorite {
             case timetableDetail(TimetableDetailReducer)
         }
 
@@ -37,6 +44,7 @@ public struct RootReducer {
 
         public struct Paths: Equatable {
             public var timetable = StackState<Path.Timetable.State>()
+            public var favorite = StackState<Path.Favorite.State>()
             public var about = StackState<Path.About.State>()
         }
 
@@ -58,12 +66,18 @@ public struct RootReducer {
         case timetable(TimetableReducer.Action)
         case favorite(FavoriteReducer.Action)
         case about(AboutReducer.Action)
+        case view(View)
         case paths(Paths)
 
         @CasePathable
         public enum Paths {
             case timetable(StackActionOf<RootReducer.Path.Timetable>)
+            case favorite(StackActionOf<RootReducer.Path.Favorite>)
             case about(StackActionOf<RootReducer.Path.About>)
+        }
+        
+        public enum View {
+            case sameTabTapped(Tab)
         }
     }
 
@@ -90,12 +104,12 @@ public struct RootReducer {
                 state.paths.about.append(.staff(.init()))
                 return .none
 
-            case .about(.view(.contributersTapped)):
-                state.paths.about.append(.contributor(.init(text: "")))
+            case .about(.view(.contributorsTapped)):
+                state.paths.about.append(.contributor(.init()))
                 return .none
 
             case .about(.view(.sponsorsTapped)):
-                state.paths.about.append(.sponsor(.init(text: "")))
+                state.paths.about.append(.sponsor(.init()))
                 return .none
 
             case .about(.view(.acknowledgementsTapped)):
@@ -110,11 +124,41 @@ public struct RootReducer {
                 ))
                 return .none
 
+            case .timetable(.view(.searchTapped)):
+                state.paths.timetable.append(.search(.init()))
+                return .none
+
+            case let .favorite(.destination(destination)):
+                switch destination {
+                case let .timetableDetail(timetableItemWithFavorite):
+                    state.paths.favorite.append(
+                        .timetableDetail(
+                            .init(
+                                timetableItem: timetableItemWithFavorite.timetableItem,
+                                isBookmarked: timetableItemWithFavorite.isFavorited
+                            )
+                        )
+                    )
+                    return .none
+                }
+                
+            case let .view(.sameTabTapped(tab)):
+                switch tab {
+                case .timetable: state.paths.timetable.removeAll()
+                case .favorite: state.paths.favorite.removeAll()
+                case .about: state.paths.about.removeAll()
+                case .map: break
+                case .idCard: break
+                }
+                
+                return .none
+                
             default:
                 return .none
             }
         }
         .forEach(\.paths.about, action: \.paths.about)
+        .forEach(\.paths.favorite, action: \.paths.favorite)
         .forEach(\.paths.timetable, action: \.paths.timetable)
     }
 }

@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.about.section
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,20 +13,33 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.about.generated.resources.app_version
+import conference_app_2024.feature.about.generated.resources.content_description_youtube
+import conference_app_2024.feature.about.generated.resources.icon_medium
+import conference_app_2024.feature.about.generated.resources.icon_x
+import conference_app_2024.feature.about.generated.resources.icon_youtube
+import conference_app_2024.feature.about.generated.resources.license_description
+import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutFooterLinksIcon
-import io.github.droidkaigi.confsched.about.strings.AboutStrings
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksMediumItemTestTag
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksXItemTestTag
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksYouTubeItemTestTag
+import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.Section
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-const val AboutFooterLinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItem"
-const val AboutFooterLinksXItemTestTag = "AboutFooterLinksXItem"
-const val AboutFooterLinksMediumItemTestTag = "AboutFooterLinksMediumItem"
-
-private val licenseDescriptionLight = Color(0xFF6D7256)
-private val licenseDescriptionDark = Color(0xFFFFFFFF)
+@Suppress("ConstPropertyName")
+object AboutFooterLinksSectionTestTag {
+    const val Section = "FooterLinksSection"
+    const val LinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItem"
+    const val LinksXItemTestTag = "AboutFooterLinksXItem"
+    const val LinksMediumItemTestTag = "AboutFooterLinksMediumItem"
+}
 
 @Composable
 fun AboutFooterLinks(
@@ -41,29 +53,33 @@ fun AboutFooterLinks(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .testTag(Section)
             .fillMaxWidth()
             .padding(top = 24.dp, bottom = 16.dp),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             AboutFooterLinksIcon(
-                testTag = AboutFooterLinksYouTubeItemTestTag,
-                contentDescription = "YouTube",
+                testTag = LinksYouTubeItemTestTag,
+                painter = painterResource(AboutRes.drawable.icon_youtube),
+                contentDescription = stringResource(AboutRes.string.content_description_youtube),
                 onClick = onYouTubeClick,
             )
             AboutFooterLinksIcon(
-                testTag = AboutFooterLinksXItemTestTag,
+                testTag = LinksXItemTestTag,
+                painter = painterResource(AboutRes.drawable.icon_x),
                 contentDescription = "X",
                 onClick = onXClick,
             )
             AboutFooterLinksIcon(
-                testTag = AboutFooterLinksMediumItemTestTag,
+                testTag = LinksMediumItemTestTag,
+                painter = painterResource(AboutRes.drawable.icon_medium),
                 contentDescription = "Medium",
                 onClick = onMediumClick,
             )
         }
         Spacer(modifier = Modifier.height(24.dp))
         Text(
-            text = AboutStrings.AppVersion.asString(),
+            text = stringResource(AboutRes.string.app_version),
             style = MaterialTheme.typography.labelLarge,
         )
         if (versionName != null) {
@@ -76,10 +92,10 @@ fun AboutFooterLinks(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             modifier = Modifier.padding(horizontal = 12.dp),
-            text = AboutStrings.LicenceDescription.asString(),
+            text = stringResource(AboutRes.string.license_description),
             style = MaterialTheme.typography.labelSmall,
             textAlign = TextAlign.Center,
-            color = if (isSystemInDarkTheme()) licenseDescriptionDark else licenseDescriptionLight,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(modifier = Modifier.height(8.dp))
     }

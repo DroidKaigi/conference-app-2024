@@ -6,8 +6,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.Default
+import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.High
+import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.Medium
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,
@@ -47,7 +50,7 @@ private val lightScheme = lightColorScheme(
     surfaceContainerHighest = surfaceContainerHighestLight,
 )
 
-private val darkScheme = darkColorScheme(
+internal val darkScheme = darkColorScheme(
     primary = primaryDark,
     onPrimary = onPrimaryDark,
     primaryContainer = primaryContainerDark,
@@ -237,62 +240,41 @@ private val highContrastDarkColorScheme = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDarkHighContrast,
 )
 
-@Immutable
-data class ColorFamily(
-    val color: Color,
-    val onColor: Color,
-    val colorContainer: Color,
-    val onColorContainer: Color,
+private val fixedAccentColors = FixedAccentColors(
+    primaryFixed = Color(0xFF67FF8D),
+    onPrimaryFixed = Color(0xFF002109),
+    secondaryFixed = Color(0xFFA3F5AD),
+    onSecondaryFixed = Color(0xFF002109),
+    tertiaryFixed = Color(0xFFFFD7F0),
+    onTertiaryFixed = Color(0xFF3A0032),
+    primaryFixedDim = Color(0xFF1CE46B),
+    secondaryFixedDim = Color(0xFF88D893),
+    tertiaryFixedDim = Color(0xFFFFACE7),
 )
-
-val unspecified_scheme = ColorFamily(
-    Color.Unspecified,
-    Color.Unspecified,
-    Color.Unspecified,
-    Color.Unspecified,
-)
-
-sealed class HallColorScheme {
-    abstract val hallA: Color
-    abstract val hallB: Color
-    abstract val hallC: Color
-    abstract val hallD: Color
-    abstract val hallE: Color
-    abstract val hallText: Color
-    abstract val hallTextWhenWithoutSpeakers: Color
-
-    data class Dark(
-        override val hallA: Color = md_theme_dark_room_hall_a,
-        override val hallB: Color = md_theme_dark_room_hall_b,
-        override val hallC: Color = md_theme_dark_room_hall_c,
-        override val hallD: Color = md_theme_dark_room_hall_d,
-        override val hallE: Color = md_theme_dark_room_hall_e,
-        override val hallText: Color = md_theme_dark_room_hall_text,
-        override val hallTextWhenWithoutSpeakers: Color = md_theme_dark_onSurfaceVariant,
-    ) : HallColorScheme()
-}
-
-@Composable
-fun hallColors() = HallColorScheme.Dark()
 
 @Composable
 fun KaigiTheme(
-    content:
-    @Composable () -> Unit,
+    colorContrast: ColorContrast = Default,
+    content: @Composable () -> Unit,
 ) {
-    val colorScheme = darkScheme
-//  val view = LocalView.current
-//  if (!view.isInEditMode) {
-//    SideEffect {
-//      val window = (view.context as Activity).window
-//      window.statusBarColor = colorScheme.primary.toArgb()
-//      WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
-//    }
-//  }
+    val colorScheme = when (colorContrast) {
+        Default -> darkScheme
+        Medium -> mediumContrastDarkColorScheme
+        High -> highContrastDarkColorScheme
+    }
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = AppTypography,
-        content = content,
+        typography = appTypography(),
+        content = {
+            CompositionLocalProvider(
+                value = LocalFixedAccentColors provides fixedAccentColors,
+                content = content,
+            )
+        },
     )
+}
+
+enum class ColorContrast {
+    Default, Medium, High
 }

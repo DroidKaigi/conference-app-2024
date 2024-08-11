@@ -33,7 +33,6 @@ kotlin {
         }
 
         androidMain {
-            dependsOn(getByName("commonMain"))
             dependencies {
                 implementation(libs.ktorClientOkHttp)
                 implementation(libs.multiplatformFirebaseAuth)

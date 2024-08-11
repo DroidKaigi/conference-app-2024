@@ -8,6 +8,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.github.takahirom.rin.produceRetainedState
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -72,6 +73,8 @@ fun <T : R, R> Flow<T>.safeCollectAsRetainedState(
                     collect { value = it }
                 }
             }
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Throwable) {
             composeEffectErrorHandler.emit(e)
         }

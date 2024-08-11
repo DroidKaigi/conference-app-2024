@@ -7,6 +7,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -18,6 +20,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.about.generated.resources.about_droidkaigi
 import io.github.droidkaigi.confsched.about.section.AboutDroidKaigiDetail
 import io.github.droidkaigi.confsched.about.section.AboutFooterLinks
 import io.github.droidkaigi.confsched.about.section.aboutCredits
@@ -26,32 +29,12 @@ import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.AboutItem.Medium
 import io.github.droidkaigi.confsched.model.AboutItem.X
 import io.github.droidkaigi.confsched.model.AboutItem.YouTube
+import org.jetbrains.compose.resources.stringResource
 
 const val aboutScreenRoute = "about"
 
-object AboutTestTag {
-    private const val suffix = "TestTag"
-    private const val prefix = "ProfileCard"
-
-    object DetailSection {
-        private const val detailSectionPrefix = "${prefix}_DetailSection"
-        const val Section = "${detailSectionPrefix}_$suffix"
-    }
-
-    object CreditsSection {
-        private const val creditsSectionPrefix = "${prefix}_CreditsSection"
-        const val Section = "${creditsSectionPrefix}_$suffix"
-    }
-
-    object OthersSection {
-        private const val othersSectionPrefix = "${prefix}_OthersSection"
-        const val Section = "${othersSectionPrefix}_$suffix"
-    }
-
-    object FooterLinksSection {
-        private const val footerLinksSectionPrefix = "${prefix}_FooterLinksSection"
-        const val Section = "${footerLinksSectionPrefix}_$suffix"
-    }
+object AboutScreenTestTag {
+    const val Screen = "AboutScreen"
 }
 
 fun NavGraphBuilder.aboutScreen(
@@ -88,7 +71,8 @@ fun AboutScreen(
     val layoutDirection = LocalLayoutDirection.current
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.testTag(AboutScreenTestTag.Screen),
+        topBar = { TopAppBar(title = { Text(stringResource(AboutRes.string.about_droidkaigi)) }) },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
@@ -102,7 +86,11 @@ fun AboutScreen(
             contentPadding = padding,
         ) {
             item {
-                AboutDroidKaigiDetail()
+                AboutDroidKaigiDetail(
+                    onViewMapClick = {
+                        onAboutItemClick(AboutItem.Map)
+                    },
+                )
             }
             aboutCredits(
                 onSponsorsItemClick = {
@@ -114,7 +102,6 @@ fun AboutScreen(
                 onStaffItemClick = {
                     onAboutItemClick(AboutItem.Staff)
                 },
-                modifier = Modifier.testTag(AboutTestTag.CreditsSection.Section),
             )
             aboutOthers(
                 onCodeOfConductItemClick = {
@@ -126,12 +113,10 @@ fun AboutScreen(
                 onPrivacyPolicyItemClick = {
                     onAboutItemClick(AboutItem.PrivacyPolicy)
                 },
-                modifier = Modifier.testTag(AboutTestTag.OthersSection.Section),
             )
             item {
                 AboutFooterLinks(
-                    // TODO: Inject the right version name
-                    versionName = "1.6.0",
+                    versionName = "0.1.0",
                     onYouTubeClick = {
                         onAboutItemClick(YouTube)
                     },
@@ -141,7 +126,6 @@ fun AboutScreen(
                     onMediumClick = {
                         onAboutItemClick(Medium)
                     },
-                    modifier = Modifier.testTag(AboutTestTag.FooterLinksSection.Section),
                 )
             }
         }

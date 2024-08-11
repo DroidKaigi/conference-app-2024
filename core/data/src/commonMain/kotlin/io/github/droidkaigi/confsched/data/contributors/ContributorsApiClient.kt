@@ -1,3 +1,6 @@
+// FIXME: When the API is ready, remove Suppress annotation below.
+@file:Suppress("UnusedPrivateProperty", "UnusedPrivateMember")
+
 package io.github.droidkaigi.confsched.data.contributors
 
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -9,7 +12,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 internal interface ContributorApi {
-    @GET("/events/droidkaigi2023/contributors")
+    @GET("/events/droidkaigi2024/contributors")
     suspend fun getContributors(): ContributorsResponse
 }
 

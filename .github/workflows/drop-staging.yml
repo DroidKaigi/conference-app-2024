@@ -1,0 +1,31 @@
+name: drop-staging
+
+on:
+  pull_request:
+    types: [closed]
+
+# Disable all permissions. We have to enable required permissions at job-level.
+permissions: {}
+
+jobs:
+  drop-stage:
+    name: "Drop from staging"
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read # for checkout
+
+    steps:
+      - uses: actions/checkout@v4.1.7
+        with:
+          repository: droidkaigi/conference-app-2024
+          ref: gh-actions
+          path: gh-actions
+      - uses: ./gh-actions/actions/destroy-distribution-by-name
+        with:
+          api-token: ${{ secrets.DEPLOYGATE_API_TOKEN }}
+          app-owner-name: droidkaigi
+          platform: android
+          app-id: io.github.droidkaigi.confsched2024.dev
+          distribution-name: ${{ format('debug/refs/pull/{0}/head', github.event.pull_request.number) }}

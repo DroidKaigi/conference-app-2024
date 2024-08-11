@@ -3,14 +3,16 @@ import ComposableArchitecture
 import ContributorFeature
 import FavoriteFeature
 import LicenseList
+import SearchFeature
 import SponsorFeature
 import StaffFeature
 import SwiftUI
 import TimetableDetailFeature
 import TimetableFeature
+import EventMapFeature
 import Theme
 
-private enum Tab {
+public enum Tab {
     case timetable
     case map
     case favorite
@@ -24,61 +26,77 @@ public struct RootView: View {
 
     public init(store: StoreOf<RootReducer>) {
         self.store = store
+        UINavigationBar.appearance().barTintColor = AssetColors.Surface.surface.color
     }
 
     public var body: some View {
-        TabView(selection: $selection) {
-            timetableTab
-                .tag(Tab.timetable)
-                .tabItem {
-                    Label(
-                        title: { Text("Timetable") },
-                        icon: { Image(.icTimetable).renderingMode(.template) }
-                    )
+        TabView(
+            selection: Binding(
+                get: { selection },
+                set: {
+                    if selection != $0 {
+                        selection = $0
+                        return
+                    }
+                    store.send(.view(.sameTabTapped($0)))
                 }
-
-            Text("Map Feature")
-                .tag(Tab.map)
-                .tabItem {
-                    Label(
-                        title: { Text("Event Map") },
-                        icon: { Image(.icMap).renderingMode(.template) }
-                    )
-                }
-
-            FavoriteScreen(
-                store: store.scope(
-                    state: \.favorite,
-                    action: \.favorite
-                )
             )
-            .tag(Tab.favorite)
-            .tabItem {
-                Label(
-                    title: { Text("Favorite") },
-                    icon: { Image(.icFav).renderingMode(.template) }
-                )
+        ) {
+            Group {
+                timetableTab
+                    .tag(Tab.timetable)
+                    .tabItem {
+                        Label(
+                            title: { Text("Timetable") },
+                            icon: { Image(.icTimetable).renderingMode(.template) }
+                        )
+                    }
+                
+                eventMapTab
+                    .tag(Tab.map)
+                    .tabItem {
+                        Label(
+                            title: { Text("Event Map") },
+                            icon: { Image(.icMap).renderingMode(.template) }
+                        )
+                    }
+                
+                favoriteTab
+                    .tag(Tab.favorite)
+                    .tabItem {
+                        Label(
+                            title: { Text("Favorite") },
+                            icon: { Image(.icFav).renderingMode(.template) }
+                        )
+                    }
+                
+                aboutTab
+                    .tag(Tab.about)
+                    .tabItem {
+                        Label(
+                            title: { Text("About") },
+                            icon: { Image(.icInfo).renderingMode(.template) }
+                        )
+                    }
+                
+                Text("ID Card Feature")
+                    .tag(Tab.idCard)
+                    .tabItem {
+                        Label(
+                            title: { Text("ID Card") },
+                            icon: { Image(.icProfileCard).renderingMode(.template) }
+                        )
+                    }
             }
-
-            aboutTab
-                .tag(Tab.about)
-                .tabItem {
-                    Label(
-                        title: { Text("About") },
-                        icon: { Image(.icInfo).renderingMode(.template) }
-                    )
-                }
-
-            Text("ID Card Feature")
-                .tag(Tab.idCard)
-                .tabItem {
-                    Label(
-                        title: { Text("ID Card") },
-                        icon: { Image(.icProfileCard).renderingMode(.template) }
-                    )
-                }
+            .toolbarBackground(AssetColors.Surface.surface.swiftUIColor, for: .tabBar)
+            // If there are not this code, tab bar color is clear when scroll down to edge.
+            .toolbarBackground(.visible, for: .tabBar)
         }
-        .tint(AssetColors.Custom.arcticFox.swiftUIColor)
+        .navigationBarTitleStyle(
+            color: AssetColors.Surface.onSurface.swiftUIColor,
+            titleTextStyle: .titleMedium,
+            largeTitleTextStyle: .headlineSmall
+        )
     }
 
     @MainActor
@@ -99,6 +117,9 @@ public struct RootView: View {
             switch store.case {
             case let .timetableDetail(store):
                 TimetableDetailView(store: store)
+
+            case let .search(store):
+                SearchView(store: store)
             }
         }
     }
@@ -131,6 +152,37 @@ public struct RootView: View {
             case .acknowledgements:
                 LicenseListView()
             }
+        }
+    }
+
+    @MainActor
+    private var favoriteTab: some View {
+        NavigationStack(
+            path: $store.scope(
+                state: \.paths.favorite,
+                action: \.paths.favorite
+            )
+        ) {
+            FavoriteView(
+                store: store.scope(
+                    state: \.favorite,
+                    action: \.favorite
+                )
+            )
+        } destination: { store in
+            switch store.case {
+            case let .timetableDetail(store):
+                TimetableDetailView(store: store)
+            }
+        }
+    }
+    
+    @MainActor
+    private var eventMapTab: some View {
+        NavigationStack {
+            EventMapView(store: Store(initialState: .init(), reducer: {
+                EventMapReducer()
+            }))
         }
     }
 }

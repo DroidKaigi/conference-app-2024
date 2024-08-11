@@ -12,7 +12,7 @@ public struct TimetableDetailView: View {
             VStack(spacing: 0) {
                 ScrollView {
                     VStack(spacing: 0) {
-                        AssetColors.Custom.arcticFoxContainer.swiftUIColor
+                        store.timetableItem.room.roomTheme.containerColor
                             .frame(height: proxy.safeAreaInsets.top)
                         headLine
                             .padding(.bottom, 24)
@@ -35,7 +35,7 @@ public struct TimetableDetailView: View {
             .frame(maxWidth: .infinity)
             .ignoresSafeArea(edges: [.top])
         }
-        .toolbarBackground(AssetColors.Surface.surface.swiftUIColor, for: .navigationBar)
+        .tint(store.timetableItem.room.roomTheme.primaryColor)
         .confirmationDialog(
             $store.scope(
                 state: \.confirmationDialog,
@@ -94,7 +94,7 @@ public struct TimetableDetailView: View {
     @MainActor var headLine: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
-                RoomTag(.arcticFox)
+                RoomTag(store.timetableItem.room)
                 ForEach(store.timetableItem.language.labels, id: \.self) { label in
                     LanguageTag(label)
                 }
@@ -131,7 +131,7 @@ public struct TimetableDetailView: View {
             .padding(.bottom, 20)
         }
         .padding([.top, .horizontal], 16)
-        .background(AssetColors.Custom.arcticFoxContainer.swiftUIColor)
+        .background(store.timetableItem.room.roomTheme.containerColor)
     }
 
     @MainActor var detail: some View {
@@ -140,31 +140,31 @@ public struct TimetableDetailView: View {
                 InformationRow(
                     icon: Image(.icSchedule),
                     title: String(localized: "TimeTableDetailDate", bundle: .module),
-                    titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
+                    titleColor: store.timetableItem.room.roomTheme.primaryColor,
                     content: store.timetableItem.formattedDateTimeString
                 )
                 InformationRow(
                     icon: Image(.icLocationOn),
                     title: String(localized: "TimeTableDetailLocation", bundle: .module),
-                    titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
+                    titleColor: store.timetableItem.room.roomTheme.primaryColor,
                     content: store.timetableItem.room.name.currentLangTitle
                 )
                 InformationRow(
                     icon: Image(.icLanguage),
                     title: String(localized: "TimeTableDetailLanguage", bundle: .module),
-                    titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
+                    titleColor: store.timetableItem.room.roomTheme.primaryColor,
                     content: store.timetableItem.getSupportedLangString(isJapaneseLocale: LocaleKt.getDefaultLocale() == .japan)
                 )
                 InformationRow(
                     icon: Image(.icCategory),
                     title: String(localized: "TimeTableDetailCategory", bundle: .module),
-                    titleColor: AssetColors.Custom.arcticFox.swiftUIColor,
+                    titleColor: store.timetableItem.room.roomTheme.primaryColor,
                     content: store.timetableItem.category.title.currentLangTitle
                 )
             }
             .padding(16)
             .overlay(
-                AssetColors.Custom.arcticFox.swiftUIColor,
+                store.timetableItem.room.roomTheme.primaryColor,
                 in: RoundedRectangle(cornerRadius: 4)
                     .stroke(style: .init(lineWidth: 1, dash: [2, 2]))
             )
@@ -180,7 +180,7 @@ public struct TimetableDetailView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailApplicants", bundle: .module))
                 .textStyle(.titleLarge)
-                .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+                .foregroundStyle(store.timetableItem.room.roomTheme.primaryColor)
 
             Text(store.timetableItem.targetAudience)
                 .textStyle(.bodyLarge)
@@ -193,7 +193,7 @@ public struct TimetableDetailView: View {
         VStack(alignment: .leading, spacing: 16) {
             Text(String(localized: "TimeTableDetailArchive", bundle: .module))
                 .textStyle(.titleLarge)
-                .foregroundStyle(AssetColors.Custom.arcticFox.swiftUIColor)
+                .foregroundStyle(store.timetableItem.room.roomTheme.primaryColor)
 
             HStack {
                 if let slideUrlString = store.timetableItem.asset.slideUrl,
@@ -213,7 +213,7 @@ public struct TimetableDetailView: View {
                         }
                         .frame(height: 40)
                         .frame(maxWidth: .infinity)
-                        .background(AssetColors.Custom.arcticFox.swiftUIColor)
+                        .background(store.timetableItem.room.roomTheme.primaryColor)
                         .clipShape(Capsule())
                     }
                 }
@@ -234,7 +234,7 @@ public struct TimetableDetailView: View {
                         }
                         .frame(height: 40)
                         .frame(maxWidth: .infinity)
-                        .background(AssetColors.Custom.arcticFox.swiftUIColor)
+                        .background(store.timetableItem.room.roomTheme.primaryColor)
                         .clipShape(Capsule())
                     }
                 }

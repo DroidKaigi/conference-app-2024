@@ -18,7 +18,7 @@ public struct AboutReducer {
         @CasePathable
         public enum View {
             case staffsTapped
-            case contributersTapped
+            case contributorsTapped
             case sponsorsTapped
             case codeOfConductTapped
             case acknowledgementsTapped
@@ -57,6 +57,9 @@ public struct AboutReducer {
                 state.destination = .medium
                 return .none
             case .view:
+                return .none
+            case .presentation(.dismiss):
+                state.destination = nil
                 return .none
             case .presentation:
                 return .none

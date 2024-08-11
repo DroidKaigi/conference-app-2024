@@ -7,6 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import conference_app_2024.feature.sessions.generated.resources.bookmarked_successfully
+import conference_app_2024.feature.sessions.generated.resources.view_bookmark_list
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.SessionsRepository
@@ -19,11 +21,10 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDe
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.ViewBookmarkListRequestCompleted
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
-import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.BookmarkedSuccessfully
-import io.github.droidkaigi.confsched.sessions.strings.TimetableItemDetailStrings.ViewBookmarkList
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.droidkaigi.confsched.ui.rememberNavigationArgument
 import kotlinx.coroutines.flow.SharedFlow
+import org.jetbrains.compose.resources.stringResource
 
 sealed interface TimetableItemDetailEvent {
     data class Bookmark(val timetableItem: TimetableItem) : TimetableItemDetailEvent
@@ -45,6 +46,8 @@ fun timetableItemDetailPresenter(
             .timetableItemWithBookmark(TimetableItemId(timetableItemId)),
     )
     var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
+    val bookmarkedSuccessfullyString = stringResource(SessionsRes.string.bookmarked_successfully)
+    val viewBookmarkListString = stringResource(SessionsRes.string.view_bookmark_list)
 
     SafeLaunchedEffect(Unit) {
         events.collect { event ->
@@ -57,8 +60,8 @@ fun timetableItemDetailPresenter(
                     val oldBookmarked = timetableItemWithBookmark.second
                     if (!oldBookmarked) {
                         userMessageStateHolder.showMessage(
-                            message = BookmarkedSuccessfully.asString(),
-                            actionLabel = ViewBookmarkList.asString(),
+                            message = bookmarkedSuccessfullyString,
+                            actionLabel = viewBookmarkListString,
                             duration = Short,
                         )
                     }
@@ -88,6 +91,7 @@ fun timetableItemDetailPresenter(
         isBookmarked = bookmarked,
         isLangSelectable = timetableItem.sessionType == NORMAL,
         currentLang = selectedDescriptionLanguage,
+        roomThemeKey = timetableItem.room.getThemeKey(),
         userMessageStateHolder = userMessageStateHolder,
     )
 }

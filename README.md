@@ -1,10 +1,56 @@
+![image](https://github.com/user-attachments/assets/11e73360-7a23-4e95-a549-da612aa20d7d)
+
 # DroidKaigi 2024 official app
+
+[DroidKaigi](https://2024.droidkaigi.jp/) is celebrating 10th year this time! This is a conference tailored for Android developers for enhancing sharing knowledge and communication.
+It's scheduled to take place for 3 days, on 11-13 September 2024.
+
+## Features
+
+In addition to the standard features of a conference app, the DroidKaigi 2024 official app offers the following functionalities:
+
+- **Timetable**: View the conference schedule and bookmark sessions.
+- **Profile cards**: Create and share your profile card with other attendees.
+- **Contributors**: Discover the contributors behind the app.
+...and more!
+
+![image](https://github.com/user-attachments/assets/ffed2cb2-455b-4de8-a9d2-be9ca0842b99)
+
+## Try the app
+
+You can try the app on your device by clicking the button below. 
+[<img src="https://dply.me/wfhpc2/button/large" alt="Try it on your device via DeployGate">](https://dply.me/wfhpc2#install)
+
+## Contributing
+
+We always welcome contributions!
+
+For a detailed step-by-step guide on how to contribute, please see [CONTRIBUTING.md](CONTRIBUTING.md). This guide will walk you through the process from setting up your environment to submitting your pull request.
+
+For Japanese speakers, a Japanese version of the contribution guide is available at [CONTRIBUTING.ja.md](CONTRIBUTING.ja.md).
+
+コントリビューションの詳細な手順については、[CONTRIBUTING.ja.md](CONTRIBUTING.ja.md)をご覧ください。初めての方でも分かりやすいステップバイステップのガイドを用意しています。
+
+## Requirements
+Stable Android Studio Koala or higher. You can download it from [this page](https://developer.android.com/studio).
+
+## Design
+
+You can check out the design on Figma.
+
+[DroidKaigi 2024 App UI](https://www.figma.com/design/XUk8WMbKCeIdWD5cz9P9JC/DroidKaigi-2024-App-UI?node-id=54795-26746&t=DgZuFVd0sduq6vUy-0)
+
+**Designer**: [nobonobopurin](https://github.com/nobonobopurin)
 
 ## Development
 
-<img width="815" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f0a9a5a2-e10d-470c-9e7d-0ad15128f1f5">
+### Overview of the architecture
 
-### A Guide for Contributors 1: Understanding the App's Data Flow
+In addition to general Android practices, we are exploring and implementing various concepts. Details for each are discussed further in this README.
+
+<img width="813" alt="image" src="https://github.com/user-attachments/assets/28532593-025b-476b-8a2d-af2367dcbdd0">
+
+### Understanding the App's Data Flow
 
 To contribute to the app effectively, understanding its data flow is crucial for comprehending the app's code structure. Let's examine this further.
 
@@ -18,8 +64,7 @@ This section explains how the TimetableScreen is set up to display sessions, det
 timetableScreenPresenter ----> TimetableScreen
 ```
 
-<img width="603" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/f8b2b564-6a0b-4617-83cb-02068459dc0a">
-
+<img width="711" alt="image" src="https://github.com/user-attachments/assets/2032e34b-933d-4964-92a8-831ea254cedd">
 
 ```kotlin
 @Composable
@@ -42,11 +87,11 @@ fun TimetableScreen(
 
 Here, the interaction of bookmarking a session is detailed, showcasing how events trigger updates within the presenter.
 
-<img width="428" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/23109f98-dd7c-4d8c-bc2b-55ad7f259680">
+<img width="494" alt="image" src="https://github.com/user-attachments/assets/715c053a-1b06-4523-8016-44d16f1a34f2">
 
 ```
       TimetableScreenEvent.Bookmark
-TimetableScreen ----> timetableScreenPresenter
+TimetableScreen ----> timetableScreenPresenter -> sessionsRepository
 ```
 
 ```kotlin
@@ -114,15 +159,14 @@ public override fun timetable(): Timetable {
 ```
 
 `safeCollectAsRetainedState()` is a utility function that allows us to safely collect a Flow in a Composable function. It retains the state across recompositions and Compose navigation, ensuring that the data is not lost when the Composable function is recomposed.
-For more information, see the [Rin](https://github.com/takahirom/Rin) library.
+For more information about retained states, refer to the [Rin](https://github.com/takahirom/Rin) library.
 
 #### 5. Passing the Updated Timetable to the Presenter
 
 Describes the flow of updated session data back to the screen presenter, highlighting how the UI state is refreshed.
 
 
-<img width="518" alt="image" src="https://github.com/DroidKaigi/conference-app-2024/assets/1386930/9ad59696-0b94-4d3f-84c4-71ae0402680b">
-
+<img width="386" alt="image" src="https://github.com/user-attachments/assets/6b69304a-ee4f-4ed7-93ff-6c4256264f8a">
 
 ```
                  Timetable
@@ -182,9 +226,33 @@ fun TimetableScreen(
         uiState = uiState,
 ```        
 
-###  A Guide for Contributors 2: Understanding the App's Testing
+### How to Check Composable Preview
 
-The DroidKaigi 2024 official app utilizes a comprehensive testing strategy that combines Behavior Driven Development (BDD), Robolectric, and Roborazzi. This integrated approach enhances app stability, ensures UI correctness, and streamlines the testing process for Android development.
+
+Currently, Android Studio doesn't support Composable Preview in the commonMain sourceset. Therefore, we are using the Roborazzi IDE Plugin to check Composable Preview.
+
+When you open a Composable file, you can see the RoborazziPreview on the right side of the file.
+
+<img width="48" alt="image" src="https://github.com/user-attachments/assets/3d0308d2-f435-4553-968c-1dcba77f615f">
+
+To capture a screenshot of the Composable Preview, run the Roborazzi Gradle task in the RoborazziPreview.
+
+<img width="319" alt="image" src="https://github.com/user-attachments/assets/52d2d386-188c-4d26-8c33-d8f4f769927e">
+
+After running the task, you should see the screenshot in the RoborazziPreview.
+
+![image](https://github.com/user-attachments/assets/8b38eb69-b737-4c2f-8e86-e3e5805d82e5)
+
+###  Understanding the App's Testing
+
+The DroidKaigi 2024 official app utilizes a comprehensive testing strategy that combines:
+
+- **Behavior Driven Development (BDD)**: For clear, readable test scenarios
+- **Robolectric**: For fast, JVM-based Android tests
+- **Roborazzi**: For visual regression testing and providing debugging hints through screenshots
+- **Robot Pattern**: For maintainable UI test code
+
+This integrated approach enhances app stability, ensures UI correctness, and streamlines the testing process.
 
 #### Key Components
 
@@ -253,7 +321,7 @@ class TimetableScreenRobot {
     ...
     fun clickFirstSessionBookmark() {
         composeTestRule 
-            .onAllNodes(hasTestTag(TimetableListItemBookmarkIconTestTag))
+            .onAllNodes(hasTestTag(TimetableItemCardBookmarkIconTestTag))
             .onFirst()
             .performClick()
         waitUntilIdle() 
@@ -270,13 +338,6 @@ fun captureScreenWithChecks(checks: () -> Unit) {
         checks()
 }
 ```
-
-**Advantages**
-
-* Speed: JVM-based tests run significantly faster than traditional instrumented tests, allowing for quicker feedback during development.
-* Clarity: BDD improves test readability, making it easier for both developers and non-technical stakeholders to understand test scenarios.
-* Maintainability: The Robot Pattern simplifies UI test maintenance by centralizing UI interaction logic, reducing the impact of UI changes on test code.
-* Visual Consistency: Roborazzi's screenshot comparison feature helps detect unintended UI changes early in the development process, ensuring a consistent user experience.
 
 ### This Year's Experimental Challenges
 
@@ -357,10 +418,10 @@ We are exploring the possibility of using Compose.
 
 #### Behavior driven development and screenshot testing
 
-We aim to enhance our app's quality by adopting BDD methodologies similar to Ruby and JavaScript, alongside implementing screenshot testing.   
-We used to have a test like `launchTimetableShot()` that captures a screenshot of the timetable screen. But we found that we don't know what to check in the screenshot.
+We aim to enhance our app's quality by adopting BDD methodologies similar to Ruby and JavaScript tests, alongside implementing screenshot testing.   
+We used to have a test like `@Test fun launchTimetableShot(){}` that captures a screenshot of the timetable screen. But we found that we don't know what to check in the screenshot.
 The reason why we chose BDD is that it clearly defines the app's behavior and ensures that the app functions as expected.  
-To effectively capture screenshots, we utilize Robolectric integrated with Roborazzi. Below is the Kotlin code snippet we employ for our BDD tests:  
+To effectively capture screenshots, we utilize Robolectric integrated with [Roborazzi](https://github.com/takahirom/roborazzi). Below is the Kotlin code snippet we employ for our BDD tests. The `describeBehaviors()` function used here is from the [RoboSpec](https://github.com/takahirom/robospec) library:
 
 ```kotlin
 companion object {

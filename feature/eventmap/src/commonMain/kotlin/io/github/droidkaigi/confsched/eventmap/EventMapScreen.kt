@@ -30,6 +30,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
+import conference_app_2024.feature.eventmap.generated.resources.eventmap
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.eventmap.component.EventMapItem
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTab
@@ -40,6 +41,7 @@ import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val eventMapScreenRoute = "eventMap"
@@ -130,7 +132,7 @@ fun EventMapScreen(
             if (scrollBehavior != null) {
                 LargeTopAppBar(
                     title = {
-                        Text(text = "イベントマップ")
+                        Text(text = stringResource(EventMapRes.string.eventmap))
                     },
                     navigationIcon = {
                         IconButton(
@@ -181,7 +183,6 @@ private fun EventMap(
             EventMapItem(
                 eventMapEvent = eventMapEvent,
                 onClick = onEventMapItemClick,
-                onClickFavorite = { /* TODO */ },
                 modifier = Modifier.fillMaxWidth(),
             )
             if (eventMapEvents.lastIndex != index) {

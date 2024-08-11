@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="favorite">Favorite</string>
+    <string name="empty_description">No favorite sessions found.</string>
+    <string name="empty_guide">Add sessions you're interested in to your favorites.</string>
+    <string name="filter_all">All</string>
+    <string name="filter_day1">9/12</string>
+    <string name="filter_day2">9/13</string>
+    <string name="content_description_back">Back</string>
+</resources>
