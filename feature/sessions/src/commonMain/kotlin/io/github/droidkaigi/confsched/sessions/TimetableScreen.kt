@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -13,8 +14,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Grid3x3
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.ViewTimeline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -45,6 +47,7 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
+import io.github.droidkaigi.confsched.model.TimetableUiType.Grid
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheet
 import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
@@ -158,13 +161,19 @@ private fun TimetableScreen(
                             modifier = Modifier.padding(8.dp).clickable {
                             },
                         )
-                        Icon(
-                            imageVector = Icons.Default.Grid3x3,
-                            contentDescription = null,
-                            modifier = Modifier.padding(8.dp).clickable {
-                                onTimetableUiChangeClick()
-                            }.testTag(TimetableUiTypeChangeButtonTestTag),
-                        )
+                        Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
+                            Icon(
+                                imageVector = if (timetableUiType == Grid) {
+                                    Icons.Default.ViewTimeline
+                                } else {
+                                    Icons.Default.GridView
+                                },
+                                contentDescription = null,
+                                modifier = Modifier.padding(8.dp).clickable {
+                                    onTimetableUiChangeClick()
+                                }.testTag(TimetableUiTypeChangeButtonTestTag),
+                            )
+                        }
                     }
                 },
             )
