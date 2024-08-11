@@ -73,7 +73,7 @@ fun TimetableItemCard(
                             contentDescription = stringResource(UiRes.string.bookmarked),
                             tint = Color.Green,
                             modifier = Modifier
-                                .testTag(TimetableItemCardBookmarkedIconTestTag)
+                                .testTag(TimetableItemCardBookmarkedIconTestTag),
                         )
                     } else {
                         Icon(
