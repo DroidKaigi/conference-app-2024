@@ -29,7 +29,6 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.sessions.generated.resources.archive
 import conference_app_2024.feature.sessions.generated.resources.read_more
 import conference_app_2024.feature.sessions.generated.resources.slide
-import conference_app_2024.feature.sessions.generated.resources.special
 import conference_app_2024.feature.sessions.generated.resources.target_audience
 import conference_app_2024.feature.sessions.generated.resources.video
 import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
@@ -79,7 +78,18 @@ fun TimetableItemDetailContent(
             }
 
             is Special -> {
-                Text(stringResource(SessionsRes.string.special))
+                DescriptionSection(
+                    description = timetableItem.description.currentLangTitle,
+                    onLinkClick = onLinkClick,
+                )
+                TargetAudienceSection(timetableItem = timetableItem)
+                if (timetableItem.asset.isAvailable) {
+                    ArchiveSection(
+                        timetableItem = timetableItem,
+                        onViewSlideClick = onLinkClick,
+                        onWatchVideoClick = onLinkClick,
+                    )
+                }
             }
         }
     }
