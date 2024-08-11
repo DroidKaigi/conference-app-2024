@@ -131,6 +131,7 @@ public struct TimetableDetailView: View {
             .padding(.bottom, 20)
         }
         .padding([.top, .horizontal], 16)
+        .frame(maxWidth: .infinity)
         .background(store.timetableItem.room.roomTheme.containerColor)
     }
 
