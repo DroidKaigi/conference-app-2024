@@ -35,7 +35,7 @@ fun EventMapItem(
     onClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    ProvideRoomTheme(eventMapEvent.roomName) {
+    ProvideRoomTheme(eventMapEvent.roomName.currentLangTitle) {
         val green = LocalRoomTheme.current.primaryColor
         val gray = Color(0xFFC5C7C4)
         Column(
@@ -54,14 +54,14 @@ fun EventMapItem(
                 horizontalArrangement = Arrangement.Start,
             ) {
                 ToolTip(
-                    text = eventMapEvent.roomName,
+                    text = eventMapEvent.roomName.currentLangTitle,
                     icon = Icons.Filled.Star,
                     color = green,
                 )
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                text = eventMapEvent.name,
+                text = eventMapEvent.name.currentLangTitle,
                 fontSize = 17.sp,
                 lineHeight = 23.8.sp,
                 fontWeight = FontWeight.W600,
@@ -70,7 +70,7 @@ fun EventMapItem(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = eventMapEvent.description,
+                text = eventMapEvent.description.currentLangTitle,
                 fontSize = 13.sp,
                 lineHeight = 20.sp,
                 fontWeight = FontWeight.W400,
