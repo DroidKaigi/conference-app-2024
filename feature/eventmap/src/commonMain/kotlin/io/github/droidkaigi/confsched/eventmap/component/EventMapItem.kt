@@ -64,13 +64,6 @@ fun EventMapItem(
                     text = eventMapEvent.dateLabel,
                     color = Color(0xFFBFC9C2),
                 )
-                Spacer(Modifier.weight(1F))
-                Icon(
-                    imageVector = Icons.Default.Star,
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp).clickable { onClickFavorite(eventMapEvent) },
-                    tint = if (eventMapEvent.isFavorite) green else gray,
-                )
             }
             Spacer(Modifier.height(8.dp))
             Text(
