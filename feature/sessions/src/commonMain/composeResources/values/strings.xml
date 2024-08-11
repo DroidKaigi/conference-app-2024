@@ -9,7 +9,7 @@
     <string name="not_bookmarked">Not Bookmarked</string>
     <string name="image">image</string>
     <string name="special">Special</string>
-    <string name="read_more">Read more</string>
+    <string name="read_more">More</string>
     <string name="target_audience">Target Audience</string>
     <string name="archive">Archive</string>
     <string name="slide">Slide</string>
@@ -26,4 +26,8 @@
     <string name="content_description_location">Location</string>
     <string name="content_description_language">Language</string>
     <string name="content_description_category">Category</string>
+    <string name="schedule_title">Date/Time</string>
+    <string name="location_title">Location</string>
+    <string name="language_title">Supported Languages</string>
+    <string name="category_title">Category</string>
 </resources>
