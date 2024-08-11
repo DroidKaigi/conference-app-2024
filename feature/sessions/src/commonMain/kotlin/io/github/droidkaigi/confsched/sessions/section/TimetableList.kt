@@ -86,7 +86,7 @@ fun TimetableList(
                                 timetableItem.language.labels.forEach { label ->
                                     TimetableItemTag(
                                         tagText = label,
-                                        tagColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                        tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                     Spacer(modifier = Modifier.padding(3.dp))
                                 }
