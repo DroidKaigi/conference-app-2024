@@ -181,7 +181,6 @@ private fun EventMap(
             EventMapItem(
                 eventMapEvent = eventMapEvent,
                 onClick = onEventMapItemClick,
-                onClickFavorite = { /* TODO */ },
                 modifier = Modifier.fillMaxWidth(),
             )
             if (eventMapEvents.lastIndex != index) {
