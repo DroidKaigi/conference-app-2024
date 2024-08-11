@@ -84,6 +84,13 @@ fun TimetableItemDetailContent(
                     onLinkClick = onLinkClick,
                 )
                 TargetAudienceSection(timetableItem = timetableItem)
+                if (timetableItem.asset.isAvailable) {
+                    ArchiveSection(
+                        timetableItem = timetableItem,
+                        onViewSlideClick = onLinkClick,
+                        onWatchVideoClick = onLinkClick,
+                    )
+                }
             }
         }
     }
