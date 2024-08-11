@@ -37,6 +37,9 @@ import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
+import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
+import io.github.droidkaigi.confsched.favorites.favoritesScreens
+import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
@@ -144,6 +147,10 @@ private fun NavGraphBuilder.mainScreen(
                 onNavigationIconClick = navController::popBackStack,
                 onEventMapItemClick = externalNavController::navigate,
             )
+            favoritesScreens(
+                onNavigationIconClick = navController::popBackStack,
+                onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+            )
             aboutScreen(
                 contentPadding = contentPadding,
                 onAboutItemClick = { aboutItem ->
@@ -199,6 +206,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
             timetableScreenRoute -> Timetable
             profileCardScreenRoute -> ProfileCard
             aboutScreenRoute -> About
+            favoritesScreenRoute -> Favorite
             else -> null
         }
     }
@@ -210,7 +218,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
-            Favorite -> {}
+            Favorite -> mainNestedNavController.navigateFavoritesScreen()
             About -> mainNestedNavController.navigateAboutScreen()
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }
