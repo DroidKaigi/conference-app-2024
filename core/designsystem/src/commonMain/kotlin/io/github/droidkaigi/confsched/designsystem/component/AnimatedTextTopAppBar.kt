@@ -36,12 +36,12 @@ fun AnimatedTextTopAppBar(
             Box(modifier = Modifier.fillMaxWidth()) {
                 val horizontalBias by animateFloatAsState(
                     targetValue = if (isTopState) 0f else -1f,
-                    animationSpec = tween(durationMillis = 300)
+                    animationSpec = tween(durationMillis = 300),
                 )
                 Text(
                     title,
                     style = if (isTopState) MaterialTheme.typography.titleMedium else MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.align(BiasAlignment(horizontalBias, 0f))
+                    modifier = Modifier.align(BiasAlignment(horizontalBias, 0f)),
                 )
             }
         },
