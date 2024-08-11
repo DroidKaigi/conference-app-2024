@@ -222,6 +222,23 @@ fun TimetableScreen(
         uiState = uiState,
 ```        
 
+### How to Check Composable Preview
+
+
+Currently, Android Studio doesn't support Composable Preview in the commonMain sourceset. Therefore, we are using the Roborazzi IDE Plugin to check Composable Preview.
+
+When you open a Composable file, you can see the RoborazziPreview on the right side of the file.
+
+<img width="48" alt="image" src="https://github.com/user-attachments/assets/3d0308d2-f435-4553-968c-1dcba77f615f">
+
+To capture a screenshot of the Composable Preview, run the Roborazzi Gradle task in the RoborazziPreview.
+
+<img width="319" alt="image" src="https://github.com/user-attachments/assets/52d2d386-188c-4d26-8c33-d8f4f769927e">
+
+After running the task, you should see the screenshot in the RoborazziPreview.
+
+![image](https://github.com/user-attachments/assets/8b38eb69-b737-4c2f-8e86-e3e5805d82e5)
+
 ###  Understanding the App's Testing
 
 The DroidKaigi 2024 official app utilizes a comprehensive testing strategy that combines:
