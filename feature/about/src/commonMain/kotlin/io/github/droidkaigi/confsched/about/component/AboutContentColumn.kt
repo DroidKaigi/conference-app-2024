@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.staff
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -33,6 +34,7 @@ fun AboutContentColumn(
     testTag: String,
     onClickAction: () -> Unit,
     modifier: Modifier = Modifier,
+    textColor: Color = MaterialTheme.colorScheme.primaryFixed,
 ) {
     Column(
         modifier = modifier
@@ -67,6 +69,7 @@ fun AboutContentColumn(
                     .padding(
                         end = 16.dp,
                     ),
+                color = textColor,
             )
         }
         HorizontalDivider(
