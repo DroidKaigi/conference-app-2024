@@ -18,11 +18,18 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
@@ -100,12 +107,17 @@ fun StaffScreen(
     modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
 ) {
+    val density = LocalDensity.current.density
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         } else {
             null
         }
+    var navigationIconWidthDp by remember { mutableStateOf(0f) }
+    val isCenterTitle = remember(scrollBehavior?.state?.collapsedFraction) {
+        scrollBehavior?.let { it.state.collapsedFraction > 0.7f }
+    }
     Scaffold(
         modifier = modifier.testTag(StaffScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -113,10 +125,24 @@ fun StaffScreen(
             if (scrollBehavior != null) {
                 LargeTopAppBar(
                     title = {
-                        Text(text = "Staff")
+                        Text(
+                            text = "Staff",
+                            modifier = Modifier.then(
+                                if (isCenterTitle == true) {
+                                    Modifier.padding(end = navigationIconWidthDp.dp).fillMaxWidth()
+                                } else {
+                                    Modifier
+                                },
+                            ),
+                            textAlign = TextAlign.Center,
+                        )
                     },
                     navigationIcon = {
                         IconButton(
+                            modifier = Modifier
+                                .onGloballyPositioned {
+                                    navigationIconWidthDp = it.size.width / density
+                                },
                             onClick = onBackClick,
                         ) {
                             Icon(
