@@ -15,12 +15,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import conference_app_2024.feature.sessions.generated.resources.conference
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.sessions.SessionsRes
+import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -51,7 +53,9 @@ fun TimetableDayTab(
             tabs = {
                 DroidKaigi2024Day.visibleDays().forEach { conferenceDay ->
                     Tab(
-                        modifier = Modifier.height(64.dp),
+                        modifier = Modifier
+                            .testTag(TimetableTabTestTag.plus(conferenceDay.dayIndex))
+                            .height(64.dp),
                         selected = false,
                         onClick = {
                             onDaySelected(conferenceDay)
