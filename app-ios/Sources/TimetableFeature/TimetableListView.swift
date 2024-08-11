@@ -25,11 +25,27 @@ public struct TimetableView: View {
                     }, label: {
                         //TODO: Only selected button should be green and underlined
                         if selectedTab == tabItem {
-                            Text(tabItem.rawValue).foregroundStyle(
-                                AssetColors.Custom.iguana.swiftUIColor)
-                            .underline()
+                            HStack(spacing: 6) {
+                                Text(tabItem.rawValue)
+                                    .textStyle(.labelMedium)
+                            }
+                            .foregroundStyle(AssetColors.Custom.iguana.swiftUIColor)
+                            .padding(6)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(AssetColors.Custom.iguana.swiftUIColor, lineWidth: 1)
+                            )
                         } else {
-                            Text(tabItem.rawValue)
+                            HStack(spacing: 6) {
+                                Text(tabItem.rawValue)
+                                    .textStyle(.labelMedium)
+                            }
+                            .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                            .padding(6)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 4)
+                                    .stroke(AssetColors.Surface.onSurface.swiftUIColor, lineWidth: 1)
+                            )
                         }
                     })
                 }
