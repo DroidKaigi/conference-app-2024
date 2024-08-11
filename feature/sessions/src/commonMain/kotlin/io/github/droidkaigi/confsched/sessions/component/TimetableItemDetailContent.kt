@@ -79,7 +79,11 @@ fun TimetableItemDetailContent(
             }
 
             is Special -> {
-                Text(stringResource(SessionsRes.string.special))
+                DescriptionSection(
+                    description = timetableItem.description.currentLangTitle,
+                    onLinkClick = onLinkClick,
+                )
+                TargetAudienceSection(timetableItem = timetableItem)
             }
         }
     }
