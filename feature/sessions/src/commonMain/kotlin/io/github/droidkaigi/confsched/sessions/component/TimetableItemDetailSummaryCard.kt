@@ -127,31 +127,32 @@ private fun SummaryCardRow(
         Icon(
             imageVector = imageVector,
             contentDescription = contentDescription,
-            modifier = Modifier.then(
-                if (isRequiredToUseAlignByBaseline) Modifier.alignByBaseline() else Modifier,
-            ),
             tint = LocalRoomTheme.current.primaryColor,
         )
         Spacer(Modifier.width(8.dp))
-        Text(
-            text = title,
-            modifier = Modifier.then(
-                if (isRequiredToUseAlignByBaseline) Modifier.alignByBaseline() else Modifier,
-            ),
-            style = MaterialTheme.typography.titleSmall,
-            color = LocalRoomTheme.current.primaryColor,
-        )
-        Spacer(Modifier.width(8.dp))
-        Text(
-            text = description,
-            modifier = Modifier.then(
-                if (isRequiredToUseAlignByBaseline) Modifier.alignByBaseline() else Modifier,
-            ),
-            onTextLayout = { result ->
-                isRequiredToUseAlignByBaseline = result.lineCount == 1
-            },
-            style = MaterialTheme.typography.bodyMedium,
-        )
+
+        // This is necessary because without this Row, the center cannot be taken.
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = title,
+                modifier = Modifier.then(
+                    if (isRequiredToUseAlignByBaseline) Modifier.alignByBaseline() else Modifier,
+                ),
+                style = MaterialTheme.typography.titleSmall,
+                color = LocalRoomTheme.current.primaryColor,
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = description,
+                modifier = Modifier.then(
+                    if (isRequiredToUseAlignByBaseline) Modifier.alignByBaseline() else Modifier,
+                ),
+                onTextLayout = { result ->
+                    isRequiredToUseAlignByBaseline = result.lineCount == 1
+                },
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }
 
