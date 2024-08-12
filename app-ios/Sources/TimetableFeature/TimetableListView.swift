@@ -184,38 +184,6 @@ struct TimeGroupMiniList: View {
     }
 }
 
-//struct TagView: View {
-//    let tagText: String
-//    let highlight: Bool
-//    
-//    var body: some View {
-//        HStack {
-//            if highlight {
-//                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
-//                    .padding(-3)
-//            }
-//            Text(tagText).foregroundStyle(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
-//        }
-//        .padding(
-//            EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
-//        .border(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
-//        .padding(-2)
-//    }
-//}
-//
-//struct PhotoView: View {
-//    //TODO: Replace this with an actual photo render
-//    let photo: String
-//    let name: String
-//    
-//    var body: some View {
-//        HStack {
-//            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
-//            Text(name)
-//        }
-//    }
-//}
-
 func getTimetableRoom(type: RoomType) -> TimetableRoom {
     switch (type) {
     case .roomI:

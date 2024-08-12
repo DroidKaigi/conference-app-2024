@@ -47,20 +47,6 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
             }
         }
     }
-    
-//    func getGridCells(rooms: [RoomType], onTap: @escaping (TimetableItem) -> Void) -> [TimetableGridCard] {
-//        rooms.map {
-//            if let cell = getItemForRoom(forRoom: $0) {
-//                TimetableGridCard(timetableItem: cell.timetableItem) { timetableItem in
-//                    onTap(timetableItem)
-//                }
-//            } else {
-//                TimetableGridCard(timetableItem: nil) { _ in
-//                    // Does nothing
-//                }
-//            }
-//        }
-//    }
 }
 
 // This exists only for previews now.
