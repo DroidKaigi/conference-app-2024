@@ -104,11 +104,7 @@ private fun KaigiNavHost(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
             onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
-            // For debug
-//            onShareClick = externalNavController::onShareClick,
-            onShareClick = {
-                navController.navigate(contributorsScreenRoute)
-            },
+            onShareClick = externalNavController::onShareClick,
         )
 
         contributorsScreens(
