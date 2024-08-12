@@ -194,7 +194,6 @@ fun MainScreen(
     Row(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
             Column {
-                Text(text = "nav rail")
                 MainScreenTab.values().forEach { tab ->
                     Button(onClick = { onTabSelected(mainNestedNavController, tab) }) {
                         Text(text = stringResource(tab.label) + " " + (currentTab == tab))
