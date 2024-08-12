@@ -7,12 +7,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.text.InlineTextContent
+import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LocationOn
 import androidx.compose.material.icons.outlined.Schedule
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -24,7 +28,13 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.Placeholder
+import androidx.compose.ui.text.PlaceholderVerticalAlign
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import conference_app_2024.feature.sessions.generated.resources.category_title
 import conference_app_2024.feature.sessions.generated.resources.content_description_category
 import conference_app_2024.feature.sessions.generated.resources.content_description_language
@@ -114,21 +124,62 @@ private fun SummaryCardRow(
     description: String,
     modifier: Modifier = Modifier,
 ) {
+    // If multiple Texts are placed, they will not break lines properly when the font scale is large.
+    // Therefore, AnnotatedString is used for implementation.
+    val appendInlineContentId = "space"
+    val annotatedString = buildAnnotatedString {
+        withStyle(
+            style = SpanStyle(
+                color = LocalRoomTheme.current.primaryColor,
+                fontSize = MaterialTheme.typography.titleSmall.fontSize,
+            ),
+        ) {
+            append(title)
+        }
+        appendInlineContent(
+            id = appendInlineContentId,
+            alternateText = "[spacer]",
+        )
+        withStyle(
+            style = SpanStyle(
+                color = LocalContentColor.current,
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            ),
+        ) {
+            append(description)
+        }
+    }
+
+    val spacerWidth = 12
+    val inlineContent = mapOf(
+        appendInlineContentId to InlineTextContent(
+            placeholder = Placeholder(
+                width = spacerWidth.sp,
+                height = MaterialTheme.typography.titleSmall.fontSize,
+                placeholderVerticalAlign = PlaceholderVerticalAlign.TextCenter,
+            ),
+            children = {
+                Spacer(modifier = Modifier.width(spacerWidth.dp))
+            },
+        ),
+    )
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(imageVector = imageVector, contentDescription = contentDescription, tint = LocalRoomTheme.current.primaryColor)
-        Spacer(Modifier.width(8.dp))
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleSmall,
-            color = LocalRoomTheme.current.primaryColor,
+        Icon(
+            imageVector = imageVector,
+            contentDescription = contentDescription,
+            tint = LocalRoomTheme.current.primaryColor,
         )
         Spacer(Modifier.width(8.dp))
         Text(
-            text = description,
-            style = MaterialTheme.typography.bodyMedium,
+            text = annotatedString,
+            inlineContent = inlineContent,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.Start),
         )
     }
 }
