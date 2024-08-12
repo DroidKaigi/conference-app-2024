@@ -1,0 +1,28 @@
+name: remove-waiting-label
+
+on:
+  workflow_run:
+    workflows: ["save-pr-number-for-removing-waiting-label"]
+    types:
+      - completed
+
+jobs:
+  remove_label:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    steps:
+      - name: Download PR number
+        uses: actions/download-artifact@v2
+        with:
+          name: pr_number
+          path: ./
+      - name: Read PR number
+        id: pr_number
+        run: echo "::set-output name=number::$(cat pr_number.txt)"
+      - name: Remove label
+        uses: actions-ecosystem/action-remove-labels@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          number: ${{ steps.pr_number.outputs.number }}
+          labels: |
+            Waiting for response or commit
