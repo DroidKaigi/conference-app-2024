@@ -143,7 +143,7 @@ internal fun ProfileCardScreen(
                 if (uiState.cardUiState == null) return@Scaffold
                 CardScreen(
                     uiState = uiState.cardUiState,
-                    onClickReset = {
+                    onClickEdit = {
                         eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
                     contentPadding = padding,
@@ -225,7 +225,7 @@ internal fun EditScreen(
 @Composable
 internal fun CardScreen(
     uiState: ProfileCardUiState.Card,
-    onClickReset: () -> Unit,
+    onClickEdit: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
@@ -243,10 +243,10 @@ internal fun CardScreen(
             Text(uiState.link)
         }
         Button(
-            onClickReset,
+            onClickEdit,
             modifier = Modifier.testTag(ProfileCardEditButtonTestTag),
         ) {
-            Text("Reset")
+            Text("Edit")
         }
     }
 }

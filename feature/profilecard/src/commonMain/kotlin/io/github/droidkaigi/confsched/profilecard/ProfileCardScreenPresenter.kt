@@ -73,7 +73,7 @@ internal fun profileCardScreenPresenter(
             isLoading = true
             when (it) {
                 CardScreenEvent.Edit -> {
-                    userMessageStateHolder.showMessage("Reset")
+                    userMessageStateHolder.showMessage("Edit")
                     uiType = ProfileCardUiType.Edit
                 }
 
