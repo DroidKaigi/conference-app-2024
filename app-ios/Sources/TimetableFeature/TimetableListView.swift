@@ -123,11 +123,9 @@ struct TimetableGridView: View {
                         .gridCellUnsizedAxes([.horizontal, .vertical])
                     
                     
-//                    ForEach(1..<4) { column in
-//                        Text("C\(column)")
-//                    }
                     ForEach(RoomType.allCases, id: \.self) { column in
-                        BOOKMARK
+                        
+//                        let room = getTimetableRoom(type: column)
                         
                         Text(column.name).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     }
@@ -222,6 +220,137 @@ struct PhotoView: View {
         }
     }
 }
+
+func getTimetableRoom(type: RoomType) -> TimetableRoom {
+    switch (type) {
+    case .roomI:
+        return TimetableRoom(
+            id: 1,
+            name: MultiLangText(
+                jaTitle: "Iguana",
+                enTitle: "Iguana"
+            ),
+            type: .roomI,
+            sort: 1
+        )
+    case .roomG:
+        return TimetableRoom(
+            id: 2,
+            name: MultiLangText(
+                jaTitle: "Giraffe",
+                enTitle: "Giraffe"
+            ),
+            type: .roomG,
+            sort: 2
+        )
+    case .roomH:
+        return TimetableRoom(
+            id: 3,
+            name: MultiLangText(
+                jaTitle: "Hedgehog",
+                enTitle: "Hedgehog"
+            ),
+            type: .roomH,
+            sort: 3
+        )
+    case .roomF:
+        return TimetableRoom(
+            id: 4,
+            name: MultiLangText(
+                jaTitle: "Flamingo",
+                enTitle: "Flamingo"
+            ),
+            type: .roomF,
+            sort: 4
+        )
+    case .roomJ:
+        return TimetableRoom(
+            id: 5,
+            name: MultiLangText(
+                jaTitle: "Jellyfish",
+                enTitle: "Jellyfish"
+            ),
+            type: .roomJ,
+            sort: 5
+        )
+    case .roomIj:
+        return TimetableRoom(
+            id: 6,
+            name: MultiLangText(
+                jaTitle: "Jellyfish",
+                enTitle: "Jellyfish"
+            ),
+            type: .roomIj,
+            sort: 6
+        )
+    }
+}
+//extension TimetableRoom {
+//    convenience init(type: RoomType) {
+//        switch (type) {
+//        case .roomI:
+//            self.init(
+//                id: 1,
+//                name: MultiLangText(
+//                    jaTitle: "Iguana",
+//                    enTitle: "Iguana"
+//                ),
+//                type: .roomI,
+//                sort: 1
+//            )
+//        case .roomG:
+//            self.init(
+//                id: 2,
+//                name: MultiLangText(
+//                    jaTitle: "Giraffe",
+//                    enTitle: "Giraffe"
+//                ),
+//                type: .roomG,
+//                sort: 2
+//            )
+//        case .roomH:
+//            self.init(
+//                id: 3,
+//                name: MultiLangText(
+//                    jaTitle: "Hedgehog",
+//                    enTitle: "Hedgehog"
+//                ),
+//                type: .roomH,
+//                sort: 3
+//            )
+//        case .roomF:
+//            self.init(
+//                id: 4,
+//                name: MultiLangText(
+//                    jaTitle: "Flamingo",
+//                    enTitle: "Flamingo"
+//                ),
+//                type: .roomF,
+//                sort: 4
+//            )
+//        case .roomJ:
+//            self.init(
+//                id: 5,
+//                name: MultiLangText(
+//                    jaTitle: "Jellyfish",
+//                    enTitle: "Jellyfish"
+//                ),
+//                type: .roomJ,
+//                sort: 5
+//            )
+//        case .roomIj:
+//            self.init(
+//                id: 6,
+//                name: MultiLangText(
+//                    jaTitle: "Jellyfish",
+//                    enTitle: "Jellyfish"
+//                ),
+//                type: .roomIj,
+//                sort: 6
+//            )
+//        }
+//    }
+//}
 
 #Preview {
     TimetableView(
