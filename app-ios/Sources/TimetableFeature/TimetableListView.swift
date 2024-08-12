@@ -33,8 +33,7 @@ public struct TimetableView: View {
             case TimetableMode.list:
                 TimetableListView(store: store)
             case TimetableMode.grid:
-                Text("Grid view placeholder")
-                    .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                TimetableGridView(store: store)
             }
             Spacer()
         }
@@ -103,6 +102,62 @@ struct TimetableListView: View {
                 .onAppear {
                     store.send(.onAppear)
                 }.background(AssetColors.Surface.surface.swiftUIColor)
+        }
+    }
+}
+
+struct TimetableGridView: View {
+    private let store: StoreOf<TimetableReducer>
+
+    public init(store: StoreOf<TimetableReducer>) {
+        self.store = store
+    }
+
+    var body: some View {
+        ScrollView{
+            
+            Grid {
+                GridRow {
+                    
+                    Color.clear
+                        .gridCellUnsizedAxes([.horizontal, .vertical])
+                    
+                    
+//                    ForEach(1..<4) { column in
+//                        Text("C\(column)")
+//                    }
+                    ForEach(RoomType.allCases, id: \.self) { column in
+                        BOOKMARK
+                        
+                        Text(column.name).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                    }
+                }
+                ForEach(1..<4) { row in
+                    GridRow {
+                        Text("R\(row)")
+                        ForEach(1..<4) { _ in
+                            Circle().foregroundStyle(.mint)
+                        }
+                    }
+                }
+            }
+
+            
+//            LazyVStack {
+//                ForEach(store.timetableItems, id: \.self) { item in
+//                    Button {
+//                        store.send(.view(.timetableItemTapped))
+//                    } label: {
+//                        TimeGroupMiniList(contents: item, onItemTap: { item in
+//                            store.send(.view(.timetableItemTapped))
+//                        })
+//                    }
+//                }
+//            }.scrollContentBackground(.hidden)
+//            
+//                .onAppear {
+//                    store.send(.onAppear)
+//                }.background(AssetColors.Surface.surface.swiftUIColor)
         }
     }
 }
