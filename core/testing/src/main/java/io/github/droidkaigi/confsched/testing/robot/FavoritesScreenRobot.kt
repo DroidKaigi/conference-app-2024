@@ -46,7 +46,7 @@ class FavoritesScreenRobot @Inject constructor(
                                 timeTable = Timetable.fake(),
                             ),
                             userMessageStateHolder = userMessageStateHolder,
-                        )
+                        ),
                     )
                 }
             }

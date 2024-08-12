@@ -32,8 +32,8 @@ fun FavoriteList(
     timetable: Timetable,
     onBookmarkClick: (TimetableItem) -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
-    contentPadding: PaddingValues = PaddingValues(),
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize()
