@@ -1,7 +1,5 @@
-package io.github.droidkaigi.confsched.designsystem.component
+package io.github.droidkaigi.confsched.ui.component
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -14,9 +12,10 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.BiasAlignment
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.text.style.TextAlign
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,19 +28,33 @@ fun AnimatedTextTopAppBar(
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
-    val isTopState = (scrollBehavior?.state?.overlappedFraction ?: 0f) > 0.01f
+    val scrollFraction = scrollBehavior?.state?.overlappedFraction ?: 0f
+    val transitionFraction = scrollFraction.coerceIn(0f, 1f)
 
     TopAppBar(
         title = {
             Box(modifier = Modifier.fillMaxWidth()) {
-                val horizontalBias by animateFloatAsState(
-                    targetValue = if (isTopState) 0f else -1f,
-                    animationSpec = tween(durationMillis = 300),
-                )
                 Text(
-                    title,
-                    style = if (isTopState) MaterialTheme.typography.titleMedium else MaterialTheme.typography.headlineSmall,
-                    modifier = Modifier.align(BiasAlignment(horizontalBias, 0f)),
+                    text = title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .graphicsLayer {
+                            alpha = 1f - transitionFraction
+                        },
+                    textAlign = TextAlign.Start,
+                    style = MaterialTheme.typography.headlineSmall,
+                )
+
+                Text(
+                    text = title,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.Center)
+                        .graphicsLayer {
+                            alpha = transitionFraction
+                        },
+                    textAlign = TextAlign.Center,
+                    style = MaterialTheme.typography.titleMedium,
                 )
             }
         },
