@@ -1,5 +1,7 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onRoot
@@ -14,6 +16,7 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
 import javax.inject.Inject
 
@@ -76,6 +79,14 @@ class TimetableItemDetailScreenRobot @Inject constructor(
                     ),
                 ),
             )
+    }
+
+    fun checkSessionDetailTitle() {
+        composeTestRule
+            .onNode(hasTestTag(TimetableItemDetailHeadlineTestTag))
+            .assertExists()
+            .assertIsDisplayed()
+            .assertTextEquals("Demo Welcome Talk 1")
     }
 
     companion object {

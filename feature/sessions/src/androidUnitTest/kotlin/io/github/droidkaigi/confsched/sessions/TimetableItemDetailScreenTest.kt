@@ -9,11 +9,14 @@ import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.TimetableItemDetailScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
+import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.shadows.ShadowLog
 import javax.inject.Inject
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
@@ -41,6 +44,12 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
         }
     }
 
+    // TODO PUSHする前に消す
+    @Before
+    fun setUp() {
+        ShadowLog.stream = System.out
+    }
+
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
@@ -55,8 +64,11 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show session detail title") {
-                            // FIXME: Add check for session detail title
-                            captureScreenWithChecks()
+                            captureScreenWithChecks(
+                                checks = {
+                                    checkSessionDetailTitle()
+                                }
+                            )
                         }
                         itShould("be appropriately accessible") {
                             checkAccessibilityCapture()
@@ -66,17 +78,27 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 clickBookmarkButton()
                             }
                             itShould("show bookmarked session") {
-                                // FIXME: Add check for bookmarked session
-                                captureScreenWithChecks()
+                                captureScreenWithChecks(
+                                    checks = {
+                                        todoChecks(
+                                            "FIXME: Add check for bookmarked session"
+                                        )
+                                    }
+                                )
                             }
                             describe("click bookmark again") {
                                 run {
                                     clickBookmarkButton()
                                 }
-                                itShould("show unbookmarked session") {
+                                itShould("show unBookmarked session") {
                                     wait5Seconds()
-                                    // FIXME: Add check for unbookmarked session
-                                    captureScreenWithChecks()
+                                    captureScreenWithChecks(
+                                        checks = {
+                                            todoChecks(
+                                                "FIXME: Add check for unBookmarked session"
+                                            )
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -85,8 +107,13 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 scroll()
                             }
                             itShould("show scrolled session detail") {
-                                // FIXME: Add check for scrolled session detail
-                                captureScreenWithChecks()
+                                captureScreenWithChecks(
+                                    checks = {
+                                        todoChecks(
+                                            "FIXME: Add check for scrolled session detail"
+                                        )
+                                    }
+                                )
                             }
                         }
                     }
@@ -96,7 +123,13 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show small font session detail") {
-                            captureScreenWithChecks()
+                            captureScreenWithChecks(
+                                checks = {
+                                    todoChecks(
+                                        "FIXME: Add show small font session detail"
+                                    )
+                                }
+                            )
                         }
                     }
                     describe("when font scale is large") {
@@ -105,7 +138,13 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show small font session detail") {
-                            captureScreenWithChecks()
+                            captureScreenWithChecks(
+                                checks = {
+                                    todoChecks(
+                                        "FIXME: Add show small font session detail"
+                                    )
+                                }
+                            )
                         }
                     }
                     describe("when font scale is huge") {
@@ -114,7 +153,13 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show small font session detail") {
-                            captureScreenWithChecks()
+                            captureScreenWithChecks(
+                                checks = {
+                                    todoChecks(
+                                        "FIXME: Add show small font session detail"
+                                    )
+                                }
+                            )
                         }
                     }
                 }
