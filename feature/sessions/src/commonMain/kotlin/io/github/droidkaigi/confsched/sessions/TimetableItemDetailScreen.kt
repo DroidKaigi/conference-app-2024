@@ -40,12 +40,11 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailCont
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadline
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
+import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDestination
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
-typealias TimetableNavigationType = io.github.droidkaigi.confsched.sessions.navigation.TimetableItem
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val TimetableItemDetailBookmarkIconTestTag = "TimetableItemDetailBookmarkIconTestTag"
@@ -56,7 +55,7 @@ fun NavGraphBuilder.sessionScreens(
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
 ) {
-    composable<TimetableNavigationType> {
+    composable<TimetableItemDestination> {
         TimetableItemDetailScreen(
             onNavigationIconClick = onNavigationIconClick,
             onLinkClick = onLinkClick,
@@ -69,7 +68,7 @@ fun NavGraphBuilder.sessionScreens(
 fun NavController.navigateToTimetableItemDetailScreen(
     timetableItem: TimetableItem,
 ) {
-    navigate(TimetableNavigationType(timetableItem.id.value))
+    navigate(TimetableItemDestination(timetableItem.id.value))
 }
 
 @Composable

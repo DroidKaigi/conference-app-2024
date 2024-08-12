@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TimetableItem(
+data class TimetableItemDestination(
     @SerialName("timetableItemId")
     val timetableItemId: String,
 )
