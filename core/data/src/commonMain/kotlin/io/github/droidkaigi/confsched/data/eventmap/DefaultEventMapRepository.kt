@@ -9,7 +9,9 @@ import io.github.droidkaigi.confsched.model.EventMapRepository
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onStart
 
 public class DefaultEventMapRepository(
     private val eventMapApi: EventMapApiClient,
@@ -26,6 +28,14 @@ public class DefaultEventMapRepository(
             }
         }
         return eventMap
+    }
+
+    override fun getEventMapStream(): Flow<PersistentList<EventMapEvent>> {
+        return eventMapStateFlow.onStart {
+            if (eventMapStateFlow.value.isEmpty()) {
+                refresh()
+            }
+        }
     }
 
     override suspend fun refresh() {
