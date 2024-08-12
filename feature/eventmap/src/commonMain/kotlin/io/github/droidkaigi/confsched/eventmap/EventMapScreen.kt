@@ -186,14 +186,10 @@ private fun EventMap(
 @Composable
 @Preview
 fun PreviewEventMapScreen() {
-    KaigiTheme {
-        Surface {
-            EventMapScreen(
-                uiState = EventMapUiState(persistentListOf(), rememberUserMessageStateHolder()),
-                snackbarHostState = SnackbarHostState(),
-                isTopAppBarHidden = false,
-                onEventMapItemClick = {},
-            )
-        }
-    }
+    EventMapScreen(
+        uiState = EventMapUiState(persistentListOf(), rememberUserMessageStateHolder()),
+        snackbarHostState = SnackbarHostState(),
+        isTopAppBarHidden = false,
+        onEventMapItemClick = {},
+    )
 }

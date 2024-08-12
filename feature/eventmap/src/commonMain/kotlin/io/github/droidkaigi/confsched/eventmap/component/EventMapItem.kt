@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.eventmap.generated.resources.read_more
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.eventmap.EventMapRes
@@ -89,10 +91,14 @@ fun EventMapItem(
 @Composable
 @Preview
 fun EventMapItemPreview() {
-    EventMapItem(
-        eventMapEvent = EventMapEvent.fakes().first(),
-        onClick = {},
-    )
+    KaigiTheme {
+        Surface {
+            EventMapItem(
+                eventMapEvent = EventMapEvent.fakes().first(),
+                onClick = {},
+            )
+        }
+    }
 }
 
 @Composable
