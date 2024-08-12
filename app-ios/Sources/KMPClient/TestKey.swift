@@ -27,3 +27,8 @@ extension ContributorClient: TestDependencyKey {
         refresh: unimplemented("ContributorClient.refresh")
     )
 }
+
+extension EventMapClient: TestDependencyKey {
+    public static let previewValue: Self = Self()
+    public static let testValue: Self = Self()
+}
