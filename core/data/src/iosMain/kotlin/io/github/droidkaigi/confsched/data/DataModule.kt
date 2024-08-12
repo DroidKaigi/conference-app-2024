@@ -8,6 +8,9 @@ import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsApiCl
 import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsRepository
 import io.github.droidkaigi.confsched.data.core.defaultJson
 import io.github.droidkaigi.confsched.data.core.defaultKtorConfig
+import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapRepository
+import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
+import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapApiClient
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsRepository
 import io.github.droidkaigi.confsched.data.sessions.SessionCacheDataStore
@@ -20,6 +23,7 @@ import io.github.droidkaigi.confsched.data.staff.DefaultStaffRepository
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
 import io.github.droidkaigi.confsched.data.user.UserDataStore
 import io.github.droidkaigi.confsched.model.ContributorsRepository
+import io.github.droidkaigi.confsched.model.EventMapRepository
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.SponsorsRepository
 import io.github.droidkaigi.confsched.model.StaffRepository
@@ -117,12 +121,14 @@ public val dataModule: Module = module {
     singleOf(::DefaultContributorsApiClient) bind ContributorsApiClient::class
     singleOf(::DefaultSponsorsApiClient) bind SponsorsApiClient::class
     singleOf(::DefaultStaffApiClient) bind StaffApiClient::class
+    singleOf(::DefaultEventMapApiClient) bind EventMapApiClient::class
 
     singleOf(::NetworkService)
     singleOf(::DefaultSessionsRepository) bind SessionsRepository::class
     singleOf(::DefaultContributorsRepository) bind ContributorsRepository::class
     singleOf(::DefaultStaffRepository) bind StaffRepository::class
     singleOf(::DefaultSponsorsRepository) bind SponsorsRepository::class
+    singleOf(::DefaultEventMapRepository) bind EventMapRepository::class
     single<Repositories> {
         DefaultRepositories(
             mapOf(
@@ -130,6 +136,7 @@ public val dataModule: Module = module {
                 ContributorsRepository::class to get<ContributorsRepository>(),
                 StaffRepository::class to get<StaffRepository>(),
                 SponsorsRepository::class to get<SponsorsRepository>(),
+                EventMapRepository::class to get<EventMapRepository>(),
             ),
         )
     }
