@@ -30,7 +30,6 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
-import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Edit
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 
@@ -74,46 +73,34 @@ fun NavController.navigateProfileCardScreen() {
 
 internal sealed interface ProfileCardUiState {
     data class Edit(
-        val nickname: String,
-        val occupation: String?,
-        val link: String?,
-        val imageUri: String?,
-        val theme: ProfileCardTheme,
-    ) : ProfileCardUiState {
-        companion object {
-            fun initial() = Edit(
-                nickname = "",
-                occupation = null,
-                link = null,
-                imageUri = null,
-                theme = ProfileCardTheme.Iguana,
-            )
-        }
-    }
+        val nickname: String = "",
+        val occupation: String? = null,
+        val link: String? = null,
+        val image: String? = null,
+        val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
+    ) : ProfileCardUiState
 
     data class Card(
         val nickname: String,
         val occupation: String?,
         val link: String?,
-        val imageUri: String?,
+        val image: String?,
         val theme: ProfileCardTheme,
     ) : ProfileCardUiState
 }
 
-internal data class ProfileCardScreenUiState(
+internal enum class ProfileCardUiType {
+    Edit,
+    Card,
+}
+
+internal data class ProfileCardScreenState(
     val isLoading: Boolean,
-    val contentUiState: ProfileCardUiState,
+    val editUiState: ProfileCardUiState.Edit,
+    val cardUiState: ProfileCardUiState.Card?,
+    val uiType: ProfileCardUiType,
     val userMessageStateHolder: UserMessageStateHolder,
 )
-
-internal fun ProfileCard.toUiState() =
-    ProfileCardUiState.Card(
-        nickname = nickname,
-        occupation = occupation,
-        link = link,
-        imageUri = imageUri,
-        theme = theme,
-    )
 
 @Composable
 fun ProfileCardScreen(
@@ -132,7 +119,7 @@ internal fun ProfileCardScreen(
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     eventEmitter: EventEmitter<ProfileCardScreenEvent> = rememberEventEmitter(),
-    uiState: ProfileCardScreenUiState = profileCardScreenPresenter(eventEmitter),
+    uiState: ProfileCardScreenState = profileCardScreenPresenter(eventEmitter),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
@@ -152,22 +139,23 @@ internal fun ProfileCardScreen(
             bottom = contentPadding.calculateBottomPadding(),
         ),
     ) { padding ->
-        when (val contentUiState = uiState.contentUiState) {
-            is ProfileCardUiState.Edit -> {
+        when (uiState.uiType) {
+            ProfileCardUiType.Edit -> {
                 EditScreen(
-                    uiState = contentUiState,
+                    uiState = uiState.editUiState,
                     onClickCreate = {
-                        eventEmitter.tryEmit(EditScreenEvent.CreateProfileCard(it))
+                        eventEmitter.tryEmit(EditScreenEvent.Create(it))
                     },
                     contentPadding = padding,
                 )
             }
 
-            is ProfileCardUiState.Card -> {
+            ProfileCardUiType.Card -> {
+                if (uiState.cardUiState == null) return@Scaffold
                 CardScreen(
-                    uiState = contentUiState,
+                    uiState = uiState.cardUiState,
                     onClickReset = {
-                        eventEmitter.tryEmit(CardScreenEvent.Reset)
+                        eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
                     contentPadding = padding,
                 )
@@ -186,7 +174,7 @@ internal fun ProfileCardScreen(
 
 @Composable
 internal fun EditScreen(
-    uiState: Edit,
+    uiState: ProfileCardUiState.Edit,
     onClickCreate: (ProfileCard) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -194,7 +182,7 @@ internal fun EditScreen(
     var nickname by remember { mutableStateOf(uiState.nickname) }
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
-    var imageUri by remember { mutableStateOf(uiState.imageUri) }
+    var image by remember { mutableStateOf(uiState.image) }
 
     Column(
         modifier = modifier
@@ -233,7 +221,7 @@ internal fun EditScreen(
                         nickname = nickname,
                         occupation = occupation,
                         link = link,
-                        imageUri = imageUri,
+                        image = image,
                         theme = uiState.theme,
                     ),
                 )
