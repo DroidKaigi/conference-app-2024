@@ -28,7 +28,6 @@ public class DefaultEventMapApiClient(
     }
 }
 
-
 public interface EventMapApiClient {
 
     public suspend fun eventMapEvents(): PersistentList<EventMapEvent>
