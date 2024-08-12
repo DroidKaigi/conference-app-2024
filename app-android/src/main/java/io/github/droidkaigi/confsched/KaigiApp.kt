@@ -37,6 +37,9 @@ import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
+import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
+import io.github.droidkaigi.confsched.favorites.favoritesScreens
+import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.main.MainScreenTab.About
@@ -101,11 +104,7 @@ private fun KaigiNavHost(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
             onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
-            // For debug
-//            onShareClick = externalNavController::onShareClick,
-            onShareClick = {
-                navController.navigate(contributorsScreenRoute)
-            },
+            onShareClick = externalNavController::onShareClick,
         )
 
         contributorsScreens(
@@ -141,8 +140,12 @@ private fun NavGraphBuilder.mainScreen(
                 contentPadding = contentPadding,
             )
             eventMapScreens(
-                onNavigationIconClick = navController::popBackStack,
                 onEventMapItemClick = externalNavController::navigate,
+            )
+            favoritesScreens(
+                onNavigationIconClick = navController::popBackStack,
+                onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                contentPadding = contentPadding,
             )
             aboutScreen(
                 contentPadding = contentPadding,
@@ -199,6 +202,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
             timetableScreenRoute -> Timetable
             profileCardScreenRoute -> ProfileCard
             aboutScreenRoute -> About
+            favoritesScreenRoute -> Favorite
             else -> null
         }
     }
@@ -210,7 +214,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         when (tab) {
             Timetable -> mainNestedNavController.navigateTimetableScreen()
             EventMap -> mainNestedNavController.navigateEventMapScreen()
-            Favorite -> {}
+            Favorite -> mainNestedNavController.navigateFavoritesScreen()
             About -> mainNestedNavController.navigateAboutScreen()
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
         }

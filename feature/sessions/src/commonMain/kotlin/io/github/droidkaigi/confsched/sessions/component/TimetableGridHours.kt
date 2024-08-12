@@ -45,7 +45,8 @@ fun HoursItem(
         text = hour,
         modifier = modifier,
         textAlign = TextAlign.Center,
-        style = MaterialTheme.typography.titleMedium,
+        style = MaterialTheme.typography.labelMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
 }
 

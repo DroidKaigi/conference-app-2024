@@ -18,7 +18,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreenEvent.Bookmark
 import io.github.droidkaigi.confsched.sessions.TimetableScreenEvent.UiTypeChange
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.sessions.section.TimetableSheetUiState
+import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
@@ -73,19 +73,19 @@ fun timetableScreenPresenter(
 fun timetableSheet(
     sessionTimetable: Timetable,
     uiType: TimetableUiType,
-): TimetableSheetUiState {
+): TimetableUiState {
     if (sessionTimetable.timetableItems.isEmpty()) {
-        return TimetableSheetUiState.Empty
+        return TimetableUiState.Empty
     }
     return if (uiType == TimetableUiType.List) {
-        TimetableSheetUiState.ListTimetable(
-            DroidKaigi2024Day.entries.associateWith { day ->
+        TimetableUiState.ListTimetable(
+            DroidKaigi2024Day.visibleDays().associateWith { day ->
                 val sortAndGroupedTimetableItems = sessionTimetable.filtered(
                     Filters(
                         days = listOf(day),
                     ),
                 ).timetableItems.groupBy {
-                    it.startsTimeString + it.endsTimeString
+                    it.startsTimeString to it.endsTimeString
                 }.mapValues { entries ->
                     entries.value.sortedWith(
                         compareBy({ it.day?.name.orEmpty() }, { it.startsTimeString }),
@@ -98,8 +98,8 @@ fun timetableSheet(
             },
         )
     } else {
-        TimetableSheetUiState.GridTimetable(
-            DroidKaigi2024Day.entries.associateWith { day ->
+        TimetableUiState.GridTimetable(
+            DroidKaigi2024Day.visibleDays().associateWith { day ->
                 TimetableGridUiState(
                     timetable = sessionTimetable.dayTimetable(day),
                 )
