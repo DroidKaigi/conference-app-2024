@@ -86,7 +86,7 @@ internal sealed interface ProfileCardUiState {
                 occupation = null,
                 link = null,
                 imageUri = null,
-                theme = ProfileCardTheme.Default,
+                theme = ProfileCardTheme.Iguana,
             )
         }
     }
