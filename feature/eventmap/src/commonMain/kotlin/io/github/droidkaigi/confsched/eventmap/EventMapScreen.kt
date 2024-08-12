@@ -7,12 +7,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons.AutoMirrored.Filled
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -39,7 +34,6 @@ import io.github.droidkaigi.confsched.eventmap.component.EventMapTab
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -52,18 +46,10 @@ const val EventMapLazyColumnTestTag = "EventMapLazyColumnTestTag"
 const val EventMapItemTestTag = "EventMapItemTestTag:"
 
 fun NavGraphBuilder.eventMapScreens(
-    onNavigationIconClick: () -> Unit,
     onEventMapItemClick: (url: String) -> Unit,
 ) {
     composable(eventMapScreenRoute) {
-        val lifecycleOwner = LocalLifecycleOwner.current
         EventMapScreen(
-            onNavigationIconClick = {
-                handleOnClickIfNotNavigating(
-                    lifecycleOwner,
-                    onNavigationIconClick,
-                )
-            },
             onEventMapItemClick = onEventMapItemClick,
         )
     }
@@ -86,7 +72,6 @@ data class EventMapUiState(
 
 @Composable
 fun EventMapScreen(
-    onNavigationIconClick: () -> Unit,
     onEventMapItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
@@ -106,7 +91,6 @@ fun EventMapScreen(
         uiState = uiState,
         isTopAppBarHidden = isTopAppBarHidden,
         snackbarHostState = snackbarHostState,
-        onBackClick = onNavigationIconClick,
         onEventMapItemClick = onEventMapItemClick,
         modifier = modifier,
     )
@@ -117,7 +101,6 @@ fun EventMapScreen(
 fun EventMapScreen(
     uiState: EventMapUiState,
     snackbarHostState: SnackbarHostState,
-    onBackClick: () -> Unit,
     onEventMapItemClick: (url: String) -> Unit,
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
@@ -137,16 +120,6 @@ fun EventMapScreen(
                 LargeTopAppBar(
                     title = {
                         Text(text = stringResource(EventMapRes.string.eventmap))
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = onBackClick,
-                        ) {
-                            Icon(
-                                imageVector = Filled.ArrowBack,
-                                contentDescription = "Back",
-                            )
-                        }
                     },
                     scrollBehavior = scrollBehavior,
                 )
@@ -215,7 +188,6 @@ fun PreviewEventMapScreen() {
         uiState = EventMapUiState(persistentListOf(), rememberUserMessageStateHolder()),
         snackbarHostState = SnackbarHostState(),
         isTopAppBarHidden = false,
-        onBackClick = {},
         onEventMapItemClick = {},
     )
 }
