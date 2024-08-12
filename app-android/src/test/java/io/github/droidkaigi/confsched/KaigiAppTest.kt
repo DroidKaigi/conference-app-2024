@@ -42,7 +42,7 @@ class KaigiAppTest(private val testCase: DescribedBehavior<KaigiAppRobot>) {
                     itShould("show timetable items") {
                         captureScreenWithChecks {
                             runRobot(timetableScreenRobot) {
-                                checkTimetableItemsDisplayed()
+                                checkTimetableListItemsDisplayed()
                             }
                         }
                     }
