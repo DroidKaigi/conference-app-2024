@@ -14,7 +14,6 @@ fun eventMapViewController(
 ): UIViewController = composeViewController(repositories) {
     EventMapScreen(
         isTopAppBarHidden = true,
-        onNavigationIconClick = { /* no action for iOS side */ },
         onEventMapItemClick = onEventMapItemClick,
     )
 }
