@@ -152,6 +152,7 @@ fun TimetableGrid(
                 ),
             ) { timetableItem, itemHeightPx ->
                 TimetableGridItem(
+                    modifier = Modifier.padding(horizontal = 2.dp),
                     timetableItem = timetableItem,
                     onTimetableItemClick = onTimetableItemClick,
                     gridItemHeightPx = itemHeightPx,
