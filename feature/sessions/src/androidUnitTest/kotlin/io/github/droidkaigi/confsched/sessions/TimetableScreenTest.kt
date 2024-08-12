@@ -66,6 +66,16 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             checkClickedItemsExists()
                         }
                     }
+                    describe("click conference day2 tab") {
+                        run {
+                            clickTimetableTab(2)
+                        }
+                        itShould("change displayed day") {
+                            captureScreenWithChecks(checks = {
+                                checkTimetableListItemsDisplayed()
+                            })
+                        }
+                    }
                     describe("click timetable ui type change") {
                         run {
                             clickTimetableUiTypeChangeButton()
@@ -75,6 +85,16 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                                 checkTimetableGridDisplayed()
                                 checkTimetableGridItemsDisplayed()
                             })
+                        }
+                        describe("click conference day2 tab") {
+                            run {
+                                clickTimetableTab(2)
+                            }
+                            itShould("change displayed day") {
+                                captureScreenWithChecks(checks = {
+                                    checkTimetableGridItemsDisplayed()
+                                })
+                            }
                         }
                     }
                 }

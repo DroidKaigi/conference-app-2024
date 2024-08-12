@@ -150,6 +150,22 @@ class RobotTestRule(
         }
     }
 
+    inline fun <reified T : Any> setContentWithNavigation(
+        crossinline startDestination: () -> T,
+        crossinline content: @Composable () -> Unit,
+    ) {
+        setContent {
+            NavHost(
+                navController = rememberNavController(),
+                startDestination = startDestination(),
+            ) {
+                composable<T> {
+                    content()
+                }
+            }
+        }
+    }
+
     fun captureScreen(name: String? = null) {
         if (name != null) {
             captureScreenRoboImage("$name.png")
