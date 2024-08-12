@@ -17,6 +17,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -114,20 +118,38 @@ private fun SummaryCardRow(
     description: String,
     modifier: Modifier = Modifier,
 ) {
+    var isRequiredToUseAlignByBaseline by remember { mutableStateOf(false) }
+
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Icon(imageVector = imageVector, contentDescription = contentDescription, tint = LocalRoomTheme.current.primaryColor)
+        Icon(
+            imageVector = imageVector,
+            contentDescription = contentDescription,
+            modifier = Modifier.then(
+                if (isRequiredToUseAlignByBaseline) Modifier.alignByBaseline() else Modifier,
+            ),
+            tint = LocalRoomTheme.current.primaryColor,
+        )
         Spacer(Modifier.width(8.dp))
         Text(
             text = title,
+            modifier = Modifier.then(
+                if (isRequiredToUseAlignByBaseline) Modifier.alignByBaseline() else Modifier,
+            ),
             style = MaterialTheme.typography.titleSmall,
             color = LocalRoomTheme.current.primaryColor,
         )
         Spacer(Modifier.width(8.dp))
         Text(
             text = description,
+            modifier = Modifier.then(
+                if (isRequiredToUseAlignByBaseline) Modifier.alignByBaseline() else Modifier,
+            ),
+            onTextLayout = { result ->
+                isRequiredToUseAlignByBaseline = result.lineCount == 1
+            },
             style = MaterialTheme.typography.bodyMedium,
         )
     }
