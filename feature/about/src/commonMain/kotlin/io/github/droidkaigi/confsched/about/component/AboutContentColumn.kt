@@ -89,6 +89,7 @@ fun AboutContentColumnPreview() {
                 label = stringResource(AboutRes.string.staff),
                 testTag = "",
                 onClickAction = {},
+                textColor = MaterialTheme.colorScheme.onPrimary,
             )
         }
     }
