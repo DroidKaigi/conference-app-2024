@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -33,11 +35,13 @@ import conference_app_2024.core.ui.generated.resources.image
 import conference_app_2024.core.ui.generated.resources.not_bookmarked
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.ui.UiRes
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
 
-const val TimetableItemCardBookmarkIconTestTag = "TimetableListItemBookmarkIcon"
+const val TimetableItemCardBookmarkButtonTestTag = "TimetableItemCardBookmarkButton"
+const val TimetableItemCardBookmarkedIconTestTag = "TimetableItemCardBookmarkedIcon"
 const val TimetableItemCardTestTag = "TimetableListItem"
 
 @Composable
@@ -65,7 +69,7 @@ fun TimetableItemCard(
                 TextButton(
                     onClick = { onBookmarkClick(timetableItem, true) },
                     modifier = Modifier
-                        .testTag(TimetableItemCardBookmarkIconTestTag)
+                        .testTag(TimetableItemCardBookmarkButtonTestTag)
                         .align(Alignment.TopEnd),
                 ) {
                     if (isBookmarked) {
@@ -73,6 +77,8 @@ fun TimetableItemCard(
                             Icons.Filled.Favorite,
                             contentDescription = stringResource(UiRes.string.bookmarked),
                             tint = Color.Green,
+                            modifier = Modifier
+                                .testTag(TimetableItemCardBookmarkedIconTestTag),
                         )
                     } else {
                         Icon(
@@ -113,6 +119,24 @@ fun TimetableItemCard(
                             .align(Alignment.CenterVertically),
                     )
                     // TODO: Message goes here (missing from object we can access here?)
+                }
+            }
+            if (timetableItem is Session) {
+                timetableItem.message?.let {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Icon(
+                            Icons.Filled.Info,
+                            contentDescription = stringResource(UiRes.string.image),
+                            tint = MaterialTheme.colorScheme.error,
+                        )
+                        Text(
+                            text = it.currentLangTitle,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.error,
+                        )
+                    }
                 }
             }
         }
