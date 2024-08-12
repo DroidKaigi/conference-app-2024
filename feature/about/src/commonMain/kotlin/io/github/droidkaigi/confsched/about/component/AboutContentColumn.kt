@@ -34,7 +34,6 @@ fun AboutContentColumn(
     testTag: String,
     onClickAction: () -> Unit,
     modifier: Modifier = Modifier,
-    textColor: Color = MaterialTheme.colorScheme.primaryFixed,
 ) {
     Column(
         modifier = modifier
@@ -69,7 +68,7 @@ fun AboutContentColumn(
                     .padding(
                         end = 16.dp,
                     ),
-                color = textColor,
+                color = MaterialTheme.colorScheme.primaryFixed,
             )
         }
         HorizontalDivider(
@@ -89,7 +88,6 @@ fun AboutContentColumnPreview() {
                 label = stringResource(AboutRes.string.staff),
                 testTag = "",
                 onClickAction = {},
-                textColor = MaterialTheme.colorScheme.onPrimary,
             )
         }
     }
