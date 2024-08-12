@@ -71,8 +71,8 @@ fun FavoriteSheet(
     onDay1FilterChipClick: () -> Unit,
     onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
-    contentPadding: PaddingValues = PaddingValues(),
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     Column(modifier = modifier.fillMaxSize()) {
         FavoriteFilters(
