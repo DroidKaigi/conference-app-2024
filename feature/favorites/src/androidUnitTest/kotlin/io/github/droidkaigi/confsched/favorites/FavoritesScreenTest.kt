@@ -45,13 +45,23 @@ class FavoritesScreenTest(
                     }
                     describe("when launch") {
                         run {
-                            setupFavoritesScreenContent()
+                            setupFavoritesScreenEmptyContent()
                         }
                         itShould("display empty view") {
                             captureScreenWithChecks(
                                 checks = { checkEmptyViewDisplayed() },
                             )
                         }
+                    }
+                }
+                describe("when there are favorite sessions") {
+                    run {
+                        setupFavoritesScreenContent()
+                    }
+                    itShould("display favorite sessions") {
+                        captureScreenWithChecks(
+                            checks = { checkFavoriteTimetableListItemsDisplayed() },
+                        )
                     }
                 }
 
@@ -61,7 +71,7 @@ class FavoritesScreenTest(
                     }
                     describe("when launch") {
                         run {
-                            setupFavoritesScreenContent()
+                            setupFavoritesScreenEmptyContent()
                         }
                         itShould("show error message") {
                             captureScreenWithChecks(
