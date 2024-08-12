@@ -19,7 +19,6 @@ class EventMapScreenRobot @Inject constructor(
         robotTestRule.setContent {
             KaigiTheme {
                 EventMapScreen(
-                    onNavigationIconClick = { },
                     onEventMapItemClick = { },
                 )
             }
