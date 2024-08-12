@@ -69,7 +69,7 @@ fun TimetableGridRooms(
         )
     }
 
-    val roomsScreen = remember(roomsLayout, density) {
+    val roomsScreen = remember(roomsLayout, scrollState, density) {
         RoomScreen(
             roomsLayout = roomsLayout,
             scrollState = scrollState,

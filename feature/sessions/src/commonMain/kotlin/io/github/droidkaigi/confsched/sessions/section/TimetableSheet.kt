@@ -66,9 +66,14 @@ fun Timetable(
             )
             when (uiState) {
                 is ListTimetable -> {
+                    val scrollStates = DroidKaigi2024Day.entries.filter {
+                        it.visibleForUsers
+                    }.associateWith {
+                        rememberLazyListState()
+                    }
                     TimetableList(
                         uiState = requireNotNull(uiState.timetableListUiStates[selectedDay]),
-                        scrollState = rememberLazyListState(),
+                        scrollState = scrollStates.getValue(selectedDay),
                         onTimetableItemClick = onTimetableItemClick,
                         onBookmarkClick = onFavoriteClick,
                         modifier = Modifier
@@ -83,8 +88,14 @@ fun Timetable(
                 }
 
                 is GridTimetable -> {
+                    val timetableStates = DroidKaigi2024Day.entries.filter {
+                        it.visibleForUsers
+                    }.associateWith {
+                        rememberTimetableGridState()
+                    }
                     TimetableGrid(
                         uiState = requireNotNull(uiState.timetableGridUiState[selectedDay]),
+                        timetableState = timetableStates.getValue(selectedDay),
                         onTimetableItemClick = onTimetableItemClick,
                         modifier = Modifier
                             .fillMaxSize()
