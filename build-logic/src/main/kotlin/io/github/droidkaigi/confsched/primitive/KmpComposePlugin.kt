@@ -14,7 +14,7 @@ class KmpComposePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply("org.jetbrains.compose")
+                apply(libs.plugin("jetbrainsCompose").pluginId)
                 apply(libs.plugin("composeCompiler").pluginId)
             }
             if (plugins.hasPlugin("com.android.library")) {

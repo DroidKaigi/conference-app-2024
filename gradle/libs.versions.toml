@@ -89,6 +89,9 @@ kotlinxCollectionsImmutable = { module = "org.jetbrains.kotlinx:kotlinx-collecti
 kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.0" }
 kotlinxAtomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version = "0.23.2" }
 
+# for Desktop
+kotlinxCoroutinesSwing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
+
 # UI
 
 composeBom = { module = "androidx.compose:compose-bom", version.ref = "compose" }
@@ -189,6 +192,7 @@ composeInvestigatorGradlePlugin = { id = "land.sungbin.composeinvestigator:compi
 kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 detektGradlePlugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ossLicensesPlugin = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 
 [bundles]
 plugins = [
