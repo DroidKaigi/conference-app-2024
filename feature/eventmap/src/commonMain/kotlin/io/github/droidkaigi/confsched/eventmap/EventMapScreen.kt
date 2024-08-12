@@ -48,6 +48,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val eventMapScreenRoute = "eventMap"
 const val EventMapScreenTestTag = "EventMapScreenTestTag"
+const val EventMapLazyColumnTestTag = "EventMapLazyColumnTestTag"
+const val EventMapItemTestTag = "EventMapItemTestTag:"
 
 fun NavGraphBuilder.eventMapScreens(
     onNavigationIconClick: () -> Unit,
@@ -175,7 +177,9 @@ private fun EventMap(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .testTag(EventMapLazyColumnTestTag),
     ) {
         item {
             EventMapTab()
@@ -185,7 +189,9 @@ private fun EventMap(
             EventMapItem(
                 eventMapEvent = eventMapEvent,
                 onClick = onEventMapItemClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(EventMapItemTestTag.plus(eventMapEvent.roomName.enTitle)),
             )
             if (eventMapEvents.lastIndex != index) {
                 Spacer(Modifier.height(24.dp))
