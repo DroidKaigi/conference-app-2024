@@ -207,12 +207,14 @@ fun MainScreen(
 
         Scaffold(
             bottomBar = {
-                GlassLikeBottomNavigation(
-                    hazeState = hazeState,
-                    onTabSelected = {
-                        onTabSelected(mainNestedNavController, it)
-                    },
-                )
+                AnimatedVisibility(visible = navigationType == BottomNavigation) {
+                    GlassLikeBottomNavigation(
+                        hazeState = hazeState,
+                        onTabSelected = {
+                            onTabSelected(mainNestedNavController, it)
+                        },
+                    )
+                }
             },
         ) { padding ->
             val hazeStyle =
