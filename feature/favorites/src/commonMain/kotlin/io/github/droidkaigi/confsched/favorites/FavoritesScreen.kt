@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -32,7 +31,6 @@ import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
-import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -41,20 +39,11 @@ const val favoritesScreenRoute = "favorites"
 const val FavoritesScreenTestTag = "FavoritesScreenTestTag"
 
 fun NavGraphBuilder.favoritesScreens(
-    onNavigationIconClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     contentPadding: PaddingValues,
 ) {
     composable(favoritesScreenRoute) {
-        val lifecycleOwner = LocalLifecycleOwner.current
-
         FavoritesScreen(
-            onNavigationIconClick = {
-                handleOnClickIfNotNavigating(
-                    lifecycleOwner,
-                    onNavigationIconClick,
-                )
-            },
             onTimetableItemClick = onTimetableItemClick,
             contentPadding = contentPadding,
         )
@@ -78,11 +67,9 @@ data class FavoritesScreenUiState(
 
 @Composable
 fun FavoritesScreen(
-    onNavigationIconClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    isTopAppBarHidden: Boolean = false,
     eventEmitter: EventEmitter<FavoritesScreenEvent> = rememberEventEmitter(),
     uiState: FavoritesScreenUiState = favoritesScreenPresenter(events = eventEmitter),
 ) {
@@ -95,7 +82,6 @@ fun FavoritesScreen(
     FavoritesScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
-        onBackClick = onNavigationIconClick,
         onTimetableItemClick = onTimetableItemClick,
         onAllFilterChipClick = {
             eventEmitter.tryEmit(FavoritesScreenEvent.AllFilter)
@@ -109,7 +95,6 @@ fun FavoritesScreen(
         onBookmarkClick = { timetableItem ->
             eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
         },
-        isTopAppBarHidden = isTopAppBarHidden,
         contentPadding = contentPadding,
         modifier = modifier,
     )
@@ -120,13 +105,11 @@ fun FavoritesScreen(
 fun FavoritesScreen(
     uiState: FavoritesScreenUiState,
     snackbarHostState: SnackbarHostState,
-    onBackClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onAllFilterChipClick: () -> Unit,
     onDay1FilterChipClick: () -> Unit,
     onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
-    isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
@@ -173,13 +156,11 @@ fun FavoritesScreenPreview() {
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
                 snackbarHostState = SnackbarHostState(),
-                onBackClick = {},
                 onTimetableItemClick = {},
                 onAllFilterChipClick = {},
                 onDay1FilterChipClick = {},
                 onDay2FilterChipClick = {},
                 onBookmarkClick = {},
-                isTopAppBarHidden = false,
             )
         }
     }

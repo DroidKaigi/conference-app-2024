@@ -73,7 +73,6 @@ data class EventMapUiState(
 fun EventMapScreen(
     onEventMapItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
-    isTopAppBarHidden: Boolean = false,
 ) {
     val eventEmitter = rememberEventEmitter<EventMapScreenEvent>()
     val uiState = eventMapScreenPresenter(
@@ -88,7 +87,6 @@ fun EventMapScreen(
     )
     EventMapScreen(
         uiState = uiState,
-        isTopAppBarHidden = isTopAppBarHidden,
         snackbarHostState = snackbarHostState,
         onEventMapItemClick = onEventMapItemClick,
         modifier = modifier,
@@ -101,7 +99,6 @@ fun EventMapScreen(
     uiState: EventMapUiState,
     snackbarHostState: SnackbarHostState,
     onEventMapItemClick: (url: String) -> Unit,
-    isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Logger.d { "EventMapScreen: $uiState" }
@@ -170,7 +167,6 @@ fun PreviewEventMapScreen() {
     EventMapScreen(
         uiState = EventMapUiState(persistentListOf(), rememberUserMessageStateHolder()),
         snackbarHostState = SnackbarHostState(),
-        isTopAppBarHidden = false,
         onEventMapItemClick = {},
     )
 }
