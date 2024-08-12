@@ -150,7 +150,7 @@ class RobotTestRule(
         }
     }
 
-    inline fun <reified T: Any> setContentWithNavigation(
+    inline fun <reified T : Any> setContentWithNavigation(
         crossinline startDestination: () -> T,
         crossinline content: @Composable () -> Unit,
     ) {
