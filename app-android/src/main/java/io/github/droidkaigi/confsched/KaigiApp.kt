@@ -144,7 +144,6 @@ private fun NavGraphBuilder.mainScreen(
                 contentPadding = contentPadding,
             )
             eventMapScreens(
-                onNavigationIconClick = navController::popBackStack,
                 onEventMapItemClick = externalNavController::navigate,
             )
             favoritesScreens(

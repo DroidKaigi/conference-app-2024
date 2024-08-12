@@ -74,7 +74,6 @@ class EventMapScreenRobot @Inject constructor(
     fun setupScreenContent() {
         robotTestRule.setContent {
             EventMapScreen(
-                onNavigationIconClick = { },
                 onEventMapItemClick = { },
             )
         }
