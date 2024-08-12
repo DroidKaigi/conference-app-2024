@@ -29,6 +29,7 @@ import io.github.droidkaigi.confsched.eventmap.EventMapRes
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import io.github.droidkaigi.confsched.model.RoomIcon
+import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.ui.toResDrawable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -89,7 +90,7 @@ fun EventMapItem(
 @Preview
 fun EventMapItemPreview() {
     EventMapItem(
-        eventMapEvent = EventMapEvent.fake(),
+        eventMapEvent = EventMapEvent.fakes().first(),
         onClick = {},
     )
 }
