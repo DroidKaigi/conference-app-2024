@@ -31,7 +31,7 @@ class EventMapScreenRobot @Inject constructor(
         index: Int,
     ) {
         composeTestRule
-            .onNodeWithTag(EventMapLazyColumnTestTag) // LazyColumnのタグを指定
+            .onNodeWithTag(EventMapLazyColumnTestTag)
             .performScrollToIndex(index)
     }
 
