@@ -14,7 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -30,7 +29,6 @@ import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
 import conference_app_2024.feature.eventmap.generated.resources.eventmap
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.eventmap.component.EventMapItem
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTab
 import io.github.droidkaigi.confsched.model.EventMapEvent
