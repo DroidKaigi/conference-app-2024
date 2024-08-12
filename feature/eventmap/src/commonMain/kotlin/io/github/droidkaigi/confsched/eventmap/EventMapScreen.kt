@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -40,6 +42,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val eventMapScreenRoute = "eventMap"
 const val EventMapScreenTestTag = "EventMapScreenTestTag"
+const val EventMapLazyColumnTestTag = "EventMapLazyColumnTestTag"
+const val EventMapItemTestTag = "EventMapItemTestTag:"
 
 fun NavGraphBuilder.eventMapScreens(
     onEventMapItemClick: (url: String) -> Unit,
@@ -146,7 +150,9 @@ private fun EventMap(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier.padding(horizontal = 16.dp),
+        modifier = modifier
+            .padding(horizontal = 16.dp)
+            .testTag(EventMapLazyColumnTestTag),
     ) {
         item {
             EventMapTab()
@@ -156,11 +162,21 @@ private fun EventMap(
             EventMapItem(
                 eventMapEvent = eventMapEvent,
                 onClick = onEventMapItemClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(EventMapItemTestTag.plus(eventMapEvent.roomName.enTitle)),
             )
             if (eventMapEvents.lastIndex != index) {
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(Modifier.height(24.dp))
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                )
+                Spacer(Modifier.height(24.dp))
             }
+        }
+        item {
+            Spacer(modifier = Modifier.height(80.dp))
         }
     }
 }
