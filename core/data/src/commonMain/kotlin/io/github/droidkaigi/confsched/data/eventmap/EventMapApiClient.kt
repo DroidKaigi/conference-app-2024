@@ -6,6 +6,7 @@ import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.eventmap.response.EventMapResponse
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.model.MultiLangText
+import io.github.droidkaigi.confsched.model.RoomIcon
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
@@ -48,12 +49,23 @@ public fun EventMapResponse.toEventMapList(): PersistentList<EventMapEvent> {
                         jaTitle = roomName.first,
                         enTitle = roomName.second,
                     ),
+                    roomIcon = roomName.second.toRoomIcon(),
                     description = MultiLangText(
                         jaTitle = event.i18nDesc.ja,
                         enTitle = event.i18nDesc.en,
                     ),
+                    moreDetailsUrl = event.moreDetailsUrl,
                 )
             }
         }
         .toPersistentList()
+}
+
+private fun String.toRoomIcon(): RoomIcon = when (this) {
+    "Iguana" -> RoomIcon.Square
+    "Hedgehog" -> RoomIcon.Diamond
+    "Giraffe" -> RoomIcon.Circle
+    "Flamingo" -> RoomIcon.Rhombus
+    "Jellyfish" -> RoomIcon.Triangle
+    else -> RoomIcon.None
 }

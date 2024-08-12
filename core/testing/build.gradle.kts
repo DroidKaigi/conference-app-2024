@@ -20,6 +20,7 @@ dependencies {
     implementation(projects.feature.staff)
     implementation(projects.feature.sponsors)
     implementation(projects.feature.favorites)
+    implementation(projects.feature.eventmap)
     implementation(libs.daggerHiltAndroidTesting)
     implementation(libs.roborazzi)
     implementation(libs.kermit)

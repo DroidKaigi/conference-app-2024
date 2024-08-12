@@ -48,7 +48,7 @@ You can check out the design on Figma.
 
 In addition to general Android practices, we are exploring and implementing various concepts. Details for each are discussed further in this README.
 
-<img width="813" alt="image" src="https://github.com/user-attachments/assets/28532593-025b-476b-8a2d-af2367dcbdd0">
+<img width="806" alt="image" src="https://github.com/user-attachments/assets/b4f5682d-839b-4ab9-9f43-bcfde9a8eefb">
 
 ### Understanding the App's Data Flow
 
