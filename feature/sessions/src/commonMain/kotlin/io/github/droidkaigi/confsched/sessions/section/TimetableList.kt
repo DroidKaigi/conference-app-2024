@@ -31,9 +31,16 @@ import kotlinx.collections.immutable.PersistentMap
 const val TimetableListTestTag = "TimetableList"
 
 data class TimetableListUiState(
-    val timetableItemMap: PersistentMap<Pair<String, String>, List<TimetableItem>>,
+    val timetableItemMap: PersistentMap<TimeSlot, List<TimetableItem>>,
     val timetable: Timetable,
-)
+) {
+    data class TimeSlot(
+        val startTimeString: String,
+        val endTimeString: String,
+    ) {
+        val key: String get() = "$startTimeString-$endTimeString"
+    }
+}
 
 @Composable
 fun TimetableList(
@@ -59,12 +66,12 @@ fun TimetableList(
         items(
             // TODO: Check whether the number of recompositions increases.
             items = uiState.timetableItemMap.toList(),
-            key = { it.first },
+            key = { it.first.key },
         ) { (time, timetableItems) ->
             Row {
                 TimetableTime(
-                    startTime = time.first,
-                    endTime = time.second,
+                    startTime = time.startTimeString,
+                    endTime = time.endTimeString,
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
