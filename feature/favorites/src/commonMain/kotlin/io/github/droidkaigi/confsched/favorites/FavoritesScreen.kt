@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.favorites
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -42,6 +43,7 @@ const val FavoritesScreenTestTag = "FavoritesScreenTestTag"
 fun NavGraphBuilder.favoritesScreens(
     onNavigationIconClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
+    contentPadding: PaddingValues,
 ) {
     composable(favoritesScreenRoute) {
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -54,6 +56,7 @@ fun NavGraphBuilder.favoritesScreens(
                 )
             },
             onTimetableItemClick = onTimetableItemClick,
+            contentPadding = contentPadding,
         )
     }
 }
@@ -78,6 +81,7 @@ fun FavoritesScreen(
     onNavigationIconClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
     isTopAppBarHidden: Boolean = false,
     eventEmitter: EventEmitter<FavoritesScreenEvent> = rememberEventEmitter(),
     uiState: FavoritesScreenUiState = favoritesScreenPresenter(events = eventEmitter),
@@ -106,6 +110,7 @@ fun FavoritesScreen(
             eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
         },
         isTopAppBarHidden = isTopAppBarHidden,
+        contentPadding = contentPadding,
         modifier = modifier,
     )
 }
@@ -123,6 +128,7 @@ fun FavoritesScreen(
     onBookmarkClick: (TimetableItem) -> Unit,
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -144,8 +150,10 @@ fun FavoritesScreen(
             onDay1FilterChipClick = onDay1FilterChipClick,
             onDay2FilterChipClick = onDay2FilterChipClick,
             onBookmarkClick = onBookmarkClick,
-            modifier = Modifier.padding(padding)
-                .nestedScroll(scrollBehavior.nestedScrollConnection),
+            contentPadding = contentPadding,
+            modifier = Modifier.padding(
+                top = padding.calculateTopPadding(),
+            ).nestedScroll(scrollBehavior.nestedScrollConnection),
         )
     }
 }

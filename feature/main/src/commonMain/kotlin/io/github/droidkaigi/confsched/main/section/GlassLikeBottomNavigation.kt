@@ -54,6 +54,7 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
+import io.github.droidkaigi.confsched.model.isBlurSupported
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -66,7 +67,7 @@ fun GlassLikeBottomNavigation(
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     Box(
         modifier = modifier
-            .padding(vertical = 24.dp, horizontal = 48.dp)
+            .padding(horizontal = 48.dp)
             .fillMaxWidth()
             .height(64.dp)
             .hazeChild(state = hazeState, shape = CircleShape)
@@ -116,7 +117,13 @@ fun GlassLikeBottomNavigation(
             Modifier
                 .fillMaxSize()
                 .clip(CircleShape)
-                .blur(50.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
+                .run {
+                    if (isBlurSupported()) {
+                        blur(50.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+                    } else {
+                        this
+                    }
+                },
         ) {
             val tabWidth = size.width / MainScreenTab.size
             drawCircle(
