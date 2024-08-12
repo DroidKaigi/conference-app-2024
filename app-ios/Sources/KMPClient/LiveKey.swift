@@ -67,6 +67,6 @@ extension ContributorClient: DependencyKey {
 
 extension EventMapClient: DependencyKey {
     public static let liveValue: EventMapClient = .init {
-        try eventMapRepository.getEventMapStream().eraseToThrowingStream()
+        eventMapRepository.getEventMapStream().eraseToThrowingStream()
     }
 }
