@@ -1,4 +1,5 @@
 import Foundation
+import CommonComponents
 import shared
 
 public enum DayTab: String, CaseIterable, Identifiable, Sendable {
@@ -28,6 +29,38 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
         self.endsTimeString = endsTimeString
         self.items = items
     }
+    
+    func getItemForRoom(forRoom: RoomType) -> TimetableItemWithFavorite? {
+        items.filter {
+            $0.timetableItem.room.type == forRoom
+        }.first
+    }
+    
+    func getCellForRoom(room: RoomType, onTap: @escaping (TimetableItem) -> Void) -> TimetableGridCard {
+        return if let cell = getItemForRoom(forRoom: room) {
+            TimetableGridCard(timetableItem: cell.timetableItem) { timetableItem in
+                onTap(timetableItem)
+            }
+        } else {
+            TimetableGridCard(timetableItem: nil) { _ in
+                // Does nothing
+            }
+        }
+    }
+    
+//    func getGridCells(rooms: [RoomType], onTap: @escaping (TimetableItem) -> Void) -> [TimetableGridCard] {
+//        rooms.map {
+//            if let cell = getItemForRoom(forRoom: $0) {
+//                TimetableGridCard(timetableItem: cell.timetableItem) { timetableItem in
+//                    onTap(timetableItem)
+//                }
+//            } else {
+//                TimetableGridCard(timetableItem: nil) { _ in
+//                    // Does nothing
+//                }
+//            }
+//        }
+//    }
 }
 
 // This exists only for previews now.

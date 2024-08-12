@@ -116,43 +116,37 @@ struct TimetableGridView: View {
     var body: some View {
         let rooms = RoomType.allCases.filter {$0 != RoomType.roomIj}
         
-        ScrollView{
-            Grid {
-                GridRow {
-
-                    Color.clear
-                        .gridCellUnsizedAxes([.horizontal, .vertical])
-                    
-                    ForEach(rooms, id: \.self) { column in
-                        
-                        let room = getTimetableRoom(type: column)
-                        
-                        Text(room.name.currentLangTitle).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                    }
-                }
-                ForEach(store.timetableItems, id: \.self) { item in
+        ScrollView(.vertical) {
+            ScrollView(.horizontal){
+                Grid {
                     GridRow {
-                        Text(item.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-//                        Text("R\(row)")
-                        ForEach(rooms, id: \.self) { room in
+                        
+                        Color.clear
+                            .gridCellUnsizedAxes([.horizontal, .vertical])
+                        
+                        ForEach(rooms, id: \.self) { column in
+                            
+                            let room = getTimetableRoom(type: column)
+                            
+                            Text(room.name.currentLangTitle).foregroundStyle(room.roomTheme.primaryColor)
+                                .frame(width: 192)
+                        }
+                    }
+                    ForEach(store.timetableItems, id: \.self) { timeBlock in
+                        GridRow {
+                            VStack {
+                                Text(timeBlock.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                                Spacer()
+                                
+                            }.frame(height: 153)
                             
                             
-                            Circle().foregroundStyle(.mint)
-                            
-                            
-                            
-//                            let cell = timeRow.items.filter{$0.timetableItem.room == room}.first
-//                            
-//                            TimetableCard(
-//                                timetableItem: cell,
-//                                isFavorite: cell.isFavorited,
-//                                onTap: { item in
-//                                    store.send(.view(.timetableItemTapped))
-//                                },
-//                                onTapFavorite: { item in
-//                                       // Handle favorite tap
-//                                })
-                            
+                            ForEach(rooms, id: \.self) { room in
+                                
+                                timeBlock.getCellForRoom(room: room, onTap: { item in
+                                    store.send(.view(.timetableItemTapped))
+                                })
+                            }
                         }
                     }
                 }
