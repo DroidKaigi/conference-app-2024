@@ -131,11 +131,11 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setFontScale(1.5f)
                             setupScreenContent()
                         }
-                        itShould("show small font session detail") {
+                        itShould("show large font session detail") {
                             captureScreenWithChecks(
                                 checks = {
                                     todoChecks(
-                                        "FIXME: Add show small font session detail"
+                                        "FIXME: Add show large font session detail"
                                     )
                                 }
                             )
@@ -146,11 +146,11 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setFontScale(2.0f)
                             setupScreenContent()
                         }
-                        itShould("show small font session detail") {
+                        itShould("show huge font session detail") {
                             captureScreenWithChecks(
                                 checks = {
                                     todoChecks(
-                                        "FIXME: Add show small font session detail"
+                                        "FIXME: Add show huge font session detail"
                                     )
                                 }
                             )
