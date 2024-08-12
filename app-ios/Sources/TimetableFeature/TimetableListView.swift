@@ -114,48 +114,49 @@ struct TimetableGridView: View {
     }
 
     var body: some View {
+        let rooms = RoomType.allCases.filter {$0 != RoomType.roomIj}
+        
         ScrollView{
-            
             Grid {
                 GridRow {
-                    
+
                     Color.clear
                         .gridCellUnsizedAxes([.horizontal, .vertical])
                     
-                    
-                    ForEach(RoomType.allCases, id: \.self) { column in
+                    ForEach(rooms, id: \.self) { column in
                         
-//                        let room = getTimetableRoom(type: column)
+                        let room = getTimetableRoom(type: column)
                         
-                        Text(column.name).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                        Text(room.name.currentLangTitle).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     }
                 }
-                ForEach(1..<4) { row in
+                ForEach(store.timetableItems, id: \.self) { item in
                     GridRow {
-                        Text("R\(row)")
-                        ForEach(1..<4) { _ in
+                        Text(item.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+//                        Text("R\(row)")
+                        ForEach(rooms, id: \.self) { room in
+                            
+                            
                             Circle().foregroundStyle(.mint)
+                            
+                            
+                            
+//                            let cell = timeRow.items.filter{$0.timetableItem.room == room}.first
+//                            
+//                            TimetableCard(
+//                                timetableItem: cell,
+//                                isFavorite: cell.isFavorited,
+//                                onTap: { item in
+//                                    store.send(.view(.timetableItemTapped))
+//                                },
+//                                onTapFavorite: { item in
+//                                       // Handle favorite tap
+//                                })
+                            
                         }
                     }
                 }
             }
-
-            
-//            LazyVStack {
-//                ForEach(store.timetableItems, id: \.self) { item in
-//                    Button {
-//                        store.send(.view(.timetableItemTapped))
-//                    } label: {
-//                        TimeGroupMiniList(contents: item, onItemTap: { item in
-//                            store.send(.view(.timetableItemTapped))
-//                        })
-//                    }
-//                }
-//            }.scrollContentBackground(.hidden)
-//            
-//                .onAppear {
-//                    store.send(.onAppear)
-//                }.background(AssetColors.Surface.surface.swiftUIColor)
         }
     }
 }
@@ -189,37 +190,37 @@ struct TimeGroupMiniList: View {
     }
 }
 
-struct TagView: View {
-    let tagText: String
-    let highlight: Bool
-    
-    var body: some View {
-        HStack {
-            if highlight {
-                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
-                    .padding(-3)
-            }
-            Text(tagText).foregroundStyle(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
-        }
-        .padding(
-            EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
-        .border(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
-        .padding(-2)
-    }
-}
-
-struct PhotoView: View {
-    //TODO: Replace this with an actual photo render
-    let photo: String
-    let name: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
-            Text(name)
-        }
-    }
-}
+//struct TagView: View {
+//    let tagText: String
+//    let highlight: Bool
+//    
+//    var body: some View {
+//        HStack {
+//            if highlight {
+//                Image(systemName: "diamond.fill").resizable().frame(width: 11,height: 11).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
+//                    .padding(-3)
+//            }
+//            Text(tagText).foregroundStyle(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+//        }
+//        .padding(
+//            EdgeInsets(top: 2,leading: 7, bottom: 2, trailing: 7))
+//        .border(highlight ? AssetColors.Custom.flamingo.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+//        .padding(-2)
+//    }
+//}
+//
+//struct PhotoView: View {
+//    //TODO: Replace this with an actual photo render
+//    let photo: String
+//    let name: String
+//    
+//    var body: some View {
+//        HStack {
+//            Image(systemName:photo).resizable().frame(width: 32,height: 32).foregroundStyle(AssetColors.Custom.flamingo.swiftUIColor)
+//            Text(name)
+//        }
+//    }
+//}
 
 func getTimetableRoom(type: RoomType) -> TimetableRoom {
     switch (type) {
@@ -277,80 +278,14 @@ func getTimetableRoom(type: RoomType) -> TimetableRoom {
         return TimetableRoom(
             id: 6,
             name: MultiLangText(
-                jaTitle: "Jellyfish",
-                enTitle: "Jellyfish"
+                jaTitle: "All",
+                enTitle: "All"
             ),
             type: .roomIj,
             sort: 6
         )
     }
 }
-//extension TimetableRoom {
-//    convenience init(type: RoomType) {
-//        switch (type) {
-//        case .roomI:
-//            self.init(
-//                id: 1,
-//                name: MultiLangText(
-//                    jaTitle: "Iguana",
-//                    enTitle: "Iguana"
-//                ),
-//                type: .roomI,
-//                sort: 1
-//            )
-//        case .roomG:
-//            self.init(
-//                id: 2,
-//                name: MultiLangText(
-//                    jaTitle: "Giraffe",
-//                    enTitle: "Giraffe"
-//                ),
-//                type: .roomG,
-//                sort: 2
-//            )
-//        case .roomH:
-//            self.init(
-//                id: 3,
-//                name: MultiLangText(
-//                    jaTitle: "Hedgehog",
-//                    enTitle: "Hedgehog"
-//                ),
-//                type: .roomH,
-//                sort: 3
-//            )
-//        case .roomF:
-//            self.init(
-//                id: 4,
-//                name: MultiLangText(
-//                    jaTitle: "Flamingo",
-//                    enTitle: "Flamingo"
-//                ),
-//                type: .roomF,
-//                sort: 4
-//            )
-//        case .roomJ:
-//            self.init(
-//                id: 5,
-//                name: MultiLangText(
-//                    jaTitle: "Jellyfish",
-//                    enTitle: "Jellyfish"
-//                ),
-//                type: .roomJ,
-//                sort: 5
-//            )
-//        case .roomIj:
-//            self.init(
-//                id: 6,
-//                name: MultiLangText(
-//                    jaTitle: "Jellyfish",
-//                    enTitle: "Jellyfish"
-//                ),
-//                type: .roomIj,
-//                sort: 6
-//            )
-//        }
-//    }
-//}
 
 #Preview {
     TimetableView(
