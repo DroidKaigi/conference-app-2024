@@ -57,13 +57,15 @@ internal fun profileCardScreenPresenter(
     var isLoading: Boolean by remember { mutableStateOf(false) }
     val ediUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
     val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(profileCard?.toCardUiState())
-    var uiType: ProfileCardUiType by remember {
-        val initialUiType = if (profileCard == null) {
+    var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Edit) }
+
+    // at first launch, if you have a profile card, show card ui
+    SafeLaunchedEffect(profileCard) {
+        uiType = if (profileCard == null) {
             ProfileCardUiType.Edit
         } else {
             ProfileCardUiType.Card
         }
-        mutableStateOf(initialUiType)
     }
 
     SafeLaunchedEffect(Unit) {
