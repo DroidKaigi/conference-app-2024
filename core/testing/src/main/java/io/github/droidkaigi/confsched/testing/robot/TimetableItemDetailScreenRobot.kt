@@ -9,6 +9,7 @@ import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToIndex
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
 import com.github.takahirom.roborazzi.Dump
@@ -19,6 +20,7 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenLazyColumnTestTag
 import io.github.droidkaigi.confsched.sessions.component.TargetAudienceSectionTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
@@ -65,6 +67,15 @@ class TimetableItemDetailScreenRobot @Inject constructor(
                     endY = visibleSize.height / 2F,
                 )
             }
+    }
+
+    // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
+    fun scrollLazyColumnByIndex(
+        index: Int
+    ) {
+        composeTestRule
+            .onNode(hasTestTag(TimetableItemDetailScreenLazyColumnTestTag))
+            .performScrollToIndex(index)
     }
 
     fun checkScreenCapture() {

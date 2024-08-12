@@ -11,12 +11,10 @@ import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerS
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
-import org.robolectric.shadows.ShadowLog
 import javax.inject.Inject
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
@@ -42,12 +40,6 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
         runRobot(timetableItemDetailScreenRobot) {
             testCase.execute(timetableItemDetailScreenRobot)
         }
-    }
-
-    // TODO PUSHする前に消す
-    @Before
-    fun setUp() {
-        ShadowLog.stream = System.out
     }
 
     companion object {
@@ -117,6 +109,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show small font session detail") {
+                            // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
                             captureScreenWithChecks(
                                 checks = {
                                     todoChecks(
@@ -132,6 +125,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show large font session detail") {
+                            // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
                             captureScreenWithChecks(
                                 checks = {
                                     todoChecks(
@@ -147,6 +141,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show huge font session detail") {
+                            // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
                             captureScreenWithChecks(
                                 checks = {
                                     todoChecks(

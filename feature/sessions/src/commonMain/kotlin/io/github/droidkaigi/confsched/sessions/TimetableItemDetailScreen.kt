@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -48,6 +49,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val TimetableItemDetailBookmarkIconTestTag = "TimetableItemDetailBookmarkIconTestTag"
+const val TimetableItemDetailScreenLazyColumnTestTag = "TimetableItemDetailScreenLazyColumnTestTag"
 
 fun NavGraphBuilder.sessionScreens(
     onNavigationIconClick: () -> Unit,
@@ -171,7 +173,10 @@ private fun TimetableItemDetailScreen(
         if (uiState is Loaded) {
             ProvideRoomTheme(uiState.roomThemeKey) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(innerPadding),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .testTag(TimetableItemDetailScreenLazyColumnTestTag),
                 ) {
                     item {
                         TimetableItemDetailHeadline(
