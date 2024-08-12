@@ -145,6 +145,7 @@ private fun NavGraphBuilder.mainScreen(
             favoritesScreens(
                 onNavigationIconClick = navController::popBackStack,
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                contentPadding = contentPadding,
             )
             aboutScreen(
                 contentPadding = contentPadding,
