@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions.section
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.animateDecay
@@ -73,6 +74,9 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridHours
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridRooms
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState.Companion
+import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
@@ -107,6 +111,7 @@ fun TimetableGrid(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TimetableGrid(
     timetable: Timetable,
@@ -117,6 +122,9 @@ fun TimetableGrid(
     val timetableGridState = rememberTimetableGridState()
     val coroutineScope = rememberCoroutineScope()
     val layoutDirection = LocalLayoutDirection.current
+    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalStateException("No SharedElementScope found")
+    val animatedScope = LocalAnimatedVisibilityScope.current ?: throw IllegalStateException("No AnimatedVisibility found")
+
     Row(
         modifier = Modifier
             .testTag(TimetableGridTestTag)
@@ -151,12 +159,20 @@ fun TimetableGrid(
                     end = 16.dp + contentPadding.calculateEndPadding(layoutDirection),
                 ),
             ) { timetableItem, itemHeightPx ->
-                TimetableGridItem(
-                    modifier = Modifier.padding(horizontal = 2.dp),
-                    timetableItem = timetableItem,
-                    onTimetableItemClick = onTimetableItemClick,
-                    gridItemHeightPx = itemHeightPx,
-                )
+                with(sharedTransitionScope) {
+                    TimetableGridItem(
+                    modifier = Modifier.padding(horizontal = 2.dp)
+                        .sharedBounds(
+                            rememberSharedContentState(
+                                key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
+                            ),
+                            animatedVisibilityScope = animatedScope,
+                        ),
+                        timetableItem = timetableItem,
+                        onTimetableItemClick = onTimetableItemClick,
+                        gridItemHeightPx = itemHeightPx,
+                    )
+                }
             }
         }
     }

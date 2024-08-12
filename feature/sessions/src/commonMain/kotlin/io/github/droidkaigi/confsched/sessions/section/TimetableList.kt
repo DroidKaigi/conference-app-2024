@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions.section
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,8 +24,11 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableTime
+import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.ui.icon
 import kotlinx.collections.immutable.PersistentMap
 
@@ -35,6 +39,7 @@ data class TimetableListUiState(
     val timetable: Timetable,
 )
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TimetableList(
     uiState: TimetableListUiState,
@@ -45,6 +50,9 @@ fun TimetableList(
     modifier: Modifier = Modifier,
 ) {
     val layoutDirection = LocalLayoutDirection.current
+    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalStateException("No SharedElementScope found")
+    val animatedScope = LocalAnimatedVisibilityScope.current ?: throw IllegalStateException("No AnimatedVisibility found")
+
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag),
         state = scrollState,
@@ -71,29 +79,38 @@ fun TimetableList(
                     timetableItems.onEach { timetableItem ->
                         val isBookmarked =
                             uiState.timetable.bookmarks.contains(timetableItem.id)
-                        TimetableItemCard(
-                            isBookmarked = isBookmarked,
-                            timetableItem = timetableItem,
-                            onBookmarkClick = onBookmarkClick,
-                            tags = {
-                                TimetableItemTag(
-                                    tagText = timetableItem.room.name.currentLangTitle,
-                                    icon = timetableItem.room.icon,
-                                    tagColor = LocalRoomTheme.current.primaryColor,
-                                    modifier = Modifier.background(LocalRoomTheme.current.containerColor),
-                                )
-                                Spacer(modifier = Modifier.padding(3.dp))
-                                timetableItem.language.labels.forEach { label ->
+                        with(sharedTransitionScope) {
+                            TimetableItemCard(
+                                isBookmarked = isBookmarked,
+                                timetableItem = timetableItem,
+                                onBookmarkClick = onBookmarkClick,
+                                modifier = Modifier
+                                    .sharedBounds(
+                                        rememberSharedContentState(
+                                            key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
+                                        ),
+                                        animatedVisibilityScope = animatedScope,
+                                    ),
+                                tags = {
                                     TimetableItemTag(
-                                        tagText = label,
-                                        tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        tagText = timetableItem.room.name.currentLangTitle,
+                                        icon = timetableItem.room.icon,
+                                        tagColor = LocalRoomTheme.current.primaryColor,
+                                        modifier = Modifier.background(LocalRoomTheme.current.containerColor),
                                     )
                                     Spacer(modifier = Modifier.padding(3.dp))
-                                }
-                                Spacer(modifier = Modifier.weight(1f))
-                            },
-                            onTimetableItemClick = onTimetableItemClick,
-                        )
+                                    timetableItem.language.labels.forEach { label ->
+                                        TimetableItemTag(
+                                            tagText = label,
+                                            tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        )
+                                        Spacer(modifier = Modifier.padding(3.dp))
+                                    }
+                                    Spacer(modifier = Modifier.weight(1f))
+                                },
+                                onTimetableItemClick = onTimetableItemClick,
+                            )
+                        }
                     }
                 }
             }

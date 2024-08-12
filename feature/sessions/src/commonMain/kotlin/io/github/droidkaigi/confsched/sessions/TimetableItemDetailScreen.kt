@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.sessions
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
@@ -15,6 +16,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +34,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
@@ -44,6 +47,8 @@ import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDes
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
@@ -56,12 +61,16 @@ fun NavGraphBuilder.sessionScreens(
     onShareClick: (TimetableItem) -> Unit,
 ) {
     composable<TimetableItemDetailDestination> {
-        TimetableItemDetailScreen(
-            onNavigationIconClick = onNavigationIconClick,
-            onLinkClick = onLinkClick,
-            onCalendarRegistrationClick = onCalendarRegistrationClick,
-            onShareClick = onShareClick,
-        )
+        CompositionLocalProvider(
+            LocalAnimatedVisibilityScope provides this@composable,
+        ) {
+            TimetableItemDetailScreen(
+                onNavigationIconClick = onNavigationIconClick,
+                onLinkClick = onLinkClick,
+                onCalendarRegistrationClick = onCalendarRegistrationClick,
+                onShareClick = onShareClick,
+            )
+        }
     }
 }
 
@@ -106,6 +115,7 @@ fun TimetableItemDetailScreen(
 
 sealed interface TimetableItemDetailScreenUiState {
     data class Loading(
+        override val timetableItemId: TimetableItemId,
         override val userMessageStateHolder: UserMessageStateHolder,
     ) : TimetableItemDetailScreenUiState
 
@@ -116,9 +126,11 @@ sealed interface TimetableItemDetailScreenUiState {
         val isLangSelectable: Boolean,
         val currentLang: Lang?,
         val roomThemeKey: String,
+        override val timetableItemId: TimetableItemId,
         override val userMessageStateHolder: UserMessageStateHolder,
     ) : TimetableItemDetailScreenUiState
 
+    val timetableItemId: TimetableItemId
     val userMessageStateHolder: UserMessageStateHolder
 }
 
@@ -126,7 +138,7 @@ data class TimetableItemDetailSectionUiState(
     val timetableItem: TimetableItem,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 private fun TimetableItemDetailScreen(
     uiState: TimetableItemDetailScreenUiState,
@@ -138,6 +150,9 @@ private fun TimetableItemDetailScreen(
     onSelectedLanguage: (Lang) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
+    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalStateException("No SharedElementScope found")
+    val animatedScope = LocalAnimatedVisibilityScope.current ?: throw IllegalStateException("No AnimatedVisibility found")
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
         modifier = Modifier
@@ -168,29 +183,44 @@ private fun TimetableItemDetailScreen(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
-        if (uiState is Loaded) {
-            ProvideRoomTheme(uiState.roomThemeKey) {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize().padding(innerPadding),
-                ) {
-                    item {
-                        TimetableItemDetailHeadline(
-                            timetableItem = uiState.timetableItem,
-                        )
-                    }
+        with(sharedTransitionScope) {
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .sharedBounds(
+                        rememberSharedContentState(
+                            key = timetableDetailSharedContentStateKey(timetableItemId = uiState.timetableItemId),
+                        ),
+                        animatedVisibilityScope = animatedScope,
+                    ),
+            ) {
+                if (uiState is Loaded) {
+                    ProvideRoomTheme(uiState.roomThemeKey) {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxSize(),
+                        ) {
+                            item {
+                                TimetableItemDetailHeadline(
+                                    timetableItem = uiState.timetableItem,
+                                )
+                            }
 
-                    item {
-                        TimetableItemDetailSummaryCard(
-                            timetableItem = uiState.timetableItem,
-                        )
-                    }
+                            item {
+                                TimetableItemDetailSummaryCard(
+                                    timetableItem = uiState.timetableItem,
+                                )
+                            }
 
-                    item {
-                        TimetableItemDetailContent(
-                            timetableItem = uiState.timetableItem,
-                            currentLang = uiState.currentLang,
-                            onLinkClick = onLinkClick,
-                        )
+                            item {
+                                TimetableItemDetailContent(
+                                    timetableItem = uiState.timetableItem,
+                                    currentLang = uiState.currentLang,
+                                    onLinkClick = onLinkClick,
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -229,6 +259,7 @@ fun TimetableItemDetailScreenPreview() {
                     isLangSelectable = true,
                     currentLang = Lang.JAPANESE,
                     roomThemeKey = "iguana",
+                    timetableItemId = fakeSession.id,
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
                 onNavigationIconClick = {},
@@ -244,3 +275,5 @@ fun TimetableItemDetailScreenPreview() {
         }
     }
 }
+
+internal fun timetableDetailSharedContentStateKey(timetableItemId: TimetableItemId) = "timetable-item-${timetableItemId.value}"
