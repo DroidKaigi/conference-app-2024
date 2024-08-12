@@ -9,7 +9,6 @@ import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.TimetableItemDetailScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
-import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
@@ -109,12 +108,12 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show small font session detail") {
-                            // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
                             captureScreenWithChecks(
                                 checks = {
-                                    todoChecks(
-                                        "FIXME: Add show small font session detail",
-                                    )
+                                    checkSummaryCardRow("Date/Time")
+                                    checkSummaryCardRow("Location")
+                                    checkSummaryCardRow("Supported Languages")
+                                    checkSummaryCardRow("Category")
                                 },
                             )
                         }
@@ -123,14 +122,15 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         run {
                             setFontScale(1.5f)
                             setupScreenContent()
+                            scrollLazyColumnByIndex(1)
                         }
                         itShould("show large font session detail") {
-                            // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
                             captureScreenWithChecks(
                                 checks = {
-                                    todoChecks(
-                                        "FIXME: Add show large font session detail",
-                                    )
+                                    checkSummaryCardRow("Date/Time")
+                                    checkSummaryCardRow("Location")
+                                    checkSummaryCardRow("Supported Languages")
+                                    checkSummaryCardRow("Category")
                                 },
                             )
                         }
@@ -139,14 +139,15 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         run {
                             setFontScale(2.0f)
                             setupScreenContent()
+                            scrollLazyColumnByIndex(1)
                         }
                         itShould("show huge font session detail") {
-                            // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
                             captureScreenWithChecks(
                                 checks = {
-                                    todoChecks(
-                                        "FIXME: Add show huge font session detail",
-                                    )
+                                    checkSummaryCardRow("Date/Time")
+                                    checkSummaryCardRow("Location")
+                                    checkSummaryCardRow("Supported Languages")
+                                    checkSummaryCardRow("Category")
                                 },
                             )
                         }

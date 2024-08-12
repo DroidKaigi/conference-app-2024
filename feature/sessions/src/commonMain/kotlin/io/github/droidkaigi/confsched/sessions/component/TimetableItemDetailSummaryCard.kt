@@ -28,6 +28,7 @@ import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.Placeholder
 import androidx.compose.ui.text.PlaceholderVerticalAlign
 import androidx.compose.ui.text.SpanStyle
@@ -53,6 +54,8 @@ import io.github.droidkaigi.confsched.model.nameAndFloor
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val SummaryCardRowTestTag = "SummaryCardRowTestTag:"
 
 @Composable
 fun TimetableItemDetailSummaryCard(
@@ -81,7 +84,11 @@ fun TimetableItemDetailSummaryCard(
             .padding(12.dp),
     ) {
         SummaryCardRow(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(
+                    SummaryCardRowTestTag.plus(stringResource(SessionsRes.string.schedule_title)),
+                ),
             imageVector = Icons.Outlined.Schedule,
             contentDescription = stringResource(SessionsRes.string.content_description_schedule),
             title = stringResource(SessionsRes.string.schedule_title),
@@ -89,7 +96,11 @@ fun TimetableItemDetailSummaryCard(
         )
         Spacer(Modifier.height(8.dp))
         SummaryCardRow(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(
+                    SummaryCardRowTestTag.plus(stringResource(SessionsRes.string.location_title)),
+                ),
             imageVector = Icons.Outlined.LocationOn,
             contentDescription = stringResource(SessionsRes.string.content_description_location),
             title = stringResource(SessionsRes.string.location_title),
@@ -97,7 +108,11 @@ fun TimetableItemDetailSummaryCard(
         )
         Spacer(Modifier.height(8.dp))
         SummaryCardRow(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(
+                    SummaryCardRowTestTag.plus(stringResource(SessionsRes.string.language_title)),
+                ),
             imageVector = Icons.Outlined.Language,
             contentDescription = stringResource(SessionsRes.string.content_description_language),
             title = stringResource(SessionsRes.string.language_title),
@@ -107,7 +122,11 @@ fun TimetableItemDetailSummaryCard(
         )
         Spacer(Modifier.height(8.dp))
         SummaryCardRow(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(
+                    SummaryCardRowTestTag.plus(stringResource(SessionsRes.string.category_title)),
+                ),
             imageVector = Icons.Outlined.Category,
             contentDescription = stringResource(SessionsRes.string.content_description_category),
             title = stringResource(SessionsRes.string.category_title),
