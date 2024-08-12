@@ -4,7 +4,6 @@ import shared
 public enum DayTab: String, CaseIterable, Identifiable, Sendable {
     public var id : RawValue { rawValue }
     
-    case all = "All"
     case day1 = "9/12"
     case day2 = "9/13"
 }

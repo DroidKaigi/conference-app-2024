@@ -28,13 +28,10 @@ public struct TimetableView: View {
                             HStack(spacing: 6) {
                                 Text(tabItem.rawValue)
                                     .textStyle(.labelMedium)
+                                    .underline()
                             }
                             .foregroundStyle(AssetColors.Custom.iguana.swiftUIColor)
                             .padding(6)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(AssetColors.Custom.iguana.swiftUIColor, lineWidth: 1)
-                            )
                         } else {
                             HStack(spacing: 6) {
                                 Text(tabItem.rawValue)
@@ -42,10 +39,6 @@ public struct TimetableView: View {
                             }
                             .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                             .padding(6)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 4)
-                                    .stroke(AssetColors.Surface.onSurface.swiftUIColor, lineWidth: 1)
-                            )
                         }
                     })
                 }
