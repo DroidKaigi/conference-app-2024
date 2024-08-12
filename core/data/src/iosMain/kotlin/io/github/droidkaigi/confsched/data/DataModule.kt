@@ -8,7 +8,7 @@ import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsApiCl
 import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsRepository
 import io.github.droidkaigi.confsched.data.core.defaultJson
 import io.github.droidkaigi.confsched.data.core.defaultKtorConfig
-import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapApiClient
+import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapRepository
 import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsApiClient
@@ -121,7 +121,7 @@ public val dataModule: Module = module {
     singleOf(::DefaultContributorsApiClient) bind ContributorsApiClient::class
     singleOf(::DefaultSponsorsApiClient) bind SponsorsApiClient::class
     singleOf(::DefaultStaffApiClient) bind StaffApiClient::class
-    singleOf(::DefaultEventMapApiClient) bind EventMapApiClient::class
+    singleOf(::FakeEventMapApiClient) bind EventMapApiClient::class
 
     singleOf(::NetworkService)
     singleOf(::DefaultSessionsRepository) bind SessionsRepository::class
