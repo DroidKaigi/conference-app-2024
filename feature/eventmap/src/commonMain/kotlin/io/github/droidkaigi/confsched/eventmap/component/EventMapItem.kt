@@ -27,12 +27,12 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.eventmap.EventMapRes
 import io.github.droidkaigi.confsched.model.EventMapEvent
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import io.github.droidkaigi.confsched.model.RoomIcon
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.ui.toResDrawable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun EventMapItem(
