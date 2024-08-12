@@ -94,7 +94,7 @@ public struct TimetableDetailView: View {
     @MainActor var headLine: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
-                RoomTag(store.timetableItem.room)
+                RoomTag(store.timetableItem.room.name)
                 ForEach(store.timetableItem.language.labels, id: \.self) { label in
                     LanguageTag(label)
                 }
