@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="eventmap">イベントマップ</string>
+    <string name="read_more">詳しく見る</string>
 </resources>
