@@ -20,7 +20,8 @@ build-app-debug: build-kmp-module
 		xcodebuild -project $(PROJECT_FILE) \
 		-scheme $(SCHEME_NAME_APP) \
 		-configuration Debug \
-                -skipPackagePluginValidation \
+		-skipPackagePluginValidation \
+		-skipMacroValidation \
 		-destination "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.5" \
 		clean build | xcbeautify
 
