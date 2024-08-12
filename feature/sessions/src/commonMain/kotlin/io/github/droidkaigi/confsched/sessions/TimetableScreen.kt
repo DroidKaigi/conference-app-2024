@@ -215,11 +215,11 @@ fun PreviewTimetableScreenDark() {
                     contentUiState = TimetableUiState.ListTimetable(
                         mapOf(
                             DroidKaigi2024Day.Workday to TimetableListUiState(
-                                mapOf<Pair<String, String>, List<TimetableItem>>().toPersistentMap(),
+                                mapOf<TimetableListUiState.TimeSlot, List<TimetableItem>>().toPersistentMap(),
                                 Timetable(),
                             ),
                             DroidKaigi2024Day.ConferenceDay1 to TimetableListUiState(
-                                mapOf<Pair<String, String>, List<TimetableItem>>().toPersistentMap(),
+                                mapOf<TimetableListUiState.TimeSlot, List<TimetableItem>>().toPersistentMap(),
                                 Timetable(),
                             ),
                         ),
