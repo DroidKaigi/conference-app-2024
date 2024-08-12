@@ -92,9 +92,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                     wait5Seconds()
                                     captureScreenWithChecks(
                                         checks = {
-                                            todoChecks(
-                                                "FIXME: Add check for unBookmarked session"
-                                            )
+                                            checkUnBookmarkSession()
                                         }
                                     )
                                 }

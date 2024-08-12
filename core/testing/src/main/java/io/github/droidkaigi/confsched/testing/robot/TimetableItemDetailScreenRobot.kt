@@ -96,6 +96,12 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .assertContentDescriptionEquals("Bookmarked")
     }
 
+    fun checkUnBookmarkSession() {
+        composeTestRule
+            .onNode(hasTestTag(TimetableItemDetailBookmarkIconTestTag))
+            .assertContentDescriptionEquals("Not Bookmarked")
+    }
+
     companion object {
         val defaultSessionId: String =
             SessionsAllResponse.fake().sessions.find { it.sessionType == "NORMAL" }!!.id
