@@ -35,25 +35,14 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 
 const val profileCardScreenRoute = "profilecard"
 
-object ProfileCardTestTag {
-    private const val suffix = "TestTag"
-    private const val prefix = "ProfileCard"
-
-    object EditScreen {
-        private const val editScreenPrefix = "${prefix}_EditScreen"
-        const val SCREEN = "${editScreenPrefix}_$suffix"
-        const val NICKNAME_TEXT_FIELD = "${editScreenPrefix}_NicknameTextField_$suffix"
-        const val OCCUPATION_TEXT_FIELD = "${editScreenPrefix}_OccupationTextField_$suffix"
-        const val LINK_TEXT_FIELD = "${editScreenPrefix}_LinkTextField_$suffix"
-        const val SELECT_IMAGE_BUTTON = "${editScreenPrefix}_SelectImageButton_$suffix"
-        const val CREATE_BUTTON = "${editScreenPrefix}_CreateButton_$suffix"
-    }
-
-    object CardScreen {
-        private const val cardScreenPrefix = "${prefix}_CardScreen"
-        const val SCREEN = "${cardScreenPrefix}_$suffix"
-    }
-}
+const val ProfileCardEditScreenTestTag = "ProfileCardEditScreenTestTag"
+const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
+const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
+const val ProfileCardLinkTextFieldTestTag = "ProfileCardLinkTextFieldTestTag"
+const val ProfileCardSelectImageButtonTestTag = "ProfileCardSelectImageButtonTestTag"
+const val ProfileCardCreateButtonTestTag = "ProfileCardCreateButtonTestTag"
+const val ProfileCardCardScreenTestTag = "ProfileCardCardScreenTestTag"
+const val ProfileCardEditButtonTestTag = "ProfileCardEditButtonTestTag"
 
 fun NavGraphBuilder.profileCardScreen(contentPadding: PaddingValues) {
     composable(profileCardScreenRoute) {
@@ -186,7 +175,7 @@ internal fun EditScreen(
 
     Column(
         modifier = modifier
-            .testTag(ProfileCardTestTag.EditScreen.SCREEN)
+            .testTag(ProfileCardEditScreenTestTag)
             .padding(contentPadding),
     ) {
         Text("ProfileCardEdit")
@@ -194,23 +183,23 @@ internal fun EditScreen(
             value = nickname,
             onValueChange = { nickname = it },
             placeholder = { Text("Nickname") },
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.NICKNAME_TEXT_FIELD),
+            modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
         )
         TextField(
             value = occupation ?: "",
             onValueChange = { occupation = it },
             placeholder = { Text("Occupation") },
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.OCCUPATION_TEXT_FIELD),
+            modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
         )
         TextField(
             value = link ?: "",
             onValueChange = { link = it },
             placeholder = { Text("Link") },
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.LINK_TEXT_FIELD),
+            modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
         Button(
             onClick = {},
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.SELECT_IMAGE_BUTTON),
+            modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
         ) {
             Text("画像を選択")
         }
@@ -226,7 +215,7 @@ internal fun EditScreen(
                     ),
                 )
             },
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.CREATE_BUTTON),
+            modifier = Modifier.testTag(ProfileCardCreateButtonTestTag),
         ) {
             Text("Create")
         }
@@ -242,7 +231,7 @@ internal fun CardScreen(
 ) {
     Column(
         modifier = modifier
-            .testTag(ProfileCardTestTag.CardScreen.SCREEN)
+            .testTag(ProfileCardCardScreenTestTag)
             .padding(contentPadding),
     ) {
         Text("ProfileCard")
@@ -253,7 +242,10 @@ internal fun CardScreen(
         if (uiState.link != null) {
             Text(uiState.link)
         }
-        Button(onClickReset) {
+        Button(
+            onClickReset,
+            modifier = Modifier.testTag(ProfileCardEditButtonTestTag),
+        ) {
             Text("Reset")
         }
     }

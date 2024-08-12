@@ -3,8 +3,9 @@ package io.github.droidkaigi.confsched.testing.robot
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.profilecard.ProfileCardCardScreenTestTag
+import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardScreen
-import io.github.droidkaigi.confsched.profilecard.ProfileCardTestTag
 import javax.inject.Inject
 
 class ProfileCardScreenRobot @Inject constructor(
@@ -21,13 +22,13 @@ class ProfileCardScreenRobot @Inject constructor(
 
     fun checkEditScreenDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(ProfileCardTestTag.EditScreen.SCREEN))
+            .onNode(hasTestTag(ProfileCardEditScreenTestTag))
             .assertIsDisplayed()
     }
 
     fun checkCardScreenDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(ProfileCardTestTag.CardScreen.SCREEN))
+            .onNode(hasTestTag(ProfileCardCardScreenTestTag))
             .assertIsDisplayed()
     }
 }
