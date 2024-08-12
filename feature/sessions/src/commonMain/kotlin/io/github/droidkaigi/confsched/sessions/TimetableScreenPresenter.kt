@@ -85,7 +85,10 @@ fun timetableSheet(
                         days = listOf(day),
                     ),
                 ).timetableItems.groupBy {
-                    it.startsTimeString to it.endsTimeString
+                    TimetableListUiState.TimeSlot(
+                        startTimeString = it.startsTimeString,
+                        endTimeString = it.endsTimeString,
+                    )
                 }.mapValues { entries ->
                     entries.value.sortedWith(
                         compareBy({ it.day?.name.orEmpty() }, { it.startsTimeString }),
