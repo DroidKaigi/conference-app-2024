@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.favorites
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons.AutoMirrored.Filled
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -48,6 +49,7 @@ const val FavoritesScreenTestTag = "FavoritesScreenTestTag"
 fun NavGraphBuilder.favoritesScreens(
     onNavigationIconClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
+    contentPadding: PaddingValues,
 ) {
     composable(favoritesScreenRoute) {
         val lifecycleOwner = LocalLifecycleOwner.current
@@ -60,6 +62,7 @@ fun NavGraphBuilder.favoritesScreens(
                 )
             },
             onTimetableItemClick = onTimetableItemClick,
+            contentPadding = contentPadding,
         )
     }
 }
@@ -83,6 +86,7 @@ data class FavoritesScreenUiState(
 fun FavoritesScreen(
     onNavigationIconClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
+    contentPadding: PaddingValues = PaddingValues(),
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
     eventEmitter: EventEmitter<FavoritesScreenEvent> = rememberEventEmitter(),
@@ -112,6 +116,7 @@ fun FavoritesScreen(
             eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
         },
         isTopAppBarHidden = isTopAppBarHidden,
+        contentPadding = contentPadding,
         modifier = modifier,
     )
 }
@@ -128,6 +133,7 @@ fun FavoritesScreen(
     onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
     isTopAppBarHidden: Boolean,
+    contentPadding: PaddingValues = PaddingValues(),
     modifier: Modifier = Modifier,
 ) {
     val scrollBehavior =
@@ -175,7 +181,10 @@ fun FavoritesScreen(
             onDay1FilterChipClick = onDay1FilterChipClick,
             onDay2FilterChipClick = onDay2FilterChipClick,
             onBookmarkClick = onBookmarkClick,
-            modifier = Modifier.padding(padding),
+            contentPadding = contentPadding,
+            modifier = Modifier.padding(
+                top = padding.calculateTopPadding()
+            ),
         )
     }
 }

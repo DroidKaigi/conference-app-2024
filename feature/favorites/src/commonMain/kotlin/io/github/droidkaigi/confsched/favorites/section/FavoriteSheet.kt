@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -70,6 +71,7 @@ fun FavoriteSheet(
     onDay1FilterChipClick: () -> Unit,
     onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
+    contentPadding: PaddingValues = PaddingValues(),
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxSize()) {
@@ -92,6 +94,7 @@ fun FavoriteSheet(
                     timetable = uiState.timeTable,
                     onBookmarkClick = onBookmarkClick,
                     onTimetableItemClick = onTimetableItemClick,
+                    contentPadding = contentPadding,
                 )
             }
         }
