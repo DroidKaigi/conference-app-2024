@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Favorite
@@ -212,6 +213,7 @@ fun MainScreen(
                     onTabSelected = {
                         onTabSelected(mainNestedNavController, it)
                     },
+                    modifier = Modifier.safeDrawingPadding(),
                 )
             },
         ) { padding ->
