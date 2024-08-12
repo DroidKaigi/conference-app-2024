@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.sessions.generated.resources.archive
@@ -44,6 +45,8 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val TargetAudienceSectionTestTag = "TargetAudienceSectionTestTag"
 
 @Composable
 fun TimetableItemDetailContent(
@@ -133,7 +136,11 @@ private fun TargetAudienceSection(
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier = modifier.padding(8.dp)) {
+    Column(
+        modifier = modifier
+            .padding(8.dp)
+            .testTag(TargetAudienceSectionTestTag)
+    ) {
         Text(
             text = stringResource(SessionsRes.string.target_audience),
             style = MaterialTheme.typography.titleLarge,

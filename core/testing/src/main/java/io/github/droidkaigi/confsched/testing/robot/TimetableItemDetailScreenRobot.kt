@@ -5,6 +5,8 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isRoot
+import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
@@ -17,6 +19,7 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
+import io.github.droidkaigi.confsched.sessions.component.TargetAudienceSectionTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
 import javax.inject.Inject
@@ -100,6 +103,16 @@ class TimetableItemDetailScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(TimetableItemDetailBookmarkIconTestTag))
             .assertContentDescriptionEquals("Not Bookmarked")
+    }
+
+    fun checkTargetAudience() {
+        composeTestRule
+            .onNode(hasTestTag(TargetAudienceSectionTestTag))
+            .onChildren()
+            .onFirst()
+            .assertExists()
+            .assertIsDisplayed()
+            .assertTextEquals("Target Audience")
     }
 
     companion object {

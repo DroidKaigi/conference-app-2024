@@ -105,9 +105,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             itShould("show scrolled session detail") {
                                 captureScreenWithChecks(
                                     checks = {
-                                        todoChecks(
-                                            "FIXME: Add check for scrolled session detail"
-                                        )
+                                        checkTargetAudience()
                                     }
                                 )
                             }
