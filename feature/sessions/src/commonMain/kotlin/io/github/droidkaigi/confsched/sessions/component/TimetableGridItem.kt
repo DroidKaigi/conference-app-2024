@@ -99,12 +99,18 @@ fun TimetableGridItem(
             )
             it.copy(fontSize = titleFontSize, lineHeight = titleLineHeight, color = LocalRoomTheme.current.primaryColor)
         }
+        val cardShape = RoundedCornerShape(4.dp)
         Column(
             modifier = modifier
                 .testTag(TimetableGridItemTestTag)
                 .background(
                     color = LocalRoomTheme.current.containerColor,
-                    shape = RoundedCornerShape(4.dp),
+                    shape = cardShape,
+                )
+                .border(
+                    width = 1.dp,
+                    color = LocalRoomTheme.current.primaryColor,
+                    shape = cardShape,
                 )
                 .width(TimetableGridItemSizes.width)
                 .height(height)

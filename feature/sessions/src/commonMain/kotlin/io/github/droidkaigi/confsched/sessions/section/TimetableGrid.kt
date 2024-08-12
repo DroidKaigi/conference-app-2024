@@ -152,6 +152,7 @@ fun TimetableGrid(
                 ),
             ) { timetableItem, itemHeightPx ->
                 TimetableGridItem(
+                    modifier = Modifier.padding(horizontal = 2.dp),
                     timetableItem = timetableItem,
                     onTimetableItemClick = onTimetableItemClick,
                     gridItemHeightPx = itemHeightPx,
@@ -292,7 +293,7 @@ fun TimetableGrid(
                     },
                 )
             },
-        itemProvider = itemProvider,
+        itemProvider = { itemProvider },
     ) { constraint ->
 
         data class ItemData(val placeable: Placeable, val timetableItem: TimetableItemLayout)
