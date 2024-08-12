@@ -11,6 +11,16 @@
         }
       }
     },
+    "Detail" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "詳しく見る"
+          }
+        }
+      }
+    },
     "NavigationTitle" : {
       "localizations" : {
         "en" : {

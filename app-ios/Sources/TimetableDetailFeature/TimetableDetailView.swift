@@ -171,7 +171,10 @@ public struct TimetableDetailView: View {
             )
             
             if let session = store.timetableItem as? TimetableItem.Session {
-                SessionDescriptionView(content: session.description_.currentLangTitle)
+                SessionDescriptionView(
+                    content: session.description_.currentLangTitle,
+                    themeColor: session.room.roomTheme.primaryColor
+                )
                     .padding(.bottom, 24)
             }
         }
