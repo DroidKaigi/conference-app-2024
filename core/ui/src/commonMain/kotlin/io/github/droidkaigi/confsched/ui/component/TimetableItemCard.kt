@@ -115,6 +115,25 @@ fun TimetableItemCard(
                         }
                     }
                 }
+                if (timetableItem is Session) {
+                    timetableItem.message?.let {
+                        Row(
+                            modifier = Modifier.padding(top = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        ) {
+                            Icon(
+                                Icons.Filled.Info,
+                                contentDescription = stringResource(UiRes.string.image),
+                                tint = MaterialTheme.colorScheme.error,
+                            )
+                            Text(
+                                text = it.currentLangTitle,
+                                fontSize = 16.sp,
+                                color = MaterialTheme.colorScheme.error,
+                            )
+                        }
+                    }
+                }
             }
             TextButton(
                 onClick = { onBookmarkClick(timetableItem, true) },
@@ -134,24 +153,6 @@ fun TimetableItemCard(
                         contentDescription = stringResource(UiRes.string.not_bookmarked),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                }
-            }
-            if (timetableItem is Session) {
-                timetableItem.message?.let {
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        Icon(
-                            Icons.Filled.Info,
-                            contentDescription = stringResource(UiRes.string.image),
-                            tint = MaterialTheme.colorScheme.error,
-                        )
-                        Text(
-                            text = it.currentLangTitle,
-                            fontSize = 16.sp,
-                            color = MaterialTheme.colorScheme.error,
-                        )
-                    }
                 }
             }
         }
