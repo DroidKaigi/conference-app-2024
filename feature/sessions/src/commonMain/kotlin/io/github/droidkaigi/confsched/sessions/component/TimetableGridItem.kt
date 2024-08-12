@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -56,7 +57,6 @@ import io.github.droidkaigi.confsched.model.TimetableSpeaker
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.section.TimetableSizes
-import io.github.droidkaigi.confsched.ui.icon
 import io.github.droidkaigi.confsched.ui.previewOverride
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.collections.immutable.PersistentList
@@ -123,35 +123,35 @@ fun TimetableGridItem(
                 modifier = Modifier.weight(3f),
                 verticalArrangement = Arrangement.Top,
             ) {
-                Row(
+                Text(
                     modifier = Modifier.weight(1f, fill = false),
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    text = timetableItem.title.currentLangTitle,
+                    style = titleTextStyle,
+                    overflow = TextOverflow.Ellipsis,
+                )
+
+                Row(
+                    modifier = Modifier
+                        .weight(1f, fill = false)
+                        .padding(top = TimetableGridItemSizes.titleToSchedulePadding),
                 ) {
                     Icon(
                         modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
-                        imageVector = timetableItem.room.icon,
-                        tint = LocalRoomTheme.current.primaryColor,
+                        imageVector = Icons.Default.Schedule,
                         contentDescription = stringResource(SessionsRes.string.content_description_schedule_icon),
                     )
-                    var scheduleTextStyle = MaterialTheme.typography.labelSmall
+                    Spacer(modifier = Modifier.width(4.dp))
+                    var scheduleTextStyle = MaterialTheme.typography.bodySmall
                     if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
                         scheduleTextStyle =
                             scheduleTextStyle.copy(fontSize = titleTextStyle.fontSize)
                     }
                     Text(
-                        text = "${timetableItem.startsTimeString}~${timetableItem.endsTimeString}",
+                        text = "${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}",
                         style = scheduleTextStyle,
                         color = LocalRoomTheme.current.primaryColor,
                     )
                 }
-
-                Text(
-                    modifier = Modifier.weight(1f, fill = false)
-                        .padding(top = TimetableGridItemSizes.titleToSchedulePadding),
-                    text = timetableItem.title.currentLangTitle,
-                    style = titleTextStyle,
-                    overflow = TextOverflow.Ellipsis,
-                )
             }
 
             val shouldShowError = timetableItem is Session && timetableItem.message != null
