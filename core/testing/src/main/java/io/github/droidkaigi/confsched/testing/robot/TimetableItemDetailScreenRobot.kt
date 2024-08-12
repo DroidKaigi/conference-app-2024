@@ -71,7 +71,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
 
     // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
     fun scrollLazyColumnByIndex(
-        index: Int
+        index: Int,
     ) {
         composeTestRule
             .onNode(hasTestTag(TimetableItemDetailScreenLazyColumnTestTag))

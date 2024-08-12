@@ -139,7 +139,7 @@ private fun TargetAudienceSection(
     Column(
         modifier = modifier
             .padding(8.dp)
-            .testTag(TargetAudienceSectionTestTag)
+            .testTag(TargetAudienceSectionTestTag),
     ) {
         Text(
             text = stringResource(SessionsRes.string.target_audience),

@@ -59,7 +59,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             captureScreenWithChecks(
                                 checks = {
                                     checkSessionDetailTitle()
-                                }
+                                },
                             )
                         }
                         itShould("be appropriately accessible") {
@@ -73,7 +73,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 captureScreenWithChecks(
                                     checks = {
                                         checkBookmarkedSession()
-                                    }
+                                    },
                                 )
                             }
                             describe("click bookmark again") {
@@ -85,7 +85,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                     captureScreenWithChecks(
                                         checks = {
                                             checkUnBookmarkSession()
-                                        }
+                                        },
                                     )
                                 }
                             }
@@ -98,7 +98,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 captureScreenWithChecks(
                                     checks = {
                                         checkTargetAudience()
-                                    }
+                                    },
                                 )
                             }
                         }
@@ -113,9 +113,9 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             captureScreenWithChecks(
                                 checks = {
                                     todoChecks(
-                                        "FIXME: Add show small font session detail"
+                                        "FIXME: Add show small font session detail",
                                     )
-                                }
+                                },
                             )
                         }
                     }
@@ -129,9 +129,9 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             captureScreenWithChecks(
                                 checks = {
                                     todoChecks(
-                                        "FIXME: Add show large font session detail"
+                                        "FIXME: Add show large font session detail",
                                     )
-                                }
+                                },
                             )
                         }
                     }
@@ -145,9 +145,9 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             captureScreenWithChecks(
                                 checks = {
                                     todoChecks(
-                                        "FIXME: Add show huge font session detail"
+                                        "FIXME: Add show huge font session detail",
                                     )
-                                }
+                                },
                             )
                         }
                     }
