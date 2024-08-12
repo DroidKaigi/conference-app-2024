@@ -13,7 +13,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
@@ -25,19 +24,16 @@ import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.ui.icon
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-const val FavoriteLazyColumnTestTag = "FavoriteLazyColumnTestTag"
-
 @Composable
 fun FavoriteList(
     timetable: Timetable,
     onBookmarkClick: (TimetableItem) -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
-    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier.fillMaxSize()
-            .testTag(FavoriteLazyColumnTestTag),
+        modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
     ) {

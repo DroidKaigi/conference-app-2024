@@ -86,8 +86,8 @@ data class FavoritesScreenUiState(
 fun FavoritesScreen(
     onNavigationIconClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
-    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
+    modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
     eventEmitter: EventEmitter<FavoritesScreenEvent> = rememberEventEmitter(),
     uiState: FavoritesScreenUiState = favoritesScreenPresenter(events = eventEmitter),
@@ -133,8 +133,8 @@ fun FavoritesScreen(
     onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
     isTopAppBarHidden: Boolean,
-    modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
+    modifier: Modifier = Modifier,
 ) {
     val scrollBehavior =
         if (!isTopAppBarHidden) {
@@ -183,7 +183,7 @@ fun FavoritesScreen(
             onBookmarkClick = onBookmarkClick,
             contentPadding = contentPadding,
             modifier = Modifier.padding(
-                top = padding.calculateTopPadding(),
+                top = padding.calculateTopPadding()
             ),
         )
     }
