@@ -91,7 +91,7 @@ struct TimetableListView: View {
             LazyVStack {
                 ForEach(store.timetableItems, id: \.self) { item in
                     Button {
-                        //store.send(.view(.timetableItemTapped))
+                        // Button click is in the label
                     } label: {
                         TimeGroupMiniList(contents: item, onItemTap: { item in
                             store.send(.view(.timetableItemTapped(item)))
