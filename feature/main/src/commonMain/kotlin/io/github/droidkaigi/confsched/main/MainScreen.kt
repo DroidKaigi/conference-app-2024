@@ -21,6 +21,8 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Map
 import androidx.compose.material.icons.outlined.People
 import androidx.compose.material3.Button
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -51,6 +53,7 @@ import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
 import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
+import io.github.droidkaigi.confsched.model.isBlurSupported
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import org.jetbrains.compose.resources.DrawableResource
@@ -219,7 +222,7 @@ fun MainScreen(
         ) { padding ->
             val hazeStyle =
                 HazeStyle(
-                    tint = Color.Black.copy(alpha = .2f),
+                    tint = MaterialTheme.colorScheme.hazeTint,
                     blurRadius = 30.dp,
                 )
             NavHost(
@@ -238,6 +241,13 @@ fun MainScreen(
         }
     }
 }
+
+private val ColorScheme.hazeTint: Color
+    @Composable get() = if (isBlurSupported()) {
+        scrim.copy(alpha = 0.4f)
+    } else {
+        scrim
+    }
 
 private fun materialFadeThroughIn(): EnterTransition =
     fadeIn(
