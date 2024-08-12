@@ -6,6 +6,11 @@ on:
     types:
       - completed
 
+permissions:
+  actions: read    # for downloading artifacts
+  contents: read   # for accessing repository contents
+  pull-requests: write # for removing labels from pull requests
+
 jobs:
   remove_label:
     runs-on: ubuntu-latest
