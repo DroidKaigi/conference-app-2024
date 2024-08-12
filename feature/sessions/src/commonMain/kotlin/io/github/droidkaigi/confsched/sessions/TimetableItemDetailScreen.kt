@@ -40,7 +40,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailCont
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadline
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
-import io.github.droidkaigi.confsched.sessions.navigation.TimeTableItem
+import io.github.droidkaigi.confsched.sessions.navigation.TimetableItem
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -57,7 +57,7 @@ fun NavGraphBuilder.sessionScreens(
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
 ) {
-    composable<TimeTableItem> {
+    composable<io.github.droidkaigi.confsched.sessions.navigation.TimetableItem> {
         TimetableItemDetailScreen(
             onNavigationIconClick = onNavigationIconClick,
             onLinkClick = onLinkClick,
@@ -70,7 +70,7 @@ fun NavGraphBuilder.sessionScreens(
 fun NavController.navigateToTimetableItemDetailScreen(
     timetableItem: TimetableItem,
 ) {
-    navigate(TimeTableItem(timetableItem.id.value))
+    navigate(io.github.droidkaigi.confsched.sessions.navigation.TimetableItem(timetableItem.id.value))
 }
 
 @Composable

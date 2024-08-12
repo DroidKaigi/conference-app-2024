@@ -14,7 +14,7 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
-import io.github.droidkaigi.confsched.sessions.timetableItemDetailScreenRoute
+import io.github.droidkaigi.confsched.sessions.navigation.TimetableItem
 import javax.inject.Inject
 
 class TimetableItemDetailScreenRobot @Inject constructor(
@@ -27,9 +27,8 @@ class TimetableItemDetailScreenRobot @Inject constructor(
 
     suspend fun setupScreenContent() {
         val firstSessionId = SessionsAllResponse.Companion.fake().sessions.first().id
-        robotTestRule.setContentWithNavigation(
-            startDestination = "timetableItemDetail/$firstSessionId",
-            route = timetableItemDetailScreenRoute,
+        robotTestRule.setContentWithNavigation<TimetableItem>(
+            startDestination = { TimetableItem(firstSessionId) },
         ) {
             KaigiTheme {
                 TimetableItemDetailScreen(
