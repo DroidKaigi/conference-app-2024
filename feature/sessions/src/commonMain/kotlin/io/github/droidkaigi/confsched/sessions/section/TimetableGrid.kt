@@ -292,7 +292,7 @@ fun TimetableGrid(
                     },
                 )
             },
-        itemProvider = itemProvider,
+        itemProvider = { itemProvider },
     ) { constraint ->
 
         data class ItemData(val placeable: Placeable, val timetableItem: TimetableItemLayout)
