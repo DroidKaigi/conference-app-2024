@@ -150,6 +150,8 @@ private fun SummaryCardRow(
         withStyle(
             style = SpanStyle(
                 color = LocalRoomTheme.current.primaryColor,
+                fontFamily = MaterialTheme.typography.titleSmall.fontFamily,
+                fontStyle = MaterialTheme.typography.titleSmall.fontStyle,
                 fontSize = MaterialTheme.typography.titleSmall.fontSize,
             ),
         ) {
@@ -162,6 +164,8 @@ private fun SummaryCardRow(
         withStyle(
             style = SpanStyle(
                 color = LocalContentColor.current,
+                fontFamily = MaterialTheme.typography.bodyMedium.fontFamily,
+                fontStyle = MaterialTheme.typography.bodyMedium.fontStyle,
                 fontSize = MaterialTheme.typography.bodyMedium.fontSize,
             ),
         ) {
