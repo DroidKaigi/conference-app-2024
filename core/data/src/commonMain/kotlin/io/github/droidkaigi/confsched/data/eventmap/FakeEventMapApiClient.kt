@@ -36,8 +36,6 @@ public class FakeEventMapApiClient : EventMapApiClient {
 
 public fun EventMapResponse.fake(): PersistentList<EventMapEvent> {
     return List(10) {
-        createSampleEventMapEvent(
-            isFavorite = it % 2 == 0,
-        )
+        createSampleEventMapEvent()
     }.toPersistentList()
 }

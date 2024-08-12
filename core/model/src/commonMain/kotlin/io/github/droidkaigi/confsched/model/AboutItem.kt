@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.model
 
 sealed class AboutItem {
+    data object Map : AboutItem()
     data object Sponsors : AboutItem()
     data object Contributors : AboutItem()
     data object Staff : AboutItem()

@@ -17,7 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.about.generated.resources.place_link
+import io.github.droidkaigi.confsched.about.AboutRes
+import io.github.droidkaigi.confsched.designsystem.component.ClickableLinkText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -27,6 +31,7 @@ fun AboutDroidKaigiDetailSummaryCardRow(
     content: String,
     modifier: Modifier = Modifier,
     leadingIconContentDescription: String? = null,
+    onLinkClick: (url: String) -> Unit = {},
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -45,10 +50,11 @@ fun AboutDroidKaigiDetailSummaryCardRow(
             style = MaterialTheme.typography.labelLarge,
         )
         Spacer(modifier = Modifier.width(12.dp))
-        Text(
-            text = content,
-            fontWeight = FontWeight.Bold,
+        ClickableLinkText(
             style = MaterialTheme.typography.bodyMedium,
+            content = content,
+            onLinkClick = onLinkClick,
+            regex = stringResource(AboutRes.string.place_link).toRegex(),
         )
     }
 }

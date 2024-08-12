@@ -16,6 +16,7 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.TimetableScreen
 import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableUiTypeChangeButtonTestTag
+import io.github.droidkaigi.confsched.sessions.component.TimetableGridItemTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkIconTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
@@ -92,9 +93,16 @@ class TimetableScreenRobot @Inject constructor(
         assert(clickedItems.isNotEmpty())
     }
 
-    fun checkTimetableItemsDisplayed() {
+    fun checkTimetableListItemsDisplayed() {
         composeTestRule
             .onAllNodes(hasTestTag(TimetableItemCardTestTag))
+            .onFirst()
+            .assertIsDisplayed()
+    }
+
+    fun checkTimetableGridItemsDisplayed() {
+        composeTestRule
+            .onAllNodes(hasTestTag(TimetableGridItemTestTag))
             .onFirst()
             .assertIsDisplayed()
     }

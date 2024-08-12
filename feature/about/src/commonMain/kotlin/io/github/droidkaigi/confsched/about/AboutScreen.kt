@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.about.generated.resources.about_droidkaigi
 import io.github.droidkaigi.confsched.about.section.AboutDroidKaigiDetail
 import io.github.droidkaigi.confsched.about.section.AboutFooterLinks
 import io.github.droidkaigi.confsched.about.section.aboutCredits
@@ -26,6 +27,8 @@ import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.AboutItem.Medium
 import io.github.droidkaigi.confsched.model.AboutItem.X
 import io.github.droidkaigi.confsched.model.AboutItem.YouTube
+import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
+import org.jetbrains.compose.resources.stringResource
 
 const val aboutScreenRoute = "about"
 
@@ -68,6 +71,12 @@ fun AboutScreen(
 
     Scaffold(
         modifier = modifier.testTag(AboutScreenTestTag.Screen),
+        topBar = {
+            AnimatedTextTopAppBar(
+                title = stringResource(AboutRes.string.about_droidkaigi),
+                scrollBehavior = scrollBehavior,
+            )
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
@@ -81,7 +90,11 @@ fun AboutScreen(
             contentPadding = padding,
         ) {
             item {
-                AboutDroidKaigiDetail()
+                AboutDroidKaigiDetail(
+                    onViewMapClick = {
+                        onAboutItemClick(AboutItem.Map)
+                    },
+                )
             }
             aboutCredits(
                 onSponsorsItemClick = {
