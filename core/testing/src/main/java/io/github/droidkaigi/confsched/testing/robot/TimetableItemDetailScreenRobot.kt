@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
@@ -87,6 +88,12 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .assertExists()
             .assertIsDisplayed()
             .assertTextEquals("Demo Welcome Talk 1")
+    }
+
+    fun checkBookmarkedSession() {
+        composeTestRule
+            .onNode(hasTestTag(TimetableItemDetailBookmarkIconTestTag))
+            .assertContentDescriptionEquals("Bookmarked")
     }
 
     companion object {

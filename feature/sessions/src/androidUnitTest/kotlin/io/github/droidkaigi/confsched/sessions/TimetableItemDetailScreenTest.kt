@@ -80,9 +80,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             itShould("show bookmarked session") {
                                 captureScreenWithChecks(
                                     checks = {
-                                        todoChecks(
-                                            "FIXME: Add check for bookmarked session"
-                                        )
+                                        checkBookmarkedSession()
                                     }
                                 )
                             }
