@@ -1,8 +1,7 @@
 package io.github.droidkaigi.confsched.data.eventmap
 
-import io.github.droidkaigi.confsched.data.eventmap.response.EventMapResponse
 import io.github.droidkaigi.confsched.model.EventMapEvent
-import io.github.droidkaigi.confsched.model.createSampleEventMapEvent
+import io.github.droidkaigi.confsched.model.fake
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import okio.IOException
@@ -12,7 +11,9 @@ public class FakeEventMapApiClient : EventMapApiClient {
     public sealed class Status : EventMapApiClient {
         public data object Operational : Status() {
             override suspend fun eventMapEvents(): PersistentList<EventMapEvent> {
-                return EventMapResponse().fake()
+                return List(10) {
+                    EventMapEvent.fake()
+                }.toPersistentList()
             }
         }
 
@@ -32,10 +33,4 @@ public class FakeEventMapApiClient : EventMapApiClient {
     override suspend fun eventMapEvents(): PersistentList<EventMapEvent> {
         return status.eventMapEvents()
     }
-}
-
-public fun EventMapResponse.fake(): PersistentList<EventMapEvent> {
-    return List(10) {
-        createSampleEventMapEvent()
-    }.toPersistentList()
 }

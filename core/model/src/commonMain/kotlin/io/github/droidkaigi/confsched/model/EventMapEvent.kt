@@ -4,9 +4,11 @@ data class EventMapEvent(
     val name: MultiLangText,
     val roomName: MultiLangText,
     val description: MultiLangText,
-)
+) {
+    companion object
+}
 
-fun createSampleEventMapEvent() = EventMapEvent(
+fun EventMapEvent.Companion.fake() = EventMapEvent(
     name = MultiLangText("ランチミートアップ", "Lunch Meetup"),
     roomName = MultiLangText("Iguana", "Iguana"),
     description = MultiLangText(
