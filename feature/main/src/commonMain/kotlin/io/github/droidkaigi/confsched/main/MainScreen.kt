@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package io.github.droidkaigi.confsched.main
 
 import androidx.compose.animation.AnimatedVisibility
@@ -35,6 +37,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.key.Key.Companion.R
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -42,8 +45,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import conference_app_2024.core.designsystem.generated.resources.ic_diamond
+import conference_app_2024.core.designsystem.generated.resources.ic_fav_off
+import conference_app_2024.core.designsystem.generated.resources.ic_fav_on
+import conference_app_2024.core.designsystem.generated.resources.ic_info_off
+import conference_app_2024.core.designsystem.generated.resources.ic_map_off
+import conference_app_2024.core.designsystem.generated.resources.ic_profilecard_off
+import conference_app_2024.core.designsystem.generated.resources.ic_timetable_off
 import conference_app_2024.feature.main.generated.resources.about
 import conference_app_2024.feature.main.generated.resources.event_map
+import conference_app_2024.feature.main.generated.resources.icon_map_fill
+import conference_app_2024.feature.main.generated.resources.icon_profilecard
 import conference_app_2024.feature.main.generated.resources.profile_card
 import conference_app_2024.feature.main.generated.resources.timetable
 import dev.chrisbanes.haze.HazeState
@@ -51,9 +63,12 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.haze
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.designsystem.DesignSystemRes
+import io.github.droidkaigi.confsched.main.IconRepresentation.Vector
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
 import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
+import io.github.droidkaigi.confsched.model.RoomIcon.Diamond
 import io.github.droidkaigi.confsched.model.isBlurSupported
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -139,37 +154,37 @@ sealed class IconRepresentation {
 }
 
 enum class MainScreenTab(
-    val icon: IconRepresentation.Vector,
+    val icon: DrawableResource,
     val label: StringResource,
     val contentDescription: StringResource,
     val testTag: String = "mainScreenTab:$label",
 ) {
     Timetable(
-        icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
+        icon = DesignSystemRes.drawable.ic_timetable_off,
         label = MainRes.string.timetable,
         contentDescription = MainRes.string.timetable,
     ),
 
     EventMap(
-        icon = IconRepresentation.Vector(Icons.Outlined.Map),
+        icon = DesignSystemRes.drawable.ic_map_off,
         label = MainRes.string.event_map,
         contentDescription = MainRes.string.event_map,
     ),
 
     Favorite(
-        icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
+        icon = DesignSystemRes.drawable.ic_fav_off,
         label = MainRes.string.event_map,
         contentDescription = MainRes.string.event_map,
     ),
 
     About(
-        icon = IconRepresentation.Vector(Icons.Outlined.Info),
+        icon = DesignSystemRes.drawable.ic_info_off,
         label = MainRes.string.about,
         contentDescription = MainRes.string.about,
     ),
 
     ProfileCard(
-        icon = IconRepresentation.Vector(Icons.Outlined.People),
+        icon = DesignSystemRes.drawable.ic_profilecard_off,
         label = MainRes.string.profile_card,
         contentDescription = MainRes.string.profile_card,
     ),
