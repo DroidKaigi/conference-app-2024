@@ -29,6 +29,10 @@ public data class Timetable(
         timetableItems.map { it.room }.toSet().sorted()
     }
 
+    val days: List<DroidKaigi2024Day> by lazy {
+        timetableItems.mapNotNull { it.day }.toSet().sortedBy { it.dayIndex }
+    }
+
     val categories: List<TimetableCategory> by lazy {
         timetableItems.map { it.category }.toSet().sortedBy { it.id }
     }
