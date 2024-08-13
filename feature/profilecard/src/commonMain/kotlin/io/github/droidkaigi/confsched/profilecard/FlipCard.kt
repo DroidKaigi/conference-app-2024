@@ -29,12 +29,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.profilecard.generated.resources.icon_qr
-import io.github.droidkaigi.confsched.model.ProfileCardTheme.BLUE
-import io.github.droidkaigi.confsched.model.ProfileCardTheme.Default
-import io.github.droidkaigi.confsched.model.ProfileCardTheme.ORANGE
-import io.github.droidkaigi.confsched.model.ProfileCardTheme.PINK
-import io.github.droidkaigi.confsched.model.ProfileCardTheme.WHITE
-import io.github.droidkaigi.confsched.model.ProfileCardTheme.YELLOW
+import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
@@ -77,67 +73,60 @@ internal fun FlipCard(
         }
     }
 
-    Card(
-        modifier = modifier
-            .size(width = 300.dp, height = 380.dp)
-            .clickable { isFlipped = !isFlipped }
-            .graphicsLayer {
-                rotationY = rotation.value
-                cameraDistance = 12f * density
-            },
-        colors = CardDefaults.cardColors(
-            containerColor = when (uiState.theme) {
-                Default -> Color(0xFFC0FF8E)
-                ORANGE -> Color(0xFFFFBB69)
-                YELLOW -> Color(0xFFFFFA77)
-                PINK -> Color(0xFFFFA0C9)
-                BLUE -> Color(0xFF93E5FF)
-                WHITE -> Color.White
-            },
-        ),
-        elevation = CardDefaults.cardElevation(10.dp),
-    ) {
-        if (isFlipped) { // Back
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer {
-                        rotationY = 180f
-                    },
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Image(
-                    painter = painterResource(ProfileCardRes.drawable.icon_qr),
-                    contentDescription = null,
-                    modifier = Modifier.size(160.dp),
-                )
-            }
-        } else { // Front
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Image(
-                    painter = rememberAsyncImagePainter(uiState.imageUri ?: ""),
-                    contentDescription = null,
+    ProvideProfileCardScreenTheme(uiState.theme.toString()) {
+        Card(
+            modifier = modifier
+                .size(width = 300.dp, height = 380.dp)
+                .clickable { isFlipped = !isFlipped }
+                .graphicsLayer {
+                    rotationY = rotation.value
+                    cameraDistance = 12f * density
+                },
+            colors = CardDefaults.cardColors(containerColor = LocalProfileCardScreenTheme.current.containerColor),
+            elevation = CardDefaults.cardElevation(10.dp),
+        ) {
+            if (isFlipped) { // Back
+                Column(
                     modifier = Modifier
-                        .clip(CircleShape)
-                        .size(120.dp),
-                )
-                Spacer(Modifier.height(12.dp))
-                Text(
-                    text = uiState.occupation ?: "",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color.Black,
-                )
-                Spacer(Modifier.height(2.dp))
-                Text(
-                    text = uiState.nickname,
-                    style = MaterialTheme.typography.headlineSmall,
-                    color = Color.Black,
-                )
+                        .fillMaxSize()
+                        .graphicsLayer {
+                            rotationY = 180f
+                        },
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Image(
+                        painter = painterResource(ProfileCardRes.drawable.icon_qr),
+                        contentDescription = null,
+                        modifier = Modifier.size(160.dp),
+                    )
+                }
+            } else { // Front
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Image(
+                        painter = rememberAsyncImagePainter(uiState.imageUri ?: ""),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .size(120.dp),
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    Text(
+                        text = uiState.occupation ?: "",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.Black,
+                    )
+                    Spacer(Modifier.height(2.dp))
+                    Text(
+                        text = uiState.nickname,
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = Color.Black,
+                    )
+                }
             }
         }
     }
