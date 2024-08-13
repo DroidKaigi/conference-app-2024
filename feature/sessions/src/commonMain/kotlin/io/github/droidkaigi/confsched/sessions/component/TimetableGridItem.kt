@@ -121,15 +121,11 @@ fun TimetableGridItem(
         ) {
             Column(
                 modifier = Modifier.weight(3f),
-                verticalArrangement = Arrangement.Top,
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 6.dp,
+                    alignment = Alignment.Top,
+                ),
             ) {
-                Text(
-                    modifier = Modifier.weight(1f, fill = false),
-                    text = timetableItem.title.currentLangTitle,
-                    style = titleTextStyle,
-                    overflow = TextOverflow.Ellipsis,
-                )
-
                 Row(
                     modifier = Modifier
                         .weight(1f, fill = false)
@@ -152,6 +148,13 @@ fun TimetableGridItem(
                         color = LocalRoomTheme.current.primaryColor,
                     )
                 }
+
+                Text(
+                    modifier = Modifier.weight(1f, fill = false),
+                    text = timetableItem.title.currentLangTitle,
+                    style = titleTextStyle,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
 
             val shouldShowError = timetableItem is Session && timetableItem.message != null
