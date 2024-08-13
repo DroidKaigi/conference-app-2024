@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -53,9 +52,9 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenT
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -204,7 +203,6 @@ internal fun ProfileCardScreen(
     }
 }
 
-@OptIn(ExperimentalStdlibApi::class)
 @Composable
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
@@ -216,34 +214,6 @@ internal fun EditScreen(
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
-    var isOpenDialog by remember { mutableStateOf(false) }
-
-    val imagePicker = rememberSingleImagePickerLauncher {
-        with(it.toImageBitmap()) {
-            if (height != width) {
-                // If the image is not square, throw an error.
-                // Ideally, we would like to crop the image, but this is currently on hold due to the difficulty of implementing it by KMP.
-                isOpenDialog = true
-            } else {
-                imageByteArray = it
-            }
-        }
-    }
-
-    if (isOpenDialog) {
-        AlertDialog(
-            onDismissRequest = { isOpenDialog = false },
-            title = { Text("Error") },
-            text = { Text("The image is not square.") },
-            confirmButton = {
-                Button(
-                    onClick = { isOpenDialog = false },
-                ) {
-                    Text("OK")
-                }
-            },
-        )
-    }
 
     Column(
         modifier = modifier
@@ -269,10 +239,8 @@ internal fun EditScreen(
             placeholder = { Text("Link") },
             modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
-        Button(
-            onClick = {
-                imagePicker.launch()
-            },
+        PhotoPickerButton(
+            onSelectedImage = { imageByteArray = it },
             modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
         ) {
             Text("画像を選択")
@@ -314,7 +282,10 @@ fun rememberSingleImagePickerLauncher(
 )
 
 @OptIn(ExperimentalEncodingApi::class)
-fun ByteArray.toBase64(): String = Base64.encode(this)
+private fun ByteArray.toBase64(): String = Base64.encode(this)
+
+@OptIn(ExperimentalEncodingApi::class)
+private fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
 
 @Composable
 internal fun CardScreen(
