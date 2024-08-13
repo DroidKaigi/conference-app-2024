@@ -2,11 +2,13 @@ package io.github.droidkaigi.confsched.profilecard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,11 +17,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -29,6 +33,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -37,7 +42,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -46,17 +53,27 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.preat.peekaboo.image.picker.toImageBitmap
+import conference_app_2024.feature.profilecard.generated.resources.add_image
+import conference_app_2024.feature.profilecard.generated.resources.create_card
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
+import conference_app_2024.feature.profilecard.generated.resources.image
+import conference_app_2024.feature.profilecard.generated.resources.link_text
+import conference_app_2024.feature.profilecard.generated.resources.nick_name
+import conference_app_2024.feature.profilecard.generated.resources.occupation
+import conference_app_2024.feature.profilecard.generated.resources.optional_input
 import conference_app_2024.feature.profilecard.generated.resources.profile_card
+import conference_app_2024.feature.profilecard.generated.resources.profile_card_edit_description
+import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
+import conference_app_2024.feature.profilecard.generated.resources.select_theme
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
-import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.io.encoding.Base64
@@ -95,7 +112,7 @@ internal sealed interface ProfileCardUiState {
         val occupation: String? = null,
         val link: String? = null,
         val image: String? = null,
-        val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
+        val theme: ProfileCardTheme = ProfileCardTheme.entries.first(),
     ) : ProfileCardUiState
 
     data class Card(
@@ -204,6 +221,7 @@ internal fun ProfileCardScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
@@ -214,79 +232,130 @@ internal fun EditScreen(
     var nickname by remember { mutableStateOf(uiState.nickname) }
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
 
-    Column(
-        modifier = modifier
-            .testTag(ProfileCardEditScreenTestTag)
-            .padding(contentPadding),
-    ) {
-        Text("ProfileCardEdit")
-        TextField(
-            value = nickname,
-            onValueChange = { nickname = it },
-            placeholder = { Text("Nickname") },
-            modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
-        )
-        TextField(
-            value = occupation ?: "",
-            onValueChange = { occupation = it },
-            placeholder = { Text("Occupation") },
-            modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
-        )
-        TextField(
-            value = link ?: "",
-            onValueChange = { link = it },
-            placeholder = { Text("Link") },
-            modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
-        )
-        PhotoPickerButton(
-            onSelectedImage = { imageByteArray = it },
-            modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+    Scaffold(modifier = modifier.testTag(ProfileCardEditScreenTestTag).padding(contentPadding),
+        topBar = {
+            AnimatedTextTopAppBar(
+                title = stringResource(ProfileCardRes.string.profile_card_title),
+                scrollBehavior = scrollBehavior,
+            )
+        }) { padding ->
+        Column(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(padding),
         ) {
-            Text("画像を選択")
-        }
-        image?.let {
-            Box {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(
-                            top = 24.dp,
-                            end = 24.dp,
-                        )
-                        .align(Alignment.BottomStart),
-                )
-                IconButton(
-                    onClick = { imageByteArray = null },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd),
-                    colors = IconButtonDefaults
-                        .iconButtonColors()
-                        .copy(containerColor = Color(0xFF414849)),
-                ) {
-                    Icon(Icons.Default.Close, null)
+            Text(stringResource(ProfileCardRes.string.profile_card_edit_description))
+
+            InputColumn(
+                modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
+                label = stringResource(ProfileCardRes.string.nick_name),
+                value = nickname,
+                onValueChanged = { nickname = it },
+            )
+            InputColumn(
+                modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
+                label = stringResource(ProfileCardRes.string.occupation),
+                value = occupation ?: "",
+                onValueChanged = { occupation = it },
+            )
+            InputColumn(
+                modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
+                label = stringResource(ProfileCardRes.string.link_text),
+                value = link ?: "",
+                onValueChanged = { link = it },
+            )
+
+            Text(stringResource(ProfileCardRes.string.image))
+            Button(
+                onClick = {},
+                modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+            ) {
+                Text(stringResource(ProfileCardRes.string.add_image))
+            }
+
+            Text(stringResource(ProfileCardRes.string.select_theme))
+
+            image?.let {
+                Box {
+                    Image(
+                        bitmap = it,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(
+                                top = 24.dp,
+                                end = 24.dp,
+                            )
+                            .align(Alignment.BottomStart),
+                    )
+                    IconButton(
+                        onClick = { imageByteArray = null },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd),
+                        colors = IconButtonDefaults
+                            .iconButtonColors()
+                            .copy(containerColor = Color(0xFF414849)),
+                    ) {
+                        Icon(Icons.Default.Close, null)
+                    }
                 }
             }
+
+            Button(
+                onClick = {
+                    onClickCreate(
+                        ProfileCard.Exists(
+                            nickname = nickname,
+                            occupation = occupation,
+                            link = link,
+                            image = imageByteArray?.toBase64(),
+                            theme = uiState.theme,
+                        ),
+                    )
+                },
+                modifier = Modifier.testTag(ProfileCardCreateButtonTestTag),
+            ) {
+                Text(stringResource(ProfileCardRes.string.create_card))
+            }
         }
-        Button(
-            onClick = {
-                onClickCreate(
-                    ProfileCard.Exists(
-                        nickname = nickname,
-                        occupation = occupation,
-                        link = link,
-                        image = imageByteArray?.toBase64(),
-                        theme = uiState.theme,
-                    ),
-                )
-            },
-            modifier = Modifier.testTag(ProfileCardCreateButtonTestTag),
-        ) {
-            Text("Create")
+    }
+}
+
+@Composable
+internal fun InputColumn(
+    modifier: Modifier = Modifier,
+    label: String,
+    value: String,
+    onValueChanged: (String) -> Unit,
+) {
+    Column {
+        Row {
+            Text(label)
+            OptionLabel()
         }
+        TextField(
+            value = value,
+            onValueChange = onValueChanged,
+            modifier = modifier,
+        )
+    }
+}
+
+@Composable
+internal fun OptionLabel() {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .border(1.dp, Color.Blue, RoundedCornerShape(4.dp))
+            .padding(vertical = 4.5.dp, horizontal = 8.dp),
+    ) {
+        Text(
+            text = stringResource(ProfileCardRes.string.optional_input),
+            style = MaterialTheme.typography.labelMedium,
+        )
     }
 }
 

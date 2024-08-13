@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="sample">!!Please remove this resource when you add string resource!!</string>
+    <string name="profile_card_title">プロフィールカード</string>
+    <string name="profile_card_edit_description">会場やSNSで自分を紹介できるプロフィールカードを作ってみましょう！</string>
+    <string name="nick_name">ニックネーム</string>
+    <string name="occupation">職業</string>
+    <string name="link_text">リンク（ex.X、Instagram...）</string>
+    <string name="image">画像</string>
+    <string name="add_image">画像を追加</string>
+    <string name="select_theme">テーマ選択</string>
+    <string name="create_card">カードを作成する</string>
+    <string name="optional_input">任意</string>
     <string name="profile_card">プロフィールカード</string>
 </resources>
