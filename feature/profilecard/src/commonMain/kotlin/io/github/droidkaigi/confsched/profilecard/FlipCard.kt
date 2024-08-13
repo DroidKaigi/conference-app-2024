@@ -21,6 +21,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +43,7 @@ internal fun FlipCard(
     isCreated: Boolean = false,
 ) {
     var isFlipped by remember { mutableStateOf(false) }
+    var isCreated by rememberSaveable { mutableStateOf(isCreated) }
     var initialRotation by remember { mutableStateOf(0f) }
     val rotation = animateFloatAsState(
         targetValue = if (isFlipped) 180f else initialRotation,
@@ -70,6 +72,7 @@ internal fun FlipCard(
             initialRotation = targetRotation
             delay(400)
             initialRotation = targetRotation2
+            isCreated = false
         }
     }
 
@@ -108,7 +111,7 @@ internal fun FlipCard(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Image(
-                        painter = rememberAsyncImagePainter(uiState.imageUri ?: ""),
+                        painter = rememberAsyncImagePainter(uiState.image ?: ""),
                         contentDescription = null,
                         modifier = Modifier
                             .clip(CircleShape)

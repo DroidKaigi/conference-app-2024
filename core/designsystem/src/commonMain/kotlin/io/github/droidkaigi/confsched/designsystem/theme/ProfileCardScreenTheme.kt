@@ -43,13 +43,12 @@ sealed interface ProfileCardScreenTheme {
     companion object {
         fun ofOrNull(profileCardTheme: String): ProfileCardScreenTheme? {
             return when (profileCardTheme) {
-                "Default" -> Default
-                "Orange" -> Orange
-                "Yellow" -> Yellow
-                "Pink" -> Pink
-                "Blue" -> Blue
-                "White" -> White
-                else -> null
+                "Iguana" -> Default
+                "Hedgehog" -> Orange
+                "Giraffe" -> Yellow
+                "Flamingo" -> Pink
+                "Jellyfish" -> Blue
+                else -> White
             }
         }
     }
@@ -62,8 +61,8 @@ val LocalProfileCardScreenTheme: ProvidableCompositionLocal<ProfileCardScreenThe
 
 @Composable
 fun ProvideProfileCardScreenTheme(profileCardTheme: String, content: @Composable () -> Unit) {
-    val roomTheme = ProfileCardScreenTheme.ofOrNull(profileCardTheme) ?: ProfileCardScreenTheme.Default
-    CompositionLocalProvider(LocalProfileCardScreenTheme provides roomTheme) {
+    val profileCardTheme = ProfileCardScreenTheme.ofOrNull(profileCardTheme) ?: ProfileCardScreenTheme.Default
+    CompositionLocalProvider(LocalProfileCardScreenTheme provides profileCardTheme) {
         content()
     }
 }
