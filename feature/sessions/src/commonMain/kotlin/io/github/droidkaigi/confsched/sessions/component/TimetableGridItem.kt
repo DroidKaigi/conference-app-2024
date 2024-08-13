@@ -150,7 +150,10 @@ fun TimetableGridItem(
         ) {
             Column(
                 modifier = Modifier.weight(3f),
-                verticalArrangement = if (isShowingAllContent) Arrangement.Top else Arrangement.Center,
+                verticalArrangement = Arrangement.spacedBy(
+                    space = TimetableGridItemSizes.scheduleToTitleSpace,
+                    alignment = if (isShowingAllContent) Alignment.Top else Alignment.CenterVertically,
+                )
             ) {
                 if (isShowingAllContent) {
                     Row(
