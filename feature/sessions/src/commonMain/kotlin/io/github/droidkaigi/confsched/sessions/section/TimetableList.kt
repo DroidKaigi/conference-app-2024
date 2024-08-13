@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions.section
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,8 +24,11 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableTime
+import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.ui.icon
 import kotlinx.collections.immutable.PersistentMap
 
@@ -42,6 +46,7 @@ data class TimetableListUiState(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TimetableList(
     uiState: TimetableListUiState,
@@ -52,6 +57,9 @@ fun TimetableList(
     modifier: Modifier = Modifier,
 ) {
     val layoutDirection = LocalLayoutDirection.current
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val animatedScope = LocalAnimatedVisibilityScope.current
+
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag),
         state = scrollState,
@@ -78,10 +86,23 @@ fun TimetableList(
                     timetableItems.onEach { timetableItem ->
                         val isBookmarked =
                             uiState.timetable.bookmarks.contains(timetableItem.id)
+                        val timetableItemCardModifier = if (sharedTransitionScope != null && animatedScope != null) {
+                            with(sharedTransitionScope) {
+                                Modifier.sharedElement(
+                                    state = rememberSharedContentState(
+                                        key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
+                                    ),
+                                    animatedVisibilityScope = animatedScope!!,
+                                )
+                            }
+                        } else {
+                            Modifier
+                        }
                         TimetableItemCard(
                             isBookmarked = isBookmarked,
                             timetableItem = timetableItem,
                             onBookmarkClick = onBookmarkClick,
+                            modifier = timetableItemCardModifier,
                             tags = {
                                 TimetableItemTag(
                                     tagText = timetableItem.room.name.currentLangTitle,

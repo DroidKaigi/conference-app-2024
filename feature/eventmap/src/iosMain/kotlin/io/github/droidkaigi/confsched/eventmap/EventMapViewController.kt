@@ -13,7 +13,6 @@ fun eventMapViewController(
     onEventMapItemClick: (url: String) -> Unit,
 ): UIViewController = composeViewController(repositories) {
     EventMapScreen(
-        isTopAppBarHidden = true,
         onEventMapItemClick = onEventMapItemClick,
     )
 }
