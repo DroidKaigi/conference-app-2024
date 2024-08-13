@@ -56,9 +56,14 @@ fun TimetableItemDetailBottomAppBar(
                 onClick = { onBookmarkClick(timetableItem) },
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
+                val contentDescription = if (isBookmarked) {
+                    "Bookmarked"
+                } else {
+                    "Not Bookmarked"
+                }
                 Icon(
                     imageVector = if (isBookmarked) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = "Bookmarked",
+                    contentDescription = contentDescription,
                 )
             }
         },
