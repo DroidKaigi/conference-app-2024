@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isRoot
@@ -21,6 +22,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenLazyColumnTestTag
+import io.github.droidkaigi.confsched.sessions.component.SummaryCardTextTag
 import io.github.droidkaigi.confsched.sessions.component.TargetAudienceSectionTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
@@ -69,7 +71,6 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             }
     }
 
-    // TODO https://github.com/DroidKaigi/conference-app-2024/issues/372
     fun scrollLazyColumnByIndex(
         index: Int,
     ) {
@@ -124,6 +125,25 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .assertExists()
             .assertIsDisplayed()
             .assertTextEquals("Target Audience")
+    }
+
+    fun checkSummaryCardTexts() {
+        val titles = listOf(
+            "Date/Time",
+            "Location",
+            "Supported Languages",
+            "Category",
+        )
+        titles.forEach { title ->
+            composeTestRule
+                .onNode(hasTestTag(SummaryCardTextTag.plus(title)))
+                .assertExists()
+                .assertIsDisplayed()
+                .assertTextContains(
+                    value = title,
+                    substring = true,
+                )
+        }
     }
 
     companion object {
