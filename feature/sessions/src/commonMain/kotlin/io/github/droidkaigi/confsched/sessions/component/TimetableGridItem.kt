@@ -118,7 +118,7 @@ fun TimetableGridItem(
             it.copy(
                 fontSize = titleFontSize,
                 lineHeight = titleLineHeight,
-                color = LocalRoomTheme.current.primaryColor
+                color = LocalRoomTheme.current.primaryColor,
             )
         }
         val cardShape = RoundedCornerShape(4.dp)
@@ -153,7 +153,7 @@ fun TimetableGridItem(
                 verticalArrangement = Arrangement.spacedBy(
                     space = TimetableGridItemSizes.scheduleToTitleSpace,
                     alignment = if (isShowingAllContent) Alignment.Top else Alignment.CenterVertically,
-                )
+                ),
             ) {
                 if (isShowingAllContent) {
                     Row(
