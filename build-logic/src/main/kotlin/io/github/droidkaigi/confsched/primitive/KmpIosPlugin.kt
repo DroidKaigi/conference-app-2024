@@ -42,21 +42,7 @@ class KmpIosPlugin : Plugin<Project> {
                         }
                     }
                 }
-                with(sourceSets) {
-                    create("iosMain") {
-                        dependsOn(getByName("commonMain"))
-                        maybeCreate("iosArm64Main").dependsOn(this)
-                        maybeCreate("iosX64Main").dependsOn(this)
-                        maybeCreate("iosSimulatorArm64Main").dependsOn(this)
-                    }
-
-                    create("iosTest") {
-                        dependsOn(getByName("commonTest"))
-                        maybeCreate("iosArm64Test").dependsOn(this)
-                        maybeCreate("iosX64Test").dependsOn(this)
-                        maybeCreate("iosSimulatorArm64Test").dependsOn(this)
-                    }
-                }
+                applyDefaultHierarchyTemplate()
 
                 targets.withType<KotlinNativeTarget> {
                     // export kdoc to header file
