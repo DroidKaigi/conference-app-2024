@@ -72,7 +72,7 @@ fun TimetableGridHours(
             verticalScale = verticalScale,
         )
     }
-    val hoursScreen = remember(hoursLayout, density) {
+    val hoursScreen = remember(hoursLayout, scrollState, density) {
         HoursScreen(
             hoursLayout,
             scrollState,
