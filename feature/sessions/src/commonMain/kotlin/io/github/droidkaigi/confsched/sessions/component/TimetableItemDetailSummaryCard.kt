@@ -147,7 +147,7 @@ private fun SummaryCardText(
     val spacer8dpInlineContentId = "spacer8dp"
     val spacer12dpInlineContentId = "spacer12dp"
 
-    val annotatedString = createAnnotatedString(
+    val annotatedString = createSummaryCardTextAnnotatedString(
         title = title,
         description = description,
         iconInlineContentId = iconInlineContentId,
@@ -155,7 +155,7 @@ private fun SummaryCardText(
         spacer12dpInlineContentId = spacer12dpInlineContentId,
     )
 
-    val inlineContent = createInlineContent(
+    val inlineContent = createInlineContentsMapForSummaryCardTexts(
         imageVector = imageVector,
         contentDescription = contentDescription,
         iconInlineContentId = iconInlineContentId,
@@ -175,7 +175,7 @@ private fun SummaryCardText(
 }
 
 @Composable
-private fun createAnnotatedString(
+private fun createSummaryCardTextAnnotatedString(
     title: String,
     description: String,
     iconInlineContentId: String,
@@ -213,7 +213,7 @@ private fun createAnnotatedString(
 }
 
 @Composable
-private fun createInlineContent(
+private fun createInlineContentsMapForSummaryCardTexts(
     imageVector: ImageVector,
     contentDescription: String,
     iconInlineContentId: String,
