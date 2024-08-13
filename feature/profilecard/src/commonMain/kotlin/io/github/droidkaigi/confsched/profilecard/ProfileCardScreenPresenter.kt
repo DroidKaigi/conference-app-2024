@@ -68,7 +68,7 @@ internal fun profileCardScreenPresenter(
     )
     var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Loading) }
 
-    // at first launch, if you have a profile card, show the appropriate UI
+    // at first launch, if you have a profile card, show card ui
     SafeLaunchedEffect(profileCard) {
         uiType = when (profileCard) {
             is ProfileCard.Exists -> ProfileCardUiType.Card
