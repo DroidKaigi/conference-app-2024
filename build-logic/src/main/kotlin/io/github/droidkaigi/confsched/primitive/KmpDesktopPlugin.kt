@@ -12,6 +12,8 @@ class KmpDesktopPlugin : Plugin<Project> {
         with(target) {
 
             with(pluginManager) {
+                apply("droidkaigi.primitive.kmp")
+                apply("droidkaigi.primitive.kmp.compose")
                 apply(libs.plugin("jetbrainsCompose").pluginId)
                 apply(libs.plugin("composeCompiler").pluginId)
             }

@@ -1,5 +1,4 @@
 plugins {
-    id("droidkaigi.primitive.kmp")
     id("droidkaigi.primitive.kmp.desktop")
 }
 
@@ -7,12 +6,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(compose.runtime)
-                api(compose.foundation)
-                api(compose.material3)
-                api(compose.ui)
-                api(compose.components.resources)
-                api(compose.components.uiToolingPreview)
+                implementation(libs.kotlinxCoroutinesCore)
+                implementation(compose.ui)
+                implementation(compose.components.uiToolingPreview)
             }
         }
         desktopMain {
