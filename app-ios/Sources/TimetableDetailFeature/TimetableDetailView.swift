@@ -94,7 +94,7 @@ public struct TimetableDetailView: View {
     @MainActor var headLine: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
-                RoomTag(store.timetableItem.room)
+                RoomTag(store.timetableItem.room.name)
                 ForEach(store.timetableItem.language.labels, id: \.self) { label in
                     LanguageTag(label)
                 }
@@ -171,7 +171,10 @@ public struct TimetableDetailView: View {
             )
             
             if let session = store.timetableItem as? TimetableItem.Session {
-                SessionDescriptionView(content: session.description_.currentLangTitle)
+                SessionDescriptionView(
+                    content: session.description_.currentLangTitle,
+                    themeColor: session.room.roomTheme.primaryColor
+                )
                     .padding(.bottom, 24)
             }
         }
