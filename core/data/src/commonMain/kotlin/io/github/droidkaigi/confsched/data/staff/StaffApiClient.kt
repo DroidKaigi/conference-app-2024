@@ -9,7 +9,6 @@ import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.staff.response.StaffResponse
 import io.github.droidkaigi.confsched.data.staff.response.StaffsResponse
 import io.github.droidkaigi.confsched.model.Staff
-import io.github.droidkaigi.confsched.model.fakes
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
