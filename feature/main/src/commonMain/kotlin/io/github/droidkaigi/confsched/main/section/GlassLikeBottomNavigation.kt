@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -101,9 +103,9 @@ fun BottomBarTabs(
                     Icon(
                         imageVector = tab.icon.imageVector,
                         tint = if (selectedTab == MainScreenTab.indexOf(tab)) {
-                            Color(0xFF67FF8D)
+                            MaterialTheme.colorScheme.primaryFixed
                         } else {
-                            Color(0xFFC1C8C9)
+                            MaterialTheme.colorScheme.onSurfaceVariant
                         },
                         contentDescription = "tab ${stringResource(tab.contentDescription)}",
                     )
