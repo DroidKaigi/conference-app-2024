@@ -90,7 +90,6 @@ struct TimetableListView: View {
         ScrollView{
             LazyVStack {
                 ForEach(store.timetableItems, id: \.self) { item in
-                    
                     TimeGroupMiniList(contents: item, onItemTap: { item in
                         store.send(.view(.timetableItemTapped(item)))
                     })
