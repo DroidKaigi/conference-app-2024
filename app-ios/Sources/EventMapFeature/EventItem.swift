@@ -19,41 +19,43 @@ struct EventItem: View {
             }
             .padding(.bottom, 8)
 
-            Text(event.description_.currentLangTitle)
-                .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                .textStyle(.bodyLarge)
-                .lineLimit(isDescriptionExpanded ? nil : 3)
-                .background {
-                    ViewThatFits(in: .vertical) {
-                        Text(event.description_.currentLangTitle)
-                            .textStyle(.bodyLarge)
-                            .hidden()
-                        // Just for receiving onAppear event if the description exceeds its line limit
-                        Color.clear
-                            .onAppear {
-                                canBeExpanded = true
+            VStack(spacing: 8) {
+                Text(event.description_.currentLangTitle)
+                    .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                    .textStyle(.bodyLarge)
+                    .lineLimit(isDescriptionExpanded ? nil : 3)
+                    .background {
+                        ViewThatFits(in: .vertical) {
+                            Text(event.description_.currentLangTitle)
+                                .textStyle(.bodyLarge)
+                                .hidden()
+                            // Just for receiving onAppear event if the description exceeds its line limit
+                            Color.clear
+                                .onAppear {
+                                    canBeExpanded = true
+                                }
+                        }
+                    }
+                
+                if canBeExpanded {
+                    Button {
+                        isDescriptionExpanded = true
+                        canBeExpanded = false
+                    } label: {
+                        Text(String(localized: "Detail", bundle: .module))
+                            .textStyle(.labelLarge)
+                            .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
+                            .frame(height: 40)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .overlay {
+                                Capsule()
+                                    .stroke(AssetColors.Outline.outline.swiftUIColor)
                             }
                     }
                 }
-                .padding(.bottom, 24)
-            
-            if canBeExpanded {
-                Button {
-                    isDescriptionExpanded = true
-                    canBeExpanded = false
-                } label: {
-                    Text(String(localized: "Detail", bundle: .module))
-                        .textStyle(.labelLarge)
-                        .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
-                        .frame(height: 40)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .overlay {
-                            Capsule()
-                                .stroke(AssetColors.Outline.outline.swiftUIColor)
-                        }
-                }
             }
-
+            .padding(.bottom, 24)
+            
             Divider()
                 .background(AssetColors.Outline.outlineVariant.swiftUIColor)
         }
