@@ -14,7 +14,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 internal interface StaffApi {
-    @GET("/events/droidkaigi2023/staff")
+    @GET("/events/droidkaigi2024/staff")
     suspend fun getStaff(): StaffsResponse
 }
 
@@ -26,11 +26,9 @@ public class DefaultStaffApiClient(
     private val staffApi = ktorfit.create<StaffApi>()
 
     public override suspend fun getStaff(): PersistentList<Staff> {
-        // FIXME: When the API is ready, remove the comments below and return the actual data.
-        return Staff.fakes()
-//        return networkService {
-//            staffApi.getStaff()
-//        }.toStaffList()
+        return networkService {
+            staffApi.getStaff()
+        }.toStaffList()
     }
 }
 
