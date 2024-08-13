@@ -82,6 +82,7 @@ class ProfileCardScreenTest(
                                     }
                                     itShould("show edit screen") {
                                         captureScreenWithChecks {
+                                            wait5Seconds()
                                             checkEditScreenDisplayed()
                                             checkNickName(nickName)
                                             checkOccupation(occupation)
