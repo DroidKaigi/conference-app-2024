@@ -55,9 +55,10 @@ sealed interface ProfileCardScreenTheme {
 }
 
 @Suppress("CompositionLocalAllowlist")
-val LocalProfileCardScreenTheme: ProvidableCompositionLocal<ProfileCardScreenTheme> = staticCompositionLocalOf<ProfileCardScreenTheme> {
-    error("No RoomTheme provided")
-}
+val LocalProfileCardScreenTheme: ProvidableCompositionLocal<ProfileCardScreenTheme> =
+    staticCompositionLocalOf<ProfileCardScreenTheme> {
+        error("No RoomTheme provided")
+    }
 
 @Composable
 fun ProvideProfileCardScreenTheme(profileCardTheme: String, content: @Composable () -> Unit) {
