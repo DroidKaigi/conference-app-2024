@@ -17,7 +17,6 @@ class FavoritesScreenRobot @Inject constructor(
         robotTestRule.setContent {
             KaigiTheme {
                 FavoritesScreen(
-                    onNavigationIconClick = {},
                     onTimetableItemClick = {},
                 )
             }
