@@ -24,7 +24,7 @@ public struct TimetableGridCard: View {
     }
 
     public var body: some View {
-        if let ttItem = timetableItem {
+        if let timetableItem {
             Button {
                 onTap(ttItem)
             } label: {
