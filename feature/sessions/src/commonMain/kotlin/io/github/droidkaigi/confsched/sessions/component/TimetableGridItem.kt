@@ -73,7 +73,6 @@ import kotlinx.datetime.toInstant
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.ceil
-import kotlin.math.min
 import kotlin.math.roundToInt
 
 const val TimetableGridItemTestTag = "TimetableGridItem"
