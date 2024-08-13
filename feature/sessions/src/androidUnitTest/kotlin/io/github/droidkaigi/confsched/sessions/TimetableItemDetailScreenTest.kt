@@ -110,10 +110,10 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         itShould("show small font session detail") {
                             captureScreenWithChecks(
                                 checks = {
-                                    checkSummaryCardRow("Date/Time")
-                                    checkSummaryCardRow("Location")
-                                    checkSummaryCardRow("Supported Languages")
-                                    checkSummaryCardRow("Category")
+                                    checkSummaryCardText("Date/Time")
+                                    checkSummaryCardText("Location")
+                                    checkSummaryCardText("Supported Languages")
+                                    checkSummaryCardText("Category")
                                 },
                             )
                         }
@@ -127,10 +127,10 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         itShould("show large font session detail") {
                             captureScreenWithChecks(
                                 checks = {
-                                    checkSummaryCardRow("Date/Time")
-                                    checkSummaryCardRow("Location")
-                                    checkSummaryCardRow("Supported Languages")
-                                    checkSummaryCardRow("Category")
+                                    checkSummaryCardText("Date/Time")
+                                    checkSummaryCardText("Location")
+                                    checkSummaryCardText("Supported Languages")
+                                    checkSummaryCardText("Category")
                                 },
                             )
                         }
@@ -144,10 +144,10 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         itShould("show huge font session detail") {
                             captureScreenWithChecks(
                                 checks = {
-                                    checkSummaryCardRow("Date/Time")
-                                    checkSummaryCardRow("Location")
-                                    checkSummaryCardRow("Supported Languages")
-                                    checkSummaryCardRow("Category")
+                                    checkSummaryCardText("Date/Time")
+                                    checkSummaryCardText("Location")
+                                    checkSummaryCardText("Supported Languages")
+                                    checkSummaryCardText("Category")
                                 },
                             )
                         }

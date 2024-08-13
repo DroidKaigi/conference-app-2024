@@ -8,7 +8,6 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.isRoot
 import androidx.compose.ui.test.onChildren
 import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
@@ -23,7 +22,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenLazyColumnTestTag
-import io.github.droidkaigi.confsched.sessions.component.SummaryCardRowTestTag
+import io.github.droidkaigi.confsched.sessions.component.SummaryCardTextTag
 import io.github.droidkaigi.confsched.sessions.component.TargetAudienceSectionTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
@@ -128,13 +127,11 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .assertTextEquals("Target Audience")
     }
 
-    fun checkSummaryCardRow(
+    fun checkSummaryCardText(
         title: String,
     ) {
         composeTestRule
-            .onNode(hasTestTag(SummaryCardRowTestTag.plus(title)))
-            .onChildren()
-            .onLast()
+            .onNode(hasTestTag(SummaryCardTextTag.plus(title)))
             .assertExists()
             .assertIsDisplayed()
             .assertTextContains(
