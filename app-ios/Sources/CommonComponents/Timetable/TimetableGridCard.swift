@@ -1,12 +1,4 @@
-//
-//  File.swift
-//  
-//
-//  Created by CHARLES BOND on 2024/08/12.
-//
-
 import Foundation
-
 import SwiftUI
 import Theme
 import class shared.TimetableItem
@@ -30,7 +22,7 @@ public struct TimetableGridCard: View {
             } label: {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 4) {
-                        timetableItem.room.shape
+                        timetableItem.room.type.shape
                             .foregroundColor(timetableItem.room.roomTheme.primaryColor)
                         Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                             .textStyle(.labelMedium)
@@ -48,12 +40,10 @@ public struct TimetableGridCard: View {
                     ForEach(timetableItem.speakers, id: \.id) { speaker in
                         HStack(spacing: 8) {
                             Group {
-                                if let url = URL(string: speaker.iconUrl) {
-                                    AsyncImage(url: url) {
-                                        $0.image?.resizable()
-                                    }
-                                } else {
-                                    Circle().stroke(Color.gray)
+                                AsyncImage(url: URL(string: speaker.iconUrl)) {
+                                    $0.resizable()
+                                } placeholder: {
+                                    Color.gray
                                 }
                             }
                             .frame(width: 32, height: 32)
