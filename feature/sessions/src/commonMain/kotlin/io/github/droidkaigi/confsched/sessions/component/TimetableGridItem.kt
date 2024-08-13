@@ -291,7 +291,7 @@ private fun SpeakerIcon(
             .layout { measurable, constraints ->
                 // To keep circle shape, it needs to match the vertical size when pinching in
                 val placeable = measurable.measure(constraints)
-                val size = min(placeable.width, placeable.height)
+                val size = placeable.height
                 layout(size, size) {
                     placeable.placeRelative(0, 0)
                 }
