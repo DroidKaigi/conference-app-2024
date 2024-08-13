@@ -23,11 +23,8 @@ public struct TimetableView: View {
                         store.send(.view(.selectDay(tabItem)))
                         selectedTab = tabItem
                     }, label: {
-                        //TODO: Only selected button should be green and underlined
                         HStack(spacing: 6) {
-                                Text(tabItem.rawValue)
-                                .textStyle(.titleMedium)
-                                    .underline(selectedTab == tabItem)
+                                Text(tabItem.rawValue).textStyle(.titleMedium).underline(selectedTab == tabItem)
                             }
                             .foregroundStyle(selectedTab == tabItem ? AssetColors.Custom.iguana.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
                             .padding(6)
