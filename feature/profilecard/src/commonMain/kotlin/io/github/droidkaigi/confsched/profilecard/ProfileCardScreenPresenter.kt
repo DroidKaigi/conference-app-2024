@@ -64,7 +64,7 @@ internal fun profileCardScreenPresenter(
             profileCard.toCardUiState()
         } else {
             null
-        }
+        },
     )
     var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Loading) }
 
