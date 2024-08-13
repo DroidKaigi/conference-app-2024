@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.testing.robot
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -91,7 +92,7 @@ class TimetableScreenRobot @Inject constructor(
             .performTouchInput {
                 swipeUp(
                     startY = visibleSize.height * 4F / 5,
-                    endY = visibleSize.height / 2F,
+                    endY = visibleSize.height / 5F,
                 )
             }
     }
@@ -113,6 +114,13 @@ class TimetableScreenRobot @Inject constructor(
             .assertIsDisplayed()
     }
 
+    fun checkTimetableListFirstItemNotDisplayed() {
+        composeTestRule
+            .onAllNodes(hasTestTag(TimetableItemCardTestTag))
+            .onFirst()
+            .assertIsNotDisplayed()
+    }
+
     fun checkTimetableGridDisplayed() {
         composeTestRule
             .onNode(hasTestTag(TimetableGridTestTag))
@@ -124,6 +132,13 @@ class TimetableScreenRobot @Inject constructor(
             .onAllNodes(hasTestTag(TimetableGridItemTestTag))
             .onFirst()
             .assertIsDisplayed()
+    }
+
+    fun checkTimetableGridFirstItemNotDisplayed() {
+        composeTestRule
+            .onAllNodes(hasTestTag(TimetableGridItemTestTag))
+            .onFirst()
+            .assertIsNotDisplayed()
     }
 
     fun checkFirstSessionBookmarkedIconDisplayed() {

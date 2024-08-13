@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.favorites.section
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,10 +30,12 @@ fun FavoriteList(
     onBookmarkClick: (TimetableItem) -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
+        contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
     ) {
         items(timetable.timetableItems) { timetableItem ->
             TimetableItemCard(

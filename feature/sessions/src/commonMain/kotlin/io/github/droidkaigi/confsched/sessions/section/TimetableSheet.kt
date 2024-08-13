@@ -7,12 +7,14 @@ import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -66,9 +68,10 @@ fun Timetable(
             )
             when (uiState) {
                 is ListTimetable -> {
+                    val scrollStates = rememberListTimetableScrollStates()
                     TimetableList(
                         uiState = requireNotNull(uiState.timetableListUiStates[selectedDay]),
-                        scrollState = rememberLazyListState(),
+                        scrollState = scrollStates.getValue(selectedDay),
                         onTimetableItemClick = onTimetableItemClick,
                         onBookmarkClick = onFavoriteClick,
                         modifier = Modifier
@@ -83,8 +86,10 @@ fun Timetable(
                 }
 
                 is GridTimetable -> {
+                    val timetableStates = rememberGridTimetableStates()
                     TimetableGrid(
                         uiState = requireNotNull(uiState.timetableGridUiState[selectedDay]),
+                        timetableState = timetableStates.getValue(selectedDay),
                         onTimetableItemClick = onTimetableItemClick,
                         modifier = Modifier
                             .fillMaxSize()
@@ -110,4 +115,24 @@ fun Timetable(
             }
         }
     }
+}
+
+@Composable
+private fun rememberListTimetableScrollStates(): Map<DroidKaigi2024Day, LazyListState> {
+    val scrollStateMap = DroidKaigi2024Day.entries.filter {
+        it.visibleForUsers
+    }.associateWith {
+        rememberLazyListState()
+    }
+    return remember { scrollStateMap }
+}
+
+@Composable
+private fun rememberGridTimetableStates(): Map<DroidKaigi2024Day, TimetableState> {
+    val timetableStateMap = DroidKaigi2024Day.entries.filter {
+        it.visibleForUsers
+    }.associateWith {
+        rememberTimetableGridState()
+    }
+    return remember { timetableStateMap }
 }

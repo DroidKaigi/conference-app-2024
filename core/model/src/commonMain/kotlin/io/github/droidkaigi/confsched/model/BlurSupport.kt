@@ -1,5 +1,3 @@
 package io.github.droidkaigi.confsched.model
 
-enum class ProfileCardTheme {
-    Default,
-}
+public expect fun isBlurSupported(): Boolean
