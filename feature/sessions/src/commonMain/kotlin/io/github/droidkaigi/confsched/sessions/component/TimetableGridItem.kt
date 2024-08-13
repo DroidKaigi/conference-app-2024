@@ -115,7 +115,11 @@ fun TimetableGridItem(
                 speaker = speaker,
                 titleLength = timetableItem.title.currentLangTitle.length,
             )
-            it.copy(fontSize = titleFontSize, lineHeight = titleLineHeight, color = LocalRoomTheme.current.primaryColor)
+            it.copy(
+                fontSize = titleFontSize,
+                lineHeight = titleLineHeight,
+                color = LocalRoomTheme.current.primaryColor,
+            )
         }
         val cardShape = RoundedCornerShape(4.dp)
         Column(
@@ -146,20 +150,15 @@ fun TimetableGridItem(
         ) {
             Column(
                 modifier = Modifier.weight(3f),
-                verticalArrangement = if (isShowingAllContent) Arrangement.Top else Arrangement.Center,
+                verticalArrangement = Arrangement.spacedBy(
+                    space = TimetableGridItemSizes.scheduleToTitleSpace,
+                    alignment = if (isShowingAllContent) Alignment.Top else Alignment.CenterVertically,
+                ),
             ) {
-                Text(
-                    modifier = Modifier.weight(1f, fill = false),
-                    text = timetableItem.title.currentLangTitle,
-                    style = titleTextStyle,
-                    overflow = TextOverflow.Ellipsis,
-                )
-
                 if (isShowingAllContent) {
                     Row(
                         modifier = Modifier
-                            .weight(1f, fill = false)
-                            .padding(top = TimetableGridItemSizes.titleToSchedulePadding),
+                            .weight(1f, fill = false),
                     ) {
                         Icon(
                             modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
@@ -179,6 +178,13 @@ fun TimetableGridItem(
                         )
                     }
                 }
+
+                Text(
+                    modifier = Modifier.weight(1f, fill = false),
+                    text = timetableItem.title.currentLangTitle,
+                    style = titleTextStyle,
+                    overflow = TextOverflow.Ellipsis,
+                )
             }
 
             val shouldShowError = timetableItem is Session && timetableItem.message != null
@@ -305,8 +311,8 @@ private fun calculateFontSizeAndLineHeight(
     titleLength: Int,
 ): Pair<TextUnit, TextUnit> {
     // The height of the title that should be displayed.
-    val titleToScheduleSpaceHeightPx = with(localDensity) {
-        TimetableGridItemSizes.titleToSchedulePadding.toPx()
+    val scheduleToTitleSpaceHeightPx = with(localDensity) {
+        TimetableGridItemSizes.scheduleToTitleSpace.toPx()
     }
     val scheduleHeightPx = with(localDensity) {
         TimetableGridItemSizes.scheduleHeight.toPx()
@@ -315,7 +321,7 @@ private fun calculateFontSizeAndLineHeight(
         (TimetableGridItemSizes.padding * 2).toPx()
     }
     var displayTitleHeight =
-        gridItemHeightPx - titleToScheduleSpaceHeightPx - scheduleHeightPx - horizontalPaddingPx
+        gridItemHeightPx - scheduleToTitleSpaceHeightPx - scheduleHeightPx - horizontalPaddingPx
     displayTitleHeight -= if (speaker != null) {
         with(localDensity) { TimetableGridItemSizes.speakerHeight.toPx() }
     } else {
@@ -412,7 +418,7 @@ private fun calculateTitleHeight(
 object TimetableGridItemSizes {
     val width = 192.dp
     val padding = 12.dp
-    val titleToSchedulePadding = 4.dp
+    val scheduleToTitleSpace = 6.dp
     val scheduleHeight = 16.dp
     val errorHeight = 16.dp
     val speakerHeight = 32.dp
