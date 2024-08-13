@@ -1,5 +1,5 @@
 package io.github.droidkaigi.confsched.model
 
 enum class ProfileCardTheme {
-    Default,
+    Default, ORANGE, YELLOW, PINK, BLUE, WHITE
 }

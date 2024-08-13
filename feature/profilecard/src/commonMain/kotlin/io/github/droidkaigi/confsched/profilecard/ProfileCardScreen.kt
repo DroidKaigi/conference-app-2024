@@ -1,13 +1,22 @@
 package io.github.droidkaigi.confsched.profilecard
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -20,19 +29,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.profilecard.generated.resources.icon_share
+import conference_app_2024.feature.profilecard.generated.resources.profile_card
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.model.ProfileCardTheme.BLUE
+import io.github.droidkaigi.confsched.model.ProfileCardTheme.Default
+import io.github.droidkaigi.confsched.model.ProfileCardTheme.ORANGE
+import io.github.droidkaigi.confsched.model.ProfileCardTheme.PINK
+import io.github.droidkaigi.confsched.model.ProfileCardTheme.WHITE
+import io.github.droidkaigi.confsched.model.ProfileCardTheme.YELLOW
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Edit
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 const val profileCardScreenRoute = "profilecard"
 
@@ -169,7 +190,11 @@ internal fun ProfileCardScreen(
                     onClickReset = {
                         eventEmitter.tryEmit(CardScreenEvent.Reset)
                     },
+                    onClickShareProfileCard = {
+                        eventEmitter.tryEmit(CardScreenEvent.ShareProfileCard)
+                    },
                     contentPadding = padding,
+                    isCreated = true,
                 )
             }
         }
@@ -249,24 +274,65 @@ internal fun EditScreen(
 internal fun CardScreen(
     uiState: ProfileCardUiState.Card,
     onClickReset: () -> Unit,
+    onClickShareProfileCard: () -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(),
+    isCreated: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(16.dp),
 ) {
     Column(
         modifier = modifier
+            .fillMaxSize()
+            .background(
+                color = when (uiState.theme) {
+                    Default -> Color(0xFFB4FF79)
+                    ORANGE -> Color(0xFFFEB258)
+                    YELLOW -> Color(0xFFFCF65F)
+                    PINK -> Color(0xFF6FD7F8)
+                    BLUE -> Color(0xFFB4FF79)
+                    WHITE -> Color(0xFFF9F9F9)
+                }
+            )
             .testTag(ProfileCardTestTag.CardScreen.SCREEN)
             .padding(contentPadding),
     ) {
-        Text("ProfileCard")
-        Text(uiState.nickname)
-        if (uiState.occupation != null) {
-            Text(uiState.occupation)
+        Text(
+            text = stringResource(ProfileCardRes.string.profile_card),
+            style = MaterialTheme.typography.headlineSmall,
+            color = Color.Black,
+            modifier = Modifier.fillMaxWidth().padding(16.dp),
+        )
+        Spacer(Modifier.height(72.dp))
+        FlipCard(
+            uiState = uiState,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            isCreated = isCreated,
+        )
+        Spacer(Modifier.height(44.dp))
+        Button(
+            onClick = { onClickShareProfileCard() },
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFFFFFF)),
+            contentPadding = PaddingValues(vertical = 10.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        ) {
+            Icon(
+                painter = painterResource(ProfileCardRes.drawable.icon_share),
+                contentDescription = "Share",
+                tint = Color.Black,
+                modifier = Modifier.size(18.dp),
+            )
+            Spacer(Modifier.width(8.dp))
+            Text(
+                text = "共有する",
+                style = MaterialTheme.typography.labelLarge,
+                color = Color.Black,
+            )
         }
-        if (uiState.link != null) {
-            Text(uiState.link)
-        }
-        Button(onClickReset) {
-            Text("Reset")
-        }
+        Spacer(Modifier.height(18.dp))
+        Text(
+            text = "編集する",
+            style = MaterialTheme.typography.labelLarge,
+            color = Color.Black,
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+        )
     }
 }
