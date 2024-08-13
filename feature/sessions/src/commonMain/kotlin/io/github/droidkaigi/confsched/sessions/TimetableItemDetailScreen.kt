@@ -211,7 +211,6 @@ private fun TimetableItemDetailScreen(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding)
                             .testTag(TimetableItemDetailScreenLazyColumnTestTag),
                     ) {
                         item {
