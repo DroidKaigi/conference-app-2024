@@ -51,7 +51,7 @@ internal fun PhotoPickerButton(
         onClick = {
             imagePicker.launch()
         },
-        modifier = modifier
+        modifier = modifier,
     ) {
         content()
     }
