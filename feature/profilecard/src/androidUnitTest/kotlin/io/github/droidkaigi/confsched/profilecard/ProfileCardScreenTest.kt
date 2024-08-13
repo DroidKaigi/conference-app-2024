@@ -47,7 +47,70 @@ class ProfileCardScreenTest(
                             checkEditScreenDisplayed()
                         }
                     }
+                    val nickName = "test"
+                    val occupation = "test"
+                    describe("input nickname") {
+                        run {
+                            inputNickName(nickName)
+                        }
+                        itShould("show nickname") {
+                            captureScreenWithChecks {
+                                checkEditScreenDisplayed()
+                            }
+                        }
+                        describe("input occupation") {
+                            run {
+                                inputOccupation(occupation)
+                            }
+                            itShould("show occupation") {
+                                captureScreenWithChecks {
+                                    checkEditScreenDisplayed()
+                                }
+                            }
+                            describe("click create button") {
+                                run {
+                                    clickCreateButton()
+                                }
+                                itShould("show card screen") {
+                                    captureScreenWithChecks {
+                                        checkCardScreenDisplayed()
+                                    }
+                                }
+                                describe("click edit button") {
+                                    run {
+                                        clickEditButton()
+                                    }
+                                    itShould("show edit screen") {
+                                        captureScreenWithChecks {
+                                            checkEditScreenDisplayed()
+                                            checkNickName(nickName)
+                                            checkOccupation(occupation)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
+                // FIXME: java.util.concurrent.CancellationException: The test timed out at saveProfileCard
+                // describe("when profile card is found") {
+                //     run {
+                //         val profileCard = ProfileCard(
+                //             nickname = "test",
+                //             occupation = "test",
+                //             link = null,
+                //             image = null,
+                //             theme = ProfileCardTheme.Iguana
+                //         )
+                //         saveProfileCard(profileCard)
+                //         setupScreenContent()
+                //     }
+                //     itShould("show card screen") {
+                //         captureScreenWithChecks {
+                //             checkCardScreenDisplayed()
+                //         }
+                //     }
+                // }
             }
         }
     }

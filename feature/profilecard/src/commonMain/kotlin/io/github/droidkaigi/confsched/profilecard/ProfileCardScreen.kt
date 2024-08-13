@@ -46,7 +46,6 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenT
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
-import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Edit
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import org.jetbrains.compose.resources.painterResource
@@ -54,25 +53,14 @@ import org.jetbrains.compose.resources.stringResource
 
 const val profileCardScreenRoute = "profilecard"
 
-object ProfileCardTestTag {
-    private const val suffix = "TestTag"
-    private const val prefix = "ProfileCard"
-
-    object EditScreen {
-        private const val editScreenPrefix = "${prefix}_EditScreen"
-        const val SCREEN = "${editScreenPrefix}_$suffix"
-        const val NICKNAME_TEXT_FIELD = "${editScreenPrefix}_NicknameTextField_$suffix"
-        const val OCCUPATION_TEXT_FIELD = "${editScreenPrefix}_OccupationTextField_$suffix"
-        const val LINK_TEXT_FIELD = "${editScreenPrefix}_LinkTextField_$suffix"
-        const val SELECT_IMAGE_BUTTON = "${editScreenPrefix}_SelectImageButton_$suffix"
-        const val CREATE_BUTTON = "${editScreenPrefix}_CreateButton_$suffix"
-    }
-
-    object CardScreen {
-        private const val cardScreenPrefix = "${prefix}_CardScreen"
-        const val SCREEN = "${cardScreenPrefix}_$suffix"
-    }
-}
+const val ProfileCardEditScreenTestTag = "ProfileCardEditScreenTestTag"
+const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
+const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
+const val ProfileCardLinkTextFieldTestTag = "ProfileCardLinkTextFieldTestTag"
+const val ProfileCardSelectImageButtonTestTag = "ProfileCardSelectImageButtonTestTag"
+const val ProfileCardCreateButtonTestTag = "ProfileCardCreateButtonTestTag"
+const val ProfileCardCardScreenTestTag = "ProfileCardCardScreenTestTag"
+const val ProfileCardEditButtonTestTag = "ProfileCardEditButtonTestTag"
 
 fun NavGraphBuilder.profileCardScreen(contentPadding: PaddingValues) {
     composable(profileCardScreenRoute) {
@@ -92,46 +80,34 @@ fun NavController.navigateProfileCardScreen() {
 
 internal sealed interface ProfileCardUiState {
     data class Edit(
-        val nickname: String,
-        val occupation: String?,
-        val link: String?,
-        val imageUri: String?,
-        val theme: ProfileCardTheme,
-    ) : ProfileCardUiState {
-        companion object {
-            fun initial() = Edit(
-                nickname = "",
-                occupation = null,
-                link = null,
-                imageUri = null,
-                theme = ProfileCardTheme.Default,
-            )
-        }
-    }
+        val nickname: String = "",
+        val occupation: String? = null,
+        val link: String? = null,
+        val image: String? = null,
+        val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
+    ) : ProfileCardUiState
 
     data class Card(
         val nickname: String,
         val occupation: String?,
         val link: String?,
-        val imageUri: String?,
+        val image: String?,
         val theme: ProfileCardTheme,
     ) : ProfileCardUiState
 }
 
-internal data class ProfileCardScreenUiState(
+internal enum class ProfileCardUiType {
+    Edit,
+    Card,
+}
+
+internal data class ProfileCardScreenState(
     val isLoading: Boolean,
-    val contentUiState: ProfileCardUiState,
+    val editUiState: ProfileCardUiState.Edit,
+    val cardUiState: ProfileCardUiState.Card?,
+    val uiType: ProfileCardUiType,
     val userMessageStateHolder: UserMessageStateHolder,
 )
-
-internal fun ProfileCard.toUiState() =
-    ProfileCardUiState.Card(
-        nickname = nickname,
-        occupation = occupation,
-        link = link,
-        imageUri = imageUri,
-        theme = theme,
-    )
 
 @Composable
 fun ProfileCardScreen(
@@ -150,7 +126,7 @@ internal fun ProfileCardScreen(
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     eventEmitter: EventEmitter<ProfileCardScreenEvent> = rememberEventEmitter(),
-    uiState: ProfileCardScreenUiState = profileCardScreenPresenter(eventEmitter),
+    uiState: ProfileCardScreenState = profileCardScreenPresenter(eventEmitter),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
@@ -170,25 +146,26 @@ internal fun ProfileCardScreen(
             bottom = contentPadding.calculateBottomPadding(),
         ),
     ) { padding ->
-        when (val contentUiState = uiState.contentUiState) {
-            is ProfileCardUiState.Edit -> {
+        when (uiState.uiType) {
+            ProfileCardUiType.Edit -> {
                 EditScreen(
-                    uiState = contentUiState,
+                    uiState = uiState.editUiState,
                     onClickCreate = {
-                        eventEmitter.tryEmit(EditScreenEvent.CreateProfileCard(it))
+                        eventEmitter.tryEmit(EditScreenEvent.Create(it))
                     },
                     contentPadding = padding,
                 )
             }
 
-            is ProfileCardUiState.Card -> {
+            ProfileCardUiType.Card -> {
+                if (uiState.cardUiState == null) return@Scaffold
                 CardScreen(
-                    uiState = contentUiState,
-                    onClickReset = {
-                        eventEmitter.tryEmit(CardScreenEvent.Reset)
+                    uiState = uiState.cardUiState,
+                    onClickEdit = {
+                        eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
                     onClickShareProfileCard = {
-                        eventEmitter.tryEmit(CardScreenEvent.ShareProfileCard)
+                        eventEmitter.tryEmit(CardScreenEvent.Share)
                     },
                     contentPadding = padding,
                     isCreated = true,
@@ -208,7 +185,7 @@ internal fun ProfileCardScreen(
 
 @Composable
 internal fun EditScreen(
-    uiState: Edit,
+    uiState: ProfileCardUiState.Edit,
     onClickCreate: (ProfileCard) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -216,11 +193,11 @@ internal fun EditScreen(
     var nickname by remember { mutableStateOf(uiState.nickname) }
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
-    var imageUri by remember { mutableStateOf(uiState.imageUri) }
+    var image by remember { mutableStateOf(uiState.image) }
 
     Column(
         modifier = modifier
-            .testTag(ProfileCardTestTag.EditScreen.SCREEN)
+            .testTag(ProfileCardEditScreenTestTag)
             .padding(contentPadding),
     ) {
         Text("ProfileCardEdit")
@@ -228,23 +205,23 @@ internal fun EditScreen(
             value = nickname,
             onValueChange = { nickname = it },
             placeholder = { Text("Nickname") },
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.NICKNAME_TEXT_FIELD),
+            modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
         )
         TextField(
             value = occupation ?: "",
             onValueChange = { occupation = it },
             placeholder = { Text("Occupation") },
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.OCCUPATION_TEXT_FIELD),
+            modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
         )
         TextField(
             value = link ?: "",
             onValueChange = { link = it },
             placeholder = { Text("Link") },
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.LINK_TEXT_FIELD),
+            modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
         Button(
             onClick = {},
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.SELECT_IMAGE_BUTTON),
+            modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
         ) {
             Text("画像を選択")
         }
@@ -255,12 +232,12 @@ internal fun EditScreen(
                         nickname = nickname,
                         occupation = occupation,
                         link = link,
-                        imageUri = imageUri,
+                        image = image,
                         theme = uiState.theme,
                     ),
                 )
             },
-            modifier = Modifier.testTag(ProfileCardTestTag.EditScreen.CREATE_BUTTON),
+            modifier = Modifier.testTag(ProfileCardCreateButtonTestTag),
         ) {
             Text("Create")
         }
@@ -270,7 +247,7 @@ internal fun EditScreen(
 @Composable
 internal fun CardScreen(
     uiState: ProfileCardUiState.Card,
-    onClickReset: () -> Unit,
+    onClickEdit: () -> Unit,
     onClickShareProfileCard: () -> Unit,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
@@ -281,7 +258,7 @@ internal fun CardScreen(
             modifier = modifier
                 .fillMaxSize()
                 .background(LocalProfileCardScreenTheme.current.primaryColor)
-                .testTag(ProfileCardTestTag.CardScreen.SCREEN)
+                .testTag(ProfileCardCardScreenTestTag)
                 .padding(contentPadding),
         ) {
             Text(
@@ -323,7 +300,8 @@ internal fun CardScreen(
                 color = Color.Black,
                 modifier = Modifier
                     .align(Alignment.CenterHorizontally)
-                    .clickable { onClickReset() }, // Is onClickReset located here?
+                    .clickable { onClickEdit() }
+                    .testTag(ProfileCardEditButtonTestTag),
             )
         }
     }

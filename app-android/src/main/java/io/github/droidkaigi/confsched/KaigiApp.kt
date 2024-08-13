@@ -10,15 +10,19 @@ import android.os.Build
 import android.provider.CalendarContract
 import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -67,6 +71,7 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -90,6 +95,7 @@ fun KaigiApp(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
@@ -98,33 +104,38 @@ private fun KaigiNavHost(
     navController: NavHostController = rememberNavController(),
     externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
-    NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
-        mainScreen(windowSize, navController, externalNavController)
-        sessionScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onLinkClick = externalNavController::navigate,
-            onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
-            // For debug
-//            onShareClick = externalNavController::onShareClick,
-            onShareClick = {
-                navController.navigate(contributorsScreenRoute)
-            },
-        )
+    SharedTransitionLayout {
+        CompositionLocalProvider(
+            LocalSharedTransitionScope provides this,
+        ) {
+            NavHostWithSharedAxisX(
+                navController = navController,
+                startDestination = mainScreenRoute,
+            ) {
+                mainScreen(windowSize, navController, externalNavController)
+                sessionScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onLinkClick = externalNavController::navigate,
+                    onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
+                    onShareClick = externalNavController::onShareClick,
+                )
 
-        contributorsScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onContributorItemClick = externalNavController::navigate,
-        )
+                contributorsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onContributorItemClick = externalNavController::navigate,
+                )
 
-        staffScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onStaffItemClick = externalNavController::navigate,
-        )
+                staffScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onStaffItemClick = externalNavController::navigate,
+                )
 
-        sponsorsScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onSponsorsItemClick = externalNavController::navigate,
-        )
+                sponsorsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onSponsorsItemClick = externalNavController::navigate,
+                )
+            }
+        }
     }
 }
 
@@ -147,8 +158,8 @@ private fun NavGraphBuilder.mainScreen(
                 onEventMapItemClick = externalNavController::navigate,
             )
             favoritesScreens(
-                onNavigationIconClick = navController::popBackStack,
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                contentPadding = contentPadding,
             )
             aboutScreen(
                 contentPadding = contentPadding,
@@ -360,9 +371,8 @@ private class ExternalNavController(
 @Composable
 @ReadOnlyComposable
 private fun colorContrast(): ColorContrast {
-    val uiModeManager =
-        LocalContext.current.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+    val uiModeManager = LocalContext.current.getSystemService<UiModeManager>()
+    return if (uiModeManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
         when (uiModeManager.contrast) {
             in 0.0f..0.33f -> ColorContrast.Default
             in 0.34f..0.66f -> ColorContrast.Medium

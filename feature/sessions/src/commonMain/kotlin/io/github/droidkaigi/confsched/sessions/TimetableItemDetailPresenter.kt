@@ -36,14 +36,15 @@ sealed interface TimetableItemDetailEvent {
 fun timetableItemDetailPresenter(
     events: SharedFlow<TimetableItemDetailEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
-    timetableItemId: String = rememberNavigationArgument(
+    timetableItemIdArg: String = rememberNavigationArgument(
         key = timetableItemDetailScreenRouteItemIdParameterName,
         initialValue = "",
     ),
 ): TimetableItemDetailScreenUiState = providePresenterDefaults<TimetableItemDetailScreenUiState> { userMessageStateHolder ->
+    val timetableItemId = TimetableItemId(timetableItemIdArg)
     val timetableItemStateWithBookmark by rememberUpdatedState(
         sessionsRepository
-            .timetableItemWithBookmark(TimetableItemId(timetableItemId)),
+            .timetableItemWithBookmark(timetableItemId),
     )
     var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
     val bookmarkedSuccessfullyString = stringResource(SessionsRes.string.bookmarked_successfully)
@@ -83,7 +84,7 @@ fun timetableItemDetailPresenter(
         }
     }
     val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
-        ?: return@providePresenterDefaults Loading(userMessageStateHolder)
+        ?: return@providePresenterDefaults Loading(timetableItemId, userMessageStateHolder)
     val (timetableItem, bookmarked) = timetableItemStateWithBookmarkValue
     Loaded(
         timetableItem = timetableItem,
@@ -92,6 +93,7 @@ fun timetableItemDetailPresenter(
         isLangSelectable = timetableItem.sessionType == NORMAL,
         currentLang = selectedDescriptionLanguage,
         roomThemeKey = timetableItem.room.getThemeKey(),
+        timetableItemId = timetableItemId,
         userMessageStateHolder = userMessageStateHolder,
     )
 }

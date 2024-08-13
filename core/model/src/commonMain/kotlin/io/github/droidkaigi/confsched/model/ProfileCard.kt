@@ -4,6 +4,14 @@ data class ProfileCard(
     val nickname: String,
     val occupation: String?,
     val link: String?,
-    val imageUri: String?,
+    val image: String?,
     val theme: ProfileCardTheme,
 )
+
+enum class ProfileCardTheme {
+    Iguana,
+    Hedgehog,
+    Giraffe,
+    Flamingo,
+    Jellyfish,
+}

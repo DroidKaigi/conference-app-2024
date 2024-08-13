@@ -55,8 +55,11 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show session detail title") {
-                            // FIXME: Add check for session detail title
-                            captureScreenWithChecks()
+                            captureScreenWithChecks(
+                                checks = {
+                                    checkSessionDetailTitle()
+                                },
+                            )
                         }
                         itShould("be appropriately accessible") {
                             checkAccessibilityCapture()
@@ -66,17 +69,23 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 clickBookmarkButton()
                             }
                             itShould("show bookmarked session") {
-                                // FIXME: Add check for bookmarked session
-                                captureScreenWithChecks()
+                                captureScreenWithChecks(
+                                    checks = {
+                                        checkBookmarkedSession()
+                                    },
+                                )
                             }
                             describe("click bookmark again") {
                                 run {
                                     clickBookmarkButton()
                                 }
-                                itShould("show unbookmarked session") {
+                                itShould("show unBookmarked session") {
                                     wait5Seconds()
-                                    // FIXME: Add check for unbookmarked session
-                                    captureScreenWithChecks()
+                                    captureScreenWithChecks(
+                                        checks = {
+                                            checkUnBookmarkSession()
+                                        },
+                                    )
                                 }
                             }
                         }
@@ -85,8 +94,11 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 scroll()
                             }
                             itShould("show scrolled session detail") {
-                                // FIXME: Add check for scrolled session detail
-                                captureScreenWithChecks()
+                                captureScreenWithChecks(
+                                    checks = {
+                                        checkTargetAudience()
+                                    },
+                                )
                             }
                         }
                     }
@@ -96,25 +108,39 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                         }
                         itShould("show small font session detail") {
-                            captureScreenWithChecks()
+                            captureScreenWithChecks(
+                                checks = {
+                                    checkSummaryCardTexts()
+                                },
+                            )
                         }
                     }
                     describe("when font scale is large") {
                         run {
                             setFontScale(1.5f)
                             setupScreenContent()
+                            scrollLazyColumnByIndex(1)
                         }
-                        itShould("show small font session detail") {
-                            captureScreenWithChecks()
+                        itShould("show large font session detail") {
+                            captureScreenWithChecks(
+                                checks = {
+                                    checkSummaryCardTexts()
+                                },
+                            )
                         }
                     }
                     describe("when font scale is huge") {
                         run {
                             setFontScale(2.0f)
                             setupScreenContent()
+                            scrollLazyColumnByIndex(1)
                         }
-                        itShould("show small font session detail") {
-                            captureScreenWithChecks()
+                        itShould("show huge font session detail") {
+                            captureScreenWithChecks(
+                                checks = {
+                                    checkSummaryCardTexts()
+                                },
+                            )
                         }
                     }
                 }

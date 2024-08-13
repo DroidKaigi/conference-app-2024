@@ -5,11 +5,8 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
-import io.github.droidkaigi.confsched.testing.robot.DefaultEventMapServerRobot
-import io.github.droidkaigi.confsched.testing.robot.DefaultScreenRobot
-import io.github.droidkaigi.confsched.testing.robot.EventMapServerRobot
+import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.EventMapServerRobot.ServerStatus
-import io.github.droidkaigi.confsched.testing.robot.ScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
@@ -43,16 +40,39 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     run {
                         setupEventMapServer(ServerStatus.Operational)
                         setupScreenContent()
+                        scrollLazyColumnByIndex(1)
                     }
-                    itShould("show event map items") {
+                    itShould("ensure that the room types for Flamingo and Giraffe are displayed.") {
                         captureScreenWithChecks(
-                            checks = todoChecks("This screen is still empty now. Please add some checks."),
+                            checks = {
+                                checkEventMapItemByRoomName(roomName = "Flamingo")
+                                checkEventMapItemByRoomName(roomName = "Giraffe")
+                            },
+                        )
+                    }
+                    run {
+                        scrollLazyColumnByIndex(3)
+                    }
+                    itShould("ensure that the room types for Hedgehog and Iguana are displayed.") {
+                        captureScreenWithChecks(
+                            checks = {
+                                checkEventMapItemByRoomName(roomName = "Hedgehog")
+                                checkEventMapItemByRoomName(roomName = "Iguana")
+                            },
+                        )
+                    }
+                    run {
+                        scrollLazyColumnByIndex(4)
+                    }
+                    itShould("ensure that the room types for Jellyfish are displayed.") {
+                        captureScreenWithChecks(
+                            checks = { checkEventMapItemByRoomName(roomName = "Jellyfish") },
                         )
                     }
                 }
                 describe("when server is error") {
                     run {
-                        setupEventMapServer(EventMapServerRobot.ServerStatus.Error)
+                        setupEventMapServer(ServerStatus.Error)
                         setupScreenContent()
                     }
                     itShould("show error message") {
@@ -62,20 +82,6 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     }
                 }
             }
-        }
-    }
-}
-
-class EventMapScreenRobot @Inject constructor(
-    screenRobot: DefaultScreenRobot,
-    eventMapServerRobot: DefaultEventMapServerRobot,
-) : ScreenRobot by screenRobot,
-    EventMapServerRobot by eventMapServerRobot {
-    fun setupScreenContent() {
-        robotTestRule.setContent {
-            EventMapScreen(
-                onEventMapItemClick = { },
-            )
         }
     }
 }

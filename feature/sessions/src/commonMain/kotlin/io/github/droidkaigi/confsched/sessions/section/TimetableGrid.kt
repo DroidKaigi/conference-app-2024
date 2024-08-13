@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions.section
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.AnimationState
 import androidx.compose.animation.core.animateDecay
@@ -51,6 +52,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.ScrollAxisRange
 import androidx.compose.ui.semantics.horizontalScrollAxisRange
 import androidx.compose.ui.semantics.scrollBy
@@ -72,6 +74,9 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridHours
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridRooms
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState.Companion
+import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
@@ -85,11 +90,14 @@ import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.roundToInt
 
+const val TimetableGridTestTag = "TimetableGrid"
+
 data class TimetableGridUiState(val timetable: Timetable)
 
 @Composable
 fun TimetableGrid(
     uiState: TimetableGridUiState,
+    timetableState: TimetableState,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -97,6 +105,7 @@ fun TimetableGrid(
     Column {
         TimetableGrid(
             timetable = uiState.timetable,
+            timetableState = timetableState,
             onTimetableItemClick = onTimetableItemClick,
             modifier = modifier,
             contentPadding = contentPadding,
@@ -104,25 +113,31 @@ fun TimetableGrid(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun TimetableGrid(
     timetable: Timetable,
+    timetableState: TimetableState,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val timetableGridState = rememberTimetableGridState()
     val coroutineScope = rememberCoroutineScope()
     val layoutDirection = LocalLayoutDirection.current
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val animatedScope = LocalAnimatedVisibilityScope.current
+
     Row(
-        modifier = Modifier.padding(
-            top = contentPadding.calculateTopPadding(),
-            start = contentPadding.calculateStartPadding(layoutDirection),
-            end = contentPadding.calculateEndPadding(layoutDirection),
-        ),
+        modifier = Modifier
+            .testTag(TimetableGridTestTag)
+            .padding(
+                top = contentPadding.calculateTopPadding(),
+                start = contentPadding.calculateStartPadding(layoutDirection),
+                end = contentPadding.calculateEndPadding(layoutDirection),
+            ),
     ) {
         TimetableGridHours(
-            timetableState = timetableGridState,
+            timetableState = timetableState,
             coroutineScope = coroutineScope,
         ) { hour ->
             HoursItem(hour = hour)
@@ -130,14 +145,14 @@ fun TimetableGrid(
         Column {
             TimetableGridRooms(
                 timetableRooms = TimetableRooms(timetable.rooms),
-                timetableState = timetableGridState,
+                timetableState = timetableState,
                 coroutineScope = coroutineScope,
             ) { room ->
                 RoomItem(room = room)
             }
             TimetableGrid(
                 timetable = timetable,
-                timetableState = timetableGridState,
+                timetableState = timetableState,
                 modifier = modifier,
                 contentPadding = PaddingValues(
                     top = 16.dp + contentPadding.calculateTopPadding(),
@@ -146,7 +161,23 @@ fun TimetableGrid(
                     end = 16.dp + contentPadding.calculateEndPadding(layoutDirection),
                 ),
             ) { timetableItem, itemHeightPx ->
+                val timetableGridItemModifier = if (sharedTransitionScope != null && animatedScope != null) {
+                    with(sharedTransitionScope) {
+                        Modifier
+                            .padding(horizontal = 2.dp)
+                            .sharedElement(
+                                state = rememberSharedContentState(
+                                    key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
+                                ),
+                                animatedVisibilityScope = animatedScope,
+                            )
+                    }
+                } else {
+                    Modifier
+                        .padding(horizontal = 2.dp)
+                }
                 TimetableGridItem(
+                    modifier = timetableGridItemModifier,
                     timetableItem = timetableItem,
                     onTimetableItemClick = onTimetableItemClick,
                     gridItemHeightPx = itemHeightPx,
@@ -172,7 +203,7 @@ fun TimetableGrid(
         TimetableLayout(timetable = timetable, density = density, verticalScale = verticalScale)
     }
     val scrollState = timetableState.screenScrollState
-    val timetableScreen = remember(timetableLayout, density) {
+    val timetableScreen = remember(timetableLayout, scrollState, density) {
         TimetableScreen(
             timetableLayout,
             scrollState,
@@ -236,7 +267,7 @@ fun TimetableGrid(
                 timetableState.screenScrollState.componentPositionInRoot =
                     coordinates.positionInRoot()
             }
-            .pointerInput(Unit) {
+            .pointerInput(timetableState) {
                 detectDragGestures(
                     onDragStart = {
                         scrollState.resetTracking()
@@ -287,7 +318,7 @@ fun TimetableGrid(
                     },
                 )
             },
-        itemProvider = itemProvider,
+        itemProvider = { itemProvider },
     ) { constraint ->
 
         data class ItemData(val placeable: Placeable, val timetableItem: TimetableItemLayout)
@@ -335,6 +366,7 @@ fun TimetableGrid(
 fun TimetablePreview() {
     TimetableGrid(
         timetable = Timetable.fake(),
+        timetableState = rememberTimetableGridState(),
         onTimetableItemClick = {},
         modifier = Modifier.fillMaxSize(),
     )
