@@ -51,10 +51,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import conference_app_2024.core.designsystem.generated.resources.ic_fav_on
+import conference_app_2024.core.designsystem.generated.resources.ic_info_on
+import conference_app_2024.core.designsystem.generated.resources.ic_map_on
+import conference_app_2024.core.designsystem.generated.resources.ic_profilecard_on
+import conference_app_2024.core.designsystem.generated.resources.ic_timetable_on
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
+import io.github.droidkaigi.confsched.designsystem.DesignSystemRes
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
+import io.github.droidkaigi.confsched.main.MainScreenTab.About
+import io.github.droidkaigi.confsched.main.MainScreenTab.EventMap
+import io.github.droidkaigi.confsched.main.MainScreenTab.Favorite
+import io.github.droidkaigi.confsched.main.MainScreenTab.ProfileCard
+import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.model.isBlurSupported
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -211,6 +222,18 @@ fun BottomBarTabs(
                     ),
                     label = "scale",
                 )
+                val iconRes = if (selectedTab == MainScreenTab.indexOf(tab)) {
+                    when (tab) {
+                        Timetable -> DesignSystemRes.drawable.ic_timetable_on
+                        EventMap -> DesignSystemRes.drawable.ic_map_on
+                        Favorite -> DesignSystemRes.drawable.ic_fav_on
+                        About -> DesignSystemRes.drawable.ic_info_on
+                        ProfileCard -> DesignSystemRes.drawable.ic_profilecard_on
+                    }
+                }
+                    else {
+                        tab.icon
+                    }
                 Column(
                     modifier =
                     Modifier
@@ -227,7 +250,7 @@ fun BottomBarTabs(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Image(
-                        painter = painterResource(tab.icon),
+                        painter = painterResource(iconRes),
                         contentDescription = "tab ${stringResource(tab.contentDescription)}",
                     )
                 }
