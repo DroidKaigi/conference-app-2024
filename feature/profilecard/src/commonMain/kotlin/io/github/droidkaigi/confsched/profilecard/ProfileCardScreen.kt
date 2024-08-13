@@ -15,10 +15,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -246,7 +250,28 @@ internal fun EditScreen(
             Text("画像を選択")
         }
         imageByteArray?.let {
-            Image(it.toImageBitmap(), null)
+            Box {
+                Image(
+                    it.toImageBitmap(),
+                    null,
+                    modifier = Modifier
+                        .padding(
+                            top = 24.dp,
+                            end = 24.dp,
+                        )
+                        .align(Alignment.BottomStart),
+                )
+                IconButton(
+                    onClick = { imageByteArray = null },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd),
+                    colors = IconButtonDefaults
+                        .iconButtonColors()
+                        .copy(containerColor = Color(0xFF414849)),
+                ) {
+                    Icon(Icons.Default.Close, null)
+                }
+            }
         }
         Button(
             onClick = {
