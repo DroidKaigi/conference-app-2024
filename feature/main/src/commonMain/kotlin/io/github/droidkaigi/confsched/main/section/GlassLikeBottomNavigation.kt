@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.chrisbanes.haze.HazeState
-import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
@@ -50,11 +49,7 @@ fun GlassLikeBottomNavigation(
             .padding(horizontal = 48.dp)
             .fillMaxWidth()
             .height(64.dp)
-            .hazeChild(
-                state = hazeState,
-                shape = CircleShape,
-                style = HazeStyle(tint = Color.Black.copy(alpha = .4f), blurRadius = 30.dp),
-            )
+            .hazeChild(state = hazeState, shape = CircleShape)
             .border(
                 width = 1.dp,
                 color = Color.White.copy(alpha = .3f),
