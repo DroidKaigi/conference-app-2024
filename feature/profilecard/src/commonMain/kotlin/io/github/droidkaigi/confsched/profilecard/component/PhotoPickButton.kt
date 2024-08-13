@@ -7,10 +7,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import com.preat.peekaboo.image.picker.SelectionMode
+import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import com.preat.peekaboo.image.picker.toImageBitmap
-import io.github.droidkaigi.confsched.profilecard.rememberSingleImagePickerLauncher
+import kotlinx.coroutines.CoroutineScope
 
 @Composable
 internal fun PhotoPickerButton(
@@ -56,3 +59,17 @@ internal fun PhotoPickerButton(
         content()
     }
 }
+
+@Composable
+private fun rememberSingleImagePickerLauncher(
+    scope: CoroutineScope = rememberCoroutineScope(),
+    onResult: (ByteArray) -> Unit,
+) = rememberImagePickerLauncher(
+    selectionMode = SelectionMode.Single,
+    scope = scope,
+    onResult = { byteArrays ->
+        byteArrays.firstOrNull()?.let {
+            onResult(it)
+        }
+    },
+)
