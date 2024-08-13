@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.layout.LazyLayout
 import androidx.compose.foundation.lazy.layout.LazyLayoutItemProvider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -367,6 +368,45 @@ fun TimetablePreview() {
     TimetableGrid(
         timetable = Timetable.fake(),
         timetableState = rememberTimetableGridState(),
+        onTimetableItemClick = {},
+        modifier = Modifier.fillMaxSize(),
+    )
+}
+
+@Preview
+@Composable
+fun TimetableVerticalScale20PercentPreview() {
+    TimetableGrid(
+        timetable = Timetable.fake(),
+        timetableState = rememberTimetableGridState(
+            screenScaleState = ScreenScaleState(0.2f, 0.2f)
+        ),
+        onTimetableItemClick = {},
+        modifier = Modifier.fillMaxSize(),
+    )
+}
+
+@Preview
+@Composable
+fun TimetableVerticalScale40PercentPreview() {
+    TimetableGrid(
+        timetable = Timetable.fake(),
+        timetableState = rememberTimetableGridState(
+            screenScaleState = ScreenScaleState(0.4f, 0.4f)
+        ),
+        onTimetableItemClick = {},
+        modifier = Modifier.fillMaxSize(),
+    )
+}
+
+@Preview
+@Composable
+fun TimetableVerticalScale60PercentPreview() {
+    TimetableGrid(
+        timetable = Timetable.fake(),
+        timetableState = rememberTimetableGridState(
+            screenScaleState = ScreenScaleState(0.6f, 0.6f)
+        ),
         onTimetableItemClick = {},
         modifier = Modifier.fillMaxSize(),
     )
