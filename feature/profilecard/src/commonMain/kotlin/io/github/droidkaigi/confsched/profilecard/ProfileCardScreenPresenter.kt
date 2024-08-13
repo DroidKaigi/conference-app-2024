@@ -59,13 +59,7 @@ internal fun profileCardScreenPresenter(
     val profileCard: ProfileCard by rememberUpdatedState(repository.profileCard())
     var isLoading: Boolean by remember { mutableStateOf(false) }
     val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
-    val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(
-        if (profileCard is ProfileCard.Exists) {
-            profileCard.toCardUiState()
-        } else {
-            null
-        },
-    )
+    val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(profileCard.toCardUiState())
     var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Loading) }
 
     // at first launch, if you have a profile card, show card ui
