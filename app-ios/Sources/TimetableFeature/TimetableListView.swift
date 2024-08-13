@@ -116,42 +116,40 @@ struct TimetableGridView: View {
     var body: some View {
         let rooms = RoomType.allCases.filter {$0 != RoomType.roomIj}
         
-        ScrollView(.vertical) {
-            ScrollView(.horizontal){
-                Grid {
-                    GridRow {
+        ScrollView([.horizontal, .vertical]) {
+            Grid {
+                GridRow {
+                    Color.clear
+                        .gridCellUnsizedAxes([.horizontal, .vertical])
+                    
+                    ForEach(rooms, id: \.self) { column in
                         
-                        Color.clear
-                            .gridCellUnsizedAxes([.horizontal, .vertical])
+                        let room = getTimetableRoom(type: column)
                         
-                        ForEach(rooms, id: \.self) { column in
-                            
-                            let room = getTimetableRoom(type: column)
-                            
-                            Text(room.name.currentLangTitle).foregroundStyle(room.roomTheme.primaryColor)
-                                .frame(width: 192)
-                        }
+                        Text(room.name.currentLangTitle).foregroundStyle(room.roomTheme.primaryColor)
+                            .frame(width: 192)
                     }
-                    ForEach(store.timetableItems, id: \.self) { timeBlock in
-                        GridRow {
-                            VStack {
-                                Text(timeBlock.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                                Spacer()
-                                
-                            }.frame(height: 153)
+                }
+                ForEach(store.timetableItems, id: \.self) { timeBlock in
+                    GridRow {
+                        VStack {
+                            Text(timeBlock.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                            Spacer()
                             
+                        }.frame(height: 153)
+                        
+                        
+                        ForEach(rooms, id: \.self) { room in
                             
-                            ForEach(rooms, id: \.self) { room in
-                                
-                                timeBlock.getCellForRoom(room: room, onTap: { item in
-                                    store.send(.view(.timetableItemTapped))
-                                })
-                            }
+                            timeBlock.getCellForRoom(room: room, onTap: { item in
+                                store.send(.view(.timetableItemTapped))
+                            })
                         }
                     }
                 }
             }
         }
+        
     }
 }
 
@@ -248,6 +246,21 @@ func getTimetableRoom(type: RoomType) -> TimetableRoom {
         )
     }
 }
+
+extension TimetableTimeGroupItems {
+    func getCellForRoom(room: RoomType, onTap: @escaping (TimetableItem) -> Void) -> TimetableGridCard {
+        return if let cell = getItemForRoom(forRoom: room) {
+            TimetableGridCard(timetableItem: cell.timetableItem) { timetableItem in
+                onTap(timetableItem)
+            }
+        } else {
+            TimetableGridCard(timetableItem: nil) { _ in
+                // Does nothing
+            }
+        }
+    }
+}
+
 
 #Preview {
     TimetableView(

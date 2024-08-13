@@ -26,26 +26,26 @@ public struct TimetableGridCard: View {
     public var body: some View {
         if let timetableItem {
             Button {
-                onTap(ttItem)
+                onTap(timetableItem)
             } label: {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 4) {
-                        ttItem.room.shape
-                            .foregroundColor(ttItem.room.roomTheme.primaryColor)
-                        Text("\(ttItem.startsTimeString) - \(ttItem.endsTimeString)")
+                        timetableItem.room.shape
+                            .foregroundColor(timetableItem.room.roomTheme.primaryColor)
+                        Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                             .textStyle(.labelMedium)
-                            .foregroundColor(ttItem.room.roomTheme.primaryColor)
+                            .foregroundColor(timetableItem.room.roomTheme.primaryColor)
                         Spacer()
                     }
                     
-                    Text(ttItem.title.currentLangTitle)
+                    Text(timetableItem.title.currentLangTitle)
                         .textStyle(.titleMedium)
-                        .foregroundColor(ttItem.room.roomTheme.primaryColor)
+                        .foregroundColor(timetableItem.room.roomTheme.primaryColor)
                         .multilineTextAlignment(.leading)
                     
                     Spacer()
                     
-                    ForEach(ttItem.speakers, id: \.id) { speaker in
+                    ForEach(timetableItem.speakers, id: \.id) { speaker in
                         HStack(spacing: 8) {
                             Group {
                                 if let url = URL(string: speaker.iconUrl) {
@@ -69,8 +69,8 @@ public struct TimetableGridCard: View {
                 .frame(maxWidth: .infinity)
                 .padding(12)
                 .frame(width: 192, height: 153)
-                .background(ttItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
-                .overlay(RoundedRectangle(cornerRadius: 4).stroke(ttItem.room.roomTheme.primaryColor, lineWidth: 1))
+                .background(timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
+                .overlay(RoundedRectangle(cornerRadius: 4).stroke(timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
             }
         } else {
             VStack {
