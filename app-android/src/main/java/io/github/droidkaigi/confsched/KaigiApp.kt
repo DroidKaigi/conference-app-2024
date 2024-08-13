@@ -19,6 +19,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
@@ -357,9 +358,8 @@ private class ExternalNavController(
 @Composable
 @ReadOnlyComposable
 private fun colorContrast(): ColorContrast {
-    val uiModeManager =
-        LocalContext.current.getSystemService(Context.UI_MODE_SERVICE) as UiModeManager
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+    val uiModeManager = LocalContext.current.getSystemService<UiModeManager>()
+    return if (uiModeManager != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
         when (uiModeManager.contrast) {
             in 0.0f..0.33f -> ColorContrast.Default
             in 0.34f..0.66f -> ColorContrast.Medium
