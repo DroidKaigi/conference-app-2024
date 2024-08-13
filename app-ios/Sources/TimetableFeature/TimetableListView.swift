@@ -26,7 +26,7 @@ public struct TimetableView: View {
                         //TODO: Only selected button should be green and underlined
                         HStack(spacing: 6) {
                                 Text(tabItem.rawValue)
-                                    .textStyle(.labelMedium)
+                                .textStyle(.titleMedium)
                                     .underline(selectedTab == tabItem)
                             }
                             .foregroundStyle(selectedTab == tabItem ? AssetColors.Custom.iguana.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
@@ -162,7 +162,6 @@ struct TagView: View {
 }
 
 struct PhotoView: View {
-    //TODO: Replace this with an actual photo render
     let photo: String
     let name: String
     
