@@ -5,7 +5,6 @@ import io.github.droidkaigi.confsched.primitive.Arch.ARM
 import io.github.droidkaigi.confsched.primitive.Arch.X86
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.creating
 import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
