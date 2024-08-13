@@ -122,14 +122,13 @@ fun TimetableGridItem(
             Column(
                 modifier = Modifier.weight(3f),
                 verticalArrangement = Arrangement.spacedBy(
-                    space = 6.dp,
+                    space = TimetableGridItemSizes.scheduleToTitleSpace,
                     alignment = Alignment.Top,
                 ),
             ) {
                 Row(
                     modifier = Modifier
-                        .weight(1f, fill = false)
-                        .padding(top = TimetableGridItemSizes.titleToSchedulePadding),
+                        .weight(1f, fill = false),
                 ) {
                     Icon(
                         modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
@@ -281,8 +280,8 @@ private fun calculateFontSizeAndLineHeight(
     titleLength: Int,
 ): Pair<TextUnit, TextUnit> {
     // The height of the title that should be displayed.
-    val titleToScheduleSpaceHeightPx = with(localDensity) {
-        TimetableGridItemSizes.titleToSchedulePadding.toPx()
+    val scheduleToTitleSpaceHeightPx = with(localDensity) {
+        TimetableGridItemSizes.scheduleToTitleSpace.toPx()
     }
     val scheduleHeightPx = with(localDensity) {
         TimetableGridItemSizes.scheduleHeight.toPx()
@@ -291,7 +290,7 @@ private fun calculateFontSizeAndLineHeight(
         (TimetableGridItemSizes.padding * 2).toPx()
     }
     var displayTitleHeight =
-        gridItemHeightPx - titleToScheduleSpaceHeightPx - scheduleHeightPx - horizontalPaddingPx
+        gridItemHeightPx - scheduleToTitleSpaceHeightPx - scheduleHeightPx - horizontalPaddingPx
     displayTitleHeight -= if (speaker != null) {
         with(localDensity) { TimetableGridItemSizes.speakerHeight.toPx() }
     } else {
@@ -388,7 +387,7 @@ private fun calculateTitleHeight(
 object TimetableGridItemSizes {
     val width = 192.dp
     val padding = 12.dp
-    val titleToSchedulePadding = 4.dp
+    val scheduleToTitleSpace = 6.dp
     val scheduleHeight = 16.dp
     val errorHeight = 16.dp
     val speakerHeight = 32.dp
