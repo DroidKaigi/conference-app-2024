@@ -127,17 +127,23 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .assertTextEquals("Target Audience")
     }
 
-    fun checkSummaryCardText(
-        title: String,
-    ) {
-        composeTestRule
-            .onNode(hasTestTag(SummaryCardTextTag.plus(title)))
-            .assertExists()
-            .assertIsDisplayed()
-            .assertTextContains(
-                value = title,
-                substring = true,
-            )
+    fun checkSummaryCardTexts() {
+        val titles = listOf(
+            "Date/Time",
+            "Location",
+            "Supported Languages",
+            "Category",
+        )
+        titles.forEach { title ->
+            composeTestRule
+                .onNode(hasTestTag(SummaryCardTextTag.plus(title)))
+                .assertExists()
+                .assertIsDisplayed()
+                .assertTextContains(
+                    value = title,
+                    substring = true,
+                )
+        }
     }
 
     companion object {

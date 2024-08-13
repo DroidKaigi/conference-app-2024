@@ -110,10 +110,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         itShould("show small font session detail") {
                             captureScreenWithChecks(
                                 checks = {
-                                    checkSummaryCardText("Date/Time")
-                                    checkSummaryCardText("Location")
-                                    checkSummaryCardText("Supported Languages")
-                                    checkSummaryCardText("Category")
+                                    checkSummaryCardTexts()
                                 },
                             )
                         }
@@ -127,10 +124,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         itShould("show large font session detail") {
                             captureScreenWithChecks(
                                 checks = {
-                                    checkSummaryCardText("Date/Time")
-                                    checkSummaryCardText("Location")
-                                    checkSummaryCardText("Supported Languages")
-                                    checkSummaryCardText("Category")
+                                    checkSummaryCardTexts()
                                 },
                             )
                         }
@@ -144,10 +138,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         itShould("show huge font session detail") {
                             captureScreenWithChecks(
                                 checks = {
-                                    checkSummaryCardText("Date/Time")
-                                    checkSummaryCardText("Location")
-                                    checkSummaryCardText("Supported Languages")
-                                    checkSummaryCardText("Category")
+                                    checkSummaryCardTexts()
                                 },
                             )
                         }
