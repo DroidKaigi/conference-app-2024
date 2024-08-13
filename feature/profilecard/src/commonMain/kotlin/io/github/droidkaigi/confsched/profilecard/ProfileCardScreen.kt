@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.profilecard
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -290,7 +291,7 @@ internal fun CardScreen(
                     PINK -> Color(0xFF6FD7F8)
                     BLUE -> Color(0xFFB4FF79)
                     WHITE -> Color(0xFFF9F9F9)
-                }
+                },
             )
             .testTag(ProfileCardTestTag.CardScreen.SCREEN)
             .padding(contentPadding),
@@ -332,7 +333,9 @@ internal fun CardScreen(
             text = "編集する",
             style = MaterialTheme.typography.labelLarge,
             color = Color.Black,
-            modifier = Modifier.align(Alignment.CenterHorizontally),
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .clickable { onClickReset() }, // Is onClickReset located here?
         )
     }
 }
