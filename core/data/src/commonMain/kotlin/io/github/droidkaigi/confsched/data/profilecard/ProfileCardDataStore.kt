@@ -13,18 +13,18 @@ import kotlinx.serialization.json.Json
 public class ProfileCardDataStore(
     private val dataStore: DataStore<Preferences>,
 ) {
-    public suspend fun save(profileCard: ProfileCard) {
+    public suspend fun save(profileCard: ProfileCard.Exists) {
         dataStore.edit { preferences ->
             preferences[KEY_PROFILE_CARD] = Json.encodeToString(profileCard.toJson())
         }
     }
 
-    public fun get(): Flow<ProfileCard?> {
+    public fun get(): Flow<ProfileCard> {
         return dataStore.data.map { preferences ->
             val cache = preferences[KEY_PROFILE_CARD] ?: return@map null
             Json.decodeFromString<ProfileCardJson>(cache)
         }.map {
-            it?.toModel()
+            it?.toModel() ?: ProfileCard.DoesNotExists
         }
     }
 
