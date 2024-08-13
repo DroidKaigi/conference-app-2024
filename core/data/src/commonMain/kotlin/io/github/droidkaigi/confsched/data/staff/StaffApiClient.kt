@@ -14,6 +14,11 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 internal interface StaffApi {
+    /**
+     * Gets staff information for the DroidKaigi 2024 event.
+     *
+     * @return [StaffsResponse]
+     */
     @GET("/events/droidkaigi2024/staff")
     suspend fun getStaff(): StaffsResponse
 }
