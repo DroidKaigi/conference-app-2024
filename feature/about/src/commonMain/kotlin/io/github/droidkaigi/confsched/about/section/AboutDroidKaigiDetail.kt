@@ -46,7 +46,7 @@ fun AboutDroidKaigiDetail(
         )
         Text(
             text = stringResource(AboutRes.string.description),
-            style = MaterialTheme.typography.bodyLarge,
+            style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .padding(

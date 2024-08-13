@@ -15,7 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.place_link
 import io.github.droidkaigi.confsched.about.AboutRes
@@ -46,12 +45,11 @@ fun AboutDroidKaigiDetailSummaryCardRow(
         Spacer(modifier = Modifier.width(8.dp))
         Text(
             text = label,
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.titleSmall,
         )
         Spacer(modifier = Modifier.width(12.dp))
         ClickableLinkText(
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.titleSmall,
             content = content,
             onLinkClick = onLinkClick,
             regex = stringResource(AboutRes.string.place_link).toRegex(),
