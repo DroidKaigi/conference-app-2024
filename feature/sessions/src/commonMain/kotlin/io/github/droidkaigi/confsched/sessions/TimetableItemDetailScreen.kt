@@ -150,8 +150,8 @@ private fun TimetableItemDetailScreen(
     onSelectedLanguage: (Lang) -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
-    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalStateException("No SharedElementScope found")
-    val animatedScope = LocalAnimatedVisibilityScope.current ?: throw IllegalStateException("No AnimatedVisibility found")
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val animatedScope = LocalAnimatedVisibilityScope.current
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(
@@ -183,43 +183,51 @@ private fun TimetableItemDetailScreen(
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
     ) { innerPadding ->
-        with(sharedTransitionScope) {
-            Surface(
-                modifier = Modifier
+        val surfaceModifier = if (sharedTransitionScope != null && animatedScope != null) {
+            with(sharedTransitionScope) {
+                Modifier
                     .fillMaxSize()
                     .padding(innerPadding)
-                    .sharedBounds(
-                        rememberSharedContentState(
+                    .sharedElement(
+                        state = rememberSharedContentState(
                             key = timetableDetailSharedContentStateKey(timetableItemId = uiState.timetableItemId),
                         ),
                         animatedVisibilityScope = animatedScope,
-                    ),
-            ) {
-                if (uiState is Loaded) {
-                    ProvideRoomTheme(uiState.roomThemeKey) {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxSize(),
-                        ) {
-                            item {
-                                TimetableItemDetailHeadline(
-                                    timetableItem = uiState.timetableItem,
-                                )
-                            }
+                    )
+            }
+        } else {
+            Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
+        }
 
-                            item {
-                                TimetableItemDetailSummaryCard(
-                                    timetableItem = uiState.timetableItem,
-                                )
-                            }
+        Surface(
+            modifier = surfaceModifier,
+        ) {
+            if (uiState is Loaded) {
+                ProvideRoomTheme(uiState.roomThemeKey) {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize(),
+                    ) {
+                        item {
+                            TimetableItemDetailHeadline(
+                                timetableItem = uiState.timetableItem,
+                            )
+                        }
 
-                            item {
-                                TimetableItemDetailContent(
-                                    timetableItem = uiState.timetableItem,
-                                    currentLang = uiState.currentLang,
-                                    onLinkClick = onLinkClick,
-                                )
-                            }
+                        item {
+                            TimetableItemDetailSummaryCard(
+                                timetableItem = uiState.timetableItem,
+                            )
+                        }
+
+                        item {
+                            TimetableItemDetailContent(
+                                timetableItem = uiState.timetableItem,
+                                currentLang = uiState.currentLang,
+                                onLinkClick = onLinkClick,
+                            )
                         }
                     }
                 }

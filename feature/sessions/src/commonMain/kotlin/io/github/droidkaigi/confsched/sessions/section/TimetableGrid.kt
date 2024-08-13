@@ -122,8 +122,8 @@ fun TimetableGrid(
     val timetableGridState = rememberTimetableGridState()
     val coroutineScope = rememberCoroutineScope()
     val layoutDirection = LocalLayoutDirection.current
-    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalStateException("No SharedElementScope found")
-    val animatedScope = LocalAnimatedVisibilityScope.current ?: throw IllegalStateException("No AnimatedVisibility found")
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val animatedScope = LocalAnimatedVisibilityScope.current
 
     Row(
         modifier = Modifier
@@ -159,20 +159,27 @@ fun TimetableGrid(
                     end = 16.dp + contentPadding.calculateEndPadding(layoutDirection),
                 ),
             ) { timetableItem, itemHeightPx ->
-                with(sharedTransitionScope) {
-                    TimetableGridItem(
-                    modifier = Modifier.padding(horizontal = 2.dp)
-                        .sharedBounds(
-                            rememberSharedContentState(
-                                key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
-                            ),
-                            animatedVisibilityScope = animatedScope,
-                        ),
-                        timetableItem = timetableItem,
-                        onTimetableItemClick = onTimetableItemClick,
-                        gridItemHeightPx = itemHeightPx,
-                    )
+                val timetableGridItemModifier = if (sharedTransitionScope != null && animatedScope != null) {
+                    with(sharedTransitionScope) {
+                        Modifier
+                            .padding(horizontal = 2.dp)
+                            .sharedElement(
+                                state = rememberSharedContentState(
+                                    key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
+                                ),
+                                animatedVisibilityScope = animatedScope,
+                            )
+                    }
+                } else {
+                    Modifier
+                        .padding(horizontal = 2.dp)
                 }
+                TimetableGridItem(
+                    modifier = timetableGridItemModifier,
+                    timetableItem = timetableItem,
+                    onTimetableItemClick = onTimetableItemClick,
+                    gridItemHeightPx = itemHeightPx,
+                )
             }
         }
     }

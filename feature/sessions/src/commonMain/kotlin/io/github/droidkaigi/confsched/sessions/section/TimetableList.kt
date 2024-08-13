@@ -50,8 +50,8 @@ fun TimetableList(
     modifier: Modifier = Modifier,
 ) {
     val layoutDirection = LocalLayoutDirection.current
-    val sharedTransitionScope = LocalSharedTransitionScope.current ?: throw IllegalStateException("No SharedElementScope found")
-    val animatedScope = LocalAnimatedVisibilityScope.current ?: throw IllegalStateException("No AnimatedVisibility found")
+    val sharedTransitionScope = LocalSharedTransitionScope.current
+    val animatedScope = LocalAnimatedVisibilityScope.current
 
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag),
@@ -79,38 +79,42 @@ fun TimetableList(
                     timetableItems.onEach { timetableItem ->
                         val isBookmarked =
                             uiState.timetable.bookmarks.contains(timetableItem.id)
-                        with(sharedTransitionScope) {
-                            TimetableItemCard(
-                                isBookmarked = isBookmarked,
-                                timetableItem = timetableItem,
-                                onBookmarkClick = onBookmarkClick,
-                                modifier = Modifier
-                                    .sharedBounds(
-                                        rememberSharedContentState(
-                                            key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
-                                        ),
-                                        animatedVisibilityScope = animatedScope,
+                        val timetableItemCardModifier = if (sharedTransitionScope != null && animatedScope != null) {
+                            with(sharedTransitionScope) {
+                                Modifier.sharedElement(
+                                    state = rememberSharedContentState(
+                                        key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
                                     ),
-                                tags = {
+                                    animatedVisibilityScope = animatedScope!!,
+                                )
+                            }
+                        } else {
+                            Modifier
+                        }
+                        TimetableItemCard(
+                            isBookmarked = isBookmarked,
+                            timetableItem = timetableItem,
+                            onBookmarkClick = onBookmarkClick,
+                            modifier = timetableItemCardModifier,
+                            tags = {
+                                TimetableItemTag(
+                                    tagText = timetableItem.room.name.currentLangTitle,
+                                    icon = timetableItem.room.icon,
+                                    tagColor = LocalRoomTheme.current.primaryColor,
+                                    modifier = Modifier.background(LocalRoomTheme.current.containerColor),
+                                )
+                                Spacer(modifier = Modifier.padding(3.dp))
+                                timetableItem.language.labels.forEach { label ->
                                     TimetableItemTag(
-                                        tagText = timetableItem.room.name.currentLangTitle,
-                                        icon = timetableItem.room.icon,
-                                        tagColor = LocalRoomTheme.current.primaryColor,
-                                        modifier = Modifier.background(LocalRoomTheme.current.containerColor),
+                                        tagText = label,
+                                        tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
                                     Spacer(modifier = Modifier.padding(3.dp))
-                                    timetableItem.language.labels.forEach { label ->
-                                        TimetableItemTag(
-                                            tagText = label,
-                                            tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                        )
-                                        Spacer(modifier = Modifier.padding(3.dp))
-                                    }
-                                    Spacer(modifier = Modifier.weight(1f))
-                                },
-                                onTimetableItemClick = onTimetableItemClick,
-                            )
-                        }
+                                }
+                                Spacer(modifier = Modifier.weight(1f))
+                            },
+                            onTimetableItemClick = onTimetableItemClick,
+                        )
                     }
                 }
             }
