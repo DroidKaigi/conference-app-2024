@@ -58,7 +58,7 @@ internal fun profileCardScreenPresenter(
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
     val profileCard: ProfileCard by rememberUpdatedState(repository.profileCard())
     var isLoading: Boolean by remember { mutableStateOf(false) }
-    val ediUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
+    val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
     val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(
         if (profileCard is ProfileCard.Exists) {
             profileCard.toCardUiState()
@@ -106,7 +106,7 @@ internal fun profileCardScreenPresenter(
 
     ProfileCardScreenState(
         isLoading = isLoading,
-        editUiState = ediUiState,
+        editUiState = editUiState,
         cardUiState = cardUiState,
         uiType = uiType,
         userMessageStateHolder = userMessageStateHolder,
