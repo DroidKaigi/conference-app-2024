@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.profilecard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -28,6 +30,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +42,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.preat.peekaboo.image.picker.SelectionMode
+import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
+import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.profile_card
 import io.github.droidkaigi.confsched.compose.EventEmitter
@@ -49,8 +55,12 @@ import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.ktor.util.decodeBase64Bytes
+import kotlinx.coroutines.CoroutineScope
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 const val profileCardScreenRoute = "profilecard"
 
@@ -157,6 +167,7 @@ internal fun ProfileCardScreen(
                     CircularProgressIndicator()
                 }
             }
+
             ProfileCardUiType.Edit -> {
                 EditScreen(
                     uiState = uiState.editUiState,
@@ -193,6 +204,7 @@ internal fun ProfileCardScreen(
     }
 }
 
+@OptIn(ExperimentalStdlibApi::class)
 @Composable
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
@@ -203,7 +215,35 @@ internal fun EditScreen(
     var nickname by remember { mutableStateOf(uiState.nickname) }
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
-    var image by remember { mutableStateOf(uiState.image) }
+    var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
+    var isOpenDialog by remember { mutableStateOf(false) }
+
+    val imagePicker = rememberSingleImagePickerLauncher {
+        with(it.toImageBitmap()) {
+            if (height != width) {
+                // If the image is not square, throw an error.
+                // Ideally, we would like to crop the image, but this is currently on hold due to the difficulty of implementing it by KMP.
+                isOpenDialog = true
+            } else {
+                imageByteArray = it
+            }
+        }
+    }
+
+    if (isOpenDialog) {
+        AlertDialog(
+            onDismissRequest = { isOpenDialog = false },
+            title = { Text("Error") },
+            text = { Text("The image is not square.") },
+            confirmButton = {
+                Button(
+                    onClick = { isOpenDialog = false },
+                ) {
+                    Text("OK")
+                }
+            },
+        )
+    }
 
     Column(
         modifier = modifier
@@ -230,10 +270,15 @@ internal fun EditScreen(
             modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
         Button(
-            onClick = {},
+            onClick = {
+                imagePicker.launch()
+            },
             modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
         ) {
             Text("画像を選択")
+        }
+        imageByteArray?.let {
+            Image(it.toImageBitmap(), null)
         }
         Button(
             onClick = {
@@ -242,7 +287,7 @@ internal fun EditScreen(
                         nickname = nickname,
                         occupation = occupation,
                         link = link,
-                        image = image,
+                        image = imageByteArray?.toBase64(),
                         theme = uiState.theme,
                     ),
                 )
@@ -253,6 +298,23 @@ internal fun EditScreen(
         }
     }
 }
+
+@Composable
+fun rememberSingleImagePickerLauncher(
+    scope: CoroutineScope = rememberCoroutineScope(),
+    onResult: (ByteArray) -> Unit,
+) = rememberImagePickerLauncher(
+    selectionMode = SelectionMode.Single,
+    scope = scope,
+    onResult = { byteArrays ->
+        byteArrays.firstOrNull()?.let {
+            onResult(it)
+        }
+    },
+)
+
+@OptIn(ExperimentalEncodingApi::class)
+fun ByteArray.toBase64(): String = Base64.encode(this)
 
 @Composable
 internal fun CardScreen(
