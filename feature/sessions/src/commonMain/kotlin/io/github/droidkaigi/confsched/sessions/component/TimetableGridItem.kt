@@ -32,6 +32,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
@@ -72,6 +73,7 @@ import kotlinx.datetime.toInstant
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.ceil
+import kotlin.math.min
 import kotlin.math.roundToInt
 
 const val TimetableGridItemTestTag = "TimetableGridItem"
@@ -281,12 +283,20 @@ private fun SpeakerIcon(
         },
         contentDescription = stringResource(SessionsRes.string.content_description_user_icon),
         modifier = modifier
-            .size(TimetableGridItemSizes.speakerHeight)
-            .clip(CircleShape)
             .border(
                 BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 CircleShape,
-            ),
+            )
+            .height(TimetableGridItemSizes.speakerHeight)
+            .layout { measurable, constraints ->
+                // To keep circle shape, it needs to match the vertical size when pinching in
+                val placeable = measurable.measure(constraints)
+                val size = min(placeable.width, placeable.height)
+                layout(size, size) {
+                    placeable.placeRelative(0, 0)
+                }
+            }
+            .clip(CircleShape),
     )
 }
 
