@@ -31,6 +31,7 @@ import conference_app_2024.feature.eventmap.generated.resources.eventmap
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.eventmap.component.EventMapItem
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTab
+import io.github.droidkaigi.confsched.eventmap.navigation.EventMapDestination
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
@@ -48,7 +49,7 @@ const val EventMapItemTestTag = "EventMapItemTestTag:"
 fun NavGraphBuilder.eventMapScreens(
     onEventMapItemClick: (url: String) -> Unit,
 ) {
-    composable(eventMapScreenRoute) {
+    composable<EventMapDestination> {
         EventMapScreen(
             onEventMapItemClick = onEventMapItemClick,
         )
@@ -56,7 +57,7 @@ fun NavGraphBuilder.eventMapScreens(
 }
 
 fun NavController.navigateEventMapScreen() {
-    navigate(eventMapScreenRoute) {
+    navigate(EventMapDestination) {
         popUpTo(route = checkNotNull(graph.findStartDestination().route)) {
             saveState = true
         }

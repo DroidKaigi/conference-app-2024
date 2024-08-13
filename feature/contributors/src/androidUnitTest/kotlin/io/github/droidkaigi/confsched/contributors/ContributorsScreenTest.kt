@@ -1,5 +1,8 @@
 package io.github.droidkaigi.confsched.contributors
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
@@ -10,7 +13,6 @@ import io.github.droidkaigi.confsched.testing.robot.DefaultContributorsServerRob
 import io.github.droidkaigi.confsched.testing.robot.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.ScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.runRobot
-import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
@@ -47,7 +49,7 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                     }
                     itShould("show contributors list") {
                         captureScreenWithChecks(
-                            checks = todoChecks("This screen is still empty now. Please add some checks."),
+                            checks = { checkContributorsDisplayed() },
                         )
                     }
                 }
@@ -58,7 +60,7 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                     }
                     itShould("show error message") {
                         captureScreenWithChecks(
-                            checks = todoChecks("This screen is still empty now. Please add some checks."),
+                            checks = { checkErrorSnackbarDisplayed() },
                         )
                     }
                 }
@@ -79,5 +81,19 @@ class ContributorsScreenRobot @Inject constructor(
                 onContributorsItemClick = { },
             )
         }
+    }
+
+    fun checkContributorsDisplayed() {
+        composeTestRule
+            .onNode(hasTestTag(ContributorsScreenTestTag))
+            .assertIsDisplayed()
+    }
+
+    fun checkErrorSnackbarDisplayed() {
+        composeTestRule
+            .onNode(
+                hasText("Fake IO Exception"),
+                useUnmergedTree = true,
+            ).assertIsDisplayed()
     }
 }
