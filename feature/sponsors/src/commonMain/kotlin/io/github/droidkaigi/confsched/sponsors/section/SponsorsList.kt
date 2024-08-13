@@ -49,7 +49,6 @@ fun SponsorsList(
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
             .padding(padding)
-            .padding(horizontal = 12.dp)
             .let {
                 if (scrollBehavior != null) {
                     it.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -57,6 +56,7 @@ fun SponsorsList(
                     it
                 }
             },
+        contentPadding = PaddingValues(12.dp),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             SponsorHeader(
