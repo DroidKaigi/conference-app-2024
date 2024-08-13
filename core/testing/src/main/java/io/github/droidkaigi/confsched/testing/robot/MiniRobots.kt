@@ -13,6 +13,8 @@ import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
 import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
 import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
+import io.github.droidkaigi.confsched.model.ProfileCard
+import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
@@ -242,5 +244,17 @@ class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: Sponsors
                 ServerStatus.Error -> FakeSponsorsApiClient.Status.Error
             },
         )
+    }
+}
+
+interface ProfileCardRepositoryRobot {
+    suspend fun saveProfileCard(profileCard: ProfileCard)
+}
+
+class DefaultProfileCardRepositoryRobot @Inject constructor(
+    private val profileCardRepository: ProfileCardRepository,
+) : ProfileCardRepositoryRobot {
+    override suspend fun saveProfileCard(profileCard: ProfileCard) {
+        profileCardRepository.save(profileCard)
     }
 }
