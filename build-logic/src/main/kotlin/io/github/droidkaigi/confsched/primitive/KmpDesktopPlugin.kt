@@ -25,7 +25,7 @@ class KmpDesktopPlugin : Plugin<Project> {
             val compose = extensions.get("compose") as org.jetbrains.compose.ComposeExtension
             compose.extensions.configure<org.jetbrains.compose.desktop.DesktopExtension> {
                 application {
-                    mainClass = "io.github.droidkaigi.confsched.MainKt"
+                    mainClass = "io.github.droidkaigi.confsched.MainApplicationKt"
 
                     nativeDistributions {
                         // TODO: set output formats of each platform
