@@ -1,13 +1,24 @@
 package io.github.droidkaigi.confsched.profilecard
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -20,18 +31,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.profilecard.generated.resources.icon_share
+import conference_app_2024.feature.profilecard.generated.resources.profile_card
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 const val profileCardScreenRoute = "profilecard"
 
@@ -155,7 +174,11 @@ internal fun ProfileCardScreen(
                     onClickEdit = {
                         eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
+                    onClickShareProfileCard = {
+                        eventEmitter.tryEmit(CardScreenEvent.Share)
+                    },
                     contentPadding = padding,
+                    isCreated = true,
                 )
             }
         }
@@ -235,27 +258,64 @@ internal fun EditScreen(
 internal fun CardScreen(
     uiState: ProfileCardUiState.Card,
     onClickEdit: () -> Unit,
+    onClickShareProfileCard: () -> Unit,
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(),
+    isCreated: Boolean = false,
+    contentPadding: PaddingValues = PaddingValues(16.dp),
 ) {
-    Column(
-        modifier = modifier
-            .testTag(ProfileCardCardScreenTestTag)
-            .padding(contentPadding),
-    ) {
-        Text("ProfileCard")
-        Text(uiState.nickname)
-        if (uiState.occupation != null) {
-            Text(uiState.occupation)
-        }
-        if (uiState.link != null) {
-            Text(uiState.link)
-        }
-        Button(
-            onClickEdit,
-            modifier = Modifier.testTag(ProfileCardEditButtonTestTag),
+    ProvideProfileCardScreenTheme(uiState.theme.toString()) {
+        Column(
+            modifier = modifier
+                .fillMaxSize()
+                .background(LocalProfileCardScreenTheme.current.primaryColor)
+                .testTag(ProfileCardCardScreenTestTag)
+                .padding(contentPadding),
         ) {
-            Text("Edit")
+            Text(
+                text = stringResource(ProfileCardRes.string.profile_card),
+                style = MaterialTheme.typography.headlineSmall,
+                color = Color.Black,
+                modifier = Modifier.fillMaxWidth().padding(start = 16.dp, top = 16.dp),
+            )
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                FlipCard(
+                    uiState = uiState,
+                    isCreated = isCreated,
+                )
+                Spacer(Modifier.height(32.dp))
+                Button(
+                    onClick = { onClickShareProfileCard() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    contentPadding = PaddingValues(vertical = 10.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(ProfileCardRes.drawable.icon_share),
+                        contentDescription = "Share",
+                        tint = Color.Black,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "共有する",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Color.Black,
+                    )
+                }
+                Spacer(Modifier.height(9.dp))
+                Text(
+                    text = "編集する",
+                    style = MaterialTheme.typography.labelLarge,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .clickable { onClickEdit() }
+                        .testTag(ProfileCardEditButtonTestTag),
+                )
+            }
         }
     }
 }
