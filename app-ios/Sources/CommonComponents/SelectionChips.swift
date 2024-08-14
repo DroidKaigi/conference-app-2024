@@ -24,7 +24,7 @@ public struct SelectionChips<SelectableCase: Selectable>: View where SelectableC
                     }
                 }
 
-                ForEach(SelectableCase.allCases, id: \.id) { selection in
+                ForEach(SelectableCase.allCases) { selection in
                     SelectionChip(
                         title: selection.caseTitle,
                         isMultiSelect: false,
