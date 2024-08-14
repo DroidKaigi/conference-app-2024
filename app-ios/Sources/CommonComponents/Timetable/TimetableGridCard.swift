@@ -32,7 +32,7 @@ public struct TimetableGridCard: View {
                     
                     Text(timetableItem.title.currentLangTitle)
                         .textStyle(.titleMedium)
-                        .foregroundColor(timetableItem.room.roomTheme.primaryColor)
+                        .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
                         .multilineTextAlignment(.leading)
                     
                     Spacer()
