@@ -161,7 +161,7 @@ fun SearchScreen(
                 contentPadding = PaddingValues(
                     horizontal = 16.dp,
                     vertical = 12.dp,
-                )
+                ),
             )
             Spacer(Modifier.height(15.dp))
             when (uiState) {

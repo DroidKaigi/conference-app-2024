@@ -56,8 +56,8 @@ fun TimetableItemCard(
     timetableItem: TimetableItem,
     tags: @Composable RowScope.() -> Unit,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
-    modifier: Modifier = Modifier,
     onTimetableItemClick: (TimetableItem) -> Unit,
+    modifier: Modifier = Modifier,
     highlightWord: String = "",
 ) {
     val highlightBackgroundColor = MaterialTheme.colorScheme.surfaceTint.copy(alpha = 0.14f)
@@ -196,14 +196,14 @@ private fun buildAnnotatedTitleString(
             startIndex = title.indexOf(
                 string = highlightWord,
                 startIndex = startIndex,
-                ignoreCase = true
+                ignoreCase = true,
             )
             if (startIndex == -1) {
                 break
             } else {
                 highlightRanges += IntRange(
                     startIndex,
-                    startIndex + highlightWord.length
+                    startIndex + highlightWord.length,
                 )
                 startIndex += highlightWord.length
             }

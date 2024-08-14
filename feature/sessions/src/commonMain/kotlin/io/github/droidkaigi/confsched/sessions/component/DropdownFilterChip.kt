@@ -54,7 +54,7 @@ fun <T> DropdownFilterChip(
         )
         DropdownMenu(
             expanded = expanded,
-            onDismissRequest = { expanded = false }
+            onDismissRequest = { expanded = false },
         ) {
             uiState.selectableItems.forEach { item ->
                 DropdownMenuItem(
@@ -85,7 +85,7 @@ fun <T> DropdownSearchFilterChip(
             Text(
                 text = uiState.selectedValuesText.ifEmpty {
                     filterChipLabelDefaultText
-                }
+                },
             )
         },
         filterChipLeadingIcon = {

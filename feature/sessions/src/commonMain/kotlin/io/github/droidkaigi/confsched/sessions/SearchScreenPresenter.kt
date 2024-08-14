@@ -60,8 +60,8 @@ fun searchScreenPresenter(
                 categories = selectedCategories,
                 sessionTypes = selectedSessionTypes,
                 languages = selectedLanguages,
-            )
-        ).timetableItems
+            ),
+        ).timetableItems,
     )
 
     val searchFilterDayUiState: SearchFilterUiState<DroidKaigi2024Day> by rememberUpdatedState(
@@ -69,7 +69,7 @@ fun searchScreenPresenter(
             selectedItems = selectedDays,
             selectableItems = sessions.days,
             selectedValuesText = selectedDays.joinToString { it.monthAndDay() },
-        )
+        ),
     )
 
     val searchFilterCategoryUiState: SearchFilterUiState<TimetableCategory> by rememberUpdatedState(
@@ -77,7 +77,7 @@ fun searchScreenPresenter(
             selectedItems = selectedCategories,
             selectableItems = sessions.categories,
             selectedValuesText = selectedCategories.joinToString { it.title.currentLangTitle },
-        )
+        ),
     )
 
     val searchFilterSessionTypeUiState: SearchFilterUiState<TimetableSessionType> by rememberUpdatedState(
@@ -85,7 +85,7 @@ fun searchScreenPresenter(
             selectedItems = selectedSessionTypes,
             selectableItems = sessions.sessionTypes,
             selectedValuesText = selectedSessionTypes.joinToString { it.label.currentLangTitle },
-        )
+        ),
     )
 
     val searchFilterLanguageUiState: SearchFilterUiState<Lang> by rememberUpdatedState(
@@ -93,7 +93,7 @@ fun searchScreenPresenter(
             selectedItems = selectedLanguages,
             selectableItems = sessions.languages.map { it.toLang() },
             selectedValuesText = selectedLanguages.joinToString { it.tagName },
-        )
+        ),
     )
 
     SafeLaunchedEffect(Unit) {

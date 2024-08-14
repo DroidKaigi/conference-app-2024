@@ -49,7 +49,7 @@ fun SearchTextFieldAppBar(
                     onSearch = {
                         keyboardController?.hide()
                         focusManager.clearFocus()
-                    }
+                    },
                 ),
                 modifier = Modifier.fillMaxWidth(),
             )
