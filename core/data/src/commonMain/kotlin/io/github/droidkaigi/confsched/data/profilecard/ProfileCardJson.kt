@@ -7,9 +7,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class ProfileCardJson(
     val nickname: String,
-    val occupation: String?,
-    val link: String?,
-    val image: String?,
+    val occupation: String,
+    val link: String,
+    val image: String?, // TODO to non-null
     val theme: String,
 )
 

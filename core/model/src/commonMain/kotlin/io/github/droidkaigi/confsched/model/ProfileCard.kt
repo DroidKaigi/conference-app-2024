@@ -7,9 +7,9 @@ sealed interface ProfileCard {
 
     data class Exists(
         val nickname: String,
-        val occupation: String?,
-        val link: String?,
-        val image: String?,
+        val occupation: String,
+        val link: String,
+        val image: String?, // TODO to non-null
         val theme: ProfileCardTheme,
     ) : ProfileCard
 }
