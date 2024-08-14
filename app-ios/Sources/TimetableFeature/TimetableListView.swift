@@ -24,10 +24,10 @@ public struct TimetableView: View {
                         selectedTab = tabItem
                     }, label: {
                         HStack(spacing: 6) {
-                                Text(tabItem.rawValue).textStyle(.titleMedium).underline(selectedTab == tabItem)
-                            }
-                            .foregroundStyle(selectedTab == tabItem ? AssetColors.Custom.iguana.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
-                            .padding(6)
+                            Text(tabItem.rawValue).textStyle(.titleMedium).underline(selectedTab == tabItem)
+                        }
+                        .foregroundStyle(selectedTab == tabItem ? AssetColors.Custom.iguana.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+                        .padding(6)
                     })
                 }
                 Spacer()
