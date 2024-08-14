@@ -481,3 +481,27 @@ private fun ValidationTextField(
         }
     }
 }
+
+@Composable
+private fun ValidationPhotoPickerButton(
+    onSelectedImage: (ByteArray) -> Unit,
+    errorMessage: String,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        PhotoPickerButton(
+            onSelectedImage = { onSelectedImage(it) },
+            modifier = Modifier.padding(bottom = 20.dp),
+        ) {
+            Text(stringResource(ProfileCardRes.string.add_image))
+        }
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(bottom = 12.dp)
+            )
+        }
+    }
+}
