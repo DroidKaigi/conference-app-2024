@@ -12,7 +12,7 @@ composeMultiplatform = "1.7.0-alpha02"
 rin = "0.1.0"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
-composeHiltNavigatiaon = "1.2.0"
+composeHiltNavigation= "1.2.0"
 androidxLifecycle = "2.8.4"
 androidxActivity = "1.9.1"
 androidxFragment = "1.8.2"
@@ -46,12 +46,13 @@ androidxLifecycleProcess = "2.8.4"
 skie = "0.8.4"
 composablePreviewScanner = "0.1.3"
 coil = "3.0.0-alpha10"
+peekaboo = "0.5.2"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 composeJbGradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "composeMultiplatform" }
-composeCompiler = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-embeddable", version.ref = "kotlin" }
+composeCompilerGradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
 hiltGradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger" }
 roborazziGradlePlugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "roborazzi" }
 kspGradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
@@ -110,7 +111,7 @@ composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 composeUiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha08" }
 coreBundle = { module = "org.jetbrains.androidx.core:core-bundle", version = "1.0.0" }
-composeHiltNavigtation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigatiaon" }
+composeHiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigation" }
 composeLintCheck = { module = "com.slack.lint.compose:compose-lint-checks", version = "1.3.1" }
 coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coilNetwork = { module = "io.coil-kt.coil3:coil-network-ktor2", version.ref = "coil"  }
@@ -120,6 +121,7 @@ rin = { module = "io.github.takahirom.rin:rin", version.ref = "rin" }
 lottieCompose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version = "1.6.8" }
 haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
+peekabooImagePicker = { group = "io.github.onseok", name = "peekaboo-image-picker", version.ref = "peekaboo" }
 
 androidxFragment = { module = "androidx.fragment:fragment", version.ref = "androidxFragment" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -198,7 +200,7 @@ jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "composeMultipl
 plugins = [
     "androidGradlePlugin",
     "kotlinGradlePlugin",
-    "composeCompiler",
+    "composeCompilerGradlePlugin",
     "hiltGradlePlugin",
     "composeJbGradlePlugin",
     "roborazziGradlePlugin",

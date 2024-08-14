@@ -22,6 +22,11 @@ extension DependencyValues {
         get { self[ContributorClient.self] }
         set { self[ContributorClient.self] = newValue }
     }
+    
+    public var eventMapClient: EventMapClient {
+        get { self[EventMapClient.self] }
+        set { self[EventMapClient.self] = newValue }
+    }
 }
 
 @DependencyClient
@@ -45,4 +50,9 @@ public struct SponsorsClient: Sendable {
 public struct ContributorClient: Sendable {
     public var streamContributors: @Sendable () throws -> AsyncThrowingStream<[Contributor], any Error>
     public var refresh: @Sendable () async throws -> Void
+}
+
+@DependencyClient
+public struct EventMapClient: Sendable {
+    public var streamEvents: @Sendable () throws -> AsyncThrowingStream<[EventMapEvent], any Error>
 }

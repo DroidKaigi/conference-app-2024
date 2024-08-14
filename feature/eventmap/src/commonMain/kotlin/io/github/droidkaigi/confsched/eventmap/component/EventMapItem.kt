@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,14 +24,17 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.eventmap.generated.resources.read_more
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.eventmap.EventMapRes
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.model.RoomIcon
+import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.ui.toResDrawable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun EventMapItem(
@@ -80,6 +84,19 @@ fun EventMapItem(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun EventMapItemPreview() {
+    KaigiTheme {
+        Surface {
+            EventMapItem(
+                eventMapEvent = EventMapEvent.fakes().first(),
+                onClick = {},
+            )
         }
     }
 }

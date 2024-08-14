@@ -24,6 +24,8 @@ import androidx.compose.ui.layout.Placeable
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.TimetableRoom
 import io.github.droidkaigi.confsched.model.TimetableRooms
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState
@@ -37,13 +39,17 @@ fun RoomItem(
     room: TimetableRoom,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = room.name.currentLangTitle,
-        )
+    ProvideRoomTheme(room.getThemeKey()) {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = room.name.currentLangTitle,
+                style = MaterialTheme.typography.titleMedium,
+                color = LocalRoomTheme.current.primaryColor,
+            )
+        }
     }
 }
 
@@ -69,11 +75,10 @@ fun TimetableGridRooms(
         )
     }
 
-    val roomsScreen = remember(roomsLayout, density) {
+    val roomsScreen = remember(roomsLayout, scrollState, density) {
         RoomScreen(
             roomsLayout = roomsLayout,
             scrollState = scrollState,
-            density = density,
         )
     }
 
@@ -87,15 +92,6 @@ fun TimetableGridRooms(
             .height(height = RoomsSizes.headerHeight)
             .clipToBounds()
             .drawBehind {
-                roomsScreen.verticalLines.value.forEach {
-                    drawLine(
-                        lineColor,
-                        Offset(it, 0f),
-                        Offset(it, roomsScreen.height.toFloat()),
-                        linePxSize,
-                    )
-                }
-
                 drawLine(
                     lineColor,
                     Offset(0f, roomsScreen.height.toFloat()),
@@ -207,7 +203,6 @@ private data class RoomItemLayout(
 private class RoomScreen(
     val roomsLayout: RoomsLayout,
     val scrollState: ScreenScrollState,
-    density: Density,
 ) {
     var width = 0
         private set
@@ -221,14 +216,6 @@ private class RoomScreen(
                 scrollState.scrollX.toInt(),
             )
         }
-
-    val verticalLines = derivedStateOf {
-        val width = with(density) { TimetableSizes.columnWidth.toPx() }
-        val rooms = roomsLayout.rooms
-        (0..rooms.lastIndex).map {
-            scrollState.scrollX + width * it
-        }
-    }
 
     fun enableHorizontalScroll(dragX: Float): Boolean {
         val nextPossibleX = calculatePossibleScrollX(dragX)

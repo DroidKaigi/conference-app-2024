@@ -1,6 +1,8 @@
 package io.github.droidkaigi.confsched.data.eventmap
 
+import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.http.GET
+import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.eventmap.response.EventMapResponse
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.model.MultiLangText
@@ -9,8 +11,22 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 internal interface EventMapApi {
-    @GET("/events/droidkaigi2023/eventmap")
+    @GET("/events/droidkaigi2024/eventmap")
     suspend fun getEventMap(): EventMapResponse
+}
+
+public class DefaultEventMapApiClient(
+    private val networkService: NetworkService,
+    ktorfit: Ktorfit,
+) : EventMapApiClient {
+
+    private val eventMapApi = ktorfit.create<EventMapApi>()
+
+    public override suspend fun eventMapEvents(): PersistentList<EventMapEvent> {
+        return networkService {
+            eventMapApi.getEventMap()
+        }.toEventMapList()
+    }
 }
 
 public interface EventMapApiClient {

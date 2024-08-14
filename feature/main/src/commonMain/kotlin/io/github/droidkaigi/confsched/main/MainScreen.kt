@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalResourceApi::class)
+
 package io.github.droidkaigi.confsched.main
 
 import androidx.compose.animation.AnimatedVisibility
@@ -13,19 +15,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CalendarMonth
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.Map
-import androidx.compose.material.icons.outlined.People
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -38,6 +38,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import conference_app_2024.core.designsystem.generated.resources.ic_fav_off
+import conference_app_2024.core.designsystem.generated.resources.ic_fav_on
+import conference_app_2024.core.designsystem.generated.resources.ic_info_off
+import conference_app_2024.core.designsystem.generated.resources.ic_info_on
+import conference_app_2024.core.designsystem.generated.resources.ic_map_off
+import conference_app_2024.core.designsystem.generated.resources.ic_map_on
+import conference_app_2024.core.designsystem.generated.resources.ic_profilecard_off
+import conference_app_2024.core.designsystem.generated.resources.ic_profilecard_on
+import conference_app_2024.core.designsystem.generated.resources.ic_timetable_off
+import conference_app_2024.core.designsystem.generated.resources.ic_timetable_on
 import conference_app_2024.feature.main.generated.resources.about
 import conference_app_2024.feature.main.generated.resources.event_map
 import conference_app_2024.feature.main.generated.resources.profile_card
@@ -47,11 +57,14 @@ import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.haze
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.designsystem.DesignSystemRes
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
 import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
+import io.github.droidkaigi.confsched.model.isBlurSupported
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
@@ -65,11 +78,15 @@ fun NavGraphBuilder.mainScreen(
     mainNestedGraph: NavGraphBuilder.(mainNestedNavController: NavController, PaddingValues) -> Unit,
 ) {
     composable(mainScreenRoute) {
-        MainScreen(
-            windowSize = windowSize,
-            mainNestedGraphStateHolder = mainNestedGraphStateHolder,
-            mainNestedNavGraph = mainNestedGraph,
-        )
+        CompositionLocalProvider(
+            LocalAnimatedVisibilityScope provides this@composable,
+        ) {
+            MainScreen(
+                windowSize = windowSize,
+                mainNestedGraphStateHolder = mainNestedGraphStateHolder,
+                mainNestedNavGraph = mainNestedGraph,
+            )
+        }
     }
 }
 
@@ -129,37 +146,43 @@ sealed class IconRepresentation {
 }
 
 enum class MainScreenTab(
-    val icon: IconRepresentation.Vector,
+    val iconOff: DrawableResource,
+    val iconOn: DrawableResource,
     val label: StringResource,
     val contentDescription: StringResource,
     val testTag: String = "mainScreenTab:$label",
 ) {
     Timetable(
-        icon = IconRepresentation.Vector(Icons.Outlined.CalendarMonth),
+        iconOff = DesignSystemRes.drawable.ic_timetable_off,
+        iconOn = DesignSystemRes.drawable.ic_timetable_on,
         label = MainRes.string.timetable,
         contentDescription = MainRes.string.timetable,
     ),
 
     EventMap(
-        icon = IconRepresentation.Vector(Icons.Outlined.Map),
+        iconOff = DesignSystemRes.drawable.ic_map_off,
+        iconOn = DesignSystemRes.drawable.ic_map_on,
         label = MainRes.string.event_map,
         contentDescription = MainRes.string.event_map,
     ),
 
     Favorite(
-        icon = IconRepresentation.Vector(Icons.Outlined.Favorite),
+        iconOff = DesignSystemRes.drawable.ic_fav_off,
+        iconOn = DesignSystemRes.drawable.ic_fav_on,
         label = MainRes.string.event_map,
         contentDescription = MainRes.string.event_map,
     ),
 
     About(
-        icon = IconRepresentation.Vector(Icons.Outlined.Info),
+        iconOff = DesignSystemRes.drawable.ic_info_off,
+        iconOn = DesignSystemRes.drawable.ic_info_on,
         label = MainRes.string.about,
         contentDescription = MainRes.string.about,
     ),
 
     ProfileCard(
-        icon = IconRepresentation.Vector(Icons.Outlined.People),
+        iconOff = DesignSystemRes.drawable.ic_profilecard_off,
+        iconOn = DesignSystemRes.drawable.ic_profilecard_on,
         label = MainRes.string.profile_card,
         contentDescription = MainRes.string.profile_card,
     ),
@@ -212,12 +235,13 @@ fun MainScreen(
                     onTabSelected = {
                         onTabSelected(mainNestedNavController, it)
                     },
+                    modifier = Modifier.safeDrawingPadding(),
                 )
             },
         ) { padding ->
             val hazeStyle =
                 HazeStyle(
-                    tint = Color.Black.copy(alpha = .2f),
+                    tint = MaterialTheme.colorScheme.hazeTint,
                     blurRadius = 30.dp,
                 )
             NavHost(
@@ -236,6 +260,13 @@ fun MainScreen(
         }
     }
 }
+
+private val ColorScheme.hazeTint: Color
+    @Composable get() = if (isBlurSupported()) {
+        scrim.copy(alpha = 0.4f)
+    } else {
+        scrim
+    }
 
 private fun materialFadeThroughIn(): EnterTransition =
     fadeIn(

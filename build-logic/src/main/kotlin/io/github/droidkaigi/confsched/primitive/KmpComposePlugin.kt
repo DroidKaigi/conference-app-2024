@@ -3,10 +3,7 @@ package io.github.droidkaigi.confsched.primitive
 import io.github.droidkaigi.confsched.convention.buildComposeMetricsParameters
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.withType
-import org.jetbrains.compose.resources.ResourcesExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 @Suppress("unused")
@@ -22,9 +19,11 @@ class KmpComposePlugin : Plugin<Project> {
                     buildFeatures.compose = true
                 }
             }
-            val compose = extensions.get("compose") as org.jetbrains.compose.ComposeExtension
-            compose.extensions.configure<ResourcesExtension> {
+            compose.resources {
                 publicResClass = true
+            }
+            composeCompiler {
+                enableStrongSkippingMode.set(true)
             }
             kotlin {
                 with(sourceSets) {

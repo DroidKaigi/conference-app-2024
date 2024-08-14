@@ -109,7 +109,7 @@ dependencies {
     implementation(projects.core.designsystem)
     implementation(projects.core.ui)
     implementation(libs.composeNavigation)
-    implementation(libs.composeHiltNavigtation)
+    implementation(libs.composeHiltNavigation)
     implementation(libs.composeMaterialWindowSize)
     implementation(libs.androidxBrowser)
     implementation(libs.androidxWindow)

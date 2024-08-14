@@ -48,7 +48,7 @@ public struct ContributorView: View {
                 SwiftUIContributorView(store: store)
 
             case .kmpPresenter:
-                KmpContributorView()
+                KmpPresenterContributorView()
 
             case .fullKmp:
                 KmpContributorComposeViewControllerWrapper()

@@ -4,53 +4,71 @@ import shared
 import Model
 
 public struct RoomTag: View {
-    let room: TimetableRoom
+    let roomName: MultiLangText
 
-    public init(_ room: TimetableRoom) {
-        self.room = room
+    public init(_ roomName: MultiLangText) {
+        self.roomName = roomName
     }
 
     public var body: some View {
         HStack(spacing: 4) {
-            room.shape
-            Text(room.name.currentLangTitle)
+            roomName.roomType.shape
+            Text(roomName.currentLangTitle)
                 .textStyle(.labelMedium)
         }
-        .foregroundStyle(room.roomTheme.primaryColor)
+        .foregroundStyle(roomName.roomType.theme.primaryColor)
         .padding(.horizontal, 6)
         .overlay(
             RoundedRectangle(cornerRadius: 2)
-                .stroke(room.roomTheme.primaryColor, lineWidth: 1)
+                .stroke(roomName.roomType.theme.primaryColor, lineWidth: 1)
         )
     }
 }
 
-extension TimetableRoom {
+enum ThemeKey {
+    static let iguana = "iguana"
+    static let hedgehog = "hedgehog"
+    static let giraffe = "giraffe"
+    static let flamingo = "flamingo"
+    static let jellyfish = "jellyfish"
+}
+
+
+extension MultiLangText {
+    var roomType: RoomType {
+        switch enTitle.lowercased() {
+        case ThemeKey.flamingo: .roomF
+        case ThemeKey.giraffe: .roomG
+        case ThemeKey.hedgehog: .roomH
+        case ThemeKey.iguana: .roomI
+        case ThemeKey.jellyfish: .roomJ
+        default: .roomIj
+        }
+    }
+}
+
+extension RoomType {
     var shape: some View {
         Group {
-            switch getShape() {
-            case .circle: Image(.icCircleFill).renderingMode(.template)
-            case .diamond: Image(.icDiamondFill).renderingMode(.template)
-            case .sharpDiamond: Image(.icSharpDiamondFill).renderingMode(.template)
-            case .square: Image(.icSquareFill).renderingMode(.template)
-            default: Image(.icTriangleFill).renderingMode(.template)
+            switch self {
+            case .roomG: Image(.icCircleFill).renderingMode(.template)
+            case .roomH: Image(.icDiamondFill).renderingMode(.template)
+            case .roomF: Image(.icSharpDiamondFill).renderingMode(.template)
+            case .roomI: Image(.icSquareFill).renderingMode(.template)
+            case .roomJ: Image(.icTriangleFill).renderingMode(.template)
+            case .roomIj: Image(.icSquareFill).renderingMode(.template)
             }
         }
-        .foregroundStyle(roomTheme.primaryColor)
+        .foregroundStyle(theme.primaryColor)
         .frame(width: 12, height: 12)
     }
 }
 
 #Preview {
     RoomTag(
-        TimetableRoom(
-            id: 1,
-            name: MultiLangText(
-                jaTitle: "Iguana",
-                enTitle: "Iguana"
-            ),
-            type: .roomF,
-            sort: 1
+        MultiLangText(
+            jaTitle: "Iguana",
+            enTitle: "Iguana"
         )
     )
 }

@@ -102,7 +102,7 @@ private fun favoritesSheet(
             .filtered(Filters(days = selectedDayFilters.toList())),
     )
 
-    return if (favoriteSessions.isEmpty()) {
+    return if (filteredSessions.isEmpty()) {
         FavoritesSheetUiState.Empty(
             currentDayFilter = selectedDayFilters.toPersistentList(),
             allFilterSelected = allFilterSelected,

@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.eventmap
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,12 +10,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -31,9 +30,11 @@ import conference_app_2024.feature.eventmap.generated.resources.eventmap
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.eventmap.component.EventMapItem
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTab
+import io.github.droidkaigi.confsched.eventmap.navigation.EventMapDestination
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -48,7 +49,7 @@ const val EventMapItemTestTag = "EventMapItemTestTag:"
 fun NavGraphBuilder.eventMapScreens(
     onEventMapItemClick: (url: String) -> Unit,
 ) {
-    composable(eventMapScreenRoute) {
+    composable<EventMapDestination> {
         EventMapScreen(
             onEventMapItemClick = onEventMapItemClick,
         )
@@ -56,7 +57,7 @@ fun NavGraphBuilder.eventMapScreens(
 }
 
 fun NavController.navigateEventMapScreen() {
-    navigate(eventMapScreenRoute) {
+    navigate(EventMapDestination) {
         popUpTo(route = checkNotNull(graph.findStartDestination().route)) {
             saveState = true
         }
@@ -74,7 +75,6 @@ data class EventMapUiState(
 fun EventMapScreen(
     onEventMapItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
-    isTopAppBarHidden: Boolean = false,
 ) {
     val eventEmitter = rememberEventEmitter<EventMapScreenEvent>()
     val uiState = eventMapScreenPresenter(
@@ -89,7 +89,6 @@ fun EventMapScreen(
     )
     EventMapScreen(
         uiState = uiState,
-        isTopAppBarHidden = isTopAppBarHidden,
         snackbarHostState = snackbarHostState,
         onEventMapItemClick = onEventMapItemClick,
         modifier = modifier,
@@ -102,43 +101,26 @@ fun EventMapScreen(
     uiState: EventMapUiState,
     snackbarHostState: SnackbarHostState,
     onEventMapItemClick: (url: String) -> Unit,
-    isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Logger.d { "EventMapScreen: $uiState" }
-    val scrollBehavior =
-        if (!isTopAppBarHidden) {
-            TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-        } else {
-            null
-        }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
         modifier = modifier.testTag(EventMapScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            if (scrollBehavior != null) {
-                LargeTopAppBar(
-                    title = {
-                        Text(text = stringResource(EventMapRes.string.eventmap))
-                    },
-                    scrollBehavior = scrollBehavior,
-                )
-            }
+            AnimatedTextTopAppBar(
+                title = stringResource(EventMapRes.string.eventmap),
+                scrollBehavior = scrollBehavior,
+            )
         },
     ) { padding ->
         EventMap(
             eventMapEvents = uiState.eventMap,
             onEventMapItemClick = onEventMapItemClick,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .let {
-                    if (scrollBehavior != null) {
-                        it.nestedScroll(scrollBehavior.nestedScrollConnection)
-                    } else {
-                        it
-                    }
-                },
+            modifier = Modifier.fillMaxSize().padding(padding)
+                .nestedScroll(scrollBehavior.nestedScrollConnection),
         )
     }
 }
@@ -151,8 +133,8 @@ private fun EventMap(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(horizontal = 16.dp)
             .testTag(EventMapLazyColumnTestTag),
+        contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
         item {
             EventMapTab()
@@ -187,7 +169,6 @@ fun PreviewEventMapScreen() {
     EventMapScreen(
         uiState = EventMapUiState(persistentListOf(), rememberUserMessageStateHolder()),
         snackbarHostState = SnackbarHostState(),
-        isTopAppBarHidden = false,
         onEventMapItemClick = {},
     )
 }
