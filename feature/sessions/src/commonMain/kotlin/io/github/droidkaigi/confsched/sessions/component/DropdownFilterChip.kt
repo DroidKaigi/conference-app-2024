@@ -109,8 +109,7 @@ fun <T> DropdownSearchFilterChip(
             )
         },
         dropdownMenuText = dropdownMenuItemText,
-        dropdownMenuItemTrailingIcon = {
-        },
+        dropdownMenuItemTrailingIcon = { /* no trailing icon */ },
         dropdownMenuItemLeadingIcon = { item ->
             if (uiState.selectedItems.contains(item)) {
                 Icon(
