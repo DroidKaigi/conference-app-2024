@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import CommonComponents
 import KMPClient
-import shared
+@preconcurrency import shared
 import Foundation
 
 @Reducer
@@ -14,21 +14,25 @@ public struct TimetableReducer : Sendable{
     @ObservableState
     public struct State: Equatable {
         var timetableItems: [TimetableTimeGroupItems] = [] //Should be simple objects
+        var toast: ToastState?
         
         public init(timetableItems: [TimetableTimeGroupItems] = []) {
             self.timetableItems = timetableItems
         }
     }
     
-    public enum Action : Sendable{
+    public enum Action : Sendable, BindableAction {
+        case binding(BindingAction<State>)
         case view(View)
-        case onAppear
-        case requestDay(View)
+        case requestDay(DayTab)
         case response(Result<[TimetableItemWithFavorite], any Error>)
+        case favoriteResponse(Result<Bool, any Error>)
         
         public enum View : Sendable {
+            case onAppear
             case selectDay(DayTab)
             case timetableItemTapped(TimetableItemWithFavorite)
+            case favoriteTapped(TimetableItemWithFavorite)
             case searchTapped
         }
     }
@@ -57,14 +61,15 @@ public struct TimetableReducer : Sendable{
     }
 
     public var body: some Reducer<State, Action> {
+        BindingReducer()
         Reduce { state, action in
             switch action {
-            case .onAppear:
-
+            case .view(.onAppear):
                  return .run { send in
-                     await send(.requestDay(.selectDay(.day1)))
+                     await send(.requestDay(.day1))
                  }
-            case .requestDay(.selectDay(let dayTab)):
+
+            case let .requestDay(dayTab):
                 return .run { send in
                     let internalDay = switch dayTab {
                     case DayTab.workshopDay:
@@ -80,9 +85,9 @@ public struct TimetableReducer : Sendable{
                     }
                 }
                 .cancellable(id: CancelID.connection)
+
             case .response(.success(let timetables)):
                 state.timetableItems = sortListIntoTimeGroups(timetableItems: timetables)
-                
                 return .none
             case .response(.failure(let error)):
                 print(error)
@@ -92,12 +97,24 @@ public struct TimetableReducer : Sendable{
             case .view(.selectDay(let dayTab)):
                 
                 return .run { send in
-                    await send(.requestDay(.selectDay(dayTab)))
+                    await send(.requestDay(dayTab))
                 }
-            case .requestDay(.timetableItemTapped):
+            case let .view(.favoriteTapped(item)):
+                return .run { send in
+                    await send(.favoriteResponse(Result {
+                        try await timetableClient.toggleBookmark(id: item.timetableItem.id)
+                        return item.isFavorited
+                    }))
+                }
+            case let .favoriteResponse(.success(isFavorited)):
+                if !isFavorited {
+                    state.toast = .init(text: String(localized: "AddFavorite", bundle: .module))
+                }
                 return .none
-
-            case .requestDay(.searchTapped):
+            case let .favoriteResponse(.failure(error)):
+                print(error.localizedDescription)
+                return .none
+            case .binding:
                 return .none
             }
         }
