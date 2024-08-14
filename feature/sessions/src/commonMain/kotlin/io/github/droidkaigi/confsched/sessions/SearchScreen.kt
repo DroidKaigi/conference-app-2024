@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
@@ -144,6 +145,7 @@ fun SearchScreen(
             )
         },
         modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.surface,
     ) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding),
