@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.profilecard
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,10 +15,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -25,6 +30,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +45,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.profile_card
 import io.github.droidkaigi.confsched.compose.EventEmitter
@@ -47,10 +54,13 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenT
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 
 const val profileCardScreenRoute = "profilecard"
 
@@ -157,6 +167,7 @@ internal fun ProfileCardScreen(
                     CircularProgressIndicator()
                 }
             }
+
             ProfileCardUiType.Edit -> {
                 EditScreen(
                     uiState = uiState.editUiState,
@@ -203,7 +214,8 @@ internal fun EditScreen(
     var nickname by remember { mutableStateOf(uiState.nickname) }
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
-    var image by remember { mutableStateOf(uiState.image) }
+    var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
+    val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
 
     Column(
         modifier = modifier
@@ -229,11 +241,35 @@ internal fun EditScreen(
             placeholder = { Text("Link") },
             modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
-        Button(
-            onClick = {},
+        PhotoPickerButton(
+            onSelectedImage = { imageByteArray = it },
             modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
         ) {
             Text("画像を選択")
+        }
+        image?.let {
+            Box {
+                Image(
+                    bitmap = it,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(
+                            top = 24.dp,
+                            end = 24.dp,
+                        )
+                        .align(Alignment.BottomStart),
+                )
+                IconButton(
+                    onClick = { imageByteArray = null },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd),
+                    colors = IconButtonDefaults
+                        .iconButtonColors()
+                        .copy(containerColor = Color(0xFF414849)),
+                ) {
+                    Icon(Icons.Default.Close, null)
+                }
+            }
         }
         Button(
             onClick = {
@@ -242,7 +278,7 @@ internal fun EditScreen(
                         nickname = nickname,
                         occupation = occupation,
                         link = link,
-                        image = image,
+                        image = imageByteArray?.toBase64(),
                         theme = uiState.theme,
                     ),
                 )
@@ -253,6 +289,12 @@ internal fun EditScreen(
         }
     }
 }
+
+@OptIn(ExperimentalEncodingApi::class)
+private fun ByteArray.toBase64(): String = Base64.encode(this)
+
+@OptIn(ExperimentalEncodingApi::class)
+private fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
 
 @Composable
 internal fun CardScreen(
