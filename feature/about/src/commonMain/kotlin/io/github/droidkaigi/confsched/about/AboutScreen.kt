@@ -94,7 +94,7 @@ fun AboutScreen(
         ) {
             item {
                 AboutDroidKaigiDetail(
-                    state = lazyListState,
+                    screenScrollState = lazyListState,
                     onViewMapClick = {
                         onAboutItemClick(AboutItem.Map)
                     },

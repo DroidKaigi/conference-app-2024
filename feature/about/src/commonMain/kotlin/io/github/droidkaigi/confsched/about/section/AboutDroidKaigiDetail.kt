@@ -30,7 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.roundToInt
 
-const val MAX_ABOUT_HEADER_OFFSET_DP = 40
+private const val MaxAboutHeaderOffsetDp = 40
 
 @Suppress("ConstPropertyName")
 object AboutDetailSectionTestTag {
@@ -39,17 +39,17 @@ object AboutDetailSectionTestTag {
 
 @Composable
 fun AboutDroidKaigiDetail(
-    state: LazyListState,
+    screenScrollState: LazyListState,
     modifier: Modifier = Modifier,
     onViewMapClick: () -> Unit,
 ) {
     // Parallax effect for the header image
-    val aboutHeaderOffset by remember(state) {
+    val aboutHeaderOffset by remember(screenScrollState) {
         derivedStateOf {
-            if (state.layoutInfo.visibleItemsInfo.isNotEmpty() && state.firstVisibleItemIndex == 0) {
-                val scrollOffset = state.firstVisibleItemScrollOffset.toFloat()
-                val height = state.layoutInfo.visibleItemsInfo.first().size
-                (MAX_ABOUT_HEADER_OFFSET_DP * (scrollOffset / height)).roundToInt()
+            if (screenScrollState.layoutInfo.visibleItemsInfo.isNotEmpty() && screenScrollState.firstVisibleItemIndex == 0) {
+                val scrollOffset = screenScrollState.firstVisibleItemScrollOffset.toFloat()
+                val height = screenScrollState.layoutInfo.visibleItemsInfo.first().size
+                (MaxAboutHeaderOffsetDp * (scrollOffset / height)).roundToInt()
             } else {
                 0
             }
@@ -96,7 +96,7 @@ fun AboutDroidKaigiDetailPreview() {
     KaigiTheme {
         Surface {
             AboutDroidKaigiDetail(
-                state = rememberLazyListState(),
+                screenScrollState = rememberLazyListState(),
                 onViewMapClick = {},
             )
         }
