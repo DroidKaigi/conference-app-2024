@@ -34,7 +34,7 @@ fun FilterLanguageChipPreview_NotSelected() {
         FilterLanguageChip(
             uiState = SearchFilterUiState(
                 selectedItems = listOf(),
-                selectableItems = listOf(Lang.ENGLISH, Lang.JAPANESE),
+                selectableItems = Lang.entries,
                 selectedValuesText = "",
             ),
             onSelect = {},
@@ -49,8 +49,8 @@ fun FilterLanguageChipPreview_Selected() {
         FilterLanguageChip(
             uiState = SearchFilterUiState(
                 selectedItems = listOf(Lang.JAPANESE),
-                selectableItems = listOf(Lang.ENGLISH, Lang.JAPANESE),
-                selectedValuesText = "JA",
+                selectableItems = Lang.entries,
+                selectedValuesText = Lang.JAPANESE.tagName,
             ),
             onSelect = {},
         )

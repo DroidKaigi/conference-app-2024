@@ -44,7 +44,7 @@ fun EmptySearchResultBody(
 fun EmptySearchResultBodyPreview() {
     KaigiTheme {
         EmptySearchResultBody(
-            searchWord = "Search query",
+            searchWord = "Input text",
         )
     }
 }

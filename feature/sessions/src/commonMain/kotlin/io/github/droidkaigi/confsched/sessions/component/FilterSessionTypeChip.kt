@@ -29,13 +29,28 @@ fun FilterSessionTypeChip(
 
 @Preview
 @Composable
-fun FilterSessionChipPreview() {
+fun FilterSessionChipPreview_NotSelected() {
     KaigiTheme {
         FilterSessionTypeChip(
             uiState = SearchFilterUiState(
                 selectedItems = listOf(),
                 selectableItems = TimetableSessionType.entries,
                 selectedValuesText = "",
+            ),
+            onSelect = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun FilterSessionChipPreview_Selected() {
+    KaigiTheme {
+        FilterSessionTypeChip(
+            uiState = SearchFilterUiState(
+                selectedItems = listOf(TimetableSessionType.NORMAL),
+                selectableItems = TimetableSessionType.entries,
+                selectedValuesText = TimetableSessionType.NORMAL.label.currentLangTitle,
             ),
             onSelect = {},
         )

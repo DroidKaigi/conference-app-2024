@@ -30,13 +30,28 @@ fun FilterCategoryChip(
 
 @Preview
 @Composable
-fun FilterCategoryChipPreview() {
+fun FilterCategoryChipPreview_NotSelected() {
     KaigiTheme {
         FilterCategoryChip(
             uiState = SearchFilterUiState(
                 selectedItems = listOf(),
                 selectableItems = TimetableCategory.fakes(),
                 selectedValuesText = "",
+            ),
+            onSelect = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun FilterCategoryChipPreview_Selected() {
+    KaigiTheme {
+        FilterCategoryChip(
+            uiState = SearchFilterUiState(
+                selectedItems = listOf(TimetableCategory.fakes().first()),
+                selectableItems = TimetableCategory.fakes(),
+                selectedValuesText = TimetableCategory.fakes().first().title.currentLangTitle,
             ),
             onSelect = {},
         )

@@ -29,13 +29,34 @@ fun FilterDayChip(
 
 @Preview
 @Composable
-fun FilterDayChipPreview() {
+fun FilterDayChipPreview_NotSelected() {
     KaigiTheme {
         FilterDayChip(
             uiState = SearchFilterUiState(
                 selectedItems = listOf(),
-                selectableItems = DroidKaigi2024Day.entries,
+                selectableItems = listOf(
+                    DroidKaigi2024Day.ConferenceDay1,
+                    DroidKaigi2024Day.ConferenceDay2,
+                ),
                 selectedValuesText = "",
+            ),
+            onSelect = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun FilterDayChipPreview_Selected() {
+    KaigiTheme {
+        FilterDayChip(
+            uiState = SearchFilterUiState(
+                selectedItems = listOf(DroidKaigi2024Day.ConferenceDay1),
+                selectableItems = listOf(
+                    DroidKaigi2024Day.ConferenceDay1,
+                    DroidKaigi2024Day.ConferenceDay2,
+                ),
+                selectedValuesText = "9/12",
             ),
             onSelect = {},
         )

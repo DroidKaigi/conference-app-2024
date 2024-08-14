@@ -189,7 +189,10 @@ fun SearchScreenPreview_Empty() {
                 searchWord = "Input text",
                 searchFilterDayUiState = SearchFilterUiState(
                     selectedItems = listOf(),
-                    selectableItems = DroidKaigi2024Day.entries,
+                    selectableItems = listOf(
+                        DroidKaigi2024Day.ConferenceDay1,
+                        DroidKaigi2024Day.ConferenceDay2,
+                    ),
                     selectedValuesText = "",
                 ),
                 searchFilterCategoryUiState = SearchFilterUiState(

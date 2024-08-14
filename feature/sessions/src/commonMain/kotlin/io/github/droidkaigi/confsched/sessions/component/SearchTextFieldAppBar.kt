@@ -78,10 +78,23 @@ fun SearchTextFieldAppBar(
 
 @Preview
 @Composable
-fun SearchTextFieldAppBarPreview() {
+fun SearchTextFieldAppBarPreview_FilledSearchWord() {
     KaigiTheme {
         SearchTextFieldAppBar(
             searchWord = "Input text",
+            onChangeSearchWord = {},
+            onClickClear = {},
+            onClickBack = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+fun SearchTextFieldAppBarPreview_EmptySearchWord() {
+    KaigiTheme {
+        SearchTextFieldAppBar(
+            searchWord = "",
             onChangeSearchWord = {},
             onClickClear = {},
             onClickBack = {},
