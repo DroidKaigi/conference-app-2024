@@ -32,7 +32,7 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
     
     func getItemForRoom(forRoom: RoomType) -> TimetableItemWithFavorite? {
         items.filter {
-            $0.timetableItem.room.type == forRoom
+            $0.timetableItem.room.type == forRoom   //TODO: roomIj handling not decided?
         }.first
     }
 }

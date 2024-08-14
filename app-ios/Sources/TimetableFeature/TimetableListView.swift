@@ -6,7 +6,6 @@ import shared
 
 public struct TimetableView: View {
     private let store: StoreOf<TimetableReducer>
-
     public init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
@@ -103,7 +102,6 @@ struct TimetableListView: View {
 
 struct TimetableGridView: View {
     private let store: StoreOf<TimetableReducer>
-
     public init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
@@ -118,9 +116,7 @@ struct TimetableGridView: View {
                         .gridCellUnsizedAxes([.horizontal, .vertical])
                     
                     ForEach(rooms, id: \.self) { column in
-                        
-                        let room = getTimetableRoom(type: column)
-                        
+                        let room = column.toRoom()
                         Text(room.name.currentLangTitle).foregroundStyle(room.roomTheme.primaryColor)
                             .frame(width: 192)
                     }
@@ -177,68 +173,70 @@ struct TimeGroupMiniList: View {
     }
 }
 
-func getTimetableRoom(type: RoomType) -> TimetableRoom {
-    switch type {
-    case .roomI:
-        return TimetableRoom(
-            id: 1,
-            name: MultiLangText(
-                jaTitle: "Iguana",
-                enTitle: "Iguana"
-            ),
-            type: .roomI,
-            sort: 1
-        )
-    case .roomG:
-        return TimetableRoom(
-            id: 2,
-            name: MultiLangText(
-                jaTitle: "Giraffe",
-                enTitle: "Giraffe"
-            ),
-            type: .roomG,
-            sort: 2
-        )
-    case .roomH:
-        return TimetableRoom(
-            id: 3,
-            name: MultiLangText(
-                jaTitle: "Hedgehog",
-                enTitle: "Hedgehog"
-            ),
-            type: .roomH,
-            sort: 3
-        )
-    case .roomF:
-        return TimetableRoom(
-            id: 4,
-            name: MultiLangText(
-                jaTitle: "Flamingo",
-                enTitle: "Flamingo"
-            ),
-            type: .roomF,
-            sort: 4
-        )
-    case .roomJ:
-        return TimetableRoom(
-            id: 5,
-            name: MultiLangText(
-                jaTitle: "Jellyfish",
-                enTitle: "Jellyfish"
-            ),
-            type: .roomJ,
-            sort: 5
-        )
-    case .roomIj:
-        return TimetableRoom(
-            id: 6,
-            name: MultiLangText(
-                jaTitle: "All",
-                enTitle: "All"
-            ),
-            type: .roomIj,
-            sort: 6
-        )
+extension RoomType {
+    func toRoom() -> TimetableRoom {
+        switch self {
+        case .roomI:
+            return TimetableRoom(
+                id: 1,
+                name: MultiLangText(
+                    jaTitle: "Iguana",
+                    enTitle: "Iguana"
+                ),
+                type: .roomI,
+                sort: 1
+            )
+        case .roomG:
+            return TimetableRoom(
+                id: 2,
+                name: MultiLangText(
+                    jaTitle: "Giraffe",
+                    enTitle: "Giraffe"
+                ),
+                type: .roomG,
+                sort: 2
+            )
+        case .roomH:
+            return TimetableRoom(
+                id: 3,
+                name: MultiLangText(
+                    jaTitle: "Hedgehog",
+                    enTitle: "Hedgehog"
+                ),
+                type: .roomH,
+                sort: 3
+            )
+        case .roomF:
+            return TimetableRoom(
+                id: 4,
+                name: MultiLangText(
+                    jaTitle: "Flamingo",
+                    enTitle: "Flamingo"
+                ),
+                type: .roomF,
+                sort: 4
+            )
+        case .roomJ:
+            return TimetableRoom(
+                id: 5,
+                name: MultiLangText(
+                    jaTitle: "Jellyfish",
+                    enTitle: "Jellyfish"
+                ),
+                type: .roomJ,
+                sort: 5
+            )
+        case .roomIj:
+            return TimetableRoom(
+                id: 6,
+                name: MultiLangText(
+                    jaTitle: "Iguana and Jellyfish",
+                    enTitle: "Iguana and Jellyfish"
+                ),
+                type: .roomIj,
+                sort: 6
+            )
+        }
     }
 }
 
@@ -250,7 +248,7 @@ extension TimetableTimeGroupItems {
             }
         } else {
             TimetableGridCard(timetableItem: nil) { _ in
-                // Does nothing
+                // Does nothing / Space holder card
             }
         }
     }

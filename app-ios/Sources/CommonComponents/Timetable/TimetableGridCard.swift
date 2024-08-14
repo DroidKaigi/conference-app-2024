@@ -63,7 +63,9 @@ public struct TimetableGridCard: View {
                 .overlay(RoundedRectangle(cornerRadius: 4).stroke(timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
             }
         } else {
-            EmptyView()
+            VStack {
+                //Empty on purpose
+            }
             .frame(maxWidth: .infinity)
             .padding(12)
             .frame(width: 192, height: 153)
