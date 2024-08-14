@@ -29,6 +29,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -46,7 +47,12 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.preat.peekaboo.image.picker.toImageBitmap
+import conference_app_2024.feature.profilecard.generated.resources.add_image
+import conference_app_2024.feature.profilecard.generated.resources.enter_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
+import conference_app_2024.feature.profilecard.generated.resources.link
+import conference_app_2024.feature.profilecard.generated.resources.nickname
+import conference_app_2024.feature.profilecard.generated.resources.occupation
 import conference_app_2024.feature.profilecard.generated.resources.profile_card
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
@@ -92,17 +98,17 @@ fun NavController.navigateProfileCardScreen() {
 internal sealed interface ProfileCardUiState {
     data class Edit(
         val nickname: String = "",
-        val occupation: String? = null,
-        val link: String? = null,
-        val image: String? = null,
+        val occupation: String = "",
+        val link: String = "",
+        val image: String? = null, // TODO to non-null
         val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
     ) : ProfileCardUiState
 
     data class Card(
         val nickname: String,
-        val occupation: String?,
-        val link: String?,
-        val image: String?,
+        val occupation: String,
+        val link: String,
+        val image: String?, // TODO to non-null
         val theme: ProfileCardTheme,
     ) : ProfileCardUiState
 }
@@ -217,35 +223,100 @@ internal fun EditScreen(
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
 
+    val nicknameValidationErrorString = stringResource(
+        ProfileCardRes.string.enter_validate_format,
+        stringResource(ProfileCardRes.string.nickname),
+    )
+    val occupationValidationErrorString = stringResource(
+        ProfileCardRes.string.enter_validate_format,
+        stringResource(ProfileCardRes.string.occupation),
+    )
+    val linkValidationErrorString = stringResource(
+        ProfileCardRes.string.enter_validate_format,
+        stringResource(ProfileCardRes.string.link),
+    )
+
+    val nicknameError by remember {
+        derivedStateOf {
+            mutableStateOf(
+                if (nickname.isNotEmpty()) {
+                    ""
+                } else {
+                    nicknameValidationErrorString
+                }
+            )
+        }
+    }
+    val occupationError by remember {
+        derivedStateOf {
+            mutableStateOf(
+                if (occupation.isNotEmpty()) {
+                    ""
+                } else {
+                    occupationValidationErrorString
+                }
+            )
+        }
+    }
+    val linkError by remember {
+        derivedStateOf {
+            mutableStateOf(
+                if (link.isNotEmpty()) {
+                    ""
+                } else {
+                    linkValidationErrorString
+                }
+            )
+        }
+    }
+
+    val isValidInputs by remember {
+        derivedStateOf {
+            nickname.isNotEmpty() && occupation.isNotEmpty() && link.isNotEmpty()
+        }
+    }
+
     Column(
         modifier = modifier
             .testTag(ProfileCardEditScreenTestTag)
             .padding(contentPadding),
     ) {
         Text("ProfileCardEdit")
-        TextField(
+        ValidationTextField(
             value = nickname,
-            onValueChange = { nickname = it },
-            placeholder = { Text("Nickname") },
+            labelName = stringResource(ProfileCardRes.string.nickname),
+            errorMessage = nicknameError.value,
+            isError = nickname.isEmpty(),
+            onValueChange = {
+                nickname = it
+            },
             modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
         )
-        TextField(
-            value = occupation ?: "",
-            onValueChange = { occupation = it },
-            placeholder = { Text("Occupation") },
+        ValidationTextField(
+            value = occupation,
+            labelName = stringResource(ProfileCardRes.string.occupation),
+            errorMessage = occupationError.value,
+            isError = occupation.isEmpty(),
+            onValueChange = {
+                occupation = it
+            },
             modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
         )
-        TextField(
-            value = link ?: "",
-            onValueChange = { link = it },
-            placeholder = { Text("Link") },
+        ValidationTextField(
+            value = link,
+            labelName = stringResource(ProfileCardRes.string.link),
+            isError = link.isEmpty(),
+            onValueChange = {
+                link = it
+            },
+            errorMessage = linkError.value,
             modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
         PhotoPickerButton(
             onSelectedImage = { imageByteArray = it },
             modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
         ) {
-            Text("画像を選択")
+            Text(stringResource(ProfileCardRes.string.add_image))
         }
         image?.let {
             Box {
@@ -283,6 +354,7 @@ internal fun EditScreen(
                     ),
                 )
             },
+            enabled = isValidInputs,
             modifier = Modifier.testTag(ProfileCardCreateButtonTestTag),
         ) {
             Text("Create")
