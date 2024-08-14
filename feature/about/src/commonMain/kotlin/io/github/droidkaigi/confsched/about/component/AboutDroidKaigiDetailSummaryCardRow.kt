@@ -40,9 +40,9 @@ fun AboutDroidKaigiDetailSummaryCardRow(
             imageVector = leadingIcon,
             contentDescription = leadingIconContentDescription,
             modifier = Modifier.size(16.dp),
-            tint = Color.Green,
+            tint = MaterialTheme.colorScheme.onSurface,
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = label,
             style = MaterialTheme.typography.titleSmall,
