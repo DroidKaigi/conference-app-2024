@@ -19,7 +19,7 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.TimetableScreen
-import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
+import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag2
 import io.github.droidkaigi.confsched.sessions.TimetableUiTypeChangeButtonTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridItemTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridTestTag
@@ -88,7 +88,7 @@ class TimetableScreenRobot @Inject constructor(
 
     fun scrollTimetable() {
         composeTestRule
-            .onNode(hasTestTag(TimetableScreenTestTag))
+            .onNode(hasTestTag(TimetableScreenTestTag2))
             .performTouchInput {
                 swipeUp(
                     startY = visibleSize.height * 4F / 5,

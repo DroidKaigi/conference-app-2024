@@ -86,7 +86,7 @@ fun NavController.navigateTimetableScreen() {
     }
 }
 
-const val TimetableScreenTestTag = "TimetableScreen"
+const val TimetableScreenTestTag2 = "TimetableScreen"
 
 @Composable
 fun TimetableScreen(
@@ -139,7 +139,7 @@ private fun TimetableScreen(
     val layoutDirection = LocalLayoutDirection.current
     Scaffold(
         modifier = modifier
-            .testTag(TimetableScreenTestTag)
+            .testTag(TimetableScreenTestTag2)
             .background(Color.Black),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
