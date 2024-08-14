@@ -13,6 +13,7 @@ public struct TimetableView: View {
     
     @State var timetableMode = TimetableMode.list
     @State var switchModeIcon: String = "square.grid.2x2"
+    @State var selectedTab: DayTab = DayTab.day1
     
     public var body: some View {
         VStack {
@@ -20,11 +21,13 @@ public struct TimetableView: View {
                 ForEach(DayTab.allCases) { tabItem in
                     Button(action: {
                         store.send(.view(.selectDay(tabItem)))
+                        selectedTab = tabItem
                     }, label: {
-                        //TODO: Only selected button should be green and underlined
-                        Text(tabItem.rawValue).foregroundStyle(
-                            AssetColors.Custom.flamingo.swiftUIColor)
-                            .underline()
+                        HStack(spacing: 6) {
+                            Text(tabItem.rawValue).textStyle(.titleMedium).underline(selectedTab == tabItem)
+                        }
+                        .foregroundStyle(selectedTab == tabItem ? AssetColors.Custom.iguana.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+                        .padding(6)
                     })
                 }
                 Spacer()
@@ -151,7 +154,6 @@ struct TagView: View {
 }
 
 struct PhotoView: View {
-    //TODO: Replace this with an actual photo render
     let photo: String
     let name: String
     
