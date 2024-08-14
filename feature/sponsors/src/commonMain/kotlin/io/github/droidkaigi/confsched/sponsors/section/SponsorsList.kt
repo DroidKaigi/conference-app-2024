@@ -56,7 +56,7 @@ fun SponsorsList(
                     it
                 }
             },
-        contentPadding = PaddingValues(12.dp),
+        contentPadding = PaddingValues(horizontal = 12.dp),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             SponsorHeader(

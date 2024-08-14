@@ -134,7 +134,7 @@ private fun EventMap(
     LazyColumn(
         modifier = modifier
             .testTag(EventMapLazyColumnTestTag),
-        contentPadding = PaddingValues(16.dp),
+        contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
         item {
             EventMapTab()
