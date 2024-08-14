@@ -9,7 +9,6 @@ import io.github.droidkaigi.confsched.testing.robot.StaffScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.StaffServerRobot.ServerStatus.Error
 import io.github.droidkaigi.confsched.testing.robot.StaffServerRobot.ServerStatus.Operational
 import io.github.droidkaigi.confsched.testing.robot.runRobot
-import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
@@ -50,7 +49,9 @@ class StaffScreenTest(
                         }
                         itShould("show staff screen") {
                             captureScreenWithChecks(
-                                checks = todoChecks("This screen is still empty now. Please add some checks."),
+                                checks = {
+                                    checkExistsStaffItem()
+                                },
                             )
                         }
                     }
@@ -66,7 +67,9 @@ class StaffScreenTest(
                         }
                         itShould("show snackbar") {
                             captureScreenWithChecks(
-                                checks = todoChecks("This screen is still empty now. Please add some checks."),
+                                checks = {
+                                    checkDoesNotExistsStaffItem()
+                                },
                             )
                         }
                     }
