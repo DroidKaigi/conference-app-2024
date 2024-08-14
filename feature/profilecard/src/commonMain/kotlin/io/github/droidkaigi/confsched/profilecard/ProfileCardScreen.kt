@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.profilecard
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -265,44 +266,47 @@ internal fun CardScreen(
                 text = stringResource(ProfileCardRes.string.profile_card),
                 style = MaterialTheme.typography.headlineSmall,
                 color = Color.Black,
-                modifier = Modifier.fillMaxWidth().padding(16.dp),
+                modifier = Modifier.fillMaxWidth().padding(start = 16.dp, top = 16.dp),
             )
-            Spacer(Modifier.height(72.dp))
-            FlipCard(
-                uiState = uiState,
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                isCreated = isCreated,
-            )
-            Spacer(Modifier.height(44.dp))
-            Button(
-                onClick = { onClickShareProfileCard() },
-                colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                contentPadding = PaddingValues(vertical = 10.dp),
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
             ) {
-                Icon(
-                    painter = painterResource(ProfileCardRes.drawable.icon_share),
-                    contentDescription = "Share",
-                    tint = Color.Black,
-                    modifier = Modifier.size(18.dp),
+                FlipCard(
+                    uiState = uiState,
+                    isCreated = isCreated,
                 )
-                Spacer(Modifier.width(8.dp))
+                Spacer(Modifier.height(32.dp))
+                Button(
+                    onClick = { onClickShareProfileCard() },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                    contentPadding = PaddingValues(vertical = 10.dp),
+                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(ProfileCardRes.drawable.icon_share),
+                        contentDescription = "Share",
+                        tint = Color.Black,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = "共有する",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = Color.Black,
+                    )
+                }
+                Spacer(Modifier.height(9.dp))
                 Text(
-                    text = "共有する",
+                    text = "編集する",
                     style = MaterialTheme.typography.labelLarge,
                     color = Color.Black,
+                    modifier = Modifier
+                        .clickable { onClickEdit() }
+                        .testTag(ProfileCardEditButtonTestTag),
                 )
             }
-            Spacer(Modifier.height(18.dp))
-            Text(
-                text = "編集する",
-                style = MaterialTheme.typography.labelLarge,
-                color = Color.Black,
-                modifier = Modifier
-                    .align(Alignment.CenterHorizontally)
-                    .clickable { onClickEdit() }
-                    .testTag(ProfileCardEditButtonTestTag),
-            )
         }
     }
 }
