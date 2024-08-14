@@ -20,36 +20,15 @@
     {
       "target" : {
         "containerPath" : "container:..",
-        "identifier" : "AboutFeatureTests",
-        "name" : "AboutFeatureTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..",
-        "identifier" : "AppTests",
-        "name" : "AppTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:..",
         "identifier" : "TimetableDetailFeatureTests",
         "name" : "TimetableDetailFeatureTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:",
-        "identifier" : "FavoriteFeatureTests",
-        "name" : "FavoriteFeatureTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:..",
-        "identifier" : "ContributorFeatureTests",
-        "name" : "ContributorFeatureTests"
+        "identifier" : "AboutFeatureTests",
+        "name" : "AboutFeatureTests"
       }
     },
     {
@@ -62,8 +41,43 @@
     {
       "target" : {
         "containerPath" : "container:..",
+        "identifier" : "ContributorFeatureTests",
+        "name" : "ContributorFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
         "identifier" : "StaffFeatureTests",
         "name" : "StaffFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "FavoriteFeatureTests",
+        "name" : "FavoriteFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "EventMapFeatureTests",
+        "name" : "EventMapFeatureTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "TimetableTests",
+        "name" : "TimetableTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..",
+        "identifier" : "AppTests",
+        "name" : "AppTests"
       }
     }
   ],
