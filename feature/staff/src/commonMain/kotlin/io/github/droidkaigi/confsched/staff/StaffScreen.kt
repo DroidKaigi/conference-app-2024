@@ -34,6 +34,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val staffScreenRoute = "staff"
 const val StaffScreenTestTag = "StaffScreenTestTag"
+const val StaffScreenLazyColumnTestTag = "StaffScreenLazyColumnTestTag"
 
 fun NavGraphBuilder.staffScreens(
     onNavigationIconClick: () -> Unit,
@@ -118,6 +119,7 @@ fun StaffScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
+                .testTag(StaffScreenLazyColumnTestTag)
                 .let {
                     if (scrollBehavior != null) {
                         it.nestedScroll(scrollBehavior.nestedScrollConnection)

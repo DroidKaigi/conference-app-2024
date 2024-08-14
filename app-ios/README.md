@@ -5,7 +5,7 @@ Official iOS App for DroidKaigi 2024.
 ## Getting started
 
 1. Setup "Requirements > Must"
-2. `make open`
+2. `make bootstrap`
 
 ## Requirements
 

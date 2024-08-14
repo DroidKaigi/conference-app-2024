@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.layout.LazyLayout
 import androidx.compose.foundation.lazy.layout.LazyLayoutItemProvider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
@@ -62,6 +63,7 @@ import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -140,7 +142,10 @@ fun TimetableGrid(
             timetableState = timetableState,
             coroutineScope = coroutineScope,
         ) { hour ->
-            HoursItem(hour = hour)
+            HoursItem(
+                hour = hour,
+                modifier = Modifier.padding(end = 8.dp),
+            )
         }
         Column {
             TimetableGridRooms(
@@ -364,51 +369,67 @@ fun TimetableGrid(
 @Preview
 @Composable
 fun TimetablePreview() {
-    TimetableGrid(
-        timetable = Timetable.fake(),
-        timetableState = rememberTimetableGridState(),
-        onTimetableItemClick = {},
-        modifier = Modifier.fillMaxSize(),
-    )
+    KaigiTheme {
+        Surface {
+            TimetableGrid(
+                timetable = Timetable.fake(),
+                timetableState = rememberTimetableGridState(),
+                onTimetableItemClick = {},
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+    }
 }
 
 @Preview
 @Composable
 fun TimetableVerticalScale20PercentPreview() {
-    TimetableGrid(
-        timetable = Timetable.fake(),
-        timetableState = rememberTimetableGridState(
-            screenScaleState = ScreenScaleState(0.2f, 0.2f),
-        ),
-        onTimetableItemClick = {},
-        modifier = Modifier.fillMaxSize(),
-    )
+    KaigiTheme {
+        Surface {
+            TimetableGrid(
+                timetable = Timetable.fake(),
+                timetableState = rememberTimetableGridState(
+                    screenScaleState = ScreenScaleState(0.2f, 0.2f),
+                ),
+                onTimetableItemClick = {},
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+    }
 }
 
 @Preview
 @Composable
 fun TimetableVerticalScale40PercentPreview() {
-    TimetableGrid(
-        timetable = Timetable.fake(),
-        timetableState = rememberTimetableGridState(
-            screenScaleState = ScreenScaleState(0.4f, 0.4f),
-        ),
-        onTimetableItemClick = {},
-        modifier = Modifier.fillMaxSize(),
-    )
+    KaigiTheme {
+        Surface {
+            TimetableGrid(
+                timetable = Timetable.fake(),
+                timetableState = rememberTimetableGridState(
+                    screenScaleState = ScreenScaleState(0.4f, 0.4f),
+                ),
+                onTimetableItemClick = {},
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+    }
 }
 
 @Preview
 @Composable
 fun TimetableVerticalScale60PercentPreview() {
-    TimetableGrid(
-        timetable = Timetable.fake(),
-        timetableState = rememberTimetableGridState(
-            screenScaleState = ScreenScaleState(0.6f, 0.6f),
-        ),
-        onTimetableItemClick = {},
-        modifier = Modifier.fillMaxSize(),
-    )
+    KaigiTheme {
+        Surface {
+            TimetableGrid(
+                timetable = Timetable.fake(),
+                timetableState = rememberTimetableGridState(
+                    screenScaleState = ScreenScaleState(0.6f, 0.6f),
+                ),
+                onTimetableItemClick = {},
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)

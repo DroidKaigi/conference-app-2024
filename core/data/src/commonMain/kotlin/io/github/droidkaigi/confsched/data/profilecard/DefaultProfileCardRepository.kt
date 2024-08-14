@@ -11,15 +11,15 @@ internal class DefaultProfileCardRepository(
     private val profileCardDataStore: ProfileCardDataStore,
 ) : ProfileCardRepository {
     @Composable
-    override fun profileCard(): ProfileCard? {
+    override fun profileCard(): ProfileCard {
         val profileCard by remember {
             profileCardDataStore.get()
-        }.safeCollectAsRetainedState(null)
+        }.safeCollectAsRetainedState(ProfileCard.Loading)
 
         return profileCard
     }
 
-    override suspend fun save(profileCard: ProfileCard) {
+    override suspend fun save(profileCard: ProfileCard.Exists) {
         profileCardDataStore.save(profileCard)
     }
 }

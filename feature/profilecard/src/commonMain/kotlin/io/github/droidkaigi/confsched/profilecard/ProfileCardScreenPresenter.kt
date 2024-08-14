@@ -17,7 +17,7 @@ internal sealed interface ProfileCardScreenEvent
 
 internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
     data object SelectImage : EditScreenEvent
-    data class Create(val profileCard: ProfileCard) : EditScreenEvent
+    data class Create(val profileCard: ProfileCard.Exists) : EditScreenEvent
 }
 
 internal sealed interface CardScreenEvent : ProfileCardScreenEvent {
@@ -25,27 +25,30 @@ internal sealed interface CardScreenEvent : ProfileCardScreenEvent {
     data object Edit : CardScreenEvent
 }
 
-private fun ProfileCard?.toEditUiState(): ProfileCardUiState.Edit {
-    if (this == null) {
-        return ProfileCardUiState.Edit()
+private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
+    return when (this) {
+        is ProfileCard.Exists -> ProfileCardUiState.Edit(
+            nickname = nickname,
+            occupation = occupation,
+            link = link,
+            image = image,
+            theme = theme,
+        )
+        ProfileCard.DoesNotExists, ProfileCard.Loading -> ProfileCardUiState.Edit()
     }
-    return ProfileCardUiState.Edit(
-        nickname = nickname,
-        occupation = occupation,
-        link = link,
-        image = image,
-        theme = theme,
-    )
 }
 
-private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card {
-    return ProfileCardUiState.Card(
-        nickname = nickname,
-        occupation = occupation,
-        link = link,
-        image = image,
-        theme = theme,
-    )
+private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
+    return when (this) {
+        is ProfileCard.Exists -> ProfileCardUiState.Card(
+            nickname = nickname,
+            occupation = occupation,
+            link = link,
+            image = image,
+            theme = theme,
+        )
+        ProfileCard.DoesNotExists, ProfileCard.Loading -> null
+    }
 }
 
 @Composable
@@ -53,18 +56,18 @@ internal fun profileCardScreenPresenter(
     events: Flow<ProfileCardScreenEvent>,
     repository: ProfileCardRepository = localProfileCardRepository(),
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
-    val profileCard: ProfileCard? by rememberUpdatedState(repository.profileCard())
+    val profileCard: ProfileCard by rememberUpdatedState(repository.profileCard())
     var isLoading: Boolean by remember { mutableStateOf(false) }
-    val ediUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
-    val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(profileCard?.toCardUiState())
-    var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Edit) }
+    val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
+    val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(profileCard.toCardUiState())
+    var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Loading) }
 
     // at first launch, if you have a profile card, show card ui
     SafeLaunchedEffect(profileCard) {
-        uiType = if (profileCard == null) {
-            ProfileCardUiType.Edit
-        } else {
-            ProfileCardUiType.Card
+        uiType = when (profileCard) {
+            is ProfileCard.Exists -> ProfileCardUiType.Card
+            ProfileCard.DoesNotExists -> ProfileCardUiType.Edit
+            ProfileCard.Loading -> ProfileCardUiType.Loading
         }
     }
 
@@ -97,7 +100,7 @@ internal fun profileCardScreenPresenter(
 
     ProfileCardScreenState(
         isLoading = isLoading,
-        editUiState = ediUiState,
+        editUiState = editUiState,
         cardUiState = cardUiState,
         uiType = uiType,
         userMessageStateHolder = userMessageStateHolder,

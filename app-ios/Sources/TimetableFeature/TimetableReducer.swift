@@ -28,7 +28,7 @@ public struct TimetableReducer : Sendable{
         
         public enum View : Sendable {
             case selectDay(DayTab)
-            case timetableItemTapped
+            case timetableItemTapped(TimetableItemWithFavorite)
             case searchTapped
         }
     }

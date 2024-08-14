@@ -248,13 +248,13 @@ class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: Sponsors
 }
 
 interface ProfileCardRepositoryRobot {
-    suspend fun saveProfileCard(profileCard: ProfileCard)
+    suspend fun saveProfileCard(profileCard: ProfileCard.Exists)
 }
 
 class DefaultProfileCardRepositoryRobot @Inject constructor(
     private val profileCardRepository: ProfileCardRepository,
 ) : ProfileCardRepositoryRobot {
-    override suspend fun saveProfileCard(profileCard: ProfileCard) {
+    override suspend fun saveProfileCard(profileCard: ProfileCard.Exists) {
         profileCardRepository.save(profileCard)
     }
 }
