@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import CommonComponents
 import KMPClient
-import shared
+@preconcurrency import shared
 import Foundation
 import EventKitClient
 import Model
@@ -15,14 +15,14 @@ public struct TimetableDetailReducer: Sendable {
     
     @ObservableState
     public struct State: Equatable {
-        public init(timetableItem: TimetableItem, isBookmarked: Bool = false) {
+        public init(timetableItem: TimetableItem, isFavorited: Bool = false) {
             self.timetableItem = timetableItem
-            self.isBookmarked = isBookmarked
+            self.isFavorited = isFavorited
             self.toast = toast
         }
 
         var timetableItem: TimetableItem
-        var isBookmarked = false
+        var isFavorited = false
         var toast: ToastState?
         var url: IdentifiableURL?
         @Presents var confirmationDialog: ConfirmationDialogState<ConfirmationDialog>?
@@ -32,12 +32,12 @@ public struct TimetableDetailReducer: Sendable {
         case binding(BindingAction<State>)
         case view(View)
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
-        case bookmarkResponse(Result<Void, any Error>)
+        case favoriteResponse(Result<Void, any Error>)
         case requestEventAccessResponse(Result<Bool, any Error>)
         case addEventResponse(Result<Void, any Error>)
 
         public enum View {
-            case bookmarkButtonTapped
+            case favoriteButtonTapped
             case calendarButtonTapped
             case slideButtonTapped(URL)
             case videoButtonTapped(URL)
@@ -56,10 +56,10 @@ public struct TimetableDetailReducer: Sendable {
             enum CancelID { case request }
 
             switch action {
-            case .view(.bookmarkButtonTapped):
-                return .run { send in
-                    await send(.bookmarkResponse(Result {
-                        try await timetableClient.toggleBookmark(id: TimetableItemId(value: ""))
+            case .view(.favoriteButtonTapped):
+                return .run { [state] send in
+                    await send(.favoriteResponse(Result {
+                        try await timetableClient.toggleBookmark(id: state.timetableItem.id)
                     }))
                 }
                 .cancellable(id: CancelID.request)
@@ -71,7 +71,7 @@ public struct TimetableDetailReducer: Sendable {
                     }))
                 }
                 
-            case let .bookmarkResponse(.failure(error)):
+            case let .favoriteResponse(.failure(error)):
                 print(error.localizedDescription)
                 return .none
 
@@ -103,11 +103,11 @@ public struct TimetableDetailReducer: Sendable {
                 state.url = IdentifiableURL(url)
                 return .none
 
-            case .bookmarkResponse(.success):
-                if !state.isBookmarked {
+            case .favoriteResponse(.success):
+                if !state.isFavorited {
                     state.toast = .init(text: String(localized: "TimetableDetailAddBookmark", bundle: .module))
                 }
-                state.isBookmarked.toggle()
+                state.isFavorited.toggle()
                 return .none
                 
             case .confirmationDialog(.presented(.addEvent)):
