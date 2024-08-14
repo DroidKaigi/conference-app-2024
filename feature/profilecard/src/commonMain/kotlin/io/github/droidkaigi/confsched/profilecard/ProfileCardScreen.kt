@@ -79,6 +79,7 @@ internal sealed interface ProfileCardUiState {
 }
 
 internal enum class ProfileCardUiType {
+    Loading,
     Edit,
     Card,
 }
@@ -129,6 +130,14 @@ internal fun ProfileCardScreen(
         ),
     ) { padding ->
         when (uiState.uiType) {
+            ProfileCardUiType.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(padding).fillMaxSize(),
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
             ProfileCardUiType.Edit -> {
                 EditScreen(
                     uiState = uiState.editUiState,
@@ -164,7 +173,7 @@ internal fun ProfileCardScreen(
 @Composable
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
-    onClickCreate: (ProfileCard) -> Unit,
+    onClickCreate: (ProfileCard.Exists) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
@@ -206,7 +215,7 @@ internal fun EditScreen(
         Button(
             onClick = {
                 onClickCreate(
-                    ProfileCard(
+                    ProfileCard.Exists(
                         nickname = nickname,
                         occupation = occupation,
                         link = link,

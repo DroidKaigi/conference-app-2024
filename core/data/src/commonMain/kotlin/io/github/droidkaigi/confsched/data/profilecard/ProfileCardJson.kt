@@ -13,7 +13,7 @@ internal data class ProfileCardJson(
     val theme: String,
 )
 
-internal fun ProfileCardJson.toModel() = ProfileCard(
+internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
     nickname = nickname,
     occupation = occupation,
     link = link,
@@ -23,7 +23,7 @@ internal fun ProfileCardJson.toModel() = ProfileCard(
 
 internal fun String.toProfileCardTheme() = ProfileCardTheme.valueOf(this)
 
-internal fun ProfileCard.toJson() = ProfileCardJson(
+internal fun ProfileCard.Exists.toJson() = ProfileCardJson(
     nickname = nickname,
     occupation = occupation,
     link = link,

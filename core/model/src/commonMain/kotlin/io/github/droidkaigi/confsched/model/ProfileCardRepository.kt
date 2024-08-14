@@ -5,8 +5,8 @@ import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 
 interface ProfileCardRepository {
     @Composable
-    fun profileCard(): ProfileCard?
-    suspend fun save(profileCard: ProfileCard)
+    fun profileCard(): ProfileCard
+    suspend fun save(profileCard: ProfileCard.Exists)
 }
 
 @Composable
