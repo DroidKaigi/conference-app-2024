@@ -361,3 +361,51 @@ internal fun CardScreen(
         }
     }
 }
+
+@Composable
+private fun ValidationTextField(
+    value: String,
+    labelName: String,
+    errorMessage: String,
+    isError: Boolean,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        val indicatorColor = if (isError) {
+            MaterialTheme.colorScheme.error
+        } else {
+            MaterialTheme.colorScheme.onSurface
+        }
+        Text(
+            text = labelName,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        TextField(
+            value = value,
+            textStyle = MaterialTheme.typography.bodyLarge,
+            onValueChange = onValueChange,
+            isError = isError,
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = indicatorColor,
+                unfocusedIndicatorColor = indicatorColor,
+                errorIndicatorColor = MaterialTheme.colorScheme.error,
+            )
+        )
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier
+                    .padding(
+                        start = 16.dp,
+                        top = 4.dp,
+                        end = 16.dp,
+                    )
+            )
+        }
+    }
+}
