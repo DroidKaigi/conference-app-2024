@@ -56,10 +56,10 @@ fun AboutDroidKaigiDetailSummaryCard(
             },
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 24.dp),
+                .padding(horizontal = 16.dp, vertical = 20.dp),
         ) {
             AboutDroidKaigiDetailSummaryCardRow(
                 leadingIcon = Outlined.Schedule,
