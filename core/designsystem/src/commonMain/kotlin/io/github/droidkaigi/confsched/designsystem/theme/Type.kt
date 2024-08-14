@@ -7,15 +7,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import conference_app_2024.core.designsystem.generated.resources.dot_gothic16_regular
-import io.github.droidkaigi.confsched.designsystem.DesignSystemRes
-import org.jetbrains.compose.resources.Font
+
+@Composable
+expect fun dotGothic16FontFamily(): FontFamily
 
 @Composable
 fun appTypography(): Typography {
-    val dotGothic16 = FontFamily(
-        Font(DesignSystemRes.font.dot_gothic16_regular),
-    )
+    val dotGothic16 = dotGothic16FontFamily()
     return remember(dotGothic16) {
         Typography(
             displayLarge = TextStyle(

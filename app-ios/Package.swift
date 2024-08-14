@@ -235,6 +235,7 @@ let package = Package(
                 .tca,
                 .theme,
                 .commonComponents,
+                .kmpClient,
             ]
         ),
         .testTarget(

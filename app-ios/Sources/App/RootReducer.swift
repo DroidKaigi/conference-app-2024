@@ -116,12 +116,13 @@ public struct RootReducer {
                 state.paths.about.append(.acknowledgements)
                 return .none
                 
-            case .timetable(.view(.timetableItemTapped)):
+            case .timetable(.view(.timetableItemTapped(let item))):
                 state.paths.timetable.append(.timetableDetail(
                     TimetableDetailReducer.State(
-                        timetableItem: shared.TimetableItem.Session.companion.fake()
+                        timetableItem: item.timetableItem,
+                        isBookmarked: item.isFavorited)
                     )
-                ))
+                )
                 return .none
 
             case .timetable(.view(.searchTapped)):

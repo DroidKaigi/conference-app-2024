@@ -90,19 +90,14 @@ struct TimetableListView: View {
         ScrollView{
             LazyVStack {
                 ForEach(store.timetableItems, id: \.self) { item in
-                    Button {
-                        store.send(.view(.timetableItemTapped))
-                    } label: {
-                        TimeGroupMiniList(contents: item, onItemTap: { item in
-                            store.send(.view(.timetableItemTapped))
-                        })
-                    }
+                    TimeGroupMiniList(contents: item, onItemTap: { item in
+                        store.send(.view(.timetableItemTapped(item)))
+                    })
                 }
             }.scrollContentBackground(.hidden)
-            
-                .onAppear {
-                    store.send(.onAppear)
-                }.background(AssetColors.Surface.surface.swiftUIColor)
+            .onAppear {
+                store.send(.onAppear)
+            }.background(AssetColors.Surface.surface.swiftUIColor)
         }
     }
 }
