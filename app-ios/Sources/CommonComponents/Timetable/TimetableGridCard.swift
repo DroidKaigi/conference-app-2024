@@ -26,7 +26,7 @@ public struct TimetableGridCard: View {
                             .foregroundColor(timetableItem.room.roomTheme.primaryColor)
                         Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                             .textStyle(.labelMedium)
-                            .foregroundColor(timetableItem.room.roomTheme.primaryColor)
+                            .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
                         Spacer()
                     }
                     
