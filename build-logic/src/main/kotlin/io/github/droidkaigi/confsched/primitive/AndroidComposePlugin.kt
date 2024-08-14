@@ -9,10 +9,13 @@ class AndroidComposePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply(libs.plugin("composeCompiler").pluginId)
+                apply("org.jetbrains.kotlin.plugin.compose")
             }
             android {
                 buildFeatures.compose = true
+            }
+            composeCompiler {
+                enableStrongSkippingMode.set(true)
             }
             dependencies {
                 implementation(platform(libs.library("composeBom")))
