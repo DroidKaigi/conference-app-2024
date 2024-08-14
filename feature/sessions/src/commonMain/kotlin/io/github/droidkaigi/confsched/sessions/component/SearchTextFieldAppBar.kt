@@ -1,6 +1,8 @@
 package io.github.droidkaigi.confsched.sessions.component
 
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -56,6 +58,7 @@ fun SearchTextFieldAppBar(
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(IntrinsicSize.Max)
                     .testTag(SearchTextFieldAppBarTextFieldTestTag),
             )
         },
