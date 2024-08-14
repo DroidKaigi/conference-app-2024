@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.ViewTimeline
+import androidx.compose.material.icons.outlined.ViewTimeline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -164,7 +164,7 @@ private fun TimetableScreen(
                         Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
                             Icon(
                                 imageVector = if (timetableUiType == Grid) {
-                                    Icons.Default.ViewTimeline
+                                    Icons.Outlined.ViewTimeline
                                 } else {
                                     Icons.Default.GridView
                                 },
