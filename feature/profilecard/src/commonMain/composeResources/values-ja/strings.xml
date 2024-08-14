@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="profile_card">プロフィールカード</string>
+    <string name="nickname">ニックネーム</string>
+    <string name="occupation">職種</string>
+    <string name="link">リンク</string>
+    <string name="image">画像</string>
+    <string name="add_image">画像を追加</string>
+    <string name="enter_validate_format">%1$sを入力してください</string>
+    <string name="add_validate_format">%1$sを追加してください</string>
 </resources>
