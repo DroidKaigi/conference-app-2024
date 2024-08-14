@@ -70,10 +70,10 @@ public struct TimetableDetailView: View {
             }
             Spacer()
             Button {
-                store.send(.view(.bookmarkButtonTapped))
+                store.send(.view(.favoriteButtonTapped))
             } label: {
                 Group {
-                    if store.isBookmarked {
+                    if store.isFavorited {
                         Image(.icFavoriteFill)
                     } else {
                         Image(.icFavoriteOutline)
