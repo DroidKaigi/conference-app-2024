@@ -44,7 +44,7 @@ fun HoursItem(
     Text(
         text = hour,
         modifier = modifier,
-        textAlign = TextAlign.Center,
+        textAlign = TextAlign.Right,
         style = MaterialTheme.typography.labelMedium,
         color = MaterialTheme.colorScheme.onSurfaceVariant,
     )
@@ -76,28 +76,25 @@ fun TimetableGridHours(
         HoursScreen(
             hoursLayout,
             scrollState,
-            density,
         )
     }
     val visibleItemLayouts by remember(hoursScreen) { hoursScreen.visibleItemLayouts }
     val lineColor = MaterialTheme.colorScheme.surfaceVariant
     val linePxSize = with(timetableState.density) { lineStrokeSize.toPx() }
-    val lineOffset = with(density) { 67.dp.roundToPx() }
-    val lineEnd = with(density) { hoursWidth.roundToPx() }
+    val lineOffsetY = with(density) { horizontalLineTopOffset.roundToPx() }
+    val lineOffsetX = with(density) { hoursWidth.roundToPx() }
 
     LazyLayout(
         modifier = modifier
             .width(hoursWidth)
             .clipToBounds()
             .drawBehind {
-                hoursScreen.timeHorizontalLines.value.forEach {
-                    drawLine(
-                        lineColor,
-                        Offset(lineOffset.toFloat(), it),
-                        Offset(lineEnd.toFloat(), it),
-                        linePxSize,
-                    )
-                }
+                drawLine(
+                    lineColor,
+                    Offset(lineOffsetX.toFloat(), lineOffsetY.toFloat()),
+                    Offset(lineOffsetX.toFloat(), lineOffsetY.toFloat() + hoursScreen.height.toFloat()),
+                    linePxSize,
+                )
             }
             .pointerInput(Unit) {
                 detectDragGestures(
@@ -206,7 +203,6 @@ private data class HoursItemLayout(
 private class HoursScreen(
     val hoursLayout: HoursLayout,
     val scrollState: ScreenScrollState,
-    density: Density,
 ) {
     var width = 0
         private set
@@ -220,13 +216,6 @@ private class HoursScreen(
                 scrollState.scrollY.toInt(),
             )
         }
-
-    val offset = with(density) { horizontalLineTopOffset.roundToPx() }
-    val timeHorizontalLines = derivedStateOf {
-        (0..10).map {
-            scrollState.scrollY + hoursLayout.minutePx * 60 * it + offset
-        }
-    }
 
     fun updateBounds(width: Int, height: Int) {
         this.width = width
@@ -272,7 +261,7 @@ private fun itemProvider(
 
 private val lineStrokeSize = 1.dp
 private val horizontalLineTopOffset = 48.dp
-private val hoursWidth = 75.dp
+private val hoursWidth = 68.dp
 private val hoursItemTopOffset = 11.dp
 private val hoursList by lazy {
     val now = Clock.System.now().toLocalDateTime(TimeZone.of("UTC+9"))
