@@ -15,6 +15,7 @@ public data class EventMapEvent(
     val roomIcon: RoomIcon,
     val description: MultiLangText,
     val moreDetailsUrl: String?,
+    val message: MultiLangText?,
 ) {
     public companion object
 }
@@ -33,6 +34,10 @@ public fun EventMapEvent.Companion.fakes(): PersistentList<EventMapEvent> = Room
         } else {
             null
         },
+        message = MultiLangText(
+            "※こちらのイベントは時間が変更されました。",
+            "※This event has been rescheduled.",
+        ),
     )
 }.toPersistentList()
 
