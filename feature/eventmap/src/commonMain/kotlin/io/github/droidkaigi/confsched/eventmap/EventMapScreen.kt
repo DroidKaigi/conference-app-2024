@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.eventmap
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -132,8 +133,8 @@ private fun EventMap(
 ) {
     LazyColumn(
         modifier = modifier
-            .padding(horizontal = 16.dp)
             .testTag(EventMapLazyColumnTestTag),
+        contentPadding = PaddingValues(horizontal = 16.dp),
     ) {
         item {
             EventMapTab()
