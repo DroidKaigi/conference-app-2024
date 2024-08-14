@@ -178,7 +178,7 @@ struct TimeGroupMiniList: View {
 }
 
 func getTimetableRoom(type: RoomType) -> TimetableRoom {
-    switch (type) {
+    switch type {
     case .roomI:
         return TimetableRoom(
             id: 1,

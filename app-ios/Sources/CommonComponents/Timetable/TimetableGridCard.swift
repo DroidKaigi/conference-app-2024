@@ -23,16 +23,16 @@ public struct TimetableGridCard: View {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 4) {
                         timetableItem.room.type.shape
-                            .foregroundColor(timetableItem.room.roomTheme.primaryColor)
+                            .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
                         Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                             .textStyle(.labelMedium)
-                            .foregroundColor(timetableItem.room.roomTheme.primaryColor)
+                            .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
                         Spacer()
                     }
                     
                     Text(timetableItem.title.currentLangTitle)
                         .textStyle(.titleMedium)
-                        .foregroundColor(timetableItem.room.roomTheme.primaryColor)
+                        .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
                         .multilineTextAlignment(.leading)
                     
                     Spacer()
