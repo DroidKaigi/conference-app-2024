@@ -46,12 +46,13 @@ androidxLifecycleProcess = "2.8.4"
 skie = "0.8.4"
 composablePreviewScanner = "0.1.3"
 coil = "3.0.0-alpha10"
+peekaboo = "0.5.2"
 
 [libraries]
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 composeJbGradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "composeMultiplatform" }
-composeCompiler = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-embeddable", version.ref = "kotlin" }
+composeCompilerGradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
 hiltGradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger" }
 roborazziGradlePlugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "roborazzi" }
 kspGradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
@@ -117,6 +118,7 @@ rin = { module = "io.github.takahirom.rin:rin", version.ref = "rin" }
 lottieCompose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version = "1.6.8" }
 haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
+peekabooImagePicker = { group = "io.github.onseok", name = "peekaboo-image-picker", version.ref = "peekaboo" }
 
 androidxFragment = { module = "androidx.fragment:fragment", version.ref = "androidxFragment" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -194,7 +196,7 @@ ossLicensesPlugin = { id = "com.google.android.gms.oss-licenses-plugin", version
 plugins = [
     "androidGradlePlugin",
     "kotlinGradlePlugin",
-    "composeCompiler",
+    "composeCompilerGradlePlugin",
     "hiltGradlePlugin",
     "composeJbGradlePlugin",
     "roborazziGradlePlugin",

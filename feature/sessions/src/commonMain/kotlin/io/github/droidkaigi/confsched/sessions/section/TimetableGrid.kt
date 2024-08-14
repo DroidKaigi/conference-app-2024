@@ -142,7 +142,10 @@ fun TimetableGrid(
             timetableState = timetableState,
             coroutineScope = coroutineScope,
         ) { hour ->
-            HoursItem(hour = hour)
+            HoursItem(
+                hour = hour,
+                modifier = Modifier.padding(end = 8.dp),
+            )
         }
         Column {
             TimetableGridRooms(
