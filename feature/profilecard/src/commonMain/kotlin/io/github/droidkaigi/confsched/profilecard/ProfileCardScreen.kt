@@ -39,6 +39,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -225,67 +226,12 @@ internal fun EditScreen(
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
 
-    val nicknameValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.nickname),
+    val (nicknameError, occupationError, linkError, imageError) = rememberValidationErrors(
+        nickname,
+        occupation,
+        link,
+        image,
     )
-    val occupationValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.occupation),
-    )
-    val linkValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.link),
-    )
-    val imageValidationErrorString = stringResource(
-        ProfileCardRes.string.add_validate_format,
-        stringResource(ProfileCardRes.string.image),
-    )
-
-    val nicknameError by remember {
-        derivedStateOf {
-            mutableStateOf(
-                if (nickname.isNotEmpty()) {
-                    ""
-                } else {
-                    nicknameValidationErrorString
-                }
-            )
-        }
-    }
-    val occupationError by remember {
-        derivedStateOf {
-            mutableStateOf(
-                if (occupation.isNotEmpty()) {
-                    ""
-                } else {
-                    occupationValidationErrorString
-                }
-            )
-        }
-    }
-    val linkError by remember {
-        derivedStateOf {
-            mutableStateOf(
-                if (link.isNotEmpty()) {
-                    ""
-                } else {
-                    linkValidationErrorString
-                }
-            )
-        }
-    }
-    val imageError by remember {
-        derivedStateOf {
-            mutableStateOf(
-                if (image != null) {
-                    ""
-                } else {
-                    imageValidationErrorString
-                }
-            )
-        }
-    }
 
     val isValidInputs by remember {
         derivedStateOf {
@@ -299,73 +245,34 @@ internal fun EditScreen(
             .padding(contentPadding),
     ) {
         Text("ProfileCardEdit")
-        TextFieldWithErrorTextColumn(
+        InputFieldWithError(
             value = nickname,
-            labelName = stringResource(ProfileCardRes.string.nickname),
-            errorMessage = nicknameError.value,
-            isError = nickname.isEmpty(),
-            onValueChange = {
-                nickname = it
-            },
+            labelString = stringResource(ProfileCardRes.string.nickname),
+            errorMessage = nicknameError,
+            onValueChange = { nickname = it },
             modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
         )
-        TextFieldWithErrorTextColumn(
+        InputFieldWithError(
             value = occupation,
-            labelName = stringResource(ProfileCardRes.string.occupation),
-            errorMessage = occupationError.value,
-            isError = occupation.isEmpty(),
-            onValueChange = {
-                occupation = it
-            },
+            labelString = stringResource(ProfileCardRes.string.occupation),
+            errorMessage = occupationError,
+            onValueChange = { occupation = it },
             modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
         )
-        TextFieldWithErrorTextColumn(
+        InputFieldWithError(
             value = link,
-            labelName = stringResource(ProfileCardRes.string.link),
-            isError = link.isEmpty(),
-            onValueChange = {
-                link = it
-            },
-            errorMessage = linkError.value,
+            labelString = stringResource(ProfileCardRes.string.link),
+            errorMessage = linkError,
+            onValueChange = { link = it },
             modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
-        Column {
-            Text(
-                text = stringResource(ProfileCardRes.string.image),
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(bottom = 20.dp)
-            )
-            image?.let {
-                Box {
-                    Image(
-                        bitmap = it,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(
-                                top = 24.dp,
-                                end = 24.dp,
-                            )
-                            .align(Alignment.BottomStart),
-                    )
-                    IconButton(
-                        onClick = { imageByteArray = null },
-                        modifier = Modifier
-                            .align(Alignment.TopEnd),
-                        colors = IconButtonDefaults
-                            .iconButtonColors()
-                            .copy(containerColor = Color(0xFF414849)),
-                    ) {
-                        Icon(Icons.Default.Close, null)
-                    }
-                }
-            } ?: run {
-                PhotoPickerButtonWithErrorTextColumn(
-                    onSelectedImage = { imageByteArray = it },
-                    errorMessage = imageError.value,
-                    modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
-                )
-            }
-        }
+        ImagePickerWithError(
+            image = image,
+            onSelectedImage = { imageByteArray = it },
+            errorMessage = imageError,
+            onClearImage = { imageByteArray = null },
+            modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+        )
         Button(
             onClick = {
                 onClickCreate(
@@ -391,6 +298,138 @@ private fun ByteArray.toBase64(): String = Base64.encode(this)
 
 @OptIn(ExperimentalEncodingApi::class)
 private fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
+
+@Composable
+private fun rememberValidationErrors(
+    nickname: String,
+    occupation: String,
+    link: String,
+    image: ImageBitmap?,
+): List<String> {
+    val nicknameValidationErrorString = stringResource(
+        ProfileCardRes.string.enter_validate_format,
+        stringResource(ProfileCardRes.string.nickname),
+    )
+    val occupationValidationErrorString = stringResource(
+        ProfileCardRes.string.enter_validate_format,
+        stringResource(ProfileCardRes.string.occupation),
+    )
+    val linkValidationErrorString = stringResource(
+        ProfileCardRes.string.enter_validate_format,
+        stringResource(ProfileCardRes.string.link),
+    )
+    val imageValidationErrorString = stringResource(
+        ProfileCardRes.string.add_validate_format,
+        stringResource(ProfileCardRes.string.image),
+    )
+
+    return remember(nickname, occupation, link, image) {
+        val nicknameError = if (nickname.isEmpty()) nicknameValidationErrorString else ""
+        val occupationError = if (occupation.isEmpty()) occupationValidationErrorString else ""
+        val linkError = if (link.isEmpty()) linkValidationErrorString else ""
+        val imageError = if (image == null) imageValidationErrorString else ""
+        listOf(nicknameError, occupationError, linkError, imageError)
+    }
+}
+
+@Composable
+private fun InputFieldWithError(
+    value: String,
+    labelString: String,
+    errorMessage: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        val isError = value.isEmpty()
+        val indicatorColor = if (isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+
+        Text(
+            text = labelString,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        TextField(
+            value = value,
+            textStyle = MaterialTheme.typography.bodyLarge,
+            onValueChange = onValueChange,
+            isError = isError,
+            modifier = Modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.colors(
+                focusedIndicatorColor = indicatorColor,
+                unfocusedIndicatorColor = indicatorColor,
+                errorIndicatorColor = MaterialTheme.colorScheme.error,
+            )
+        )
+        if (errorMessage.isNotEmpty()) {
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(
+                    start = 16.dp,
+                    top = 4.dp,
+                    end = 16.dp,
+                )
+            )
+        }
+    }
+}
+
+@Composable
+private fun ImagePickerWithError(
+    image: ImageBitmap?,
+    onSelectedImage: (ByteArray) -> Unit,
+    errorMessage: String,
+    onClearImage: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
+        Text(
+            text = stringResource(ProfileCardRes.string.image),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 20.dp)
+        )
+        if (image != null) {
+            Box {
+                Image(
+                    bitmap = image,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .padding(
+                            top = 24.dp,
+                            end = 24.dp,
+                        )
+                        .align(Alignment.BottomStart),
+                )
+                IconButton(
+                    onClick = onClearImage,
+                    modifier = Modifier.align(Alignment.TopEnd),
+                    colors = IconButtonDefaults
+                        .iconButtonColors()
+                        .copy(containerColor = Color(0xFF414849)),
+                ) {
+                    Icon(Icons.Default.Close, null)
+                }
+            }
+        } else {
+            PhotoPickerButton(
+                onSelectedImage = onSelectedImage,
+                modifier = Modifier.padding(bottom = 20.dp),
+            ) {
+                Text(stringResource(ProfileCardRes.string.add_image))
+            }
+            if (errorMessage.isNotEmpty()) {
+                Text(
+                    text = errorMessage,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+            }
+        }
+    }
+}
 
 @Composable
 internal fun CardScreen(
@@ -454,78 +493,6 @@ internal fun CardScreen(
                         .testTag(ProfileCardEditButtonTestTag),
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun TextFieldWithErrorTextColumn(
-    value: String,
-    labelName: String,
-    errorMessage: String,
-    isError: Boolean,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier) {
-        val indicatorColor = if (isError) {
-            MaterialTheme.colorScheme.error
-        } else {
-            MaterialTheme.colorScheme.onSurface
-        }
-        Text(
-            text = labelName,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
-        TextField(
-            value = value,
-            textStyle = MaterialTheme.typography.bodyLarge,
-            onValueChange = onValueChange,
-            isError = isError,
-            modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                focusedIndicatorColor = indicatorColor,
-                unfocusedIndicatorColor = indicatorColor,
-                errorIndicatorColor = MaterialTheme.colorScheme.error,
-            )
-        )
-        if (errorMessage.isNotEmpty()) {
-            Text(
-                text = errorMessage,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .padding(
-                        start = 16.dp,
-                        top = 4.dp,
-                        end = 16.dp,
-                    )
-            )
-        }
-    }
-}
-
-@Composable
-private fun PhotoPickerButtonWithErrorTextColumn(
-    onSelectedImage: (ByteArray) -> Unit,
-    errorMessage: String,
-    modifier: Modifier = Modifier,
-) {
-    Column(modifier = modifier) {
-        PhotoPickerButton(
-            onSelectedImage = { onSelectedImage(it) },
-            modifier = Modifier.padding(bottom = 20.dp),
-        ) {
-            Text(stringResource(ProfileCardRes.string.add_image))
-        }
-        if (errorMessage.isNotEmpty()) {
-            Text(
-                text = errorMessage,
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(bottom = 12.dp)
-            )
         }
     }
 }
