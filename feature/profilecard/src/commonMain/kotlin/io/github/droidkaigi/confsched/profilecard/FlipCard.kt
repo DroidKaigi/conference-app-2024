@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ internal fun FlipCard(
             easing = FastOutSlowInEasing,
         ),
     )
+    val isBack by remember { derivedStateOf { rotation > 90f } }
     val targetRotation by animateFloatAsState(
         targetValue = 30f,
         animationSpec = tween(
@@ -88,7 +90,7 @@ internal fun FlipCard(
             colors = CardDefaults.cardColors(containerColor = LocalProfileCardScreenTheme.current.containerColor),
             elevation = CardDefaults.cardElevation(10.dp),
         ) {
-            if (isFlipped) { // Back
+            if (isBack) { // Back
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
