@@ -119,7 +119,7 @@ private fun KaigiNavHost(
                     onLinkClick = externalNavController::navigate,
                     onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
                     onShareClick = externalNavController::onShareClick,
-                    onFavoriteListClick = { navController.navigate(favoritesScreenRoute) }
+                    onFavoriteListClick = { navController.navigate(favoritesScreenRoute) },
                 )
 
                 contributorsScreens(

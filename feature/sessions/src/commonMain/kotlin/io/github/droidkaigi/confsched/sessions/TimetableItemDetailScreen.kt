@@ -72,7 +72,7 @@ fun NavGraphBuilder.sessionScreens(
                 onLinkClick = onLinkClick,
                 onCalendarRegistrationClick = onCalendarRegistrationClick,
                 onShareClick = onShareClick,
-                onFavoriteListClick = onFavoriteListClick
+                onFavoriteListClick = onFavoriteListClick,
             )
         }
     }
@@ -94,7 +94,7 @@ fun TimetableItemDetailScreen(
     eventEmitter: EventEmitter<TimetableItemDetailEvent> = rememberEventEmitter(),
     uiState: TimetableItemDetailScreenUiState = timetableItemDetailPresenter(
         events = eventEmitter,
-        onFavoriteListClick = onFavoriteListClick
+        onFavoriteListClick = onFavoriteListClick,
     ),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
