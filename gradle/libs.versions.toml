@@ -52,7 +52,7 @@ peekaboo = "0.5.2"
 androidGradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 kotlinGradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 composeJbGradlePlugin = { group = "org.jetbrains.compose", name = "compose-gradle-plugin", version.ref = "composeMultiplatform" }
-composeCompiler = { group = "org.jetbrains.kotlin", name = "kotlin-compiler-embeddable", version.ref = "kotlin" }
+composeCompilerGradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
 hiltGradlePlugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin", version.ref = "dagger" }
 roborazziGradlePlugin = { group = "io.github.takahirom.roborazzi", name = "roborazzi-gradle-plugin", version.ref = "roborazzi" }
 kspGradlePlugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
@@ -196,7 +196,7 @@ ossLicensesPlugin = { id = "com.google.android.gms.oss-licenses-plugin", version
 plugins = [
     "androidGradlePlugin",
     "kotlinGradlePlugin",
-    "composeCompiler",
+    "composeCompilerGradlePlugin",
     "hiltGradlePlugin",
     "composeJbGradlePlugin",
     "roborazziGradlePlugin",
