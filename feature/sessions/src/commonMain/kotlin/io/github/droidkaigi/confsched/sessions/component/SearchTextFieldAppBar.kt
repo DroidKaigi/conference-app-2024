@@ -18,9 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val SearchTextFieldAppBarTextFieldTestTag = "SearchTextFieldAppBarTextField"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +54,9 @@ fun SearchTextFieldAppBar(
                         focusManager.clearFocus()
                     },
                 ),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(SearchTextFieldAppBarTextFieldTestTag),
             )
         },
         actions = {

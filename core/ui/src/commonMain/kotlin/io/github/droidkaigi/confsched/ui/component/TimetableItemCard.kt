@@ -49,6 +49,7 @@ import org.jetbrains.compose.resources.stringResource
 const val TimetableItemCardBookmarkButtonTestTag = "TimetableItemCardBookmarkButton"
 const val TimetableItemCardBookmarkedIconTestTag = "TimetableItemCardBookmarkedIcon"
 const val TimetableItemCardTestTag = "TimetableListItem"
+const val TimetableItemCardTitleTextTestTag = "TimetableItemCardTitleText"
 
 @Composable
 fun TimetableItemCard(
@@ -97,7 +98,7 @@ fun TimetableItemCard(
                     text = annotatedTitleString,
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier
-                        .testTag(TimetableItemCardTestTag)
+                        .testTag(TimetableItemCardTitleTextTestTag)
                         .padding(top = 8.dp),
                 )
                 if (timetableItem.speakers.isNotEmpty()) {
