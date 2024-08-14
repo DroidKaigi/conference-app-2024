@@ -155,7 +155,7 @@ private fun TimetableItemDetailScreen(
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val animatedScope = LocalAnimatedVisibilityScope.current
 
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
         modifier = Modifier
             .fillMaxSize()
