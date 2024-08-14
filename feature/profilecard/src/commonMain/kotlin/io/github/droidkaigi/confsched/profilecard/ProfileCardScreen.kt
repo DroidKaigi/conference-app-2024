@@ -299,7 +299,7 @@ internal fun EditScreen(
             .padding(contentPadding),
     ) {
         Text("ProfileCardEdit")
-        ValidationTextField(
+        TextFieldWithErrorTextColumn(
             value = nickname,
             labelName = stringResource(ProfileCardRes.string.nickname),
             errorMessage = nicknameError.value,
@@ -309,7 +309,7 @@ internal fun EditScreen(
             },
             modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
         )
-        ValidationTextField(
+        TextFieldWithErrorTextColumn(
             value = occupation,
             labelName = stringResource(ProfileCardRes.string.occupation),
             errorMessage = occupationError.value,
@@ -319,7 +319,7 @@ internal fun EditScreen(
             },
             modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
         )
-        ValidationTextField(
+        TextFieldWithErrorTextColumn(
             value = link,
             labelName = stringResource(ProfileCardRes.string.link),
             isError = link.isEmpty(),
@@ -359,7 +359,7 @@ internal fun EditScreen(
                     }
                 }
             } ?: run {
-                ValidationPhotoPickerButton(
+                PhotoPickerButtonWithErrorTextColumn(
                     onSelectedImage = { imageByteArray = it },
                     errorMessage = imageError.value,
                     modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
@@ -459,7 +459,7 @@ internal fun CardScreen(
 }
 
 @Composable
-private fun ValidationTextField(
+private fun TextFieldWithErrorTextColumn(
     value: String,
     labelName: String,
     errorMessage: String,
@@ -507,7 +507,7 @@ private fun ValidationTextField(
 }
 
 @Composable
-private fun ValidationPhotoPickerButton(
+private fun PhotoPickerButtonWithErrorTextColumn(
     onSelectedImage: (ByteArray) -> Unit,
     errorMessage: String,
     modifier: Modifier = Modifier,
