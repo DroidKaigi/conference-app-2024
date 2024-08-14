@@ -9,7 +9,7 @@ sealed interface ProfileCard {
         val nickname: String,
         val occupation: String,
         val link: String,
-        val image: String?, // TODO to non-null
+        val image: String,
         val theme: ProfileCardTheme,
     ) : ProfileCard
 }
