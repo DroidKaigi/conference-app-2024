@@ -41,7 +41,7 @@ struct KeyVisual: View {
                     Text(String(localized: "KeyVisualPlaceValue", bundle: .module))
                         .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                         .textStyle(.titleSmall)
-                    Link(destination: URL(string: "https://2024.droidkaigi.jp/")!) {
+                    Link(destination: URL(string: "https://goo.gl/maps/vv9sE19JvRjYKtSP9")!) {
                         Text(String(localized: "KeyVisualCheckMap", bundle: .module))
                             .textStyle(.titleSmall)
                             .foregroundStyle(AssetColors.Custom.jellyfish.swiftUIColor)
