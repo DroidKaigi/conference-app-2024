@@ -48,8 +48,10 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
+import conference_app_2024.feature.profilecard.generated.resources.add_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.enter_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
+import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
 import conference_app_2024.feature.profilecard.generated.resources.nickname
 import conference_app_2024.feature.profilecard.generated.resources.occupation
@@ -100,7 +102,7 @@ internal sealed interface ProfileCardUiState {
         val nickname: String = "",
         val occupation: String = "",
         val link: String = "",
-        val image: String? = null, // TODO to non-null
+        val image: String? = null,
         val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
     ) : ProfileCardUiState
 
@@ -108,7 +110,7 @@ internal sealed interface ProfileCardUiState {
         val nickname: String,
         val occupation: String,
         val link: String,
-        val image: String?, // TODO to non-null
+        val image: String,
         val theme: ProfileCardTheme,
     ) : ProfileCardUiState
 }
@@ -235,6 +237,10 @@ internal fun EditScreen(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.link),
     )
+    val imageValidationErrorString = stringResource(
+        ProfileCardRes.string.add_validate_format,
+        stringResource(ProfileCardRes.string.image),
+    )
 
     val nicknameError by remember {
         derivedStateOf {
@@ -269,10 +275,21 @@ internal fun EditScreen(
             )
         }
     }
+    val imageError by remember {
+        derivedStateOf {
+            mutableStateOf(
+                if (image != null) {
+                    ""
+                } else {
+                    imageValidationErrorString
+                }
+            )
+        }
+    }
 
     val isValidInputs by remember {
         derivedStateOf {
-            nickname.isNotEmpty() && occupation.isNotEmpty() && link.isNotEmpty()
+            nickname.isNotEmpty() && occupation.isNotEmpty() && link.isNotEmpty() && image != null
         }
     }
 
@@ -312,34 +329,41 @@ internal fun EditScreen(
             errorMessage = linkError.value,
             modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
-        PhotoPickerButton(
-            onSelectedImage = { imageByteArray = it },
-            modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
-        ) {
-            Text(stringResource(ProfileCardRes.string.add_image))
-        }
-        image?.let {
-            Box {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(
-                            top = 24.dp,
-                            end = 24.dp,
-                        )
-                        .align(Alignment.BottomStart),
-                )
-                IconButton(
-                    onClick = { imageByteArray = null },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd),
-                    colors = IconButtonDefaults
-                        .iconButtonColors()
-                        .copy(containerColor = Color(0xFF414849)),
-                ) {
-                    Icon(Icons.Default.Close, null)
+        Column {
+            Text(
+                text = stringResource(ProfileCardRes.string.image),
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.padding(bottom = 20.dp)
+            )
+            image?.let {
+                Box {
+                    Image(
+                        bitmap = it,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .padding(
+                                top = 24.dp,
+                                end = 24.dp,
+                            )
+                            .align(Alignment.BottomStart),
+                    )
+                    IconButton(
+                        onClick = { imageByteArray = null },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd),
+                        colors = IconButtonDefaults
+                            .iconButtonColors()
+                            .copy(containerColor = Color(0xFF414849)),
+                    ) {
+                        Icon(Icons.Default.Close, null)
+                    }
                 }
+            } ?: run {
+                ValidationPhotoPickerButton(
+                    onSelectedImage = { imageByteArray = it },
+                    errorMessage = imageError.value,
+                    modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+                )
             }
         }
         Button(
@@ -349,7 +373,7 @@ internal fun EditScreen(
                         nickname = nickname,
                         occupation = occupation,
                         link = link,
-                        image = imageByteArray?.toBase64(),
+                        image = imageByteArray?.toBase64() ?: "",
                         theme = uiState.theme,
                     ),
                 )
