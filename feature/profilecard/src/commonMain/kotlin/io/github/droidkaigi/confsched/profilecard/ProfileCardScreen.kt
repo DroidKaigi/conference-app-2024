@@ -30,6 +30,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -214,6 +215,7 @@ internal fun EditScreen(
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
+    val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
 
     Column(
         modifier = modifier
@@ -245,11 +247,11 @@ internal fun EditScreen(
         ) {
             Text("画像を選択")
         }
-        imageByteArray?.let {
+        image?.let {
             Box {
                 Image(
-                    it.toImageBitmap(),
-                    null,
+                    bitmap = it,
+                    contentDescription = null,
                     modifier = Modifier
                         .padding(
                             top = 24.dp,
