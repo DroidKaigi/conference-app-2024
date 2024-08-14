@@ -61,6 +61,7 @@ fun NavGraphBuilder.sessionScreens(
     onLinkClick: (url: String) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
+    onFavoriteListClick: () -> Unit,
 ) {
     composable<TimetableItemDetailDestination> {
         CompositionLocalProvider(
@@ -71,6 +72,7 @@ fun NavGraphBuilder.sessionScreens(
                 onLinkClick = onLinkClick,
                 onCalendarRegistrationClick = onCalendarRegistrationClick,
                 onShareClick = onShareClick,
+                onFavoriteListClick = onFavoriteListClick
             )
         }
     }
@@ -88,9 +90,11 @@ fun TimetableItemDetailScreen(
     onLinkClick: (url: String) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
+    onFavoriteListClick: () -> Unit,
     eventEmitter: EventEmitter<TimetableItemDetailEvent> = rememberEventEmitter(),
     uiState: TimetableItemDetailScreenUiState = timetableItemDetailPresenter(
         events = eventEmitter,
+        onFavoriteListClick = onFavoriteListClick
     ),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -287,4 +291,5 @@ fun TimetableItemDetailScreenPreview() {
     }
 }
 
-internal fun timetableDetailSharedContentStateKey(timetableItemId: TimetableItemId) = "timetable-item-${timetableItemId.value}"
+internal fun timetableDetailSharedContentStateKey(timetableItemId: TimetableItemId) =
+    "timetable-item-${timetableItemId.value}"

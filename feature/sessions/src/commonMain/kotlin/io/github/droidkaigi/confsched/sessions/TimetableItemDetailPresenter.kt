@@ -18,9 +18,9 @@ import io.github.droidkaigi.confsched.model.TimetableSessionType.NORMAL
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.Bookmark
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDescriptionLanguage
-import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.ViewBookmarkListRequestCompleted
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
+import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.droidkaigi.confsched.ui.rememberNavigationArgument
 import kotlinx.coroutines.flow.SharedFlow
@@ -29,12 +29,12 @@ import org.jetbrains.compose.resources.stringResource
 sealed interface TimetableItemDetailEvent {
     data class Bookmark(val timetableItem: TimetableItem) : TimetableItemDetailEvent
     data class SelectDescriptionLanguage(val language: Lang) : TimetableItemDetailEvent
-    data object ViewBookmarkListRequestCompleted : TimetableItemDetailEvent
 }
 
 @Composable
 fun timetableItemDetailPresenter(
     events: SharedFlow<TimetableItemDetailEvent>,
+    onFavoriteListClick: () -> Unit,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
     timetableItemIdArg: String = rememberNavigationArgument(
         key = timetableItemDetailScreenRouteItemIdParameterName,
@@ -60,15 +60,15 @@ fun timetableItemDetailPresenter(
                     sessionsRepository.toggleBookmark(timetableItem.id)
                     val oldBookmarked = timetableItemWithBookmark.second
                     if (!oldBookmarked) {
-                        userMessageStateHolder.showMessage(
+                        val result = userMessageStateHolder.showMessage(
                             message = bookmarkedSuccessfullyString,
                             actionLabel = viewBookmarkListString,
                             duration = Short,
                         )
+                        if (result == ActionPerformed) {
+                            onFavoriteListClick()
+                        }
                     }
-                }
-
-                is ViewBookmarkListRequestCompleted -> {
                 }
 
                 is SelectDescriptionLanguage -> {
