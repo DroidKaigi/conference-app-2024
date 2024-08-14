@@ -171,6 +171,7 @@ fun SearchScreen(
 
                 is SearchScreenUiState.SearchList -> SearchList(
                     uiState = uiState.timetableListUiState,
+                    highlightWord = uiState.searchWord,
                     onBookmarkClick = { timetableItem, _ -> onTimetableItemBookmark(timetableItem) },
                     onTimetableItemClick = onTimetableItemClick,
                 )

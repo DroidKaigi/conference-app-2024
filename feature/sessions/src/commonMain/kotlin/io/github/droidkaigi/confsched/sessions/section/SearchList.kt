@@ -9,6 +9,7 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 @Composable
 fun SearchList(
     uiState: TimetableListUiState,
+    highlightWord: String,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
     modifier: Modifier = Modifier,
@@ -19,6 +20,7 @@ fun SearchList(
         onBookmarkClick = onBookmarkClick,
         onTimetableItemClick = onTimetableItemClick,
         contentPadding = PaddingValues(),
+        highlightWord = highlightWord,
         modifier = modifier,
     )
 }
