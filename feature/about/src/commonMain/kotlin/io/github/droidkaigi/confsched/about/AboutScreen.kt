@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.about
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -68,6 +69,7 @@ fun AboutScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
+    val lazyListState = rememberLazyListState()
 
     Scaffold(
         modifier = modifier.testTag(AboutScreenTestTag.Screen),
@@ -88,9 +90,11 @@ fun AboutScreen(
         LazyColumn(
             Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             contentPadding = padding,
+            state = lazyListState,
         ) {
             item {
                 AboutDroidKaigiDetail(
+                    state = lazyListState,
                     onViewMapClick = {
                         onAboutItemClick(AboutItem.Map)
                     },
