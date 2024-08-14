@@ -1,0 +1,25 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "|" : {
+
+    },
+    "AddFavorite" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ブックマークに追加されました"
+          }
+        }
+      }
+    },
+    "Grid view placeholder" : {
+
+    },
+    "Timetable" : {
+
+    }
+  },
+  "version" : "1.0"
+}
