@@ -3,6 +3,7 @@ plugins {
     id("droidkaigi.primitive.kmp.android")
     id("droidkaigi.primitive.kmp.ios")
     id("droidkaigi.primitive.kmp.compose")
+    id("droidkaigi.primitive.kmp.desktop")
     id("droidkaigi.primitive.kmp.android.hilt")
     id("droidkaigi.primitive.kmp.roborazzi")
     id("droidkaigi.primitive.detekt")

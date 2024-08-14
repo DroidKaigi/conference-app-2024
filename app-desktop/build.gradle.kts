@@ -6,9 +6,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.kotlinxCoroutinesCore)
+                implementation(projects.core.designsystem)
                 implementation(compose.ui)
-                implementation(compose.components.uiToolingPreview)
             }
         }
         desktopMain {
