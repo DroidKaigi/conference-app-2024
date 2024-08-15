@@ -3,4 +3,5 @@
     <string name="bookmarked">ブックマーク済み</string>
     <string name="not_bookmarked">ブックマークされていません</string>
     <string name="image">画像</string>
+    <string name="connection_failed">接続に失敗しました、ネットワーク設定を確認してください。</string>
 </resources>
