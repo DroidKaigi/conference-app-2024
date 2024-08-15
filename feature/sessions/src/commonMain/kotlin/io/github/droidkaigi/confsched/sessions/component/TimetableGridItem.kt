@@ -70,6 +70,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.toInstant
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.ceil
 import kotlin.math.roundToInt
@@ -162,7 +163,7 @@ fun TimetableGridItem(
                     ) {
                         Icon(
                             modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
-                            imageVector = timetableItem.room.icon,
+                            imageVector = vectorResource(checkNotNull(timetableItem.room.icon)),
                             contentDescription = timetableItem.room.name.currentLangTitle,
                             tint = LocalRoomTheme.current.primaryColor,
                         )
