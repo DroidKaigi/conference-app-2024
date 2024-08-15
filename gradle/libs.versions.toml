@@ -8,6 +8,8 @@ kotlin = "2.0.10"
 androidxCore = "1.13.1"
 androidDesugarJdkLibs = "2.0.4"
 compose = "2024.06.00"
+# Confirm that the Compose for Desktop app is available to launch when update this version number.
+# https://youtrack.jetbrains.com/issue/CMP-5077/Compose-navigation-crash-v2.8.0-alpha08-UnsatisfiedLinkError
 composeMultiplatform = "1.7.0-alpha02"
 rin = "0.1.0"
 composeInvestigator = "1.5.10-0.2.1"
