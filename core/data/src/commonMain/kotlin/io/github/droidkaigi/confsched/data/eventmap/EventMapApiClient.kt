@@ -56,7 +56,7 @@ public fun EventMapResponse.toEventMapList(): PersistentList<EventMapEvent> {
                         enTitle = event.i18nDesc.en,
                     ),
                     moreDetailsUrl = event.moreDetailsUrl,
-                    message = event.message.toMultiLangText(),
+                    message = event.message?.toMultiLangText(),
                 )
             }
         }

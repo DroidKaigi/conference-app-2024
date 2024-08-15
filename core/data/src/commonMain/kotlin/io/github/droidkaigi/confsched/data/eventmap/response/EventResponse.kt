@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 public data class EventResponse(
     val i18nDesc: I18nDescResponse,
     val id: String,
-    val message: MessageResponse,
+    val message: MessageResponse?,
     val moreDetailsUrl: String?,
     val noShow: Boolean,
     val roomId: Int,
