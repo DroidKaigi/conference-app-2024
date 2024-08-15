@@ -22,10 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
@@ -52,6 +48,7 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.model.getDefaultLocale
 import io.github.droidkaigi.confsched.model.nameAndFloor
 import io.github.droidkaigi.confsched.sessions.SessionsRes
+import io.github.droidkaigi.confsched.ui.dashedRoundRect
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -71,16 +68,7 @@ fun TimetableItemDetailSummaryCard(
                 top = 16.dp,
                 bottom = 8.dp,
             )
-            .drawBehind {
-                drawRoundRect(
-                    color = primaryColor,
-                    style = Stroke(
-                        width = 2f,
-                        pathEffect = PathEffect.dashPathEffect(floatArrayOf(5f, 5f), 0f),
-                    ),
-                    cornerRadius = CornerRadius(4.dp.toPx()),
-                )
-            }
+            .dashedRoundRect(primaryColor)
             .padding(12.dp),
     ) {
         SummaryCardText(

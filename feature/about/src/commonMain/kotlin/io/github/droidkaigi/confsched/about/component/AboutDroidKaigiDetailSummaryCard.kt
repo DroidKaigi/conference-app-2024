@@ -14,10 +14,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.geometry.CornerRadius
-import androidx.compose.ui.graphics.PathEffect
-import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.date_description
 import conference_app_2024.feature.about.generated.resources.date_title
@@ -26,6 +22,7 @@ import conference_app_2024.feature.about.generated.resources.place_link
 import conference_app_2024.feature.about.generated.resources.place_title
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.ui.dashedRoundRect
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -39,21 +36,7 @@ fun AboutDroidKaigiDetailSummaryCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainerLow),
-        modifier = modifier
-            .drawBehind {
-                val strokeWidth = 1.dp.toPx()
-                val dashSize = 2.dp.toPx()
-                val pathEffect = PathEffect.dashPathEffect(floatArrayOf(dashSize, dashSize))
-
-                drawRoundRect(
-                    color = borderColor,
-                    style = Stroke(
-                        width = strokeWidth,
-                        pathEffect = pathEffect,
-                    ),
-                    cornerRadius = CornerRadius(4.dp.toPx()),
-                )
-            },
+        modifier = modifier.dashedRoundRect(color = borderColor),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),
