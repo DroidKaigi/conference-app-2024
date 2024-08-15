@@ -71,6 +71,14 @@ fun EventMapItem(
                 style = MaterialTheme.typography.bodyLarge,
                 color = Color.White.copy(alpha = 0.7F),
             )
+            eventMapEvent.message?.let {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = it.currentLangTitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+            }
             eventMapEvent.moreDetailsUrl?.let {
                 Spacer(Modifier.height(height = 8.dp))
                 OutlinedButton(
