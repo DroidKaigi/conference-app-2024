@@ -57,6 +57,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -470,12 +471,14 @@ private fun ThemeImage(
         put(ProfileCardTheme.Jellyfish, Color(0xFF6FD7F8))
         put(ProfileCardTheme.None, Color.White)
     }
+    val selectedBorderColor = MaterialTheme.colorScheme.surfaceTint
+    val painter = rememberVectorPainter(Icons.Default.Check)
 
     Image(
         painter = painterResource(ProfileCardRes.drawable.theme),
         contentDescription = null,
         modifier = modifier
-            .selectedBorder(isSelected)
+            .selectedBorder(isSelected, selectedBorderColor, painter)
             .clip(RoundedCornerShape(2.dp))
             .background(colorMap[theme]!!)
             .clickable { onClickImage(theme) }
@@ -483,42 +486,40 @@ private fun ThemeImage(
     )
 }
 
-@Composable
-fun Modifier.selectedBorder(isSelected: Boolean): Modifier {
-    val selectedBorderColor = MaterialTheme.colorScheme.surfaceTint
-    val painter = rememberVectorPainter(Icons.Default.Check)
-
-    return if (isSelected) {
-        drawWithContent {
-            drawRoundRect(
-                color = selectedBorderColor,
-                size = size,
-                cornerRadius = CornerRadius(2.dp.toPx()),
-                style = Stroke(8.dp.toPx(), cap = StrokeCap.Round),
-            )
-            drawContent()
-            drawPath(
-                color = selectedBorderColor,
-                path = Path().apply {
-                    moveTo(size.width, 0f)
-                    lineTo(size.width - 44.dp.toPx(), 0f)
-                    lineTo(size.width, 44.dp.toPx())
-                },
-            )
-            drawCircle(
-                color = Color.White,
-                center = Offset(size.width - 12.dp.toPx(), 13.dp.toPx()),
-                radius = 10.dp.toPx(),
-            )
-            translate(left = size.width - 20.dp.toPx(), top = 5.dp.toPx()) {
-                with(painter) {
-                    draw(size = Size(16.dp.toPx(), 16.dp.toPx()))
-                }
+fun Modifier.selectedBorder(
+    isSelected: Boolean,
+    selectedBorderColor: Color,
+    vectorPainter: VectorPainter,
+): Modifier = if (isSelected) {
+    drawWithContent {
+        drawRoundRect(
+            color = selectedBorderColor,
+            size = size,
+            cornerRadius = CornerRadius(2.dp.toPx()),
+            style = Stroke(8.dp.toPx(), cap = StrokeCap.Round),
+        )
+        drawContent()
+        drawPath(
+            color = selectedBorderColor,
+            path = Path().apply {
+                moveTo(size.width, 0f)
+                lineTo(size.width - 44.dp.toPx(), 0f)
+                lineTo(size.width, 44.dp.toPx())
+            },
+        )
+        drawCircle(
+            color = Color.White,
+            center = Offset(size.width - 12.dp.toPx(), 13.dp.toPx()),
+            radius = 10.dp.toPx(),
+        )
+        translate(left = size.width - 20.dp.toPx(), top = 5.dp.toPx()) {
+            with(vectorPainter) {
+                draw(size = Size(16.dp.toPx(), 16.dp.toPx()))
             }
         }
-    } else {
-        this
     }
+} else {
+    this
 }
 
 @OptIn(ExperimentalEncodingApi::class)
