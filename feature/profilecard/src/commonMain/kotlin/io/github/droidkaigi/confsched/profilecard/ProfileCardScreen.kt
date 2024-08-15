@@ -103,6 +103,7 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 const val profileCardScreenRoute = "profilecard"
 
 const val ProfileCardEditScreenTestTag = "ProfileCardEditScreenTestTag"
+const val ProfileCardEditScreenColumnTestTag = "ProfileCardEditScreenColumnTestTag"
 const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
 const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
 const val ProfileCardLinkTextFieldTestTag = "ProfileCardLinkTextFieldTestTag"
@@ -287,7 +288,8 @@ internal fun EditScreen(
                 .verticalScroll(rememberScrollState())
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(padding)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .testTag(ProfileCardEditScreenColumnTestTag),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Text(stringResource(ProfileCardRes.string.profile_card_edit_description))

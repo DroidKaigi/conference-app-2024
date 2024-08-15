@@ -12,6 +12,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.profilecard.ProfileCardCardScreenTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardCreateButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditButtonTestTag
+import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenColumnTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardLinkTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardNicknameTextFieldTestTag
@@ -64,7 +65,7 @@ class ProfileCardScreenRobot @Inject constructor(
         testTag: String,
     ) {
         composeTestRule
-            .onNode(hasTestTag(ProfileCardEditScreenTestTag))
+            .onNode(hasTestTag(ProfileCardEditScreenColumnTestTag))
             .performScrollToNode(hasTestTag(testTag))
         waitUntilIdle()
     }
