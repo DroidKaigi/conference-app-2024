@@ -56,6 +56,7 @@ import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -251,6 +252,7 @@ internal fun EditScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
+    var selectedTheme by remember { mutableStateOf(uiState.theme) }
 
     Scaffold(
         modifier = modifier.testTag(ProfileCardEditScreenTestTag).padding(contentPadding),
@@ -300,44 +302,46 @@ internal fun EditScreen(
                     isOptional = true,
                 )
 
-                PhotoPickerButton(
-                    onSelectedImage = { imageByteArray = it },
-                    modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
-                ) {
-                    Icon(Icons.Default.Add, null)
-                    Spacer(Modifier.width(8.dp))
-                    Text(stringResource(ProfileCardRes.string.add_image))
-                }
-            }
-
-            image?.let {
-                Box {
-                    Image(
-                        bitmap = it,
-                        contentDescription = null,
-                        modifier = Modifier
-                            .padding(
-                                top = 24.dp,
-                                end = 24.dp,
-                            )
-                            .align(Alignment.BottomStart),
-                    )
-                    IconButton(
-                        onClick = { imageByteArray = null },
-                        modifier = Modifier
-                            .align(Alignment.TopEnd),
-                        colors = IconButtonDefaults
-                            .iconButtonColors()
-                            .copy(containerColor = Color(0xFF414849)),
+                image?.let {
+                    Box(modifier = Modifier.size(120.dp)) {
+                        Image(
+                            bitmap = it,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(2.dp))
+                                .align(Alignment.BottomStart),
+                        )
+                        IconButton(
+                            onClick = { imageByteArray = null },
+                            modifier = Modifier
+                                .graphicsLayer {
+                                    translationX = 12.dp.toPx()
+                                    translationY = -12.dp.toPx()
+                                }
+                                .size(24.dp)
+                                .align(Alignment.TopEnd),
+                            colors = IconButtonDefaults
+                                .iconButtonColors()
+                                .copy(containerColor = Color(0xFF414849)),
+                        ) {
+                            Icon(Icons.Default.Close, null)
+                        }
+                    }
+                } ?: run {
+                    PhotoPickerButton(
+                        onSelectedImage = { imageByteArray = it },
+                        modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
                     ) {
-                        Icon(Icons.Default.Close, null)
+                        Icon(Icons.Default.Add, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(ProfileCardRes.string.add_image))
                     }
                 }
             }
 
             Text(stringResource(ProfileCardRes.string.select_theme))
 
-            ThemePiker(uiState.theme)
+            ThemePiker(selectedTheme = selectedTheme, onClickImage = { selectedTheme = it })
 
             Button(
                 onClick = {
@@ -424,7 +428,7 @@ internal fun OptionLabel() {
 }
 
 @Composable
-internal fun ThemePiker(selectedTheme: ProfileCardTheme) {
+internal fun ThemePiker(selectedTheme: ProfileCardTheme, onClickImage: (ProfileCardTheme) -> Unit) {
     val themes = ProfileCardTheme.entries.chunked(2)
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -434,6 +438,7 @@ internal fun ThemePiker(selectedTheme: ProfileCardTheme) {
                     ThemeImage(
                         modifier = Modifier.weight(1.0f),
                         isSelected = selectedTheme == it,
+                        onClickImage = onClickImage,
                         theme = it,
                     )
                 }
@@ -441,6 +446,7 @@ internal fun ThemePiker(selectedTheme: ProfileCardTheme) {
                     ThemeImage(
                         modifier = Modifier.weight(1.0f),
                         isSelected = selectedTheme == it,
+                        onClickImage = onClickImage,
                         theme = it,
                     )
                 }
@@ -454,6 +460,7 @@ private fun ThemeImage(
     isSelected: Boolean,
     theme: ProfileCardTheme,
     modifier: Modifier = Modifier,
+    onClickImage: (ProfileCardTheme) -> Unit,
 ) {
     val colorMap = buildMap {
         put(ProfileCardTheme.Iguana, Color(0xFFB4FF79))
@@ -463,50 +470,55 @@ private fun ThemeImage(
         put(ProfileCardTheme.Jellyfish, Color(0xFF6FD7F8))
         put(ProfileCardTheme.None, Color.White)
     }
-    val selectedBorderColor = MaterialTheme.colorScheme.surfaceTint
-    val painter = rememberVectorPainter(Icons.Default.Check)
 
     Image(
         painter = painterResource(ProfileCardRes.drawable.theme),
         contentDescription = null,
         modifier = modifier
-            .run {
-                if (isSelected) {
-                    drawWithContent {
-                        drawRoundRect(
-                            color = selectedBorderColor,
-                            size = size,
-                            cornerRadius = CornerRadius(6.dp.toPx()),
-                            style = Stroke(8.dp.toPx(), cap = StrokeCap.Round),
-                        )
-                        drawContent()
-                        drawPath(
-                            color = selectedBorderColor,
-                            path = Path().apply {
-                                moveTo(size.width, 0f)
-                                lineTo(size.width - 44.dp.toPx(), 0f)
-                                lineTo(size.width, 44.dp.toPx())
-                            },
-                        )
-                        drawCircle(
-                            color = Color.White,
-                            center = Offset(size.width - 12.dp.toPx(), 13.dp.toPx()),
-                            radius = 10.dp.toPx(),
-                        )
-                        translate(left = size.width - 20.dp.toPx(), top = 5.dp.toPx()) {
-                            with(painter) {
-                                draw(size = Size(16.dp.toPx(), 16.dp.toPx()))
-                            }
-                        }
-                    }
-                } else {
-                    this
-                }
-            }
-            .clip(RoundedCornerShape(10.dp))
+            .selectedBorder(isSelected)
+            .clip(RoundedCornerShape(2.dp))
             .background(colorMap[theme]!!)
+            .clickable { onClickImage(theme) }
             .padding(top = 36.dp, start = 30.dp, end = 30.dp, bottom = 36.dp),
     )
+}
+
+@Composable
+fun Modifier.selectedBorder(isSelected: Boolean): Modifier {
+    val selectedBorderColor = MaterialTheme.colorScheme.surfaceTint
+    val painter = rememberVectorPainter(Icons.Default.Check)
+
+    return if (isSelected) {
+        drawWithContent {
+            drawRoundRect(
+                color = selectedBorderColor,
+                size = size,
+                cornerRadius = CornerRadius(2.dp.toPx()),
+                style = Stroke(8.dp.toPx(), cap = StrokeCap.Round),
+            )
+            drawContent()
+            drawPath(
+                color = selectedBorderColor,
+                path = Path().apply {
+                    moveTo(size.width, 0f)
+                    lineTo(size.width - 44.dp.toPx(), 0f)
+                    lineTo(size.width, 44.dp.toPx())
+                },
+            )
+            drawCircle(
+                color = Color.White,
+                center = Offset(size.width - 12.dp.toPx(), 13.dp.toPx()),
+                radius = 10.dp.toPx(),
+            )
+            translate(left = size.width - 20.dp.toPx(), top = 5.dp.toPx()) {
+                with(painter) {
+                    draw(size = Size(16.dp.toPx(), 16.dp.toPx()))
+                }
+            }
+        }
+    } else {
+        this
+    }
 }
 
 @OptIn(ExperimentalEncodingApi::class)
