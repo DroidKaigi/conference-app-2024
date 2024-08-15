@@ -34,7 +34,6 @@ sealed interface TimetableItemDetailEvent {
 @Composable
 fun timetableItemDetailPresenter(
     events: SharedFlow<TimetableItemDetailEvent>,
-    onFavoriteListClick: () -> Unit,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
     timetableItemIdArg: String = rememberNavigationArgument(
         key = timetableItemDetailScreenRouteItemIdParameterName,
@@ -47,6 +46,7 @@ fun timetableItemDetailPresenter(
             .timetableItemWithBookmark(timetableItemId),
     )
     var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
+    var shouldGoToFavoriteList by remember { mutableStateOf(false) }
     val bookmarkedSuccessfullyString = stringResource(SessionsRes.string.bookmarked_successfully)
     val viewBookmarkListString = stringResource(SessionsRes.string.view_bookmark_list)
 
@@ -66,7 +66,7 @@ fun timetableItemDetailPresenter(
                             duration = Short,
                         )
                         if (result == ActionPerformed) {
-                            onFavoriteListClick()
+                            shouldGoToFavoriteList = true
                         }
                     }
                 }
@@ -95,5 +95,6 @@ fun timetableItemDetailPresenter(
         roomThemeKey = timetableItem.room.getThemeKey(),
         timetableItemId = timetableItemId,
         userMessageStateHolder = userMessageStateHolder,
+        shouldGoToFavoriteList = shouldGoToFavoriteList,
     )
 }

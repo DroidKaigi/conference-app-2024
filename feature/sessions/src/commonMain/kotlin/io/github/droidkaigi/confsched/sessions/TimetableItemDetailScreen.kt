@@ -94,7 +94,6 @@ fun TimetableItemDetailScreen(
     eventEmitter: EventEmitter<TimetableItemDetailEvent> = rememberEventEmitter(),
     uiState: TimetableItemDetailScreenUiState = timetableItemDetailPresenter(
         events = eventEmitter,
-        onFavoriteListClick = onFavoriteListClick,
     ),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -102,6 +101,10 @@ fun TimetableItemDetailScreen(
         snackbarHostState = snackbarHostState,
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
+
+    if (uiState is Loaded && uiState.shouldGoToFavoriteList) {
+        onFavoriteListClick()
+    }
 
     TimetableItemDetailScreen(
         uiState = uiState,
@@ -132,6 +135,7 @@ sealed interface TimetableItemDetailScreenUiState {
         val isLangSelectable: Boolean,
         val currentLang: Lang?,
         val roomThemeKey: String,
+        val shouldGoToFavoriteList: Boolean,
         override val timetableItemId: TimetableItemId,
         override val userMessageStateHolder: UserMessageStateHolder,
     ) : TimetableItemDetailScreenUiState
@@ -276,6 +280,7 @@ fun TimetableItemDetailScreenPreview() {
                     roomThemeKey = "iguana",
                     timetableItemId = fakeSession.id,
                     userMessageStateHolder = UserMessageStateHolderImpl(),
+                    shouldGoToFavoriteList = false,
                 ),
                 onNavigationIconClick = {},
                 onBookmarkClick = {
