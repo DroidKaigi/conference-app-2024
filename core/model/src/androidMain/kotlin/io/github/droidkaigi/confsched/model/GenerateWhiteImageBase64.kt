@@ -3,8 +3,8 @@ package io.github.droidkaigi.confsched.model
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.util.Base64
-import java.io.ByteArrayOutputStream
 import androidx.compose.ui.unit.IntSize
+import java.io.ByteArrayOutputStream
 
 internal actual fun generateWhiteImageBase64(size: IntSize): String {
     val bitmap = Bitmap.createBitmap(size.width, size.height, Bitmap.Config.ARGB_8888)
