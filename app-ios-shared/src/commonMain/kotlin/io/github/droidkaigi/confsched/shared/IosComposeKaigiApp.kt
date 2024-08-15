@@ -89,6 +89,7 @@ private fun KaigiNavHost(
             onShareClick = {
                 navController.navigate(contributorsScreenRoute)
             },
+            onFavoriteListClick = {} // { navController.navigate(favoritesScreenRoute) }
         )
 
         // For KMP, we are not using navigation abstraction for contributors screen
