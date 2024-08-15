@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -44,6 +45,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -67,6 +69,7 @@ import conference_app_2024.feature.profilecard.generated.resources.profile_card
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_edit_description
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
 import conference_app_2024.feature.profilecard.generated.resources.select_theme
+import conference_app_2024.feature.profilecard.generated.resources.theme
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
@@ -297,8 +300,6 @@ internal fun EditScreen(
                 }
             }
 
-            Text(stringResource(ProfileCardRes.string.select_theme))
-
             image?.let {
                 Box {
                     Image(
@@ -323,6 +324,10 @@ internal fun EditScreen(
                     }
                 }
             }
+
+            Text(stringResource(ProfileCardRes.string.select_theme))
+
+            ThemePiker()
 
             Button(
                 onClick = {
@@ -406,6 +411,43 @@ internal fun OptionLabel() {
             style = MaterialTheme.typography.titleMedium,
         )
     }
+}
+
+@Composable
+internal fun ThemePiker() {
+    val themes = ProfileCardTheme.entries.chunked(2)
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        themes.forEach {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                it.firstOrNull()?.let {
+                    ThemeImage(it)
+                }
+                it.getOrNull(1)?.let {
+                    ThemeImage(it)
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ThemeImage(theme: ProfileCardTheme, modifier: Modifier = Modifier) {
+    val colorMap = buildMap {
+        put(ProfileCardTheme.Iguana, Color(0xFFB4FF79))
+        put(ProfileCardTheme.Hedgehog, Color(0xFFFEB258))
+        put(ProfileCardTheme.Giraffe, Color(0xFFFCF65F))
+        put(ProfileCardTheme.Flamingo, Color(0xFFFF8EBD))
+        put(ProfileCardTheme.Jellyfish, Color(0xFF6FD7F8))
+    }
+    Image(
+        painter = painterResource(ProfileCardRes.drawable.theme),
+        contentDescription = null,
+        modifier = modifier
+            .clip(RoundedCornerShape(2.dp))
+            .background(colorMap[theme]!!)
+            .padding(top = 36.dp, start = 30.dp, end = 30.dp, bottom = 36.dp),
+    )
 }
 
 @OptIn(ExperimentalEncodingApi::class)
