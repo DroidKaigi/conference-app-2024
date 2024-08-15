@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -46,7 +47,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
@@ -327,7 +337,7 @@ internal fun EditScreen(
 
             Text(stringResource(ProfileCardRes.string.select_theme))
 
-            ThemePiker()
+            ThemePiker(uiState.theme)
 
             Button(
                 onClick = {
@@ -414,17 +424,25 @@ internal fun OptionLabel() {
 }
 
 @Composable
-internal fun ThemePiker() {
+internal fun ThemePiker(selectedTheme: ProfileCardTheme) {
     val themes = ProfileCardTheme.entries.chunked(2)
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         themes.forEach {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 it.firstOrNull()?.let {
-                    ThemeImage(it)
+                    ThemeImage(
+                        modifier = Modifier.weight(1.0f),
+                        isSelected = selectedTheme == it,
+                        theme = it,
+                    )
                 }
                 it.getOrNull(1)?.let {
-                    ThemeImage(it)
+                    ThemeImage(
+                        modifier = Modifier.weight(1.0f),
+                        isSelected = selectedTheme == it,
+                        theme = it,
+                    )
                 }
             }
         }
@@ -432,19 +450,60 @@ internal fun ThemePiker() {
 }
 
 @Composable
-private fun ThemeImage(theme: ProfileCardTheme, modifier: Modifier = Modifier) {
+private fun ThemeImage(
+    isSelected: Boolean,
+    theme: ProfileCardTheme,
+    modifier: Modifier = Modifier,
+) {
     val colorMap = buildMap {
         put(ProfileCardTheme.Iguana, Color(0xFFB4FF79))
         put(ProfileCardTheme.Hedgehog, Color(0xFFFEB258))
         put(ProfileCardTheme.Giraffe, Color(0xFFFCF65F))
         put(ProfileCardTheme.Flamingo, Color(0xFFFF8EBD))
         put(ProfileCardTheme.Jellyfish, Color(0xFF6FD7F8))
+        put(ProfileCardTheme.None, Color.White)
     }
+    val selectedBorderColor = MaterialTheme.colorScheme.surfaceTint
+    val painter = rememberVectorPainter(Icons.Default.Check)
+
     Image(
         painter = painterResource(ProfileCardRes.drawable.theme),
         contentDescription = null,
         modifier = modifier
-            .clip(RoundedCornerShape(2.dp))
+            .run {
+                if (isSelected) {
+                    drawWithContent {
+                        drawRoundRect(
+                            color = selectedBorderColor,
+                            size = size,
+                            cornerRadius = CornerRadius(6.dp.toPx()),
+                            style = Stroke(8.dp.toPx(), cap = StrokeCap.Round),
+                        )
+                        drawContent()
+                        drawPath(
+                            color = selectedBorderColor,
+                            path = Path().apply {
+                                moveTo(size.width, 0f)
+                                lineTo(size.width - 44.dp.toPx(), 0f)
+                                lineTo(size.width, 44.dp.toPx())
+                            },
+                        )
+                        drawCircle(
+                            color = Color.White,
+                            center = Offset(size.width - 12.dp.toPx(), 13.dp.toPx()),
+                            radius = 10.dp.toPx(),
+                        )
+                        translate(left = size.width - 20.dp.toPx(), top = 5.dp.toPx()) {
+                            with(painter) {
+                                draw(size = Size(16.dp.toPx(), 16.dp.toPx()))
+                            }
+                        }
+                    }
+                } else {
+                    this
+                }
+            }
+            .clip(RoundedCornerShape(10.dp))
             .background(colorMap[theme]!!)
             .padding(top = 36.dp, start = 30.dp, end = 30.dp, bottom = 36.dp),
     )

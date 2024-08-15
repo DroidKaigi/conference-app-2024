@@ -70,9 +70,18 @@ class ProfileCardScreenTest(
                             describe("scroll profile") {
                                 run {
                                     scrollProfile()
+                                }
+                                itShould("show edit screen") {
+                                    captureScreenWithChecks {
+                                        checkEditScreenDisplayed()
+                                    }
+                                }
+                            }
+                            describe("scroll profile") {
+                                run {
                                     scrollProfile()
                                 }
-                                itShould("show card screen") {
+                                itShould("show edit screen") {
                                     captureScreenWithChecks {
                                         checkEditScreenDisplayed()
                                     }
