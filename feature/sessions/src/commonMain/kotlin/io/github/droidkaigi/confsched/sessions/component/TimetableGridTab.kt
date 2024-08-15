@@ -56,7 +56,7 @@ fun TimetableDayTab(
                         modifier = Modifier
                             .testTag(TimetableTabTestTag.plus(conferenceDay.ordinal))
                             .height(64.dp),
-                        selected = false,
+                        selected = conferenceDay == selectedDay,
                         onClick = {
                             onDaySelected(conferenceDay)
                         },
