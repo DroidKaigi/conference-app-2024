@@ -9,7 +9,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,7 +27,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -194,6 +192,8 @@ fun MainScreen(
     val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
     val hazeState = remember { HazeState() }
 
+    var scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
+
     Row(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
             GlassLikeNavRail(
@@ -201,6 +201,7 @@ fun MainScreen(
                 onTabSelected = {
                     onTabSelected(mainNestedNavController, it)
                 },
+                modifier = Modifier.padding(scaffoldPadding.value)
             )
         }
 
@@ -216,6 +217,7 @@ fun MainScreen(
                 }
             },
         ) { padding ->
+            scaffoldPadding.value = padding
             val hazeStyle =
                 HazeStyle(
                     tint = Color.Black.copy(alpha = .2f),
