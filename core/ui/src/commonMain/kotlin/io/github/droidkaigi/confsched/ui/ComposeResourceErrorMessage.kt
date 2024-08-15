@@ -19,6 +19,6 @@ internal fun composeResourceErrorMessages(): List<ComposeResourceErrorMessage> =
 )
 
 internal data class ComposeResourceErrorMessage(
-    val appError: KClass<out AppError>,
+    val appErrorClass: KClass<out AppError>,
     val message: String,
 )
