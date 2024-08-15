@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -241,6 +243,7 @@ internal fun EditScreen(
 
     Column(
         modifier = modifier
+            .verticalScroll(rememberScrollState())
             .testTag(ProfileCardEditScreenTestTag)
             .padding(contentPadding),
     ) {
@@ -249,29 +252,28 @@ internal fun EditScreen(
             value = nickname,
             labelString = stringResource(ProfileCardRes.string.nickname),
             errorMessage = nicknameError,
+            textFieldTestTag = ProfileCardNicknameTextFieldTestTag,
             onValueChange = { nickname = it },
-            modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
         )
         InputFieldWithError(
             value = occupation,
             labelString = stringResource(ProfileCardRes.string.occupation),
             errorMessage = occupationError,
+            textFieldTestTag = ProfileCardOccupationTextFieldTestTag,
             onValueChange = { occupation = it },
-            modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
         )
         InputFieldWithError(
             value = link,
             labelString = stringResource(ProfileCardRes.string.link),
             errorMessage = linkError,
+            textFieldTestTag = ProfileCardLinkTextFieldTestTag,
             onValueChange = { link = it },
-            modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
         )
         ImagePickerWithError(
             image = image,
             onSelectedImage = { imageByteArray = it },
             errorMessage = imageError,
             onClearImage = { imageByteArray = null },
-            modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
         )
         Button(
             onClick = {
@@ -337,6 +339,7 @@ private fun InputFieldWithError(
     value: String,
     labelString: String,
     errorMessage: String,
+    textFieldTestTag: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -354,7 +357,9 @@ private fun InputFieldWithError(
             textStyle = MaterialTheme.typography.bodyLarge,
             onValueChange = onValueChange,
             isError = isError,
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(textFieldTestTag),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = indicatorColor,
                 unfocusedIndicatorColor = indicatorColor,
@@ -379,8 +384,8 @@ private fun InputFieldWithError(
 @Composable
 private fun ImagePickerWithError(
     image: ImageBitmap?,
-    onSelectedImage: (ByteArray) -> Unit,
     errorMessage: String,
+    onSelectedImage: (ByteArray) -> Unit,
     onClearImage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -415,7 +420,9 @@ private fun ImagePickerWithError(
         } else {
             PhotoPickerButton(
                 onSelectedImage = onSelectedImage,
-                modifier = Modifier.padding(bottom = 20.dp),
+                modifier = Modifier
+                    .padding(bottom = 20.dp)
+                    .testTag(ProfileCardSelectImageButtonTestTag),
             ) {
                 Text(stringResource(ProfileCardRes.string.add_image))
             }

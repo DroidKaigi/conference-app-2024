@@ -7,15 +7,18 @@ import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.FakeContributorsApiClient
 import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
+import io.github.droidkaigi.confsched.data.profilecard.FakeProfileCardDataStore
+import io.github.droidkaigi.confsched.data.profilecard.ProfileCardDataStore
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
 import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
 import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
-import io.github.droidkaigi.confsched.model.ProfileCard
-import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
+import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus
+import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus.AllNotEntered
+import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus.NoInputOtherThanImage
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.coroutines.test.TestDispatcher
@@ -247,14 +250,25 @@ class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: Sponsors
     }
 }
 
-interface ProfileCardRepositoryRobot {
-    suspend fun saveProfileCard(profileCard: ProfileCard.Exists)
+interface ProfileCardDataStoreRobot {
+    enum class ProfileCardInputStatus {
+        NoInputOtherThanImage,
+        AllNotEntered,
+    }
+
+    fun setupProfileCardDataStore(profileCardInputStatus: ProfileCardInputStatus)
 }
 
-class DefaultProfileCardRepositoryRobot @Inject constructor(
-    private val profileCardRepository: ProfileCardRepository,
-) : ProfileCardRepositoryRobot {
-    override suspend fun saveProfileCard(profileCard: ProfileCard.Exists) {
-        profileCardRepository.save(profileCard)
+class DefaultProfileCardDataStoreRobot @Inject constructor(
+    profileCardDataStore: ProfileCardDataStore,
+) : ProfileCardDataStoreRobot {
+    private val fakeProfileCardDataStore = profileCardDataStore as FakeProfileCardDataStore
+    override fun setupProfileCardDataStore(profileCardInputStatus: ProfileCardInputStatus) {
+        fakeProfileCardDataStore.setup(
+            when (profileCardInputStatus) {
+                NoInputOtherThanImage -> FakeProfileCardDataStore.Status.NoInputOtherThanImage
+                AllNotEntered -> FakeProfileCardDataStore.Status.AllNotEntered
+            },
+        )
     }
 }
