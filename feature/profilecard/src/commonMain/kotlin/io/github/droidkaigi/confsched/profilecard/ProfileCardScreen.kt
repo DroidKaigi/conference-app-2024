@@ -238,13 +238,15 @@ internal fun EditScreen(
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
 
-    Scaffold(modifier = modifier.testTag(ProfileCardEditScreenTestTag).padding(contentPadding),
+    Scaffold(
+        modifier = modifier.testTag(ProfileCardEditScreenTestTag).padding(contentPadding),
         topBar = {
             AnimatedTextTopAppBar(
                 title = stringResource(ProfileCardRes.string.profile_card_title),
                 scrollBehavior = scrollBehavior,
             )
-        }) { padding ->
+        },
+    ) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -252,7 +254,7 @@ internal fun EditScreen(
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(padding)
                 .padding(horizontal = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(32.dp)
+            verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
             Text(stringResource(ProfileCardRes.string.profile_card_edit_description))
 
@@ -342,7 +344,7 @@ internal fun EditScreen(
             ) {
                 Text(
                     modifier = Modifier.padding(8.dp),
-                    text = stringResource(ProfileCardRes.string.create_card)
+                    text = stringResource(ProfileCardRes.string.create_card),
                 )
             }
         }
@@ -351,11 +353,11 @@ internal fun EditScreen(
 
 @Composable
 internal fun InputColumn(
-    modifier: Modifier = Modifier,
     label: String,
     value: String,
-    isOptional: Boolean = true,
     testTag: String,
+    modifier: Modifier = Modifier,
+    isOptional: Boolean = true,
     onValueChanged: (String) -> Unit,
 ) {
     Column(modifier = modifier) {
@@ -387,7 +389,7 @@ internal fun Label(
             style = MaterialTheme.typography.titleMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(weight = 1.0f, fill = false)
+            modifier = Modifier.weight(weight = 1.0f, fill = false),
         )
         if (isOptional) OptionLabel()
     }
