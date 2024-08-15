@@ -2,50 +2,49 @@ package io.github.droidkaigi.confsched.eventmap.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import conference_app_2024.feature.eventmap.generated.resources.read_more
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
+import io.github.droidkaigi.confsched.eventmap.EventMapRes
 import io.github.droidkaigi.confsched.model.EventMapEvent
+import io.github.droidkaigi.confsched.model.RoomIcon
+import io.github.droidkaigi.confsched.model.fakes
+import io.github.droidkaigi.confsched.ui.toResDrawable
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun EventMapItem(
     eventMapEvent: EventMapEvent,
-    @Suppress("UnusedParameter")
     onClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ProvideRoomTheme(eventMapEvent.roomName.currentLangTitle) {
-        val green = LocalRoomTheme.current.primaryColor
-        val gray = Color(0xFFC5C7C4)
         Column(
-            modifier = modifier
-                .border(1.dp, gray, RoundedCornerShape(5.dp))
-                .background(Color.Transparent, RoundedCornerShape(5.dp))
-                .clickable {
-//                eventMapEvent.profileUrl?.let(onClick)
-                }
-                .padding(12.dp),
+            modifier = modifier,
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start,
         ) {
@@ -55,27 +54,56 @@ fun EventMapItem(
             ) {
                 ToolTip(
                     text = eventMapEvent.roomName.currentLangTitle,
-                    icon = Icons.Filled.Star,
-                    color = green,
+                    roomIcon = eventMapEvent.roomIcon,
+                    color = LocalRoomTheme.current.primaryColor,
+                    backgroundColor = LocalRoomTheme.current.containerColor,
+                )
+                Spacer(Modifier.width(12.dp))
+                Text(
+                    text = eventMapEvent.name.currentLangTitle,
+                    style = MaterialTheme.typography.titleMedium,
+                    color = LocalRoomTheme.current.primaryColor,
                 )
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                text = eventMapEvent.name.currentLangTitle,
-                fontSize = 17.sp,
-                lineHeight = 23.8.sp,
-                fontWeight = FontWeight.W600,
-                letterSpacing = 0.1.sp,
-                color = gray,
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
                 text = eventMapEvent.description.currentLangTitle,
-                fontSize = 13.sp,
-                lineHeight = 20.sp,
-                fontWeight = FontWeight.W400,
-                letterSpacing = 0.25.sp,
+                style = MaterialTheme.typography.bodyLarge,
                 color = Color.White.copy(alpha = 0.7F),
+            )
+            eventMapEvent.message?.let {
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    text = it.currentLangTitle,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.tertiary,
+                )
+            }
+            eventMapEvent.moreDetailsUrl?.let {
+                Spacer(Modifier.height(height = 8.dp))
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = { onClick(it) },
+                ) {
+                    Text(
+                        text = stringResource(EventMapRes.string.read_more),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = LocalRoomTheme.current.primaryColor,
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun EventMapItemPreview() {
+    KaigiTheme {
+        Surface {
+            EventMapItem(
+                eventMapEvent = EventMapEvent.fakes().first(),
+                onClick = {},
             )
         }
     }
@@ -84,20 +112,21 @@ fun EventMapItem(
 @Composable
 private fun ToolTip(
     text: String,
-    icon: ImageVector? = null,
+    roomIcon: RoomIcon,
     color: Color = Color(0xFFC5C7C4),
     backgroundColor: Color = Color.Transparent,
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .border(1.dp, color)
-            .background(backgroundColor, RoundedCornerShape(0.dp))
+            .clip(RoundedCornerShape(4.dp))
+            .background(backgroundColor)
+            .border(1.dp, color, RoundedCornerShape(4.dp))
             .padding(vertical = 4.5.dp, horizontal = 8.dp),
     ) {
-        icon?.let {
+        roomIcon.toResDrawable()?.let {
             Icon(
-                imageVector = icon,
+                painter = painterResource(it),
                 contentDescription = null,
                 tint = color,
                 modifier = Modifier.size(12.dp),
@@ -106,10 +135,7 @@ private fun ToolTip(
         }
         Text(
             text = text,
-            fontSize = 12.sp,
-            lineHeight = 16.sp,
-            letterSpacing = 0.5.sp,
-            fontWeight = FontWeight.W500,
+            style = MaterialTheme.typography.labelMedium,
             color = color,
         )
     }

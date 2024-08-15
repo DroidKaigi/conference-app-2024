@@ -2,6 +2,7 @@ import SwiftUI
 import CommonComponents
 import ComposableArchitecture
 import Theme
+import shared
 
 public struct EventMapView: View {
     @Bindable private var store: StoreOf<EventMapReducer>
@@ -16,21 +17,31 @@ public struct EventMapView: View {
                 .textStyle(.bodyMedium)
                 .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
                 .padding(.horizontal, 16)
+            
             SelectionChips<FloorMap>(
                 selected: Binding(
                     get: { store.selectedFloorMap },
                     set: { store.send(.view(.selectFloorMap($0 ?? .first))) }
                 )
             )
+            
             Image(store.selectedFloorMap.image)
                 .resizable()
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal, 16)
                 .scaledToFit()
+                .padding(.bottom, 24)
+            
+            VStack(spacing: 24) {
+                ForEach(store.events, id: \.self) { event in
+                    EventItem(event: event)
+                }
+            }
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(String(localized: "NavigationTitle", bundle: .module))
+        .onAppear { store.send(.view(.onAppear)) }
     }
 }
 

@@ -77,7 +77,7 @@ public struct RootReducer {
         }
         
         public enum View {
-            case sameTabTapped(Tab)
+            case sameTabTapped(DroidKaigiAppTab)
         }
     }
 
@@ -116,12 +116,13 @@ public struct RootReducer {
                 state.paths.about.append(.acknowledgements)
                 return .none
                 
-            case .timetable(.view(.timetableItemTapped)):
+            case .timetable(.view(.timetableItemTapped(let item))):
                 state.paths.timetable.append(.timetableDetail(
                     TimetableDetailReducer.State(
-                        timetableItem: shared.TimetableItem.Session.companion.fake()
+                        timetableItem: item.timetableItem,
+                        isFavorited: item.isFavorited)
                     )
-                ))
+                )
                 return .none
 
             case .timetable(.view(.searchTapped)):
@@ -135,7 +136,7 @@ public struct RootReducer {
                         .timetableDetail(
                             .init(
                                 timetableItem: timetableItemWithFavorite.timetableItem,
-                                isBookmarked: timetableItemWithFavorite.isFavorited
+                                isFavorited: timetableItemWithFavorite.isFavorited
                             )
                         )
                     )

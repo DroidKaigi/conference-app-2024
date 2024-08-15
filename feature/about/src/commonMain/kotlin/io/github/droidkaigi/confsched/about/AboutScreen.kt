@@ -3,12 +3,11 @@ package io.github.droidkaigi.confsched.about
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,6 +28,7 @@ import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.AboutItem.Medium
 import io.github.droidkaigi.confsched.model.AboutItem.X
 import io.github.droidkaigi.confsched.model.AboutItem.YouTube
+import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
 import org.jetbrains.compose.resources.stringResource
 
 const val aboutScreenRoute = "about"
@@ -69,10 +69,16 @@ fun AboutScreen(
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
+    val lazyListState = rememberLazyListState()
 
     Scaffold(
         modifier = modifier.testTag(AboutScreenTestTag.Screen),
-        topBar = { TopAppBar(title = { Text(stringResource(AboutRes.string.about_droidkaigi)) }) },
+        topBar = {
+            AnimatedTextTopAppBar(
+                title = stringResource(AboutRes.string.about_droidkaigi),
+                scrollBehavior = scrollBehavior,
+            )
+        },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
@@ -84,9 +90,11 @@ fun AboutScreen(
         LazyColumn(
             Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             contentPadding = padding,
+            state = lazyListState,
         ) {
             item {
                 AboutDroidKaigiDetail(
+                    screenScrollState = lazyListState,
                     onViewMapClick = {
                         onAboutItemClick(AboutItem.Map)
                     },

@@ -12,7 +12,7 @@ import TimetableFeature
 import EventMapFeature
 import Theme
 
-public enum Tab {
+public enum DroidKaigiAppTab {
     case timetable
     case map
     case favorite
@@ -22,7 +22,7 @@ public enum Tab {
 
 public struct RootView: View {
     @Bindable private var store: StoreOf<RootReducer>
-    @State private var selection: Tab = .timetable
+    @State private var selection: DroidKaigiAppTab = .timetable
 
     public init(store: StoreOf<RootReducer>) {
         self.store = store
@@ -44,7 +44,7 @@ public struct RootView: View {
         ) {
             Group {
                 timetableTab
-                    .tag(Tab.timetable)
+                    .tag(DroidKaigiAppTab.timetable)
                     .tabItem {
                         Label(
                             title: { Text("Timetable") },
@@ -53,7 +53,7 @@ public struct RootView: View {
                     }
                 
                 eventMapTab
-                    .tag(Tab.map)
+                    .tag(DroidKaigiAppTab.map)
                     .tabItem {
                         Label(
                             title: { Text("Event Map") },
@@ -62,7 +62,7 @@ public struct RootView: View {
                     }
                 
                 favoriteTab
-                    .tag(Tab.favorite)
+                    .tag(DroidKaigiAppTab.favorite)
                     .tabItem {
                         Label(
                             title: { Text("Favorite") },
@@ -71,7 +71,7 @@ public struct RootView: View {
                     }
                 
                 aboutTab
-                    .tag(Tab.about)
+                    .tag(DroidKaigiAppTab.about)
                     .tabItem {
                         Label(
                             title: { Text("About") },
@@ -80,7 +80,7 @@ public struct RootView: View {
                     }
                 
                 Text("ID Card Feature")
-                    .tag(Tab.idCard)
+                    .tag(DroidKaigiAppTab.idCard)
                     .tabItem {
                         Label(
                             title: { Text("ID Card") },

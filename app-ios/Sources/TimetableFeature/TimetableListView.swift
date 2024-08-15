@@ -5,7 +5,7 @@ import Theme
 import shared
 
 public struct TimetableView: View {
-    private let store: StoreOf<TimetableReducer>
+    @Bindable private var store: StoreOf<TimetableReducer>
 
     public init(store: StoreOf<TimetableReducer>) {
         self.store = store
@@ -13,6 +13,7 @@ public struct TimetableView: View {
     
     @State var timetableMode = TimetableMode.list
     @State var switchModeIcon: String = "square.grid.2x2"
+    @State var selectedTab: DayTab = DayTab.day1
     
     public var body: some View {
         VStack {
@@ -20,11 +21,13 @@ public struct TimetableView: View {
                 ForEach(DayTab.allCases) { tabItem in
                     Button(action: {
                         store.send(.view(.selectDay(tabItem)))
+                        selectedTab = tabItem
                     }, label: {
-                        //TODO: Only selected button should be green and underlined
-                        Text(tabItem.rawValue).foregroundStyle(
-                            AssetColors.Custom.flamingo.swiftUIColor)
-                            .underline()
+                        HStack(spacing: 6) {
+                            Text(tabItem.rawValue).textStyle(.titleMedium).underline(selectedTab == tabItem)
+                        }
+                        .foregroundStyle(selectedTab == tabItem ? AssetColors.Custom.iguana.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+                        .padding(6)
                     })
                 }
                 Spacer()
@@ -38,7 +41,7 @@ public struct TimetableView: View {
             }
             Spacer()
         }
-        
+        .toast($store.toast)
         .background(AssetColors.Surface.surface.swiftUIColor)
         .frame(maxWidth: .infinity)
         .toolbar{
@@ -90,19 +93,16 @@ struct TimetableListView: View {
         ScrollView{
             LazyVStack {
                 ForEach(store.timetableItems, id: \.self) { item in
-                    Button {
-                        store.send(.view(.timetableItemTapped))
-                    } label: {
-                        TimeGroupMiniList(contents: item, onItemTap: { item in
-                            store.send(.view(.timetableItemTapped))
-                        })
+                    TimeGroupMiniList(contents: item, onItemTap: { item in
+                        store.send(.view(.timetableItemTapped(item)))
+                    }) {
+                        store.send(.view(.favoriteTapped($0)))
                     }
                 }
             }.scrollContentBackground(.hidden)
-            
-                .onAppear {
-                    store.send(.onAppear)
-                }.background(AssetColors.Surface.surface.swiftUIColor)
+            .onAppear {
+                store.send(.view(.onAppear))
+            }.background(AssetColors.Surface.surface.swiftUIColor)
         }
     }
 }
@@ -110,6 +110,7 @@ struct TimetableListView: View {
 struct TimeGroupMiniList: View {
     let contents: TimetableTimeGroupItems
     let onItemTap: (TimetableItemWithFavorite) -> Void
+    let onFavoriteTap: (TimetableItemWithFavorite) -> Void
     
     var body: some View {
         HStack {
@@ -127,7 +128,8 @@ struct TimeGroupMiniList: View {
                         onTap: {_ in
                             onItemTap(item)
                         },
-                        onTapFavorite: {_ in
+                        onTapFavorite: { _ in
+                            onFavoriteTap(item)
                         })
                 }
             }
@@ -156,7 +158,6 @@ struct TagView: View {
 }
 
 struct PhotoView: View {
-    //TODO: Replace this with an actual photo render
     let photo: String
     let name: String
     

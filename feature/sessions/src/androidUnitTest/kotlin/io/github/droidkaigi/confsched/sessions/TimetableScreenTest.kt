@@ -8,7 +8,6 @@ import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
-import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
@@ -45,6 +44,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                     }
                     itShould("show timetable items") {
                         captureScreenWithChecks(checks = {
+                            checkTimetableListDisplayed()
                             checkTimetableListItemsDisplayed()
                         })
                     }
@@ -53,8 +53,9 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             clickFirstSessionBookmark()
                         }
                         itShould("show bookmarked session") {
-                            // FIXME: Add check for bookmarked session
-                            captureScreenWithChecks()
+                            captureScreenWithChecks(checks = {
+                                checkFirstSessionBookmarkedIconDisplayed()
+                            })
                         }
                     }
                     describe("click first session") {
@@ -63,6 +64,16 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                         itShould("show session detail") {
                             checkClickedItemsExists()
+                        }
+                    }
+                    describe("scroll timetable") {
+                        run {
+                            scrollTimetable()
+                        }
+                        itShould("first session is not displayed") {
+                            captureScreenWithChecks(checks = {
+                                checkTimetableListFirstItemNotDisplayed()
+                            })
                         }
                     }
                     describe("click conference day2 tab") {
@@ -80,9 +91,20 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             clickTimetableUiTypeChangeButton()
                         }
                         itShould("change timetable ui type") {
-                            captureScreenWithChecks(
-                                checks = todoChecks("This screen is roughly created. Please add some checks."),
-                            )
+                            captureScreenWithChecks(checks = {
+                                checkTimetableGridDisplayed()
+                                checkTimetableGridItemsDisplayed()
+                            })
+                        }
+                        describe("scroll timetable") {
+                            run {
+                                scrollTimetable()
+                            }
+                            itShould("first session is not displayed") {
+                                captureScreenWithChecks(checks = {
+                                    checkTimetableGridFirstItemNotDisplayed()
+                                })
+                            }
                         }
                         describe("click conference day2 tab") {
                             run {
@@ -102,8 +124,9 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         setupTimetableScreenContent()
                     }
                     itShould("show error message") {
-                        // FIXME: Add check for error message
-                        captureScreenWithChecks()
+                        captureScreenWithChecks(checks = {
+                            checkErrorSnackbarDisplayed()
+                        })
                     }
                 }
             }

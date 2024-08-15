@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
@@ -28,6 +29,8 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val TimetableItemDetailHeadlineTestTag = "TimetableItemDetailHeadlineTestTag"
 
 @Composable
 fun TimetableItemDetailHeadline(
@@ -56,6 +59,7 @@ fun TimetableItemDetailHeadline(
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
+            modifier = Modifier.testTag(TimetableItemDetailHeadlineTestTag),
             text = timetableItem.title.currentLangTitle,
             style = MaterialTheme.typography.headlineSmall,
         )

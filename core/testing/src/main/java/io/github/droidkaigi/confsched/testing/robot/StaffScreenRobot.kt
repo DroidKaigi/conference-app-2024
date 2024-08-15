@@ -1,7 +1,12 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.onChildren
+import androidx.compose.ui.test.onFirst
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.staff.StaffScreen
+import io.github.droidkaigi.confsched.staff.StaffScreenLazyColumnTestTag
 import javax.inject.Inject
 
 class StaffScreenRobot @Inject constructor(
@@ -19,5 +24,22 @@ class StaffScreenRobot @Inject constructor(
             }
         }
         waitUntilIdle()
+    }
+
+    fun checkExistsStaffItem() {
+        composeTestRule
+            .onNode(hasTestTag(StaffScreenLazyColumnTestTag))
+            .onChildren()
+            .onFirst()
+            .assertExists()
+            .assertIsDisplayed()
+    }
+
+    fun checkDoesNotExistsStaffItem() {
+        composeTestRule
+            .onNode(hasTestTag(StaffScreenLazyColumnTestTag))
+            .onChildren()
+            .onFirst()
+            .assertDoesNotExist()
     }
 }

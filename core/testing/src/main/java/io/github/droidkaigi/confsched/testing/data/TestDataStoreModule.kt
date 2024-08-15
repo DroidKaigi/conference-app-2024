@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import dagger.hilt.testing.TestInstallIn
 import io.github.droidkaigi.confsched.data.createDataStore
 import io.github.droidkaigi.confsched.data.user.DataStoreModule
+import io.github.droidkaigi.confsched.data.user.ProfileCardDataStoreQualifier
 import io.github.droidkaigi.confsched.data.user.SessionCacheDataStoreQualifier
 import io.github.droidkaigi.confsched.data.user.UserDataStoreQualifier
 import kotlinx.coroutines.CoroutineScope
@@ -47,8 +48,21 @@ class TestDataStoreModule {
         },
     )
 
+    @ProfileCardDataStoreQualifier
+    @Provides
+    @Singleton
+    fun provideProfileCardDataStore(
+        @ApplicationContext context: Context,
+        testDispatcher: TestDispatcher,
+    ): DataStore<Preferences> = createDataStore(
+        coroutineScope = CoroutineScope(testDispatcher + Job()),
+        producePath = { context.cacheDir.resolve(TEST_DATASTORE_PROFILE_CARD_NAME).path },
+    )
+
     companion object {
         private const val TEST_DATASTORE_NAME = "test_datastore.preferences_pb"
         private const val TEST_DATASTORE_CACHE_NAME = "test_datastore_cache.preferences_pb"
+        private const val TEST_DATASTORE_PROFILE_CARD_NAME =
+            "test_datastore_profilecard.preferences_pb"
     }
 }

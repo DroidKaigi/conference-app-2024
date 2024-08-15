@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Scaffold
@@ -26,6 +26,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,6 +54,8 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
+import io.github.droidkaigi.confsched.model.isBlurSupported
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -62,10 +65,10 @@ fun GlassLikeBottomNavigation(
     onTabSelected: (MainScreenTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     Box(
         modifier = modifier
-            .padding(vertical = 24.dp, horizontal = 48.dp)
+            .padding(horizontal = 48.dp)
             .fillMaxWidth()
             .height(64.dp)
             .hazeChild(state = hazeState, shape = CircleShape)
@@ -115,7 +118,13 @@ fun GlassLikeBottomNavigation(
             Modifier
                 .fillMaxSize()
                 .clip(CircleShape)
-                .blur(50.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
+                .run {
+                    if (isBlurSupported()) {
+                        blur(50.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded)
+                    } else {
+                        this
+                    }
+                },
         ) {
             val tabWidth = size.width / MainScreenTab.size
             drawCircle(
@@ -201,6 +210,11 @@ fun BottomBarTabs(
                     ),
                     label = "scale",
                 )
+                val iconRes = if (selectedTab == MainScreenTab.indexOf(tab)) {
+                    tab.iconOn
+                } else {
+                    tab.iconOff
+                }
                 Column(
                     modifier =
                     Modifier
@@ -216,8 +230,8 @@ fun BottomBarTabs(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    Icon(
-                        imageVector = tab.icon.imageVector,
+                    Image(
+                        painter = painterResource(iconRes),
                         contentDescription = "tab ${stringResource(tab.contentDescription)}",
                     )
                 }

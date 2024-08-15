@@ -179,7 +179,7 @@ private fun LocaledResponse.toRoomType() = when (en?.lowercase()) {
     "hedgehog" -> RoomH
     "iguana" -> RoomI
     "jellyfish" -> RoomJ
-    // Assume the room on the third day.
+    // Assume the room on the first day.
     else -> RoomIJ
 }
 

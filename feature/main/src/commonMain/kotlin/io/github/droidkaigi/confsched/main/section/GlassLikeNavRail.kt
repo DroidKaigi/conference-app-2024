@@ -51,6 +51,7 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -196,8 +197,13 @@ fun NavRailTabs(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
+                    val iconRes = if (selectedTab == MainScreenTab.indexOf(tab)) {
+                        tab.iconOn
+                    } else {
+                        tab.iconOff
+                    }
                     Icon(
-                        imageVector = tab.icon.imageVector,
+                        painter = painterResource(iconRes),
                         contentDescription = "tab ${stringResource(tab.contentDescription)}",
                     )
                 }

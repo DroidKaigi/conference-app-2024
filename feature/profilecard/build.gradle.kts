@@ -3,7 +3,8 @@ plugins {
 }
 
 android.namespace = "io.github.droidkaigi.confsched.feature.profilecard"
-roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.profilecard")
+roborazzi.generateComposePreviewRobolectricTests.packages =
+    listOf("io.github.droidkaigi.confsched.profilecard")
 kotlin {
     sourceSets {
         commonMain {
@@ -14,10 +15,12 @@ kotlin {
 
                 implementation(libs.composeNavigation)
                 implementation(compose.materialIconsExtended)
+                implementation(libs.peekabooImagePicker)
             }
         }
         androidTarget {
             dependencies {
+                implementation(projects.core.model)
                 implementation(libs.composeMaterialWindowSize)
             }
         }

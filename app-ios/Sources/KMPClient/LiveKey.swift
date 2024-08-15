@@ -17,6 +17,10 @@ private var contributorRepository: any ContributorsRepository {
     Container.shared.get(type: (any ContributorsRepository).self)
 }
 
+private var eventMapRepository: any EventMapRepository {
+    Container.shared.get(type: (any EventMapRepository).self)
+}
+
 extension TimetableClient: DependencyKey {
     public static let liveValue: TimetableClient = .init(
         streamTimetable: {
@@ -58,5 +62,11 @@ extension ContributorClient: DependencyKey {
         contributorRepository.getContributorStream().eraseToThrowingStream()
     } refresh: {
         try await contributorRepository.refresh()
+    }
+}
+
+extension EventMapClient: DependencyKey {
+    public static let liveValue: EventMapClient = .init {
+        eventMapRepository.getEventMapStream().eraseToThrowingStream()
     }
 }

@@ -24,11 +24,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
@@ -81,11 +85,26 @@ fun TimetableGridItem(
     modifier: Modifier = Modifier,
 ) {
     val localDensity = LocalDensity.current
+    val localFontScale = LocalDensity.current.fontScale
 
     val speaker = timetableItem.speakers.firstOrNull()
     val speakers = timetableItem.speakers
 
     val height = with(localDensity) { gridItemHeightPx.toDp() }
+    val titleMinHeightDp =
+        (TimetableGridItemSizes.minTitleLineHeight.value * localFontScale / localDensity.density).dp
+
+    // Narrow the padding after pinching in to a certain size
+    val isNarrowedVerticalPadding by remember(height) {
+        // `4` is the number of weights set in display area
+        derivedStateOf { (height - TimetableGridItemSizes.padding * 2) / 4 < titleMinHeightDp * 3 }
+    }
+
+    // Exclude all except title because pinching in to a certain size makes it difficult to see title
+    val isShowingAllContent by remember(height) {
+        // `4` is the number of weights set in display area
+        derivedStateOf { (height - TimetableGridItemSizes.padding * 2) / 4 > titleMinHeightDp * 3 / 2 }
+    }
 
     ProvideRoomTheme(timetableItem.room.getThemeKey()) {
         val titleTextStyle = MaterialTheme.typography.labelLarge.let {
@@ -97,60 +116,81 @@ fun TimetableGridItem(
                 speaker = speaker,
                 titleLength = timetableItem.title.currentLangTitle.length,
             )
-            it.copy(fontSize = titleFontSize, lineHeight = titleLineHeight, color = LocalRoomTheme.current.primaryColor)
+            it.copy(
+                fontSize = titleFontSize,
+                lineHeight = titleLineHeight,
+                color = LocalRoomTheme.current.primaryColor,
+            )
         }
+        val cardShape = RoundedCornerShape(4.dp)
         Column(
             modifier = modifier
                 .testTag(TimetableGridItemTestTag)
                 .background(
                     color = LocalRoomTheme.current.containerColor,
-                    shape = RoundedCornerShape(4.dp),
+                    shape = cardShape,
+                )
+                .border(
+                    width = 1.dp,
+                    color = LocalRoomTheme.current.primaryColor,
+                    shape = cardShape,
                 )
                 .width(TimetableGridItemSizes.width)
                 .height(height)
                 .clickable {
                     onTimetableItemClick(timetableItem)
                 }
-                .padding(TimetableGridItemSizes.padding),
+                .padding(
+                    horizontal = TimetableGridItemSizes.padding,
+                    vertical = if (isNarrowedVerticalPadding) {
+                        TimetableGridItemSizes.padding / 2
+                    } else {
+                        TimetableGridItemSizes.padding
+                    },
+                ),
         ) {
             Column(
                 modifier = Modifier.weight(3f),
-                verticalArrangement = Arrangement.Top,
+                verticalArrangement = Arrangement.spacedBy(
+                    space = TimetableGridItemSizes.scheduleToTitleSpace,
+                    alignment = if (isShowingAllContent) Alignment.Top else Alignment.CenterVertically,
+                ),
             ) {
+                if (isShowingAllContent) {
+                    Row(
+                        modifier = Modifier
+                            .weight(1f, fill = false),
+                    ) {
+                        Icon(
+                            modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
+                            imageVector = Icons.Default.Schedule,
+                            contentDescription = stringResource(SessionsRes.string.content_description_schedule_icon),
+                        )
+                        Spacer(modifier = Modifier.width(4.dp))
+                        var scheduleTextStyle = MaterialTheme.typography.bodySmall
+                        if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
+                            scheduleTextStyle =
+                                scheduleTextStyle.copy(fontSize = titleTextStyle.fontSize)
+                        }
+                        Text(
+                            text = "${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}",
+                            style = scheduleTextStyle,
+                            color = LocalRoomTheme.current.primaryColor,
+                        )
+                    }
+                }
+
                 Text(
                     modifier = Modifier.weight(1f, fill = false),
                     text = timetableItem.title.currentLangTitle,
                     style = titleTextStyle,
                     overflow = TextOverflow.Ellipsis,
                 )
-
-                Row(
-                    modifier = Modifier
-                        .weight(1f, fill = false)
-                        .padding(top = TimetableGridItemSizes.titleToSchedulePadding),
-                ) {
-                    Icon(
-                        modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
-                        imageVector = Icons.Default.Schedule,
-                        contentDescription = stringResource(SessionsRes.string.content_description_schedule_icon),
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    var scheduleTextStyle = MaterialTheme.typography.bodySmall
-                    if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
-                        scheduleTextStyle =
-                            scheduleTextStyle.copy(fontSize = titleTextStyle.fontSize)
-                    }
-                    Text(
-                        text = "${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}",
-                        style = scheduleTextStyle,
-                        color = LocalRoomTheme.current.primaryColor,
-                    )
-                }
             }
 
             val shouldShowError = timetableItem is Session && timetableItem.message != null
 
-            if (speakers.isNotEmpty() || shouldShowError) {
+            if (isShowingAllContent && (speakers.isNotEmpty() || shouldShowError)) {
                 Row(
                     modifier = Modifier.weight(1f, fill = false),
                     verticalAlignment = Alignment.CenterVertically,
@@ -242,12 +282,20 @@ private fun SpeakerIcon(
         },
         contentDescription = stringResource(SessionsRes.string.content_description_user_icon),
         modifier = modifier
-            .size(TimetableGridItemSizes.speakerHeight)
-            .clip(CircleShape)
             .border(
                 BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 CircleShape,
-            ),
+            )
+            .height(TimetableGridItemSizes.speakerHeight)
+            .layout { measurable, constraints ->
+                // To keep circle shape, it needs to match the vertical size when pinching in
+                val placeable = measurable.measure(constraints)
+                val size = placeable.height
+                layout(size, size) {
+                    placeable.placeRelative(0, 0)
+                }
+            }
+            .clip(CircleShape),
     )
 }
 
@@ -272,8 +320,8 @@ private fun calculateFontSizeAndLineHeight(
     titleLength: Int,
 ): Pair<TextUnit, TextUnit> {
     // The height of the title that should be displayed.
-    val titleToScheduleSpaceHeightPx = with(localDensity) {
-        TimetableGridItemSizes.titleToSchedulePadding.toPx()
+    val scheduleToTitleSpaceHeightPx = with(localDensity) {
+        TimetableGridItemSizes.scheduleToTitleSpace.toPx()
     }
     val scheduleHeightPx = with(localDensity) {
         TimetableGridItemSizes.scheduleHeight.toPx()
@@ -282,7 +330,7 @@ private fun calculateFontSizeAndLineHeight(
         (TimetableGridItemSizes.padding * 2).toPx()
     }
     var displayTitleHeight =
-        gridItemHeightPx - titleToScheduleSpaceHeightPx - scheduleHeightPx - horizontalPaddingPx
+        gridItemHeightPx - scheduleToTitleSpaceHeightPx - scheduleHeightPx - horizontalPaddingPx
     displayTitleHeight -= if (speaker != null) {
         with(localDensity) { TimetableGridItemSizes.speakerHeight.toPx() }
     } else {
@@ -379,7 +427,7 @@ private fun calculateTitleHeight(
 object TimetableGridItemSizes {
     val width = 192.dp
     val padding = 12.dp
-    val titleToSchedulePadding = 4.dp
+    val scheduleToTitleSpace = 6.dp
     val scheduleHeight = 16.dp
     val errorHeight = 16.dp
     val speakerHeight = 32.dp
