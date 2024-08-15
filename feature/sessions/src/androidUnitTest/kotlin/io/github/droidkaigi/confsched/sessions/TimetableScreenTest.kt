@@ -71,7 +71,9 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             scrollTimetable()
                         }
                         itShould("first session is not displayed") {
-                            checkTimetableListFirstItemNotDisplayed()
+                            captureScreenWithChecks(checks = {
+                                checkTimetableListFirstItemNotDisplayed()
+                            })
                         }
                     }
                     describe("click conference day2 tab") {
@@ -99,7 +101,9 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                                 scrollTimetable()
                             }
                             itShould("first session is not displayed") {
-                                checkTimetableGridFirstItemNotDisplayed()
+                                captureScreenWithChecks(checks = {
+                                    checkTimetableGridFirstItemNotDisplayed()
+                                })
                             }
                         }
                         describe("click conference day2 tab") {
