@@ -3,11 +3,17 @@ package io.github.droidkaigi.confsched.about.section
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -22,6 +28,9 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import kotlin.math.roundToInt
+
+private const val maxAboutHeaderOffsetDp = 40
 
 @Suppress("ConstPropertyName")
 object AboutDetailSectionTestTag {
@@ -30,9 +39,23 @@ object AboutDetailSectionTestTag {
 
 @Composable
 fun AboutDroidKaigiDetail(
+    screenScrollState: LazyListState,
     modifier: Modifier = Modifier,
     onViewMapClick: () -> Unit,
 ) {
+    // Parallax effect for the header image
+    val aboutHeaderOffset by remember(screenScrollState) {
+        derivedStateOf {
+            if (screenScrollState.layoutInfo.visibleItemsInfo.isNotEmpty() && screenScrollState.firstVisibleItemIndex == 0) {
+                val scrollOffset = screenScrollState.firstVisibleItemScrollOffset.toFloat()
+                val height = screenScrollState.layoutInfo.visibleItemsInfo.first().size
+                (maxAboutHeaderOffsetDp * (scrollOffset / height)).roundToInt()
+            } else {
+                0
+            }
+        }
+    }
+
     Column(
         modifier = modifier.testTag(AboutDetailSectionTestTag.Section),
     ) {
@@ -42,7 +65,7 @@ fun AboutDroidKaigiDetail(
             contentScale = ContentScale.FillWidth,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .offset(y = aboutHeaderOffset.dp),
         )
         Text(
             text = stringResource(AboutRes.string.description),
@@ -73,6 +96,7 @@ fun AboutDroidKaigiDetailPreview() {
     KaigiTheme {
         Surface {
             AboutDroidKaigiDetail(
+                screenScrollState = rememberLazyListState(),
                 onViewMapClick = {},
             )
         }
