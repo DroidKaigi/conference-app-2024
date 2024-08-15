@@ -68,12 +68,7 @@ fun TimetableItemDetailSummaryCard(
                 top = 16.dp,
                 bottom = 8.dp,
             )
-            .dashedRoundRect(
-                color = primaryColor,
-                cornerRadius = 4.dp,
-                strokeWidth = 1.dp,
-                intervals = arrayOf(2.dp, 2.dp),
-            )
+            .dashedRoundRect(primaryColor)
             .padding(12.dp),
     ) {
         SummaryCardText(

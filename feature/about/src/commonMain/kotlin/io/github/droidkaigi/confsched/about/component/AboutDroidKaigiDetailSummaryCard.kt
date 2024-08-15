@@ -36,13 +36,7 @@ fun AboutDroidKaigiDetailSummaryCard(
     Card(
         shape = RoundedCornerShape(4.dp),
         colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainerLow),
-        modifier = modifier
-            .dashedRoundRect(
-                color = borderColor,
-                cornerRadius = 4.dp,
-                strokeWidth = 1.dp,
-                intervals = arrayOf(2.dp, 2.dp),
-            ),
+        modifier = modifier.dashedRoundRect(color = borderColor),
     ) {
         Column(
             verticalArrangement = Arrangement.spacedBy(8.dp),

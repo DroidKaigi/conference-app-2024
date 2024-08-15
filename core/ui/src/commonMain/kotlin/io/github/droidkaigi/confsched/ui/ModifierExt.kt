@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
 
 /**
  * draw round rect behind the modified content.
@@ -18,9 +19,9 @@ import androidx.compose.ui.unit.Dp
  */
 fun Modifier.dashedRoundRect(
     color: Color,
-    cornerRadius: Dp,
-    strokeWidth: Dp,
-    intervals: Array<Dp>,
+    cornerRadius: Dp = 4.dp,
+    strokeWidth: Dp = 1.dp,
+    intervals: Array<Dp> = arrayOf(2.dp, 2.dp),
 ) = this.drawBehind {
     drawRoundRect(
         color = color,
