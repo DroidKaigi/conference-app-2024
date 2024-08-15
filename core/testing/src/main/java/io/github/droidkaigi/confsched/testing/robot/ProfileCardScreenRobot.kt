@@ -66,12 +66,14 @@ class ProfileCardScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(ProfileCardEditScreenTestTag))
             .performScrollToNode(hasTestTag(testTag))
+        waitUntilIdle()
     }
 
     fun clickEditButton() {
         composeTestRule
             .onNode(hasTestTag(ProfileCardEditButtonTestTag))
             .performClick()
+        wait5Seconds()
     }
 
     fun checkCreateButtonDisabled() {

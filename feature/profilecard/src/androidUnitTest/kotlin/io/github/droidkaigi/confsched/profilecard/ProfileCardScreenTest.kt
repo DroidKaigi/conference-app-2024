@@ -65,7 +65,6 @@ class ProfileCardScreenTest(
                     describe("when click edit button") {
                         run {
                             clickEditButton()
-                            wait5Seconds()
                         }
                         itShould("show edit screen") {
                             captureScreenWithChecks {
@@ -75,7 +74,6 @@ class ProfileCardScreenTest(
                         describe("when if a required field has not been filled in") {
                             run {
                                 scrollToTestTag(ProfileCardCreateButtonTestTag)
-                                waitUntilIdle()
                             }
                             itShould("make sure the Create button is deactivated") {
                                 captureScreenWithChecks {
@@ -92,7 +90,6 @@ class ProfileCardScreenTest(
                                 inputOccupation(occupation)
                                 inputLink(link)
                                 scrollToTestTag(ProfileCardCreateButtonTestTag)
-                                waitUntilIdle()
                             }
                             itShould("make sure the Create button is activated") {
                                 captureScreenWithChecks {
