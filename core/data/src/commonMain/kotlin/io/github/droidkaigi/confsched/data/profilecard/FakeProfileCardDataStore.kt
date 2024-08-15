@@ -16,7 +16,7 @@ public class FakeProfileCardDataStore : ProfileCardDataStore {
 
             override fun get(): Flow<ProfileCard> {
                 return flowOf(
-                    ProfileCard.DoesNotExists
+                    ProfileCard.DoesNotExists,
                 )
             }
         }
@@ -32,7 +32,7 @@ public class FakeProfileCardDataStore : ProfileCardDataStore {
                         nickname = "",
                         occupation = "",
                         link = "",
-                    )
+                    ),
                 )
             }
         }

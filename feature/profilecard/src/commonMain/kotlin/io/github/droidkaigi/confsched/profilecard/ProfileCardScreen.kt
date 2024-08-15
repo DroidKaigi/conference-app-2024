@@ -350,7 +350,7 @@ private fun InputFieldWithError(
         Text(
             text = labelString,
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
         )
         TextField(
             value = value,
@@ -364,7 +364,7 @@ private fun InputFieldWithError(
                 focusedIndicatorColor = indicatorColor,
                 unfocusedIndicatorColor = indicatorColor,
                 errorIndicatorColor = MaterialTheme.colorScheme.error,
-            )
+            ),
         )
         if (errorMessage.isNotEmpty()) {
             Text(
@@ -375,7 +375,7 @@ private fun InputFieldWithError(
                     start = 16.dp,
                     top = 4.dp,
                     end = 16.dp,
-                )
+                ),
             )
         }
     }
@@ -393,7 +393,7 @@ private fun ImagePickerWithError(
         Text(
             text = stringResource(ProfileCardRes.string.image),
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(bottom = 20.dp)
+            modifier = Modifier.padding(bottom = 20.dp),
         )
         if (image != null) {
             Box {
@@ -431,7 +431,7 @@ private fun ImagePickerWithError(
                     text = errorMessage,
                     color = MaterialTheme.colorScheme.error,
                     style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(bottom = 12.dp)
+                    modifier = Modifier.padding(bottom = 12.dp),
                 )
             }
         }
