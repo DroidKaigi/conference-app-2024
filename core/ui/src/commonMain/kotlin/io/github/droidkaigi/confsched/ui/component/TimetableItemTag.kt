@@ -14,16 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.resources.DrawableResource
+import org.jetbrains.compose.resources.vectorResource
 
 @Composable
 fun TimetableItemTag(
     tagText: String,
     tagColor: Color,
     modifier: Modifier = Modifier,
-    icon: ImageVector? = null,
+    icon: DrawableResource? = null,
 ) {
     Row(
         modifier = modifier
@@ -41,7 +42,7 @@ fun TimetableItemTag(
         icon?.let { ico ->
             Icon(
                 modifier = Modifier.size(12.dp),
-                imageVector = ico,
+                imageVector = vectorResource(ico),
                 contentDescription = "",
                 tint = tagColor,
             )
