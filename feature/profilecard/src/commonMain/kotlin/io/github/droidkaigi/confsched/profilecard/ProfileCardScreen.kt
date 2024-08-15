@@ -72,6 +72,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenT
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
@@ -291,6 +292,13 @@ internal fun EditScreen(
             }
 
             Text(stringResource(ProfileCardRes.string.select_theme))
+
+            PhotoPickerButton(
+                onSelectedImage = { imageByteArray = it },
+                modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+            ) {
+                Text("画像を選択")
+            }
 
             image?.let {
                 Box {

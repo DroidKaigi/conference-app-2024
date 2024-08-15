@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sample">!!Please remove this resource when you add string resource!!</string>
     <string name="profile_card_title">Profile Card</string>
     <string name="profile_card_edit_description">Let's create a profile card to introduce yourself at events or on social media!</string>
     <string name="nick_name">Nick Name</string>
