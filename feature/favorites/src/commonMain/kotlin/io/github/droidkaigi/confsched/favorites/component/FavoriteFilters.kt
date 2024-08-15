@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.favorites.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.FilterChip
@@ -30,8 +31,8 @@ fun FavoriteFilters(
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier.padding(start = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         FavoriteFilterChip(
             selected = allFilterSelected,
