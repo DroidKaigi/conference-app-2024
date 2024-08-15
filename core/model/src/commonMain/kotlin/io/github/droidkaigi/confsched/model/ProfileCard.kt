@@ -20,4 +20,5 @@ enum class ProfileCardTheme {
     Giraffe,
     Flamingo,
     Jellyfish,
+    None,
 }
