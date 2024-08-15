@@ -41,7 +41,7 @@ class ProfileCardScreenTest(
             return describeBehaviors("ProfileCardScreen") {
                 describe("when profile card is does not exists") {
                     run {
-                        setupProfileCardDataStore(ProfileCardInputStatus.AllNotEntered)
+                        setupSavedProfileCard(ProfileCardInputStatus.AllNotEntered)
                         setupScreenContent()
                     }
                     itShould("show edit screen") {
@@ -54,7 +54,7 @@ class ProfileCardScreenTest(
                 }
                 describe("when profile card is exists") {
                     run {
-                        setupProfileCardDataStore(ProfileCardInputStatus.NoInputOtherThanImage)
+                        setupSavedProfileCard(ProfileCardInputStatus.NoInputOtherThanImage)
                         setupScreenContent()
                     }
                     itShould("show card screen") {

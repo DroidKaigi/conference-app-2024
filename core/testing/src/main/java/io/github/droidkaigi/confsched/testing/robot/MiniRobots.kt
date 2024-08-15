@@ -256,14 +256,14 @@ interface ProfileCardDataStoreRobot {
         AllNotEntered,
     }
 
-    fun setupProfileCardDataStore(profileCardInputStatus: ProfileCardInputStatus)
+    fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus)
 }
 
 class DefaultProfileCardDataStoreRobot @Inject constructor(
     profileCardDataStore: ProfileCardDataStore,
 ) : ProfileCardDataStoreRobot {
     private val fakeProfileCardDataStore = profileCardDataStore as FakeProfileCardDataStore
-    override fun setupProfileCardDataStore(profileCardInputStatus: ProfileCardInputStatus) {
+    override fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus) {
         fakeProfileCardDataStore.setup(
             when (profileCardInputStatus) {
                 NoInputOtherThanImage -> FakeProfileCardDataStore.Status.NoInputOtherThanImage
