@@ -55,6 +55,7 @@ fun TimetableList(
     onTimetableItemClick: (TimetableItem) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
+    highlightWord: String = "",
 ) {
     val layoutDirection = LocalLayoutDirection.current
     val sharedTransitionScope = LocalSharedTransitionScope.current
@@ -103,6 +104,7 @@ fun TimetableList(
                             timetableItem = timetableItem,
                             onBookmarkClick = onBookmarkClick,
                             modifier = timetableItemCardModifier,
+                            highlightWord = highlightWord,
                             tags = {
                                 TimetableItemTag(
                                     tagText = timetableItem.room.name.currentLangTitle,

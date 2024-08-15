@@ -47,6 +47,7 @@ class TimetableScreenRobot @Inject constructor(
                         onTimetableItemClick = {
                             clickedItems.add(it)
                         },
+                        onSearchClick = {},
                     )
                 }
             }

@@ -63,6 +63,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 const val timetableScreenRoute = "timetable"
 const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
 fun NavGraphBuilder.nestedSessionScreens(
+    onSearchClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
@@ -70,6 +71,7 @@ fun NavGraphBuilder.nestedSessionScreens(
     composable(timetableScreenRoute) {
         TimetableScreen(
             onTimetableItemClick = onTimetableItemClick,
+            onSearchClick = onSearchClick,
             contentPadding = contentPadding,
             modifier = modifier,
         )
@@ -90,6 +92,7 @@ const val TimetableScreenTestTag = "TimetableScreen"
 
 @Composable
 fun TimetableScreen(
+    onSearchClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -107,6 +110,7 @@ fun TimetableScreen(
     TimetableScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
+        onSearchClick = onSearchClick,
         onTimetableItemClick = onTimetableItemClick,
         onBookmarkClick = { item, bookmarked ->
             eventEmitter.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
@@ -130,6 +134,7 @@ data class TimetableScreenUiState(
 private fun TimetableScreen(
     uiState: TimetableScreenUiState,
     snackbarHostState: SnackbarHostState,
+    onSearchClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
     onTimetableUiChangeClick: () -> Unit,
@@ -159,6 +164,7 @@ private fun TimetableScreen(
                             imageVector = Icons.Default.Search,
                             contentDescription = null,
                             modifier = Modifier.padding(8.dp).clickable {
+                                onSearchClick()
                             },
                         )
                         Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
@@ -231,6 +237,7 @@ fun PreviewTimetableScreenDark() {
                 onTimetableItemClick = {},
                 onBookmarkClick = { _, _ -> },
                 onTimetableUiChangeClick = {},
+                onSearchClick = {},
                 modifier = Modifier.statusBarsPadding(),
             )
         }
