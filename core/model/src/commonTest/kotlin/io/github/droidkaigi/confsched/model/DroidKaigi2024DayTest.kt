@@ -14,37 +14,37 @@ import kotlin.test.assertEquals
 class DroidKaigi2024DayOfOrNullTest {
     @Test
     fun `returns Workday on September 11 2024`() {
-        val workday = LocalDate(2024, 9, 11)
+        val date = LocalDate(2024, 9, 11)
 
         runTest(
             expected = DroidKaigi2024Day.Workday,
-            workday.atStartOfDay(),
-            workday.at3pm(),
-            workday.atEndOfDay(),
+            date.atStartOfDay(),
+            date.at3pm(),
+            date.atEndOfDay(),
         )
     }
 
     @Test
     fun `returns Day1 on September 12 2024`() {
-        val day1 = LocalDate(2024, 9, 12)
+        val date = LocalDate(2024, 9, 12)
 
         runTest(
             expected = DroidKaigi2024Day.ConferenceDay1,
-            day1.atStartOfDay(),
-            day1.at3pm(),
-            day1.atEndOfDay(),
+            date.atStartOfDay(),
+            date.at3pm(),
+            date.atEndOfDay(),
         )
     }
 
     @Test
     fun `returns Day2 on September 13 2024`() {
-        val day2 = LocalDate(2024, 9, 13)
+        val date = LocalDate(2024, 9, 13)
 
         runTest(
             expected = DroidKaigi2024Day.ConferenceDay2,
-            day2.atStartOfDay(),
-            day2.at3pm(),
-            day2.atEndOfDay(),
+            date.atStartOfDay(),
+            date.at3pm(),
+            date.atEndOfDay(),
         )
     }
 
@@ -68,7 +68,7 @@ class DroidKaigi2024DayOfOrNullTest {
     }
 }
 
-class DroidKaigi2024DayTestInitialSelectedTabDayTest {
+class DroidKaigi2024DayInitialSelectedTabDayTest {
     @Test
     fun `initialSelectedTabDay returns Day1 on any date except for the second conference day`() {
         runTest(
