@@ -1,22 +1,38 @@
 name: 'PR Labeler'
 
 on:
-  pull_request:
+  workflow_run:
+    workflows: ["save-pr-number-for-labeler"]
+    types:
+      - completed
+
+permissions:
+  actions: read    # for downloading artifacts
+  contents: read   # for accessing repository contents
+  pull-requests: write # for removing labels from pull requests
 
 jobs:
   label:
     runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      pull-requests: write
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     timeout-minutes: 5
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Download PR number
+        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615 # v2.27.0
+        with:
+          name: pr_number
+          path: ./
+          run_id: ${{ github.event.workflow_run.id }}
+
+      - name: Read PR number
+        id: pr_number
+        run: echo "::set-output name=number::$(cat pr_number.txt)"
 
       - name: Add label
-        uses: actions/labeler@v5
-        with:
-          configuration-path: .github/configs/labeler.yml
+        run: gh pr edit "$NUMBER" --add-label "$LABELS"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ steps.pr_number.outputs.number }}
+          LABELS: type:iOS 🍎
