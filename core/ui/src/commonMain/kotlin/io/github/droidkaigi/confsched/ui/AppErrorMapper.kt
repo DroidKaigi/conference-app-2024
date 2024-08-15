@@ -4,9 +4,9 @@ import io.github.droidkaigi.confsched.model.AppError.InternetConnectionException
 import io.github.droidkaigi.confsched.ui.ComposeResourceErrorMessageType.ConnectionFailed
 
 internal fun Throwable.toApplicationErrorMessage(
-    composeResourceErrorMessage: List<ComposeResourceErrorMessage>? = null,
+    composeResourceErrorMessages: List<ComposeResourceErrorMessage>? = null,
 ): String {
-    composeResourceErrorMessage?.forEach {
+    composeResourceErrorMessages?.forEach {
         if (it.type == ConnectionFailed && this is InternetConnectionException) {
             return it.message
         }

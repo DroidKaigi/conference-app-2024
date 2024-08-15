@@ -11,11 +11,11 @@ fun <T> providePresenterDefaults(
     userMessageStateHolder: UserMessageStateHolder = rememberUserMessageStateHolder(),
     block: @Composable (UserMessageStateHolder) -> T,
 ): T {
-    val composeResourceErrorMessage = ComposeResourceErrorMessages()
+    val composeResourceErrorMessages = ComposeResourceErrorMessages()
     val handler = remember(userMessageStateHolder) {
         object : ComposeEffectErrorHandler {
             override suspend fun emit(throwable: Throwable) {
-                val message = throwable.toApplicationErrorMessage(composeResourceErrorMessage)
+                val message = throwable.toApplicationErrorMessage(composeResourceErrorMessages)
                 userMessageStateHolder.showMessage(
                     message = message,
                     actionLabel = null,
