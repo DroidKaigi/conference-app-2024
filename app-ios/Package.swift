@@ -242,7 +242,7 @@ let package = Package(
             name: "EventMapFeatureTests",
             dependencies: [
                 .eventMapFeature,
-                .tca
+                .tca,
             ]
         ),
         .target(name: "CommonComponents", dependencies: [.theme, .kmpModule, .model]),
