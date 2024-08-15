@@ -2,7 +2,6 @@ package io.github.droidkaigi.confsched.profilecard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -62,7 +61,6 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -76,7 +74,6 @@ import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link_text
 import conference_app_2024.feature.profilecard.generated.resources.nick_name
 import conference_app_2024.feature.profilecard.generated.resources.occupation
-import conference_app_2024.feature.profilecard.generated.resources.optional_input
 import conference_app_2024.feature.profilecard.generated.resources.profile_card
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_edit_description
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
@@ -278,7 +275,6 @@ internal fun EditScreen(
             InputColumn(
                 label = stringResource(ProfileCardRes.string.nick_name),
                 value = nickname,
-                isOptional = false,
                 testTag = ProfileCardNicknameTextFieldTestTag,
                 onValueChanged = { nickname = it },
             )
@@ -298,10 +294,7 @@ internal fun EditScreen(
             Column(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                Label(
-                    label = stringResource(ProfileCardRes.string.image),
-                    isOptional = true,
-                )
+                Label(label = stringResource(ProfileCardRes.string.image))
 
                 image?.let {
                     Box(modifier = Modifier.size(120.dp)) {
@@ -374,15 +367,10 @@ internal fun InputColumn(
     value: String,
     testTag: String,
     modifier: Modifier = Modifier,
-    isOptional: Boolean = true,
     onValueChanged: (String) -> Unit,
 ) {
     Column(modifier = modifier) {
-        Label(
-            label = label,
-            isOptional = isOptional,
-        )
-
+        Label(label = label)
         OutlinedTextField(
             value = value,
             onValueChange = onValueChanged,
@@ -392,40 +380,12 @@ internal fun InputColumn(
 }
 
 @Composable
-internal fun Label(
-    label: String,
-    isOptional: Boolean = false,
-) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
+internal fun Label(label: String) {
+    Text(
         modifier = Modifier.padding(bottom = 8.dp),
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.titleMedium,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(weight = 1.0f, fill = false),
-        )
-        if (isOptional) OptionLabel()
-    }
-}
-
-@Composable
-internal fun OptionLabel() {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .border(1.dp, MaterialTheme.colorScheme.primary)
-            .padding(vertical = 2.dp, horizontal = 6.dp),
-    ) {
-        Text(
-            text = stringResource(ProfileCardRes.string.optional_input),
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.titleMedium,
-        )
-    }
+        text = label,
+        style = MaterialTheme.typography.titleMedium,
+    )
 }
 
 @Composable
