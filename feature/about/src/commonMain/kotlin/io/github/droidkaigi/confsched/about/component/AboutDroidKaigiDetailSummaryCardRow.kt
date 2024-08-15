@@ -13,9 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.about.generated.resources.place_link
 import io.github.droidkaigi.confsched.about.AboutRes
@@ -41,17 +39,16 @@ fun AboutDroidKaigiDetailSummaryCardRow(
             imageVector = leadingIcon,
             contentDescription = leadingIconContentDescription,
             modifier = Modifier.size(16.dp),
-            tint = Color.Green,
+            tint = MaterialTheme.colorScheme.onSurface,
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(4.dp))
         Text(
             text = label,
-            fontWeight = FontWeight.Bold,
-            style = MaterialTheme.typography.labelLarge,
+            style = MaterialTheme.typography.titleSmall,
         )
         Spacer(modifier = Modifier.width(12.dp))
         ClickableLinkText(
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.titleSmall,
             content = content,
             onLinkClick = onLinkClick,
             regex = stringResource(AboutRes.string.place_link).toRegex(),
