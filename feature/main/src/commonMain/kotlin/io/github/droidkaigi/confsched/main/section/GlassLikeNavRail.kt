@@ -171,7 +171,7 @@ fun NavRailTabs(
         LocalContentColor provides Color.White,
     ) {
         Column(
-            modifier = modifier.padding(vertical = 32.dp).fillMaxWidth(),
+            modifier = modifier.padding(vertical = 12.dp).fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             for (tab in MainScreenTab.entries) {
