@@ -17,7 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
@@ -28,11 +29,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -42,11 +43,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -244,36 +245,49 @@ internal fun EditScreen(
             )
         }) { padding ->
         Column(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
-                .padding(padding),
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(padding)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(32.dp)
         ) {
             Text(stringResource(ProfileCardRes.string.profile_card_edit_description))
 
             InputColumn(
-                modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
                 label = stringResource(ProfileCardRes.string.nick_name),
                 value = nickname,
+                isOptional = false,
+                testTag = ProfileCardNicknameTextFieldTestTag,
                 onValueChanged = { nickname = it },
             )
             InputColumn(
-                modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
                 label = stringResource(ProfileCardRes.string.occupation),
                 value = occupation ?: "",
+                testTag = ProfileCardOccupationTextFieldTestTag,
                 onValueChanged = { occupation = it },
             )
             InputColumn(
-                modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
                 label = stringResource(ProfileCardRes.string.link_text),
                 value = link ?: "",
+                testTag = ProfileCardLinkTextFieldTestTag,
                 onValueChanged = { link = it },
             )
 
-            Text(stringResource(ProfileCardRes.string.image))
-            Button(
-                onClick = {},
-                modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                Text(stringResource(ProfileCardRes.string.add_image))
+                Label(
+                    label = stringResource(ProfileCardRes.string.image),
+                    isOptional = true,
+                )
+                Button(
+                    onClick = {},
+                    modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+                ) {
+                    Text(stringResource(ProfileCardRes.string.add_image))
+                }
             }
 
             Text(stringResource(ProfileCardRes.string.select_theme))
@@ -315,9 +329,13 @@ internal fun EditScreen(
                         ),
                     )
                 },
-                modifier = Modifier.testTag(ProfileCardCreateButtonTestTag),
+                modifier = Modifier.fillMaxWidth()
+                    .testTag(ProfileCardCreateButtonTestTag),
             ) {
-                Text(stringResource(ProfileCardRes.string.create_card))
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = stringResource(ProfileCardRes.string.create_card)
+                )
             }
         }
     }
@@ -328,18 +346,42 @@ internal fun InputColumn(
     modifier: Modifier = Modifier,
     label: String,
     value: String,
+    isOptional: Boolean = true,
+    testTag: String,
     onValueChanged: (String) -> Unit,
 ) {
-    Column {
-        Row {
-            Text(label)
-            OptionLabel()
-        }
-        TextField(
+    Column(modifier = modifier) {
+        Label(
+            label = label,
+            isOptional = isOptional,
+        )
+
+        OutlinedTextField(
             value = value,
             onValueChange = onValueChanged,
-            modifier = modifier,
+            modifier = Modifier.fillMaxWidth().testTag(testTag),
         )
+    }
+}
+
+@Composable
+internal fun Label(
+    label: String,
+    isOptional: Boolean = false,
+) {
+    Row(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(bottom = 8.dp),
+    ) {
+        Text(
+            text = label,
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.weight(weight = 1.0f, fill = false)
+        )
+        if (isOptional) OptionLabel()
     }
 }
 
@@ -348,13 +390,13 @@ internal fun OptionLabel() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
-            .clip(RoundedCornerShape(4.dp))
-            .border(1.dp, Color.Blue, RoundedCornerShape(4.dp))
-            .padding(vertical = 4.5.dp, horizontal = 8.dp),
+            .border(1.dp, MaterialTheme.colorScheme.primary)
+            .padding(vertical = 2.dp, horizontal = 6.dp),
     ) {
         Text(
             text = stringResource(ProfileCardRes.string.optional_input),
-            style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.titleMedium,
         )
     }
 }

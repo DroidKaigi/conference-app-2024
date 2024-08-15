@@ -69,6 +69,7 @@ class ProfileCardScreenTest(
                             }
                             describe("click create button") {
                                 run {
+                                    scrollProfile()
                                     clickCreateButton()
                                 }
                                 itShould("show card screen") {
