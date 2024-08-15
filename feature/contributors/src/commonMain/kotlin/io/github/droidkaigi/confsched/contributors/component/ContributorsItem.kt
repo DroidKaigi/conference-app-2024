@@ -17,11 +17,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.previewOverride
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
+
+const val ContributorsItemImageTestTag = "ContributorsItemImageTestTag:"
+const val ContributorsUserNameTextTestTag = "ContributorsUserNameTextTestTag:"
 
 private val contributorIconShape = CircleShape
 
@@ -44,7 +48,7 @@ fun ContributorsItem(
             painter = previewOverride(previewPainter = { rememberVectorPainter(image = Icons.Default.Person) }) {
                 rememberAsyncImagePainter(contributor.iconUrl)
             },
-            contentDescription = null,
+            contentDescription = contributor.username,
             modifier = Modifier
                 .size(52.dp)
                 .clip(contributorIconShape)
@@ -52,13 +56,15 @@ fun ContributorsItem(
                     width = 1.dp,
                     color = MaterialTheme.colorScheme.outline,
                     shape = contributorIconShape,
-                ),
+                )
+                .testTag(ContributorsItemImageTestTag.plus(contributor.username)),
         )
         Text(
             text = contributor.username,
             style = MaterialTheme.typography.bodyLarge,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.testTag(ContributorsUserNameTextTestTag.plus(contributor.username)),
         )
     }
 }

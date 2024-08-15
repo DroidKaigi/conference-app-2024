@@ -37,26 +37,76 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun behaviors(): List<DescribedBehavior<ContributorsScreenRobot>> {
             return describeBehaviors<ContributorsScreenRobot>(name = "ContributorsScreen") {
-                describe("when launch") {
+                describe("when server is operational") {
                     run {
                         setupContributorServer(ContributorsServerRobot.ServerStatus.Operational)
-                        setupScreenContent()
                     }
-                    itShould("show contributors list") {
-                        captureScreenWithChecks(
-                            checks = { checkContributorsDisplayed() },
-                        )
+                    describe("when launch") {
+                        run {
+                            setupScreenContent()
+                        }
+                        itShould("show contributor 1 to 5") {
+                            captureScreenWithChecks {
+                                checkExistsContributorItem(
+                                    fromTo = 0 to 5,
+                                )
+                            }
+                        }
+                        describe("when scroll to contributor 9") {
+                            run {
+                                scrollToTestTag(ContributorsItemTestTag.plus(9))
+                            }
+                            itShould("show contributor 6 to 10") {
+                                captureScreenWithChecks {
+                                    checkExistsContributorItem(
+                                        fromTo = 5 to 10,
+                                    )
+                                }
+                            }
+                        }
+                        describe("when scroll to contributor 12") {
+                            run {
+                                scrollToTestTag(ContributorsItemTestTag.plus(12))
+                            }
+                            itShould("show contributor 11 to 15") {
+                                captureScreenWithChecks {
+                                    checkExistsContributorItem(
+                                        fromTo = 10 to 15,
+                                    )
+                                }
+                            }
+                        }
+                        describe("when scroll to contributor 20") {
+                            run {
+                                scrollToTestTag(ContributorsItemTestTag.plus(20))
+                            }
+                            itShould("show contributor 16 to 20") {
+                                captureScreenWithChecks {
+                                    checkExistsContributorItem(
+                                        fromTo = 15 to 20,
+                                    )
+                                }
+                            }
+                        }
                     }
-                }
-                describe("when launch with error") {
-                    run {
-                        setupContributorServer(ContributorsServerRobot.ServerStatus.Error)
-                        setupScreenContent()
-                    }
-                    itShould("show error message") {
-                        captureScreenWithChecks(
-                            checks = { checkErrorSnackbarDisplayed() },
-                        )
+
+                    describe("when server is down") {
+                        run {
+                            setupContributorServer(ContributorsServerRobot.ServerStatus.Error)
+                        }
+                        describe("when launch") {
+                            run {
+                                setupScreenContent()
+                            }
+                            itShould("does not show contributor, and show snackbar") {
+                                captureScreenWithChecks(
+                                    checks = {
+                                        checkDoesNotExistsContributorItem()
+                                        checkErrorSnackbarDisplayed()
+                                    },
+                                )
+                            }
+                        }
                     }
                 }
             }
