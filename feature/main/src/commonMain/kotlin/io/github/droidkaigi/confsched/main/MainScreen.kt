@@ -230,13 +230,15 @@ fun MainScreen(
 
         Scaffold(
             bottomBar = {
-                GlassLikeBottomNavigation(
-                    hazeState = hazeState,
-                    onTabSelected = {
-                        onTabSelected(mainNestedNavController, it)
-                    },
-                    modifier = Modifier.safeDrawingPadding(),
-                )
+                AnimatedVisibility(visible = navigationType == BottomNavigation) {
+                    GlassLikeBottomNavigation(
+                        hazeState = hazeState,
+                        onTabSelected = {
+                            onTabSelected(mainNestedNavController, it)
+                        },
+                        modifier = Modifier.safeDrawingPadding(),
+                    )
+                }
             },
         ) { padding ->
             scaffoldPadding.value = padding
