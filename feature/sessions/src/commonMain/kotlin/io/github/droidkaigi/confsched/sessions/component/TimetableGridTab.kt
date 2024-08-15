@@ -54,7 +54,7 @@ fun TimetableDayTab(
                 DroidKaigi2024Day.visibleDays().forEach { conferenceDay ->
                     Tab(
                         modifier = Modifier
-                            .testTag(TimetableTabTestTag.plus(conferenceDay.dayIndex))
+                            .testTag(TimetableTabTestTag.plus(conferenceDay.ordinal))
                             .height(64.dp),
                         selected = false,
                         onClick = {
