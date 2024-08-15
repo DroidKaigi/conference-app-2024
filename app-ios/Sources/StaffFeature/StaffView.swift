@@ -24,6 +24,8 @@ public struct StaffView: View {
                 }
             }
             .padding(16)
+            // bottom floating tabbar padding
+            Color.clear.padding(.bottom, 60)
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
         .onAppear {
