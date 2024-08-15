@@ -30,7 +30,7 @@ jobs:
         run: echo "::set-output name=number::$(cat pr_number.txt)"
 
       - name: Add label
-        run: gh issue edit "$NUMBER" --add-label "$LABELS"
+        run: gh pr edit "$NUMBER" --add-label "$LABELS"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
