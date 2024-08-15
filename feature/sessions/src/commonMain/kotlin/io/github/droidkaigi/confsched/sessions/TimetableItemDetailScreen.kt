@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -102,8 +103,11 @@ fun TimetableItemDetailScreen(
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
 
-    if (uiState is Loaded && uiState.shouldGoToFavoriteList) {
-        onFavoriteListClick()
+    LaunchedEffect(uiState is Loaded && uiState.shouldGoToFavoriteList) {
+        if (uiState is Loaded && uiState.shouldGoToFavoriteList) {
+            eventEmitter.tryEmit(TimetableItemDetailEvent.FavoriteListNavigated)
+            onFavoriteListClick()
+        }
     }
 
     TimetableItemDetailScreen(

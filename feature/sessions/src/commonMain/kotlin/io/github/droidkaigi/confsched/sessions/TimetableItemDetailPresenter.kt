@@ -17,6 +17,7 @@ import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.model.TimetableSessionType.NORMAL
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.Bookmark
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.FavoriteListNavigated
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDescriptionLanguage
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
@@ -29,6 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 sealed interface TimetableItemDetailEvent {
     data class Bookmark(val timetableItem: TimetableItem) : TimetableItemDetailEvent
     data class SelectDescriptionLanguage(val language: Lang) : TimetableItemDetailEvent
+    data object FavoriteListNavigated : TimetableItemDetailEvent
 }
 
 @Composable
@@ -73,6 +75,10 @@ fun timetableItemDetailPresenter(
 
                 is SelectDescriptionLanguage -> {
                     selectedDescriptionLanguage = event.language
+                }
+
+                is FavoriteListNavigated -> {
+                    shouldGoToFavoriteList = false
                 }
             }
         }
