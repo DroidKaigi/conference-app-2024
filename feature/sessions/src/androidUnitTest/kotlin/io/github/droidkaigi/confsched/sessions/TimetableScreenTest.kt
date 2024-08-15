@@ -10,7 +10,9 @@ import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.atTime
+import kotlinx.datetime.format
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -121,17 +123,32 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                 }
-                describe("when the current date is the second conference day") {
-                    run {
-                        setupTimetableServer(ServerStatus.Operational)
-                        setupTimetableScreenContent(LocalDateTime(2024, 9, 13, 10, 0))
-                    }
-                    itShould("show timetable items") {
-                        captureScreenWithChecks(checks = {
-                            checkTimetableListDisplayed()
-                            checkTimetableListItemsDisplayed()
-                            checkTimetableTabSelected(DroidKaigi2024Day.ConferenceDay2)
-                        })
+                listOf(
+                    InitialTabTestSpec(
+                        date = LocalDate(2024, 9, 11),
+                        expectedInitialTab = DroidKaigi2024Day.ConferenceDay1,
+                    ),
+                    InitialTabTestSpec(
+                        date = LocalDate(2024, 9, 12),
+                        expectedInitialTab = DroidKaigi2024Day.ConferenceDay1,
+                    ),
+                    InitialTabTestSpec(
+                        date = LocalDate(2024, 9, 13),
+                        expectedInitialTab = DroidKaigi2024Day.ConferenceDay2,
+                    ),
+                ).forEach { case ->
+                    describe("when the current date is ${case.date.format(LocalDate.Formats.ISO)}") {
+                        run {
+                            setupTimetableServer(ServerStatus.Operational)
+                            setupTimetableScreenContent(case.date.atTime(10, 0))
+                        }
+                        itShould("show timetable items for ${case.expectedInitialTab.monthAndDay()}") {
+                            captureScreenWithChecks(checks = {
+                                checkTimetableListDisplayed()
+                                checkTimetableListItemsDisplayed()
+                                checkTimetableTabSelected(case.expectedInitialTab)
+                            })
+                        }
                     }
                 }
                 describe("when server is down") {
@@ -149,3 +166,8 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
         }
     }
 }
+
+private data class InitialTabTestSpec(
+    val date: LocalDate,
+    val expectedInitialTab: DroidKaigi2024Day,
+)
