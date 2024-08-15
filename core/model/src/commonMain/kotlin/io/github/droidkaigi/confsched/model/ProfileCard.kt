@@ -22,6 +22,7 @@ enum class ProfileCardTheme {
     Giraffe,
     Flamingo,
     Jellyfish,
+    None,
 }
 
 public fun ProfileCard.Exists.Companion.fake(): ProfileCard.Exists {

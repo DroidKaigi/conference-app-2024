@@ -2,6 +2,8 @@ package io.github.droidkaigi.confsched.profilecard.component
 
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,13 +52,12 @@ internal fun PhotoPickerButton(
         )
     }
 
-    Button(
-        onClick = {
-            imagePicker.launch()
-        },
+    OutlinedButton(
+        onClick = imagePicker::launch,
         modifier = modifier,
+        contentPadding = ButtonDefaults.TextButtonWithIconContentPadding,
     ) {
-        content()
+        content.invoke()
     }
 }
 

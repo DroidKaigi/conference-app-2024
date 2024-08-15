@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -61,8 +62,10 @@ import io.github.droidkaigi.confsched.profilecard.navigateProfileCardScreen
 import io.github.droidkaigi.confsched.profilecard.profileCardScreen
 import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
 import io.github.droidkaigi.confsched.sessions.navigateTimetableScreen
+import io.github.droidkaigi.confsched.sessions.navigateToSearchScreen
 import io.github.droidkaigi.confsched.sessions.navigateToTimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
+import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.share.ShareNavigator
@@ -118,11 +121,17 @@ private fun KaigiNavHost(
                     onLinkClick = externalNavController::navigate,
                     onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
                     onShareClick = externalNavController::onShareClick,
+                    onFavoriteListClick = { navController.navigate(favoritesScreenRoute) },
                 )
 
                 contributorsScreens(
                     onNavigationIconClick = navController::popBackStack,
                     onContributorItemClick = externalNavController::navigate,
+                )
+
+                searchScreens(
+                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                    onBackClick = navController::popBackStack,
                 )
 
                 staffScreens(
@@ -133,6 +142,11 @@ private fun KaigiNavHost(
                 sponsorsScreens(
                     onNavigationIconClick = navController::popBackStack,
                     onSponsorsItemClick = externalNavController::navigate,
+                )
+
+                favoritesScreens(
+                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                    contentPadding = PaddingValues(),
                 )
             }
         }
@@ -151,6 +165,7 @@ private fun NavGraphBuilder.mainScreen(
         mainNestedGraph = { mainNestedNavController, contentPadding ->
             nestedSessionScreens(
                 modifier = Modifier,
+                onSearchClick = navController::navigateToSearchScreen,
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
                 contentPadding = contentPadding,
             )
@@ -173,6 +188,7 @@ private fun NavGraphBuilder.mainScreen(
                         AboutItem.Map -> externalNavController.navigate(
                             url = "https://goo.gl/maps/vv9sE19JvRjYKtSP9",
                         )
+
                         AboutItem.Sponsors -> navController.navigate(sponsorsScreenRoute)
                         AboutItem.CodeOfConduct -> {
                             externalNavController.navigate(
