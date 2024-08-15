@@ -2,15 +2,9 @@
 <resources>
     <string name="profile_card_title">Profile Card</string>
     <string name="profile_card_edit_description">Let's create a profile card to introduce yourself at events or on social media!</string>
-    <string name="nick_name">Nick Name</string>
-    <string name="occupation">Occupation</string>
-    <string name="link_text">Link（ex.X、Instagram...）</string>
-    <string name="image">image</string>
-    <string name="add_image">Add Image</string>
+    <string name="link_example_text">（ex.X、Instagram...）</string>
     <string name="select_theme">Select Theme</string>
     <string name="create_card">Create Card</string>
-    <string name="optional_input">Opptional</string>
-    <string name="profile_card">Profile Card</string>
     <string name="nickname">Nickname</string>
     <string name="occupation">Occupation</string>
     <string name="link">Link</string>
