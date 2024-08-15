@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -285,22 +286,18 @@ internal fun EditScreen(
                     label = stringResource(ProfileCardRes.string.image),
                     isOptional = true,
                 )
-                Button(
-                    onClick = {},
+
+                PhotoPickerButton(
+                    onSelectedImage = { imageByteArray = it },
                     modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
                 ) {
+                    Icon(Icons.Default.Add, null)
+                    Spacer(Modifier.width(8.dp))
                     Text(stringResource(ProfileCardRes.string.add_image))
                 }
             }
 
             Text(stringResource(ProfileCardRes.string.select_theme))
-
-            PhotoPickerButton(
-                onSelectedImage = { imageByteArray = it },
-                modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
-            ) {
-                Text("画像を選択")
-            }
 
             image?.let {
                 Box {
