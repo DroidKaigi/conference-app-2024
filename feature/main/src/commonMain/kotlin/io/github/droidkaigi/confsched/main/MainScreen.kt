@@ -13,7 +13,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.displayCutoutPadding
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -31,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -217,8 +222,20 @@ fun MainScreen(
     val hazeState = remember { HazeState() }
 
     val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
+    val layoutDirection = LocalLayoutDirection.current
 
-    Row(modifier = modifier.displayCutoutPadding().fillMaxSize()) {
+    Row(
+        modifier = modifier
+            .padding(
+                start = WindowInsets.displayCutout
+                    .asPaddingValues()
+                    .calculateStartPadding(layoutDirection),
+                end = WindowInsets.displayCutout
+                    .asPaddingValues()
+                    .calculateEndPadding(layoutDirection),
+            )
+            .fillMaxSize(),
+    ) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
             GlassLikeNavRail(
                 hazeState = hazeState,
