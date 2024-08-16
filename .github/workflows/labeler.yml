@@ -9,7 +9,7 @@ on:
 permissions:
   actions: read    # for downloading artifacts
   contents: read   # for accessing repository contents
-  pull-requests: write # for removing labels from pull requests
+  pull-requests: write # for add labels to pull requests
 
 jobs:
   label:

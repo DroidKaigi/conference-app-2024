@@ -1,4 +1,4 @@
-name: iOS Build
+name: iOS Build and Test
 
 on:
   push:
@@ -6,11 +6,11 @@ on:
   pull_request:
 
 concurrency:
-  group: ios-build-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build-ios:
+  build-test-ios:
     runs-on: macos-latest
 
     steps:
@@ -19,4 +19,6 @@ jobs:
       - name: Set up XCFramework arch filter
         run: echo "arch=arm64" >> local.properties
       - run: make build-app-debug
+        working-directory: app-ios
+      - run: make test-app-debug
         working-directory: app-ios
