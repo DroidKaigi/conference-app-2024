@@ -12,7 +12,7 @@ fun hasTestTag(
     ignoreCase: Boolean = false,
 ): SemanticsMatcher {
     return SemanticsMatcher(
-        "TestTag ${if (substring) "contains" else "is"} '$testTag' (ignoreCase: $ignoreCase)"
+        "TestTag ${if (substring) "contains" else "is"} '$testTag' (ignoreCase: $ignoreCase)",
     ) { node ->
         val nodeTestTag: String? = node.config.getOrNull(SemanticsProperties.TestTag)
         when {
@@ -29,15 +29,15 @@ fun SemanticsNodeInteractionCollection.assertCountAtLeast(
     val errorOnFail = "Failed to assert minimum count of nodes."
     val matchedNodes = fetchSemanticsNodes(
         atLeastOneRootRequired = minimumExpectedSize > 0,
-        errorOnFail
+        errorOnFail,
     )
     if (matchedNodes.size < minimumExpectedSize) {
         throw AssertionError(
             buildErrorMessageForMinimumCountMismatch(
                 errorMessage = errorOnFail,
                 foundNodes = matchedNodes,
-                minimumExpectedCount = minimumExpectedSize
-            )
+                minimumExpectedCount = minimumExpectedSize,
+            ),
         )
     }
     return this
