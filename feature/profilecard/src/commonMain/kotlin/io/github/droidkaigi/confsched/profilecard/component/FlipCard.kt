@@ -121,7 +121,7 @@ internal fun FlipCard(
             },
         elevation = CardDefaults.cardElevation(10.dp),
     ) {
-        val profileImage = uiState.image.decodeBase64Bytes().toImageBitmap()
+        val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
         if (isBack) { // Back
             FlipCardBack(uiState)
         } else { // Front
