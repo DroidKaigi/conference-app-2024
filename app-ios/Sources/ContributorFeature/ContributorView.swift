@@ -51,7 +51,12 @@ public struct ContributorView: View {
                 KmpPresenterContributorView()
 
             case .fullKmp:
-                KmpContributorComposeViewControllerWrapper()
+                KmpContributorComposeViewControllerWrapper { urlString in
+                    guard let url = URL(string: urlString) else {
+                        return
+                    }
+                    store.send(.view(.contributorButtonTapped(url)))
+                }
             }
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
