@@ -111,7 +111,7 @@ fun SponsorsList(
             )
         }
         items(
-            items = uiState.platinumSponsors,
+            items = uiState.supporters,
             span = { GridItemSpan(2) },
         ) { sponsor ->
             SponsorItem(
