@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -169,6 +170,7 @@ fun SearchScreen(
             when (uiState) {
                 is SearchScreenUiState.Empty -> EmptySearchResultBody(
                     searchWord = uiState.searchWord,
+                    modifier = Modifier.imePadding(),
                 )
 
                 is SearchScreenUiState.SearchList -> SearchList(
@@ -176,6 +178,7 @@ fun SearchScreen(
                     highlightWord = uiState.searchWord,
                     onBookmarkClick = { timetableItem, _ -> onTimetableItemBookmark(timetableItem) },
                     onTimetableItemClick = onTimetableItemClick,
+                    modifier = Modifier.imePadding(),
                 )
             }
         }
