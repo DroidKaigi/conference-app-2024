@@ -153,7 +153,7 @@ internal sealed interface ProfileCardUiState {
         val linkError @Composable get() = if (link.isEmpty()) {
             stringResource(
                 ProfileCardRes.string.enter_validate_format,
-                stringResource(ProfileCardRes.string.occupation),
+                stringResource(ProfileCardRes.string.link),
             )
         } else {
             ""
