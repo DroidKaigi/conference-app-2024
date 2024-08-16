@@ -23,7 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import conference_app_2024.feature.eventmap.generated.resources.Res
-import conference_app_2024.feature.eventmap.generated.resources.event_map
+import conference_app_2024.feature.eventmap.generated.resources.event_map_1f
+import conference_app_2024.feature.eventmap.generated.resources.event_map_b1f
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -82,8 +83,13 @@ fun EventMapTab(
             },
         )
         Spacer(modifier = Modifier.height(24.dp))
+        val mapRes = if (selectedTabIndex == 0) {
+            Res.drawable.event_map_1f
+        } else {
+            Res.drawable.event_map_b1f
+        }
         Image(
-            painter = painterResource(Res.drawable.event_map),
+            painter = painterResource(mapRes),
             contentDescription = null,
         )
     }
