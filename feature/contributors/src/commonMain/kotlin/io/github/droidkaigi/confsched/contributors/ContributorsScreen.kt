@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.contributors
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -129,9 +130,10 @@ fun ContributorsScreen(
         Contributors(
             contributors = uiState.contributors,
             onContributorsItemClick = onContributorsItemClick,
+            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(top = padding.calculateTopPadding())
                 .let {
                     if (scrollBehavior != null) {
                         it.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -148,9 +150,11 @@ private fun Contributors(
     contributors: PersistentList<Contributor>,
     onContributorsItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     LazyColumn(
         modifier = modifier,
+        contentPadding = contentPadding,
     ) {
         items(contributors) {
             ContributorsItem(
