@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.staff
 
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -103,7 +104,9 @@ fun StaffScreen(
             null
         }
     Scaffold(
-        modifier = modifier.testTag(StaffScreenTestTag),
+        modifier = modifier
+            .displayCutoutPadding()
+            .testTag(StaffScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (!isTopAppBarHidden) {
