@@ -30,7 +30,7 @@ public data class Timetable(
     }
 
     val days: List<DroidKaigi2024Day> by lazy {
-        timetableItems.mapNotNull { it.day }.toSet().sortedBy { it.dayIndex }
+        timetableItems.mapNotNull { it.day }.toSet().sortedBy { it.ordinal }
     }
 
     val categories: List<TimetableCategory> by lazy {
