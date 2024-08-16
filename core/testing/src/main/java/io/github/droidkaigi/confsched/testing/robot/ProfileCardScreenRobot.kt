@@ -14,6 +14,9 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardCreateButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenColumnTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenTestTag
+import io.github.droidkaigi.confsched.profilecard.ProfileCardFlipCardBackTestTag
+import io.github.droidkaigi.confsched.profilecard.ProfileCardFlipCardFrontTestTag
+import io.github.droidkaigi.confsched.profilecard.ProfileCardFlipCardTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardLinkTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardNicknameTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardOccupationTextFieldTestTag
@@ -77,6 +80,13 @@ class ProfileCardScreenRobot @Inject constructor(
         wait5Seconds()
     }
 
+    fun flipProfileCard() {
+        composeTestRule
+            .onNode(hasTestTag(ProfileCardFlipCardTestTag))
+            .performClick()
+        waitUntilIdle()
+    }
+
     fun checkCreateButtonDisabled() {
         composeTestRule
             .onNode(hasTestTag(ProfileCardCreateButtonTestTag))
@@ -122,6 +132,24 @@ class ProfileCardScreenRobot @Inject constructor(
     fun checkCardScreenDisplayed() {
         composeTestRule
             .onNode(hasTestTag(ProfileCardCardScreenTestTag))
+            .assertIsDisplayed()
+    }
+
+    fun checkProfileCardFrontDisplayed() {
+        composeTestRule
+            .onNode(
+                hasTestTag(ProfileCardFlipCardFrontTestTag),
+                useUnmergedTree = true,
+            )
+            .assertIsDisplayed()
+    }
+
+    fun checkProfileCardBackDisplayed() {
+        composeTestRule
+            .onNode(
+                hasTestTag(ProfileCardFlipCardBackTestTag),
+                useUnmergedTree = true,
+            )
             .assertIsDisplayed()
     }
 }
