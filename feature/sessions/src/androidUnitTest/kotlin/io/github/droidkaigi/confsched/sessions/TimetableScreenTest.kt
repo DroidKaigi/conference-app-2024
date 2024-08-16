@@ -142,7 +142,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             setupTimetableServer(ServerStatus.Operational)
                             setupTimetableScreenContent(case.date.atTime(10, 0))
                         }
-                        itShould("show timetable items for ${case.expectedInitialTab.monthAndDay()}") {
+                        itShould("show timetable items for ${case.expectedInitialTab.name}") {
                             captureScreenWithChecks(checks = {
                                 checkTimetableListDisplayed()
                                 checkTimetableListItemsDisplayed()
