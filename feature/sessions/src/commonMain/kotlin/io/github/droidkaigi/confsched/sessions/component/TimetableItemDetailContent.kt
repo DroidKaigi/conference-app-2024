@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.PlayCircle
@@ -109,14 +110,16 @@ private fun DescriptionSection(
     var isExpand by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(8.dp)) {
-        ClickableLinkText(
-            content = description,
-            regex = "(https)(://[\\w/:%#$&?()~.=+\\-]+)".toRegex(),
-            onLinkClick = onLinkClick,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = if (isExpand) Int.MAX_VALUE else 7,
-            overflow = if (isExpand) TextOverflow.Clip else TextOverflow.Ellipsis,
-        )
+        SelectionContainer {
+            ClickableLinkText(
+                content = description,
+                regex = "(https)(://[\\w/:%#$&?()~.=+\\-]+)".toRegex(),
+                onLinkClick = onLinkClick,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = if (isExpand) Int.MAX_VALUE else 7,
+                overflow = if (isExpand) TextOverflow.Clip else TextOverflow.Ellipsis,
+            )
+        }
         Spacer(Modifier.height(16.dp))
         AnimatedVisibility(
             visible = isExpand.not(),
