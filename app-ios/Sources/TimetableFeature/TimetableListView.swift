@@ -103,6 +103,8 @@ struct TimetableListView: View {
             .onAppear {
                 store.send(.view(.onAppear))
             }.background(AssetColors.Surface.surface.swiftUIColor)
+            // bottom floating tabbar padding
+            Color.clear.padding(.bottom, 60)
         }
     }
 }

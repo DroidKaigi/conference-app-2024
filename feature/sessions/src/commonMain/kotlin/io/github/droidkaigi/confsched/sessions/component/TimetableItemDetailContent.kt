@@ -1,5 +1,8 @@
 package io.github.droidkaigi.confsched.sessions.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -104,6 +107,7 @@ private fun DescriptionSection(
     onLinkClick: (url: String) -> Unit,
 ) {
     var isExpand by remember { mutableStateOf(false) }
+    var isOverFlow by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(8.dp)) {
         ClickableLinkText(
@@ -113,9 +117,16 @@ private fun DescriptionSection(
             style = MaterialTheme.typography.bodyLarge,
             maxLines = if (isExpand) Int.MAX_VALUE else 7,
             overflow = if (isExpand) TextOverflow.Clip else TextOverflow.Ellipsis,
+            onOverflow = {
+                isOverFlow = it
+            },
         )
         Spacer(Modifier.height(16.dp))
-        if (isExpand.not()) {
+        AnimatedVisibility(
+            visible = isExpand.not() && isOverFlow,
+            enter = EnterTransition.None,
+            exit = fadeOut(),
+        ) {
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
                 onClick = { isExpand = true },
