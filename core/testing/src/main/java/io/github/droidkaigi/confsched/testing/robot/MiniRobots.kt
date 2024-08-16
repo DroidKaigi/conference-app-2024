@@ -25,10 +25,20 @@ import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.shadows.ShadowLooper
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.time.Duration.Companion.seconds
 
-inline fun <reified T : ScreenRobot> runRobot(robot: T, noinline block: suspend T.() -> Unit) {
-    robot.run(robot, block)
+inline fun <reified T : ScreenRobot> runRobot(
+    robot: T,
+    context: CoroutineContext = EmptyCoroutineContext,
+    noinline block: suspend T.() -> Unit,
+) {
+    robot.run(
+        context,
+        robot,
+        block,
+    )
 }
 
 class DefaultScreenRobot @Inject constructor(
@@ -45,8 +55,15 @@ class DefaultScreenRobot @Inject constructor(
 interface ScreenRobot : ComposeScreenRobot, CaptureScreenRobot, WaitRobot {
     val robotTestRule: RobotTestRule
 
-    fun <T : ScreenRobot> run(thiz: T, block: suspend T.() -> Unit) {
-        runTestWithLogging(timeout = 30.seconds) {
+    fun <T : ScreenRobot> run(
+        context: CoroutineContext = EmptyCoroutineContext,
+        thiz: T,
+        block: suspend T.() -> Unit,
+    ) {
+        runTestWithLogging(
+            context = context,
+            timeout = 30.seconds,
+        ) {
             thiz.block()
         }
     }
