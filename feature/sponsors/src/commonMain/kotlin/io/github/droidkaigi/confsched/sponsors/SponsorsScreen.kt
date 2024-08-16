@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.sponsors
 
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons.AutoMirrored.Filled
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -116,9 +115,7 @@ fun SponsorsScreen(
             null
         }
     Scaffold(
-        modifier = modifier
-            .displayCutoutPadding()
-            .testTag(SponsorsScreenTestTag),
+        modifier = modifier.testTag(SponsorsScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (scrollBehavior != null) {

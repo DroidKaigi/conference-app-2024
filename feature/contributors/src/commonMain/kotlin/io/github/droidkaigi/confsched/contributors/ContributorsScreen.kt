@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.contributors
 
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -104,9 +103,7 @@ fun ContributorsScreen(
             null
         }
     Scaffold(
-        modifier = modifier
-            .displayCutoutPadding()
-            .testTag(ContributorsScreenTestTag),
+        modifier = modifier.testTag(ContributorsScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (scrollBehavior != null) {
