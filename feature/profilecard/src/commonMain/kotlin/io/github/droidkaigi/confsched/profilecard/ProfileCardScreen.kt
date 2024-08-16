@@ -73,9 +73,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
-import conference_app_2024.feature.profilecard.generated.resources.add_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.create_card
-import conference_app_2024.feature.profilecard.generated.resources.enter_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
@@ -148,6 +146,13 @@ internal sealed interface ProfileCardUiState {
     ) : ProfileCardUiState
 }
 
+internal data class ProfileCardError(
+    val nicknameError: String = "",
+    val occupationError: String = "",
+    val linkError: String = "",
+    val imageError: String = "",
+)
+
 internal enum class ProfileCardUiType {
     Loading,
     Edit,
@@ -158,6 +163,7 @@ internal data class ProfileCardScreenState(
     val isLoading: Boolean,
     val editUiState: ProfileCardUiState.Edit,
     val cardUiState: ProfileCardUiState.Card?,
+    val cardError: ProfileCardError,
     val uiType: ProfileCardUiType,
     val userMessageStateHolder: UserMessageStateHolder,
 )
@@ -212,6 +218,19 @@ internal fun ProfileCardScreen(
             ProfileCardUiType.Edit -> {
                 EditScreen(
                     uiState = uiState.editUiState,
+                    profileCardError = uiState.cardError,
+                    onChangeNickname = {
+                        eventEmitter.tryEmit(EditScreenEvent.OnChangeNickname(it))
+                    },
+                    onChangeOccupation = {
+                        eventEmitter.tryEmit(EditScreenEvent.OnChangeOccupation(it))
+                    },
+                    onChangeLink = {
+                        eventEmitter.tryEmit(EditScreenEvent.OnChangeLink(it))
+                    },
+                    onChangeImage = {
+                        eventEmitter.tryEmit(EditScreenEvent.OnChangeImage(it))
+                    },
                     onClickCreate = {
                         eventEmitter.tryEmit(EditScreenEvent.Create(it))
                     },
@@ -249,6 +268,11 @@ internal fun ProfileCardScreen(
 @Composable
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
+    profileCardError: ProfileCardError,
+    onChangeNickname: (String) -> Unit,
+    onChangeOccupation: (String) -> Unit,
+    onChangeLink: (String) -> Unit,
+    onChangeImage: (String) -> Unit,
     onClickCreate: (ProfileCard.Exists) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -261,13 +285,6 @@ internal fun EditScreen(
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
     var selectedTheme by remember { mutableStateOf(uiState.theme) }
-
-    val (nicknameError, occupationError, linkError, imageError) = rememberValidationErrors(
-        nickname,
-        occupation,
-        link,
-        image,
-    )
 
     val isValidInputs by remember {
         derivedStateOf {
@@ -299,25 +316,34 @@ internal fun EditScreen(
             InputFieldWithError(
                 value = nickname,
                 labelString = stringResource(ProfileCardRes.string.nickname),
-                errorMessage = nicknameError,
+                errorMessage = profileCardError.nicknameError,
                 textFieldTestTag = ProfileCardNicknameTextFieldTestTag,
-                onValueChange = { nickname = it },
+                onValueChange = {
+                    nickname = it
+                    onChangeNickname(it)
+                },
             )
             InputFieldWithError(
                 value = occupation,
                 labelString = stringResource(ProfileCardRes.string.occupation),
-                errorMessage = occupationError,
+                errorMessage = profileCardError.occupationError,
                 textFieldTestTag = ProfileCardOccupationTextFieldTestTag,
-                onValueChange = { occupation = it },
+                onValueChange = {
+                    occupation = it
+                    onChangeOccupation(it)
+                },
             )
             val linkLabel = stringResource(ProfileCardRes.string.link)
                 .plus(stringResource(ProfileCardRes.string.link_example_text))
             InputFieldWithError(
                 value = link,
                 labelString = linkLabel,
-                errorMessage = linkError,
+                errorMessage = profileCardError.linkError,
                 textFieldTestTag = ProfileCardLinkTextFieldTestTag,
-                onValueChange = { link = it },
+                onValueChange = {
+                    link = it
+                    onChangeLink(it)
+                },
             )
 
             Column(
@@ -326,9 +352,15 @@ internal fun EditScreen(
                 Label(label = stringResource(ProfileCardRes.string.image))
                 ImagePickerWithError(
                     image = image,
-                    onSelectedImage = { imageByteArray = it },
-                    errorMessage = imageError,
-                    onClearImage = { imageByteArray = null },
+                    onSelectedImage = {
+                        imageByteArray = it
+                        onChangeImage(it.toBase64())
+                    },
+                    errorMessage = profileCardError.imageError,
+                    onClearImage = {
+                        imageByteArray = null
+                        onChangeImage("")
+                    },
                 )
 
                 Text(stringResource(ProfileCardRes.string.select_theme))
@@ -374,39 +406,6 @@ internal fun Label(label: String) {
         text = label,
         style = MaterialTheme.typography.titleMedium,
     )
-}
-
-@Composable
-private fun rememberValidationErrors(
-    nickname: String,
-    occupation: String,
-    link: String,
-    image: ImageBitmap?,
-): List<String> {
-    val nicknameValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.nickname),
-    )
-    val occupationValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.occupation),
-    )
-    val linkValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.link),
-    )
-    val imageValidationErrorString = stringResource(
-        ProfileCardRes.string.add_validate_format,
-        stringResource(ProfileCardRes.string.image),
-    )
-
-    return remember(nickname, occupation, link, image) {
-        val nicknameError = if (nickname.isEmpty()) nicknameValidationErrorString else ""
-        val occupationError = if (occupation.isEmpty()) occupationValidationErrorString else ""
-        val linkError = if (link.isEmpty()) linkValidationErrorString else ""
-        val imageError = if (image == null) imageValidationErrorString else ""
-        listOf(nicknameError, occupationError, linkError, imageError)
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
