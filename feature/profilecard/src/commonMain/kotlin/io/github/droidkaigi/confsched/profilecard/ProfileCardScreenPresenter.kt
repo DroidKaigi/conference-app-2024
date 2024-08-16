@@ -19,6 +19,7 @@ internal sealed interface ProfileCardScreenEvent
 
 internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
     data object SelectImage : EditScreenEvent
+    data class Update(val editUiState: ProfileCardUiState.Edit) : EditScreenEvent
     data class Create(val profileCard: ProfileCard.Exists) : EditScreenEvent
 }
 
@@ -85,6 +86,10 @@ internal fun profileCardScreenPresenter(
 
                 CardScreenEvent.Share -> {
                     userMessageStateHolder.showMessage("Share Profile Card")
+                }
+
+                is EditScreenEvent.Update -> {
+                    editingUiState = it.editUiState
                 }
 
                 is EditScreenEvent.Create -> {

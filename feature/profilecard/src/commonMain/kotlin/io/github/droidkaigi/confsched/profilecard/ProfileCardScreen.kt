@@ -204,6 +204,9 @@ internal fun ProfileCardScreen(
             ProfileCardUiType.Edit -> {
                 EditScreen(
                     uiState = uiState.editUiState,
+                    onUpdateEditingState = {
+                        eventEmitter.tryEmit(EditScreenEvent.Update(it))
+                    },
                     onClickCreate = {
                         eventEmitter.tryEmit(EditScreenEvent.Create(it))
                     },
@@ -241,6 +244,7 @@ internal fun ProfileCardScreen(
 @Composable
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
+    onUpdateEditingState: (ProfileCardUiState.Edit) -> Unit,
     onClickCreate: (ProfileCard.Exists) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
