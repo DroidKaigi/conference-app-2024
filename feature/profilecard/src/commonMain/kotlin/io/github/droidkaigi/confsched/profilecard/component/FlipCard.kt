@@ -53,13 +53,11 @@ import conference_app_2024.feature.profilecard.generated.resources.card_front_wh
 import conference_app_2024.feature.profilecard.generated.resources.card_front_yellow
 import conference_app_2024.feature.profilecard.generated.resources.icon_qr
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
-import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
-import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
-import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
 import io.github.droidkaigi.confsched.model.fake
+import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
+import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
@@ -264,11 +262,12 @@ fun FlipCardBackPreview() {
     }
 
     KaigiTheme {
-        Surface(modifier = Modifier
-            .size(300.dp, 380.dp)
-            .graphicsLayer {
-                rotationY = 180f
-            }
+        Surface(
+            modifier = Modifier
+                .size(300.dp, 380.dp)
+                .graphicsLayer {
+                    rotationY = 180f
+                },
         ) {
             FlipCardBack(
                 uiState = uiState,
