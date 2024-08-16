@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,7 +46,6 @@ import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableItem.Special
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsRes
-import io.github.takahirom.rin.rememberRetained
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -106,7 +106,7 @@ private fun DescriptionSection(
     description: String,
     onLinkClick: (url: String) -> Unit,
 ) {
-    var isExpand by rememberRetained { mutableStateOf(false) }
+    var isExpand by rememberSaveable { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(8.dp)) {
         ClickableLinkText(
