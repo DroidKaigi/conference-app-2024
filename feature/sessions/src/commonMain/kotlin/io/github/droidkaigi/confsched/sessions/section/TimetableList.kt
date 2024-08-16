@@ -16,10 +16,12 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -87,7 +89,11 @@ fun TimetableList(
                     timetableItems.onEach { timetableItem ->
                         val isBookmarked =
                             uiState.timetable.bookmarks.contains(timetableItem.id)
-                        val timetableItemCardModifier = if (sharedTransitionScope != null && animatedScope != null) {
+                        val timetableItemCardModifier = if (
+                            !scrollState.isScrollInProgress &&
+                            sharedTransitionScope != null &&
+                            animatedScope != null
+                        ) {
                             with(sharedTransitionScope) {
                                 Modifier.sharedElement(
                                     state = rememberSharedContentState(
