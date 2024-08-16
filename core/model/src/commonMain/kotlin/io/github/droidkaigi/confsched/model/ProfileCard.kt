@@ -23,14 +23,14 @@ data class ImageData internal constructor(
     val image: String,
     val imageBase64: ByteArray,
 ) {
+    private val imageHash: Int = imageBase64.contentHashCode()
+
     constructor(image: String) : this(image, image.decodeBase64Bytes())
     constructor(imageBase64: ByteArray) : this(imageBase64.toBase64(), imageBase64)
 
-    private val imageHash: Int = imageBase64.contentHashCode()
-
     override fun equals(other: Any?): Boolean {
-        return this === other
-            || other is ImageData && imageHash == other.imageHash
+        return this === other ||
+            other is ImageData && imageHash == other.imageHash
     }
 
     override fun hashCode(): Int {

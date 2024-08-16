@@ -41,8 +41,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -134,30 +132,46 @@ internal sealed interface ProfileCardUiState {
         val imageData: ImageData? = null,
         val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
     ) : ProfileCardUiState {
-        val nicknameError @Composable get() = if (nickname.isEmpty()) stringResource(
-            ProfileCardRes.string.enter_validate_format,
-            stringResource(ProfileCardRes.string.nickname),
-        ) else ""
+        val nicknameError @Composable get() = if (nickname.isEmpty()) {
+            stringResource(
+                ProfileCardRes.string.enter_validate_format,
+                stringResource(ProfileCardRes.string.nickname),
+            )
+        } else {
+            ""
+        }
 
-        val occupationError @Composable get() = if (occupation.isEmpty()) stringResource(
-            ProfileCardRes.string.enter_validate_format,
-            stringResource(ProfileCardRes.string.occupation),
-        ) else ""
+        val occupationError @Composable get() = if (occupation.isEmpty()) {
+            stringResource(
+                ProfileCardRes.string.enter_validate_format,
+                stringResource(ProfileCardRes.string.occupation),
+            )
+        } else {
+            ""
+        }
 
-        val linkError @Composable get() = if (link.isEmpty()) stringResource(
-            ProfileCardRes.string.enter_validate_format,
-            stringResource(ProfileCardRes.string.occupation),
-        ) else ""
+        val linkError @Composable get() = if (link.isEmpty()) {
+            stringResource(
+                ProfileCardRes.string.enter_validate_format,
+                stringResource(ProfileCardRes.string.occupation),
+            )
+        } else {
+            ""
+        }
 
-        val imageError @Composable get() = if (imageData == null) stringResource(
-            ProfileCardRes.string.add_validate_format,
-            stringResource(ProfileCardRes.string.image),
-        ) else ""
+        val imageError @Composable get() = if (imageData == null) {
+            stringResource(
+                ProfileCardRes.string.add_validate_format,
+                stringResource(ProfileCardRes.string.image),
+            )
+        } else {
+            ""
+        }
 
-        val isValidInputs = nickname.isNotEmpty()
-            && occupation.isNotEmpty()
-            && link.isNotEmpty()
-            && imageData != null
+        val isValidInputs = nickname.isNotEmpty() &&
+            occupation.isNotEmpty() &&
+            link.isNotEmpty() &&
+            imageData != null
     }
 
     data class Card(
@@ -341,7 +355,7 @@ internal fun EditScreen(
 
                 ThemePiker(
                     selectedTheme = uiState.theme,
-                    onClickImage = { onUpdateEditingState(uiState.copy(theme = it)) }
+                    onClickImage = { onUpdateEditingState(uiState.copy(theme = it)) },
                 )
 
                 Button(
