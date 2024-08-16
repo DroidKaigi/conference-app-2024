@@ -53,6 +53,8 @@ import conference_app_2024.feature.profilecard.generated.resources.card_front_wh
 import conference_app_2024.feature.profilecard.generated.resources.card_front_yellow
 import conference_app_2024.feature.profilecard.generated.resources.icon_qr
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
 import io.github.droidkaigi.confsched.model.fake
@@ -145,14 +147,7 @@ private fun FlipCardFront(
         ProfileCardTheme.Jellyfish -> ProfileCardRes.drawable.card_front_blue
         ProfileCardTheme.None -> ProfileCardRes.drawable.card_front_white
     }
-    val namePrimaryColor = when (uiState.theme) {
-        ProfileCardTheme.Iguana -> Color(0xFFB4FF79)
-        ProfileCardTheme.Hedgehog -> Color(0xFFFEB258)
-        ProfileCardTheme.Giraffe -> Color(0xFFFCF65F)
-        ProfileCardTheme.Flamingo -> Color(0xFFFF8EBD)
-        ProfileCardTheme.Jellyfish -> Color(0xFF6FD7F8)
-        ProfileCardTheme.None -> Color(0xFFB4FF79)
-    }
+    val namePrimaryColor = LocalProfileCardScreenTheme.current.primaryColor
     Box(
         modifier = modifier
             .testTag(ProfileCardFlipCardFrontTestTag)
@@ -246,10 +241,12 @@ fun FlipCardFrontPreview() {
 
     KaigiTheme {
         Surface(modifier = Modifier.size(300.dp, 380.dp)) {
-            FlipCardFront(
-                uiState = uiState,
-                profileImage = profileImage,
-            )
+            ProvideProfileCardScreenTheme(uiState.theme.name) {
+                FlipCardFront(
+                    uiState = uiState,
+                    profileImage = profileImage,
+                )
+            }
         }
     }
 }
