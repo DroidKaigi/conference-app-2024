@@ -27,7 +27,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -43,6 +46,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.ui.UiRes
+import io.github.droidkaigi.confsched.ui.animation.LocalFavoriteAnimationScope
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
 
@@ -156,9 +160,20 @@ fun TimetableItemCard(
                     }
                 }
             }
+            // TODO リファクタリング
+            val animationScope = LocalFavoriteAnimationScope.current
+            var offset = Offset.Zero
+
             TextButton(
-                onClick = { onBookmarkClick(timetableItem, true) },
-                modifier = Modifier.testTag(TimetableItemCardBookmarkButtonTestTag),
+                onClick = {
+                    onBookmarkClick(timetableItem, true)
+                    if(!isBookmarked) {
+                        animationScope.startAnimation(offset)
+                    }
+                },
+                modifier = Modifier.testTag(TimetableItemCardBookmarkButtonTestTag).onGloballyPositioned {  coordinates ->
+                    offset = coordinates.positionInRoot()
+                },
             ) {
                 if (isBookmarked) {
                     Icon(

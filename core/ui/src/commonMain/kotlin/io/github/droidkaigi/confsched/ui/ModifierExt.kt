@@ -35,3 +35,11 @@ fun Modifier.dashedRoundRect(
         cornerRadius = CornerRadius(cornerRadius.toPx()),
     )
 }
+
+fun Modifier.useIf(condition: Boolean, apply: Modifier.() -> Modifier): Modifier {
+    return if (condition) {
+        this.apply()
+    } else {
+        this
+    }
+}

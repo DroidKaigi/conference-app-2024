@@ -60,6 +60,3 @@ private class OnGloballyPositionedNode(
         callback(favoriteAnimationScope, coordinates)
     }
 }
-
-class FavoriteAnimationModifier {
-}

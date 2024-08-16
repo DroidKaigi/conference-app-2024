@@ -81,13 +81,11 @@ fun NavGraphBuilder.mainScreen(
         CompositionLocalProvider(
             LocalAnimatedVisibilityScope provides this@composable,
         ) {
-            ProvideFavoriteAnimation {
-                MainScreen(
-                    windowSize = windowSize,
-                    mainNestedGraphStateHolder = mainNestedGraphStateHolder,
-                    mainNestedNavGraph = mainNestedGraph,
-                )
-            }
+            MainScreen(
+                windowSize = windowSize,
+                mainNestedGraphStateHolder = mainNestedGraphStateHolder,
+                mainNestedNavGraph = mainNestedGraph,
+            )
         }
     }
 }
@@ -130,14 +128,18 @@ fun MainScreen(
         snackbarHostState = snackbarHostState,
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
-    MainScreen(
-        uiState = uiState,
-        snackbarHostState = snackbarHostState,
-        navigationType = navigationType,
-        routeToTab = mainNestedGraphStateHolder::routeToTab,
-        onTabSelected = mainNestedGraphStateHolder::onTabSelected,
-        mainNestedNavGraph = mainNestedNavGraph,
-    )
+    ProvideFavoriteAnimation(
+        navigationType == BottomNavigation,
+    ) {
+        MainScreen(
+            uiState = uiState,
+            snackbarHostState = snackbarHostState,
+            navigationType = navigationType,
+            routeToTab = mainNestedGraphStateHolder::routeToTab,
+            onTabSelected = mainNestedGraphStateHolder::onTabSelected,
+            mainNestedNavGraph = mainNestedNavGraph,
+        )
+    }
 }
 
 sealed class IconRepresentation {
