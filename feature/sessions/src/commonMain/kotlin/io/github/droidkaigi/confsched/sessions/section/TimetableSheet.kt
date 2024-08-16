@@ -119,9 +119,7 @@ fun Timetable(
 
 @Composable
 private fun rememberListTimetableScrollStates(): Map<DroidKaigi2024Day, LazyListState> {
-    val scrollStateMap = DroidKaigi2024Day.entries.filter {
-        it.visibleForUsers
-    }.associateWith {
+    val scrollStateMap = DroidKaigi2024Day.visibleDays().associateWith {
         rememberLazyListState()
     }
     return remember { scrollStateMap }
@@ -129,9 +127,7 @@ private fun rememberListTimetableScrollStates(): Map<DroidKaigi2024Day, LazyList
 
 @Composable
 private fun rememberGridTimetableStates(): Map<DroidKaigi2024Day, TimetableState> {
-    val timetableStateMap = DroidKaigi2024Day.entries.filter {
-        it.visibleForUsers
-    }.associateWith {
+    val timetableStateMap = DroidKaigi2024Day.visibleDays().associateWith {
         rememberTimetableGridState()
     }
     return remember { timetableStateMap }

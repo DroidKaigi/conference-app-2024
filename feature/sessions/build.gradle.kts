@@ -27,6 +27,7 @@ kotlin {
         }
         androidUnitTest {
             dependencies {
+                implementation(projects.core.model)
                 implementation(projects.core.testing)
             }
         }
