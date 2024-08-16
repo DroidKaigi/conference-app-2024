@@ -5,7 +5,8 @@ import Theme
 import shared
 
 public struct TimetableView: View {
-    private let store: StoreOf<TimetableReducer>
+    @Bindable private var store: StoreOf<TimetableReducer>
+
     public init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
@@ -39,7 +40,7 @@ public struct TimetableView: View {
             }
             Spacer()
         }
-        
+        .toast($store.toast)
         .background(AssetColors.Surface.surface.swiftUIColor)
         .frame(maxWidth: .infinity)
         .toolbar{
@@ -93,11 +94,13 @@ struct TimetableListView: View {
                 ForEach(store.timetableItems, id: \.self) { item in
                     TimeGroupMiniList(contents: item, onItemTap: { item in
                         store.send(.view(.timetableItemTapped(item)))
-                    })
+                    }) {
+                        store.send(.view(.favoriteTapped($0)))
+                    }
                 }
             }.scrollContentBackground(.hidden)
             .onAppear {
-                store.send(.onAppear)
+                store.send(.view(.onAppear))
             }.background(AssetColors.Surface.surface.swiftUIColor)
         }
     }
@@ -150,6 +153,7 @@ struct TimetableGridView: View {
 struct TimeGroupMiniList: View {
     let contents: TimetableTimeGroupItems
     let onItemTap: (TimetableItemWithFavorite) -> Void
+    let onFavoriteTap: (TimetableItemWithFavorite) -> Void
     
     var body: some View {
         HStack {
@@ -167,7 +171,8 @@ struct TimeGroupMiniList: View {
                         onTap: {_ in
                             onItemTap(item)
                         },
-                        onTapFavorite: {_ in
+                        onTapFavorite: { _ in
+                            onFavoriteTap(item)
                         })
                 }
             }

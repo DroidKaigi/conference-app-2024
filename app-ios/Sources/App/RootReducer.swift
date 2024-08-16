@@ -77,7 +77,7 @@ public struct RootReducer {
         }
         
         public enum View {
-            case sameTabTapped(Tab)
+            case sameTabTapped(DroidKaigiAppTab)
         }
     }
 
@@ -120,7 +120,7 @@ public struct RootReducer {
                 state.paths.timetable.append(.timetableDetail(
                     TimetableDetailReducer.State(
                         timetableItem: item.timetableItem,
-                        isBookmarked: item.isFavorited)
+                        isFavorited: item.isFavorited)
                     )
                 )
                 return .none
@@ -136,7 +136,7 @@ public struct RootReducer {
                         .timetableDetail(
                             .init(
                                 timetableItem: timetableItemWithFavorite.timetableItem,
-                                isBookmarked: timetableItemWithFavorite.isFavorited
+                                isFavorited: timetableItemWithFavorite.isFavorited
                             )
                         )
                     )
