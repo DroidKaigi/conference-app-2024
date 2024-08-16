@@ -94,7 +94,7 @@ import org.jetbrains.compose.resources.stringResource
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
-const val profileCardScreenRoute = "profilecard"
+const val profileCardScreenRoute = "profileCard"
 
 const val ProfileCardEditScreenTestTag = "ProfileCardEditScreenTestTag"
 const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
