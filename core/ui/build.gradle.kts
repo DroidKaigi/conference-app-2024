@@ -11,6 +11,12 @@ android.namespace = "io.github.droidkaigi.confsched.core.ui"
 
 kotlin {
     sourceSets {
+        androidMain {
+            dependencies {
+                implementation(libs.animation.graphics.android)
+            }
+        }
+
         commonMain {
             dependencies {
                 implementation(projects.core.model)
