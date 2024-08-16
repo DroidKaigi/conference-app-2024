@@ -14,9 +14,9 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardCreateButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenColumnTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenTestTag
-import io.github.droidkaigi.confsched.profilecard.ProfileCardFlipCardBackTestTag
-import io.github.droidkaigi.confsched.profilecard.ProfileCardFlipCardFrontTestTag
-import io.github.droidkaigi.confsched.profilecard.ProfileCardFlipCardTestTag
+import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardBackTestTag
+import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardFrontTestTag
+import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardLinkTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardNicknameTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardOccupationTextFieldTestTag

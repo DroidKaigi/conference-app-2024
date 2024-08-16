@@ -110,28 +110,25 @@ internal fun FlipCard(
         }
     }
 
-    ProvideProfileCardScreenTheme(uiState.theme.toString()) {
-        Card(
-            modifier = modifier
-                .testTag(ProfileCardFlipCardTestTag)
-                .size(width = 300.dp, height = 380.dp)
-                .clickable { isFlipped = !isFlipped }
-                .graphicsLayer {
-                    rotationY = rotation
-                    cameraDistance = 12f * density
-                },
-            colors = CardDefaults.cardColors(containerColor = LocalProfileCardScreenTheme.current.containerColor),
-            elevation = CardDefaults.cardElevation(10.dp),
-        ) {
-            val profileImage = uiState.image.decodeBase64Bytes().toImageBitmap()
-            if (isBack) { // Back
-                FlipCardBack(uiState)
-            } else { // Front
-                FlipCardFront(
-                    uiState = uiState,
-                    profileImage = profileImage,
-                )
-            }
+    Card(
+        modifier = modifier
+            .testTag(ProfileCardFlipCardTestTag)
+            .size(width = 300.dp, height = 380.dp)
+            .clickable { isFlipped = !isFlipped }
+            .graphicsLayer {
+                rotationY = rotation
+                cameraDistance = 12f * density
+            },
+        elevation = CardDefaults.cardElevation(10.dp),
+    ) {
+        val profileImage = uiState.image.decodeBase64Bytes().toImageBitmap()
+        if (isBack) { // Back
+            FlipCardBack(uiState)
+        } else { // Front
+            FlipCardFront(
+                uiState = uiState,
+                profileImage = profileImage,
+            )
         }
     }
 }
