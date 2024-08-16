@@ -18,11 +18,9 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
@@ -47,11 +45,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
-import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun GlassLikeNavRail(
@@ -206,22 +202,6 @@ fun NavRailTabs(
                     )
                 }
             }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun GlassLikeNavRailPreview() {
-    val hazeState = remember { HazeState() }
-
-    KaigiTheme {
-        Scaffold {
-            GlassLikeNavRail(
-                hazeState = hazeState,
-                {},
-                MainScreenTab.Timetable,
-            )
         }
     }
 }
