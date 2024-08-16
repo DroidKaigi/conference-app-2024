@@ -206,6 +206,8 @@ public struct AboutView: View {
                     .padding(.bottom, 16)
             }
             .padding(.horizontal, 16)
+            // bottom floating tabbar padding
+            Color.clear.padding(.bottom, 60)
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
     }

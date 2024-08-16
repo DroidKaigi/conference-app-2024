@@ -37,6 +37,8 @@ public struct EventMapView: View {
                     EventItem(event: event)
                 }
             }
+            // bottom floating tabbar padding
+            Color.clear.padding(.bottom, 60)
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
         .navigationBarTitleDisplayMode(.large)
