@@ -148,7 +148,7 @@ fun SearchScreen(
         containerColor = MaterialTheme.colorScheme.surface,
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(innerPadding),
+            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
         ) {
             HorizontalDivider()
             SearchFilters(
@@ -176,6 +176,7 @@ fun SearchScreen(
                     highlightWord = uiState.searchWord,
                     onBookmarkClick = { timetableItem, _ -> onTimetableItemBookmark(timetableItem) },
                     onTimetableItemClick = onTimetableItemClick,
+                    contentPadding = PaddingValues(bottom = innerPadding.calculateBottomPadding()),
                 )
             }
         }

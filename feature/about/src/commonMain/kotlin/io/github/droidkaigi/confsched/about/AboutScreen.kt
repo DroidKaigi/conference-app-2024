@@ -59,6 +59,10 @@ fun NavController.navigateAboutScreen() {
     }
 }
 
+data class AboutUiState(
+    val versionName: String,
+)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
@@ -66,6 +70,7 @@ fun AboutScreen(
     contentPadding: PaddingValues = PaddingValues(),
     onAboutItemClick: (AboutItem) -> Unit,
 ) {
+    val uiState = aboutScreenPresenter()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
@@ -124,7 +129,7 @@ fun AboutScreen(
             )
             item {
                 AboutFooterLinks(
-                    versionName = "0.1.0",
+                    versionName = uiState.versionName,
                     onYouTubeClick = {
                         onAboutItemClick(YouTube)
                     },
