@@ -47,6 +47,7 @@ import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
 import io.github.droidkaigi.confsched.eventmap.navigation.EventMapDestination
@@ -249,6 +250,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
         if (route.contains("${EventMapDestination::class.simpleName}")) return EventMap
         return when (route) {
             timetableScreenRoute -> Timetable
+            eventMapScreenRoute -> EventMap
             profileCardScreenRoute -> ProfileCard
             aboutScreenRoute -> About
             favoritesScreenRoute -> Favorite
