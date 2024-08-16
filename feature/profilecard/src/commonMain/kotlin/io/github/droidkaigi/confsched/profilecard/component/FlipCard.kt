@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.profilecard
+package io.github.droidkaigi.confsched.profilecard.component
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -33,13 +33,15 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.profilecard.generated.resources.icon_qr
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
+import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
+import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun FlipCard(
-    uiState: ProfileCardUiState.Card,
+    uiState: Card,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
 ) {
