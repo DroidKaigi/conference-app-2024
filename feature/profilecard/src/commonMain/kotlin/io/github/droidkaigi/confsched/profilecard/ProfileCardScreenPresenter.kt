@@ -7,16 +7,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.model.ImageData
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.flow.Flow
 
 internal sealed interface ProfileCardScreenEvent
 
 internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
     data object SelectImage : EditScreenEvent
+    data class Update(val editUiState: ProfileCardUiState.Edit) : EditScreenEvent
     data class Create(val profileCard: ProfileCard.Exists) : EditScreenEvent
 }
 
@@ -31,7 +34,7 @@ private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
             nickname = nickname,
             occupation = occupation,
             link = link,
-            image = image,
+            imageData = image?.run(::ImageData),
             theme = theme,
         )
         ProfileCard.DoesNotExists, ProfileCard.Loading -> ProfileCardUiState.Edit()
@@ -58,7 +61,8 @@ internal fun profileCardScreenPresenter(
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
     val profileCard: ProfileCard by rememberUpdatedState(repository.profileCard())
     var isLoading: Boolean by remember { mutableStateOf(false) }
-    val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
+    var editingUiState: ProfileCardUiState.Edit? by rememberRetained { mutableStateOf(null) }
+    val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(editingUiState ?: profileCard.toEditUiState())
     val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(profileCard.toCardUiState())
     var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Loading) }
 
@@ -82,6 +86,10 @@ internal fun profileCardScreenPresenter(
 
                 CardScreenEvent.Share -> {
                     userMessageStateHolder.showMessage("Share Profile Card")
+                }
+
+                is EditScreenEvent.Update -> {
+                    editingUiState = it.editUiState
                 }
 
                 is EditScreenEvent.Create -> {

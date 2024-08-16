@@ -41,11 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -89,6 +85,7 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
+import io.github.droidkaigi.confsched.model.ImageData
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
@@ -98,10 +95,8 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
-const val profileCardScreenRoute = "profilecard"
+const val profileCardScreenRoute = "profileCard"
 
 const val ProfileCardEditScreenTestTag = "ProfileCardEditScreenTestTag"
 const val ProfileCardEditScreenColumnTestTag = "ProfileCardEditScreenColumnTestTag"
@@ -134,9 +129,50 @@ internal sealed interface ProfileCardUiState {
         val nickname: String = "",
         val occupation: String = "",
         val link: String = "",
-        val image: String? = null,
+        val imageData: ImageData? = null,
         val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
-    ) : ProfileCardUiState
+    ) : ProfileCardUiState {
+        val nicknameError @Composable get() = if (nickname.isEmpty()) {
+            stringResource(
+                ProfileCardRes.string.enter_validate_format,
+                stringResource(ProfileCardRes.string.nickname),
+            )
+        } else {
+            ""
+        }
+
+        val occupationError @Composable get() = if (occupation.isEmpty()) {
+            stringResource(
+                ProfileCardRes.string.enter_validate_format,
+                stringResource(ProfileCardRes.string.occupation),
+            )
+        } else {
+            ""
+        }
+
+        val linkError @Composable get() = if (link.isEmpty()) {
+            stringResource(
+                ProfileCardRes.string.enter_validate_format,
+                stringResource(ProfileCardRes.string.link),
+            )
+        } else {
+            ""
+        }
+
+        val imageError @Composable get() = if (imageData == null) {
+            stringResource(
+                ProfileCardRes.string.add_validate_format,
+                stringResource(ProfileCardRes.string.image),
+            )
+        } else {
+            ""
+        }
+
+        val isValidInputs = nickname.isNotEmpty() &&
+            occupation.isNotEmpty() &&
+            link.isNotEmpty() &&
+            imageData != null
+    }
 
     data class Card(
         val nickname: String,
@@ -211,6 +247,9 @@ internal fun ProfileCardScreen(
             ProfileCardUiType.Edit -> {
                 EditScreen(
                     uiState = uiState.editUiState,
+                    onUpdateEditingState = {
+                        eventEmitter.tryEmit(EditScreenEvent.Update(it))
+                    },
                     onClickCreate = {
                         eventEmitter.tryEmit(EditScreenEvent.Create(it))
                     },
@@ -248,31 +287,13 @@ internal fun ProfileCardScreen(
 @Composable
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
+    onUpdateEditingState: (ProfileCardUiState.Edit) -> Unit,
     onClickCreate: (ProfileCard.Exists) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
-    var nickname by remember { mutableStateOf(uiState.nickname) }
-    var occupation by remember { mutableStateOf(uiState.occupation) }
-    var link by remember { mutableStateOf(uiState.link) }
-    var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
-    val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
-    var selectedTheme by remember { mutableStateOf(uiState.theme) }
-
-    val (nicknameError, occupationError, linkError, imageError) = rememberValidationErrors(
-        nickname,
-        occupation,
-        link,
-        image,
-    )
-
-    val isValidInputs by remember {
-        derivedStateOf {
-            nickname.isNotEmpty() && occupation.isNotEmpty() && link.isNotEmpty() && image != null
-        }
-    }
+    val image = remember(uiState.imageData) { uiState.imageData?.imageBase64?.toImageBitmap() }
 
     Scaffold(
         modifier = modifier.testTag(ProfileCardEditScreenTestTag).padding(contentPadding),
@@ -296,27 +317,27 @@ internal fun EditScreen(
             Text(stringResource(ProfileCardRes.string.profile_card_edit_description))
 
             InputFieldWithError(
-                value = nickname,
+                value = uiState.nickname,
                 labelString = stringResource(ProfileCardRes.string.nickname),
-                errorMessage = nicknameError,
+                errorMessage = uiState.nicknameError,
                 textFieldTestTag = ProfileCardNicknameTextFieldTestTag,
-                onValueChange = { nickname = it },
+                onValueChange = { onUpdateEditingState(uiState.copy(nickname = it)) },
             )
             InputFieldWithError(
-                value = occupation,
+                value = uiState.occupation,
                 labelString = stringResource(ProfileCardRes.string.occupation),
-                errorMessage = occupationError,
+                errorMessage = uiState.occupationError,
                 textFieldTestTag = ProfileCardOccupationTextFieldTestTag,
-                onValueChange = { occupation = it },
+                onValueChange = { onUpdateEditingState(uiState.copy(occupation = it)) },
             )
             val linkLabel = stringResource(ProfileCardRes.string.link)
                 .plus(stringResource(ProfileCardRes.string.link_example_text))
             InputFieldWithError(
-                value = link,
+                value = uiState.link,
                 labelString = linkLabel,
-                errorMessage = linkError,
+                errorMessage = uiState.linkError,
                 textFieldTestTag = ProfileCardLinkTextFieldTestTag,
-                onValueChange = { link = it },
+                onValueChange = { onUpdateEditingState(uiState.copy(link = it)) },
             )
 
             Column(
@@ -325,28 +346,31 @@ internal fun EditScreen(
                 Label(label = stringResource(ProfileCardRes.string.image))
                 ImagePickerWithError(
                     image = image,
-                    onSelectedImage = { imageByteArray = it },
-                    errorMessage = imageError,
-                    onClearImage = { imageByteArray = null },
+                    onSelectedImage = { onUpdateEditingState(uiState.copy(imageData = ImageData(it))) },
+                    errorMessage = uiState.imageError,
+                    onClearImage = { onUpdateEditingState(uiState.copy(imageData = null)) },
                 )
 
                 Text(stringResource(ProfileCardRes.string.select_theme))
 
-                ThemePiker(selectedTheme = selectedTheme, onClickImage = { selectedTheme = it })
+                ThemePiker(
+                    selectedTheme = uiState.theme,
+                    onClickImage = { onUpdateEditingState(uiState.copy(theme = it)) },
+                )
 
                 Button(
                     onClick = {
                         onClickCreate(
                             ProfileCard.Exists(
-                                nickname = nickname,
-                                occupation = occupation,
-                                link = link,
-                                image = imageByteArray?.toBase64() ?: "",
+                                nickname = uiState.nickname,
+                                occupation = uiState.occupation,
+                                link = uiState.link,
+                                image = uiState.imageData?.image ?: "",
                                 theme = uiState.theme,
                             ),
                         )
                     },
-                    enabled = isValidInputs,
+                    enabled = uiState.isValidInputs,
                     modifier = Modifier.fillMaxWidth()
                         .testTag(ProfileCardCreateButtonTestTag),
                 ) {
@@ -360,12 +384,6 @@ internal fun EditScreen(
     }
 }
 
-@OptIn(ExperimentalEncodingApi::class)
-private fun ByteArray.toBase64(): String = Base64.encode(this)
-
-@OptIn(ExperimentalEncodingApi::class)
-private fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
-
 @Composable
 internal fun Label(label: String) {
     Text(
@@ -373,39 +391,6 @@ internal fun Label(label: String) {
         text = label,
         style = MaterialTheme.typography.titleMedium,
     )
-}
-
-@Composable
-private fun rememberValidationErrors(
-    nickname: String,
-    occupation: String,
-    link: String,
-    image: ImageBitmap?,
-): List<String> {
-    val nicknameValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.nickname),
-    )
-    val occupationValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.occupation),
-    )
-    val linkValidationErrorString = stringResource(
-        ProfileCardRes.string.enter_validate_format,
-        stringResource(ProfileCardRes.string.link),
-    )
-    val imageValidationErrorString = stringResource(
-        ProfileCardRes.string.add_validate_format,
-        stringResource(ProfileCardRes.string.image),
-    )
-
-    return remember(nickname, occupation, link, image) {
-        val nicknameError = if (nickname.isEmpty()) nicknameValidationErrorString else ""
-        val occupationError = if (occupation.isEmpty()) occupationValidationErrorString else ""
-        val linkError = if (link.isEmpty()) linkValidationErrorString else ""
-        val imageError = if (image == null) imageValidationErrorString else ""
-        listOf(nicknameError, occupationError, linkError, imageError)
-    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
