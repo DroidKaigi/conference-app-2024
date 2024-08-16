@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,20 +16,27 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -37,7 +45,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.drawscope.translate
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.VectorPainter
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
@@ -46,8 +67,18 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.preat.peekaboo.image.picker.toImageBitmap
+import conference_app_2024.feature.profilecard.generated.resources.add_image
+import conference_app_2024.feature.profilecard.generated.resources.create_card
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
+import conference_app_2024.feature.profilecard.generated.resources.image
+import conference_app_2024.feature.profilecard.generated.resources.link_text
+import conference_app_2024.feature.profilecard.generated.resources.nick_name
+import conference_app_2024.feature.profilecard.generated.resources.occupation
 import conference_app_2024.feature.profilecard.generated.resources.profile_card
+import conference_app_2024.feature.profilecard.generated.resources.profile_card_edit_description
+import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
+import conference_app_2024.feature.profilecard.generated.resources.select_theme
+import conference_app_2024.feature.profilecard.generated.resources.theme
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
@@ -57,6 +88,7 @@ import io.github.droidkaigi.confsched.model.ProfileCardTheme
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import kotlin.io.encoding.Base64
@@ -95,7 +127,7 @@ internal sealed interface ProfileCardUiState {
         val occupation: String? = null,
         val link: String? = null,
         val image: String? = null,
-        val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
+        val theme: ProfileCardTheme = ProfileCardTheme.entries.first(),
     ) : ProfileCardUiState
 
     data class Card(
@@ -204,6 +236,7 @@ internal fun ProfileCardScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
@@ -214,80 +247,239 @@ internal fun EditScreen(
     var nickname by remember { mutableStateOf(uiState.nickname) }
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
+    var selectedTheme by remember { mutableStateOf(uiState.theme) }
 
-    Column(
-        modifier = modifier
-            .testTag(ProfileCardEditScreenTestTag)
-            .padding(contentPadding),
-    ) {
-        Text("ProfileCardEdit")
-        TextField(
-            value = nickname,
-            onValueChange = { nickname = it },
-            placeholder = { Text("Nickname") },
-            modifier = Modifier.testTag(ProfileCardNicknameTextFieldTestTag),
-        )
-        TextField(
-            value = occupation ?: "",
-            onValueChange = { occupation = it },
-            placeholder = { Text("Occupation") },
-            modifier = Modifier.testTag(ProfileCardOccupationTextFieldTestTag),
-        )
-        TextField(
-            value = link ?: "",
-            onValueChange = { link = it },
-            placeholder = { Text("Link") },
-            modifier = Modifier.testTag(ProfileCardLinkTextFieldTestTag),
-        )
-        PhotoPickerButton(
-            onSelectedImage = { imageByteArray = it },
-            modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+    Scaffold(
+        modifier = modifier.testTag(ProfileCardEditScreenTestTag).padding(contentPadding),
+        topBar = {
+            AnimatedTextTopAppBar(
+                title = stringResource(ProfileCardRes.string.profile_card_title),
+                scrollBehavior = scrollBehavior,
+            )
+        },
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState())
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(padding)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(32.dp),
         ) {
-            Text("画像を選択")
-        }
-        image?.let {
-            Box {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .padding(
-                            top = 24.dp,
-                            end = 24.dp,
+            Text(stringResource(ProfileCardRes.string.profile_card_edit_description))
+
+            InputColumn(
+                label = stringResource(ProfileCardRes.string.nick_name),
+                value = nickname,
+                testTag = ProfileCardNicknameTextFieldTestTag,
+                onValueChanged = { nickname = it },
+            )
+            InputColumn(
+                label = stringResource(ProfileCardRes.string.occupation),
+                value = occupation ?: "",
+                testTag = ProfileCardOccupationTextFieldTestTag,
+                onValueChanged = { occupation = it },
+            )
+            InputColumn(
+                label = stringResource(ProfileCardRes.string.link_text),
+                value = link ?: "",
+                testTag = ProfileCardLinkTextFieldTestTag,
+                onValueChanged = { link = it },
+            )
+
+            Column(
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+            ) {
+                Label(label = stringResource(ProfileCardRes.string.image))
+
+                image?.let {
+                    Box(modifier = Modifier.size(120.dp)) {
+                        Image(
+                            bitmap = it,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .clip(RoundedCornerShape(2.dp))
+                                .align(Alignment.BottomStart),
                         )
-                        .align(Alignment.BottomStart),
+                        IconButton(
+                            onClick = { imageByteArray = null },
+                            modifier = Modifier
+                                .graphicsLayer {
+                                    translationX = 12.dp.toPx()
+                                    translationY = -12.dp.toPx()
+                                }
+                                .size(24.dp)
+                                .align(Alignment.TopEnd),
+                            colors = IconButtonDefaults
+                                .iconButtonColors()
+                                .copy(containerColor = Color(0xFF414849)),
+                        ) {
+                            Icon(Icons.Default.Close, null)
+                        }
+                    }
+                } ?: run {
+                    PhotoPickerButton(
+                        onSelectedImage = { imageByteArray = it },
+                        modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
+                    ) {
+                        Icon(Icons.Default.Add, null)
+                        Spacer(Modifier.width(8.dp))
+                        Text(stringResource(ProfileCardRes.string.add_image))
+                    }
+                }
+            }
+
+            Text(stringResource(ProfileCardRes.string.select_theme))
+
+            ThemePiker(selectedTheme = selectedTheme, onClickImage = { selectedTheme = it })
+
+            Button(
+                onClick = {
+                    onClickCreate(
+                        ProfileCard.Exists(
+                            nickname = nickname,
+                            occupation = occupation,
+                            link = link,
+                            image = imageByteArray?.toBase64(),
+                            theme = uiState.theme,
+                        ),
+                    )
+                },
+                modifier = Modifier.fillMaxWidth()
+                    .testTag(ProfileCardCreateButtonTestTag),
+            ) {
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = stringResource(ProfileCardRes.string.create_card),
                 )
-                IconButton(
-                    onClick = { imageByteArray = null },
-                    modifier = Modifier
-                        .align(Alignment.TopEnd),
-                    colors = IconButtonDefaults
-                        .iconButtonColors()
-                        .copy(containerColor = Color(0xFF414849)),
-                ) {
-                    Icon(Icons.Default.Close, null)
+            }
+        }
+    }
+}
+
+@Composable
+internal fun InputColumn(
+    label: String,
+    value: String,
+    testTag: String,
+    modifier: Modifier = Modifier,
+    onValueChanged: (String) -> Unit,
+) {
+    Column(modifier = modifier) {
+        Label(label = label)
+        OutlinedTextField(
+            value = value,
+            onValueChange = onValueChanged,
+            modifier = Modifier.fillMaxWidth().testTag(testTag),
+        )
+    }
+}
+
+@Composable
+internal fun Label(label: String) {
+    Text(
+        modifier = Modifier.padding(bottom = 8.dp),
+        text = label,
+        style = MaterialTheme.typography.titleMedium,
+    )
+}
+
+@Composable
+internal fun ThemePiker(selectedTheme: ProfileCardTheme, onClickImage: (ProfileCardTheme) -> Unit) {
+    val themes = ProfileCardTheme.entries.chunked(2)
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        themes.forEach {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                it.firstOrNull()?.let {
+                    ThemeImage(
+                        modifier = Modifier.weight(1.0f),
+                        isSelected = selectedTheme == it,
+                        onClickImage = onClickImage,
+                        theme = it,
+                    )
+                }
+                it.getOrNull(1)?.let {
+                    ThemeImage(
+                        modifier = Modifier.weight(1.0f),
+                        isSelected = selectedTheme == it,
+                        onClickImage = onClickImage,
+                        theme = it,
+                    )
                 }
             }
         }
-        Button(
-            onClick = {
-                onClickCreate(
-                    ProfileCard.Exists(
-                        nickname = nickname,
-                        occupation = occupation,
-                        link = link,
-                        image = imageByteArray?.toBase64(),
-                        theme = uiState.theme,
-                    ),
-                )
+    }
+}
+
+@Composable
+private fun ThemeImage(
+    isSelected: Boolean,
+    theme: ProfileCardTheme,
+    modifier: Modifier = Modifier,
+    onClickImage: (ProfileCardTheme) -> Unit,
+) {
+    val colorMap = buildMap {
+        put(ProfileCardTheme.Iguana, Color(0xFFB4FF79))
+        put(ProfileCardTheme.Hedgehog, Color(0xFFFEB258))
+        put(ProfileCardTheme.Giraffe, Color(0xFFFCF65F))
+        put(ProfileCardTheme.Flamingo, Color(0xFFFF8EBD))
+        put(ProfileCardTheme.Jellyfish, Color(0xFF6FD7F8))
+        put(ProfileCardTheme.None, Color.White)
+    }
+    val selectedBorderColor = MaterialTheme.colorScheme.surfaceTint
+    val painter = rememberVectorPainter(Icons.Default.Check)
+
+    Image(
+        painter = painterResource(ProfileCardRes.drawable.theme),
+        contentDescription = null,
+        modifier = modifier
+            .selectedBorder(isSelected, selectedBorderColor, painter)
+            .clip(RoundedCornerShape(2.dp))
+            .background(colorMap[theme]!!)
+            .clickable { onClickImage(theme) }
+            .padding(top = 36.dp, start = 30.dp, end = 30.dp, bottom = 36.dp),
+    )
+}
+
+fun Modifier.selectedBorder(
+    isSelected: Boolean,
+    selectedBorderColor: Color,
+    vectorPainter: VectorPainter,
+): Modifier = if (isSelected) {
+    drawWithContent {
+        drawRoundRect(
+            color = selectedBorderColor,
+            size = size,
+            cornerRadius = CornerRadius(2.dp.toPx()),
+            style = Stroke(8.dp.toPx(), cap = StrokeCap.Round),
+        )
+        drawContent()
+        drawPath(
+            color = selectedBorderColor,
+            path = Path().apply {
+                moveTo(size.width, 0f)
+                lineTo(size.width - 44.dp.toPx(), 0f)
+                lineTo(size.width, 44.dp.toPx())
             },
-            modifier = Modifier.testTag(ProfileCardCreateButtonTestTag),
-        ) {
-            Text("Create")
+        )
+        drawCircle(
+            color = Color.White,
+            center = Offset(size.width - 12.dp.toPx(), 13.dp.toPx()),
+            radius = 10.dp.toPx(),
+        )
+        translate(left = size.width - 20.dp.toPx(), top = 5.dp.toPx()) {
+            with(vectorPainter) {
+                draw(size = Size(16.dp.toPx(), 16.dp.toPx()))
+            }
         }
     }
+} else {
+    this
 }
 
 @OptIn(ExperimentalEncodingApi::class)

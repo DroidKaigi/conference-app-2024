@@ -188,9 +188,9 @@ enum class MainScreenTab(
     ;
 
     companion object {
-        val size: Int get() = values().size
-        fun indexOf(tab: MainScreenTab): Int = values().indexOf(tab)
-        fun fromIndex(index: Int): MainScreenTab = values()[index]
+        val size: Int get() = entries.size
+        fun indexOf(tab: MainScreenTab): Int = entries.indexOf(tab)
+        fun fromIndex(index: Int): MainScreenTab = entries[index]
     }
 }
 

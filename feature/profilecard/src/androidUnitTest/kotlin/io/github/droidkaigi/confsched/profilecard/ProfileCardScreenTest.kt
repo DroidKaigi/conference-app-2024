@@ -67,8 +67,29 @@ class ProfileCardScreenTest(
                                     checkEditScreenDisplayed()
                                 }
                             }
+                            describe("scroll profile") {
+                                run {
+                                    scrollProfile()
+                                }
+                                itShould("show edit screen") {
+                                    captureScreenWithChecks {
+                                        checkEditScreenDisplayed()
+                                    }
+                                }
+                            }
+                            describe("scroll profile") {
+                                run {
+                                    scrollProfile()
+                                }
+                                itShould("show edit screen") {
+                                    captureScreenWithChecks {
+                                        checkEditScreenDisplayed()
+                                    }
+                                }
+                            }
                             describe("click create button") {
                                 run {
+                                    scrollProfile()
                                     clickCreateButton()
                                 }
                                 itShould("show card screen") {

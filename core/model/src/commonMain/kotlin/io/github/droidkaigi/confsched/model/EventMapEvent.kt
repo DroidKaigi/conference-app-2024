@@ -34,10 +34,14 @@ public fun EventMapEvent.Companion.fakes(): PersistentList<EventMapEvent> = Room
         } else {
             null
         },
-        message = MultiLangText(
-            "※こちらのイベントは時間が変更されました。",
-            "※This event has been rescheduled.",
-        ),
+        message = if (it.ordinal % 3 == 0) {
+            MultiLangText(
+                "※こちらのイベントは時間が変更されました。",
+                "※This event has been rescheduled.",
+            )
+        } else {
+            null
+        },
     )
 }.toPersistentList()
 

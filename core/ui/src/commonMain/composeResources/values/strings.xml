@@ -3,4 +3,5 @@
     <string name="bookmarked">Bookmarked</string>
     <string name="not_bookmarked">Not Bookmarked</string>
     <string name="image">image</string>
+    <string name="connection_failed">Connection failed, Check your network settings.</string>
 </resources>

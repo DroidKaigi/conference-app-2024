@@ -12,6 +12,7 @@ import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -120,6 +121,7 @@ private fun KaigiNavHost(
                     onLinkClick = externalNavController::navigate,
                     onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
                     onShareClick = externalNavController::onShareClick,
+                    onFavoriteListClick = { navController.navigate(favoritesScreenRoute) },
                 )
 
                 contributorsScreens(
@@ -140,6 +142,11 @@ private fun KaigiNavHost(
                 sponsorsScreens(
                     onNavigationIconClick = navController::popBackStack,
                     onSponsorsItemClick = externalNavController::navigate,
+                )
+
+                favoritesScreens(
+                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                    contentPadding = PaddingValues(),
                 )
             }
         }

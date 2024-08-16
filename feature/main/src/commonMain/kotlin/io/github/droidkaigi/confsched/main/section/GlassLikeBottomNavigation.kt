@@ -195,7 +195,7 @@ fun BottomBarTabs(
         Row(
             modifier = modifier.fillMaxSize(),
         ) {
-            for (tab in MainScreenTab.values()) {
+            for (tab in MainScreenTab.entries) {
                 val alpha by animateFloatAsState(
                     targetValue = if (selectedTab == MainScreenTab.indexOf(tab)) 1f else .35f,
                     label = "alpha",
