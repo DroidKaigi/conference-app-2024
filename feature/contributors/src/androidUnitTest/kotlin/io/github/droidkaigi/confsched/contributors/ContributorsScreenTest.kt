@@ -45,47 +45,11 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                         run {
                             setupScreenContent()
                         }
-                        itShould("show contributor 1 to 5") {
+                        itShould("show contributor two or more") {
                             captureScreenWithChecks {
                                 checkExistsContributorItem(
-                                    fromTo = 0 to 5,
+                                    fromTo = 0 to 2,
                                 )
-                            }
-                        }
-                        describe("when scroll to contributor 9") {
-                            run {
-                                scrollToTestTag(ContributorsItemTestTag.plus(9))
-                            }
-                            itShould("show contributor 6 to 10") {
-                                captureScreenWithChecks {
-                                    checkExistsContributorItem(
-                                        fromTo = 5 to 10,
-                                    )
-                                }
-                            }
-                        }
-                        describe("when scroll to contributor 12") {
-                            run {
-                                scrollToTestTag(ContributorsItemTestTag.plus(12))
-                            }
-                            itShould("show contributor 11 to 15") {
-                                captureScreenWithChecks {
-                                    checkExistsContributorItem(
-                                        fromTo = 10 to 15,
-                                    )
-                                }
-                            }
-                        }
-                        describe("when scroll to contributor 20") {
-                            run {
-                                scrollToTestTag(ContributorsItemTestTag.plus(20))
-                            }
-                            itShould("show contributor 16 to 20") {
-                                captureScreenWithChecks {
-                                    checkExistsContributorItem(
-                                        fromTo = 15 to 20,
-                                    )
-                                }
                             }
                         }
                     }

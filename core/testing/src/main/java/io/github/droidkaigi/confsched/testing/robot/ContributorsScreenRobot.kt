@@ -5,9 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.performScrollToNode
 import io.github.droidkaigi.confsched.contributors.ContributorsItemTestTag
-import io.github.droidkaigi.confsched.contributors.ContributorsLazyColumnTestTag
 import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.component.ContributorsItemImageTestTag
 import io.github.droidkaigi.confsched.contributors.component.ContributorsUserNameTextTestTag
@@ -27,15 +25,6 @@ class ContributorsScreenRobot @Inject constructor(
                 onContributorsItemClick = { },
             )
         }
-    }
-
-    fun scrollToTestTag(
-        testTag: String,
-    ) {
-        composeTestRule
-            .onNode(hasTestTag(ContributorsLazyColumnTestTag))
-            .performScrollToNode(hasTestTag(testTag))
-        waitUntilIdle()
     }
 
     fun checkExistsContributorItem(

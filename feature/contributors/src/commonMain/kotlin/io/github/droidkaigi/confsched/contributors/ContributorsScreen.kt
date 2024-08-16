@@ -34,7 +34,6 @@ import kotlinx.collections.immutable.PersistentList
 
 const val contributorsScreenRoute = "contributors"
 const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
-const val ContributorsLazyColumnTestTag = "ContributorsLazyColumnTestTag"
 const val ContributorsItemTestTag = "ContributorsItemTestTag:"
 
 fun NavGraphBuilder.contributorsScreens(
@@ -152,7 +151,7 @@ private fun Contributors(
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier.testTag(ContributorsLazyColumnTestTag),
+        modifier = modifier,
     ) {
         items(contributors) {
             ContributorsItem(
