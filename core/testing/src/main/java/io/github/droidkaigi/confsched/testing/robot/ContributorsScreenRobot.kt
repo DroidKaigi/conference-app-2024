@@ -9,8 +9,8 @@ import androidx.compose.ui.test.performScrollToIndex
 import io.github.droidkaigi.confsched.contributors.ContributorsItemTestTagPrefix
 import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.ContributorsTestTag
-import io.github.droidkaigi.confsched.contributors.component.ContributorsItemImageTestTag
-import io.github.droidkaigi.confsched.contributors.component.ContributorsUserNameTextTestTag
+import io.github.droidkaigi.confsched.contributors.component.ContributorsItemImageTestTagPrefix
+import io.github.droidkaigi.confsched.contributors.component.ContributorsUserNameTextTestTagPrefix
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
@@ -49,7 +49,7 @@ class ContributorsScreenRobot @Inject constructor(
 
             composeTestRule
                 .onNode(
-                    matcher = hasTestTag(ContributorsItemImageTestTag.plus(contributor.username)),
+                    matcher = hasTestTag(ContributorsItemImageTestTagPrefix.plus(contributor.username)),
                     useUnmergedTree = true,
                 )
                 .assertExists()
@@ -58,7 +58,7 @@ class ContributorsScreenRobot @Inject constructor(
 
             composeTestRule
                 .onNode(
-                    matcher = hasTestTag(ContributorsUserNameTextTestTag.plus(contributor.username)),
+                    matcher = hasTestTag(ContributorsUserNameTextTestTagPrefix.plus(contributor.username)),
                     useUnmergedTree = true,
                 )
                 .assertExists()
@@ -82,14 +82,14 @@ class ContributorsScreenRobot @Inject constructor(
 
         composeTestRule
             .onNode(
-                matcher = hasTestTag(ContributorsItemImageTestTag.plus(contributor.username)),
+                matcher = hasTestTag(ContributorsItemImageTestTagPrefix.plus(contributor.username)),
                 useUnmergedTree = true,
             )
             .assertDoesNotExist()
 
         composeTestRule
             .onNode(
-                matcher = hasTestTag(ContributorsUserNameTextTestTag.plus(contributor.username)),
+                matcher = hasTestTag(ContributorsUserNameTextTestTagPrefix.plus(contributor.username)),
                 useUnmergedTree = true,
             )
             .assertDoesNotExist()

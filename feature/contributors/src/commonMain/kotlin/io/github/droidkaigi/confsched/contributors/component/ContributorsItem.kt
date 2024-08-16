@@ -24,8 +24,8 @@ import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.previewOverride
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 
-const val ContributorsItemImageTestTag = "ContributorsItemImageTestTag:"
-const val ContributorsUserNameTextTestTag = "ContributorsUserNameTextTestTag:"
+const val ContributorsItemImageTestTagPrefix = "ContributorsItemImageTestTag:"
+const val ContributorsUserNameTextTestTagPrefix = "ContributorsUserNameTextTestTag:"
 
 private val contributorIconShape = CircleShape
 
@@ -57,14 +57,14 @@ fun ContributorsItem(
                     color = MaterialTheme.colorScheme.outline,
                     shape = contributorIconShape,
                 )
-                .testTag(ContributorsItemImageTestTag.plus(contributor.username)),
+                .testTag(ContributorsItemImageTestTagPrefix.plus(contributor.username)),
         )
         Text(
             text = contributor.username,
             style = MaterialTheme.typography.bodyLarge,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.testTag(ContributorsUserNameTextTestTag.plus(contributor.username)),
+            modifier = Modifier.testTag(ContributorsUserNameTextTestTagPrefix.plus(contributor.username)),
         )
     }
 }
