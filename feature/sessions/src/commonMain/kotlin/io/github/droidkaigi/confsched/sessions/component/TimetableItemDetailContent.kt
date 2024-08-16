@@ -107,6 +107,7 @@ private fun DescriptionSection(
     onLinkClick: (url: String) -> Unit,
 ) {
     var isExpand by rememberSaveable { mutableStateOf(false) }
+    var isOverFlow by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(8.dp)) {
         ClickableLinkText(
@@ -116,10 +117,13 @@ private fun DescriptionSection(
             style = MaterialTheme.typography.bodyLarge,
             maxLines = if (isExpand) Int.MAX_VALUE else 7,
             overflow = if (isExpand) TextOverflow.Clip else TextOverflow.Ellipsis,
+            onOverflow = {
+                isOverFlow = it
+            },
         )
         Spacer(Modifier.height(16.dp))
         AnimatedVisibility(
-            visible = isExpand.not(),
+            visible = isExpand.not() && isOverFlow,
             enter = EnterTransition.None,
             exit = fadeOut(),
         ) {

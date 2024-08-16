@@ -37,6 +37,8 @@ public struct FavoriteView: View {
                             }
                         }
                         .padding(.horizontal, 16)
+                        // bottom floating tabbar padding
+                        Color.clear.padding(.bottom, 60)
                     }
                 }
             }
