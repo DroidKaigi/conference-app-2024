@@ -1,0 +1,20 @@
+name: save-pr-number-for-ios-assign-reviewers
+
+on:
+  pull_request:
+    types: [opened, ready_for_review, labeled]
+
+jobs:
+  save_pr_number:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'type:iOS 🍎') && github.event.pull_request.draft == false
+
+    steps:
+      - name: Save PR number
+        run: |
+          echo ${{ github.event.pull_request.number }} > pr_number.txt
+      - name: Upload PR number
+        uses: actions/upload-artifact@v2
+        with:
+          name: pr_number
+          path: pr_number.txt

@@ -25,6 +25,11 @@ kotlin {
                 implementation(libs.androidxAppCompat)
             }
         }
+        commonTest {
+            dependencies {
+                implementation(libs.kotlinTest)
+            }
+        }
     }
 }
 

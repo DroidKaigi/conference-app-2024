@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "8.5.1"
+androidGradlePlugin = "8.5.2"
 # For updating Kotlin and Compose Compiler version, see:
 # https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html#jetpack-compose-and-compose-multiplatform-release-cycles
 # https://developer.android.com/jetpack/androidx/releases/compose-kotlin?#pre-release_kotlin_compatibility
@@ -169,6 +169,7 @@ ossLicenses = { module = "com.google.android.gms:play-services-oss-licenses", ve
 junit = { module = "junit:junit", version.ref = "junit" }
 androidxTestExtJunit = { module = "androidx.test.ext:junit", version.ref = "androidxTestExt" }
 androidxTestEspressoEspressoCore = { module = "androidx.test.espresso:espresso-core", version.ref = "androidxTestEspresso" }
+kotlinTest = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 robolectric = { module = "org.robolectric:robolectric", version = "4.13" }
 roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
 roborazziCompose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }

@@ -1,0 +1,19 @@
+name: save-pr-number-for-labeler
+
+on:
+  pull_request:
+    paths:
+      - app-ios/**
+
+jobs:
+  save_pr_number:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Save PR number
+        run: |
+          echo ${{ github.event.pull_request.number }} > pr_number.txt
+      - name: Upload PR number
+        uses: actions/upload-artifact@v2
+        with:
+          name: pr_number
+          path: pr_number.txt

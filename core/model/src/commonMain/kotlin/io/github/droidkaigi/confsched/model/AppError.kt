@@ -18,4 +18,7 @@ public sealed class AppError : RuntimeException {
     }
 
     public class UnknownException(cause: Throwable?) : AppError(cause = cause)
+    public class InternetConnectionException(cause: Throwable?) : AppError(cause)
 }
+
+public expect fun knownPlatformExceptionOrNull(e: Throwable): AppError?

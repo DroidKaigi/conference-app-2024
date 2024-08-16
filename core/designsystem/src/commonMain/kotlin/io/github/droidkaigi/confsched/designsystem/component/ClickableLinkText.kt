@@ -1,5 +1,8 @@
 package io.github.droidkaigi.confsched.designsystem.component
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.EaseInQuart
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,6 +22,8 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+
+private const val ClickableTextExpandAnimateDurationMillis = 300
 
 @Composable
 private fun findResults(
@@ -118,9 +123,13 @@ fun ClickableLinkText(
     }
 
     ClickableText(
-        modifier = modifier.onGloballyPositioned { coordinates ->
-            layoutResult.value = coordinates
-        },
+        modifier = modifier
+            .animateContentSize(
+                animationSpec = tween(ClickableTextExpandAnimateDurationMillis, easing = EaseInQuart),
+            )
+            .onGloballyPositioned { coordinates ->
+                layoutResult.value = coordinates
+            },
         text = annotatedString,
         style = style,
         overflow = overflow,

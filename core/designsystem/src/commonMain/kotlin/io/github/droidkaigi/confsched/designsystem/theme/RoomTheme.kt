@@ -26,9 +26,9 @@ sealed interface RoomTheme {
     }
 
     data object Flamingo : RoomTheme {
-        override val primaryColor = Color(0xFFBB85FF)
-        override val containerColor = Color(0xFFBB85FF).copy(alpha = 0.1f)
-        override val dimColor = Color(0xFF1E1A27)
+        override val primaryColor = Color(0xFFFF53CF)
+        override val containerColor = Color(0xFFFF53CF).copy(alpha = 0.1f)
+        override val dimColor = Color(0xFF271A25)
     }
 
     data object Jellyfish : RoomTheme {
