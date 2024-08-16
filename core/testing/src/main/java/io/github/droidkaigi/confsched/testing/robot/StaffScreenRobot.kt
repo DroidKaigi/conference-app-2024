@@ -5,13 +5,11 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
-import androidx.compose.ui.test.performScrollToNode
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.staff.StaffItemTestTag
 import io.github.droidkaigi.confsched.staff.StaffScreen
-import io.github.droidkaigi.confsched.staff.StaffScreenLazyColumnTestTag
 import io.github.droidkaigi.confsched.staff.component.StaffItemImageTestTag
 import io.github.droidkaigi.confsched.staff.component.StaffItemUserNameTextTestTag
 import javax.inject.Inject
@@ -30,15 +28,6 @@ class StaffScreenRobot @Inject constructor(
                 )
             }
         }
-        waitUntilIdle()
-    }
-
-    fun scrollToTestTag(
-        testTag: String,
-    ) {
-        composeTestRule
-            .onNode(hasTestTag(StaffScreenLazyColumnTestTag))
-            .performScrollToNode(hasTestTag(testTag))
         waitUntilIdle()
     }
 

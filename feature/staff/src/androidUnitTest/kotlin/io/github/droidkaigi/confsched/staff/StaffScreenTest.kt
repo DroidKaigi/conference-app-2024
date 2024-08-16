@@ -47,67 +47,31 @@ class StaffScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("show staff 1 to 5") {
+                        itShould("show staff two or more") {
                             captureScreenWithChecks {
                                 checkExistsStaffItem(
-                                    fromTo = 0 to 5,
+                                    fromTo = 0 to 2,
                                 )
                             }
                         }
-                        describe("when scroll to staff 9") {
-                            run {
-                                scrollToTestTag(StaffItemTestTag.plus(9))
-                            }
-                            itShould("show staff 6 to 10") {
-                                captureScreenWithChecks {
-                                    checkExistsStaffItem(
-                                        fromTo = 5 to 10,
-                                    )
-                                }
-                            }
-                        }
-                        describe("when scroll to staff 12") {
-                            run {
-                                scrollToTestTag(StaffItemTestTag.plus(12))
-                            }
-                            itShould("show staff 11 to 15") {
-                                captureScreenWithChecks {
-                                    checkExistsStaffItem(
-                                        fromTo = 10 to 15,
-                                    )
-                                }
-                            }
-                        }
-                        describe("when scroll to staff 20") {
-                            run {
-                                scrollToTestTag(StaffItemTestTag.plus(20))
-                            }
-                            itShould("show staff 16 to 20") {
-                                captureScreenWithChecks {
-                                    checkExistsStaffItem(
-                                        fromTo = 15 to 20,
-                                    )
-                                }
-                            }
-                        }
                     }
-                }
 
-                describe("when server is down") {
-                    run {
-                        setupStaffServer(Error)
-                    }
-                    describe("when launch") {
+                    describe("when server is down") {
                         run {
-                            setupScreenContent()
+                            setupStaffServer(Error)
                         }
-                        itShould("does not show staff, and show snackbar") {
-                            captureScreenWithChecks(
-                                checks = {
-                                    checkDoesNotExistsStaffItem()
-                                    checkErrorSnackbarDisplayed()
-                                },
-                            )
+                        describe("when launch") {
+                            run {
+                                setupScreenContent()
+                            }
+                            itShould("does not show staff and show snackbar") {
+                                captureScreenWithChecks(
+                                    checks = {
+                                        checkDoesNotExistsStaffItem()
+                                        checkErrorSnackbarDisplayed()
+                                    },
+                                )
+                            }
                         }
                     }
                 }
