@@ -8,10 +8,8 @@ import de.jensklingenberg.ktorfit.http.GET
 import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.sponsors.response.SponsorResponse
 import io.github.droidkaigi.confsched.data.sponsors.response.SponsorsResponse
-import io.github.droidkaigi.confsched.data.staff.response.StaffsResponse
 import io.github.droidkaigi.confsched.model.Plan
 import io.github.droidkaigi.confsched.model.Sponsor
-import io.github.droidkaigi.confsched.model.fakes
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
