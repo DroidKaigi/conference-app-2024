@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.sessions
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
@@ -145,7 +144,7 @@ fun SearchScreen(
                 onClickBack = onBackClick,
             )
         },
-        modifier = modifier.displayCutoutPadding(),
+        modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surface,
     ) { innerPadding ->
         Column(
