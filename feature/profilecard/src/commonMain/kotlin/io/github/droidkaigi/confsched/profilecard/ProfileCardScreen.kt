@@ -83,6 +83,7 @@ import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
+import io.github.droidkaigi.confsched.model.ImageData
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardTheme
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
@@ -126,7 +127,7 @@ internal sealed interface ProfileCardUiState {
         val nickname: String = "",
         val occupation: String? = null,
         val link: String? = null,
-        val image: String? = null,
+        val imageData: ImageData? = null,
         val theme: ProfileCardTheme = ProfileCardTheme.entries.first(),
     ) : ProfileCardUiState
 

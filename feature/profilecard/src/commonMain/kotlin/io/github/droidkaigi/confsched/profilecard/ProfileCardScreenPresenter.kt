@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.model.ImageData
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
@@ -31,7 +32,7 @@ private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
             nickname = nickname,
             occupation = occupation,
             link = link,
-            image = image,
+            imageData = image?.run(::ImageData),
             theme = theme,
         )
         ProfileCard.DoesNotExists, ProfileCard.Loading -> ProfileCardUiState.Edit()
