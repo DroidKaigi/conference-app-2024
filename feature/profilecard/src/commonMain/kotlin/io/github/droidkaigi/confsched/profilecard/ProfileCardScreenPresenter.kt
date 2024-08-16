@@ -12,6 +12,7 @@ import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.flow.Flow
 
 internal sealed interface ProfileCardScreenEvent
@@ -59,7 +60,8 @@ internal fun profileCardScreenPresenter(
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
     val profileCard: ProfileCard by rememberUpdatedState(repository.profileCard())
     var isLoading: Boolean by remember { mutableStateOf(false) }
-    val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
+    var editingUiState: ProfileCardUiState.Edit? by rememberRetained { mutableStateOf(null) }
+    val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(editingUiState ?: profileCard.toEditUiState())
     val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(profileCard.toCardUiState())
     var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Loading) }
 
