@@ -25,6 +25,17 @@ build-app-debug: build-kmp-module
 		-destination "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.5" \
 		clean build | xcbeautify
 
+.PHONY: test-app-debug
+test-app-debug:
+	set -o pipefail && \
+		xcodebuild test -project $(PROJECT_FILE) \
+		-scheme $(SCHEME_NAME_APP) \
+		-configuration Debug \
+		-skipPackagePluginValidation \
+		-skipMacroValidation \
+		-destination "platform=iOS Simulator,name=iPhone 15 Pro,OS=17.5" \
+		| xcbeautify
+
 .PHONY: bootstrap
 bootstrap:
 	make setup && \

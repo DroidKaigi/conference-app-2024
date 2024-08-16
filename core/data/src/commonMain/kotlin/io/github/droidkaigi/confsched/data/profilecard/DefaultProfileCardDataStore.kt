@@ -10,16 +10,16 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
-public class ProfileCardDataStore(
+public class DefaultProfileCardDataStore(
     private val dataStore: DataStore<Preferences>,
-) {
-    public suspend fun save(profileCard: ProfileCard.Exists) {
+) : ProfileCardDataStore {
+    public override suspend fun save(profileCard: ProfileCard.Exists) {
         dataStore.edit { preferences ->
             preferences[KEY_PROFILE_CARD] = Json.encodeToString(profileCard.toJson())
         }
     }
 
-    public fun get(): Flow<ProfileCard> {
+    public override fun get(): Flow<ProfileCard> {
         return dataStore.data.map { preferences ->
             val cache = preferences[KEY_PROFILE_CARD] ?: return@map null
             Json.decodeFromString<ProfileCardJson>(cache)
@@ -31,4 +31,9 @@ public class ProfileCardDataStore(
     private companion object {
         private val KEY_PROFILE_CARD = stringPreferencesKey("KEY_PROFILE_CARD")
     }
+}
+
+public interface ProfileCardDataStore {
+    public suspend fun save(profileCard: ProfileCard.Exists)
+    public fun get(): Flow<ProfileCard>
 }

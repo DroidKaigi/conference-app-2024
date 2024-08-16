@@ -46,7 +46,7 @@ public struct TimetableView: View {
         .frame(maxWidth: .infinity)
         .toolbar{
             ToolbarItem(placement: .topBarLeading) {
-                Text("Timetable")
+                Text("Timetable", bundle: .module)
                     .textStyle(.headlineMedium)
                     .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 

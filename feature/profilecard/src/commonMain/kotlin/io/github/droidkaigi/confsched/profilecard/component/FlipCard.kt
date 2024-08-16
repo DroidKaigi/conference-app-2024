@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.profilecard
+package io.github.droidkaigi.confsched.profilecard.component
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
@@ -18,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,40 +33,43 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.profilecard.generated.resources.icon_qr
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
+import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
+import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 internal fun FlipCard(
-    uiState: ProfileCardUiState.Card,
+    uiState: Card,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
 ) {
     var isFlipped by remember { mutableStateOf(false) }
     var isCreated by rememberSaveable { mutableStateOf(isCreated) }
     var initialRotation by remember { mutableStateOf(0f) }
-    val rotation = animateFloatAsState(
+    val rotation by animateFloatAsState(
         targetValue = if (isFlipped) 180f else initialRotation,
         animationSpec = tween(
             durationMillis = 400,
             easing = FastOutSlowInEasing,
         ),
     )
-    val targetRotation = animateFloatAsState(
+    val isBack by remember { derivedStateOf { rotation > 90f } }
+    val targetRotation by animateFloatAsState(
         targetValue = 30f,
         animationSpec = tween(
             durationMillis = 400,
             easing = FastOutSlowInEasing,
         ),
-    ).value
-    val targetRotation2 = animateFloatAsState(
+    )
+    val targetRotation2 by animateFloatAsState(
         targetValue = 0f,
         animationSpec = tween(
             durationMillis = 400,
             easing = FastOutSlowInEasing,
         ),
-    ).value
+    )
 
     LaunchedEffect(Unit) {
         if (isCreated) {
@@ -82,13 +86,13 @@ internal fun FlipCard(
                 .size(width = 300.dp, height = 380.dp)
                 .clickable { isFlipped = !isFlipped }
                 .graphicsLayer {
-                    rotationY = rotation.value
+                    rotationY = rotation
                     cameraDistance = 12f * density
                 },
             colors = CardDefaults.cardColors(containerColor = LocalProfileCardScreenTheme.current.containerColor),
             elevation = CardDefaults.cardElevation(10.dp),
         ) {
-            if (isFlipped) { // Back
+            if (isBack) { // Back
                 Column(
                     modifier = Modifier
                         .fillMaxSize()

@@ -4,6 +4,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
+import androidx.compose.ui.test.assertIsSelected
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -17,6 +18,7 @@ import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.TimetableScreen
 import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
@@ -30,6 +32,9 @@ import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkedIc
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import javax.inject.Inject
 
 class TimetableScreenRobot @Inject constructor(
@@ -39,14 +44,21 @@ class TimetableScreenRobot @Inject constructor(
     TimetableServerRobot by timetableServerRobot {
     val clickedItems = mutableSetOf<TimetableItem>()
 
-    fun setupTimetableScreenContent() {
+    fun setupTimetableScreenContent(customTime: LocalDateTime? = null) {
+        val fakeClock = if (customTime != null) {
+            FakeClock(customTime.toInstant(TimeZone.of("UTC+9")))
+        } else {
+            FakeClock
+        }
+
         robotTestRule.setContent {
-            CompositionLocalProvider(LocalClock provides FakeClock) {
+            CompositionLocalProvider(LocalClock provides fakeClock) {
                 KaigiTheme {
                     TimetableScreen(
                         onTimetableItemClick = {
                             clickedItems.add(it)
                         },
+                        onSearchClick = {},
                     )
                 }
             }
@@ -105,6 +117,12 @@ class TimetableScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(TimetableListTestTag))
             .assertIsDisplayed()
+    }
+
+    fun checkTimetableTabSelected(day: DroidKaigi2024Day) {
+        composeTestRule
+            .onNode(hasTestTag(TimetableTabTestTag.plus(day.ordinal)))
+            .assertIsSelected()
     }
 
     fun checkTimetableListItemsDisplayed() {

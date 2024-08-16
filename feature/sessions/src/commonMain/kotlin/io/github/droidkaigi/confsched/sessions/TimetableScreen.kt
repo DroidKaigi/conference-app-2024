@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.sessions
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -14,9 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.ViewTimeline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -39,6 +38,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.sessions.generated.resources.ic_grid_view
+import conference_app_2024.feature.sessions.generated.resources.ic_view_timeline
 import conference_app_2024.feature.sessions.generated.resources.timetable
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
@@ -57,12 +58,14 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.toPersistentMap
+import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
 const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
 fun NavGraphBuilder.nestedSessionScreens(
+    onSearchClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues,
@@ -70,6 +73,7 @@ fun NavGraphBuilder.nestedSessionScreens(
     composable(timetableScreenRoute) {
         TimetableScreen(
             onTimetableItemClick = onTimetableItemClick,
+            onSearchClick = onSearchClick,
             contentPadding = contentPadding,
             modifier = modifier,
         )
@@ -90,6 +94,7 @@ const val TimetableScreenTestTag = "TimetableScreen"
 
 @Composable
 fun TimetableScreen(
+    onSearchClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -107,6 +112,7 @@ fun TimetableScreen(
     TimetableScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
+        onSearchClick = onSearchClick,
         onTimetableItemClick = onTimetableItemClick,
         onBookmarkClick = { item, bookmarked ->
             eventEmitter.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
@@ -130,6 +136,7 @@ data class TimetableScreenUiState(
 private fun TimetableScreen(
     uiState: TimetableScreenUiState,
     snackbarHostState: SnackbarHostState,
+    onSearchClick: () -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
     onTimetableUiChangeClick: () -> Unit,
@@ -159,15 +166,17 @@ private fun TimetableScreen(
                             imageVector = Icons.Default.Search,
                             contentDescription = null,
                             modifier = Modifier.padding(8.dp).clickable {
+                                onSearchClick()
                             },
                         )
                         Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
-                            Icon(
-                                imageVector = if (timetableUiType == Grid) {
-                                    Icons.Default.ViewTimeline
-                                } else {
-                                    Icons.Default.GridView
-                                },
+                            val iconRes = if (timetableUiType == Grid) {
+                                SessionsRes.drawable.ic_view_timeline
+                            } else {
+                                SessionsRes.drawable.ic_grid_view
+                            }
+                            Image(
+                                painter = painterResource(iconRes),
                                 contentDescription = null,
                                 modifier = Modifier.padding(8.dp).clickable {
                                     onTimetableUiChangeClick()
@@ -231,6 +240,7 @@ fun PreviewTimetableScreenDark() {
                 onTimetableItemClick = {},
                 onBookmarkClick = { _, _ -> },
                 onTimetableUiChangeClick = {},
+                onSearchClick = {},
                 modifier = Modifier.statusBarsPadding(),
             )
         }
