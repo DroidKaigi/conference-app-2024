@@ -212,10 +212,10 @@ fun MainScreen(
 ) {
     val mainNestedNavController = rememberNavController()
     val navBackStackEntry by mainNestedNavController.currentBackStackEntryAsState()
-    val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
+    navBackStackEntry?.destination?.route?.routeToTab()
     val hazeState = remember { HazeState() }
 
-    var scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
+    val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
 
     Row(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
@@ -224,7 +224,7 @@ fun MainScreen(
                 onTabSelected = {
                     onTabSelected(mainNestedNavController, it)
                 },
-                modifier = Modifier.padding(scaffoldPadding.value)
+                modifier = Modifier.padding(scaffoldPadding.value),
             )
         }
 
