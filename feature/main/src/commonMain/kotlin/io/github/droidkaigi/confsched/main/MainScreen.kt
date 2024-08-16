@@ -212,7 +212,7 @@ fun MainScreen(
 ) {
     val mainNestedNavController = rememberNavController()
     val navBackStackEntry by mainNestedNavController.currentBackStackEntryAsState()
-    navBackStackEntry?.destination?.route?.routeToTab()
+    val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
     val hazeState = remember { HazeState() }
 
     val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
@@ -224,6 +224,7 @@ fun MainScreen(
                 onTabSelected = {
                     onTabSelected(mainNestedNavController, it)
                 },
+                currentTab = currentTab ?: MainScreenTab.Timetable,
                 modifier = Modifier.padding(scaffoldPadding.value),
             )
         }
@@ -236,6 +237,7 @@ fun MainScreen(
                         onTabSelected = {
                             onTabSelected(mainNestedNavController, it)
                         },
+                        currentTab = currentTab ?: MainScreenTab.Timetable,
                         modifier = Modifier.safeDrawingPadding(),
                     )
                 }
