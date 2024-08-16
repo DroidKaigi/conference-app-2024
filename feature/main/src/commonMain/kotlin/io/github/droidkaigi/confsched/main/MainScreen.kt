@@ -13,7 +13,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
@@ -218,7 +217,7 @@ fun MainScreen(
 
     val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
 
-    Row(modifier = modifier.displayCutoutPadding().fillMaxSize()) {
+    Row(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
             GlassLikeNavRail(
                 hazeState = hazeState,
