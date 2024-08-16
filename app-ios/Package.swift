@@ -220,6 +220,7 @@ let package = Package(
                 .kmpClient,
                 .theme,
                 .model,
+                .commonComponents,
             ]
         ),
         .testTarget(
