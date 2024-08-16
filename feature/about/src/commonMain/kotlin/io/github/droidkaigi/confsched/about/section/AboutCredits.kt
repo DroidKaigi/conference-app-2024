@@ -17,18 +17,12 @@ import conference_app_2024.feature.about.generated.resources.sponsor
 import conference_app_2024.feature.about.generated.resources.staff
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutContentColumn
-import io.github.droidkaigi.confsched.about.section.AboutCreditsSectionTestTag.ContributorsItem
-import io.github.droidkaigi.confsched.about.section.AboutCreditsSectionTestTag.SponsorsItem
-import io.github.droidkaigi.confsched.about.section.AboutCreditsSectionTestTag.StaffItem
 import org.jetbrains.compose.resources.stringResource
 
-@Suppress("ConstPropertyName")
-object AboutCreditsSectionTestTag {
-    const val Title = "AboutCreditsTitle"
-    const val StaffItem = "AboutCreditsStaffItem"
-    const val ContributorsItem = "AboutCreditsContributorsItem"
-    const val SponsorsItem = "AboutCreditsSponsorsItem"
-}
+const val AboutCreditsTitleTestTag = "AboutCreditsTitleTestTag"
+const val AboutCreditsStaffItemTestTag = "AboutCreditsStaffItemTestTag"
+const val AboutCreditsContributorsItemTestTag = "AboutCreditsContributorsItemTestTag"
+const val AboutCreditsSponsorsItemTestTag = "AboutCreditsSponsorsItemTestTag"
 
 fun LazyListScope.aboutCredits(
     modifier: Modifier = Modifier,
@@ -41,7 +35,7 @@ fun LazyListScope.aboutCredits(
             text = stringResource(AboutRes.string.credits_title),
             style = MaterialTheme.typography.titleMedium,
             modifier = modifier
-                .testTag(AboutCreditsSectionTestTag.Title)
+                .testTag(AboutCreditsTitleTestTag)
                 .padding(
                     start = 16.dp,
                     top = 32.dp,
@@ -53,7 +47,7 @@ fun LazyListScope.aboutCredits(
         AboutContentColumn(
             leadingIcon = Outlined.Diversity1,
             label = stringResource(AboutRes.string.contributor),
-            testTag = ContributorsItem,
+            testTag = AboutCreditsContributorsItemTestTag,
             onClickAction = onContributorsItemClick,
             modifier = modifier
                 .padding(
@@ -65,7 +59,7 @@ fun LazyListScope.aboutCredits(
         AboutContentColumn(
             leadingIcon = Outlined.SentimentVerySatisfied,
             label = stringResource(AboutRes.string.staff),
-            testTag = StaffItem,
+            testTag = AboutCreditsStaffItemTestTag,
             onClickAction = onStaffItemClick,
             modifier = modifier
                 .padding(
@@ -77,7 +71,7 @@ fun LazyListScope.aboutCredits(
         AboutContentColumn(
             leadingIcon = Outlined.Apartment,
             label = stringResource(AboutRes.string.sponsor),
-            testTag = SponsorsItem,
+            testTag = AboutCreditsSponsorsItemTestTag,
             onClickAction = onSponsorsItemClick,
             modifier = modifier
                 .padding(

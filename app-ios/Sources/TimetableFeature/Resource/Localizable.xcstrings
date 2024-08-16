@@ -18,7 +18,14 @@
 
     },
     "Timetable" : {
-
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "タイムテーブル"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

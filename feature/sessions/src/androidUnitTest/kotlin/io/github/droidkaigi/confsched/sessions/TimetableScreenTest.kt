@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.sessions
 
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
+import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
@@ -9,6 +10,9 @@ import io.github.droidkaigi.confsched.testing.robot.TimetableScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.atTime
+import kotlinx.datetime.format
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -46,6 +50,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         captureScreenWithChecks(checks = {
                             checkTimetableListDisplayed()
                             checkTimetableListItemsDisplayed()
+                            checkTimetableTabSelected(DroidKaigi2024Day.ConferenceDay1)
                         })
                     }
                     describe("click first session bookmark") {
@@ -118,6 +123,34 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                 }
+                listOf(
+                    InitialTabTestSpec(
+                        date = LocalDate(2024, 9, 11),
+                        expectedInitialTab = DroidKaigi2024Day.ConferenceDay1,
+                    ),
+                    InitialTabTestSpec(
+                        date = LocalDate(2024, 9, 12),
+                        expectedInitialTab = DroidKaigi2024Day.ConferenceDay1,
+                    ),
+                    InitialTabTestSpec(
+                        date = LocalDate(2024, 9, 13),
+                        expectedInitialTab = DroidKaigi2024Day.ConferenceDay2,
+                    ),
+                ).forEach { case ->
+                    describe("when the current date is ${case.date.format(LocalDate.Formats.ISO)}") {
+                        run {
+                            setupTimetableServer(ServerStatus.Operational)
+                            setupTimetableScreenContent(case.date.atTime(10, 0))
+                        }
+                        itShould("show timetable items for ${case.expectedInitialTab.name}") {
+                            captureScreenWithChecks(checks = {
+                                checkTimetableListDisplayed()
+                                checkTimetableListItemsDisplayed()
+                                checkTimetableTabSelected(case.expectedInitialTab)
+                            })
+                        }
+                    }
+                }
                 describe("when server is down") {
                     run {
                         setupTimetableServer(ServerStatus.Error)
@@ -133,3 +166,8 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
         }
     }
 }
+
+private data class InitialTabTestSpec(
+    val date: LocalDate,
+    val expectedInitialTab: DroidKaigi2024Day,
+)
