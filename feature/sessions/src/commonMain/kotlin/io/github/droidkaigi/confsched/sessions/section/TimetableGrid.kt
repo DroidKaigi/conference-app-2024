@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.layout.LazyLayoutItemProvider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -78,6 +79,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridRooms
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState.Companion
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -86,7 +88,9 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
+import kotlinx.datetime.periodUntil
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -202,6 +206,7 @@ fun TimetableGrid(
     content: @Composable (TimetableItem, Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
+    val clock = LocalClock.current
     val density = timetableState.density
     val verticalScale = timetableState.screenScaleState.verticalScale
     val timetableLayout = remember(timetable, verticalScale) {
@@ -227,6 +232,27 @@ fun TimetableGrid(
 
     val nestedScrollConnection = remember { object : NestedScrollConnection {} }
     val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
+
+    LaunchedEffect(Unit) {
+        val progressingSession = timetable.timetableItems.timetableItems.find { clock.now() in it.startsAt..it.endsAt }
+        progressingSession?.let { session ->
+            val timeZone = TimeZone.of("UTC+9")
+            val period = with(session.startsAt) {
+                toLocalDateTime(timeZone)
+                    .date.atTime(10, 0)
+                    .toInstant(timeZone)
+                    .periodUntil(this, timeZone)
+            }
+            val minuteHeightPx = with(density) { TimetableSizes.minuteHeight.times(verticalScale).toPx() }
+            val scrollOffsetY = -with(period) { hours * minuteHeightPx * 60 + minutes * minuteHeightPx }
+            timetableScreen.scroll(
+                Offset(0f, scrollOffsetY),
+                0,
+                Offset.Zero,
+                nestedScrollDispatcher,
+            )
+        }
+    }
 
     LazyLayout(
         modifier = modifier

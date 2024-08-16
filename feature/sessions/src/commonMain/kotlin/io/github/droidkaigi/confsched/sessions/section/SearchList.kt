@@ -21,6 +21,7 @@ fun SearchList(
         onTimetableItemClick = onTimetableItemClick,
         contentPadding = PaddingValues(),
         highlightWord = highlightWord,
+        enableAutoScrolling = false,
         modifier = modifier,
     )
 }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
@@ -29,6 +30,7 @@ import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentState
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.ui.icon
 import kotlinx.collections.immutable.PersistentMap
@@ -60,10 +62,22 @@ fun TimetableList(
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
     highlightWord: String = "",
+    enableAutoScrolling: Boolean = true,
 ) {
+    val clock = LocalClock.current
     val layoutDirection = LocalLayoutDirection.current
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val animatedScope = LocalAnimatedVisibilityScope.current
+
+    LaunchedEffect(Unit) {
+        if (enableAutoScrolling) {
+            val progressingSessionIndex =
+                uiState.timetableItemMap.keys.indexOfFirst { clock.now() in it.startTime..it.endTime }
+            progressingSessionIndex.takeIf { it != -1 }?.let {
+                scrollState.animateScrollToItem(it)
+            }
+        }
+    }
 
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag),
