@@ -45,11 +45,22 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                         run {
                             setupScreenContent()
                         }
-                        itShould("show contributor two or more") {
+                        itShould("show contributor first and second") {
                             captureScreenWithChecks {
-                                checkExistsContributorItem(
-                                    fromTo = 0 to 2,
+                                checkRangeContributorItemsDisplayed(
+                                    fromTo = 0..2,
                                 )
+                            }
+                        }
+
+                        describe("when scroll to index 10") {
+                            run {
+                                scrollToIndex10()
+                            }
+                            itShould("show contributor last") {
+                                captureScreenWithChecks {
+                                    checkContributorItemsDisplayed()
+                                }
                             }
                         }
                     }
@@ -65,7 +76,7 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                             itShould("does not show contributor and show snackbar") {
                                 captureScreenWithChecks(
                                     checks = {
-                                        checkDoesNotExistsContributorItem()
+                                        checkDoesNotFirstContributorItemDisplayed()
                                         checkErrorSnackbarDisplayed()
                                     },
                                 )
