@@ -118,27 +118,31 @@ data class FavoriteAnimationSpec(
     val targetPosition: Offset,
 ) {
     companion object {
-        private const val GRAPHICAL_ACCELERATION_PIXELS = 9.8f
+        private const val GRAPHICAL_ACCELERATION = 9.8f
+        private const val TIMES_SPEED = 20
     }
 
     private val targetXFromStart: Float = targetPosition.x - startPosition.x
     private val targetYFromStart: Float = targetPosition.y - startPosition.y
 
-    // 自由落下時に目標地点に到達するまでの時間
+    // Time to reach the target point during free fall
     private val durationMillis: Long =
-        sqrt((2 * targetYFromStart).absoluteValue / GRAPHICAL_ACCELERATION_PIXELS).toLong() * 1000
+        sqrt((2 * targetYFromStart).absoluteValue / GRAPHICAL_ACCELERATION).toLong() * 1000
+    private val durationMillisWithTimesSpeed = durationMillis / TIMES_SPEED
 
-    val endTime = startTime + durationMillis
+    val endTime = startTime + durationMillisWithTimesSpeed
 
     fun calculateCurrentOffset(currentTime: Long): Offset {
         if (currentTime > endTime) {
             return targetPosition
         }
-        val elapsedTime = currentTime - startTime
-        val progress = elapsedTime / durationMillis.toFloat()
+        val elapsedTimeMillis = currentTime - startTime
+        val elapsedTime = elapsedTimeMillis.toFloat() / (1000 / TIMES_SPEED)
+        val progress = elapsedTimeMillis / durationMillisWithTimesSpeed.toFloat()
+
         return Offset(
             x = startPosition.x + targetXFromStart * progress,
-            y = startPosition.y + (0.5 * GRAPHICAL_ACCELERATION_PIXELS * (elapsedTime.toFloat() / 1000).pow(
+            y = startPosition.y + (0.5 * GRAPHICAL_ACCELERATION * elapsedTime.pow(
                 2
             )).toFloat(),
         )
