@@ -1,10 +1,6 @@
 package io.github.droidkaigi.confsched.contributors
 
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.displayCutoutPadding
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -25,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavGraphBuilder
@@ -102,7 +97,6 @@ fun ContributorsScreen(
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -111,14 +105,7 @@ fun ContributorsScreen(
         }
     Scaffold(
         modifier = modifier
-            .padding(
-                start = WindowInsets.displayCutout
-                    .asPaddingValues()
-                    .calculateStartPadding(layoutDirection),
-                end = WindowInsets.displayCutout
-                    .asPaddingValues()
-                    .calculateEndPadding(layoutDirection),
-            )
+            .displayCutoutPadding()
             .testTag(ContributorsScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
