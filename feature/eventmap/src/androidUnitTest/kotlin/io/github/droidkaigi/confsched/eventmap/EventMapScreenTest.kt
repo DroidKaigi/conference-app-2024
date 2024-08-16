@@ -36,6 +36,31 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun behaviors(): List<DescribedBehavior<EventMapScreenRobot>> {
             return describeBehaviors<EventMapScreenRobot>(name = "EventMapScreenRobot") {
+                describe("when regardless of server status") {
+                    run {
+                        setupScreenContent()
+                    }
+                    describe("when click floor level ground") {
+                        run {
+                            clickEventMapTab("1F")
+                        }
+                        itShould("showed ground floor level map") {
+                            captureScreenWithChecks {
+                                checkEventMap("1F")
+                            }
+                        }
+                    }
+                    describe("when click floor level basement") {
+                        run {
+                            clickEventMapTab("B1F")
+                        }
+                        itShould("showed basement floor level map") {
+                            captureScreenWithChecks {
+                                checkEventMap("B1F")
+                            }
+                        }
+                    }
+                }
                 describe("when server is operational") {
                     run {
                         setupEventMapServer(ServerStatus.Operational)

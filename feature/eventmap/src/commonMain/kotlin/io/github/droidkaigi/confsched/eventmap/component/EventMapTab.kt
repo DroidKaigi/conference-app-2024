@@ -19,13 +19,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import conference_app_2024.feature.eventmap.generated.resources.Res
 import conference_app_2024.feature.eventmap.generated.resources.event_map_1f
 import conference_app_2024.feature.eventmap.generated.resources.event_map_b1f
+import io.github.droidkaigi.confsched.model.FloorLevel
 import org.jetbrains.compose.resources.painterResource
+
+const val EventMapTabTestTagPrefix = "EventMapTabTestTag:"
+const val EventMapTabImageTestTag = "EventMapTabImageTestTag"
 
 @Composable
 fun EventMapTab(
@@ -53,7 +58,9 @@ fun EventMapTab(
             },
             tabs = {
                 Tab(
-                    modifier = Modifier.height(64.dp),
+                    modifier = Modifier
+                        .height(64.dp)
+                        .testTag(EventMapTabTestTagPrefix.plus(FloorLevel.Ground.floorName)),
                     selected = true,
                     onClick = {
                         selectedTabIndex = 0
@@ -67,7 +74,9 @@ fun EventMapTab(
                     )
                 }
                 Tab(
-                    modifier = Modifier.height(64.dp),
+                    modifier = Modifier
+                        .height(64.dp)
+                        .testTag(EventMapTabTestTagPrefix.plus(FloorLevel.Basement.floorName)),
                     selected = false,
                     onClick = {
                         selectedTabIndex = 1
@@ -88,9 +97,15 @@ fun EventMapTab(
         } else {
             Res.drawable.event_map_b1f
         }
+        val mapContentDescription = if (selectedTabIndex == 0) {
+            FloorLevel.Ground.floorName
+        } else {
+            FloorLevel.Basement.floorName
+        }
         Image(
+            modifier = Modifier.testTag(EventMapTabImageTestTag),
             painter = painterResource(mapRes),
-            contentDescription = null,
+            contentDescription = "Map of $mapContentDescription",
         )
     }
 }
