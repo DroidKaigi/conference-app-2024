@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.toTimetableTimeString
 import io.github.droidkaigi.confsched.sessions.component.TimetableTime
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
@@ -31,6 +32,7 @@ import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilit
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.ui.icon
 import kotlinx.collections.immutable.PersistentMap
+import kotlinx.datetime.Instant
 
 const val TimetableListTestTag = "TimetableList"
 
@@ -39,9 +41,11 @@ data class TimetableListUiState(
     val timetable: Timetable,
 ) {
     data class TimeSlot(
-        val startTimeString: String,
-        val endTimeString: String,
+        val startTime: Instant,
+        val endTime: Instant,
     ) {
+        val startTimeString: String get() = startTime.toTimetableTimeString()
+        val endTimeString: String get() = endTime.toTimetableTimeString()
         val key: String get() = "$startTimeString-$endTimeString"
     }
 }
