@@ -32,10 +32,7 @@ import kotlin.math.roundToInt
 
 private const val maxAboutHeaderOffsetDp = 40
 
-@Suppress("ConstPropertyName")
-object AboutDetailSectionTestTag {
-    const val Section = "DetailSection"
-}
+const val AboutDetailTestTag = "AboutDetailTestTag"
 
 @Composable
 fun AboutDroidKaigiDetail(
@@ -57,7 +54,7 @@ fun AboutDroidKaigiDetail(
     }
 
     Column(
-        modifier = modifier.testTag(AboutDetailSectionTestTag.Section),
+        modifier = modifier.testTag(AboutDetailTestTag),
     ) {
         Image(
             painter = painterResource(Res.drawable.about_header),
