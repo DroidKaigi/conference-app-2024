@@ -54,18 +54,7 @@ public struct TimetableCard: View {
                 
                 ForEach(timetableItem.speakers, id: \.id) { speaker in
                     HStack(spacing: 8) {
-                        Group {
-                            if let url = URL(string: speaker.iconUrl) {
-                                AsyncImage(url: url) {
-                                    $0.image?.resizable()
-                                }
-                            } else {
-                                Circle().stroke(Color.gray)
-                            }
-                        }
-                        .frame(width: 32, height: 32)
-                        .clipShape(Circle())
-
+                        SpeakerIcon(urlString: speaker.iconUrl)
                         Text(speaker.name)
                             .textStyle(.titleSmall)
                             .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
