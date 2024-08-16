@@ -38,11 +38,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -92,8 +88,6 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import kotlin.io.encoding.Base64
-import kotlin.io.encoding.ExperimentalEncodingApi
 
 const val profileCardScreenRoute = "profileCard"
 
@@ -249,13 +243,8 @@ internal fun EditScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    var nickname by remember { mutableStateOf(uiState.nickname) }
-    var occupation by remember { mutableStateOf(uiState.occupation) }
-    var link by remember { mutableStateOf(uiState.link) }
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
-    val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
-    var selectedTheme by remember { mutableStateOf(uiState.theme) }
+    val image = remember(uiState.imageData) { uiState.imageData?.imageBase64?.toImageBitmap() }
 
     Scaffold(
         modifier = modifier.testTag(ProfileCardEditScreenTestTag).padding(contentPadding),
@@ -279,21 +268,21 @@ internal fun EditScreen(
 
             InputColumn(
                 label = stringResource(ProfileCardRes.string.nick_name),
-                value = nickname,
+                value = uiState.nickname,
                 testTag = ProfileCardNicknameTextFieldTestTag,
-                onValueChanged = { nickname = it },
+                onValueChanged = { onUpdateEditingState(uiState.copy(nickname = it)) },
             )
             InputColumn(
                 label = stringResource(ProfileCardRes.string.occupation),
-                value = occupation ?: "",
+                value = uiState.occupation ?: "",
                 testTag = ProfileCardOccupationTextFieldTestTag,
-                onValueChanged = { occupation = it },
+                onValueChanged = { onUpdateEditingState(uiState.copy(occupation = it)) },
             )
             InputColumn(
                 label = stringResource(ProfileCardRes.string.link_text),
-                value = link ?: "",
+                value = uiState.link ?: "",
                 testTag = ProfileCardLinkTextFieldTestTag,
-                onValueChanged = { link = it },
+                onValueChanged = { onUpdateEditingState(uiState.copy(link = it)) },
             )
 
             Column(
@@ -311,7 +300,7 @@ internal fun EditScreen(
                                 .align(Alignment.BottomStart),
                         )
                         IconButton(
-                            onClick = { imageByteArray = null },
+                            onClick = { onUpdateEditingState(uiState.copy(imageData = null)) },
                             modifier = Modifier
                                 .graphicsLayer {
                                     translationX = 12.dp.toPx()
@@ -328,7 +317,7 @@ internal fun EditScreen(
                     }
                 } ?: run {
                     PhotoPickerButton(
-                        onSelectedImage = { imageByteArray = it },
+                        onSelectedImage = { onUpdateEditingState(uiState.copy(imageData = ImageData(it))) },
                         modifier = Modifier.testTag(ProfileCardSelectImageButtonTestTag),
                     ) {
                         Icon(Icons.Default.Add, null)
@@ -340,16 +329,19 @@ internal fun EditScreen(
 
             Text(stringResource(ProfileCardRes.string.select_theme))
 
-            ThemePiker(selectedTheme = selectedTheme, onClickImage = { selectedTheme = it })
+            ThemePiker(
+                selectedTheme = uiState.theme,
+                onClickImage = { onUpdateEditingState(uiState.copy(theme = it)) }
+            )
 
             Button(
                 onClick = {
                     onClickCreate(
                         ProfileCard.Exists(
-                            nickname = nickname,
-                            occupation = occupation,
-                            link = link,
-                            image = imageByteArray?.toBase64(),
+                            nickname = uiState.nickname,
+                            occupation = uiState.occupation,
+                            link = uiState.link,
+                            image = uiState.imageData?.image,
                             theme = uiState.theme,
                         ),
                     )
@@ -486,12 +478,6 @@ fun Modifier.selectedBorder(
 } else {
     this
 }
-
-@OptIn(ExperimentalEncodingApi::class)
-private fun ByteArray.toBase64(): String = Base64.encode(this)
-
-@OptIn(ExperimentalEncodingApi::class)
-private fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
 
 @Composable
 internal fun CardScreen(
