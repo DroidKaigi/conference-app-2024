@@ -62,7 +62,7 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                             run {
                                 setupScreenContent()
                             }
-                            itShould("does not show contributor, and show snackbar") {
+                            itShould("does not show contributor and show snackbar") {
                                 captureScreenWithChecks(
                                     checks = {
                                         checkDoesNotExistsContributorItem()
