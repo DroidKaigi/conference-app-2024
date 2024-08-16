@@ -148,7 +148,7 @@ data class FavoriteAnimationSpec(
         val progress = elapsedTimeMillis / durationMillisWithTimesSpeed.toFloat()
 
         val x = targetXFromStart * progress
-        val y = (0.5 * GRAPHICAL_ACCELERATION * elapsedTime.pow(2)).toFloat()
+        val y = (0.5 * GRAPHICAL_ACCELERATION * elapsedTime.pow(2)).toFloat().adjustYSign()
 
         return Offset(
             x = startPosition.x + x,
@@ -158,6 +158,14 @@ data class FavoriteAnimationSpec(
 
     private fun Float.pow(exponent: Int): Float {
         return toDouble().pow(exponent).toFloat()
+    }
+
+    private fun Float.adjustYSign(): Float {
+        return if (targetYFromStart < 0) {
+            -this
+        } else {
+            this
+        }
     }
 
     companion object {
