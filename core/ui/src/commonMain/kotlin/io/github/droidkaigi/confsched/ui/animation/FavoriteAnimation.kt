@@ -24,6 +24,7 @@ import org.jetbrains.compose.resources.stringResource
 @Composable
 fun ProvideFavoriteAnimation(
     isEnabled: Boolean,
+    modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val clock = LocalClock.current
@@ -39,7 +40,7 @@ fun ProvideFavoriteAnimation(
     CompositionLocalProvider(
         LocalFavoriteAnimationScope provides favoriteAnimationScope,
     ) {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = modifier.fillMaxSize()) {
             content()
             FavoriteAnimationFrame()
         }
@@ -54,7 +55,7 @@ private fun FavoriteAnimationFrame() {
             .onGloballyPositionedWithFavoriteAnimationScope { scope, coordinates ->
                 val position = coordinates.positionInRoot()
                 scope?.setAnimationFramePosition(position)
-            }
+            },
     ) {
         if (animationScope.animations.isNotEmpty()) {
             animationScope.animations.forEach {
@@ -65,7 +66,7 @@ private fun FavoriteAnimationFrame() {
                     modifier = Modifier
                         .offset {
                             it.offset.toIntOffset()
-                        }
+                        },
                 )
             }
         }

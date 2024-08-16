@@ -235,7 +235,7 @@ fun BottomBarTabs(
                 ) {
                     Image(
                         modifier = Modifier.useIf(
-                            tab == MainScreenTab.Favorite
+                            tab == MainScreenTab.Favorite,
                         ) {
                             onGloballyPositionedWithFavoriteAnimationScope { scope, coordinates ->
                                 val position = coordinates.positionInRoot()

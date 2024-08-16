@@ -17,9 +17,7 @@ import kotlin.math.sqrt
 
 @Suppress("CompositionLocalAllowlist")
 internal val LocalFavoriteAnimationScope: ProvidableCompositionLocal<FavoriteAnimationScope> =
-    staticCompositionLocalOf {
-        error("No FavoriteAnimationScope provided")
-    }
+    staticCompositionLocalOf { DefaultFavoriteAnimationScope }
 
 internal fun FavoriteAnimationScope(
     clock: Clock,
@@ -36,6 +34,21 @@ sealed interface FavoriteAnimationScope {
     fun setAnimationFramePosition(position: Offset)
     fun setTargetPosition(position: Offset)
     fun startAnimation(position: Offset)
+}
+
+private data object DefaultFavoriteAnimationScope : FavoriteAnimationScope {
+    override val animations: List<FavoriteAnimationState> = emptyList()
+    override fun setAnimationFramePosition(position: Offset) {
+        // Do nothing
+    }
+
+    override fun setTargetPosition(position: Offset) {
+        // Do nothing
+    }
+
+    override fun startAnimation(position: Offset) {
+        // Do nothing
+    }
 }
 
 private class FavoriteAnimationScopeImpl(
@@ -80,14 +93,13 @@ private class FavoriteAnimationScopeImpl(
                     startTime = clock.now().toEpochMilliseconds(),
                     startPosition = startPosition,
                     targetPosition = targetPosition,
-                )
+                ),
             )
         }
     }
 
     private suspend fun observeAnimation() {
         observeAnimationMutex.withLock {
-
             var isObserving = specMutex.withLock { animationSpecs.isNotEmpty() }
             while (isObserving) {
                 specMutex.withLock {
@@ -117,11 +129,6 @@ data class FavoriteAnimationSpec(
     val startPosition: Offset,
     val targetPosition: Offset,
 ) {
-    companion object {
-        private const val GRAPHICAL_ACCELERATION = 9.8f
-        private const val TIMES_SPEED = 20
-    }
-
     private val targetXFromStart: Float = targetPosition.x - startPosition.x
     private val targetYFromStart: Float = targetPosition.y - startPosition.y
 
@@ -140,15 +147,21 @@ data class FavoriteAnimationSpec(
         val elapsedTime = elapsedTimeMillis.toFloat() / (1000 / TIMES_SPEED)
         val progress = elapsedTimeMillis / durationMillisWithTimesSpeed.toFloat()
 
+        val x = targetXFromStart * progress
+        val y = (0.5 * GRAPHICAL_ACCELERATION * elapsedTime.pow(2)).toFloat()
+
         return Offset(
-            x = startPosition.x + targetXFromStart * progress,
-            y = startPosition.y + (0.5 * GRAPHICAL_ACCELERATION * elapsedTime.pow(
-                2
-            )).toFloat(),
+            x = startPosition.x + x,
+            y = startPosition.y + y,
         )
     }
 
     private fun Float.pow(exponent: Int): Float {
         return toDouble().pow(exponent).toFloat()
+    }
+
+    companion object {
+        private const val GRAPHICAL_ACCELERATION = 9.8f
+        private const val TIMES_SPEED = 20
     }
 }
