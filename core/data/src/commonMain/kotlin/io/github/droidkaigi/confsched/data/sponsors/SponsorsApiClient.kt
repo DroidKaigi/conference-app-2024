@@ -8,6 +8,7 @@ import de.jensklingenberg.ktorfit.http.GET
 import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.sponsors.response.SponsorResponse
 import io.github.droidkaigi.confsched.data.sponsors.response.SponsorsResponse
+import io.github.droidkaigi.confsched.data.staff.response.StaffsResponse
 import io.github.droidkaigi.confsched.model.Plan
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
@@ -15,6 +16,11 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 internal interface SponsorApi {
+    /**
+     * Gets sponsor information for the DroidKaigi 2024 event.
+     *
+     * @return [SponsorsResponse]
+     */
     @GET("/events/droidkaigi2023/sponsor")
     suspend fun getSponsors(): SponsorsResponse
 }
@@ -26,11 +32,9 @@ public class DefaultSponsorsApiClient(
 
     private val sponsorApi = ktorfit.create<SponsorApi>()
     public override suspend fun sponsors(): PersistentList<Sponsor> {
-        // FIXME: When the API is ready, remove the comments below and return the actual data.
-        return Sponsor.fakes()
-//        return networkService {
-//            sponsorApi.getSponsors()
-//        }.toSponsorList()
+        return networkService {
+            sponsorApi.getSponsors()
+        }.toSponsorList()
     }
 }
 
