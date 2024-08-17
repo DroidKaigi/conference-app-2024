@@ -123,7 +123,7 @@ fun TimetableGridRooms(
                     },
                 )
             },
-        itemProvider = itemProvider,
+        itemProvider = { itemProvider },
     ) { constraints ->
         data class ItemData(val placeable: Placeable, val roomItem: RoomItemLayout)
         roomsScreen.updateBounds(width = constraints.maxWidth, height = constraints.maxHeight)
