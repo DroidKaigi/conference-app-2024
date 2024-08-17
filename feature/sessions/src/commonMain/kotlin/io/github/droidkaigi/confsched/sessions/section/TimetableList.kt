@@ -97,7 +97,7 @@ fun TimetableList(
                                     state = rememberSharedContentState(
                                         key = timetableDetailSharedContentStateKey(timetableItemId = timetableItem.id),
                                     ),
-                                    animatedVisibilityScope = animatedScope!!,
+                                    animatedVisibilityScope = animatedScope,
                                 )
                             }
                         } else {

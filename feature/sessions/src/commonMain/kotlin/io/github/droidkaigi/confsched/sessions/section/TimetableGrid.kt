@@ -640,7 +640,7 @@ class ScreenScrollState(
                 lastValue = value
                 val preConsumed = nestedScrollDispatcher.dispatchPreScroll(
                     available = delta,
-                    source = NestedScrollSource.Fling,
+                    source = NestedScrollSource.SideEffect,
                 )
 
                 val weAvailable = delta - preConsumed
@@ -651,7 +651,7 @@ class ScreenScrollState(
                 nestedScrollDispatcher.dispatchPostScroll(
                     consumed = preConsumed + weConsumed,
                     available = weAvailable - weConsumed,
-                    source = NestedScrollSource.Fling,
+                    source = NestedScrollSource.SideEffect,
                 )
 
                 if (cancelFling) {
@@ -812,7 +812,7 @@ private class TimetableScreen(
 
         val parentConsumed = nestedScrollDispatcher.dispatchPreScroll(
             available = dragAmount,
-            source = NestedScrollSource.Drag,
+            source = NestedScrollSource.UserInput,
         )
         val nextPossibleX = calculatePossibleScrollX(dragAmount.x - parentConsumed.x)
         val nextPossibleY = calculatePossibleScrollY(dragAmount.y - parentConsumed.y)
@@ -829,7 +829,7 @@ private class TimetableScreen(
         nestedScrollDispatcher.dispatchPostScroll(
             consumed = parentConsumed + weConsumed,
             available = dragAmount - weConsumed - parentConsumed,
-            source = NestedScrollSource.Drag,
+            source = NestedScrollSource.UserInput,
         )
     }
 
