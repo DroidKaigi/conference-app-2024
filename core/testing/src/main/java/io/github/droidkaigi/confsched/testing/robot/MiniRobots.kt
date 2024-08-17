@@ -23,15 +23,11 @@ import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerSt
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.shadows.ShadowLog
 import org.robolectric.shadows.ShadowLooper
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
-inline fun <reified T : ScreenRobot> runRobot(robot: T, isShowLogOnConsole: Boolean = false, noinline block: suspend T.() -> Unit) {
-    if (isShowLogOnConsole) {
-        robot.showLogOnConsole()
-    }
+inline fun <reified T : ScreenRobot> runRobot(robot: T, noinline block: suspend T.() -> Unit) {
     robot.run(robot, block)
 }
 
@@ -53,10 +49,6 @@ interface ScreenRobot : ComposeScreenRobot, CaptureScreenRobot, WaitRobot {
         runTestWithLogging(timeout = 30.seconds) {
             thiz.block()
         }
-    }
-
-    fun showLogOnConsole() {
-        ShadowLog.stream = System.out
     }
 }
 
