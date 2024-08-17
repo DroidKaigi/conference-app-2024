@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.data.profilecard
 
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -10,7 +11,10 @@ internal data class ProfileCardJson(
     val occupation: String,
     val link: String,
     val image: String,
-    val cardType: String,
+    @Deprecated("Use cardType instead", replaceWith = ReplaceWith("cardType"))
+    val theme: String? = null,
+    @SerialName("card_type")
+    val cardType: String? = null,
 )
 
 internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
@@ -18,7 +22,7 @@ internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
     occupation = occupation,
     link = link,
     image = image,
-    cardType = cardType.toProfileCardType(),
+    cardType = checkNotNull(cardType ?: theme).toProfileCardType(),
 )
 
 internal fun String.toProfileCardType() = ProfileCardType.valueOf(this)
