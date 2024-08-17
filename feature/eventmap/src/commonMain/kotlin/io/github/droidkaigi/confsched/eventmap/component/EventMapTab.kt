@@ -34,7 +34,7 @@ import org.jetbrains.compose.resources.painterResource
 
 const val EventMapTabTestTagPrefix = "EventMapTabTestTag:"
 const val EventMapTabImageTestTag = "EventMapTabImageTestTag"
-const val ChangeTabDragAmountThreshold = 20f
+private const val ChangeTabDragAmountThreshold = 20f
 
 @Composable
 fun EventMapTab(
