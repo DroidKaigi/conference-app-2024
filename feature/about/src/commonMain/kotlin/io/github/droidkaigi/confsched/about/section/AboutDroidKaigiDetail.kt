@@ -30,7 +30,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.roundToInt
 
-private const val maxAboutHeaderOffsetDp = 40
+private const val MaxAboutHeaderOffsetDp = 40
 
 @Suppress("ConstPropertyName")
 object AboutDetailSectionTestTag {
@@ -49,7 +49,7 @@ fun AboutDroidKaigiDetail(
             if (screenScrollState.layoutInfo.visibleItemsInfo.isNotEmpty() && screenScrollState.firstVisibleItemIndex == 0) {
                 val scrollOffset = screenScrollState.firstVisibleItemScrollOffset.toFloat()
                 val height = screenScrollState.layoutInfo.visibleItemsInfo.first().size
-                (maxAboutHeaderOffsetDp * (scrollOffset / height)).roundToInt()
+                (MaxAboutHeaderOffsetDp * (scrollOffset / height)).roundToInt()
             } else {
                 0
             }
