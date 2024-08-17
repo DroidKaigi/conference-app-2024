@@ -6,6 +6,7 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.SponsorsScreenRobot
+import io.github.droidkaigi.confsched.testing.robot.SponsorsScreenRobot.SponsorType
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
@@ -46,10 +47,44 @@ class SponsorsScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("display sponsors") {
-                            captureScreenWithChecks(
-                                checks = { checkSponsorsDisplayed() },
-                            )
+                        itShould("display platinum sponsors") {
+                            captureScreenWithChecks {
+                                checkSponsorItemsDisplayed()
+                                checkSponsorItemsDisplayedByRangeAndSponsorType(
+                                    sponsorType = SponsorType.Platinum,
+                                    fromTo = 0..2,
+                                )
+                            }
+                        }
+
+                        describe("when scroll to gold sponsors header") {
+                            run {
+                                scrollToSponsorHeader(SponsorType.Gold)
+                            }
+                            itShould("display gold sponsors") {
+                                checkSponsorItemsDisplayed()
+                                captureScreenWithChecks {
+                                    checkSponsorItemsDisplayedByRangeAndSponsorType(
+                                        sponsorType = SponsorType.Gold,
+                                        fromTo = 0..2,
+                                    )
+                                }
+                            }
+                        }
+
+                        describe("when scroll to supporters header") {
+                            run {
+                                scrollToSponsorHeader(SponsorType.Supporters)
+                            }
+                            itShould("display supporters sponsors") {
+                                checkSponsorItemsDisplayed()
+                                captureScreenWithChecks {
+                                    checkSponsorItemsDisplayedByRangeAndSponsorType(
+                                        sponsorType = SponsorType.Supporters,
+                                        fromTo = 0..2,
+                                    )
+                                }
+                            }
                         }
                     }
                 }
@@ -62,10 +97,11 @@ class SponsorsScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("show error message") {
-                            captureScreenWithChecks(
-                                checks = { checkErrorSnackbarDisplayed() },
-                            )
+                        itShould("does not show sponsors and show snackbar") {
+                            captureScreenWithChecks {
+                                checkDoesNotSponsorItemsDisplayed()
+                                checkErrorSnackbarDisplayed()
+                            }
                         }
                     }
                 }

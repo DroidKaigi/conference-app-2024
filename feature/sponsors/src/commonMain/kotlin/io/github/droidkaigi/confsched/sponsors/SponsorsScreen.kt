@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.sponsors.generated.resources.content_description_back
@@ -37,7 +36,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val sponsorsScreenRoute = "sponsors"
-const val SponsorsScreenTestTag = "SponsorsScreenTestTag"
 
 fun NavGraphBuilder.sponsorsScreens(
     onNavigationIconClick: () -> Unit,
@@ -112,7 +110,7 @@ fun SponsorsScreen(
             null
         }
     Scaffold(
-        modifier = modifier.testTag(SponsorsScreenTestTag),
+        modifier = modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (!isTopAppBarHidden) {
