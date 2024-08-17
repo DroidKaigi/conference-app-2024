@@ -1,6 +1,8 @@
 package io.github.droidkaigi.confsched.eventmap.component
 
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -31,6 +34,7 @@ import org.jetbrains.compose.resources.painterResource
 
 const val EventMapTabTestTagPrefix = "EventMapTabTestTag:"
 const val EventMapTabImageTestTag = "EventMapTabImageTestTag"
+const val ChangeTabDragAmountThreshold = 20f
 
 @Composable
 fun EventMapTab(
@@ -40,7 +44,16 @@ fun EventMapTab(
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
     Column(
-        modifier = modifier,
+        modifier = modifier.pointerInput(Unit) {
+            detectDragGestures { _, dragAmount ->
+                if (selectedTabIndex == 0 && dragAmount.x > ChangeTabDragAmountThreshold) {
+                    selectedTabIndex = 1
+                }
+                if (selectedTabIndex == 1 && dragAmount.x < -ChangeTabDragAmountThreshold) {
+                    selectedTabIndex = 0
+                }
+            }
+        },
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
     ) {
@@ -92,21 +105,23 @@ fun EventMapTab(
             },
         )
         Spacer(modifier = Modifier.height(24.dp))
-        val mapRes = if (selectedTabIndex == 0) {
-            Res.drawable.event_map_1f
-        } else {
-            Res.drawable.event_map_b1f
+        Crossfade(targetState = selectedTabIndex) { index ->
+            val mapRes = if (index == 0) {
+                Res.drawable.event_map_1f
+            } else {
+                Res.drawable.event_map_b1f
+            }
+            val mapContentDescription = if (index == 0) {
+                FloorLevel.Ground.floorName
+            } else {
+                FloorLevel.Basement.floorName
+            }
+            Image(
+                modifier = Modifier.testTag(EventMapTabImageTestTag),
+                painter = painterResource(mapRes),
+                contentDescription = "Map of $mapContentDescription",
+            )
         }
-        val mapContentDescription = if (selectedTabIndex == 0) {
-            FloorLevel.Ground.floorName
-        } else {
-            FloorLevel.Basement.floorName
-        }
-        Image(
-            modifier = Modifier.testTag(EventMapTabImageTestTag),
-            painter = painterResource(mapRes),
-            contentDescription = "Map of $mapContentDescription",
-        )
     }
 }
 
