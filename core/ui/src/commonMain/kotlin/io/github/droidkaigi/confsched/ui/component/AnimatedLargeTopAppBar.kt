@@ -34,12 +34,12 @@ import androidx.compose.ui.unit.dp
 fun AnimatedLargeTopAppBar(
     title: String,
     onBackClick: () -> Unit,
+    navIconContentDescription: String?,
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    navIconContentDescription: String?,
 ) {
     val density = LocalDensity.current.density
     var navigationIconWidthDp by remember { mutableStateOf(0f) }
