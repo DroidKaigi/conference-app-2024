@@ -56,7 +56,7 @@ sealed interface RoomTheme {
 }
 
 @Suppress("CompositionLocalAllowlist")
-val LocalRoomTheme: ProvidableCompositionLocal<RoomTheme> = staticCompositionLocalOf<RoomTheme> {
+val LocalRoomTheme: ProvidableCompositionLocal<RoomTheme> = staticCompositionLocalOf {
     error("No RoomTheme provided")
 }
 
