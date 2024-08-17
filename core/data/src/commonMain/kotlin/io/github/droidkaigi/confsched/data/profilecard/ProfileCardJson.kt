@@ -10,7 +10,7 @@ internal data class ProfileCardJson(
     val occupation: String,
     val link: String,
     val image: String,
-    val theme: String,
+    val cardType: String,
 )
 
 internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
@@ -18,7 +18,7 @@ internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
     occupation = occupation,
     link = link,
     image = image,
-    cardType = theme.toProfileCardType(),
+    cardType = cardType.toProfileCardType(),
 )
 
 internal fun String.toProfileCardType() = ProfileCardType.valueOf(this)
@@ -28,5 +28,5 @@ internal fun ProfileCard.Exists.toJson() = ProfileCardJson(
     occupation = occupation,
     link = link,
     image = image,
-    theme = cardType.name,
+    cardType = cardType.name,
 )
