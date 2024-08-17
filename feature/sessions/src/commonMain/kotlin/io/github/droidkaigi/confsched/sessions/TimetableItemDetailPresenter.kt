@@ -41,7 +41,7 @@ fun timetableItemDetailPresenter(
         key = timetableItemDetailScreenRouteItemIdParameterName,
         initialValue = "",
     ),
-): TimetableItemDetailScreenUiState = providePresenterDefaults<TimetableItemDetailScreenUiState> { userMessageStateHolder ->
+): TimetableItemDetailScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val timetableItemId = TimetableItemId(timetableItemIdArg)
     val timetableItemStateWithBookmark by rememberUpdatedState(
         sessionsRepository
