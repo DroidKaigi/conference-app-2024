@@ -5,7 +5,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,17 +28,46 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import com.preat.peekaboo.image.picker.toImageBitmap
+import conference_app_2024.feature.profilecard.generated.resources.card_back_blue
+import conference_app_2024.feature.profilecard.generated.resources.card_back_green
+import conference_app_2024.feature.profilecard.generated.resources.card_back_orange
+import conference_app_2024.feature.profilecard.generated.resources.card_back_pink
+import conference_app_2024.feature.profilecard.generated.resources.card_back_white
+import conference_app_2024.feature.profilecard.generated.resources.card_back_yellow
+import conference_app_2024.feature.profilecard.generated.resources.card_front_blue
+import conference_app_2024.feature.profilecard.generated.resources.card_front_green
+import conference_app_2024.feature.profilecard.generated.resources.card_front_orange
+import conference_app_2024.feature.profilecard.generated.resources.card_front_pink
+import conference_app_2024.feature.profilecard.generated.resources.card_front_white
+import conference_app_2024.feature.profilecard.generated.resources.card_front_yellow
 import conference_app_2024.feature.profilecard.generated.resources.icon_qr
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
+import io.github.droidkaigi.confsched.model.ProfileCard
+import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
-import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
+import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val ProfileCardFlipCardTestTag = "ProfileCardFlipCardTestTag"
+const val ProfileCardFlipCardFrontTestTag = "ProfileCardFlipCardFrontTestTag"
+const val ProfileCardFlipCardBackTestTag = "ProfileCardFlipCardBackTestTag"
 
 @Composable
 internal fun FlipCard(
@@ -80,61 +110,165 @@ internal fun FlipCard(
         }
     }
 
-    ProvideProfileCardScreenTheme(uiState.theme.toString()) {
-        Card(
-            modifier = modifier
-                .size(width = 300.dp, height = 380.dp)
-                .clickable { isFlipped = !isFlipped }
-                .graphicsLayer {
-                    rotationY = rotation
-                    cameraDistance = 12f * density
-                },
-            colors = CardDefaults.cardColors(containerColor = LocalProfileCardScreenTheme.current.containerColor),
-            elevation = CardDefaults.cardElevation(10.dp),
+    Card(
+        modifier = modifier
+            .testTag(ProfileCardFlipCardTestTag)
+            .size(width = 300.dp, height = 380.dp)
+            .clickable { isFlipped = !isFlipped }
+            .graphicsLayer {
+                rotationY = rotation
+                cameraDistance = 12f * density
+            },
+        elevation = CardDefaults.cardElevation(10.dp),
+    ) {
+        val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
+        if (isBack) { // Back
+            FlipCardBack(uiState)
+        } else { // Front
+            FlipCardFront(
+                uiState = uiState,
+                profileImage = profileImage,
+            )
+        }
+    }
+}
+
+@Composable
+private fun FlipCardFront(
+    uiState: Card,
+    profileImage: ImageBitmap,
+    modifier: Modifier = Modifier,
+) {
+    val background = when (uiState.theme) {
+        ProfileCardTheme.Iguana -> ProfileCardRes.drawable.card_front_green
+        ProfileCardTheme.Hedgehog -> ProfileCardRes.drawable.card_front_orange
+        ProfileCardTheme.Giraffe -> ProfileCardRes.drawable.card_front_yellow
+        ProfileCardTheme.Flamingo -> ProfileCardRes.drawable.card_front_pink
+        ProfileCardTheme.Jellyfish -> ProfileCardRes.drawable.card_front_blue
+        ProfileCardTheme.None -> ProfileCardRes.drawable.card_front_white
+    }
+    val namePrimaryColor = LocalProfileCardScreenTheme.current.primaryColor
+    Box(
+        modifier = modifier
+            .testTag(ProfileCardFlipCardFrontTestTag)
+            .fillMaxSize(),
+    ) {
+        Image(
+            painter = painterResource(background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+        )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (isBack) { // Back
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .graphicsLayer {
-                            rotationY = 180f
-                        },
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Image(
-                        painter = painterResource(ProfileCardRes.drawable.icon_qr),
-                        contentDescription = null,
-                        modifier = Modifier.size(160.dp),
-                    )
-                }
-            } else { // Front
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center,
-                ) {
-                    Image(
-                        painter = rememberAsyncImagePainter(uiState.image),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .clip(CircleShape)
-                            .size(120.dp),
-                    )
-                    Spacer(Modifier.height(12.dp))
-                    Text(
-                        text = uiState.occupation,
-                        style = MaterialTheme.typography.titleMedium,
-                        color = Color.Black,
-                    )
-                    Spacer(Modifier.height(2.dp))
-                    Text(
-                        text = uiState.nickname,
-                        style = MaterialTheme.typography.headlineSmall,
-                        color = Color.Black,
-                    )
-                }
+            Spacer(Modifier.height(103.dp))
+            Image(
+                bitmap = profileImage,
+                contentDescription = null,
+                modifier = Modifier
+                    .clip(CircleShape)
+                    .size(131.dp),
+            )
+            Spacer(Modifier.height(12.dp))
+            Text(
+                text = uiState.occupation,
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.White,
+                maxLines = 1,
+            )
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(
+                            brush = Brush.verticalGradient(listOf(Color.White, namePrimaryColor)),
+                        ),
+                    ) {
+                        append(uiState.nickname)
+                    }
+                },
+                style = MaterialTheme.typography.headlineSmall,
+                maxLines = 1,
+            )
+        }
+    }
+}
+
+@Composable
+private fun FlipCardBack(
+    uiState: Card,
+    modifier: Modifier = Modifier,
+) {
+    val background = when (uiState.theme) {
+        ProfileCardTheme.Iguana -> ProfileCardRes.drawable.card_back_green
+        ProfileCardTheme.Hedgehog -> ProfileCardRes.drawable.card_back_orange
+        ProfileCardTheme.Giraffe -> ProfileCardRes.drawable.card_back_yellow
+        ProfileCardTheme.Flamingo -> ProfileCardRes.drawable.card_back_pink
+        ProfileCardTheme.Jellyfish -> ProfileCardRes.drawable.card_back_blue
+        ProfileCardTheme.None -> ProfileCardRes.drawable.card_back_white
+    }
+    Box(
+        modifier = modifier
+            .testTag(ProfileCardFlipCardBackTestTag)
+            .fillMaxSize()
+            .graphicsLayer {
+                rotationY = 180f
+            },
+        contentAlignment = Alignment.Center,
+    ) {
+        Image(
+            painter = painterResource(background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop,
+        )
+        Image(
+            painter = painterResource(ProfileCardRes.drawable.icon_qr),
+            contentDescription = null,
+            modifier = Modifier.size(160.dp),
+        )
+    }
+}
+
+@Composable
+@Preview
+fun FlipCardFrontPreview() {
+    val uiState = ProfileCard.Exists.fake().let { (nickname, occupation, link, image, theme) ->
+        Card(nickname, occupation, link, image, theme)
+    }
+    val profileImage = uiState.image.decodeBase64Bytes().toImageBitmap()
+
+    KaigiTheme {
+        Surface(modifier = Modifier.size(300.dp, 380.dp)) {
+            ProvideProfileCardScreenTheme(uiState.theme.name) {
+                FlipCardFront(
+                    uiState = uiState,
+                    profileImage = profileImage,
+                )
             }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun FlipCardBackPreview() {
+    val uiState = ProfileCard.Exists.fake().let { (nickname, occupation, link, image, theme) ->
+        Card(nickname, occupation, link, image, theme)
+    }
+
+    KaigiTheme {
+        Surface(
+            modifier = Modifier
+                .size(300.dp, 380.dp)
+                .graphicsLayer {
+                    rotationY = 180f
+                },
+        ) {
+            FlipCardBack(
+                uiState = uiState,
+            )
         }
     }
 }

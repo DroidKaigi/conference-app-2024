@@ -23,12 +23,12 @@ sealed interface ProfileCardScreenTheme {
     }
 
     data object Pink : ProfileCardScreenTheme {
-        override val primaryColor = Color(0xFF6FD7F8)
+        override val primaryColor = Color(0xFFFF8EBD)
         override val containerColor = Color(0xFFFFA0C9)
     }
 
     data object Blue : ProfileCardScreenTheme {
-        override val primaryColor = Color(0xFFB4FF79)
+        override val primaryColor = Color(0xFF6FD7F8)
         override val containerColor = Color(0xFF93E5FF)
     }
 
@@ -41,14 +41,15 @@ sealed interface ProfileCardScreenTheme {
     val containerColor: Color
 
     companion object {
-        fun ofOrNull(profileCardTheme: String): ProfileCardScreenTheme? {
+        fun of(profileCardTheme: String): ProfileCardScreenTheme {
             return when (profileCardTheme) {
                 "Iguana" -> Default
                 "Hedgehog" -> Orange
                 "Giraffe" -> Yellow
                 "Flamingo" -> Pink
                 "Jellyfish" -> Blue
-                else -> White
+                "None" -> White
+                else -> Default
             }
         }
     }
@@ -56,14 +57,14 @@ sealed interface ProfileCardScreenTheme {
 
 @Suppress("CompositionLocalAllowlist")
 val LocalProfileCardScreenTheme: ProvidableCompositionLocal<ProfileCardScreenTheme> =
-    staticCompositionLocalOf<ProfileCardScreenTheme> {
+    staticCompositionLocalOf {
         error("No RoomTheme provided")
     }
 
 @Composable
 fun ProvideProfileCardScreenTheme(profileCardTheme: String, content: @Composable () -> Unit) {
-    val profileCardTheme = ProfileCardScreenTheme.ofOrNull(profileCardTheme) ?: ProfileCardScreenTheme.Default
-    CompositionLocalProvider(LocalProfileCardScreenTheme provides profileCardTheme) {
+    val profileCardScreenTheme = ProfileCardScreenTheme.of(profileCardTheme)
+    CompositionLocalProvider(LocalProfileCardScreenTheme provides profileCardScreenTheme) {
         content()
     }
 }

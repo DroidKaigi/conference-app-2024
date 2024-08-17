@@ -87,7 +87,11 @@ fun TimetableList(
                     timetableItems.onEach { timetableItem ->
                         val isBookmarked =
                             uiState.timetable.bookmarks.contains(timetableItem.id)
-                        val timetableItemCardModifier = if (sharedTransitionScope != null && animatedScope != null) {
+                        val timetableItemCardModifier = if (
+                            !scrollState.isScrollInProgress &&
+                            sharedTransitionScope != null &&
+                            animatedScope != null
+                        ) {
                             with(sharedTransitionScope) {
                                 Modifier.sharedElement(
                                     state = rememberSharedContentState(
