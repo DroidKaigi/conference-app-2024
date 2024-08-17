@@ -6,6 +6,7 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot
+import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot.FloorLevel
 import io.github.droidkaigi.confsched.testing.robot.EventMapServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.robot.todoChecks
@@ -42,21 +43,21 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     }
                     describe("when click floor level ground") {
                         run {
-                            clickEventMapTab("1F")
+                            clickEventMapTab(FloorLevel.Ground)
                         }
                         itShould("showed ground floor level map") {
                             captureScreenWithChecks {
-                                checkEventMap("1F")
+                                checkEventMap(FloorLevel.Ground)
                             }
                         }
                     }
                     describe("when click floor level basement") {
                         run {
-                            clickEventMapTab("B1F")
+                            clickEventMapTab(FloorLevel.Basement)
                         }
                         itShould("showed basement floor level map") {
                             captureScreenWithChecks {
-                                checkEventMap("B1F")
+                                checkEventMap(FloorLevel.Basement)
                             }
                         }
                     }

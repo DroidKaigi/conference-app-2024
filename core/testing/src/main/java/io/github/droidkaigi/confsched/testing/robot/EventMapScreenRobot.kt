@@ -19,6 +19,13 @@ class EventMapScreenRobot @Inject constructor(
     eventMapServerRobot: DefaultEventMapServerRobot,
 ) : ScreenRobot by screenRobot,
     EventMapServerRobot by eventMapServerRobot {
+    enum class FloorLevel(
+        val floorName: String,
+    ) {
+        Basement("B1F"),
+        Ground("1F");
+    }
+
     fun setupScreenContent() {
         robotTestRule.setContent {
             KaigiTheme {
@@ -39,10 +46,10 @@ class EventMapScreenRobot @Inject constructor(
     }
 
     fun clickEventMapTab(
-        floorLevelString: String,
+        floorLevel: FloorLevel,
     ) {
         composeTestRule
-            .onNode(hasTestTag(EventMapTabTestTagPrefix.plus(floorLevelString)))
+            .onNode(hasTestTag(EventMapTabTestTagPrefix.plus(floorLevel.floorName)))
             .performClick()
         waitUntilIdle()
     }
@@ -57,10 +64,10 @@ class EventMapScreenRobot @Inject constructor(
     }
 
     fun checkEventMap(
-        floorLevelString: String,
+        floorLevel: FloorLevel,
     ) {
         composeTestRule
             .onNode(hasTestTag(EventMapTabImageTestTag))
-            .assertContentDescriptionEquals("Map of $floorLevelString")
+            .assertContentDescriptionEquals("Map of ${floorLevel.floorName}")
     }
 }
