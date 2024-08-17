@@ -148,7 +148,13 @@ public struct SearchView: View {
     }
 }
 
-extension DroidKaigi2024Day: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension DroidKaigi2024Day: @retroactive Selectable {}
+#else
+extension DroidKaigi2024Day: Selectable {}
+#endif
+
+extension DroidKaigi2024Day {
     public var id: Self {
         self
     }
@@ -167,7 +173,13 @@ extension DroidKaigi2024Day: Selectable {
     }
 }
 
-extension TimetableCategory: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension TimetableCategory: @retroactive Selectable {}
+#else
+extension TimetableCategory: Selectable {}
+#endif
+
+extension TimetableCategory {
     public var caseTitle: String {
         title.currentLangTitle
     }
@@ -178,7 +190,13 @@ extension TimetableCategory: Selectable {
     }
 }
 
-extension TimetableSessionType: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension TimetableSessionType: @retroactive Selectable {}
+#else
+extension TimetableSessionType: Selectable {}
+#endif
+
+extension TimetableSessionType {
     public var id: Self {
         self
     }
@@ -188,7 +206,13 @@ extension TimetableSessionType: Selectable {
     }
 }
 
-extension Lang: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension Lang: @retroactive Selectable {}
+#else
+extension Lang: Selectable {}
+#endif
+
+extension Lang {
     public var id: Self {
         self
     }
