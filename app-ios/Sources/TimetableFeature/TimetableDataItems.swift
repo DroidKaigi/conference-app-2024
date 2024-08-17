@@ -29,9 +29,9 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
         self.items = items
     }
     
-    func getItemForRoom(forRoom: RoomType) -> TimetableItemWithFavorite? {
+    func getItem(for room: RoomType) -> TimetableItemWithFavorite? {
         items.filter {
-            $0.timetableItem.room.type == forRoom   //TODO: roomIj handling not decided?
+            $0.timetableItem.room.type == room   //TODO: roomIj handling not decided?
         }.first
     }
 }

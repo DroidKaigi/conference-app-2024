@@ -137,6 +137,7 @@ struct TimetableGridView: View {
                         }.frame(height: 153)
                         
                         DashedDivider(axis: .vertical).frame(width: 1, height: 153)
+
                         ForEach(rooms, id: \.self) { room in
                             timeBlock.getCellForRoom(room: room, onTap: { item in
                                 store.send(.view(.timetableItemTapped(item)))
@@ -288,7 +289,7 @@ extension RoomType {
 
 extension TimetableTimeGroupItems {
     func getCellForRoom(room: RoomType, onTap: @escaping (TimetableItemWithFavorite) -> Void) -> TimetableGridCard {
-        return if let cell = getItemForRoom(forRoom: room) {
+        return if let cell = getItem(for: room) {
             TimetableGridCard(timetableItem: cell.timetableItem) { timetableItem in
                 onTap(cell)
             }

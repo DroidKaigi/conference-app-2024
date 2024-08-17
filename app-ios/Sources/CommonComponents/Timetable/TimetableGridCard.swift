@@ -64,10 +64,10 @@ public struct TimetableGridCard: View {
             }
         } else {
             Color.clear
-            .frame(maxWidth: .infinity)
-            .padding(12)
-            .frame(width: 192, height: 153)
-            .background(Color.clear, in: RoundedRectangle(cornerRadius: 4))
+                .frame(maxWidth: .infinity)
+                .padding(12)
+                .frame(width: 192, height: 153)
+                .background(Color.clear, in: RoundedRectangle(cornerRadius: 4))
         }
 
     }
