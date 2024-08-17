@@ -45,7 +45,7 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                         run {
                             setupScreenContent()
                         }
-                        itShould("show contributor first and second") {
+                        itShould("show first and second contributors") {
                             captureScreenWithChecks {
                                 checkRangeContributorItemsDisplayed(
                                     fromTo = 0..2,
@@ -57,7 +57,7 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                             run {
                                 scrollToIndex10()
                             }
-                            itShould("show contributor last") {
+                            itShould("show contributors") {
                                 captureScreenWithChecks {
                                     checkContributorItemsDisplayed()
                                 }
