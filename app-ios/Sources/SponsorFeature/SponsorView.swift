@@ -18,7 +18,7 @@ public struct SponsorView: View {
                     .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                ForEach(store.platinums, id: \.id) { platinum in
+                ForEach(store.platinums) { platinum in
                     Button {
                         selectedSponsorData = platinum
                     } label: {
@@ -37,7 +37,7 @@ public struct SponsorView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 LazyVGrid(columns: Array(repeating: .init(.fixed(184)), count: 2)) {
-                    ForEach(store.golds, id: \.id) { gold in
+                    ForEach(store.golds) { gold in
                         Button {
                             selectedSponsorData = gold
                         } label: {
@@ -57,7 +57,7 @@ public struct SponsorView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 LazyVGrid(columns: Array(repeating: .init(.fixed(118)), count: 3)) {
-                    ForEach(store.supporters, id: \.id) { supporter in
+                    ForEach(store.supporters) { supporter in
                         Button {
                             selectedSponsorData = supporter
                         } label: {
