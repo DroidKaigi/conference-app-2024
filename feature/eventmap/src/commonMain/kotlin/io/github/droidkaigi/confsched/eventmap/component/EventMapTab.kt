@@ -35,7 +35,7 @@ import org.jetbrains.compose.resources.painterResource
 
 const val EventMapTabTestTagPrefix = "EventMapTabTestTag:"
 const val EventMapTabImageTestTag = "EventMapTabImageTestTag"
-private const val ChangeTabDragAmountThreshold = 20f
+private const val ChangeTabDeltaThreshold = 20f
 
 @Composable
 fun EventMapTab(
@@ -48,10 +48,10 @@ fun EventMapTab(
         modifier = modifier.draggable(
             orientation = Orientation.Horizontal,
             state = rememberDraggableState { delta ->
-                if (selectedTabIndex == 0 && delta > ChangeTabDragAmountThreshold) {
+                if (selectedTabIndex == 0 && delta > ChangeTabDeltaThreshold) {
                     selectedTabIndex = 1
                 }
-                if (selectedTabIndex == 1 && delta < -ChangeTabDragAmountThreshold) {
+                if (selectedTabIndex == 1 && delta < -ChangeTabDeltaThreshold) {
                     selectedTabIndex = 0
                 }
             },
