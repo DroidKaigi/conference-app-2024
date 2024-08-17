@@ -39,6 +39,7 @@ fun AnimatedLargeTopAppBar(
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    navIconContentDescription: String?
 ) {
     val density = LocalDensity.current.density
     var navigationIconWidthDp by remember { mutableStateOf(0f) }
@@ -92,7 +93,7 @@ fun AnimatedLargeTopAppBar(
             ) {
                 Icon(
                     imageVector = Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = navIconContentDescription,
                 )
             }
         },
