@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.profilecard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -395,7 +396,7 @@ internal fun EditScreen(
                             occupation = occupation,
                             link = link,
                             image = imageByteArray?.toBase64() ?: "",
-                            theme = uiState.theme,
+                            theme = selectedTheme,
                         ),
                     )
                 },
@@ -673,8 +674,10 @@ internal fun CardScreen(
                 Button(
                     onClick = { onClickShareProfileCard() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    contentPadding = PaddingValues(vertical = 10.dp),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    border = if (uiState.theme == ProfileCardTheme.None) BorderStroke(0.5.dp, Color.Black) else null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
                     Icon(
                         painter = painterResource(ProfileCardRes.drawable.icon_share),
@@ -685,11 +688,12 @@ internal fun CardScreen(
                     Spacer(Modifier.width(8.dp))
                     Text(
                         text = "共有する",
+                        modifier = Modifier.padding(8.dp),
                         style = MaterialTheme.typography.labelLarge,
                         color = Color.Black,
                     )
                 }
-                Spacer(Modifier.height(9.dp))
+                Spacer(Modifier.height(8.dp))
                 Text(
                     text = "編集する",
                     style = MaterialTheme.typography.labelLarge,
