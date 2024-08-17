@@ -101,12 +101,12 @@ fun ContributorsScreen(
         modifier = modifier.testTag(ContributorsScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            if (!isTopAppBarHidden){
+            if (!isTopAppBarHidden) {
                 AnimatedLargeTopAppBar(
                     title = "Contributor",
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
-                    navIconContentDescription = "Back"
+                    navIconContentDescription = "Back",
                 )
             }
         },

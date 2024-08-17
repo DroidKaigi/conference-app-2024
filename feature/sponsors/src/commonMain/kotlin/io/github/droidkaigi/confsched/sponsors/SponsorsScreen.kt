@@ -116,9 +116,9 @@ fun SponsorsScreen(
             if (!isTopAppBarHidden) {
                 AnimatedLargeTopAppBar(
                     title = stringResource(SponsorsRes.string.sponsor),
-                    onBackClick =onBackClick,
+                    onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
-                    navIconContentDescription = stringResource(SponsorsRes.string.content_description_back)
+                    navIconContentDescription = stringResource(SponsorsRes.string.content_description_back),
                 )
             }
         },
