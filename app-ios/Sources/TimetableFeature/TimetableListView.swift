@@ -249,7 +249,7 @@ extension RoomType {
 
 extension TimetableTimeGroupItems {
     func getCellForRoom(room: RoomType, onTap: @escaping (TimetableItemWithFavorite) -> Void) -> TimetableGridCard {
-        return if let cell = getItemForRoom(forRoom: room) {
+        return if let cell = getItem(for: room) {
             TimetableGridCard(timetableItem: cell.timetableItem) { timetableItem in
                 onTap(cell)
             }
