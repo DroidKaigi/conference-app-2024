@@ -10,6 +10,7 @@ import okio.Path.Companion.toPath
 import okio.SYSTEM
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertFails
 import kotlin.test.assertNull
 
 class ProfileCardJsonTest {
@@ -74,8 +75,20 @@ class ProfileCardJsonTest {
         assertSerializedJson(jsonString)
     }
 
+    @Test
+    fun `throw exception when both theme and card_type are not exist`() {
+        val jsonString =
+            FileSystem.SYSTEM.read("src/commonTest/resources/profilecard/invalid.json".toPath()) {
+                readUtf8()
+            }
+
+        assertFails {
+            Json.decodeFromString<ProfileCardJson>(jsonString).toModel()
+        }
+    }
+
     private fun readJsonString(version: Int): String {
-        return FileSystem.SYSTEM.read("src/commonTest/resources/profilecard/v${version}.json".toPath()) {
+        return FileSystem.SYSTEM.read("src/commonTest/resources/profilecard/v$version.json".toPath()) {
             readUtf8()
         }
     }
