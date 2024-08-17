@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 fun AnimatedLargeTopAppBar(
     title: String,
     onBackClick: () -> Unit,
+    navIconContentDescription: String?,
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
@@ -92,7 +93,7 @@ fun AnimatedLargeTopAppBar(
             ) {
                 Icon(
                     imageVector = Filled.ArrowBack,
-                    contentDescription = "Back",
+                    contentDescription = navIconContentDescription,
                 )
             }
         },
