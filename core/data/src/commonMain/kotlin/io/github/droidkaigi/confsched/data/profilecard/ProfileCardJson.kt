@@ -18,10 +18,10 @@ internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
     occupation = occupation,
     link = link,
     image = image,
-    cardType = theme.toProfileCardTheme(),
+    cardType = theme.toProfileCardType(),
 )
 
-internal fun String.toProfileCardTheme() = ProfileCardType.valueOf(this)
+internal fun String.toProfileCardType() = ProfileCardType.valueOf(this)
 
 internal fun ProfileCard.Exists.toJson() = ProfileCardJson(
     nickname = nickname,
