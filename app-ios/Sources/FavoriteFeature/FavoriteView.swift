@@ -82,7 +82,13 @@ public struct FavoriteView: View {
     }
 }
 
-extension DroidKaigi2024Day: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension DroidKaigi2024Day: @retroactive Selectable {}
+#else
+extension DroidKaigi2024Day: Selectable {}
+#endif
+
+extension DroidKaigi2024Day {
     public var id: Self {
         self
     }
