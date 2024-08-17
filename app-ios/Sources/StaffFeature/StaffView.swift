@@ -2,10 +2,11 @@ import ComposableArchitecture
 import SwiftUI
 import Theme
 import CommonComponents
+import Model
 
 public struct StaffView: View {
     private let store: StoreOf<StaffReducer>
-    @State var selectedStaffData: StaffData?
+    @State var selectedStaffData: Model.Staff?
 
     public init(store: StoreOf<StaffReducer>) {
         self.store = store
