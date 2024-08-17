@@ -51,7 +51,7 @@ public struct SponsorView: View {
                 GridItem(.flexible(), spacing: 12, alignment: .center)
             }
         LazyVGrid(columns: gridItems, spacing: 12) {
-            ForEach(items, id: \.id) { item in
+            ForEach(items) { item in
                 Button {
                     selectedSponsorData = item
                 } label: {
