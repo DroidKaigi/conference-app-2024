@@ -13,7 +13,6 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardCardScreenTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardCreateButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenColumnTestTag
-import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardLinkTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardNicknameTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardOccupationTextFieldTestTag
@@ -101,7 +100,7 @@ class ProfileCardScreenRobot @Inject constructor(
 
     fun checkEditScreenDisplayed() {
         composeTestRule
-            .onNode(hasTestTag(ProfileCardEditScreenTestTag))
+            .onNode(hasTestTag(ProfileCardEditScreenColumnTestTag))
             .assertIsDisplayed()
     }
 
