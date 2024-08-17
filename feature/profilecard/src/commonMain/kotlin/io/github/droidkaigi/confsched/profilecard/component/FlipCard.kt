@@ -115,7 +115,7 @@ internal fun FlipCard(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Image(
-                        painter = rememberAsyncImagePainter(uiState.image ?: ""),
+                        painter = rememberAsyncImagePainter(uiState.image),
                         contentDescription = null,
                         modifier = Modifier
                             .clip(CircleShape)
@@ -123,7 +123,7 @@ internal fun FlipCard(
                     )
                     Spacer(Modifier.height(12.dp))
                     Text(
-                        text = uiState.occupation ?: "",
+                        text = uiState.occupation,
                         style = MaterialTheme.typography.titleMedium,
                         color = Color.Black,
                     )
