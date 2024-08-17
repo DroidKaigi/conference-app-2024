@@ -35,7 +35,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val staffScreenRoute = "staff"
 const val StaffScreenTestTag = "StaffScreenTestTag"
-const val StaffItemTestTag = "StaffItemTestTag:"
+const val StaffScreenLazyColumnTestTag = "StaffScreenLazyColumnTestTag"
+const val StaffItemTestTagPrefix = "StaffItemTestTag:"
 
 fun NavGraphBuilder.staffScreens(
     onNavigationIconClick: () -> Unit,
@@ -127,7 +128,8 @@ fun StaffScreen(
                     } else {
                         it
                     }
-                },
+                }
+                .testTag(StaffScreenLazyColumnTestTag),
             contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
         ) {
             items(uiState.staff) { staff ->
@@ -136,7 +138,7 @@ fun StaffScreen(
                     onStaffItemClick = onStaffItemClick,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .testTag(StaffItemTestTag.plus(staff.id)),
+                        .testTag(StaffItemTestTagPrefix.plus(staff.id)),
                 )
             }
         }

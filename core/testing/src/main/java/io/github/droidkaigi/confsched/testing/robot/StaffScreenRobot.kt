@@ -5,13 +5,17 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.performScrollToIndex
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.fakes
-import io.github.droidkaigi.confsched.staff.StaffItemTestTag
+import io.github.droidkaigi.confsched.staff.StaffItemTestTagPrefix
 import io.github.droidkaigi.confsched.staff.StaffScreen
+import io.github.droidkaigi.confsched.staff.StaffScreenLazyColumnTestTag
 import io.github.droidkaigi.confsched.staff.component.StaffItemImageTestTag
 import io.github.droidkaigi.confsched.staff.component.StaffItemUserNameTextTestTag
+import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
+import io.github.droidkaigi.confsched.testing.utils.hasTestTag
 import javax.inject.Inject
 
 class StaffScreenRobot @Inject constructor(
@@ -31,13 +35,19 @@ class StaffScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun checkExistsStaffItem(
-        fromTo: Pair<Int, Int>,
+    fun scrollToIndex10() {
+        composeTestRule
+            .onNode(hasTestTag(StaffScreenLazyColumnTestTag))
+            .performScrollToIndex(10)
+    }
+
+    fun checkRangeStaffItemsDisplayed(
+        fromTo: IntRange,
     ) {
-        val staffList = Staff.fakes().subList(fromTo.first, fromTo.second)
+        val staffList = Staff.fakes().subList(fromTo.first, fromTo.last)
         staffList.forEach { staff ->
             composeTestRule
-                .onNode(hasTestTag(StaffItemTestTag.plus(staff.id)))
+                .onNode(hasTestTag(StaffItemTestTagPrefix.plus(staff.id)))
                 .assertExists()
                 .assertIsDisplayed()
 
@@ -61,10 +71,17 @@ class StaffScreenRobot @Inject constructor(
         }
     }
 
-    fun checkDoesNotExistsStaffItem() {
+    fun checkStaffItemsDisplayed() {
+        // Check there are two staffs
+        composeTestRule
+            .onAllNodes(hasTestTag(StaffItemTestTagPrefix, substring = true))
+            .assertCountAtLeast(2)
+    }
+
+    fun checkDoesNotFirstStaffItemDisplayed() {
         val staff = Staff.fakes().first()
         composeTestRule
-            .onNode(hasTestTag(StaffItemTestTag.plus(staff.id)))
+            .onNode(hasTestTag(StaffItemTestTagPrefix.plus(staff.id)))
             .assertDoesNotExist()
 
         composeTestRule
