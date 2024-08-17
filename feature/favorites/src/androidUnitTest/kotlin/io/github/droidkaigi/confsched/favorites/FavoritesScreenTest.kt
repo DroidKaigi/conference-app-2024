@@ -8,7 +8,6 @@ import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.FavoritesScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
-import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.coroutines.test.TestDispatcher
 import org.junit.Rule
@@ -75,7 +74,7 @@ class FavoritesScreenTest(
                         }
                         itShould("show error message") {
                             captureScreenWithChecks(
-                                checks = todoChecks("This screen is still empty now. Please add some checks."),
+                                checks = { checkErrorSnackbarDisplayed() },
                             )
                         }
                     }
