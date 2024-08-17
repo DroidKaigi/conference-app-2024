@@ -111,6 +111,7 @@ fun StaffScreen(
                     title = "Staff",
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
+                    navIconContentDescription = "Back"
                 )
             }
         },
