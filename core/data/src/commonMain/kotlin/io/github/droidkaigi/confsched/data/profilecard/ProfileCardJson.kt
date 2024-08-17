@@ -1,7 +1,7 @@
 package io.github.droidkaigi.confsched.data.profilecard
 
 import io.github.droidkaigi.confsched.model.ProfileCard
-import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.model.ProfileCardType
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,15 +18,15 @@ internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
     occupation = occupation,
     link = link,
     image = image,
-    theme = theme.toProfileCardTheme(),
+    cardType = theme.toProfileCardTheme(),
 )
 
-internal fun String.toProfileCardTheme() = ProfileCardTheme.valueOf(this)
+internal fun String.toProfileCardTheme() = ProfileCardType.valueOf(this)
 
 internal fun ProfileCard.Exists.toJson() = ProfileCardJson(
     nickname = nickname,
     occupation = occupation,
     link = link,
     image = image,
-    theme = theme.name,
+    theme = cardType.name,
 )

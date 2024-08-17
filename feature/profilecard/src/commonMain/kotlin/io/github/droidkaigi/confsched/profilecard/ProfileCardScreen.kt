@@ -74,6 +74,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
+import conference_app_2024.feature.profilecard.generated.resources.card_type
 import conference_app_2024.feature.profilecard.generated.resources.create_card
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.image
@@ -84,13 +85,13 @@ import conference_app_2024.feature.profilecard.generated.resources.occupation
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_edit_description
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
 import conference_app_2024.feature.profilecard.generated.resources.select_theme
-import conference_app_2024.feature.profilecard.generated.resources.theme
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
-import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
+import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProfileCardTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
-import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
@@ -134,7 +135,7 @@ internal sealed interface ProfileCardUiState {
         val occupation: String = "",
         val link: String = "",
         val image: String? = null,
-        val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
+        val cardType: ProfileCardType = ProfileCardType.Iguana,
     ) : ProfileCardUiState
 
     data class Card(
@@ -142,7 +143,7 @@ internal sealed interface ProfileCardUiState {
         val occupation: String,
         val link: String,
         val image: String,
-        val theme: ProfileCardTheme,
+        val cardType: ProfileCardType,
     ) : ProfileCardUiState
 }
 
@@ -220,10 +221,10 @@ internal fun ProfileCardScreen(
                 }
                 ProfileCardUiType.Card -> {
                     if (uiState.cardUiState == null) return@Scaffold
-                    ProvideProfileCardScreenTheme(uiState.cardUiState.theme.toString()) {
+                    ProvideProfileCardTheme(uiState.cardUiState.cardType.toString()) {
                         AnimatedTextTopAppBar(
                             colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = LocalProfileCardScreenTheme.current.primaryColor,
+                                containerColor = LocalProfileCardTheme.current.primaryColor,
                             ),
                             textColor = MaterialTheme.colorScheme.scrim,
                             title = stringResource(ProfileCardRes.string.profile_card_title),
@@ -313,7 +314,7 @@ internal fun EditScreen(
     var link by remember { mutableStateOf(uiState.link) }
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
-    var selectedTheme by remember { mutableStateOf(uiState.theme) }
+    var selectedCardType by remember { mutableStateOf(uiState.cardType) }
 
     val isValidInputs by remember {
         derivedStateOf {
@@ -385,7 +386,7 @@ internal fun EditScreen(
 
             Text(stringResource(ProfileCardRes.string.select_theme))
 
-            ThemePiker(selectedTheme = selectedTheme, onClickImage = { selectedTheme = it })
+            CardTypePiker(selectedCardType = selectedCardType, onClickImage = { selectedCardType = it })
 
             Button(
                 onClick = {
@@ -395,7 +396,7 @@ internal fun EditScreen(
                             occupation = occupation,
                             link = link,
                             image = imageByteArray?.toBase64() ?: "",
-                            theme = selectedTheme,
+                            cardType = selectedCardType,
                         ),
                     )
                 },
@@ -550,26 +551,26 @@ private fun ImagePickerWithError(
 }
 
 @Composable
-internal fun ThemePiker(selectedTheme: ProfileCardTheme, onClickImage: (ProfileCardTheme) -> Unit) {
-    val themes = ProfileCardTheme.entries.chunked(2)
+internal fun CardTypePiker(selectedCardType: ProfileCardType, onClickImage: (ProfileCardType) -> Unit) {
+    val cardTypes = ProfileCardType.entries.chunked(2)
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        themes.forEach {
+        cardTypes.forEach {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 it.firstOrNull()?.let {
-                    ThemeImage(
+                    CardTypeImage(
                         modifier = Modifier.weight(1.0f),
-                        isSelected = selectedTheme == it,
+                        isSelected = selectedCardType == it,
                         onClickImage = onClickImage,
-                        theme = it,
+                        cardType = it,
                     )
                 }
                 it.getOrNull(1)?.let {
-                    ThemeImage(
+                    CardTypeImage(
                         modifier = Modifier.weight(1.0f),
-                        isSelected = selectedTheme == it,
+                        isSelected = selectedCardType == it,
                         onClickImage = onClickImage,
-                        theme = it,
+                        cardType = it,
                     )
                 }
             }
@@ -578,31 +579,26 @@ internal fun ThemePiker(selectedTheme: ProfileCardTheme, onClickImage: (ProfileC
 }
 
 @Composable
-private fun ThemeImage(
+private fun CardTypeImage(
     isSelected: Boolean,
-    theme: ProfileCardTheme,
+    cardType: ProfileCardType,
     modifier: Modifier = Modifier,
-    onClickImage: (ProfileCardTheme) -> Unit,
+    onClickImage: (ProfileCardType) -> Unit,
 ) {
-    val colorMap = buildMap {
-        put(ProfileCardTheme.Iguana, Color(0xFFB4FF79))
-        put(ProfileCardTheme.Hedgehog, Color(0xFFFEB258))
-        put(ProfileCardTheme.Giraffe, Color(0xFFFCF65F))
-        put(ProfileCardTheme.Flamingo, Color(0xFFFF8EBD))
-        put(ProfileCardTheme.Jellyfish, Color(0xFF6FD7F8))
-        put(ProfileCardTheme.None, Color.White)
+    val colorMap = ProfileCardType.entries.associateWith { type ->
+        ProfileCardTheme.of(type.name).primaryColor
     }
     val selectedBorderColor = MaterialTheme.colorScheme.surfaceTint
     val painter = rememberVectorPainter(Icons.Default.Check)
 
     Image(
-        painter = painterResource(ProfileCardRes.drawable.theme),
+        painter = painterResource(ProfileCardRes.drawable.card_type),
         contentDescription = null,
         modifier = modifier
             .selectedBorder(isSelected, selectedBorderColor, painter)
             .clip(RoundedCornerShape(2.dp))
-            .background(colorMap[theme]!!)
-            .clickable { onClickImage(theme) }
+            .background(colorMap[cardType]!!)
+            .clickable { onClickImage(cardType) }
             .padding(top = 36.dp, start = 30.dp, end = 30.dp, bottom = 36.dp),
     )
 }
@@ -652,11 +648,11 @@ internal fun CardScreen(
     isCreated: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
 ) {
-    ProvideProfileCardScreenTheme(uiState.theme.toString()) {
+    ProvideProfileCardTheme(uiState.cardType.toString()) {
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(LocalProfileCardScreenTheme.current.primaryColor)
+                .background(LocalProfileCardTheme.current.primaryColor)
                 .testTag(ProfileCardCardScreenTestTag)
                 .padding(contentPadding),
         ) {
@@ -673,7 +669,7 @@ internal fun CardScreen(
                 Button(
                     onClick = { onClickShareProfileCard() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    border = if (uiState.theme == ProfileCardTheme.None) BorderStroke(0.5.dp, Color.Black) else null,
+                    border = if (uiState.cardType == ProfileCardType.None) BorderStroke(0.5.dp, Color.Black) else null,
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
