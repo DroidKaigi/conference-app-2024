@@ -6,6 +6,7 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot
+import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot.FloorLevel
 import io.github.droidkaigi.confsched.testing.robot.EventMapServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.robot.todoChecks
@@ -36,6 +37,31 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun behaviors(): List<DescribedBehavior<EventMapScreenRobot>> {
             return describeBehaviors<EventMapScreenRobot>(name = "EventMapScreenRobot") {
+                describe("when regardless of server status") {
+                    run {
+                        setupScreenContent()
+                    }
+                    describe("when click floor level ground") {
+                        run {
+                            clickEventMapTab(FloorLevel.Ground)
+                        }
+                        itShould("showed ground floor level map") {
+                            captureScreenWithChecks {
+                                checkEventMap(FloorLevel.Ground)
+                            }
+                        }
+                    }
+                    describe("when click floor level basement") {
+                        run {
+                            clickEventMapTab(FloorLevel.Basement)
+                        }
+                        itShould("showed basement floor level map") {
+                            captureScreenWithChecks {
+                                checkEventMap(FloorLevel.Basement)
+                            }
+                        }
+                    }
+                }
                 describe("when server is operational") {
                     run {
                         setupEventMapServer(ServerStatus.Operational)
