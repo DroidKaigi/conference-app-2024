@@ -2,7 +2,9 @@ package io.github.droidkaigi.confsched.eventmap.component
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -21,7 +23,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -44,16 +45,17 @@ fun EventMapTab(
     var selectedTabIndex by rememberSaveable { mutableStateOf(0) }
 
     Column(
-        modifier = modifier.pointerInput(Unit) {
-            detectDragGestures { _, dragAmount ->
-                if (selectedTabIndex == 0 && dragAmount.x > ChangeTabDragAmountThreshold) {
+        modifier = modifier.draggable(
+            orientation = Orientation.Horizontal,
+            state = rememberDraggableState { delta ->
+                if (selectedTabIndex == 0 && delta > ChangeTabDragAmountThreshold) {
                     selectedTabIndex = 1
                 }
-                if (selectedTabIndex == 1 && dragAmount.x < -ChangeTabDragAmountThreshold) {
+                if (selectedTabIndex == 1 && delta < -ChangeTabDragAmountThreshold) {
                     selectedTabIndex = 0
                 }
-            }
-        },
+            },
+        ),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
     ) {
