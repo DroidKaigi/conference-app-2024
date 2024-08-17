@@ -103,7 +103,6 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 const val profileCardScreenRoute = "profilecard"
 
-const val ProfileCardEditScreenTestTag = "ProfileCardEditScreenTestTag"
 const val ProfileCardEditScreenColumnTestTag = "ProfileCardEditScreenColumnTestTag"
 const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
 const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
