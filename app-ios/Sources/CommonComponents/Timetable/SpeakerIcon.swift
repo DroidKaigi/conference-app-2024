@@ -1,8 +1,28 @@
+import Foundation
 import SwiftUI
+
+private actor SpeakerIconInMemoryCache {
+    static let shared = SpeakerIconInMemoryCache()
+    private init() {}
+    
+    private var cache: [String: Data] = [:]
+    
+    func data(urlString: String) -> Data? {
+        return cache[urlString]
+    }
+    
+    func set(data: Data, urlString: String) {
+        cache[urlString] = data
+    }
+}
 
 struct SpeakerIcon: View {
     let urlString: String
     @State private var iconData: Data?
+    
+    init(urlString: String) {
+        self.urlString = urlString
+    }
     
     var body: some View {
         Group {
@@ -17,21 +37,18 @@ struct SpeakerIcon: View {
         .frame(width: 32, height: 32)
         .clipShape(Circle())
         .task {
-            guard let url = URL(string: urlString) else {
-                return
-            }
-            let urlRequest = URLRequest(url: url)
-            if let cachedResponse = URLCache.shared.cachedResponse(for: urlRequest) {
-                iconData = cachedResponse.data
+            if let data = await SpeakerIconInMemoryCache.shared.data(urlString: urlString) {
+                iconData = data
                 return
             }
             
-            do {
-                let (data, response) = try await URLSession.shared.data(for: urlRequest)
-                URLCache.shared.storeCachedResponse(CachedURLResponse(response: response, data: data), for: urlRequest)
+            guard let url = URL(string: urlString) else {
+                return
+            }
+            let urlRequest = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy)
+            if let (data, _) = try? await URLSession.shared.data(for: urlRequest) {
                 iconData = data
-            } catch {
-                iconData = nil
+                await SpeakerIconInMemoryCache.shared.set(data: data, urlString: urlString)
             }
         }
     }
