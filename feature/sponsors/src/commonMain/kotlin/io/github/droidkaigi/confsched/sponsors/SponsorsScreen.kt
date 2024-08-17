@@ -1,17 +1,11 @@
 package io.github.droidkaigi.confsched.sponsors
 
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons.AutoMirrored.Filled
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -33,6 +27,7 @@ import io.github.droidkaigi.confsched.sponsors.section.SponsorsList
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
@@ -118,22 +113,12 @@ fun SponsorsScreen(
         modifier = modifier.testTag(SponsorsScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            if (scrollBehavior != null) {
-                LargeTopAppBar(
-                    title = {
-                        Text(text = stringResource(SponsorsRes.string.sponsor))
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = onBackClick,
-                        ) {
-                            Icon(
-                                imageVector = Filled.ArrowBack,
-                                contentDescription = stringResource(SponsorsRes.string.content_description_back),
-                            )
-                        }
-                    },
+            if (!isTopAppBarHidden) {
+                AnimatedLargeTopAppBar(
+                    title = stringResource(SponsorsRes.string.sponsor),
+                    onBackClick =onBackClick,
                     scrollBehavior = scrollBehavior,
+                    navIconContentDescription = stringResource(SponsorsRes.string.content_description_back)
                 )
             }
         },
