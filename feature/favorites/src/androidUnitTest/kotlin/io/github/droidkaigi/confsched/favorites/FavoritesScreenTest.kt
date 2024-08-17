@@ -10,6 +10,7 @@ import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerS
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
+import kotlinx.coroutines.test.TestDispatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -27,9 +28,11 @@ class FavoritesScreenTest(
     @Inject
     lateinit var favoritesScreenRobot: FavoritesScreenRobot
 
+    @Inject lateinit var testDispatcher: TestDispatcher
+
     @Test
     fun runTest() {
-        runRobot(favoritesScreenRobot) {
+        runRobot(context = testDispatcher, robot = favoritesScreenRobot) {
             testCase.execute(favoritesScreenRobot)
         }
     }
@@ -42,10 +45,17 @@ class FavoritesScreenTest(
                 describe("when server is operational") {
                     run {
                         setupTimetableServer(ServerStatus.Operational)
+                        setupFavoriteSession()
+                        setupFavoritesScreenContent()
                     }
-                    describe("when launch") {
+                    itShould("display favorite session") {
+                        captureScreenWithChecks(
+                            checks = { checkTimetableListItemsDisplayed() },
+                        )
+                    }
+                    describe("click first session bookmark") {
                         run {
-                            setupFavoritesScreenContent()
+                            clickFirstSessionBookmark()
                         }
                         itShould("display empty view") {
                             captureScreenWithChecks(
