@@ -20,7 +20,7 @@ public struct ContributorView: View {
                 "KMP Presenter"
 
             case .fullKmp:
-                "KMP Compose view"
+                "KMP Compose View"
             }
         }
     }
