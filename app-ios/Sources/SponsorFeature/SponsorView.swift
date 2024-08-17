@@ -18,58 +18,21 @@ public struct SponsorView: View {
                     .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                ForEach(store.platinums) { platinum in
-                    Button {
-                        selectedSponsorData = platinum
-                    } label: {
-                        AsyncImage(url: platinum.logo) {
-                            $0.image?
-                                .resizable()
-                                .scaledToFit()
-                        }
-                        .frame(height: 110)
-                    }
-                }
+                makeSponsorGrid(columnCount: 1, items: store.platinums, imageHeight: 110)
                 
                 Text("GOLD SPONSORS")
                     .textStyle(.headlineSmall)
                     .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                LazyVGrid(columns: Array(repeating: .init(.fixed(184)), count: 2)) {
-                    ForEach(store.golds) { gold in
-                        Button {
-                            selectedSponsorData = gold
-                        } label: {
-                            AsyncImage(url: gold.logo) {
-                                $0.image?
-                                    .resizable()
-                                    .scaledToFit()
-                            }
-                            .frame(height: 80)
-                        }
-                    }
-                }
+                makeSponsorGrid(columnCount: 2, items: store.golds, imageHeight: 77)
                 
                 Text("SUPPORTERS")
                     .textStyle(.headlineSmall)
                     .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
-                LazyVGrid(columns: Array(repeating: .init(.fixed(118)), count: 3)) {
-                    ForEach(store.supporters) { supporter in
-                        Button {
-                            selectedSponsorData = supporter
-                        } label: {
-                            AsyncImage(url: supporter.logo) {
-                                $0.image?
-                                    .resizable()
-                                    .scaledToFit()
-                            }
-                            .frame(height: 80)
-                        }
-                    }
-                }
+                makeSponsorGrid(columnCount: 3, items: store.supporters, imageHeight: 77)
             }
             .padding(16)
         }
@@ -79,6 +42,33 @@ public struct SponsorView: View {
         }
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(String(localized: "Sponsor", bundle: .module))
+    }
+
+    @ViewBuilder
+    func makeSponsorGrid(columnCount: Int, items: [SponsorData], imageHeight: Double) -> some View {
+        let gridItems = (1...columnCount)
+            .map { _ in
+                GridItem(.flexible(), spacing: 12, alignment: .center)
+            }
+        LazyVGrid(columns: gridItems, spacing: 12) {
+            ForEach(items, id: \.id) { item in
+                Button {
+                    selectedSponsorData = item
+                } label: {
+                    ZStack {
+                        AssetColors.Inverse.inverseSurface.swiftUIColor
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        AsyncImage(url: item.logo) {
+                            $0.image?
+                                .resizable()
+                                .scaledToFit()
+                        }
+                        .frame(height: imageHeight)
+                        .padding(.vertical, 6)
+                    }
+                }
+            }
+        }
     }
 }
 

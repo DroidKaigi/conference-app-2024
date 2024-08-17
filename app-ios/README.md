@@ -26,7 +26,7 @@ Official iOS App for DroidKaigi 2024.
 ## Project structure
 
 This iOS app's almost all of source code is located in Swift Package Manager source. This structure is inspired by [isowords](https://github.com/pointfreeco/isowords).
-The feature modules in this iOS app are made independent of each other. (e.g. `TimetableFeature` shouldn't depend on `TiemtableDetailFeature`. )
+The feature modules in this iOS app are made independent of each other. (e.g. `TimetableFeature` shouldn't depend on `TimetableDetailFeature`. )
 
 ## For your information
 
