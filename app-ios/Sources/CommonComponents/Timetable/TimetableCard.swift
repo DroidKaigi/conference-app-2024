@@ -72,6 +72,17 @@ public struct TimetableCard: View {
                             .lineLimit(1)
                     }
                 }
+                if let timetableItemSession = timetableItem as? TimetableItem.Session,
+                   let sessionMessage = timetableItemSession.message?.currentLangTitle,
+                   !sessionMessage.isEmpty {
+                    HStack(spacing: 8) {
+                        Image(.icInfoFill)
+                        Text(sessionMessage)
+                            .textStyle(.bodySmall)
+                            .multilineTextAlignment(.leading)
+                            .foregroundStyle(AssetColors.Error.error.swiftUIColor)
+                    }
+                }
             }
             .frame(maxWidth: .infinity)
             .padding(12)

@@ -12,7 +12,7 @@ public struct TimetableView: View {
     }
     
     @State var timetableMode = TimetableMode.list
-    @State var switchModeIcon: String = "square.grid.2x2"
+    @State var switchModeIcon: ImageResource = .icGrid
     @State var selectedTab: DayTab = DayTab.day1
     
     public var body: some View {
@@ -66,14 +66,15 @@ public struct TimetableView: View {
                         switch timetableMode {
                         case .list:
                             timetableMode = .grid
-                            switchModeIcon = "list.bullet.indent"
+                            switchModeIcon = .icList
                         case .grid:
                             timetableMode = .list
-                            switchModeIcon = "square.grid.2x2"
+                            switchModeIcon = .icGrid
                         }
                     } label: {
-                        Image(systemName:switchModeIcon).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                        .frame(width: 40, height: 40)
+                        Image(switchModeIcon)
+                            .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                            .frame(width: 40, height: 40)
                     }
                 }
             }
@@ -103,6 +104,8 @@ struct TimetableListView: View {
             .onAppear {
                 store.send(.view(.onAppear))
             }.background(AssetColors.Surface.surface.swiftUIColor)
+            // bottom floating tabbar padding
+            Color.clear.padding(.bottom, 60)
         }
     }
 }

@@ -98,7 +98,7 @@ fun TimetableScreen(
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    eventEmitter: EventEmitter<TimetableScreenEvent> = rememberEventEmitter<TimetableScreenEvent>(),
+    eventEmitter: EventEmitter<TimetableScreenEvent> = rememberEventEmitter(),
     uiState: TimetableScreenUiState = timetableScreenPresenter(
         events = eventEmitter,
     ),
