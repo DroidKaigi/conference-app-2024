@@ -23,7 +23,7 @@ class EventMapScreenRobot @Inject constructor(
         val floorName: String,
     ) {
         Basement("B1F"),
-        Ground("1F");
+        Ground("1F"),
     }
 
     fun setupScreenContent() {
