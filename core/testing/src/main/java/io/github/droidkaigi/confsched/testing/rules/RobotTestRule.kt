@@ -10,6 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.rules.ActivityScenarioRule
+import co.touchlab.kermit.CommonWriter
+import co.touchlab.kermit.Logger
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.CompareOptions
 import com.github.takahirom.roborazzi.RoborazziOptions.PixelBitConfig
@@ -89,6 +91,7 @@ class RobotTestRule(
             .around(object : TestWatcher() {
                 override fun starting(description: Description) {
                     // To see logs in the console
+                    Logger.setLogWriters(CommonWriter())
                     ShadowLog.stream = System.out
                 }
             })
