@@ -57,7 +57,7 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                             run {
                                 scrollToIndex10()
                             }
-                            itShould("show contributor last") {
+                            itShould("show contributors") {
                                 captureScreenWithChecks {
                                     checkContributorItemsDisplayed()
                                 }
