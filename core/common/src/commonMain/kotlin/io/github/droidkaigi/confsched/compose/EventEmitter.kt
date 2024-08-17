@@ -9,6 +9,6 @@ typealias EventEmitter<T> = MutableSharedFlow<T>
 @Composable
 fun <T> rememberEventEmitter(): EventEmitter<T> {
     return remember {
-        MutableSharedFlow<T>(extraBufferCapacity = 20)
+        MutableSharedFlow(extraBufferCapacity = 20)
     }
 }
