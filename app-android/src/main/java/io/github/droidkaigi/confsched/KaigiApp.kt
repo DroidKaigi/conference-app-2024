@@ -246,7 +246,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     override val startDestination: String = timetableScreenRoute
 
     override fun routeToTab(route: String): MainScreenTab? {
-        if (route.contains(EventMapDestination::class.java.simpleName)) return EventMap
+        if (route.contains("${EventMapDestination::class.simpleName}")) return EventMap
         return when (route) {
             timetableScreenRoute -> Timetable
             profileCardScreenRoute -> ProfileCard
