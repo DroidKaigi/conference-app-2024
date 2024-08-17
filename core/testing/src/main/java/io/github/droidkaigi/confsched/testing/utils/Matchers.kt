@@ -61,11 +61,10 @@ fun SemanticsNodeInteraction.assertTextDoesNotContain(
                 ) { it.text }
             assertFalse(
                 "Node text contains unexpected substring: $substring",
-                textContent?.contains(substring) ?: false
+                textContent?.contains(substring) ?: false,
             )
         }
 }
-
 
 private fun buildErrorMessageForMinimumCountMismatch(
     errorMessage: String,

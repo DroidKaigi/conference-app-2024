@@ -30,13 +30,13 @@ class SearchScreenRobot @Inject constructor(
     private val timetableServerRobot: DefaultTimetableServerRobot,
 ) : ScreenRobot by screenRobot,
     TimetableServerRobot by timetableServerRobot {
-        enum class ConferenceDay(
-            val day: Int,
-            val dateText: String,
-        ) {
-            Day1(1, "9/12"),
-            Day2(2, "9/13"),
-        }
+    enum class ConferenceDay(
+        val day: Int,
+        val dateText: String,
+    ) {
+        Day1(1, "9/12"),
+        Day2(2, "9/13"),
+    }
 
     fun setupSearchScreenContent() {
         robotTestRule.setContent {
@@ -65,14 +65,14 @@ class SearchScreenRobot @Inject constructor(
     }
 
     fun clickConferenceDay(
-        clickDay: ConferenceDay
+        clickDay: ConferenceDay,
     ) {
         composeTestRule
             .onAllNodes(
                 hasTestTag(
                     testTag = DropdownFilterChipTestTagPrefix,
                     substring = true,
-                )
+                ),
             )
             .filter(matcher = hasText(clickDay.dateText))
             .onFirst()
@@ -86,7 +86,7 @@ class SearchScreenRobot @Inject constructor(
                 hasTestTag(
                     testTag = DropdownFilterChipTestTagPrefix,
                     substring = true,
-                )
+                ),
             )
             .assertCountAtLeast(ConferenceDay.entries.size)
     }
