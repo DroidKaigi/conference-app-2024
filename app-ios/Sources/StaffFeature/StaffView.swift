@@ -6,7 +6,7 @@ import Model
 
 public struct StaffView: View {
     private let store: StoreOf<StaffReducer>
-    @State var selectedStaffData: Model.Staff?
+    @State var selectedStaffData: Staff?
 
     public init(store: StoreOf<StaffReducer>) {
         self.store = store
