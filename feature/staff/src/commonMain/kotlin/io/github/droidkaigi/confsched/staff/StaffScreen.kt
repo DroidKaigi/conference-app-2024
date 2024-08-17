@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.staff
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -111,6 +112,7 @@ fun StaffScreen(
                     title = "Staff",
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
+                    navIconContentDescription = "Back",
                 )
             }
         },
@@ -118,7 +120,7 @@ fun StaffScreen(
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(top = padding.calculateTopPadding())
                 .testTag(StaffScreenLazyColumnTestTag)
                 .let {
                     if (scrollBehavior != null) {
@@ -127,6 +129,7 @@ fun StaffScreen(
                         it
                     }
                 },
+            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
         ) {
             items(uiState.staff) { staff ->
                 StaffItem(

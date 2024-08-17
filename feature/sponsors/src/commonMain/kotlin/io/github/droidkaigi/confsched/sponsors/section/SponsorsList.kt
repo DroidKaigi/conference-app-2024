@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -30,6 +29,7 @@ import io.github.droidkaigi.confsched.sponsors.SponsorsListUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsRes
 import io.github.droidkaigi.confsched.sponsors.component.SponsorHeader
 import io.github.droidkaigi.confsched.sponsors.component.SponsorItem
+import io.github.droidkaigi.confsched.ui.plus
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -37,18 +37,17 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SponsorsList(
-    padding: PaddingValues,
     uiState: SponsorsListUiState,
     onSponsorsItemClick: (url: String) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior?,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(6),
         verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
         modifier = modifier
-            .padding(padding)
             .let {
                 if (scrollBehavior != null) {
                     it.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -56,7 +55,7 @@ fun SponsorsList(
                     it
                 }
             },
-        contentPadding = PaddingValues(horizontal = 12.dp),
+        contentPadding = contentPadding + PaddingValues(horizontal = 12.dp),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             SponsorHeader(
@@ -111,7 +110,7 @@ fun SponsorsList(
             )
         }
         items(
-            items = uiState.platinumSponsors,
+            items = uiState.supporters,
             span = { GridItemSpan(2) },
         ) { sponsor ->
             SponsorItem(
@@ -137,7 +136,6 @@ fun SponsorsListPreview() {
                     goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
                     supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
                 ),
-                padding = PaddingValues(),
                 onSponsorsItemClick = {},
                 scrollBehavior = null,
             )
