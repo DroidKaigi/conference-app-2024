@@ -11,7 +11,14 @@ final class StaffFeatureTests: XCTestCase {
         } withDependencies: {
             $0.staffClient.streamStaffs = {
                 AsyncThrowingStream {
-                    $0.yield([.init(id: 0, username: "testValue", profileUrl: "https://2024.droidkaigi.jp/", iconUrl: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4"),])
+                    $0.yield([
+                        .init(
+                            id: 0,
+                            name: "testValue",
+                            icon: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!,
+                            github: URL(string: "https://2024.droidkaigi.jp/")!
+                        )
+                    ])
                     $0.finish()
                 }
             }
