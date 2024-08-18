@@ -176,6 +176,17 @@ class SearchScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
+    fun checkDisplayedFilterLanguageChip() {
+        composeTestRule
+            .onAllNodes(
+                hasTestTag(
+                    testTag = DropdownFilterChipTestTagPrefix,
+                    substring = true,
+                ),
+            )
+            .assertCountAtLeast(Language.entries.size)
+    }
+
     fun checkTimetableListItemByConferenceDay(
         checkDay: ConferenceDay,
     ) {
