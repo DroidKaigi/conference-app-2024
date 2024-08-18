@@ -24,10 +24,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
@@ -46,6 +43,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -55,6 +53,8 @@ import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.model.isBlurSupported
+import io.github.droidkaigi.confsched.ui.animation.onGloballyPositionedWithFavoriteAnimationScope
+import io.github.droidkaigi.confsched.ui.useIf
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -63,9 +63,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun GlassLikeBottomNavigation(
     hazeState: HazeState,
     onTabSelected: (MainScreenTab) -> Unit,
+    currentTab: MainScreenTab,
     modifier: Modifier = Modifier,
 ) {
-    var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     Box(
         modifier = modifier
             .padding(horizontal = 48.dp)
@@ -86,15 +86,12 @@ fun GlassLikeBottomNavigation(
             ),
     ) {
         BottomBarTabs(
-            selectedTab = selectedTabIndex,
-            onTabSelected = {
-                selectedTabIndex = MainScreenTab.indexOf(it)
-                onTabSelected(it)
-            },
+            selectedTab = currentTab,
+            onTabSelected = { onTabSelected(it) },
         )
 
         val animatedSelectedTabIndex by animateFloatAsState(
-            targetValue = selectedTabIndex.toFloat(),
+            targetValue = currentTab.ordinal.toFloat(),
             label = "animatedSelectedTabIndex",
             animationSpec =
             spring(
@@ -180,7 +177,7 @@ fun GlassLikeBottomNavigation(
 
 @Composable
 fun BottomBarTabs(
-    selectedTab: Int,
+    selectedTab: MainScreenTab,
     onTabSelected: (MainScreenTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -195,13 +192,13 @@ fun BottomBarTabs(
         Row(
             modifier = modifier.fillMaxSize(),
         ) {
-            for (tab in MainScreenTab.values()) {
+            for (tab in MainScreenTab.entries) {
                 val alpha by animateFloatAsState(
-                    targetValue = if (selectedTab == MainScreenTab.indexOf(tab)) 1f else .35f,
+                    targetValue = if (selectedTab == tab) 1f else .35f,
                     label = "alpha",
                 )
                 val scale by animateFloatAsState(
-                    targetValue = if (selectedTab == MainScreenTab.indexOf(tab)) 1f else .98f,
+                    targetValue = if (selectedTab == tab) 1f else .98f,
                     visibilityThreshold = .000001f,
                     animationSpec =
                     spring(
@@ -210,7 +207,7 @@ fun BottomBarTabs(
                     ),
                     label = "scale",
                 )
-                val iconRes = if (selectedTab == MainScreenTab.indexOf(tab)) {
+                val iconRes = if (selectedTab == tab) {
                     tab.iconOn
                 } else {
                     tab.iconOff
@@ -231,6 +228,14 @@ fun BottomBarTabs(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Image(
+                        modifier = Modifier.useIf(
+                            tab == MainScreenTab.Favorite,
+                        ) {
+                            onGloballyPositionedWithFavoriteAnimationScope { scope, coordinates ->
+                                val position = coordinates.positionInRoot()
+                                scope?.setTargetPosition(position)
+                            }
+                        },
                         painter = painterResource(iconRes),
                         contentDescription = "tab ${stringResource(tab.contentDescription)}",
                     )
@@ -250,6 +255,7 @@ fun GlassLikeBottomNavigationPreview() {
             GlassLikeBottomNavigation(
                 hazeState = hazeState,
                 {},
+                currentTab = MainScreenTab.Timetable,
             )
         }
     }

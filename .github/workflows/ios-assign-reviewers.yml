@@ -1,32 +1,47 @@
 name: Auto assign iOS PR reviewers
 
 on:
-  pull_request:
-    types: [opened, ready_for_review, labeled]
+  workflow_run:
+    workflows: ["save-pr-number-for-ios-assign-reviewers"]
+    types:
+      - completed
+
+permissions:
+  actions: read    # for downloading artifacts
+  contents: read   # for accessing repository contents
+  pull-requests: write # for assign reviewers
 
 jobs:
   reviewers-assign:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pull-requests: write
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     timeout-minutes: 5
     steps:
+      - name: Download PR number
+        uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615 # v2.27.0
+        with:
+          name: pr_number
+          path: ./
+          run_id: ${{ github.event.workflow_run.id }}
+
+      - name: Read PR number
+        id: pr_number
+        run: echo "::set-output name=number::$(cat pr_number.txt)"
+
       - name: Assign reviewers
         uses: actions/github-script@v7
-        if: contains(github.event.pull_request.labels.*.name, 'type:iOS 🍎') && github.event.pull_request.draft == false
         env:
           IOS_REVIEWERS: ${{ vars.IOS_REVIEWERS }}
+          PULL_NUMBER: ${{ steps.pr_number.outputs.number }}
         with:
           script: |
             const { IOS_REVIEWERS } = process.env
-            const author = context.payload.pull_request.user.login;
-            const reviewers = IOS_REVIEWERS.split(',').filter(reviewer => reviewer !== author)
+            const reviewers = IOS_REVIEWERS.split(',')
 
             await github.rest.pulls.requestReviewers({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number,
+              pull_number: PULL_NUMBER,
               reviewers
             });

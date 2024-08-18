@@ -5,6 +5,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
+import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
@@ -38,8 +39,9 @@ class ProfileCardScreenTest(
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun behaviors(): List<DescribedBehavior<ProfileCardScreenRobot>> {
             return describeBehaviors("ProfileCardScreen") {
-                describe("when profile card is not found") {
+                describe("when profile card is does not exists") {
                     run {
+                        setupSavedProfileCard(ProfileCardInputStatus.AllNotEntered)
                         setupScreenContent()
                     }
                     itShould("show edit screen") {
@@ -47,70 +49,70 @@ class ProfileCardScreenTest(
                             checkEditScreenDisplayed()
                         }
                     }
-                    val nickName = "test"
-                    val occupation = "test"
-                    describe("input nickname") {
-                        run {
-                            inputNickName(nickName)
+                    // FIXME Add a test to confirm that it is possible to transition to the Card screen after entering the required input fields, including images.
+                    // FIXME Currently, the test code does not allow the user to select and input an image from the Add Image button.
+                }
+                describe("when profile card is exists") {
+                    run {
+                        setupSavedProfileCard(ProfileCardInputStatus.NoInputOtherThanImage)
+                        setupScreenContent()
+                    }
+                    itShould("show card screen") {
+                        captureScreenWithChecks {
+                            checkCardScreenDisplayed()
+                            checkProfileCardFrontDisplayed()
                         }
-                        itShould("show nickname") {
+                    }
+                    describe("flip prifle card") {
+                        run {
+                            flipProfileCard()
+                        }
+                        itShould("back side of the profile card is displayed") {
+                            captureScreenWithChecks {
+                                checkProfileCardBackDisplayed()
+                            }
+                        }
+                    }
+                    describe("when click edit button") {
+                        run {
+                            clickEditButton()
+                        }
+                        itShould("show edit screen") {
                             captureScreenWithChecks {
                                 checkEditScreenDisplayed()
                             }
                         }
-                        describe("input occupation") {
+                        describe("when if a required field has not been filled in") {
                             run {
-                                inputOccupation(occupation)
+                                scrollToTestTag(ProfileCardCreateButtonTestTag)
                             }
-                            itShould("show occupation") {
+                            itShould("make sure the Create button is deactivated") {
                                 captureScreenWithChecks {
-                                    checkEditScreenDisplayed()
+                                    checkCreateButtonDisabled()
                                 }
                             }
-                            describe("click create button") {
-                                run {
-                                    clickCreateButton()
-                                }
-                                itShould("show card screen") {
-                                    captureScreenWithChecks {
-                                        checkCardScreenDisplayed()
-                                    }
-                                }
-                                describe("click edit button") {
-                                    run {
-                                        clickEditButton()
-                                    }
-                                    itShould("show edit screen") {
-                                        captureScreenWithChecks {
-                                            checkEditScreenDisplayed()
-                                            checkNickName(nickName)
-                                            checkOccupation(occupation)
-                                        }
-                                    }
+                        }
+                        describe("if all required fields are filled in") {
+                            val nickname = "test"
+                            val occupation = "test"
+                            val link = "test"
+                            run {
+                                inputNickName(nickname)
+                                inputOccupation(occupation)
+                                inputLink(link)
+                                scrollToTestTag(ProfileCardCreateButtonTestTag)
+                            }
+                            itShould("make sure the Create button is activated") {
+                                captureScreenWithChecks {
+                                    checkNickName(nickname)
+                                    checkOccupation(occupation)
+                                    checkLink(link)
+                                    checkCreateButtonEnabled()
                                 }
                             }
                         }
                     }
                 }
-                // FIXME: java.util.concurrent.CancellationException: The test timed out at saveProfileCard
-                // describe("when profile card is found") {
-                //     run {
-                //         val profileCard = ProfileCard(
-                //             nickname = "test",
-                //             occupation = "test",
-                //             link = null,
-                //             image = null,
-                //             theme = ProfileCardTheme.Iguana
-                //         )
-                //         saveProfileCard(profileCard)
-                //         setupScreenContent()
-                //     }
-                //     itShould("show card screen") {
-                //         captureScreenWithChecks {
-                //             checkCardScreenDisplayed()
-                //         }
-                //     }
-                // }
             }
         }
     }

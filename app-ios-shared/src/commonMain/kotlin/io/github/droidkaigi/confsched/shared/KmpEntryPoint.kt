@@ -4,7 +4,6 @@ import io.github.droidkaigi.confsched.data.BaseUrl
 import io.github.droidkaigi.confsched.data.auth.Authenticator
 import io.github.droidkaigi.confsched.data.dataModule
 import io.github.droidkaigi.confsched.data.remoteconfig.RemoteConfigApi
-import co.touchlab.skie.configuration.annotations.DefaultArgumentInterop
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin

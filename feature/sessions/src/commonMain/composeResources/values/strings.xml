@@ -1,5 +1,4 @@
 <resources>
-    <string name="content_description_schedule_icon">Schedule</string>
     <string name="content_description_user_icon">User</string>
     <string name="content_description_error_icon">Error</string>
     <string name="bookmarked_successfully">Bookmarked successfully.</string>
@@ -30,4 +29,9 @@
     <string name="location_title">Location</string>
     <string name="language_title">Supported Languages</string>
     <string name="category_title">Category</string>
+    <string name="empty_search_result">Nothing matched your search criteria "%1$s"</string>
+    <string name="filter_chip_day">Day</string>
+    <string name="filter_chip_category">Category</string>
+    <string name="filter_chip_session_type">Session type</string>
+    <string name="filter_chip_supported_language">Supported languages</string>
 </resources>

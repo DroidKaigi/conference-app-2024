@@ -4,6 +4,7 @@ import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.http.GET
 import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.eventmap.response.EventMapResponse
+import io.github.droidkaigi.confsched.data.eventmap.response.MessageResponse
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.RoomIcon
@@ -55,6 +56,7 @@ public fun EventMapResponse.toEventMapList(): PersistentList<EventMapEvent> {
                         enTitle = event.i18nDesc.en,
                     ),
                     moreDetailsUrl = event.moreDetailsUrl,
+                    message = event.message?.toMultiLangText(),
                 )
             }
         }
@@ -69,3 +71,6 @@ private fun String.toRoomIcon(): RoomIcon = when (this) {
     "Jellyfish" -> RoomIcon.Triangle
     else -> RoomIcon.None
 }
+
+private fun MessageResponse.toMultiLangText() =
+    if (ja != null && en != null) MultiLangText(jaTitle = ja, enTitle = en) else null

@@ -1,20 +1,19 @@
 package io.github.droidkaigi.confsched.ui
 
-import io.github.droidkaigi.confsched.designsystem.strings.Strings
 import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.retry
 
 fun <T> Flow<T>.handleErrorAndRetry(
-    actionLabel: Strings<*>,
+    actionLabel: String,
     userMessageStateHolder: UserMessageStateHolder,
 ) = retry { throwable ->
     // TODO: Introduce logger
     throwable.printStackTrace()
     val messageResult = userMessageStateHolder.showMessage(
         message = throwable.toApplicationErrorMessage(),
-        actionLabel = actionLabel.asString(),
+        actionLabel = actionLabel,
     )
 
     val retryPerformed = messageResult == ActionPerformed

@@ -12,7 +12,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -23,6 +22,7 @@ import conference_app_2024.feature.about.generated.resources.place_link
 import conference_app_2024.feature.about.generated.resources.place_title
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.ui.dashedRoundRect
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -31,20 +31,18 @@ fun AboutDroidKaigiDetailSummaryCard(
     modifier: Modifier = Modifier,
     onViewMapClick: () -> Unit,
 ) {
+    val borderColor = MaterialTheme.colorScheme.onSurfaceVariant
+
     Card(
-        shape = RoundedCornerShape(12.dp),
-        modifier = modifier,
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceColorAtElevation(
-                1.dp,
-            ),
-        ),
+        shape = RoundedCornerShape(4.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surfaceContainerLow),
+        modifier = modifier.dashedRoundRect(color = borderColor),
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 24.dp),
+                .padding(horizontal = 16.dp, vertical = 20.dp),
         ) {
             AboutDroidKaigiDetailSummaryCardRow(
                 leadingIcon = Outlined.Schedule,

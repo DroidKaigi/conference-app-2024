@@ -4,12 +4,12 @@ import Theme
 import class shared.TimetableItem
 
 public struct TimetableGridCard: View {
-    let timetableItem: TimetableItem?
+    let timetableItem: TimetableItem
     let onTap: (TimetableItem) -> Void
     let cellCount: Int
     
     public init(
-        timetableItem: TimetableItem?,
+        timetableItem: TimetableItem,
         cellCount: Int? = 1,
         onTap: @escaping (TimetableItem) -> Void
     ) {
@@ -19,60 +19,51 @@ public struct TimetableGridCard: View {
     }
 
     public var body: some View {
-        if let timetableItem {
-            Button {
-                onTap(timetableItem)
-            } label: {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 4) {
-                        timetableItem.room.type.shape
-                            .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
-                        Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
-                            .textStyle(.labelMedium)
-                            .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
-                        Spacer()
-                    }
-                    
-                    Text(timetableItem.title.currentLangTitle)
-                        .textStyle(.titleMedium)
+        Button {
+            onTap(timetableItem)
+        } label: {
+            VStack(alignment: .leading, spacing: 8) {
+                HStack(spacing: 4) {
+                    timetableItem.room.type.shape
                         .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
-                        .multilineTextAlignment(.leading)
-                    
+                    Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
+                        .textStyle(.labelMedium)
+                        .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
                     Spacer()
-                    
-                    ForEach(timetableItem.speakers, id: \.id) { speaker in
-                        HStack(spacing: 8) {
-                            Group {
-                                AsyncImage(url: URL(string: speaker.iconUrl)) {
-                                    $0.resizable()
-                                } placeholder: {
-                                    Color.gray
-                                }
+                }
+                
+                Text(timetableItem.title.currentLangTitle)
+                    .textStyle(.titleMedium)
+                    .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                    .multilineTextAlignment(.leading)
+                
+                Spacer()
+                
+                ForEach(timetableItem.speakers, id: \.id) { speaker in
+                    HStack(spacing: 8) {
+                        Group {
+                            AsyncImage(url: URL(string: speaker.iconUrl)) {
+                                $0.resizable()
+                            } placeholder: {
+                                Color.gray
                             }
-                            .frame(width: 32, height: 32)
-                            .clipShape(Circle())
-
-                            Text(speaker.name)
-                                .textStyle(.titleSmall)
-                                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
-                                .lineLimit(1)
                         }
+                        .frame(width: 32, height: 32)
+                        .clipShape(Circle())
+
+                        Text(speaker.name)
+                            .textStyle(.titleSmall)
+                            .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
+                            .lineLimit(1)
                     }
                 }
-                .frame(maxWidth: .infinity)
-                .padding(12)
-                .frame(width: 192*CGFloat(cellCount)+CGFloat(12*(cellCount-1)), height: 153)
-                .background(timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
-                .overlay(RoundedRectangle(cornerRadius: 4).stroke(timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
             }
-        } else {
-            Color.clear
-                .frame(maxWidth: .infinity)
-                .padding(12)
-                .frame(width: 192, height: 153)
-                .background(Color.clear, in: RoundedRectangle(cornerRadius: 4))
+            .frame(maxWidth: .infinity)
+            .padding(12)
+            .frame(width: 192*CGFloat(cellCount)+CGFloat(12*(cellCount-1)), height: 153)
+            .background(timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
         }
-
     }
 }
 

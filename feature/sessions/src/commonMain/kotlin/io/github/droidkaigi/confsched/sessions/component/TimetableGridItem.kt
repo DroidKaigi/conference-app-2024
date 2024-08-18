@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Schedule
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -42,7 +41,6 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import conference_app_2024.feature.sessions.generated.resources.content_description_error_icon
-import conference_app_2024.feature.sessions.generated.resources.content_description_schedule_icon
 import conference_app_2024.feature.sessions.generated.resources.content_description_user_icon
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
@@ -61,6 +59,7 @@ import io.github.droidkaigi.confsched.model.TimetableSpeaker
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.section.TimetableSizes
+import io.github.droidkaigi.confsched.ui.icon
 import io.github.droidkaigi.confsched.ui.previewOverride
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.collections.immutable.PersistentList
@@ -71,6 +70,7 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.toInstant
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.resources.vectorResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.ceil
 import kotlin.math.roundToInt
@@ -163,17 +163,18 @@ fun TimetableGridItem(
                     ) {
                         Icon(
                             modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
-                            imageVector = Icons.Default.Schedule,
-                            contentDescription = stringResource(SessionsRes.string.content_description_schedule_icon),
+                            imageVector = vectorResource(checkNotNull(timetableItem.room.icon)),
+                            contentDescription = timetableItem.room.name.currentLangTitle,
+                            tint = LocalRoomTheme.current.primaryColor,
                         )
                         Spacer(modifier = Modifier.width(4.dp))
-                        var scheduleTextStyle = MaterialTheme.typography.bodySmall
+                        var scheduleTextStyle = MaterialTheme.typography.labelSmall
                         if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
                             scheduleTextStyle =
                                 scheduleTextStyle.copy(fontSize = titleTextStyle.fontSize)
                         }
                         Text(
-                            text = "${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}",
+                            text = "${timetableItem.startsTimeString}~${timetableItem.endsTimeString}",
                             style = scheduleTextStyle,
                             color = LocalRoomTheme.current.primaryColor,
                         )
