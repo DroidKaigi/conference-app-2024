@@ -11,6 +11,8 @@ import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerS
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.atTime
 import kotlinx.datetime.format
 import org.junit.Rule
@@ -151,6 +153,39 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                 }
+                listOf(
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 11, hour = 10, minute = 0),
+                        shouldShowTimeLine = false,
+                    ),
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 12, hour = 10, minute = 30),
+                        shouldShowTimeLine = true,
+                    ),
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 13, hour = 11, minute = 0),
+                        shouldShowTimeLine = true,
+                    ),
+                ).forEach { case ->
+                    describe("when the current datetime is ${case.dateTime.format(LocalDateTime.Formats.ISO)}") {
+                        run {
+                            setupTimetableServer(ServerStatus.Operational)
+                            setupTimetableScreenContent(case.dateTime)
+                            clickTimetableUiTypeChangeButton()
+                        }
+
+                        val description = if (case.shouldShowTimeLine) {
+                            "show an indicator of the current time at ${case.dateTime.time.format(LocalTime.Formats.ISO)}"
+                        } else {
+                            "not show an indicator of the current time"
+                        }
+                        itShould(description) {
+                            captureScreenWithChecks {
+                                checkTimetableGridDisplayed()
+                            }
+                        }
+                    }
+                }
                 describe("when server is down") {
                     run {
                         setupTimetableServer(ServerStatus.Error)
@@ -170,4 +205,9 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
 private data class InitialTabTestSpec(
     val date: LocalDate,
     val expectedInitialTab: DroidKaigi2024Day,
+)
+
+private data class TimeLineTestSpec(
+    val dateTime: LocalDateTime,
+    val shouldShowTimeLine: Boolean,
 )
