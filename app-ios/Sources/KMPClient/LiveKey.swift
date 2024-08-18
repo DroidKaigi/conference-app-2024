@@ -1,5 +1,7 @@
 import Dependencies
 import shared
+import Model
+import Foundation
 
 private var sessionsRepository: any SessionsRepository {
     Container.shared.get(type: (any SessionsRepository).self)
@@ -44,7 +46,19 @@ extension TimetableClient: DependencyKey {
 extension StaffClient: DependencyKey {
     public static let liveValue: StaffClient = .init(
         streamStaffs: {
-            staffRepository.staffs().eraseToThrowingStream()
+            staffRepository
+                .staffs()
+                .map {
+                    $0.map {
+                        Model.Staff(
+                            id: Int($0.id),
+                            name: $0.username,
+                            icon: URL(string: $0.iconUrl)!,
+                            github: URL(string: $0.profileUrl)!
+                        )
+                    }
+                }
+                .eraseToThrowingStream()
         }
     )
 }

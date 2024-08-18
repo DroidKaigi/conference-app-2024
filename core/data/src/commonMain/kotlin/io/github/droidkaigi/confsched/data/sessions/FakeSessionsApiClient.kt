@@ -10,6 +10,7 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SpeakerResponse
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.Lang
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.offsetAt
@@ -81,13 +82,18 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
             items = listOf(
                 CategoryItemResponse(
                     id = 1,
-                    name = LocaledResponse(ja = "CategoryItem1 ja", en = "CategoryItem1 en"),
+                    name = LocaledResponse(ja = "App Architecture ja", en = "App Architecture en"),
                     sort = 1,
                 ),
                 CategoryItemResponse(
                     id = 2,
-                    name = LocaledResponse(ja = "CategoryItem2 ja", en = "CategoryItem2 en"),
+                    name = LocaledResponse(ja = "Jetpack Compose ja", en = "Jetpack Compose en"),
                     sort = 2,
+                ),
+                CategoryItemResponse(
+                    id = 3,
+                    name = LocaledResponse(ja = "Other ja", en = "Other en"),
+                    sort = 3,
                 ),
             ),
         ),
@@ -111,7 +117,7 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                 roomId = 2,
                 targetAudience = "TBW",
                 language = "JAPANESE",
-                sessionCategoryItemId = 1,
+                sessionCategoryItemId = 3,
                 interpretationTarget = false,
                 asset = SessionAssetResponse(videoUrl = null, slideUrl = null),
                 message = null,
@@ -129,13 +135,18 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                     (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds).seconds)
                 val end =
                     (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds + 30 * 60).seconds)
+                val sessionCategoryItemId = if (categories.first().items.size % index.plus(1) == 0) {
+                    1
+                } else {
+                    2
+                }
 
                 val session = SessionResponse(
                     id = "$day${room.id}$index",
                     isServiceSession = false,
                     title = LocaledResponse(
-                        ja = "DroidKaigiのアプリのアーキテクチャ day$day room${room.name.ja} index$index",
-                        en = "DroidKaigi App Architecture day$day room${room.name.en} index$index",
+                        ja = "DroidKaigiの${categories.first().items.findLast { it.id == sessionCategoryItemId }?.name?.ja} day$day room${room.name.ja} index$index",
+                        en = "DroidKaigi ${categories.first().items.findLast { it.id == sessionCategoryItemId }?.name?.en} day$day room${room.name.en} index$index",
                     ),
                     speakers = listOf("1", "2"),
                     description = "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n" +
@@ -148,9 +159,13 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                     ),
                     startsAt = start.toCustomIsoString(),
                     endsAt = end.toCustomIsoString(),
-                    language = "JAPANESE",
+                    language = if (Lang.entries.size > index) {
+                        Lang.entries[index].name
+                    } else {
+                        Lang.JAPANESE.name
+                    },
                     roomId = room.id,
-                    sessionCategoryItemId = 1,
+                    sessionCategoryItemId = sessionCategoryItemId,
                     sessionType = "NORMAL",
                     message = null,
                     isPlenumSession = false,

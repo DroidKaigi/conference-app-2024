@@ -16,7 +16,10 @@ import io.github.droidkaigi.confsched.model.TimetableSessionType
 import io.github.droidkaigi.confsched.model.fakes
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+const val SearchFiltersLazyRowTestTag = "SearchFiltersLazyRowTestTag"
 const val SearchFiltersFilterDayChipTestTag = "SearchFiltersFilterDayChipTestTag"
+const val SearchFiltersFilterCategoryChipTestTag = "SearchFiltersFilterCategoryChipTestTag"
+const val SearchFiltersFilterLanguageChipTestTag = "SearchFiltersFilterLanguageChipTestTag"
 
 @Composable
 fun SearchFilters(
@@ -32,7 +35,7 @@ fun SearchFilters(
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
-        modifier = modifier,
+        modifier = modifier.testTag(SearchFiltersLazyRowTestTag),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         contentPadding = contentPadding,
     ) {
@@ -45,6 +48,7 @@ fun SearchFilters(
         }
         item {
             FilterCategoryChip(
+                modifier = Modifier.testTag(SearchFiltersFilterCategoryChipTestTag),
                 uiState = filterCategoryUiState,
                 onSelect = onSelectCategory,
             )
@@ -57,6 +61,7 @@ fun SearchFilters(
         }
         item {
             FilterLanguageChip(
+                modifier = Modifier.testTag(SearchFiltersFilterLanguageChipTestTag),
                 uiState = filterLanguageUiState,
                 onSelect = onSelectLanguage,
             )
