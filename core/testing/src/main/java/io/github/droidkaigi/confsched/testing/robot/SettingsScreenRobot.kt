@@ -11,7 +11,7 @@ class SettingsScreenRobot @Inject constructor(
         robotTestRule.setContent {
             KaigiTheme {
                 SettingsScreen(
-                    onNavigationIconClick = {}
+                    onNavigationIconClick = {},
                 )
             }
         }

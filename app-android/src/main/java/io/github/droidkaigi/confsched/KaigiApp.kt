@@ -76,11 +76,11 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.share.ShareNavigator
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
-import io.github.droidkaigi.confsched.settings.settingsScreenRoute
-import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
@@ -160,7 +160,7 @@ private fun KaigiNavHost(
                 )
 
                 settingsScreens(
-                    onNavigationIconClick = navController::popBackStack
+                    onNavigationIconClick = navController::popBackStack,
                 )
 
                 sponsorsScreens(

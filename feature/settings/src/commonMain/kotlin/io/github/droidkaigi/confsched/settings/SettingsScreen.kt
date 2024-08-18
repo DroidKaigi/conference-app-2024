@@ -71,6 +71,8 @@ fun SettingsScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
+    // TODO Remove Suppress
+    @Suppress("UnusedParameter")
     uiState: SettingsUiState,
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
