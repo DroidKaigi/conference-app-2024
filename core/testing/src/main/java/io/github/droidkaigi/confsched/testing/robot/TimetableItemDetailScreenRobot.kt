@@ -40,7 +40,6 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     suspend fun setupScreenContent(
         sessionId: String = SessionsAllResponse.Companion.fake().sessions.first().id,
     ) {
-
         robotTestRule.setContentWithNavigation<TimetableItemDetailDestination>(
             startDestination = { TimetableItemDetailDestination(sessionId) },
         ) {
