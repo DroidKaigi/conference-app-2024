@@ -56,8 +56,7 @@ public struct SponsorView: View {
                     selectedSponsorData = item
                 } label: {
                     ZStack {
-                        AssetColors.Inverse.inverseSurface.swiftUIColor
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        Color.white.clipShape(RoundedRectangle(cornerRadius: 12))
                         AsyncImage(url: item.logo) {
                             $0.image?
                                 .resizable()
