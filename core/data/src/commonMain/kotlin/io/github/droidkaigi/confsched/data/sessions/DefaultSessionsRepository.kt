@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.data.sessions
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,6 +10,7 @@ import androidx.compose.runtime.setValue
 import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
+import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.data.user.UserDataStore
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.SessionsRepository
@@ -59,13 +61,7 @@ public class DefaultSessionsRepository(
     private suspend fun refreshSessionData() {
         val sessionsAllResponse = sessionsApi.sessionsAllResponse()
         // Remove workday sessions
-        val sessionsAllResponseFiltered = sessionsAllResponse.copy(
-            sessions = sessionsAllResponse.sessions.filter {
-                val startsAt = it.startsAt.toInstantAsJST()
-                DroidKaigi2024Day.visibleDays()
-                    .any { day -> day.start <= startsAt && startsAt < day.end }
-            },
-        )
+        val sessionsAllResponseFiltered = sessionsAllResponse.filterConferenceDaySessions()
         sessionCacheDataStore.save(sessionsAllResponseFiltered)
     }
 
@@ -114,12 +110,27 @@ public class DefaultSessionsRepository(
             timetableItem to timetable.bookmarks.contains(id)
         }
         Logger.d {
-            "DefaultSessionsRepository timetableItemWithBookmark() timetableSize:${timetable.timetableItems.size} id:$id itemWithBookmark=$itemWithBookmark"
+            "DefaultSessionsRepository timetableItemWithBookmark() timetable size:${timetable.timetableItems.size} id:$id itemWithBookmark=${itemWithBookmark?.first?.id} ${itemWithBookmark?.second}"
         }
         return itemWithBookmark
     }
 
     override suspend fun toggleBookmark(id: TimetableItemId) {
+        Logger.d { "DefaultSessionsRepository toggleBookmark() start id:$id" }
         userDataStore.toggleFavorite(id)
+        Logger.d { "DefaultSessionsRepository toggleBookmark() end id:$id" }
+    }
+
+    public companion object {
+        @VisibleForTesting
+        public fun SessionsAllResponse.filterConferenceDaySessions(): SessionsAllResponse {
+            return copy(
+                sessions = sessions.filter {
+                    val startsAt = it.startsAt.toInstantAsJST()
+                    DroidKaigi2024Day.visibleDays()
+                        .any { day -> day.start <= startsAt && startsAt < day.end }
+                },
+            )
+        }
     }
 }

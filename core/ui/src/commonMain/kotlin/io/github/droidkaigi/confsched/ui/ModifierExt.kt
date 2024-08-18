@@ -2,9 +2,11 @@ package io.github.droidkaigi.confsched.ui
 
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -34,4 +36,25 @@ fun Modifier.dashedRoundRect(
         ),
         cornerRadius = CornerRadius(cornerRadius.toPx()),
     )
+}
+
+/**
+ * draw into a Canvas in front of the modified content.
+ *
+ * @param onDraw The lambda to draw into the Canvas
+ *
+ */
+fun Modifier.drawInFrontOf(
+    onDraw: DrawScope.() -> Unit,
+): Modifier = this.drawWithContent {
+    drawContent()
+    onDraw()
+}
+
+fun Modifier.useIf(condition: Boolean, apply: Modifier.() -> Modifier): Modifier {
+    return if (condition) {
+        this.apply()
+    } else {
+        this
+    }
 }
