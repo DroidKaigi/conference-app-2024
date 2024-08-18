@@ -22,9 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
@@ -59,9 +57,9 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun GlassLikeNavRail(
     hazeState: HazeState,
     onTabSelected: (MainScreenTab) -> Unit,
+    currentTab: MainScreenTab,
     modifier: Modifier = Modifier,
 ) {
-    var selectedTabIndex by remember { mutableIntStateOf(0) }
     Box(
         modifier = modifier.size(width = 64.dp, height = 320.dp)
             .hazeChild(state = hazeState, shape = CircleShape).border(
@@ -75,13 +73,13 @@ fun GlassLikeNavRail(
                 shape = CircleShape,
             ),
     ) {
-        NavRailTabs(selectedTab = selectedTabIndex, onTabSelected = {
-            selectedTabIndex = MainScreenTab.indexOf(it)
-            onTabSelected(it)
-        })
+        NavRailTabs(
+            selectedTab = currentTab.ordinal,
+            onTabSelected = { onTabSelected(it) },
+        )
 
         val animatedSelectedTabIndex by animateFloatAsState(
-            targetValue = selectedTabIndex.toFloat(),
+            targetValue = currentTab.ordinal.toFloat(),
             label = "animatedSelectedTabIndex",
             animationSpec = spring(
                 stiffness = Spring.StiffnessLow,
@@ -222,6 +220,7 @@ fun GlassLikeNavRailPreview() {
             GlassLikeNavRail(
                 hazeState = hazeState,
                 {},
+                MainScreenTab.Timetable,
             )
         }
     }

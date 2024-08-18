@@ -1,6 +1,16 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "%@ - %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ - %2$@"
+          }
+        }
+      }
+    },
     "|" : {
 
     },
@@ -13,9 +23,6 @@
           }
         }
       }
-    },
-    "Grid view placeholder" : {
-
     },
     "Timetable" : {
       "localizations" : {
