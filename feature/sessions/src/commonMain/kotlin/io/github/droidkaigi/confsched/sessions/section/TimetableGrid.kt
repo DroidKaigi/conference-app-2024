@@ -25,6 +25,7 @@ import androidx.compose.foundation.lazy.layout.LazyLayoutItemProvider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -79,6 +80,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridRooms
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState.Companion
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
+import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
@@ -399,15 +401,17 @@ fun TimetableGrid(
 @Preview
 @Composable
 fun TimetablePreview() {
-    KaigiTheme {
-        Surface {
-            TimetableGrid(
-                timetable = Timetable.fake(),
-                selectedDay = DroidKaigi2024Day.ConferenceDay1,
-                timetableState = rememberTimetableGridState(),
-                onTimetableItemClick = {},
-                modifier = Modifier.fillMaxSize(),
-            )
+    CompositionLocalProvider(LocalClock provides FakeClock) {
+        KaigiTheme {
+            Surface {
+                TimetableGrid(
+                    timetable = Timetable.fake(),
+                    selectedDay = DroidKaigi2024Day.ConferenceDay1,
+                    timetableState = rememberTimetableGridState(),
+                    onTimetableItemClick = {},
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }
@@ -415,17 +419,19 @@ fun TimetablePreview() {
 @Preview
 @Composable
 fun TimetableVerticalScale20PercentPreview() {
-    KaigiTheme {
-        Surface {
-            TimetableGrid(
-                timetable = Timetable.fake(),
-                selectedDay = DroidKaigi2024Day.ConferenceDay1,
-                timetableState = rememberTimetableGridState(
-                    screenScaleState = ScreenScaleState(0.2f, 0.2f),
-                ),
-                onTimetableItemClick = {},
-                modifier = Modifier.fillMaxSize(),
-            )
+    CompositionLocalProvider(LocalClock provides FakeClock) {
+        KaigiTheme {
+            Surface {
+                TimetableGrid(
+                    timetable = Timetable.fake(),
+                    selectedDay = DroidKaigi2024Day.ConferenceDay1,
+                    timetableState = rememberTimetableGridState(
+                        screenScaleState = ScreenScaleState(0.2f, 0.2f),
+                    ),
+                    onTimetableItemClick = {},
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }
@@ -433,17 +439,19 @@ fun TimetableVerticalScale20PercentPreview() {
 @Preview
 @Composable
 fun TimetableVerticalScale40PercentPreview() {
-    KaigiTheme {
-        Surface {
-            TimetableGrid(
-                timetable = Timetable.fake(),
-                selectedDay = DroidKaigi2024Day.ConferenceDay1,
-                timetableState = rememberTimetableGridState(
-                    screenScaleState = ScreenScaleState(0.4f, 0.4f),
-                ),
-                onTimetableItemClick = {},
-                modifier = Modifier.fillMaxSize(),
-            )
+    CompositionLocalProvider(LocalClock provides FakeClock) {
+        KaigiTheme {
+            Surface {
+                TimetableGrid(
+                    timetable = Timetable.fake(),
+                    selectedDay = DroidKaigi2024Day.ConferenceDay1,
+                    timetableState = rememberTimetableGridState(
+                        screenScaleState = ScreenScaleState(0.4f, 0.4f),
+                    ),
+                    onTimetableItemClick = {},
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }
@@ -451,17 +459,19 @@ fun TimetableVerticalScale40PercentPreview() {
 @Preview
 @Composable
 fun TimetableVerticalScale60PercentPreview() {
-    KaigiTheme {
-        Surface {
-            TimetableGrid(
-                timetable = Timetable.fake(),
-                selectedDay = DroidKaigi2024Day.ConferenceDay1,
-                timetableState = rememberTimetableGridState(
-                    screenScaleState = ScreenScaleState(0.6f, 0.6f),
-                ),
-                onTimetableItemClick = {},
-                modifier = Modifier.fillMaxSize(),
-            )
+    CompositionLocalProvider(LocalClock provides FakeClock) {
+        KaigiTheme {
+            Surface {
+                TimetableGrid(
+                    timetable = Timetable.fake(),
+                    selectedDay = DroidKaigi2024Day.ConferenceDay1,
+                    timetableState = rememberTimetableGridState(
+                        screenScaleState = ScreenScaleState(0.6f, 0.6f),
+                    ),
+                    onTimetableItemClick = {},
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
         }
     }
 }
