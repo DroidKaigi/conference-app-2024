@@ -19,11 +19,19 @@ class EventMapScreenRobot @Inject constructor(
     eventMapServerRobot: DefaultEventMapServerRobot,
 ) : ScreenRobot by screenRobot,
     EventMapServerRobot by eventMapServerRobot {
-    enum class FloorLevel(
+    private enum class FloorLevel(
         val floorName: String,
     ) {
         Basement("B1F"),
         Ground("1F"),
+    }
+
+    private enum class RoomType {
+        Flamingo,
+        Giraffe,
+        Hedgehog,
+        Iguana,
+        Jellyfish,
     }
 
     fun setupScreenContent() {
@@ -37,7 +45,19 @@ class EventMapScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun scrollLazyColumnByIndex(
+    fun scrollToFlamingoAndGiraffe() {
+        scrollLazyColumnByIndex(1)
+    }
+
+    fun scrollToHedgehogAndIguana() {
+        scrollLazyColumnByIndex(3)
+    }
+
+    fun scrollToJellyfish() {
+        scrollLazyColumnByIndex(4)
+    }
+
+    private fun scrollLazyColumnByIndex(
         index: Int,
     ) {
         composeTestRule
@@ -45,7 +65,15 @@ class EventMapScreenRobot @Inject constructor(
             .performScrollToIndex(index)
     }
 
-    fun clickEventMapTab(
+    fun clickEventMapTabOnGround() {
+        clickEventMapTab(FloorLevel.Ground)
+    }
+
+    fun clickEventMapTabOnBasement() {
+        clickEventMapTab(FloorLevel.Basement)
+    }
+
+    private fun clickEventMapTab(
         floorLevel: FloorLevel,
     ) {
         composeTestRule
@@ -54,16 +82,38 @@ class EventMapScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun checkEventMapItemByRoomName(
-        roomName: String,
+    fun checkEventMapItemFlamingoAndGiraffe() {
+        checkEventMapItemByRoomName(roomType = RoomType.Flamingo)
+        checkEventMapItemByRoomName(roomType = RoomType.Giraffe)
+    }
+
+    fun checkEventMapItemHedgehogAndIguana() {
+        checkEventMapItemByRoomName(roomType = RoomType.Hedgehog)
+        checkEventMapItemByRoomName(roomType = RoomType.Iguana)
+    }
+
+    fun checkEventMapItemJellyfish() {
+        checkEventMapItemByRoomName(roomType = RoomType.Jellyfish)
+    }
+
+    private fun checkEventMapItemByRoomName(
+        roomType: RoomType,
     ) {
         composeTestRule
-            .onAllNodes(hasTestTag(EventMapItemTestTag.plus(roomName)))
+            .onAllNodes(hasTestTag(EventMapItemTestTag.plus(roomType.name)))
             .onFirst()
             .assertExists()
     }
 
-    fun checkEventMap(
+    fun checkEventMapOnGround() {
+        checkEventMap(FloorLevel.Ground)
+    }
+
+    fun checkEventMapOnBasement() {
+        checkEventMap(FloorLevel.Basement)
+    }
+
+    private fun checkEventMap(
         floorLevel: FloorLevel,
     ) {
         composeTestRule

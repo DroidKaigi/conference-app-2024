@@ -6,7 +6,6 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot
-import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot.FloorLevel
 import io.github.droidkaigi.confsched.testing.robot.EventMapServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.robot.todoChecks
@@ -43,21 +42,21 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     }
                     describe("when click floor level ground") {
                         run {
-                            clickEventMapTab(FloorLevel.Ground)
+                            clickEventMapTabOnGround()
                         }
                         itShould("showed ground floor level map") {
                             captureScreenWithChecks {
-                                checkEventMap(FloorLevel.Ground)
+                                checkEventMapOnGround()
                             }
                         }
                     }
                     describe("when click floor level basement") {
                         run {
-                            clickEventMapTab(FloorLevel.Basement)
+                            clickEventMapTabOnBasement()
                         }
                         itShould("showed basement floor level map") {
                             captureScreenWithChecks {
-                                checkEventMap(FloorLevel.Basement)
+                                checkEventMapOnBasement()
                             }
                         }
                     }
@@ -66,33 +65,31 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     run {
                         setupEventMapServer(ServerStatus.Operational)
                         setupScreenContent()
-                        scrollLazyColumnByIndex(1)
+                        scrollToFlamingoAndGiraffe()
                     }
                     itShould("ensure that the room types for Flamingo and Giraffe are displayed.") {
                         captureScreenWithChecks(
                             checks = {
-                                checkEventMapItemByRoomName(roomName = "Flamingo")
-                                checkEventMapItemByRoomName(roomName = "Giraffe")
+                                checkEventMapItemFlamingoAndGiraffe()
                             },
                         )
                     }
                     run {
-                        scrollLazyColumnByIndex(3)
+                        scrollToHedgehogAndIguana()
                     }
                     itShould("ensure that the room types for Hedgehog and Iguana are displayed.") {
                         captureScreenWithChecks(
                             checks = {
-                                checkEventMapItemByRoomName(roomName = "Hedgehog")
-                                checkEventMapItemByRoomName(roomName = "Iguana")
+                                checkEventMapItemHedgehogAndIguana()
                             },
                         )
                     }
                     run {
-                        scrollLazyColumnByIndex(4)
+                        scrollToJellyfish()
                     }
                     itShould("ensure that the room types for Jellyfish are displayed.") {
                         captureScreenWithChecks(
-                            checks = { checkEventMapItemByRoomName(roomName = "Jellyfish") },
+                            checks = { checkEventMapItemJellyfish() },
                         )
                     }
                 }
