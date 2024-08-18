@@ -15,6 +15,8 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.atTime
 import kotlinx.datetime.format
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -39,6 +41,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
     }
 
     companion object {
+        @OptIn(FormatStringsInDatetimeFormats::class)
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun behaviors(): List<DescribedBehavior<TimetableScreenRobot>> {
@@ -167,15 +170,17 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         shouldShowTimeLine = true,
                     ),
                 ).forEach { case ->
-                    describe("when the current datetime is ${case.dateTime.format(LocalDateTime.Formats.ISO)}") {
+                    val formattedDateTime = case.dateTime.format(LocalDateTime.Format { byUnicodePattern("yyyy-MM-dd HH-mm") })
+                    describe("when the current datetime is $formattedDateTime") {
                         run {
                             setupTimetableServer(ServerStatus.Operational)
                             setupTimetableScreenContent(case.dateTime)
                             clickTimetableUiTypeChangeButton()
                         }
 
+                        val formattedTime = case.dateTime.time.format(LocalTime.Format { byUnicodePattern("HH-mm") })
                         val description = if (case.shouldShowTimeLine) {
-                            "show an indicator of the current time at ${case.dateTime.time.format(LocalTime.Formats.ISO)}"
+                            "show an indicator of the current time at $formattedTime"
                         } else {
                             "not show an indicator of the current time"
                         }
