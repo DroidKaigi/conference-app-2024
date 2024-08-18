@@ -105,7 +105,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                     describe("when the description is lengthy") {
                         run {
                             setupScreenContentWithLongDescription()
-                            scrollLazyColumnByIndex(2)
+                            scrollToMiddleOfScreen()
                             waitUntilIdle()
                         }
                         itShould("display a more button") {

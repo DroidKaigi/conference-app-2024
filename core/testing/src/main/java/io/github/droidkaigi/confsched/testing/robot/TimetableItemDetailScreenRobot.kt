@@ -84,6 +84,17 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .performScrollToIndex(index)
     }
 
+    fun scrollToMiddleOfScreen() {
+        composeTestRule
+            .onRoot()
+            .performTouchInput {
+                swipeUp(
+                    startY = visibleSize.height / 2F,
+                    endY = visibleSize.height / 7F,
+                )
+            }
+    }
+
     fun checkScreenCapture() {
         composeTestRule
             .onNode(isRoot())
