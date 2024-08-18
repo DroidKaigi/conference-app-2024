@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.Icons.Filled
+import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -27,7 +29,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -43,6 +48,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.ui.UiRes
+import io.github.droidkaigi.confsched.ui.animation.LocalFavoriteAnimationScope
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
 
@@ -156,28 +162,54 @@ fun TimetableItemCard(
                     }
                 }
             }
-            TextButton(
-                onClick = { onBookmarkClick(timetableItem, true) },
-                modifier = Modifier.testTag(TimetableItemCardBookmarkButtonTestTag),
-            ) {
-                if (isBookmarked) {
-                    Icon(
-                        Icons.Filled.Favorite,
-                        contentDescription = stringResource(UiRes.string.bookmarked),
-                        tint = MaterialTheme.colorScheme.primaryFixed,
-                        modifier = Modifier
-                            .testTag(TimetableItemCardBookmarkedIconTestTag),
-                    )
-                } else {
-                    Icon(
-                        Icons.Outlined.FavoriteBorder,
-                        contentDescription = stringResource(UiRes.string.not_bookmarked),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
+
+            FavoriteButton(
+                isBookmarked = isBookmarked,
+                onClick = {
+                    onBookmarkClick(timetableItem, true)
+                },
+            )
         }
         // TODO: There is no data for the warning string right now. (Should go here)
+    }
+}
+
+@Composable
+private fun FavoriteButton(
+    isBookmarked: Boolean,
+    onClick: () -> Unit,
+) {
+    val animationScope = LocalFavoriteAnimationScope.current
+    var favoriteButtonOffset = Offset.Zero
+
+    TextButton(
+        onClick = {
+            onClick()
+            if (!isBookmarked) {
+                animationScope.startAnimation(favoriteButtonOffset)
+            }
+        },
+        modifier = Modifier
+            .testTag(TimetableItemCardBookmarkButtonTestTag)
+            .onGloballyPositioned { coordinates ->
+                favoriteButtonOffset = coordinates.positionInRoot()
+            },
+    ) {
+        if (isBookmarked) {
+            Icon(
+                Filled.Favorite,
+                contentDescription = stringResource(UiRes.string.bookmarked),
+                tint = MaterialTheme.colorScheme.primaryFixed,
+                modifier = Modifier
+                    .testTag(TimetableItemCardBookmarkedIconTestTag),
+            )
+        } else {
+            Icon(
+                Outlined.FavoriteBorder,
+                contentDescription = stringResource(UiRes.string.not_bookmarked),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
     }
 }
 

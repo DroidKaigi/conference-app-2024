@@ -1,4 +1,5 @@
 import Foundation
+import CommonComponents
 import shared
 
 public enum DayTab: String, CaseIterable, Identifiable, Sendable {
@@ -26,6 +27,12 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
         self.startsTimeString = startsTimeString
         self.endsTimeString = endsTimeString
         self.items = items
+    }
+    
+    func getItem(for room: RoomType) -> TimetableItemWithFavorite? {
+        items.filter {
+            $0.timetableItem.room.type == room   //TODO: roomIj handling not decided?
+        }.first
     }
 }
 
