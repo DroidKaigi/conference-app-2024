@@ -68,6 +68,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -285,9 +287,12 @@ internal fun ProfileCardScreen(
             }
         }
         if (uiState.isLoading) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.padding(padding).fillMaxSize(),
+            Dialog(
+                onDismissRequest = {},
+                properties = DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false
+                )
             ) {
                 CircularProgressIndicator()
             }
