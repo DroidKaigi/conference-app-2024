@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
@@ -14,6 +15,11 @@ import io.github.droidkaigi.confsched.model.TimetableCategory
 import io.github.droidkaigi.confsched.model.TimetableSessionType
 import io.github.droidkaigi.confsched.model.fakes
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val SearchFiltersLazyRowTestTag = "SearchFiltersLazyRowTestTag"
+const val SearchFiltersFilterDayChipTestTag = "SearchFiltersFilterDayChipTestTag"
+const val SearchFiltersFilterCategoryChipTestTag = "SearchFiltersFilterCategoryChipTestTag"
+const val SearchFiltersFilterLanguageChipTestTag = "SearchFiltersFilterLanguageChipTestTag"
 
 @Composable
 fun SearchFilters(
@@ -29,18 +35,20 @@ fun SearchFilters(
     modifier: Modifier = Modifier,
 ) {
     LazyRow(
-        modifier = modifier,
+        modifier = modifier.testTag(SearchFiltersLazyRowTestTag),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
         contentPadding = contentPadding,
     ) {
         item {
             FilterDayChip(
+                modifier = Modifier.testTag(SearchFiltersFilterDayChipTestTag),
                 uiState = filterDayUiState,
                 onSelect = onSelectDay,
             )
         }
         item {
             FilterCategoryChip(
+                modifier = Modifier.testTag(SearchFiltersFilterCategoryChipTestTag),
                 uiState = filterCategoryUiState,
                 onSelect = onSelectCategory,
             )
@@ -53,6 +61,7 @@ fun SearchFilters(
         }
         item {
             FilterLanguageChip(
+                modifier = Modifier.testTag(SearchFiltersFilterLanguageChipTestTag),
                 uiState = filterLanguageUiState,
                 onSelect = onSelectLanguage,
             )

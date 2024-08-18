@@ -2,10 +2,11 @@ import ComposableArchitecture
 import SwiftUI
 import Theme
 import CommonComponents
+import Model
 
 public struct StaffView: View {
     private let store: StoreOf<StaffReducer>
-    @State var selectedStaffData: StaffData?
+    @State var selectedStaffData: Staff?
 
     public init(store: StoreOf<StaffReducer>) {
         self.store = store
@@ -14,7 +15,7 @@ public struct StaffView: View {
     public var body: some View {
         ScrollView {
             LazyVStack {
-                ForEach(store.list, id: \.id) { staff in
+                ForEach(store.list) { staff in
                     Button {
                         selectedStaffData = staff
                     } label: {

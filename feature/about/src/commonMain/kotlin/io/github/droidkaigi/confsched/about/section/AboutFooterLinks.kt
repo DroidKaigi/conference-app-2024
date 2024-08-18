@@ -24,22 +24,15 @@ import conference_app_2024.feature.about.generated.resources.icon_youtube
 import conference_app_2024.feature.about.generated.resources.license_description
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutFooterLinksIcon
-import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksMediumItemTestTag
-import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksXItemTestTag
-import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.LinksYouTubeItemTestTag
-import io.github.droidkaigi.confsched.about.section.AboutFooterLinksSectionTestTag.Section
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@Suppress("ConstPropertyName")
-object AboutFooterLinksSectionTestTag {
-    const val Section = "FooterLinksSection"
-    const val LinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItem"
-    const val LinksXItemTestTag = "AboutFooterLinksXItem"
-    const val LinksMediumItemTestTag = "AboutFooterLinksMediumItem"
-}
+const val AboutFooterLinksTestTag = "AboutFooterLinksTestTag"
+const val AboutFooterLinksYouTubeItemTestTag = "AboutFooterLinksYouTubeItemTestTag"
+const val AboutFooterLinksXItemTestTag = "AboutFooterLinksXItemTestTag"
+const val AboutFooterLinksMediumItemTestTag = "AboutFooterLinksMediumItemTestTag"
 
 @Composable
 fun AboutFooterLinks(
@@ -53,25 +46,25 @@ fun AboutFooterLinks(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .testTag(Section)
+            .testTag(AboutFooterLinksTestTag)
             .fillMaxWidth()
             .padding(top = 24.dp, bottom = 16.dp),
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             AboutFooterLinksIcon(
-                testTag = LinksYouTubeItemTestTag,
+                testTag = AboutFooterLinksYouTubeItemTestTag,
                 painter = painterResource(AboutRes.drawable.icon_youtube),
                 contentDescription = stringResource(AboutRes.string.content_description_youtube),
                 onClick = onYouTubeClick,
             )
             AboutFooterLinksIcon(
-                testTag = LinksXItemTestTag,
+                testTag = AboutFooterLinksXItemTestTag,
                 painter = painterResource(AboutRes.drawable.icon_x),
                 contentDescription = "X",
                 onClick = onXClick,
             )
             AboutFooterLinksIcon(
-                testTag = LinksMediumItemTestTag,
+                testTag = AboutFooterLinksMediumItemTestTag,
                 painter = painterResource(AboutRes.drawable.icon_medium),
                 contentDescription = "Medium",
                 onClick = onMediumClick,

@@ -13,13 +13,14 @@ fun SearchList(
     onTimetableItemClick: (TimetableItem) -> Unit,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     TimetableList(
         uiState = uiState,
         scrollState = rememberLazyListState(),
         onBookmarkClick = onBookmarkClick,
         onTimetableItemClick = onTimetableItemClick,
-        contentPadding = PaddingValues(),
+        contentPadding = contentPadding,
         highlightWord = highlightWord,
         enableAutoScrolling = false,
         modifier = modifier,
