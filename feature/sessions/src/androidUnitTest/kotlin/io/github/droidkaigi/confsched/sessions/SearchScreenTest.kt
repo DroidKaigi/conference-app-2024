@@ -6,6 +6,7 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot
+import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Category
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.ConferenceDay
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
@@ -83,6 +84,30 @@ class SearchScreenTest(
                                         checkTimetableListItemByConferenceDay(
                                             checkDay = conference,
                                         )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    describe("when filter category chip click") {
+                        run {
+                            clickFilterCategoryChip()
+                        }
+                        itShould("show drop down menu") {
+                            captureScreenWithChecks {
+                                checkDisplayedFilterCategoryChip()
+                            }
+                        }
+                        Category.entries.forEach { category ->
+                            describe("when click category ${category.categoryName}") {
+                                run {
+                                    clickCategory(
+                                        category = category,
+                                    )
+                                }
+                                itShould("selected category ${category.categoryName}") {
+                                    captureScreenWithChecks {
+                                        checkTimetableListItemByCategory(category)
                                     }
                                 }
                             }
