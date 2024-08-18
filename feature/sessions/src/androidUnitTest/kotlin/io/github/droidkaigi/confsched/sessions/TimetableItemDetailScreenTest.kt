@@ -106,7 +106,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         run {
                             setupScreenContentWithLongDescription()
                             scrollLazyColumnByIndex(2)
-                            advanceTimeBy(500)
+                            waitUntilIdle()
                         }
                         itShould("display a more button") {
                             captureScreenWithChecks {

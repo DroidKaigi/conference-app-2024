@@ -56,9 +56,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     }
 
     suspend fun setupScreenContentWithLongDescription() =
-    fun advanceTimeBy(milliseconds: Long) {
-        composeTestRule.mainClock.advanceTimeBy(milliseconds)
-    }
+        setupScreenContent(FakeSessionsApiClient.defaultSessionIdWithLongDescription)
 
     suspend fun clickBookmarkButton() {
         composeTestRule
