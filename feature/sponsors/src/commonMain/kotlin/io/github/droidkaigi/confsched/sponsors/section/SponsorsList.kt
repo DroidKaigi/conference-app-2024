@@ -62,8 +62,8 @@ fun SponsorsList(
             }
             .testTag(SponsorsListLazyVerticalGridTestTag),
         contentPadding = PaddingValues(
-            start = 12.dp,
-            end = 12.dp,
+            start = 16.dp,
+            end = 16.dp,
             bottom = 48.dp + contentPadding.calculateBottomPadding()
         ),
     ) {
