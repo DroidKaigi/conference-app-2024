@@ -22,6 +22,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenLazyColumnTestTag
+import io.github.droidkaigi.confsched.sessions.component.DescriptionMoreButtonTestTag
 import io.github.droidkaigi.confsched.sessions.component.SummaryCardTextTag
 import io.github.droidkaigi.confsched.sessions.component.TargetAudienceSectionTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
@@ -54,6 +55,13 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             }
         }
         waitUntilIdle()
+    }
+
+    suspend fun setupScreenContentWithLongDescription() =
+        setupScreenContent(SessionsAllResponse.Companion.fake().sessions[4].id)
+
+    fun advanceTimeBy(milliseconds: Long) {
+        composeTestRule.mainClock.advanceTimeBy(milliseconds)
     }
 
     suspend fun clickBookmarkButton() {
@@ -147,6 +155,13 @@ class TimetableItemDetailScreenRobot @Inject constructor(
                     substring = true,
                 )
         }
+    }
+
+    fun checkDisplayingMoreButton() {
+        composeTestRule
+            .onNode(hasTestTag(DescriptionMoreButtonTestTag))
+            .assertExists()
+            .assertIsDisplayed()
     }
 
     companion object {
