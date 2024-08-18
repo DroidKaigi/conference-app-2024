@@ -52,6 +52,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val TargetAudienceSectionTestTag = "TargetAudienceSectionTestTag"
+const val DescriptionMoreButtonTestTag = "DescriptionMoreButtonTestTag"
 
 @Composable
 fun TimetableItemDetailContent(
@@ -130,9 +131,11 @@ private fun DescriptionSection(
             visible = isExpand.not() && isOverFlow,
             enter = EnterTransition.None,
             exit = fadeOut(),
+            modifier = Modifier.testTag(DescriptionMoreButtonTestTag),
         ) {
             OutlinedButton(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
                 onClick = { isExpand = true },
             ) {
                 Text(
