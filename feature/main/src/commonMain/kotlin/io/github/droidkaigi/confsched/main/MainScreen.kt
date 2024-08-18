@@ -64,6 +64,7 @@ import io.github.droidkaigi.confsched.main.section.GlassLikeNavRail
 import io.github.droidkaigi.confsched.model.isBlurSupported
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.animation.ProvideFavoriteAnimation
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -127,14 +128,18 @@ fun MainScreen(
         snackbarHostState = snackbarHostState,
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
-    MainScreen(
-        uiState = uiState,
-        snackbarHostState = snackbarHostState,
-        navigationType = navigationType,
-        routeToTab = mainNestedGraphStateHolder::routeToTab,
-        onTabSelected = mainNestedGraphStateHolder::onTabSelected,
-        mainNestedNavGraph = mainNestedNavGraph,
-    )
+    ProvideFavoriteAnimation(
+        navigationType == BottomNavigation,
+    ) {
+        MainScreen(
+            uiState = uiState,
+            snackbarHostState = snackbarHostState,
+            navigationType = navigationType,
+            routeToTab = mainNestedGraphStateHolder::routeToTab,
+            onTabSelected = mainNestedGraphStateHolder::onTabSelected,
+            mainNestedNavGraph = mainNestedNavGraph,
+        )
+    }
 }
 
 sealed class IconRepresentation {
