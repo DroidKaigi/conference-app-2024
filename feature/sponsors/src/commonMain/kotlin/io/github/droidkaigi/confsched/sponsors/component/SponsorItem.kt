@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.sponsors.generated.resources.content_description_sponsor_logo
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -29,7 +30,7 @@ fun SponsorItem(
     Card(
         modifier = modifier.clickable { onSponsorsItemClick(sponsor.link) },
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.inverseSurface,
+            containerColor = Color.White,
         ),
     ) {
         Image(
