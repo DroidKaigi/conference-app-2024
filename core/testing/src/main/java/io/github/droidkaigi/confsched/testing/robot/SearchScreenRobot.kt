@@ -29,6 +29,8 @@ import io.github.droidkaigi.confsched.ui.Inject
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTitleTextTestTag
 
+const val DemoSearchWord = "Demo"
+
 class SearchScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
@@ -70,7 +72,11 @@ class SearchScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun inputSearchWord(text: String) {
+    fun inputDemoSearchWord() {
+        inputSearchWord(DemoSearchWord)
+    }
+
+    private fun inputSearchWord(text: String) {
         composeTestRule
             .onNodeWithTag(SearchTextFieldAppBarTextFieldTestTag)
             .performTextInput(text)
@@ -241,13 +247,21 @@ class SearchScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun checkSearchWordDisplayed(text: String) {
+    fun checkDemoSearchWordDisplayed() {
+        checkSearchWordDisplayed(DemoSearchWord)
+    }
+
+    private fun checkSearchWordDisplayed(text: String) {
         composeTestRule
             .onNodeWithTag(SearchTextFieldAppBarTextFieldTestTag)
             .assertTextEquals(text)
     }
 
-    fun checkTimetableListItemsHasText(searchWord: String) {
+    fun checkTimetableListItemsHasDemoText() {
+        checkTimetableListItemsHasText(DemoSearchWord)
+    }
+
+    private fun checkTimetableListItemsHasText(searchWord: String) {
         composeTestRule
             .onAllNodesWithTag(TimetableItemCardTitleTextTestTag)
             .assertAll(hasText(text = searchWord, ignoreCase = true))

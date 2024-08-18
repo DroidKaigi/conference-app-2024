@@ -53,14 +53,13 @@ class SearchScreenTest(
                         }
                     }
                     describe("input search word to TextField") {
-                        val searchWord = "Demo"
                         run {
-                            inputSearchWord(searchWord)
+                            inputDemoSearchWord()
                         }
                         itShould("show search word and filtered items") {
                             captureScreenWithChecks {
-                                checkSearchWordDisplayed(searchWord)
-                                checkTimetableListItemsHasText(searchWord)
+                                checkDemoSearchWordDisplayed()
+                                checkTimetableListItemsHasDemoText()
                             }
                         }
                     }
