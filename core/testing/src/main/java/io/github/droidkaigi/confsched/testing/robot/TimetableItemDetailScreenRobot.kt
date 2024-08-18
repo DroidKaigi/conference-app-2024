@@ -16,6 +16,7 @@ import androidx.compose.ui.test.swipeUp
 import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
+import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.fake
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -38,7 +39,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     FontScaleRobot by fontScaleRobot {
 
     suspend fun setupScreenContent(
-        sessionId: String = SessionsAllResponse.Companion.fake().sessions.first().id,
+        sessionId: String = FakeSessionsApiClient.defaultSessionId
     ) {
         robotTestRule.setContentWithNavigation<TimetableItemDetailDestination>(
             startDestination = { TimetableItemDetailDestination(sessionId) },
@@ -76,7 +77,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .performTouchInput {
                 swipeUp(
                     startY = visibleSize.height * 3F / 4,
-                    endY = visibleSize.height / 2F,
+                    endY = visibleSize.height / 4F,
                 )
             }
     }
@@ -112,7 +113,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onNode(hasTestTag(TimetableItemDetailHeadlineTestTag))
             .assertExists()
             .assertIsDisplayed()
-            .assertTextEquals("Demo Welcome Talk 1")
+            .assertTextEquals(FakeSessionsApiClient.defaultSession.title.en!!)
     }
 
     fun checkBookmarkedSession() {
@@ -164,7 +165,6 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     }
 
     companion object {
-        val defaultSessionId: String =
-            SessionsAllResponse.fake().sessions.find { it.sessionType == "NORMAL" }!!.id
+        val defaultSessionId = FakeSessionsApiClient.defaultSession.id
     }
 }
