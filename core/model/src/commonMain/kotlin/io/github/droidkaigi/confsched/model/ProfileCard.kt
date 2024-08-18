@@ -10,13 +10,13 @@ sealed interface ProfileCard {
         val occupation: String,
         val link: String,
         val image: String,
-        val theme: ProfileCardTheme,
+        val cardType: ProfileCardType,
     ) : ProfileCard {
         public companion object
     }
 }
 
-enum class ProfileCardTheme {
+enum class ProfileCardType {
     Iguana,
     Hedgehog,
     Giraffe,
@@ -31,6 +31,6 @@ public fun ProfileCard.Exists.Companion.fake(): ProfileCard.Exists {
         occupation = "test",
         link = "test",
         image = generateWhiteImageBase64(),
-        theme = ProfileCardTheme.Iguana,
+        cardType = ProfileCardType.Iguana,
     )
 }
