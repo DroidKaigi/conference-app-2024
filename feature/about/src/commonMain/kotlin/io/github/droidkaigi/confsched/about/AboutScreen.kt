@@ -128,7 +128,7 @@ fun AboutScreen(
                 },
                 onSettingsItemClick = {
                     onAboutItemClick(AboutItem.Settings)
-                }
+                },
             )
             item {
                 AboutFooterLinks(
