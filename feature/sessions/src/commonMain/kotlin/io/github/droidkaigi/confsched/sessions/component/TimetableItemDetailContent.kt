@@ -134,8 +134,7 @@ private fun DescriptionSection(
             modifier = Modifier.testTag(DescriptionMoreButtonTestTag),
         ) {
             OutlinedButton(
-                modifier = Modifier
-                    .fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(),
                 onClick = { isExpand = true },
             ) {
                 Text(
