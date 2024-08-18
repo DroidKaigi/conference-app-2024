@@ -11,12 +11,15 @@ import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.SearchScreen
 import io.github.droidkaigi.confsched.sessions.component.DropdownFilterChipTestTagPrefix
 import io.github.droidkaigi.confsched.sessions.component.SearchFiltersFilterCategoryChipTestTag
 import io.github.droidkaigi.confsched.sessions.component.SearchFiltersFilterDayChipTestTag
+import io.github.droidkaigi.confsched.sessions.component.SearchFiltersFilterLanguageChipTestTag
+import io.github.droidkaigi.confsched.sessions.component.SearchFiltersLazyRowTestTag
 import io.github.droidkaigi.confsched.sessions.component.SearchTextFieldAppBarTextFieldTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
@@ -47,6 +50,14 @@ class SearchScreenRobot @Inject constructor(
         Other("Other en"),
     }
 
+    enum class Language(
+        val tagName: String,
+    ) {
+        MIXED("MIXED"),
+        JAPANESE("JA"),
+        ENGLISH("EN"),
+    }
+
     fun setupSearchScreenContent() {
         robotTestRule.setContent {
             KaigiTheme {
@@ -66,6 +77,13 @@ class SearchScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
+    fun scrollToFilterLanguageChip() {
+        composeTestRule
+            .onNode(hasTestTag(SearchFiltersLazyRowTestTag))
+            .performScrollToNode(hasTestTag(SearchFiltersFilterLanguageChipTestTag))
+        waitUntilIdle()
+    }
+
     fun clickFilterDayChip() {
         composeTestRule
             .onNode(hasTestTag(SearchFiltersFilterDayChipTestTag))
@@ -76,6 +94,13 @@ class SearchScreenRobot @Inject constructor(
     fun clickFilterCategoryChip() {
         composeTestRule
             .onNode(hasTestTag(SearchFiltersFilterCategoryChipTestTag))
+            .performClick()
+        waitUntilIdle()
+    }
+
+    fun clickFilterLanguageChip() {
+        composeTestRule
+            .onNode(hasTestTag(SearchFiltersFilterLanguageChipTestTag))
             .performClick()
         waitUntilIdle()
     }
@@ -107,6 +132,22 @@ class SearchScreenRobot @Inject constructor(
                 ),
             )
             .filter(matcher = hasText(category.categoryName))
+            .onFirst()
+            .performClick()
+        waitUntilIdle()
+    }
+
+    fun clickLanguage(
+        language: Language,
+    ) {
+        composeTestRule
+            .onAllNodes(
+                hasTestTag(
+                    testTag = DropdownFilterChipTestTagPrefix,
+                    substring = true,
+                ),
+            )
+            .filter(matcher = hasText(language.tagName))
             .onFirst()
             .performClick()
         waitUntilIdle()
@@ -167,6 +208,25 @@ class SearchScreenRobot @Inject constructor(
                 value = containText,
                 substring = true,
             )
+        waitUntilIdle()
+    }
+
+    fun checkTimetableListItemByLanguage(
+        language: Language,
+    ) {
+        val doesNotContains = Language.entries.filterNot { it == language }
+
+        composeTestRule
+            .onAllNodes(hasTestTag(TimetableItemCardTestTag))
+            .onFirst()
+            .assertTextContains(language.tagName)
+
+        doesNotContains.forEach { doesNotContain ->
+            composeTestRule
+                .onAllNodes(hasTestTag(TimetableItemCardTestTag))
+                .onFirst()
+                .assertTextDoesNotContain(doesNotContain.tagName)
+        }
         waitUntilIdle()
     }
 
