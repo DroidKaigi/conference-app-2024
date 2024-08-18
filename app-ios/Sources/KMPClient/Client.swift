@@ -1,6 +1,7 @@
 import DependenciesMacros
 import Dependencies
 import shared
+import Model
 
 extension DependencyValues {
     public var timetableClient: TimetableClient {
@@ -38,7 +39,7 @@ public struct TimetableClient: Sendable {
 
 @DependencyClient
 public struct StaffClient: Sendable {
-    public var streamStaffs: @Sendable () throws -> AsyncThrowingStream<[Staff], any Error>
+    public var streamStaffs: @Sendable () throws -> AsyncThrowingStream<[Model.Staff], any Error>
 }
 
 @DependencyClient
