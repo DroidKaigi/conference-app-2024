@@ -48,9 +48,7 @@ class StaffScreenTest(
                         }
                         itShould("show first and second staffs") {
                             captureScreenWithChecks {
-                                checkRangeStaffItemsDisplayed(
-                                    fromTo = 0..2,
-                                )
+                                checkShowFirstAndSecondStaffs()
                             }
                         }
 

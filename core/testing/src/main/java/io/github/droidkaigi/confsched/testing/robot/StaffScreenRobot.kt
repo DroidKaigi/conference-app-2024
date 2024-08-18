@@ -41,7 +41,13 @@ class StaffScreenRobot @Inject constructor(
             .performScrollToIndex(10)
     }
 
-    fun checkRangeStaffItemsDisplayed(
+    fun checkShowFirstAndSecondStaffs() {
+        checkRangeStaffItemsDisplayed(
+            fromTo = 0..2,
+        )
+    }
+
+    private fun checkRangeStaffItemsDisplayed(
         fromTo: IntRange,
     ) {
         val staffList = Staff.fakes().subList(fromTo.first, fromTo.last)
