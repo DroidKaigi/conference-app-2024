@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.about.section
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -19,18 +20,19 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import conference_app_2024.feature.about.generated.resources.Res
-import conference_app_2024.feature.about.generated.resources.about_header
+import conference_app_2024.core.ui.generated.resources.about_header_year
 import conference_app_2024.feature.about.generated.resources.description
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetailSummaryCard
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.ui.UiRes
+import io.github.droidkaigi.confsched.ui.provideAboutHeaderTitlePainter
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.roundToInt
 
-private const val maxAboutHeaderOffsetDp = 40
+private const val MaxAboutHeaderOffsetDp = 40
 
 const val AboutDetailTestTag = "AboutDetailTestTag"
 
@@ -46,7 +48,7 @@ fun AboutDroidKaigiDetail(
             if (screenScrollState.layoutInfo.visibleItemsInfo.isNotEmpty() && screenScrollState.firstVisibleItemIndex == 0) {
                 val scrollOffset = screenScrollState.firstVisibleItemScrollOffset.toFloat()
                 val height = screenScrollState.layoutInfo.visibleItemsInfo.first().size
-                (maxAboutHeaderOffsetDp * (scrollOffset / height)).roundToInt()
+                (MaxAboutHeaderOffsetDp * (scrollOffset / height)).roundToInt()
             } else {
                 0
             }
@@ -56,14 +58,24 @@ fun AboutDroidKaigiDetail(
     Column(
         modifier = modifier.testTag(AboutDetailTestTag),
     ) {
-        Image(
-            painter = painterResource(Res.drawable.about_header),
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset(y = aboutHeaderOffset.dp),
-        )
+        Box {
+            Image(
+                painter = painterResource(UiRes.drawable.about_header_year),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(y = aboutHeaderOffset.dp),
+            )
+            Image(
+                painter = provideAboutHeaderTitlePainter(),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(y = aboutHeaderOffset.dp),
+            )
+        }
         Text(
             text = stringResource(AboutRes.string.description),
             style = MaterialTheme.typography.titleMedium,

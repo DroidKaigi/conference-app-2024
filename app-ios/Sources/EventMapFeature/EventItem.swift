@@ -19,7 +19,7 @@ struct EventItem: View {
             }
             .padding(.bottom, 8)
 
-            VStack(spacing: 8) {
+            VStack(alignment: .leading ,spacing: 8) {
                 Text(event.description_.currentLangTitle)
                     .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     .textStyle(.bodyLarge)
@@ -36,6 +36,11 @@ struct EventItem: View {
                                 }
                         }
                     }
+                if let message = event.message {
+                    Text(message.currentLangTitle)
+                        .foregroundStyle(AssetColors.Tertiary.tertiary.swiftUIColor)
+                        .textStyle(.bodyMedium)
+                }
                 
                 if canBeExpanded {
                     Button {
