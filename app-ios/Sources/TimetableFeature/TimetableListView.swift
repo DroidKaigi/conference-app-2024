@@ -150,9 +150,6 @@ struct TimetableGridView: View {
                             
                         } else {
                             ForEach(rooms, id: \.self) { room in
-                                timeBlock.getCellForRoom(room: room, cellCount: 1, onTap: { item in
-                                    store.send(.view(.timetableItemTapped(item)))
-                                })
                                 if let cell = timeBlock.getCellForRoom(room: room, onTap: { item in
                                     store.send(.view(.timetableItemTapped(item)))}) {
                                     cell

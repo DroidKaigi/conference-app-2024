@@ -24,17 +24,19 @@ public struct TimetableGridCard: View {
         } label: {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
-                    timetableItem.room.type.shape
-                        .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                    if cellCount == 1 {
+                        timetableItem.room.type.shape
+                            .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                    }
                     Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                         .textStyle(.labelMedium)
-                        .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                        .foregroundStyle(cellCount>1 ? AssetColors.Surface.onSurfaceVariant.swiftUIColor : timetableItem.room.roomTheme.primaryColor)
                     Spacer()
                 }
                 
                 Text(timetableItem.title.currentLangTitle)
                     .textStyle(.titleMedium)
-                    .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                    .foregroundStyle(cellCount>1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor)
                     .multilineTextAlignment(.leading)
                 
                 Spacer()
@@ -61,8 +63,8 @@ public struct TimetableGridCard: View {
             .frame(maxWidth: .infinity)
             .padding(12)
             .frame(width: 192*CGFloat(cellCount)+CGFloat(12*(cellCount-1)), height: 153)
-            .background(timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
-            .overlay(RoundedRectangle(cornerRadius: 4).stroke(timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
+            .background(cellCount>1 ? AssetColors.Surface.surfaceContainer.swiftUIColor : timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(cellCount>1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
         }
     }
 }
