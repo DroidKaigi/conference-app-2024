@@ -16,6 +16,7 @@ import androidx.compose.ui.test.swipeUp
 import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
+import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsRepository.Companion.filterConferenceDaySessions
 import io.github.droidkaigi.confsched.data.sessions.fake
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -37,9 +38,8 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     FontScaleRobot by fontScaleRobot {
 
     suspend fun setupScreenContent() {
-        val firstSessionId = SessionsAllResponse.Companion.fake().sessions.first().id
         robotTestRule.setContentWithNavigation<TimetableItemDetailDestination>(
-            startDestination = { TimetableItemDetailDestination(firstSessionId) },
+            startDestination = { TimetableItemDetailDestination(defaultSessionId) },
         ) {
             KaigiTheme {
                 TimetableItemDetailScreen(
@@ -67,7 +67,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .performTouchInput {
                 swipeUp(
                     startY = visibleSize.height * 3F / 4,
-                    endY = visibleSize.height / 2F,
+                    endY = visibleSize.height / 4F,
                 )
             }
     }
@@ -103,7 +103,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onNode(hasTestTag(TimetableItemDetailHeadlineTestTag))
             .assertExists()
             .assertIsDisplayed()
-            .assertTextEquals("Demo Welcome Talk 1")
+            .assertTextEquals(defaultSession.title.en!!)
     }
 
     fun checkBookmarkedSession() {
@@ -148,7 +148,9 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     }
 
     companion object {
+        val defaultSession = SessionsAllResponse.fake()
+            .filterConferenceDaySessions().sessions.find { it.sessionType == "NORMAL" }!!
         val defaultSessionId: String =
-            SessionsAllResponse.fake().sessions.find { it.sessionType == "NORMAL" }!!.id
+            defaultSession!!.id
     }
 }

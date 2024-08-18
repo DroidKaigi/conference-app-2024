@@ -89,7 +89,7 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
     for (dayIndex in 0..2) {
         sessions.add(
             SessionResponse(
-                id = "0570556a-8a53-49d6-916c-26ff85635d86",
+                id = "0570556a-8a53-49d6-916c-26ff85635d86$dayIndex",
                 title = LocaledResponse(
                     ja = "Demo Welcome Talk $dayIndex",
                     en = "Demo Welcome Talk $dayIndex",
@@ -124,7 +124,7 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                     (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds + 30 * 60).seconds)
 
                 val session = SessionResponse(
-                    id = "$day$room$index",
+                    id = "$day${room.id}$index",
                     isServiceSession = false,
                     title = LocaledResponse(
                         ja = "DroidKaigiのアプリのアーキテクチャ day$day room${room.name.ja} index$index",

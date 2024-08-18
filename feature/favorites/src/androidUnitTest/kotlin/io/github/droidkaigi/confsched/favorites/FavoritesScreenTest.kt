@@ -27,11 +27,9 @@ class FavoritesScreenTest(
     @Inject
     lateinit var favoritesScreenRobot: FavoritesScreenRobot
 
-    @Inject lateinit var testDispatcher: TestDispatcher
-
     @Test
     fun runTest() {
-        runRobot(context = testDispatcher, robot = favoritesScreenRobot) {
+        runRobot(robot = favoritesScreenRobot) {
             testCase.execute(favoritesScreenRobot)
         }
     }
