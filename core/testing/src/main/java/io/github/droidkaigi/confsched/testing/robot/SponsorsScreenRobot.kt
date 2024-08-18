@@ -118,7 +118,7 @@ class SponsorsScreenRobot @Inject constructor(
         composeTestRule
             .onAllNodes(
                 hasTestTag(
-                    SponsorsListSponsorItemTestTagPrefix,
+                    testTag = SponsorsListSponsorItemTestTagPrefix,
                     substring = true,
                 ),
             )
@@ -128,7 +128,12 @@ class SponsorsScreenRobot @Inject constructor(
     fun checkDoesNotSponsorItemsDisplayed() {
         val sponsor = Sponsor.fakes().first()
         composeTestRule
-            .onNode(hasTestTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)))
+            .onNode(
+                hasTestTag(
+                    testTag = SponsorsListSponsorItemTestTagPrefix,
+                    substring = true,
+                )
+            )
             .assertDoesNotExist()
 
         composeTestRule
