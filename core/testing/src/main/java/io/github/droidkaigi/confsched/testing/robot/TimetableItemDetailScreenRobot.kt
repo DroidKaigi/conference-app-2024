@@ -17,8 +17,6 @@ import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
-import io.github.droidkaigi.confsched.data.sessions.fake
-import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
@@ -58,8 +56,6 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     }
 
     suspend fun setupScreenContentWithLongDescription() =
-        setupScreenContent(SessionsAllResponse.Companion.fake().sessions[4].id)
-
     fun advanceTimeBy(milliseconds: Long) {
         composeTestRule.mainClock.advanceTimeBy(milliseconds)
     }

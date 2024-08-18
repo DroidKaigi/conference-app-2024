@@ -50,6 +50,13 @@ public class FakeSessionsApiClient : SessionsApiClient {
         public val defaultSession: SessionResponse = SessionsAllResponse.fake()
             .filterConferenceDaySessions().sessions.find { it.sessionType == "NORMAL" }!!
         public val defaultSessionId: String = defaultSession!!.id
+
+        public val defaultSessionWithLongDescription: SessionResponse = SessionsAllResponse.fake()
+            .filterConferenceDaySessions().sessions.find {
+                (it.description?.split("\n")?.size ?: 0) >= 7
+            }!!
+        public val defaultSessionIdWithLongDescription: String =
+            defaultSessionWithLongDescription.id
     }
 }
 
@@ -134,11 +141,12 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                     (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds).seconds)
                 val end =
                     (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds + 30 * 60).seconds)
-                val sessionCategoryItemId = if (categories.first().items.size % index.plus(1) == 0) {
-                    1
-                } else {
-                    2
-                }
+                val sessionCategoryItemId =
+                    if (categories.first().items.size % index.plus(1) == 0) {
+                        1
+                    } else {
+                        2
+                    }
 
                 val session = SessionResponse(
                     id = "$day${room.id}$index",
