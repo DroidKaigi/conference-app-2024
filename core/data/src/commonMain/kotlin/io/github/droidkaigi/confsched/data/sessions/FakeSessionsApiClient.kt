@@ -148,6 +148,23 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                         2
                     }
 
+                val description = if (index % 2 == 0) {
+                    "これはディスクリプションです。\nこれはディスクリプションです。\n" +
+                        "これはディスクリプションです。\nこれはディスクリプションです。\n" +
+                        "これはディスクリプションです。\nこれはディスクリプションです。\n" +
+                        "これはディスクリプションです。\nこれはディスクリプションです。\n"
+                } else {
+                    "これはディスクリプションです。"
+                }
+
+                val englishDescription = if (index % 2 == 0) {
+                    "This is a description\nThis is a description\nThis is a description\n" +
+                        "This is a description\nThis is a description\nThis is a description\n" +
+                        "This is a description\nThis is a description\n"
+                } else {
+                    "This is a description."
+                }
+
                 val session = SessionResponse(
                     id = "$day${room.id}$index",
                     isServiceSession = false,
@@ -156,16 +173,10 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                         en = "DroidKaigi ${categories.first().items.findLast { it.id == sessionCategoryItemId }?.name?.en} day$day room${room.name.en} index$index",
                     ),
                     speakers = listOf("1", "2"),
-                    description = "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n" +
-                        "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。" +
-                        "\nこれはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n",
+                    description = description,
                     i18nDesc = LocaledResponse(
-                        ja = "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n" +
-                            "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n" +
-                            "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n",
-                        en = "This is a description\nThis is a description\nThis is a description\n" +
-                            "This is a description\nThis is a description\nThis is a description\n" +
-                            "This is a description\nThis is a description\nThis is a description\n",
+                        ja = description,
+                        en = englishDescription,
                     ),
                     startsAt = start.toCustomIsoString(),
                     endsAt = end.toCustomIsoString(),
