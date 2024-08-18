@@ -10,6 +10,7 @@ import io.github.droidkaigi.confsched.data.sessions.response.SessionResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SpeakerResponse
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.Lang
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.offsetAt
@@ -158,7 +159,11 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                     ),
                     startsAt = start.toCustomIsoString(),
                     endsAt = end.toCustomIsoString(),
-                    language = "JAPANESE",
+                    language = if (Lang.entries.size > index) {
+                        Lang.entries[index].name
+                    } else {
+                        Lang.JAPANESE.name
+                    },
                     roomId = room.id,
                     sessionCategoryItemId = sessionCategoryItemId,
                     sessionType = "NORMAL",

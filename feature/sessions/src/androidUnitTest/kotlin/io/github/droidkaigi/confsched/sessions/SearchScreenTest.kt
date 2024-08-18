@@ -8,8 +8,10 @@ import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Category
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.ConferenceDay
+import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Language
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
+import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
@@ -108,6 +110,31 @@ class SearchScreenTest(
                                 itShould("selected category ${category.categoryName}") {
                                     captureScreenWithChecks {
                                         checkTimetableListItemByCategory(category)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    describe("when filter language chip click") {
+                        run {
+                            scrollToFilterLanguageChip()
+                            clickFilterLanguageChip()
+                        }
+                        itShould("show drop down menu") {
+                            captureScreenWithChecks {
+                                todoChecks("todo")
+                            }
+                        }
+                        Language.entries.forEach { language ->
+                            describe("when click language ${language.name}") {
+                                run {
+                                    clickLanguage(
+                                        language = language,
+                                    )
+                                }
+                                itShould("selected language ${language.name}") {
+                                    captureScreenWithChecks {
+                                        checkTimetableListItemByLanguage(language)
                                     }
                                 }
                             }
