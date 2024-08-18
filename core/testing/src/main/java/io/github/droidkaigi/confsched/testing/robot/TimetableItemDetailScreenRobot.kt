@@ -36,10 +36,12 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     TimetableServerRobot by timetableServerRobot,
     FontScaleRobot by fontScaleRobot {
 
-    suspend fun setupScreenContent() {
-        val firstSessionId = SessionsAllResponse.Companion.fake().sessions.first().id
+    suspend fun setupScreenContent(
+        sessionId: String = SessionsAllResponse.Companion.fake().sessions.first().id,
+    ) {
+
         robotTestRule.setContentWithNavigation<TimetableItemDetailDestination>(
-            startDestination = { TimetableItemDetailDestination(firstSessionId) },
+            startDestination = { TimetableItemDetailDestination(sessionId) },
         ) {
             KaigiTheme {
                 TimetableItemDetailScreen(
