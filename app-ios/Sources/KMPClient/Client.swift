@@ -44,7 +44,7 @@ public struct StaffClient: Sendable {
 
 @DependencyClient
 public struct SponsorsClient: Sendable {
-    public var streamSponsors: @Sendable () throws -> AsyncThrowingStream<[Sponsor], any Error>
+    public var streamSponsors: @Sendable () throws -> AsyncThrowingStream<[Model.Sponsor], any Error>
 }
 
 @DependencyClient
