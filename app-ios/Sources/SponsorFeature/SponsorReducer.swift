@@ -36,8 +36,12 @@ public struct SponsorReducer {
             switch action {
             case .onAppear:
                 return .run { send in
-                    for try await sponsors in try sponsorsData.streamSponsors() {
-                        await send(.response(.success(sponsors)))
+                    do {
+                        for try await sponsors in try sponsorsData.streamSponsors() {
+                            await send(.response(.success(sponsors)))
+                        }
+                    } catch {
+                        await send(.response(.failure(error)))
                     }
                 }
                 .cancellable(id: CancelID.connection)
