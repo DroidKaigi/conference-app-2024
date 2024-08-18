@@ -12,11 +12,11 @@ public data class Contributor(
     public companion object
 }
 
-public fun Contributor.Companion.fakes(): PersistentList<Contributor> = (0..20)
+public fun Contributor.Companion.fakes(): PersistentList<Contributor> = (1..20)
     .map {
         Contributor(
             id = it,
-            username = it.toString(),
+            username = "username $it",
             profileUrl = "https://developer.android.com/",
             iconUrl = "https://placehold.jp/150x150.png",
         )

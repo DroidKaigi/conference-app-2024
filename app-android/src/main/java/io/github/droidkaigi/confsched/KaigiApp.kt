@@ -13,7 +13,13 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -23,6 +29,7 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -42,6 +49,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
+import io.github.droidkaigi.confsched.eventmap.navigation.EventMapDestination
 import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
 import io.github.droidkaigi.confsched.favorites.favoritesScreens
 import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
@@ -83,6 +91,7 @@ fun KaigiApp(
     displayFeatures: PersistentList<DisplayFeature>,
     modifier: Modifier = Modifier,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     KaigiTheme(
         colorContrast = colorContrast(),
     ) {
@@ -93,6 +102,14 @@ fun KaigiApp(
             KaigiNavHost(
                 windowSize = windowSize,
                 displayFeatures = displayFeatures,
+                modifier = Modifier.padding(
+                    start = WindowInsets.displayCutout
+                        .asPaddingValues()
+                        .calculateStartPadding(layoutDirection),
+                    end = WindowInsets.displayCutout
+                        .asPaddingValues()
+                        .calculateEndPadding(layoutDirection),
+                ),
             )
         }
     }
@@ -104,10 +121,11 @@ private fun KaigiNavHost(
     windowSize: WindowSizeClass,
     @Suppress("UnusedParameter")
     displayFeatures: PersistentList<DisplayFeature>,
+    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
     externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
-    SharedTransitionLayout {
+    SharedTransitionLayout(modifier = modifier) {
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
         ) {
@@ -228,6 +246,7 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     override val startDestination: String = timetableScreenRoute
 
     override fun routeToTab(route: String): MainScreenTab? {
+        if (route.contains("${EventMapDestination::class.simpleName}")) return EventMap
         return when (route) {
             timetableScreenRoute -> Timetable
             profileCardScreenRoute -> ProfileCard

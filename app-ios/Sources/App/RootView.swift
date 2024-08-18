@@ -12,7 +12,7 @@ import TimetableFeature
 import EventMapFeature
 import Theme
 
-public enum DroidKaigiAppTab {
+public enum DroidKaigiAppTab: Hashable {
     case timetable
     case map
     case favorite
@@ -30,73 +30,52 @@ public struct RootView: View {
     }
 
     public var body: some View {
-        TabView(
-            selection: Binding(
-                get: { selection },
-                set: {
-                    if selection != $0 {
-                        selection = $0
-                        return
-                    }
-                    store.send(.view(.sameTabTapped($0)))
-                }
-            )
-        ) {
-            Group {
+        Group {
+            switch selection {
+            case .timetable:
                 timetableTab
-                    .tag(DroidKaigiAppTab.timetable)
-                    .tabItem {
-                        Label(
-                            title: { Text("Timetable") },
-                            icon: { Image(.icTimetable).renderingMode(.template) }
-                        )
-                    }
-                
+            case .map:
                 eventMapTab
-                    .tag(DroidKaigiAppTab.map)
-                    .tabItem {
-                        Label(
-                            title: { Text("Event Map") },
-                            icon: { Image(.icMap).renderingMode(.template) }
-                        )
-                    }
-                
+            case .favorite:
                 favoriteTab
-                    .tag(DroidKaigiAppTab.favorite)
-                    .tabItem {
-                        Label(
-                            title: { Text("Favorite") },
-                            icon: { Image(.icFav).renderingMode(.template) }
-                        )
-                    }
-                
+            case .about:
                 aboutTab
-                    .tag(DroidKaigiAppTab.about)
-                    .tabItem {
-                        Label(
-                            title: { Text("About") },
-                            icon: { Image(.icInfo).renderingMode(.template) }
-                        )
-                    }
-                
-                Text("ID Card Feature")
-                    .tag(DroidKaigiAppTab.idCard)
-                    .tabItem {
-                        Label(
-                            title: { Text("ID Card") },
-                            icon: { Image(.icProfileCard).renderingMode(.template) }
-                        )
-                    }
+            case .idCard:
+                idCardTab
             }
-            .toolbarBackground(AssetColors.Surface.surface.swiftUIColor, for: .tabBar)
-            // If there are not this code, tab bar color is clear when scroll down to edge.
-            .toolbarBackground(.visible, for: .tabBar)
         }
         .navigationBarTitleStyle(
             color: AssetColors.Surface.onSurface.swiftUIColor,
             titleTextStyle: .titleMedium,
             largeTitleTextStyle: .headlineSmall
         )
+    }
+
+    @MainActor
+    @ViewBuilder
+    private var tabItems: some View {
+        let items: [(tab: DroidKaigiAppTab, icon: ImageResource)] = [
+            (tab: .timetable, icon: .icTimetable),
+            (tab: .map, icon: .icMap),
+            (tab: .favorite, icon: .icFav),
+            (tab: .about, icon: .icInfo),
+            (tab: .idCard, icon: .icProfileCard),
+        ]
+        HStack(spacing: 36) {
+            ForEach(items, id: \.tab) { item in
+                let isSelected = selection == item.tab
+                Button {
+                    selection = item.tab
+                } label: {
+                    Image(item.icon).renderingMode(.template).tint(isSelected ? nil : .white)
+                }
+            }
+        }
+        .padding(.vertical)
+        .padding(.horizontal, 24)
+        .background(.ultraThinMaterial, in: Capsule())
+        .overlay(Capsule().stroke(.gray, lineWidth: 1))
+        .environment(\.colorScheme, .dark)
     }
 
     @MainActor
@@ -107,12 +86,15 @@ public struct RootView: View {
                 action: \.paths.timetable
             )
         ) {
-            TimetableView(
-                store: store.scope(
-                    state: \.timetable,
-                    action: \.timetable
+            ZStack(alignment: .bottom) {
+                TimetableView(
+                    store: store.scope(
+                        state: \.timetable,
+                        action: \.timetable
+                    )
                 )
-            )
+                tabItems
+            }
         } destination: { store in
             switch store.case {
             case let .timetableDetail(store):
@@ -132,12 +114,15 @@ public struct RootView: View {
                 action: \.paths.about
             )
         ) {
-            AboutView(
-                store: store.scope(
-                    state: \.about,
-                    action: \.about
+            ZStack(alignment: .bottom) {
+                AboutView(
+                    store: store.scope(
+                        state: \.about,
+                        action: \.about
+                    )
                 )
-            )
+                tabItems
+            }
         } destination: { store in
             switch store.case {
             case let .staff(store):
@@ -163,12 +148,15 @@ public struct RootView: View {
                 action: \.paths.favorite
             )
         ) {
-            FavoriteView(
-                store: store.scope(
-                    state: \.favorite,
-                    action: \.favorite
+            ZStack(alignment: .bottom) {
+                FavoriteView(
+                    store: store.scope(
+                        state: \.favorite,
+                        action: \.favorite
+                    )
                 )
-            )
+                tabItems
+            }
         } destination: { store in
             switch store.case {
             case let .timetableDetail(store):
@@ -180,9 +168,24 @@ public struct RootView: View {
     @MainActor
     private var eventMapTab: some View {
         NavigationStack {
-            EventMapView(store: Store(initialState: .init(), reducer: {
-                EventMapReducer()
-            }))
+            ZStack(alignment: .bottom) {
+                EventMapView(store: Store(initialState: .init(), reducer: {
+                    EventMapReducer()
+                }))
+                tabItems
+            }
+        }
+    }
+
+    @MainActor
+    private var idCardTab: some View {
+        NavigationStack {
+            ZStack(alignment: .bottom) {
+                ScrollView {
+                    Text("ID Card Feature")
+                }
+                tabItems
+            }
         }
     }
 }
