@@ -115,6 +115,7 @@ dependencies {
     implementation(libs.androidxWindow)
     implementation(libs.kermit)
     implementation(libs.firebaseDynamicLinks)
+    implementation(libs.androidxAppCompat)
     debugImplementation(projects.core.testingManifest)
     testImplementation(projects.core.testing)
     testImplementation(libs.composablePreviewScanner)
