@@ -16,7 +16,7 @@ expect fun notoSansFontFamily(): FontFamily
 
 @Composable
 fun appTypography(
-    fontFamily: FontFamily
+    fontFamily: FontFamily,
 ): Typography {
     return remember(fontFamily) {
         Typography(

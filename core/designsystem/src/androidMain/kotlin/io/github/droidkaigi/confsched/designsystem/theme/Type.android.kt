@@ -14,5 +14,5 @@ actual fun dotGothic16FontFamily(): FontFamily = FontFamily(
 
 @Composable
 actual fun notoSansFontFamily(): FontFamily = FontFamily(
-    Font(DesignSystemRes.font.noto_sans_jp_regular)
+    Font(DesignSystemRes.font.noto_sans_jp_regular),
 )
