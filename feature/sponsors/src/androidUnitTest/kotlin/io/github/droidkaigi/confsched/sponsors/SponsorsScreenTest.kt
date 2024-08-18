@@ -50,10 +50,7 @@ class SponsorsScreenTest(
                         itShould("display platinum sponsors") {
                             captureScreenWithChecks {
                                 checkSponsorItemsDisplayed()
-                                checkSponsorItemsDisplayedByRangeAndSponsorType(
-                                    sponsorType = SponsorType.Platinum,
-                                    fromTo = 0..2,
-                                )
+                                checkDisplayPlatinumSponsors()
                             }
                         }
 
@@ -62,12 +59,9 @@ class SponsorsScreenTest(
                                 scrollToSponsorHeader(SponsorType.Gold)
                             }
                             itShould("display gold sponsors") {
-                                checkSponsorItemsDisplayed()
                                 captureScreenWithChecks {
-                                    checkSponsorItemsDisplayedByRangeAndSponsorType(
-                                        sponsorType = SponsorType.Gold,
-                                        fromTo = 0..2,
-                                    )
+                                    checkSponsorItemsDisplayed()
+                                    checkDisplayGoldSponsors()
                                 }
                             }
                         }
@@ -77,12 +71,9 @@ class SponsorsScreenTest(
                                 scrollToSponsorHeader(SponsorType.Supporters)
                             }
                             itShould("display supporters sponsors") {
-                                checkSponsorItemsDisplayed()
                                 captureScreenWithChecks {
-                                    checkSponsorItemsDisplayedByRangeAndSponsorType(
-                                        sponsorType = SponsorType.Supporters,
-                                        fromTo = 0..2,
-                                    )
+                                    checkSponsorItemsDisplayed()
+                                    checkDisplaySupportersSponsors()
                                 }
                             }
                         }

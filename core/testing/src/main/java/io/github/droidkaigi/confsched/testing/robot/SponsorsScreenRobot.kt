@@ -59,7 +59,28 @@ class SponsorsScreenRobot @Inject constructor(
             )
     }
 
-    fun checkSponsorItemsDisplayedByRangeAndSponsorType(
+    fun checkDisplayPlatinumSponsors() {
+        checkSponsorItemsDisplayedByRangeAndSponsorType(
+            sponsorType = SponsorType.Platinum,
+            fromTo = 0..2,
+        )
+    }
+
+    fun checkDisplayGoldSponsors() {
+        checkSponsorItemsDisplayedByRangeAndSponsorType(
+            sponsorType = SponsorType.Gold,
+            fromTo = 0..2,
+        )
+    }
+
+    fun checkDisplaySupportersSponsors() {
+        checkSponsorItemsDisplayedByRangeAndSponsorType(
+            sponsorType = SponsorType.Supporters,
+            fromTo = 0..2,
+        )
+    }
+
+    private fun checkSponsorItemsDisplayedByRangeAndSponsorType(
         sponsorType: SponsorType,
         fromTo: IntRange,
     ) {
