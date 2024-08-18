@@ -11,6 +11,11 @@ actual fun dotGothic16FontFamily(): FontFamily {
     return FontFamily(Typeface(loadCustomFont("dot_gothic16_regular")))
 }
 
+@Composable
+actual fun notoSansFontFamily(): FontFamily {
+    return FontFamily(Typeface(loadCustomFont("noto_sans_jp_regular")))
+}
+
 private fun loadCustomFont(name: String): Typeface {
     return Typeface.makeFromName(name, FontStyle.NORMAL)
 }

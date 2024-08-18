@@ -12,80 +12,84 @@ import androidx.compose.ui.unit.sp
 expect fun dotGothic16FontFamily(): FontFamily
 
 @Composable
-fun appTypography(): Typography {
-    val dotGothic16 = dotGothic16FontFamily()
-    return remember(dotGothic16) {
+expect fun notoSansFontFamily(): FontFamily
+
+@Composable
+fun appTypography(
+    fontFamily: FontFamily
+): Typography {
+    return remember(fontFamily) {
         Typography(
             displayLarge = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 57.sp,
                 lineHeight = 64.sp,
                 letterSpacing = (-0.25).sp,
             ),
             displayMedium = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 45.sp,
                 lineHeight = 52.sp,
                 letterSpacing = 0.sp,
             ),
             displaySmall = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 36.sp,
                 lineHeight = 44.sp,
                 letterSpacing = 0.sp,
             ),
             headlineLarge = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 32.sp,
                 lineHeight = 40.sp,
                 letterSpacing = 0.sp,
             ),
             headlineMedium = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 28.sp,
                 lineHeight = 36.sp,
                 letterSpacing = 0.sp,
             ),
             headlineSmall = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 24.sp,
                 lineHeight = 32.sp,
                 letterSpacing = 0.sp,
             ),
             titleLarge = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 22.sp,
                 lineHeight = 28.sp,
                 letterSpacing = 0.sp,
             ),
             titleMedium = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 16.sp,
                 lineHeight = 24.sp,
                 letterSpacing = 0.15.sp,
             ),
             titleSmall = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
                 letterSpacing = 0.1.sp,
             ),
             labelLarge = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
                 letterSpacing = 0.1.sp,
             ),
             labelMedium = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 12.sp,
                 lineHeight = 16.sp,
                 letterSpacing = 0.5.sp,
             ),
             labelSmall = TextStyle(
-                fontFamily = dotGothic16,
+                fontFamily = fontFamily,
                 fontWeight = FontWeight.Medium,
                 fontSize = 11.sp,
                 lineHeight = 16.sp,
