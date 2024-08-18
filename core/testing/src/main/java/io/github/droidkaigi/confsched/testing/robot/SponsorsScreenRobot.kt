@@ -49,7 +49,15 @@ class SponsorsScreenRobot @Inject constructor(
         }
     }
 
-    fun scrollToSponsorHeader(
+    fun scrollToGoldSponsorsHeader() {
+        scrollToSponsorHeader(SponsorType.Gold)
+    }
+
+    fun scrollToSupportersSponsorsHeader() {
+        scrollToSponsorHeader(SponsorType.Supporters)
+    }
+
+    private fun scrollToSponsorHeader(
         sponsorType: SponsorType,
     ) {
         composeTestRule

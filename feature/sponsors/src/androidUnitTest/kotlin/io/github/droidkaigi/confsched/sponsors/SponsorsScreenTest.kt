@@ -56,7 +56,7 @@ class SponsorsScreenTest(
 
                         describe("when scroll to gold sponsors header") {
                             run {
-                                scrollToSponsorHeader(SponsorType.Gold)
+                                scrollToGoldSponsorsHeader()
                             }
                             itShould("display gold sponsors") {
                                 captureScreenWithChecks {
@@ -68,7 +68,7 @@ class SponsorsScreenTest(
 
                         describe("when scroll to supporters header") {
                             run {
-                                scrollToSponsorHeader(SponsorType.Supporters)
+                                scrollToSupportersSponsorsHeader()
                             }
                             itShould("display supporters sponsors") {
                                 captureScreenWithChecks {
