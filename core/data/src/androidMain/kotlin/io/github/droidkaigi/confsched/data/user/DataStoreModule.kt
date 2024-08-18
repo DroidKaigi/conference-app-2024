@@ -66,9 +66,9 @@ public class DataStoreModule {
     @Singleton
     public fun provideSettingsDataStore(
         @ApplicationContext context: Context,
-    ) : DataStore<Preferences> = createDataStore(
+    ): DataStore<Preferences> = createDataStore(
         coroutineScope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-        producePath = { context.cacheDir.resolve(DATA_STORE_SETTINGS_FILE_NAME).path }
+        producePath = { context.cacheDir.resolve(DATA_STORE_SETTINGS_FILE_NAME).path },
     )
 
     public companion object {

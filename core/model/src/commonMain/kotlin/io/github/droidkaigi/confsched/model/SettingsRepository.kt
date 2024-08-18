@@ -10,6 +10,6 @@ interface SettingsRepository {
 }
 
 @Composable
-fun localSettingsRepository() : SettingsRepository {
+fun localSettingsRepository(): SettingsRepository {
     return LocalRepositories.current[SettingsRepository::class] as SettingsRepository
 }
