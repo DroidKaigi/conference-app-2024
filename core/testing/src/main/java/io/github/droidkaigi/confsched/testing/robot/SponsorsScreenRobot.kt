@@ -132,7 +132,7 @@ class SponsorsScreenRobot @Inject constructor(
                 hasTestTag(
                     testTag = SponsorsListSponsorItemTestTagPrefix,
                     substring = true,
-                )
+                ),
             )
             .assertDoesNotExist()
 
