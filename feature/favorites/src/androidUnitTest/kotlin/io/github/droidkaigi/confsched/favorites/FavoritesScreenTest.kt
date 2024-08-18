@@ -9,7 +9,6 @@ import io.github.droidkaigi.confsched.testing.robot.FavoritesScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
-import kotlinx.coroutines.test.TestDispatcher
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith

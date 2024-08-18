@@ -90,7 +90,9 @@ fun timetableItemDetailPresenter(
             selectedDescriptionLanguage = Lang.valueOf(timetableItem.language.langOfSpeaker)
         }
     }
-    Logger.d { "timetableItemDetailPresenter receive timetableItemStateWithBookmark: ${timetableItemStateWithBookmark?.first?.id}" }
+    Logger.d {
+        "timetableItemDetailPresenter receive timetableItemStateWithBookmark: ${timetableItemStateWithBookmark?.first?.id}"
+    }
     val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
         ?: return@providePresenterDefaults Loading(timetableItemId, userMessageStateHolder)
     val (timetableItem, bookmarked) = timetableItemStateWithBookmarkValue

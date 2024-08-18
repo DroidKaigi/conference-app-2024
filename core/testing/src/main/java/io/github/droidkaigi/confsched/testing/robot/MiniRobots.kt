@@ -56,7 +56,7 @@ interface ScreenRobot : ComposeScreenRobot, CaptureScreenRobot, WaitRobot {
 
 class DefaultComposeScreenRobot @Inject constructor(
     private val robotTestRule: RobotTestRule,
-    ) :
+) :
     ComposeScreenRobot {
     override val composeTestRule: ComposeTestRule
         get() = robotTestRule.composeTestRule
