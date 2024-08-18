@@ -4,7 +4,9 @@ import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
+import org.junit.Assert.assertFalse
 
 fun hasTestTag(
     testTag: String,
@@ -41,6 +43,27 @@ fun SemanticsNodeInteractionCollection.assertCountAtLeast(
         )
     }
     return this
+}
+
+fun SemanticsNodeInteraction.assertTextDoesNotContain(
+    substring: String,
+) {
+    fetchSemanticsNode()
+        .let { node ->
+            val textProperty = node
+                .config
+                .getOrNull(
+                    key = SemanticsProperties.Text,
+                )
+            val textContent = textProperty
+                ?.joinToString(
+                    separator = " ",
+                ) { it.text }
+            assertFalse(
+                "Node text contains unexpected substring: $substring",
+                textContent?.contains(substring) ?: false,
+            )
+        }
 }
 
 private fun buildErrorMessageForMinimumCountMismatch(
