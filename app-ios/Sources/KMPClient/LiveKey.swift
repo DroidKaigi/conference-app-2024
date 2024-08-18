@@ -73,7 +73,19 @@ extension SponsorsClient: DependencyKey {
 
 extension ContributorClient: DependencyKey {
     public static let liveValue: ContributorClient = Self {
-        contributorRepository.getContributorStream().eraseToThrowingStream()
+        contributorRepository
+            .getContributorStream()
+            .map {
+                $0.map {
+                    Model.Contributor(
+                        id: Int($0.id),
+                        userName: $0.username,
+                        profileUrl: $0.profileUrl.map { URL(string: $0)! } ,
+                        iconUrl: URL(string: $0.iconUrl)!
+                    )
+                }
+            }
+            .eraseToThrowingStream()
     } refresh: {
         try await contributorRepository.refresh()
     }
