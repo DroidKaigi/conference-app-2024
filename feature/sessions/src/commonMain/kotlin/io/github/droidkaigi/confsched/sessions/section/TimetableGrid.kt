@@ -38,6 +38,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollDispatcher
@@ -65,6 +66,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.TimeLine
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableRoom
@@ -78,6 +80,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridRooms
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState.Companion
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
@@ -100,19 +103,19 @@ data class TimetableGridUiState(val timetable: Timetable)
 fun TimetableGrid(
     uiState: TimetableGridUiState,
     timetableState: TimetableState,
+    selectedDay: DroidKaigi2024Day,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    Column {
-        TimetableGrid(
-            timetable = uiState.timetable,
-            timetableState = timetableState,
-            onTimetableItemClick = onTimetableItemClick,
-            modifier = modifier,
-            contentPadding = contentPadding,
-        )
-    }
+    TimetableGrid(
+        timetable = uiState.timetable,
+        timetableState = timetableState,
+        selectedDay = selectedDay,
+        onTimetableItemClick = onTimetableItemClick,
+        modifier = modifier,
+        contentPadding = contentPadding,
+    )
 }
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -120,6 +123,7 @@ fun TimetableGrid(
 fun TimetableGrid(
     timetable: Timetable,
     timetableState: TimetableState,
+    selectedDay: DroidKaigi2024Day,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -158,6 +162,7 @@ fun TimetableGrid(
             TimetableGrid(
                 timetable = timetable,
                 timetableState = timetableState,
+                selectedDay = selectedDay,
                 modifier = modifier,
                 contentPadding = PaddingValues(
                     top = 16.dp + contentPadding.calculateTopPadding(),
@@ -197,10 +202,12 @@ fun TimetableGrid(
 fun TimetableGrid(
     timetable: Timetable,
     timetableState: TimetableState,
+    selectedDay: DroidKaigi2024Day,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     content: @Composable (TimetableItem, Int) -> Unit,
 ) {
+    val timeLine = TimeLine.now(LocalClock.current)
     val coroutineScope = rememberCoroutineScope()
     val density = timetableState.density
     val verticalScale = timetableState.screenScaleState.verticalScale
@@ -208,11 +215,13 @@ fun TimetableGrid(
         TimetableLayout(timetable = timetable, density = density, verticalScale = verticalScale)
     }
     val scrollState = timetableState.screenScrollState
-    val timetableScreen = remember(timetableLayout, scrollState, density) {
+    val timetableScreen = remember(timetableLayout, timeLine, selectedDay, scrollState, density) {
         TimetableScreen(
-            timetableLayout,
-            scrollState,
-            density,
+            timetableLayout = timetableLayout,
+            timeLine = timeLine,
+            selectedDay = selectedDay,
+            scrollState = scrollState,
+            density = density,
         )
     }
     val visibleItemLayouts by remember(timetableScreen) { timetableScreen.visibleItemLayouts }
@@ -228,9 +237,30 @@ fun TimetableGrid(
     val nestedScrollConnection = remember { object : NestedScrollConnection {} }
     val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
+    val currentTimeLineColor = MaterialTheme.colorScheme.primary
+    val currentTimeDotRadius = with(timetableState.density) {
+        TimetableSizes.currentTimeDotRadius.toPx()
+    }
+
     LazyLayout(
         modifier = modifier
             .focusGroup()
+            .drawWithContent {
+                drawContent()
+                timetableScreen.timeLineOffsetY.value?.let {
+                    drawLine(
+                        color = currentTimeLineColor,
+                        start = Offset(0f, it),
+                        end = Offset(size.width, it),
+                        strokeWidth = linePxSize,
+                    )
+                    drawCircle(
+                        color = currentTimeLineColor,
+                        radius = currentTimeDotRadius,
+                        center = Offset(0f, it),
+                    )
+                }
+            }
             .clipToBounds()
             .nestedScroll(nestedScrollConnection, nestedScrollDispatcher)
             .drawBehind {
@@ -373,6 +403,7 @@ fun TimetablePreview() {
         Surface {
             TimetableGrid(
                 timetable = Timetable.fake(),
+                selectedDay = DroidKaigi2024Day.ConferenceDay1,
                 timetableState = rememberTimetableGridState(),
                 onTimetableItemClick = {},
                 modifier = Modifier.fillMaxSize(),
@@ -388,6 +419,7 @@ fun TimetableVerticalScale20PercentPreview() {
         Surface {
             TimetableGrid(
                 timetable = Timetable.fake(),
+                selectedDay = DroidKaigi2024Day.ConferenceDay1,
                 timetableState = rememberTimetableGridState(
                     screenScaleState = ScreenScaleState(0.2f, 0.2f),
                 ),
@@ -405,6 +437,7 @@ fun TimetableVerticalScale40PercentPreview() {
         Surface {
             TimetableGrid(
                 timetable = Timetable.fake(),
+                selectedDay = DroidKaigi2024Day.ConferenceDay1,
                 timetableState = rememberTimetableGridState(
                     screenScaleState = ScreenScaleState(0.4f, 0.4f),
                 ),
@@ -422,6 +455,7 @@ fun TimetableVerticalScale60PercentPreview() {
         Surface {
             TimetableGrid(
                 timetable = Timetable.fake(),
+                selectedDay = DroidKaigi2024Day.ConferenceDay1,
                 timetableState = rememberTimetableGridState(
                     screenScaleState = ScreenScaleState(0.6f, 0.6f),
                 ),
@@ -761,6 +795,8 @@ class ScreenScaleState(
 
 private class TimetableScreen(
     val timetableLayout: TimetableLayout,
+    val timeLine: TimeLine?,
+    val selectedDay: DroidKaigi2024Day,
     val scrollState: ScreenScrollState,
     private val density: Density,
 ) {
@@ -789,6 +825,13 @@ private class TimetableScreen(
         val rooms = timetableLayout.rooms
         (0..rooms.lastIndex).map {
             scrollState.scrollX + width * it
+        }
+    }
+
+    val timeLineOffsetY = derivedStateOf {
+        val durationFromStart = timeLine?.durationFromScheduleStart(selectedDay)
+        durationFromStart?.let {
+            scrollState.scrollY + it.inWholeMinutes * timetableLayout.minutePx + topOffset
         }
     }
 
@@ -919,4 +962,5 @@ object TimetableSizes {
     val columnWidth = 192.dp
     val lineStrokeSize = 1.dp
     val minuteHeight = 4.dp
+    val currentTimeDotRadius = 6.dp
 }

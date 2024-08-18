@@ -90,6 +90,7 @@ fun Timetable(
                     TimetableGrid(
                         uiState = requireNotNull(uiState.timetableGridUiState[selectedDay]),
                         timetableState = timetableStates.getValue(selectedDay),
+                        selectedDay = selectedDay,
                         onTimetableItemClick = onTimetableItemClick,
                         modifier = Modifier
                             .fillMaxSize()
