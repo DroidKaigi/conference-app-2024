@@ -53,10 +53,10 @@ import conference_app_2024.feature.profilecard.generated.resources.card_front_wh
 import conference_app_2024.feature.profilecard.generated.resources.card_front_yellow
 import conference_app_2024.feature.profilecard.generated.resources.icon_qr
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
-import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
+import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
-import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
@@ -139,15 +139,15 @@ private fun FlipCardFront(
     profileImage: ImageBitmap,
     modifier: Modifier = Modifier,
 ) {
-    val background = when (uiState.theme) {
-        ProfileCardTheme.Iguana -> ProfileCardRes.drawable.card_front_green
-        ProfileCardTheme.Hedgehog -> ProfileCardRes.drawable.card_front_orange
-        ProfileCardTheme.Giraffe -> ProfileCardRes.drawable.card_front_yellow
-        ProfileCardTheme.Flamingo -> ProfileCardRes.drawable.card_front_pink
-        ProfileCardTheme.Jellyfish -> ProfileCardRes.drawable.card_front_blue
-        ProfileCardTheme.None -> ProfileCardRes.drawable.card_front_white
+    val background = when (uiState.cardType) {
+        ProfileCardType.Iguana -> ProfileCardRes.drawable.card_front_green
+        ProfileCardType.Hedgehog -> ProfileCardRes.drawable.card_front_orange
+        ProfileCardType.Giraffe -> ProfileCardRes.drawable.card_front_yellow
+        ProfileCardType.Flamingo -> ProfileCardRes.drawable.card_front_pink
+        ProfileCardType.Jellyfish -> ProfileCardRes.drawable.card_front_blue
+        ProfileCardType.None -> ProfileCardRes.drawable.card_front_white
     }
-    val namePrimaryColor = LocalProfileCardScreenTheme.current.primaryColor
+    val namePrimaryColor = LocalProfileCardTheme.current.primaryColor
     Box(
         modifier = modifier
             .testTag(ProfileCardFlipCardFrontTestTag)
@@ -200,13 +200,13 @@ private fun FlipCardBack(
     uiState: Card,
     modifier: Modifier = Modifier,
 ) {
-    val background = when (uiState.theme) {
-        ProfileCardTheme.Iguana -> ProfileCardRes.drawable.card_back_green
-        ProfileCardTheme.Hedgehog -> ProfileCardRes.drawable.card_back_orange
-        ProfileCardTheme.Giraffe -> ProfileCardRes.drawable.card_back_yellow
-        ProfileCardTheme.Flamingo -> ProfileCardRes.drawable.card_back_pink
-        ProfileCardTheme.Jellyfish -> ProfileCardRes.drawable.card_back_blue
-        ProfileCardTheme.None -> ProfileCardRes.drawable.card_back_white
+    val background = when (uiState.cardType) {
+        ProfileCardType.Iguana -> ProfileCardRes.drawable.card_back_green
+        ProfileCardType.Hedgehog -> ProfileCardRes.drawable.card_back_orange
+        ProfileCardType.Giraffe -> ProfileCardRes.drawable.card_back_yellow
+        ProfileCardType.Flamingo -> ProfileCardRes.drawable.card_back_pink
+        ProfileCardType.Jellyfish -> ProfileCardRes.drawable.card_back_blue
+        ProfileCardType.None -> ProfileCardRes.drawable.card_back_white
     }
     Box(
         modifier = modifier
@@ -234,14 +234,14 @@ private fun FlipCardBack(
 @Composable
 @Preview
 fun FlipCardFrontPreview() {
-    val uiState = ProfileCard.Exists.fake().let { (nickname, occupation, link, image, theme) ->
-        Card(nickname, occupation, link, image, theme)
+    val uiState = ProfileCard.Exists.fake().let { (nickname, occupation, link, image, cardType) ->
+        Card(nickname, occupation, link, image, cardType)
     }
     val profileImage = uiState.image.decodeBase64Bytes().toImageBitmap()
 
     KaigiTheme {
         Surface(modifier = Modifier.size(300.dp, 380.dp)) {
-            ProvideProfileCardScreenTheme(uiState.theme.name) {
+            ProvideProfileCardTheme(uiState.cardType.name) {
                 FlipCardFront(
                     uiState = uiState,
                     profileImage = profileImage,
@@ -254,8 +254,8 @@ fun FlipCardFrontPreview() {
 @Composable
 @Preview
 fun FlipCardBackPreview() {
-    val uiState = ProfileCard.Exists.fake().let { (nickname, occupation, link, image, theme) ->
-        Card(nickname, occupation, link, image, theme)
+    val uiState = ProfileCard.Exists.fake().let { (nickname, occupation, link, image, cardType) ->
+        Card(nickname, occupation, link, image, cardType)
     }
 
     KaigiTheme {

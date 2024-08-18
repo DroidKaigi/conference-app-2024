@@ -50,5 +50,14 @@ kotlin {
                 api(libs.koin)
             }
         }
+
+        commonTest {
+            dependencies {
+                implementation(projects.core.model)
+                implementation(libs.kotlinTest)
+                implementation(libs.okIo)
+                implementation(libs.ktorKotlinxSerialization)
+            }
+        }
     }
 }
