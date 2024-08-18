@@ -22,9 +22,7 @@ import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.Pr
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus.NoInputOtherThanImage
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
-import kotlinx.coroutines.async
 import kotlinx.coroutines.test.TestDispatcher
-import kotlinx.coroutines.test.TestScope
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.shadows.ShadowLooper
 import javax.inject.Inject
@@ -270,28 +268,22 @@ interface ProfileCardDataStoreRobot {
 
 class DefaultProfileCardDataStoreRobot @Inject constructor(
     private val profileCardDataStore: ProfileCardDataStore,
-    private val testDispatcher: TestDispatcher,
 ) : ProfileCardDataStoreRobot {
     override suspend fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus) {
-        val deferred = TestScope(testDispatcher)
-            .async {
-                when (profileCardInputStatus) {
-                    NoInputOtherThanImage -> {
-                        profileCardDataStore.save(
-                            ProfileCard.Exists.fake().copy(
-                                nickname = "",
-                                occupation = "",
-                                link = "",
-                            ),
-                        )
-                    }
-
-                    AllNotEntered -> {
-                        // Do nothing
-                    }
-                }
+        when (profileCardInputStatus) {
+            NoInputOtherThanImage -> {
+                profileCardDataStore.save(
+                    ProfileCard.Exists.fake().copy(
+                        nickname = "",
+                        occupation = "",
+                        link = "",
+                    ),
+                )
             }
-        testDispatcher.scheduler.runCurrent()
-        deferred.await()
+
+            AllNotEntered -> {
+                // Do nothing
+            }
+        }
     }
 }
