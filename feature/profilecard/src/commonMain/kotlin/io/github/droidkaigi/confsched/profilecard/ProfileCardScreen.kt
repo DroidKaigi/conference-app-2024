@@ -291,8 +291,8 @@ internal fun ProfileCardScreen(
                 onDismissRequest = {},
                 properties = DialogProperties(
                     dismissOnBackPress = false,
-                    dismissOnClickOutside = false
-                )
+                    dismissOnClickOutside = false,
+                ),
             ) {
                 CircularProgressIndicator()
             }
