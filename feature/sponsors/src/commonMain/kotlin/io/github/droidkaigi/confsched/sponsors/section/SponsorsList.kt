@@ -64,7 +64,7 @@ fun SponsorsList(
         contentPadding = PaddingValues(
             start = 16.dp,
             end = 16.dp,
-            bottom = 48.dp + contentPadding.calculateBottomPadding()
+            bottom = 48.dp + contentPadding.calculateBottomPadding(),
         ),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
