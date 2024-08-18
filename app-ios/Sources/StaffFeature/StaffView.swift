@@ -14,7 +14,7 @@ public struct StaffView: View {
     public var body: some View {
         ScrollView {
             LazyVStack {
-                ForEach(store.list, id: \.id) { staff in
+                ForEach(store.list) { staff in
                     Button {
                         selectedStaffData = staff
                     } label: {

@@ -1,20 +1,15 @@
 package io.github.droidkaigi.confsched.contributors
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons.AutoMirrored.Filled
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -29,11 +24,14 @@ import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 
 const val contributorsScreenRoute = "contributors"
 const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
+const val ContributorsTestTag = "ContributorsTestTag"
+const val ContributorsItemTestTagPrefix = "ContributorsItemTestTag:"
 
 fun NavGraphBuilder.contributorsScreens(
     onNavigationIconClick: () -> Unit,
@@ -106,22 +104,12 @@ fun ContributorsScreen(
         modifier = modifier.testTag(ContributorsScreenTestTag),
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
-            if (scrollBehavior != null) {
-                LargeTopAppBar(
-                    title = {
-                        Text(text = "Contributor")
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = onBackClick,
-                        ) {
-                            Icon(
-                                imageVector = Filled.ArrowBack,
-                                contentDescription = "Back",
-                            )
-                        }
-                    },
+            if (!isTopAppBarHidden) {
+                AnimatedLargeTopAppBar(
+                    title = "Contributor",
+                    onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
+                    navIconContentDescription = "Back",
                 )
             }
         },
@@ -129,9 +117,10 @@ fun ContributorsScreen(
         Contributors(
             contributors = uiState.contributors,
             onContributorsItemClick = onContributorsItemClick,
+            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(padding)
+                .padding(top = padding.calculateTopPadding())
                 .let {
                     if (scrollBehavior != null) {
                         it.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -148,15 +137,19 @@ private fun Contributors(
     contributors: PersistentList<Contributor>,
     onContributorsItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.testTag(ContributorsTestTag),
+        contentPadding = contentPadding,
     ) {
         items(contributors) {
             ContributorsItem(
                 contributor = it,
                 onClick = onContributorsItemClick,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ContributorsItemTestTagPrefix.plus(it.id)),
             )
         }
     }
