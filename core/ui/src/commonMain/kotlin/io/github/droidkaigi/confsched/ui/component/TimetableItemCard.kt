@@ -102,7 +102,11 @@ fun TimetableItemCard(
                     .weight(1f)
                     .padding(top = contentPadding, start = contentPadding, bottom = contentPadding),
             ) {
-                FlowRow(content = tags)
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    content = tags,
+                )
                 Text(
                     text = annotatedTitleString,
                     style = MaterialTheme.typography.titleMedium,
