@@ -15,6 +15,7 @@ import androidx.compose.ui.test.performTextInput
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.SearchScreen
 import io.github.droidkaigi.confsched.sessions.component.DropdownFilterChipTestTagPrefix
+import io.github.droidkaigi.confsched.sessions.component.SearchFiltersFilterCategoryChipTestTag
 import io.github.droidkaigi.confsched.sessions.component.SearchFiltersFilterDayChipTestTag
 import io.github.droidkaigi.confsched.sessions.component.SearchTextFieldAppBarTextFieldTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
@@ -36,6 +37,14 @@ class SearchScreenRobot @Inject constructor(
     ) {
         Day1(1, "9/12"),
         Day2(2, "9/13"),
+    }
+
+    enum class Category(
+        val categoryName: String,
+    ) {
+        AppArchitecture("App Architecture en"),
+        JetpackCompose("Jetpack Compose en"),
+        Other("Other en"),
     }
 
     fun setupSearchScreenContent() {
@@ -64,6 +73,13 @@ class SearchScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
+    fun clickFilterCategoryChip() {
+        composeTestRule
+            .onNode(hasTestTag(SearchFiltersFilterCategoryChipTestTag))
+            .performClick()
+        waitUntilIdle()
+    }
+
     fun clickConferenceDay(
         clickDay: ConferenceDay,
     ) {
@@ -80,6 +96,22 @@ class SearchScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
+    fun clickCategory(
+        category: Category,
+    ) {
+        composeTestRule
+            .onAllNodes(
+                hasTestTag(
+                    testTag = DropdownFilterChipTestTagPrefix,
+                    substring = true,
+                ),
+            )
+            .filter(matcher = hasText(category.categoryName))
+            .onFirst()
+            .performClick()
+        waitUntilIdle()
+    }
+
     fun checkDisplayedFilterDayChip() {
         composeTestRule
             .onAllNodes(
@@ -89,6 +121,18 @@ class SearchScreenRobot @Inject constructor(
                 ),
             )
             .assertCountAtLeast(ConferenceDay.entries.size)
+    }
+
+    fun checkDisplayedFilterCategoryChip() {
+        composeTestRule
+            .onAllNodes(
+                hasTestTag(
+                    testTag = DropdownFilterChipTestTagPrefix,
+                    substring = true,
+                ),
+            )
+            .assertCountAtLeast(Category.entries.size)
+        waitUntilIdle()
     }
 
     fun checkTimetableListItemByConferenceDay(
@@ -105,6 +149,25 @@ class SearchScreenRobot @Inject constructor(
             .onFirst()
             .assertTextContains("Demo Welcome Talk ${contain.day}")
             .assertTextDoesNotContain("Demo Welcome Talk ${doesNotContain.day}")
+    }
+
+    fun checkTimetableListItemByCategory(
+        category: Category,
+    ) {
+        val containText = if (category == Category.Other) {
+            "Demo Welcome Talk"
+        } else {
+            category.categoryName
+        }
+
+        composeTestRule
+            .onAllNodes(hasTestTag(TimetableItemCardTestTag))
+            .onFirst()
+            .assertTextContains(
+                value = containText,
+                substring = true,
+            )
+        waitUntilIdle()
     }
 
     fun checkSearchWordDisplayed(text: String) {
