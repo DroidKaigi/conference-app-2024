@@ -9,6 +9,11 @@ public data class Filters(
     val searchWord: String = "",
 ) {
 
+    /**
+     * Checks if all filtering criteria are empty.
+     *
+     * @return True if all criteria are empty; false otherwise.
+     */
     fun isEmpty() = days.isEmpty() &&
         categories.isEmpty() &&
         sessionTypes.isEmpty() &&
