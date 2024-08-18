@@ -6,6 +6,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -57,6 +59,7 @@ const val TimetableItemCardBookmarkedIconTestTag = "TimetableItemCardBookmarkedI
 const val TimetableItemCardTestTag = "TimetableListItem"
 const val TimetableItemCardTitleTextTestTag = "TimetableItemCardTitleText"
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TimetableItemCard(
     isBookmarked: Boolean,
@@ -99,7 +102,11 @@ fun TimetableItemCard(
                     .weight(1f)
                     .padding(top = contentPadding, start = contentPadding, bottom = contentPadding),
             ) {
-                Row(content = tags)
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp),
+                    content = tags,
+                )
                 Text(
                     text = annotatedTitleString,
                     style = MaterialTheme.typography.titleMedium,
