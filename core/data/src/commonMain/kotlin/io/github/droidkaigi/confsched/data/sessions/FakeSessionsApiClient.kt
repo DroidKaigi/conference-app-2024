@@ -51,6 +51,13 @@ public class FakeSessionsApiClient : SessionsApiClient {
         public val defaultSession: SessionResponse = SessionsAllResponse.fake()
             .filterConferenceDaySessions().sessions.find { it.sessionType == "NORMAL" }!!
         public val defaultSessionId: String = defaultSession!!.id
+
+        public val defaultSessionWithLongDescription: SessionResponse = SessionsAllResponse.fake()
+            .filterConferenceDaySessions().sessions.find {
+                (it.description?.split("\n")?.size ?: 0) >= 7
+            }!!
+        public val defaultSessionIdWithLongDescription: String =
+            defaultSessionWithLongDescription.id
     }
 }
 
@@ -135,10 +142,28 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                     (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds).seconds)
                 val end =
                     (DroidKaigi2024Day.Workday.start + (index * 30 * 60 * 60 + dayOffsetSeconds + 30 * 60).seconds)
-                val sessionCategoryItemId = if (categories.first().items.size % index.plus(1) == 0) {
-                    1
+                val sessionCategoryItemId =
+                    if (categories.first().items.size % index.plus(1) == 0) {
+                        1
+                    } else {
+                        2
+                    }
+
+                val description = if (index % 2 == 0) {
+                    "これはディスクリプションです。\nこれはディスクリプションです。\n" +
+                        "これはディスクリプションです。\nこれはディスクリプションです。\n" +
+                        "これはディスクリプションです。\nこれはディスクリプションです。\n" +
+                        "これはディスクリプションです。\nこれはディスクリプションです。\n"
                 } else {
-                    2
+                    "これはディスクリプションです。"
+                }
+
+                val englishDescription = if (index % 2 == 0) {
+                    "This is a description\nThis is a description\nThis is a description\n" +
+                        "This is a description\nThis is a description\nThis is a description\n" +
+                        "This is a description\nThis is a description\n"
+                } else {
+                    "This is a description."
                 }
 
                 val session = SessionResponse(
@@ -149,13 +174,10 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                         en = "DroidKaigi ${categories.first().items.findLast { it.id == sessionCategoryItemId }?.name?.en} day$day room${room.name.en} index$index",
                     ),
                     speakers = listOf("1", "2"),
-                    description = "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n" +
-                        "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n",
+                    description = description,
                     i18nDesc = LocaledResponse(
-                        ja = "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n" +
-                            "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n",
-                        en = "This is a description\nThis is a description\nThis is a description\n" +
-                            "This is a description\nThis is a description\nThis is a description\n",
+                        ja = description,
+                        en = englishDescription,
                     ),
                     startsAt = start.toCustomIsoString(),
                     endsAt = end.toCustomIsoString(),
