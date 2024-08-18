@@ -6,8 +6,7 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
-import io.github.droidkaigi.confsched.data.sessions.fake
-import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
+import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.user.UserDataStore
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.FavoritesScreen
@@ -37,7 +36,7 @@ class FavoritesScreenRobot @Inject constructor(
 
     suspend fun setupFavoriteSession() {
         userDataStore.toggleFavorite(
-            TimetableItemId(SessionsAllResponse.fake().sessions.first().id),
+            TimetableItemId(FakeSessionsApiClient.defaultSessionId),
         )
         waitUntilIdle()
     }

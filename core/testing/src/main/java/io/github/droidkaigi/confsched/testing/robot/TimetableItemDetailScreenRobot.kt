@@ -16,9 +16,7 @@ import androidx.compose.ui.test.swipeUp
 import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
-import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsRepository.Companion.filterConferenceDaySessions
-import io.github.droidkaigi.confsched.data.sessions.fake
-import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
+import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
@@ -39,7 +37,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
 
     suspend fun setupScreenContent() {
         robotTestRule.setContentWithNavigation<TimetableItemDetailDestination>(
-            startDestination = { TimetableItemDetailDestination(defaultSessionId) },
+            startDestination = { TimetableItemDetailDestination(FakeSessionsApiClient.defaultSessionId) },
         ) {
             KaigiTheme {
                 TimetableItemDetailScreen(
@@ -103,7 +101,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onNode(hasTestTag(TimetableItemDetailHeadlineTestTag))
             .assertExists()
             .assertIsDisplayed()
-            .assertTextEquals(defaultSession.title.en!!)
+            .assertTextEquals(FakeSessionsApiClient.defaultSession.title.en!!)
     }
 
     fun checkBookmarkedSession() {
@@ -148,9 +146,6 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     }
 
     companion object {
-        val defaultSession = SessionsAllResponse.fake()
-            .filterConferenceDaySessions().sessions.find { it.sessionType == "NORMAL" }!!
-        val defaultSessionId: String =
-            defaultSession!!.id
+        val defaultSessionId = FakeSessionsApiClient.defaultSession.id
     }
 }

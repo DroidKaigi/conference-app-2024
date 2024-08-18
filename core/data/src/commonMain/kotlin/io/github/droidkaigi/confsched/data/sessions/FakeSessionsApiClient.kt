@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.data.sessions
 
+import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsRepository.Companion.filterConferenceDaySessions
 import io.github.droidkaigi.confsched.data.sessions.response.CategoryItemResponse
 import io.github.droidkaigi.confsched.data.sessions.response.CategoryResponse
 import io.github.droidkaigi.confsched.data.sessions.response.LocaledResponse
@@ -43,6 +44,12 @@ public class FakeSessionsApiClient : SessionsApiClient {
 
     override suspend fun sessionsAllResponse(): SessionsAllResponse {
         return status.sessionsAllResponse()
+    }
+
+    public companion object {
+        public val defaultSession: SessionResponse = SessionsAllResponse.fake()
+            .filterConferenceDaySessions().sessions.find { it.sessionType == "NORMAL" }!!
+        public val defaultSessionId: String = defaultSession!!.id
     }
 }
 
