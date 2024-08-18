@@ -61,7 +61,11 @@ fun SponsorsList(
                 }
             }
             .testTag(SponsorsListLazyVerticalGridTestTag),
-        contentPadding = contentPadding + PaddingValues(horizontal = 12.dp),
+        contentPadding = PaddingValues(
+            start = 12.dp,
+            end = 12.dp,
+            bottom = 48.dp + contentPadding.calculateBottomPadding()
+        ),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             SponsorHeader(
