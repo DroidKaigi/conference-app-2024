@@ -8,7 +8,6 @@ import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.FavoritesScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
-import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
@@ -29,7 +28,7 @@ class FavoritesScreenTest(
 
     @Test
     fun runTest() {
-        runRobot(favoritesScreenRobot) {
+        runRobot(robot = favoritesScreenRobot) {
             testCase.execute(favoritesScreenRobot)
         }
     }
@@ -42,10 +41,17 @@ class FavoritesScreenTest(
                 describe("when server is operational") {
                     run {
                         setupTimetableServer(ServerStatus.Operational)
+                        setupFavoriteSession()
+                        setupFavoritesScreenContent()
                     }
-                    describe("when launch") {
+                    itShould("display favorite session") {
+                        captureScreenWithChecks(
+                            checks = { checkTimetableListItemsDisplayed() },
+                        )
+                    }
+                    describe("click first session bookmark") {
                         run {
-                            setupFavoritesScreenContent()
+                            clickFirstSessionBookmark()
                         }
                         itShould("display empty view") {
                             captureScreenWithChecks(
@@ -65,7 +71,7 @@ class FavoritesScreenTest(
                         }
                         itShould("show error message") {
                             captureScreenWithChecks(
-                                checks = todoChecks("This screen is still empty now. Please add some checks."),
+                                checks = { checkErrorSnackbarDisplayed() },
                             )
                         }
                     }
