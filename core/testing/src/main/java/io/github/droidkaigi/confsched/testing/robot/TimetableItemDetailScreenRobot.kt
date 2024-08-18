@@ -39,7 +39,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     FontScaleRobot by fontScaleRobot {
 
     suspend fun setupScreenContent(
-        sessionId: String = FakeSessionsApiClient.defaultSessionId
+        sessionId: String = FakeSessionsApiClient.defaultSessionId,
     ) {
         robotTestRule.setContentWithNavigation<TimetableItemDetailDestination>(
             startDestination = { TimetableItemDetailDestination(sessionId) },
