@@ -102,6 +102,18 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             }
                         }
                     }
+                    describe("when the description is lengthy") {
+                        run {
+                            setupScreenContentWithLongDescription()
+                            scrollLazyColumnByIndex(2)
+                            advanceTimeBy(500)
+                        }
+                        itShould("display a more button") {
+                            captureScreenWithChecks {
+                                checkDisplayingMoreButton()
+                            }
+                        }
+                    }
                     describe("when font scale is small") {
                         run {
                             setFontScale(0.5f)
