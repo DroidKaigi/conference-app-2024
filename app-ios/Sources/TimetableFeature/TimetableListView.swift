@@ -127,6 +127,7 @@ struct TimetableGridView: View {
                             .frame(width: 192)
                     }
                 }
+                
                 ForEach(store.timetableItems, id: \.self) { timeBlock in
                     GridRow {
                         VStack {
@@ -135,11 +136,22 @@ struct TimetableGridView: View {
                             
                         }.frame(height: 153)
                         
-                        ForEach(rooms, id: \.self) { room in
+                        if (timeBlock.items.count == 1 && timeBlock.matchTopItem(for: RoomType.roomJ)) {
                             
-                            timeBlock.getCellForRoom(room: room, onTap: { item in
+                            timeBlock.getCellForRoom(
+                                room: RoomType.roomJ,
+                                cellCount: 5,
+                                onTap: { item in
                                 store.send(.view(.timetableItemTapped(item)))
-                            })
+                            }).gridCellColumns(5)
+                            
+                            
+                        } else {
+                            ForEach(rooms, id: \.self) { room in
+                                timeBlock.getCellForRoom(room: room, cellCount: 1, onTap: { item in
+                                    store.send(.view(.timetableItemTapped(item)))
+                                })
+                            }
                         }
                     }
                 }
@@ -248,9 +260,9 @@ extension RoomType {
 }
 
 extension TimetableTimeGroupItems {
-    func getCellForRoom(room: RoomType, onTap: @escaping (TimetableItemWithFavorite) -> Void) -> TimetableGridCard {
+    func getCellForRoom(room: RoomType, cellCount: Int?=1, onTap: @escaping (TimetableItemWithFavorite) -> Void) -> TimetableGridCard {
         return if let cell = getItem(for: room) {
-            TimetableGridCard(timetableItem: cell.timetableItem) { timetableItem in
+            TimetableGridCard(timetableItem: cell.timetableItem, cellCount: cellCount ?? 1) { timetableItem in
                 onTap(cell)
             }
         } else {

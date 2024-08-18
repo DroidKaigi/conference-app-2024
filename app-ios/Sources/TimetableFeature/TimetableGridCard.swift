@@ -6,13 +6,16 @@ import class shared.TimetableItem
 public struct TimetableGridCard: View {
     let timetableItem: TimetableItem?
     let onTap: (TimetableItem) -> Void
+    let cellCount: Int
     
     public init(
         timetableItem: TimetableItem?,
+        cellCount: Int? = 1,
         onTap: @escaping (TimetableItem) -> Void
     ) {
         self.timetableItem = timetableItem
         self.onTap = onTap
+        self.cellCount = cellCount ?? 1
     }
 
     public var body: some View {
@@ -58,7 +61,7 @@ public struct TimetableGridCard: View {
                 }
                 .frame(maxWidth: .infinity)
                 .padding(12)
-                .frame(width: 192, height: 153)
+                .frame(width: 192*CGFloat(cellCount)+CGFloat(12*(cellCount-1)), height: 153)
                 .background(timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
                 .overlay(RoundedRectangle(cornerRadius: 4).stroke(timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
             }

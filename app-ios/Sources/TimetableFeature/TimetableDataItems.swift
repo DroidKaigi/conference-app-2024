@@ -34,6 +34,10 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
             $0.timetableItem.room.type == room   //TODO: roomIj handling not decided?
         }.first
     }
+    
+    func matchTopItem(for room: RoomType) -> Bool {
+        return items[0].timetableItem.room.type == room
+    }
 }
 
 // This exists only for previews now.
