@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.outlined.FileCopy
 import androidx.compose.material.icons.outlined.Gavel
 import androidx.compose.material.icons.outlined.PrivacyTip
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,6 +19,7 @@ import conference_app_2024.feature.about.generated.resources.code_of_conduct
 import conference_app_2024.feature.about.generated.resources.license
 import conference_app_2024.feature.about.generated.resources.others_title
 import conference_app_2024.feature.about.generated.resources.privacy_policy
+import conference_app_2024.feature.about.generated.resources.settings
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutContentColumn
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -34,6 +36,7 @@ fun LazyListScope.aboutOthers(
     onCodeOfConductItemClick: () -> Unit,
     onLicenseItemClick: () -> Unit,
     onPrivacyPolicyItemClick: () -> Unit,
+    onSettingsItemClick: () -> Unit,
 ) {
     item {
         Text(
@@ -84,6 +87,18 @@ fun LazyListScope.aboutOthers(
                 ),
         )
     }
+    item {
+        AboutContentColumn(
+            leadingIcon = Outlined.Settings,
+            label = stringResource(AboutRes.string.settings),
+            onClickAction = onSettingsItemClick,
+            testTag = "TODO",
+            modifier = modifier
+                .padding(
+                    horizontal = 16.dp,
+                ),
+        )
+    }
 }
 
 @Preview
@@ -96,6 +111,7 @@ internal fun AboutOthersPreview() {
                     onCodeOfConductItemClick = {},
                     onLicenseItemClick = {},
                     onPrivacyPolicyItemClick = {},
+                    onSettingsItemClick = {},
                 )
             }
         }

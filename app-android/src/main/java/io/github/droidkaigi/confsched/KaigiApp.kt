@@ -226,6 +226,10 @@ private fun NavGraphBuilder.mainScreen(
                             )
                         }
 
+                        AboutItem.Settings -> {
+                            // TODO Transition to SettingsScreen
+                        }
+
                         AboutItem.Staff -> navController.navigate(staffScreenRoute)
                         AboutItem.X -> externalNavController.navigate(
                             url = "https://twitter.com/DroidKaigi",
