@@ -24,7 +24,7 @@ public class DefaultSettingsDataStore(
             val cache = preferences[KEY_SETTINGS] ?: return@map null
             Json.decodeFromString<SettingsJson>(cache)
         }.map {
-            it?.toModel() ?: Settings.DoesNotExists
+            it?.toModel() ?: Settings.defaultValue()
         }
     }
 
