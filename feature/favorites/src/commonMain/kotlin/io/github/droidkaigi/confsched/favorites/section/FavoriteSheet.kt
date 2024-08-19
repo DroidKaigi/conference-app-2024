@@ -39,6 +39,7 @@ import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+
 const val FavoritesScreenEmptyViewTestTag = "FavoritesScreenEmptyViewTestTag"
 
 sealed interface FavoritesSheetUiState {
@@ -103,7 +104,7 @@ fun FavoriteSheet(
 
 @Composable
 private fun EmptyView(modifier: Modifier = Modifier) {
-    Column(
+    LazyColumm(
         modifier = modifier.testTag(FavoritesScreenEmptyViewTestTag).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
