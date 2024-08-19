@@ -66,7 +66,7 @@ fun TimetableDayTab(
                         val isSelected = conferenceDay == selectedDay
                         if (isSelected) {
                             FloorText(
-                                text = stringResource(SessionsRes.string.conference),
+                                text = "",
                                 isSelected = isSelected,
                             )
                             Text(
