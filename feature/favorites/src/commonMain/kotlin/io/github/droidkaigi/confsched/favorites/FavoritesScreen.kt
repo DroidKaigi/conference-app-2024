@@ -130,8 +130,15 @@ fun FavoritesScreen(
             )
         },
     ) { padding ->
+        val filterBackgroundColor = if (scrollBehavior.state.overlappedFraction > 0f) {
+            MaterialTheme.colorScheme.surfaceContainer
+        } else {
+            MaterialTheme.colorScheme.surface
+        }
+
         FavoriteSheet(
             uiState = uiState.favoritesSheetUiState,
+            filterBackgroundColor = filterBackgroundColor,
             onTimetableItemClick = onTimetableItemClick,
             onAllFilterChipClick = onAllFilterChipClick,
             onDay1FilterChipClick = onDay1FilterChipClick,
