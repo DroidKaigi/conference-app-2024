@@ -50,7 +50,6 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
-import io.github.droidkaigi.confsched.eventmap.navigation.EventMapDestination
 import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
 import io.github.droidkaigi.confsched.favorites.favoritesScreens
 import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
@@ -247,7 +246,6 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     override val startDestination: String = timetableScreenRoute
 
     override fun routeToTab(route: String): MainScreenTab? {
-        if (route.contains("${EventMapDestination::class.simpleName}")) return EventMap
         return when (route) {
             timetableScreenRoute -> Timetable
             eventMapScreenRoute -> EventMap
