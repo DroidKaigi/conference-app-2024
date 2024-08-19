@@ -16,15 +16,15 @@ private actor SpeakerIconInMemoryCache {
     }
 }
 
-struct SpeakerIcon: View {
+public struct SpeakerIcon: View {
     let urlString: String
     @State private var iconData: Data?
     
-    init(urlString: String) {
+    public init(urlString: String) {
         self.urlString = urlString
     }
     
-    var body: some View {
+    public var body: some View {
         Group {
             if let data = iconData,
                let uiImage = UIImage(data: data) {
@@ -34,7 +34,6 @@ struct SpeakerIcon: View {
                 Circle().stroke(Color.gray)
             }
         }
-        .frame(width: 32, height: 32)
         .clipShape(Circle())
         .task {
             if let data = await SpeakerIconInMemoryCache.shared.data(urlString: urlString) {
@@ -56,4 +55,5 @@ struct SpeakerIcon: View {
 
 #Preview {
     SpeakerIcon(urlString: "https://github.com/mltokky.png")
+        .frame(width: 32, height: 32)
 }
