@@ -61,6 +61,7 @@ fun NavController.navigateAboutScreen() {
 
 data class AboutUiState(
     val versionName: String,
+    val enableAnimation: Boolean,
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -99,6 +100,7 @@ fun AboutScreen(
         ) {
             item {
                 AboutDroidKaigiDetail(
+                    uiState = uiState,
                     screenScrollState = lazyListState,
                     onViewMapClick = {
                         onAboutItemClick(AboutItem.Map)

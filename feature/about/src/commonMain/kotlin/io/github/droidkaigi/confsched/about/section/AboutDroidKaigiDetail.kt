@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.core.ui.generated.resources.about_header_year
 import conference_app_2024.feature.about.generated.resources.description
 import io.github.droidkaigi.confsched.about.AboutRes
+import io.github.droidkaigi.confsched.about.AboutUiState
 import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetailSummaryCard
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.ui.UiRes
@@ -38,6 +39,7 @@ const val AboutDetailTestTag = "AboutDetailTestTag"
 
 @Composable
 fun AboutDroidKaigiDetail(
+    uiState: AboutUiState,
     screenScrollState: LazyListState,
     modifier: Modifier = Modifier,
     onViewMapClick: () -> Unit,
@@ -68,7 +70,9 @@ fun AboutDroidKaigiDetail(
                     .offset(y = aboutHeaderOffset.dp),
             )
             Image(
-                painter = provideAboutHeaderTitlePainter(),
+                painter = provideAboutHeaderTitlePainter(
+                    enableAnimation = uiState.enableAnimation,
+                ),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
@@ -106,6 +110,10 @@ fun AboutDroidKaigiDetailPreview() {
     KaigiTheme {
         Surface {
             AboutDroidKaigiDetail(
+                uiState = AboutUiState(
+                    versionName = "",
+                    enableAnimation = true,
+                ),
                 screenScrollState = rememberLazyListState(),
                 onViewMapClick = {},
             )
