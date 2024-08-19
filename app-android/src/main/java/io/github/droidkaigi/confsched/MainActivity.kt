@@ -23,11 +23,11 @@ import androidx.core.view.WindowCompat
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.WindowInfoTracker
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
 import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
 import io.github.droidkaigi.confsched.model.FontFamily.DotGothic16Regular
 import io.github.droidkaigi.confsched.model.FontFamily.SystemDefault
-import io.github.droidkaigi.confsched.model.Settings.DoesNotExists
 import io.github.droidkaigi.confsched.model.Settings.Exists
 import io.github.droidkaigi.confsched.model.Settings.Loading
 import io.github.droidkaigi.confsched.model.SettingsRepository
@@ -79,12 +79,28 @@ class MainActivity : ComponentActivity() {
             .isAppearanceLightStatusBars = false
         setContent {
             val settings = settingRepository.settings()
+            val enableAnimation = isDeviceWithLowMemory().not()
+
+            SafeLaunchedEffect(Unit) {
+                when (settings) {
+                    Loading -> {
+                        // NOOP
+                    }
+                    is Exists -> {
+                        settingRepository.save(
+                            settings = settings.copy(
+                                enableAnimation = enableAnimation,
+                            )
+                        )
+                    }
+                }
+            }
 
             val windowSize = calculateWindowSizeClass()
             val displayFeatures = calculateDisplayFeatures(this)
 
             val fontFamily = when (settings) {
-                DoesNotExists, Loading -> dotGothic16FontFamily()
+                Loading -> dotGothic16FontFamily()
                 is Exists -> {
                     when (settings.useFontFamily) {
                         DotGothic16Regular -> dotGothic16FontFamily()
