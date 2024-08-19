@@ -39,6 +39,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.window.layout.DisplayFeature
 import co.touchlab.kermit.Logger
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import io.github.droidkaigi.confsched.about.aboutScreen
 import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
@@ -321,7 +322,7 @@ private class ExternalNavController(
     }
 
     fun navigateToLicenseScreen() {
-        context.startActivity(Intent(context, OssLicensesDarkModeLauncherActivity::class.java))
+        context.startActivity(Intent(context, OssLicensesMenuActivity::class.java))
     }
 
     fun onShareClick(timetableItem: TimetableItem) {
