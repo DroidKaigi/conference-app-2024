@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 internal data class SettingsJson(
     @SerialName("use_font_family_name")
-    val useFontFamilyName: String,
+    val useFontFamilyName: String? = null,
 )
 
 internal fun SettingsJson.toModel() = Settings.Exists(

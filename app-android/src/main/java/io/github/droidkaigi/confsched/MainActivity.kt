@@ -22,9 +22,8 @@ import androidx.window.layout.WindowInfoTracker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
 import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
-import io.github.droidkaigi.confsched.designsystem.theme.notoSansFontFamily
 import io.github.droidkaigi.confsched.model.FontFamily.DotGothic16Regular
-import io.github.droidkaigi.confsched.model.FontFamily.NotoSansJPRegular
+import io.github.droidkaigi.confsched.model.FontFamily.SystemDefault
 import io.github.droidkaigi.confsched.model.Settings.DoesNotExists
 import io.github.droidkaigi.confsched.model.Settings.Exists
 import io.github.droidkaigi.confsched.model.Settings.Loading
@@ -43,6 +42,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var repositoryProvider: RepositoryProvider
+
+    @Inject
+    lateinit var settingRepository: SettingsRepository
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,16 +75,17 @@ class MainActivity : ComponentActivity() {
         WindowCompat.getInsetsController(window, window.decorView)
             .isAppearanceLightStatusBars = false
         setContent {
+            val settings = settingRepository.settings()
+
             val windowSize = calculateWindowSizeClass()
             val displayFeatures = calculateDisplayFeatures(this)
 
-            val settingsRepository = repositoryProvider.repositories[SettingsRepository::class.java] as SettingsRepository
-            val fontFamily = when (val settings = settingsRepository.settings()) {
+            val fontFamily = when (settings) {
                 DoesNotExists, Loading -> dotGothic16FontFamily()
                 is Exists -> {
                     when (settings.useFontFamily) {
                         DotGothic16Regular -> dotGothic16FontFamily()
-                        NotoSansJPRegular -> notoSansFontFamily()
+                        SystemDefault -> null
                     }
                 }
             }

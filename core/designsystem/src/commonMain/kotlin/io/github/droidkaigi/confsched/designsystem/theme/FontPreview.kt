@@ -16,7 +16,7 @@ internal fun FontPreview() {
     ) {
         val fonts = listOf(
             dotGothic16FontFamily(),
-            notoSansFontFamily(),
+            // Add here when adding fonts.
         )
         fonts.forEach { fontFamily ->
             Text("Display Large", style = appTypography(fontFamily).displayLarge)

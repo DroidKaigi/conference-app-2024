@@ -12,11 +12,8 @@ import androidx.compose.ui.unit.sp
 expect fun dotGothic16FontFamily(): FontFamily
 
 @Composable
-expect fun notoSansFontFamily(): FontFamily
-
-@Composable
 fun appTypography(
-    fontFamily: FontFamily,
+    fontFamily: FontFamily?,
 ): Typography {
     return remember(fontFamily) {
         Typography(
@@ -110,7 +107,6 @@ fun appTypography(
                 lineHeight = 16.sp,
                 letterSpacing = 0.4.sp,
             ),
-
         )
     }
 }

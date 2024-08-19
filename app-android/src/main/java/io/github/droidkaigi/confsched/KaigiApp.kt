@@ -92,7 +92,7 @@ import kotlinx.collections.immutable.PersistentList
 fun KaigiApp(
     windowSize: WindowSizeClass,
     displayFeatures: PersistentList<DisplayFeature>,
-    fontFamily: FontFamily,
+    fontFamily: FontFamily?,
     modifier: Modifier = Modifier,
 ) {
     val layoutDirection = LocalLayoutDirection.current

@@ -260,7 +260,7 @@ private val fixedAccentColors = FixedAccentColors(
 @Composable
 fun KaigiTheme(
     colorContrast: ColorContrast = Default,
-    fontFamily: FontFamily = dotGothic16FontFamily(),
+    fontFamily: FontFamily? = dotGothic16FontFamily(),
     content: @Composable () -> Unit,
 ) {
     val colorScheme = when (colorContrast) {
