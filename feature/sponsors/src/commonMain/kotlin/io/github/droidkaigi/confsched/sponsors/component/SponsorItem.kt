@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import conference_app_2024.feature.sponsors.generated.resources.content_description_sponsor_logo_format
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Sponsor
@@ -35,8 +36,8 @@ fun SponsorItem(
             containerColor = MaterialTheme.colorScheme.inverseSurface,
         ),
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(sponsor.logo),
+        AsyncImage(
+            model = sponsor.logo,
             contentDescription = stringResource(
                 SponsorsRes.string.content_description_sponsor_logo_format,
                 sponsor.name,
