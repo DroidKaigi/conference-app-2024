@@ -52,6 +52,7 @@ fun NavGraphBuilder.settingsScreens(
 data class SettingsUiState(
     val useFontFamily: FontFamily?,
     val enableAnimation: Boolean,
+    val enableFallbackMode: Boolean,
     val userMessageStateHolder: UserMessageStateHolder,
 )
 
@@ -76,6 +77,7 @@ fun SettingsScreen(
         onBackClick = onNavigationIconClick,
         onSelectUseFontFamily = { eventEmitter.tryEmit(SettingsScreenEvent.SelectUseFontFamily(it)) },
         onSelectEnableAnimation = { eventEmitter.tryEmit(SettingsScreenEvent.SelectEnableAnimation(it)) },
+        onSelectFallbackMode = { eventEmitter.tryEmit(SettingsScreenEvent.SelectEnableFallbackMode(it)) },
         modifier = modifier,
         isTopAppBarHidden = isTopAppBarHidden,
     )
@@ -89,6 +91,7 @@ fun SettingsScreen(
     onBackClick: () -> Unit,
     onSelectUseFontFamily: (FontFamily) -> Unit,
     onSelectEnableAnimation: (Boolean) -> Unit,
+    onSelectFallbackMode: (Boolean) -> Unit,
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -134,6 +137,7 @@ fun SettingsScreen(
             lookAndFeel(
                 uiState = uiState,
                 onSelectEnableAnimation = onSelectEnableAnimation,
+                onSelectFallbackMode = onSelectFallbackMode,
             )
         }
     }
@@ -148,12 +152,14 @@ fun SettingsScreenPreview() {
                 uiState = SettingsUiState(
                     useFontFamily = FontFamily.DotGothic16Regular,
                     enableAnimation = true,
+                    enableFallbackMode = false,
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
                 snackbarHostState = SnackbarHostState(),
                 onBackClick = {},
                 onSelectUseFontFamily = {},
                 onSelectEnableAnimation = {},
+                onSelectFallbackMode = {},
                 isTopAppBarHidden = false,
             )
         }
