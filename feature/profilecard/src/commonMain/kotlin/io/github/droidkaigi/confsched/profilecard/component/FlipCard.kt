@@ -64,6 +64,7 @@ import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import qrcode.QRCode
 
 const val ProfileCardFlipCardTestTag = "ProfileCardFlipCardTestTag"
 const val ProfileCardFlipCardFrontTestTag = "ProfileCardFlipCardFrontTestTag"
@@ -122,6 +123,11 @@ internal fun FlipCard(
         elevation = CardDefaults.cardElevation(10.dp),
     ) {
         val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
+        val imageBitmap = remember {
+            QRCode.ofSquares()
+                .build(uiState.link)
+                .renderToBytes().toImageBitmap()
+        }
         if (isBack) { // Back
             FlipCardBack(uiState)
         } else { // Front
