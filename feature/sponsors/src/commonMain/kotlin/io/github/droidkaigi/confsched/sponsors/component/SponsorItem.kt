@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.sponsors.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,7 +17,6 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.sponsors.SponsorsRes
-import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
