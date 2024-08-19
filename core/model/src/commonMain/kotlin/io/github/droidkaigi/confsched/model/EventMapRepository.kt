@@ -4,9 +4,11 @@ import androidx.compose.runtime.Composable
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.flow.Flow
+import kotlin.coroutines.cancellation.CancellationException
 
 interface EventMapRepository {
 
+    @Throws(CancellationException::class)
     suspend fun refresh()
 
     @Composable
