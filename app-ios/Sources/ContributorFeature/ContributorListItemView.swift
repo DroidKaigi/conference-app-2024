@@ -14,7 +14,7 @@ struct ContributorListItemView: View {
             }
         } label: {
             HStack(alignment: .center, spacing: 12) {
-                SpeakerIcon(urlString: contributor.iconUrl.absoluteString)
+                CircularUserIcon(urlString: contributor.iconUrl.absoluteString)
                     .frame(width: 52, height: 52)
 
                 Text(contributor.userName)

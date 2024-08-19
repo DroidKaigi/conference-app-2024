@@ -54,7 +54,7 @@ public struct TimetableCard: View {
                 
                 ForEach(timetableItem.speakers, id: \.id) { speaker in
                     HStack(spacing: 8) {
-                        SpeakerIcon(urlString: speaker.iconUrl)
+                        CircularUserIcon(urlString: speaker.iconUrl)
                             .frame(width: 32, height: 32)
                         Text(speaker.name)
                             .textStyle(.titleSmall)

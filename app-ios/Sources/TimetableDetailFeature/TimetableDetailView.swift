@@ -109,7 +109,7 @@ public struct TimetableDetailView: View {
             
             ForEach(store.timetableItem.speakers, id: \.id) { speaker in
                 HStack(spacing: 12) {
-                    SpeakerIcon(urlString: speaker.iconUrl)
+                    CircularUserIcon(urlString: speaker.iconUrl)
                         .frame(width: 52, height: 52)
                         
                     VStack(alignment: .leading, spacing: 8) {

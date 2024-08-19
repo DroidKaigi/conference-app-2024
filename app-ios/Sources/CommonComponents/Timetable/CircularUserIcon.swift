@@ -16,7 +16,7 @@ private actor SpeakerIconInMemoryCache {
     }
 }
 
-public struct SpeakerIcon: View {
+public struct CircularUserIcon: View {
     let urlString: String
     @State private var iconData: Data?
     
@@ -54,6 +54,6 @@ public struct SpeakerIcon: View {
 }
 
 #Preview {
-    SpeakerIcon(urlString: "https://github.com/mltokky.png")
+    CircularUserIcon(urlString: "https://github.com/mltokky.png")
         .frame(width: 32, height: 32)
 }

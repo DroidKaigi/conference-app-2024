@@ -8,7 +8,7 @@ struct StaffLabel: View {
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
-            SpeakerIcon(urlString: icon.absoluteString)
+            CircularUserIcon(urlString: icon.absoluteString)
                 .frame(width: 52, height: 52)
                 .overlay(
                     Circle()
