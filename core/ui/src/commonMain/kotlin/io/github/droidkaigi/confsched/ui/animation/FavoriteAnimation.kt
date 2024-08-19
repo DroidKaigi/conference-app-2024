@@ -24,17 +24,17 @@ private val IconSize = 24.0.dp
 
 @Composable
 fun ProvideFavoriteAnimation(
-    isEnabled: Boolean,
+    direction: FavoriteAnimationDirection,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
     val clock = LocalClock.current
     val coroutineScope = rememberCoroutineScope()
-    val favoriteAnimationScope = remember(clock, coroutineScope, isEnabled) {
+    val favoriteAnimationScope = remember(clock, coroutineScope, direction) {
         FavoriteAnimationScope(
             clock = clock,
             coroutineScope = coroutineScope,
-            isEnabled = isEnabled,
+            direction = direction,
         )
     }
 

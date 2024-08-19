@@ -41,6 +41,7 @@ import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -49,6 +50,8 @@ import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.main.MainScreenTab
+import io.github.droidkaigi.confsched.ui.animation.onGloballyPositionedWithFavoriteAnimationScope
+import io.github.droidkaigi.confsched.ui.useIf
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -203,6 +206,14 @@ fun NavRailTabs(
                     Icon(
                         painter = painterResource(iconRes),
                         contentDescription = "tab ${stringResource(tab.contentDescription)}",
+                        modifier = Modifier.useIf(
+                            tab == MainScreenTab.Favorite,
+                        ) {
+                            onGloballyPositionedWithFavoriteAnimationScope { scope, coordinates ->
+                                val position = coordinates.positionInRoot()
+                                scope?.setTargetPosition(position)
+                            }
+                        },
                     )
                 }
             }

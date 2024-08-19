@@ -1,10 +1,11 @@
 import ComposableArchitecture
 import SwiftUI
 import Theme
+import Model
 
 public struct SponsorView: View {
     private let store: StoreOf<SponsorReducer>
-    @State var selectedSponsorData: SponsorData?
+    @State var selectedSponsorData: Sponsor?
 
     public init(store: StoreOf<SponsorReducer>) {
         self.store = store
@@ -45,7 +46,7 @@ public struct SponsorView: View {
     }
 
     @ViewBuilder
-    func makeSponsorGrid(columnCount: Int, items: [SponsorData], imageHeight: Double) -> some View {
+    func makeSponsorGrid(columnCount: Int, items: [Sponsor], imageHeight: Double) -> some View {
         let gridItems = (1...columnCount)
             .map { _ in
                 GridItem(.flexible(), spacing: 12, alignment: .center)
@@ -56,8 +57,7 @@ public struct SponsorView: View {
                     selectedSponsorData = item
                 } label: {
                     ZStack {
-                        AssetColors.Inverse.inverseSurface.swiftUIColor
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        Color.white.clipShape(RoundedRectangle(cornerRadius: 12))
                         AsyncImage(url: item.logo) {
                             $0.image?
                                 .resizable()

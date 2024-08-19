@@ -44,12 +44,12 @@ public struct StaffClient: Sendable {
 
 @DependencyClient
 public struct SponsorsClient: Sendable {
-    public var streamSponsors: @Sendable () throws -> AsyncThrowingStream<[Sponsor], any Error>
+    public var streamSponsors: @Sendable () throws -> AsyncThrowingStream<[Model.Sponsor], any Error>
 }
 
 @DependencyClient
 public struct ContributorClient: Sendable {
-    public var streamContributors: @Sendable () throws -> AsyncThrowingStream<[Contributor], any Error>
+    public var streamContributors: @Sendable () throws -> AsyncThrowingStream<[Model.Contributor], any Error>
     public var refresh: @Sendable () async throws -> Void
 }
 
