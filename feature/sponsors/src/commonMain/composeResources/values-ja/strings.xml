@@ -5,5 +5,5 @@
     <string name="gold_sponsor">ゴールドスポンサー</string>
     <string name="supporters">サポーター</string>
     <string name="content_description_back">戻る</string>
-    <string name="content_description_sponsor_logo">スポンサーロゴ</string>
+    <string name="content_description_sponsor_logo_format">%1$sのスポンサーロゴ</string>
 </resources>

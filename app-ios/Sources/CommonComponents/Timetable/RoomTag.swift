@@ -48,7 +48,7 @@ extension MultiLangText {
 }
 
 extension RoomType {
-    var shape: some View {
+    public var shape: some View {
         Group {
             switch self {
             case .roomG: Image(.icCircleFill).renderingMode(.template)
