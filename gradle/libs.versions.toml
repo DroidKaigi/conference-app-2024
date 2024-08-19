@@ -119,6 +119,7 @@ lottieCompose = { module = "com.airbnb.android:lottie-compose", version.ref = "l
 animation-graphics-android = { group = "androidx.compose.animation", name = "animation-graphics-android", version = "1.6.8" }
 haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
 peekabooImagePicker = { group = "io.github.onseok", name = "peekaboo-image-picker", version.ref = "peekaboo" }
+qrcodeKotlin = { group = "io.github.g0dkar", name = "qrcode-kotlin", version = "4.1.1" }
 
 androidxFragment = { module = "androidx.fragment:fragment", version.ref = "androidxFragment" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
