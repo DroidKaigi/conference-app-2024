@@ -1,21 +1,22 @@
 import XCTest
 import ComposableArchitecture
 import Model
-@preconcurrency import shared
 @testable import ContributorFeature
 
 final class ContributorFeatureTests: XCTestCase {
 
     @MainActor
     func testOnAppear() async throws {
-        let contributors = Contributor.companion.fakes()
         let store = TestStore(initialState: ContributorReducer.State()) {
             ContributorReducer()
         } withDependencies: {
             $0.contributorClient.refresh = {}
             $0.contributorClient.streamContributors = {
                 AsyncThrowingStream {
-                    $0.yield(contributors)
+                    $0.yield([
+                        .init(id: 0, userName: "hoge", profileUrl: URL(string: "https://2024.droidkaigi.jp/"), iconUrl: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!),
+                        .init(id: 0, userName: "fuga", profileUrl: nil, iconUrl: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!),
+                    ])
                     $0.finish()
                 }
             }
@@ -23,13 +24,15 @@ final class ContributorFeatureTests: XCTestCase {
 
         await store.send(.onAppear)
         await store.receive(\.response) {
-            $0.contributors = contributors
+            $0.contributors = [
+                .init(id: 0, userName: "hoge", profileUrl: URL(string: "https://2024.droidkaigi.jp/"), iconUrl: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!),
+                .init(id: 0, userName: "fuga", profileUrl: nil, iconUrl: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!),
+            ]
         }
     }
 
     @MainActor
     func testOnAppearFail() async throws {
-        let contributors = Contributor.companion.fakes()
         let store = TestStore(initialState: ContributorReducer.State()) {
             ContributorReducer()
         } withDependencies: {
@@ -38,7 +41,6 @@ final class ContributorFeatureTests: XCTestCase {
             }
             $0.contributorClient.streamContributors = {
                 AsyncThrowingStream {
-                    $0.yield(contributors)
                     $0.finish()
                 }
             }

@@ -23,7 +23,13 @@ struct KmpPresenterContributorView: View {
             if let contributors = currentState.map(\.contributors) {
                 ScrollView {
                     LazyVStack(spacing: 0) {
-                        ForEach(contributors, id: \.id) { contributor in
+                        ForEach(contributors, id: \.id) { value in
+                            let contributor = Model.Contributor(
+                                id: Int(value.id),
+                                userName: value.username,
+                                profileUrl: value.profileUrl.map { URL(string: $0)! } ,
+                                iconUrl: URL(string: value.iconUrl)!
+                            )
                             ContributorListItemView(contributor: contributor) { url in
                                 showingUrl = IdentifiableURL(url)
                             }
