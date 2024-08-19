@@ -8,9 +8,9 @@ import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsApiCl
 import io.github.droidkaigi.confsched.data.contributors.DefaultContributorsRepository
 import io.github.droidkaigi.confsched.data.core.defaultJson
 import io.github.droidkaigi.confsched.data.core.defaultKtorConfig
+import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapRepository
 import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
-import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapApiClient
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsRepository
 import io.github.droidkaigi.confsched.data.sessions.SessionCacheDataStore
