@@ -36,12 +36,12 @@ jobs:
           PULL_NUMBER: ${{ steps.pr_number.outputs.number }}
         with:
           script: |
-            const { IOS_REVIEWERS } = process.env
+            const { IOS_REVIEWERS, PULL_NUMBER } = process.env
             const reviewers = IOS_REVIEWERS.split(',')
 
             await github.rest.pulls.requestReviewers({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              pull_number: PULL_NUMBER,
+              pull_number: Number(PULL_NUMBER),
               reviewers
             });

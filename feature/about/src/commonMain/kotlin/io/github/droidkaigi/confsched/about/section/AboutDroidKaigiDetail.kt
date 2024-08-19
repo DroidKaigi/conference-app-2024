@@ -81,6 +81,7 @@ fun AboutDroidKaigiDetail(
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(
                     start = 16.dp,
                     end = 16.dp,

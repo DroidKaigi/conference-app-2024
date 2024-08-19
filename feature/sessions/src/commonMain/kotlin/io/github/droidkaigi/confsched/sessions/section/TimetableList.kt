@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -116,15 +115,12 @@ fun TimetableList(
                                     tagColor = LocalRoomTheme.current.primaryColor,
                                     modifier = Modifier.background(LocalRoomTheme.current.containerColor),
                                 )
-                                Spacer(modifier = Modifier.padding(3.dp))
                                 timetableItem.language.labels.forEach { label ->
                                     TimetableItemTag(
                                         tagText = label,
                                         tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
                                     )
-                                    Spacer(modifier = Modifier.padding(3.dp))
                                 }
-                                Spacer(modifier = Modifier.weight(1f))
                             },
                             onTimetableItemClick = onTimetableItemClick,
                         )
