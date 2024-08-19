@@ -2,5 +2,9 @@
 <resources>
     <string name="settings_title">設定</string>
     <string name="section_title_accessibility">アクセシビリティ</string>
+    <string name="section_title_title_look_and_feel">ルック&amp;フィール</string>
     <string name="section_item_title_font">フォント</string>
+    <string name="section_item_title_enable_animation">アニメーション</string>
+    <string name="enable">ON</string>
+    <string name="disable">OFF</string>
 </resources>

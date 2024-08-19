@@ -2,5 +2,9 @@
 <resources>
     <string name="settings_title">Settings</string>
     <string name="section_title_accessibility">Accessibility</string>
+    <string name="section_title_title_look_and_feel">Look &amp; feel</string>
     <string name="section_item_title_font">Font</string>
+    <string name="section_item_title_enable_animation">Animation</string>
+    <string name="enable">ON</string>
+    <string name="disable">OFF</string>
 </resources>
