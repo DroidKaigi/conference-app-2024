@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class EventMapResponse(
-    val events: List<EventResponse> = emptyList(),
+    val projects: List<ProjectResponse> = emptyList(),
     val rooms: List<RoomResponse> = emptyList(),
     val status: String = "",
 )

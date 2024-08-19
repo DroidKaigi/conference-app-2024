@@ -6,6 +6,9 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot
+import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Category
+import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.ConferenceDay
+import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Language
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
@@ -50,14 +53,88 @@ class SearchScreenTest(
                         }
                     }
                     describe("input search word to TextField") {
-                        val searchWord = "Demo"
                         run {
-                            inputSearchWord(searchWord)
+                            inputDemoSearchWord()
                         }
                         itShould("show search word and filtered items") {
                             captureScreenWithChecks {
-                                checkSearchWordDisplayed(searchWord)
-                                checkTimetableListItemsHasText(searchWord)
+                                checkDemoSearchWordDisplayed()
+                                checkTimetableListItemsHasDemoText()
+                            }
+                        }
+                    }
+                    describe("when filter day chip click") {
+                        run {
+                            clickFilterDayChip()
+                        }
+                        itShould("show drop down menu") {
+                            captureScreenWithChecks {
+                                checkDisplayedFilterDayChip()
+                            }
+                        }
+                        ConferenceDay.entries.forEach { conference ->
+                            describe("when click conference day ${conference.day}") {
+                                run {
+                                    clickConferenceDay(
+                                        clickDay = conference,
+                                    )
+                                }
+                                itShould("selected day ${conference.day}") {
+                                    captureScreenWithChecks {
+                                        checkTimetableListItemByConferenceDay(
+                                            checkDay = conference,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    describe("when filter category chip click") {
+                        run {
+                            clickFilterCategoryChip()
+                        }
+                        itShould("show drop down menu") {
+                            captureScreenWithChecks {
+                                checkDisplayedFilterCategoryChip()
+                            }
+                        }
+                        Category.entries.forEach { category ->
+                            describe("when click category ${category.categoryName}") {
+                                run {
+                                    clickCategory(
+                                        category = category,
+                                    )
+                                }
+                                itShould("selected category ${category.categoryName}") {
+                                    captureScreenWithChecks {
+                                        checkTimetableListItemByCategory(category)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    describe("when filter language chip click") {
+                        run {
+                            scrollToFilterLanguageChip()
+                            clickFilterLanguageChip()
+                        }
+                        itShould("show drop down menu") {
+                            captureScreenWithChecks {
+                                checkDisplayedFilterLanguageChip()
+                            }
+                        }
+                        Language.entries.forEach { language ->
+                            describe("when click language ${language.name}") {
+                                run {
+                                    clickLanguage(
+                                        language = language,
+                                    )
+                                }
+                                itShould("selected language ${language.name}") {
+                                    captureScreenWithChecks {
+                                        checkTimetableListItemByLanguage(language)
+                                    }
+                                }
                             }
                         }
                     }

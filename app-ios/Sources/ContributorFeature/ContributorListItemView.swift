@@ -1,6 +1,6 @@
-import shared
 import SwiftUI
 import Theme
+import Model
 
 struct ContributorListItemView: View {
     let contributor: Contributor
@@ -8,19 +8,18 @@ struct ContributorListItemView: View {
 
     var body: some View {
         Button {
-            if let urlString = contributor.profileUrl,
-               let url = URL(string: urlString) {
+            if let url = contributor.profileUrl {
                 onContributorButtonTapped(url)
             }
         } label: {
             HStack(alignment: .center, spacing: 12) {
-                AsyncImage(url: URL(string: contributor.iconUrl)) {
+                AsyncImage(url: contributor.iconUrl) {
                     $0.image?.resizable()
                 }
                 .frame(width: 52, height: 52)
                 .clipShape(Circle())
 
-                Text(contributor.username)
+                Text(contributor.userName)
                     .textStyle(.bodyLarge)
                     .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     .multilineTextAlignment(.leading)
@@ -37,6 +36,11 @@ struct ContributorListItemView: View {
 
 #Preview {
     ContributorListItemView(
-        contributor: Contributor.companion.fakes().first!
+        contributor: .init(
+            id: 0,
+            userName: "hoge",
+            profileUrl: URL(string: "https://2024.droidkaigi.jp/"),
+            iconUrl: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!
+        )
     ) { _ in }
 }
