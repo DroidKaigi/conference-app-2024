@@ -6,12 +6,14 @@ sealed interface Settings {
     data class Exists(
         val useFontFamily: FontFamily,
         val enableAnimation: Boolean,
+        val enableFallbackMode: Boolean,
     ) : Settings
 
     companion object {
         fun defaultValue() = Exists(
             useFontFamily = FontFamily.DotGothic16Regular,
             enableAnimation = true,
+            enableFallbackMode = false,
         )
     }
 }
