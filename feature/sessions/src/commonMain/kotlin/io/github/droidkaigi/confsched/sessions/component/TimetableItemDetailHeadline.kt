@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
-import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
