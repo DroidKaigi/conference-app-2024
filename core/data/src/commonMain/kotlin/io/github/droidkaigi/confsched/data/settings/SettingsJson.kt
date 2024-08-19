@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.data.settings
 
+import io.github.droidkaigi.confsched.model.FontFamily
 import io.github.droidkaigi.confsched.model.Settings
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -11,9 +12,9 @@ internal data class SettingsJson(
 )
 
 internal fun SettingsJson.toModel() = Settings.Exists(
-    useFontFamilyName = useFontFamilyName,
+    useFontFamily = FontFamily.entries.find { it.fileName == useFontFamilyName } ?: FontFamily.DotGothic16Regular,
 )
 
 internal fun Settings.Exists.toJson() = SettingsJson(
-    useFontFamilyName = useFontFamilyName,
+    useFontFamilyName = useFontFamily.fileName,
 )

@@ -6,6 +6,6 @@ sealed interface Settings {
     data object DoesNotExists : Settings
 
     data class Exists(
-        val useFontFamilyName: String,
+        val useFontFamily: FontFamily,
     ) : Settings
 }
