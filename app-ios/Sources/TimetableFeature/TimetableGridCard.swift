@@ -22,7 +22,7 @@ public struct TimetableGridCard: View {
         } label: {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
-                    RoomTypeShape(roomType: timetableItem.room.type)
+                    RoomTypeShape(roomType: .init(enTitle: timetableItem.room.name.enTitle))
                         .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
                     Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                         .textStyle(.labelMedium)

@@ -94,7 +94,12 @@ public struct TimetableDetailView: View {
     @MainActor var headLine: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
-                RoomTag(store.timetableItem.room.name)
+                RoomTag(.init(
+                    currentLangTitle: store.timetableItem.room.name.currentLangTitle,
+                    enTitle: store.timetableItem.room.name.enTitle,
+                    jaTitle: store.timetableItem.room.name.jaTitle
+                ))
+
                 ForEach(store.timetableItem.language.labels, id: \.self) { label in
                     LanguageTag(label)
                 }

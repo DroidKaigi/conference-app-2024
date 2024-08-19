@@ -1,5 +1,5 @@
 import SwiftUI
-import shared
+import Model
 
 public struct RoomTypeShape: View {
     let roomType: RoomType
@@ -21,5 +21,16 @@ public struct RoomTypeShape: View {
         }
         .foregroundStyle(roomType.theme.primaryColor)
         .frame(width: 12, height: 12)
+    }
+}
+
+#Preview {
+    Group {
+        RoomTypeShape(roomType: .roomF)
+        RoomTypeShape(roomType: .roomG)
+        RoomTypeShape(roomType: .roomH)
+        RoomTypeShape(roomType: .roomI)
+        RoomTypeShape(roomType: .roomJ)
+        RoomTypeShape(roomType: .roomIj)
     }
 }
