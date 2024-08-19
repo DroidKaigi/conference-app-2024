@@ -31,7 +31,6 @@ actual fun provideAboutHeaderTitlePainter(enableAnimation: Boolean): Painter {
         }
 
         painter
-
     } else {
         painterResource(UiRes.drawable.about_header_title)
     }

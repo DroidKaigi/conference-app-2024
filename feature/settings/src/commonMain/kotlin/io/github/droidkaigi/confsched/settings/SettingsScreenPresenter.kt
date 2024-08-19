@@ -43,16 +43,16 @@ fun settingsScreenPresenter(
                         useFontFamily = (settings as Settings.Exists).useFontFamily,
                         enableAnimation = event.enableAnimation,
                         enableFallbackMode = (settings as Settings.Exists).enableFallbackMode,
-                    )
+                    ),
                 )
 
-                is SelectEnableFallbackMode ->  settingsRepository.save(
+                is SelectEnableFallbackMode -> settingsRepository.save(
                     settings = Settings.Exists(
                         useFontFamily = (settings as Settings.Exists).useFontFamily,
                         // There should be no need to animate on a device that has to Fallback.
                         enableAnimation = false,
                         enableFallbackMode = event.enableFallbackMode,
-                    )
+                    ),
                 )
             }
         }

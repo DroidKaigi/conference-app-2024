@@ -92,7 +92,7 @@ class MainActivity : ComponentActivity() {
                                 settings = settings.copy(
                                     enableAnimation = false,
                                     enableFallbackMode = true,
-                                )
+                                ),
                             )
                         }
                     }
