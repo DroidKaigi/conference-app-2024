@@ -9,12 +9,15 @@ import kotlinx.serialization.Serializable
 internal data class SettingsJson(
     @SerialName("use_font_family_name")
     val useFontFamilyName: String? = null,
+    val enableAnimation: Boolean,
 )
 
 internal fun SettingsJson.toModel() = Settings.Exists(
     useFontFamily = FontFamily.entries.find { it.fileName == useFontFamilyName } ?: FontFamily.DotGothic16Regular,
+    enableAnimation = enableAnimation,
 )
 
 internal fun Settings.Exists.toJson() = SettingsJson(
     useFontFamilyName = useFontFamily.fileName,
+    enableAnimation = enableAnimation,
 )

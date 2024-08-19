@@ -43,7 +43,7 @@ fun LazyListScope.accessibility(
             selectableItems = {
                 FontFamily.entries.forEach { fontFamily ->
                     SelectableItemColumn(
-                        currentValue = fontFamily.displayName,
+                        label = fontFamily.displayName,
                         onClickItem = {
                             onSelectUseFontFamily(fontFamily)
                         },

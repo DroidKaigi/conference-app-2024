@@ -21,6 +21,7 @@ import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.FontFamily
 import io.github.droidkaigi.confsched.settings.section.accessibility
+import io.github.droidkaigi.confsched.settings.section.lookAndFeel
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -50,6 +51,7 @@ fun NavGraphBuilder.settingsScreens(
 
 data class SettingsUiState(
     val useFontFamily: FontFamily?,
+    val enableAnimation: Boolean,
     val userMessageStateHolder: UserMessageStateHolder,
 )
 
@@ -73,6 +75,7 @@ fun SettingsScreen(
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
         onSelectUseFontFamily = { eventEmitter.tryEmit(SettingsScreenEvent.SelectUseFontFamily(it)) },
+        onSelectEnableAnimation = { eventEmitter.tryEmit(SettingsScreenEvent.SelectEnableAnimation(it)) },
         modifier = modifier,
         isTopAppBarHidden = isTopAppBarHidden,
     )
@@ -85,6 +88,7 @@ fun SettingsScreen(
     snackbarHostState: SnackbarHostState,
     onBackClick: () -> Unit,
     onSelectUseFontFamily: (FontFamily) -> Unit,
+    onSelectEnableAnimation: (Boolean) -> Unit,
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -127,6 +131,10 @@ fun SettingsScreen(
                 uiState = uiState,
                 onSelectUseFontFamily = onSelectUseFontFamily,
             )
+            lookAndFeel(
+                uiState = uiState,
+                onSelectEnableAnimation = onSelectEnableAnimation,
+            )
         }
     }
 }
@@ -139,11 +147,13 @@ fun SettingsScreenPreview() {
             SettingsScreen(
                 uiState = SettingsUiState(
                     useFontFamily = FontFamily.DotGothic16Regular,
+                    enableAnimation = true,
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
                 snackbarHostState = SnackbarHostState(),
                 onBackClick = {},
                 onSelectUseFontFamily = {},
+                onSelectEnableAnimation = {},
                 isTopAppBarHidden = false,
             )
         }

@@ -8,12 +8,14 @@ import io.github.droidkaigi.confsched.model.FontFamily
 import io.github.droidkaigi.confsched.model.Settings
 import io.github.droidkaigi.confsched.model.SettingsRepository
 import io.github.droidkaigi.confsched.model.localSettingsRepository
+import io.github.droidkaigi.confsched.settings.SettingsScreenEvent.SelectEnableAnimation
 import io.github.droidkaigi.confsched.settings.SettingsScreenEvent.SelectUseFontFamily
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
 sealed interface SettingsScreenEvent {
     data class SelectUseFontFamily(val fontFamily: FontFamily) : SettingsScreenEvent
+    data class SelectEnableAnimation(val enableAnimation: Boolean) : SettingsScreenEvent
 }
 
 @Composable
@@ -29,16 +31,27 @@ fun settingsScreenPresenter(
                 is SelectUseFontFamily -> settingsRepository.save(
                     settings = Settings.Exists(
                         useFontFamily = event.fontFamily,
+                        enableAnimation = (settings as Settings.Exists).enableAnimation
                     ),
+                )
+
+                is SelectEnableAnimation -> settingsRepository.save(
+                    settings = Settings.Exists(
+                        useFontFamily = (settings as Settings.Exists).useFontFamily,
+                        enableAnimation = event.enableAnimation
+                    )
                 )
             }
         }
     }
     SettingsUiState(
         useFontFamily = when (settings) {
-            Settings.DoesNotExists -> FontFamily.DotGothic16Regular
             is Settings.Exists -> (settings as Settings.Exists).useFontFamily
             Settings.Loading -> null
+        },
+        enableAnimation = when (settings) {
+            Settings.Loading -> true
+            is Settings.Exists -> (settings as Settings.Exists).enableAnimation
         },
         userMessageStateHolder = userMessageStateHolder,
     )
