@@ -23,6 +23,15 @@ Official iOS App for DroidKaigi 2024.
 - Homebrew
   - for Build output formatting
 
+## Project structure
+
+This iOS app's almost all of source code is located in Swift Package Manager source. This structure is inspired by [isowords](https://github.com/pointfreeco/isowords).
+The feature modules in this iOS app are made independent of each other. (e.g. `TimetableFeature` shouldn't depend on `TimetableDetailFeature`. )
+
+## For your information
+
+- Now DroidKaigi 2024 iOS App supports only Xcode. Build and run from Android Studio may not work.
+
 ## Trouble shooting
 
 ### Case1: In Rosetta 2 environment, `$ make bootstrap` fails.
@@ -77,12 +86,3 @@ Sometimes an error will occur if the JDK versions do not match. In the case of a
 You select Xcode > Settings > Locations and set your $JAVA_HOME path manually.
 
 JFYI: https://qiita.com/nacho4d/items/6d04c9287c55c26fca95
-
-## Project structure
-
-This iOS app's almost all of source code is located in Swift Package Manager source. This structure is inspired by [isowords](https://github.com/pointfreeco/isowords).
-The feature modules in this iOS app are made independent of each other. (e.g. `TimetableFeature` shouldn't depend on `TimetableDetailFeature`. )
-
-## For your information
-
-- Now DroidKaigi 2024 iOS App supports only Xcode. Build and run from Android Studio may not work.
