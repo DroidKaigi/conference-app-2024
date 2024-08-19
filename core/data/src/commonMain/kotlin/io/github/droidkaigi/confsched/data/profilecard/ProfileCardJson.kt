@@ -22,7 +22,7 @@ internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
     occupation = occupation,
     link = link,
     image = image,
-    cardType = checkNotNull(cardType ?: theme).toProfileCardType(),
+    cardType = checkNotNull(cardType ?: cardType).toProfileCardType(),
 )
 
 internal fun String.toProfileCardType() = ProfileCardType.valueOf(this)
