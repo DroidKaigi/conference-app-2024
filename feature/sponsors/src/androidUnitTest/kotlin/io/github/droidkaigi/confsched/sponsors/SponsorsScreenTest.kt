@@ -46,10 +46,35 @@ class SponsorsScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("display sponsors") {
-                            captureScreenWithChecks(
-                                checks = { checkSponsorsDisplayed() },
-                            )
+                        itShould("display platinum sponsors") {
+                            captureScreenWithChecks {
+                                checkSponsorItemsDisplayed()
+                                checkDisplayPlatinumSponsors()
+                            }
+                        }
+
+                        describe("when scroll to gold sponsors header") {
+                            run {
+                                scrollToGoldSponsorsHeader()
+                            }
+                            itShould("display gold sponsors") {
+                                captureScreenWithChecks {
+                                    checkSponsorItemsDisplayed()
+                                    checkDisplayGoldSponsors()
+                                }
+                            }
+                        }
+
+                        describe("when scroll to supporters header") {
+                            run {
+                                scrollToSupportersSponsorsHeader()
+                            }
+                            itShould("display supporters sponsors") {
+                                captureScreenWithChecks {
+                                    checkSponsorItemsDisplayed()
+                                    checkDisplaySupportersSponsors()
+                                }
+                            }
                         }
                     }
                 }
@@ -62,10 +87,11 @@ class SponsorsScreenTest(
                         run {
                             setupScreenContent()
                         }
-                        itShould("show error message") {
-                            captureScreenWithChecks(
-                                checks = { checkErrorSnackbarDisplayed() },
-                            )
+                        itShould("does not show sponsors and show snackbar") {
+                            captureScreenWithChecks {
+                                checkDoesNotSponsorItemsDisplayed()
+                                checkErrorSnackbarDisplayed()
+                            }
                         }
                     }
                 }
