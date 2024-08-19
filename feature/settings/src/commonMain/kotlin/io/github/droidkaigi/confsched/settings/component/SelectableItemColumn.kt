@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SelectableItemColumn(
-    currentValue: String,
+    label: String,
     onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -29,7 +29,7 @@ fun SelectableItemColumn(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = currentValue,
+            text = label,
             style = MaterialTheme.typography.bodyLarge,
         )
     }
