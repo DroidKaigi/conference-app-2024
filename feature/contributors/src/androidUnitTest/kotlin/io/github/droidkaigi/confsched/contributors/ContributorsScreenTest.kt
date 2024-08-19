@@ -47,9 +47,7 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                         }
                         itShould("show first and second contributors") {
                             captureScreenWithChecks {
-                                checkRangeContributorItemsDisplayed(
-                                    fromTo = 0..2,
-                                )
+                                checkShowFirstAndSecondContributors()
                             }
                         }
 
