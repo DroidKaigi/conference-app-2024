@@ -79,19 +79,22 @@ class MainActivity : ComponentActivity() {
             .isAppearanceLightStatusBars = false
         setContent {
             val settings = settingRepository.settings()
-            val enableAnimation = isDeviceWithLowMemory().not()
+            val enableFallbackMode = isDeviceWithLowMemory()
 
-            SafeLaunchedEffect(Unit) {
+            SafeLaunchedEffect(settings) {
                 when (settings) {
                     Loading -> {
                         // NOOP
                     }
                     is Exists -> {
-                        settingRepository.save(
-                            settings = settings.copy(
-                                enableAnimation = enableAnimation,
+                        if (enableFallbackMode) {
+                            settingRepository.save(
+                                settings = settings.copy(
+                                    enableAnimation = false,
+                                    enableFallbackMode = true,
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }
