@@ -51,7 +51,6 @@ import conference_app_2024.feature.profilecard.generated.resources.card_front_or
 import conference_app_2024.feature.profilecard.generated.resources.card_front_pink
 import conference_app_2024.feature.profilecard.generated.resources.card_front_white
 import conference_app_2024.feature.profilecard.generated.resources.card_front_yellow
-import conference_app_2024.feature.profilecard.generated.resources.icon_qr
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
@@ -64,6 +63,7 @@ import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import qrcode.QRCode
 
 const val ProfileCardFlipCardTestTag = "ProfileCardFlipCardTestTag"
 const val ProfileCardFlipCardFrontTestTag = "ProfileCardFlipCardFrontTestTag"
@@ -122,8 +122,13 @@ internal fun FlipCard(
         elevation = CardDefaults.cardElevation(10.dp),
     ) {
         val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
+        val imageBitmap = remember {
+            QRCode.ofSquares()
+                .build(uiState.link)
+                .renderToBytes().toImageBitmap()
+        }
         if (isBack) { // Back
-            FlipCardBack(uiState)
+            FlipCardBack(uiState, imageBitmap)
         } else { // Front
             FlipCardFront(
                 uiState = uiState,
@@ -198,6 +203,7 @@ private fun FlipCardFront(
 @Composable
 private fun FlipCardBack(
     uiState: Card,
+    bitmap: ImageBitmap,
     modifier: Modifier = Modifier,
 ) {
     val background = when (uiState.cardType) {
@@ -224,7 +230,7 @@ private fun FlipCardBack(
             contentScale = ContentScale.Crop,
         )
         Image(
-            painter = painterResource(ProfileCardRes.drawable.icon_qr),
+            bitmap = bitmap,
             contentDescription = null,
             modifier = Modifier.size(160.dp),
         )
@@ -268,6 +274,7 @@ fun FlipCardBackPreview() {
         ) {
             FlipCardBack(
                 uiState = uiState,
+                bitmap = QRCode.ofCircles().build(uiState.link).renderToBytes().toImageBitmap(),
             )
         }
     }

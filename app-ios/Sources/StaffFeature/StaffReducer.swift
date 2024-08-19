@@ -1,30 +1,24 @@
 import ComposableArchitecture
 import Foundation
 import KMPClient
+import Model
 import shared
 
-struct StaffData: Equatable, Identifiable {
-    let id: Int
-    let name: String
-    let icon: URL
-    let github: URL
-}
-
 @Reducer
-public struct StaffReducer {
+public struct StaffReducer : Sendable {
     @Dependency(\.staffClient) var staffsData
 
     public init() { }
     
     @ObservableState
     public struct State: Equatable {
-        var list: [StaffData] = []
+        var list: [Model.Staff] = []
         public init() { }
     }
 
-    public enum Action {
+    public enum Action : Sendable {
         case onAppear
-        case response(Result<[Staff], any Error>)
+        case response(Result<[Model.Staff], any Error>)
     }
 
     public var body: some ReducerOf<Self> {
@@ -34,20 +28,17 @@ public struct StaffReducer {
             switch action {
             case .onAppear:
                 return .run { send in
-                    for try await staffs in try staffsData.streamStaffs() {
-                        await send(.response(.success(staffs)))
+                    do {
+                        for try await staffs in try staffsData.streamStaffs() {
+                            await send(.response(.success(staffs)))
+                        }
+                    } catch {
+                        await send(.response(.failure(error)))
                     }
                 }
                 .cancellable(id: CancelID.connection)
             case .response(.success(let staffs)):
-                state.list = staffs.map {
-                    StaffData(
-                        id: Int($0.id),
-                        name: $0.username,
-                        icon: URL(string: $0.iconUrl)!,
-                        github: URL(string: $0.profileUrl)!
-                    )
-                }
+                state.list = staffs
                 return .none
             case .response(.failure(let error)):
                 print(error)

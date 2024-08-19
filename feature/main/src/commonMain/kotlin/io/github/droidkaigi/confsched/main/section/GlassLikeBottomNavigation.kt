@@ -254,7 +254,7 @@ fun GlassLikeBottomNavigationPreview() {
         Scaffold {
             GlassLikeBottomNavigation(
                 hazeState = hazeState,
-                {},
+                onTabSelected = {},
                 currentTab = MainScreenTab.Timetable,
             )
         }

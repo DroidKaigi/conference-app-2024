@@ -3,10 +3,8 @@ package io.github.droidkaigi.confsched.favorites.section
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
@@ -48,13 +46,11 @@ fun FavoriteList(
                         tagColor = LocalRoomTheme.current.primaryColor,
                         modifier = Modifier.background(LocalRoomTheme.current.containerColor),
                     )
-                    Spacer(modifier = Modifier.padding(3.dp))
                     timetableItem.language.labels.forEach { label ->
                         TimetableItemTag(
                             tagText = label,
                             tagColor = MaterialTheme.colorScheme.outline,
                         )
-                        Spacer(modifier = Modifier.padding(3.dp))
                     }
                     timetableItem.day?.let {
                         TimetableItemTag(
@@ -62,7 +58,6 @@ fun FavoriteList(
                             tagColor = MaterialTheme.colorScheme.outline,
                         )
                     }
-                    Spacer(modifier = Modifier.weight(1f))
                 },
                 timetableItem = timetableItem,
                 onTimetableItemClick = onTimetableItemClick,

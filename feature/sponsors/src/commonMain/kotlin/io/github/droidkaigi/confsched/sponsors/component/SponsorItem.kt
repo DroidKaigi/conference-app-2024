@@ -10,8 +10,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import conference_app_2024.feature.sponsors.generated.resources.content_description_sponsor_logo
+import conference_app_2024.feature.sponsors.generated.resources.content_description_sponsor_logo_format
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
@@ -19,6 +20,8 @@ import io.github.droidkaigi.confsched.sponsors.SponsorsRes
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val SponsorItemImageTestTag = "SponsorItemImageTestTag"
 
 @Composable
 fun SponsorItem(
@@ -34,13 +37,17 @@ fun SponsorItem(
     ) {
         Image(
             painter = rememberAsyncImagePainter(sponsor.logo),
-            contentDescription = stringResource(SponsorsRes.string.content_description_sponsor_logo),
+            contentDescription = stringResource(
+                SponsorsRes.string.content_description_sponsor_logo_format,
+                sponsor.name,
+            ),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(
                     horizontal = 12.dp,
                     vertical = 6.dp,
-                ),
+                )
+                .testTag(SponsorItemImageTestTag),
         )
     }
 }

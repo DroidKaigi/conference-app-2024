@@ -325,8 +325,8 @@ internal fun EditScreen(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
             .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .verticalScroll(rememberScrollState())
             .padding(contentPadding)
             .padding(horizontal = 16.dp)
             .testTag(ProfileCardEditScreenColumnTestTag),
