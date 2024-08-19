@@ -2,9 +2,7 @@ package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.hasTestTag
-import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onFirst
-import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -46,12 +44,20 @@ class EventMapScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun scrollToFlamingoAndGiraffe() {
+    fun scrollToFlamingo() {
+        scrollLazyColumnByRoomName(RoomType.Flamingo)
+    }
+
+    fun scrollToGiraffe() {
         scrollLazyColumnByRoomName(RoomType.Giraffe)
     }
 
-    fun scrollToHedgehogAndIguana() {
+    fun scrollToHedgehog() {
         scrollLazyColumnByRoomName(RoomType.Hedgehog)
+    }
+
+    fun scrollToIguana() {
+        scrollLazyColumnByRoomName(RoomType.Iguana)
     }
 
     fun scrollToJellyfish() {
@@ -62,13 +68,9 @@ class EventMapScreenRobot @Inject constructor(
         roomType: RoomType,
     ) {
         composeTestRule
-            .onNodeWithTag(EventMapLazyColumnTestTag)
-            .performScrollToNode(
-                matcher = hasText(
-                    text = roomType.name,
-                    substring = true,
-                ),
-            )
+            .onNode(hasTestTag(EventMapLazyColumnTestTag))
+            .performScrollToNode(hasTestTag(EventMapItemTestTag.plus(roomType.name)))
+        wait5Seconds()
     }
 
     fun clickEventMapTabOnGround() {
@@ -88,13 +90,19 @@ class EventMapScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun checkEventMapItemFlamingoAndGiraffe() {
+    fun checkEventMapItemFlamingo() {
         checkEventMapItemByRoomName(roomType = RoomType.Flamingo)
+    }
+
+    fun checkEventMapItemGiraffe() {
         checkEventMapItemByRoomName(roomType = RoomType.Giraffe)
     }
 
-    fun checkEventMapItemHedgehogAndIguana() {
+    fun checkEventMapItemHedgehog() {
         checkEventMapItemByRoomName(roomType = RoomType.Hedgehog)
+    }
+
+    fun checkEventMapItemIguana() {
         checkEventMapItemByRoomName(roomType = RoomType.Iguana)
     }
 

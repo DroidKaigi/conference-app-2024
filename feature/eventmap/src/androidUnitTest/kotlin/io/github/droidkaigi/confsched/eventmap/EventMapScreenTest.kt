@@ -65,22 +65,42 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     run {
                         setupEventMapServer(ServerStatus.Operational)
                         setupScreenContent()
-                        scrollToFlamingoAndGiraffe()
+                        scrollToFlamingo()
                     }
-                    itShould("ensure that the room types for Flamingo and Giraffe are displayed.") {
+                    itShould("ensure that the room types for Flamingo are displayed.") {
                         captureScreenWithChecks(
                             checks = {
-                                checkEventMapItemFlamingoAndGiraffe()
+                                checkEventMapItemFlamingo()
                             },
                         )
                     }
                     run {
-                        scrollToHedgehogAndIguana()
+                        scrollToGiraffe()
                     }
-                    itShould("ensure that the room types for Hedgehog and Iguana are displayed.") {
+                    itShould("ensure that the room types for Giraffe are displayed.") {
                         captureScreenWithChecks(
                             checks = {
-                                checkEventMapItemHedgehogAndIguana()
+                                checkEventMapItemGiraffe()
+                            },
+                        )
+                    }
+                    run {
+                        scrollToHedgehog()
+                    }
+                    itShould("ensure that the room types for Hedgehog are displayed.") {
+                        captureScreenWithChecks(
+                            checks = {
+                                checkEventMapItemHedgehog()
+                            },
+                        )
+                    }
+                    run {
+                        scrollToIguana()
+                    }
+                    itShould("ensure that the room types for Iguana are displayed.") {
+                        captureScreenWithChecks(
+                            checks = {
+                                checkEventMapItemIguana()
                             },
                         )
                     }
@@ -89,7 +109,9 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     }
                     itShould("ensure that the room types for Jellyfish are displayed.") {
                         captureScreenWithChecks(
-                            checks = { checkEventMapItemJellyfish() },
+                            checks = {
+                                checkEventMapItemJellyfish()
+                            },
                         )
                     }
                 }
