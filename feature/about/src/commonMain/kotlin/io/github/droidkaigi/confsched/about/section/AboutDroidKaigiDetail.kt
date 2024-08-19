@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -39,7 +40,7 @@ const val AboutDetailTestTag = "AboutDetailTestTag"
 
 @Composable
 fun AboutDroidKaigiDetail(
-    uiState: AboutUiState,
+    uiState: AboutUiState.Loaded,
     screenScrollState: LazyListState,
     modifier: Modifier = Modifier,
     onViewMapClick: () -> Unit,
@@ -60,14 +61,25 @@ fun AboutDroidKaigiDetail(
     Column(
         modifier = modifier.testTag(AboutDetailTestTag),
     ) {
-        Box {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            val imageModifier = if (uiState.enableFallbackMode) {
+                // The application crashes with OOM when displaying images in full width on devices with low memory capacity.
+                // Therefore, for such devices, images are not spread across the entire width.
+                Modifier
+            } else {
+                Modifier
+                    .fillMaxWidth()
+                    .offset(y = aboutHeaderOffset.dp)
+            }
+
             Image(
                 painter = painterResource(UiRes.drawable.about_header_year),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = aboutHeaderOffset.dp),
+                modifier = imageModifier,
             )
             Image(
                 painter = provideAboutHeaderTitlePainter(
@@ -75,9 +87,7 @@ fun AboutDroidKaigiDetail(
                 ),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = aboutHeaderOffset.dp),
+                modifier = imageModifier,
             )
         }
         Text(
@@ -110,9 +120,10 @@ fun AboutDroidKaigiDetailPreview() {
     KaigiTheme {
         Surface {
             AboutDroidKaigiDetail(
-                uiState = AboutUiState(
+                uiState = AboutUiState.Loaded(
                     versionName = "",
                     enableAnimation = true,
+                    enableFallbackMode = false,
                 ),
                 screenScrollState = rememberLazyListState(),
                 onViewMapClick = {},

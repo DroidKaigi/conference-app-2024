@@ -1,6 +1,8 @@
 package io.github.droidkaigi.confsched.about
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import io.github.droidkaigi.confsched.model.AboutRepository
 import io.github.droidkaigi.confsched.model.Settings.Exists
 import io.github.droidkaigi.confsched.model.Settings.Loading
@@ -14,13 +16,12 @@ fun aboutScreenPresenter(
     aboutRepository: AboutRepository = localAboutRepository(),
     settingsRepository: SettingsRepository = localSettingsRepository(),
 ): AboutUiState = providePresenterDefaults { _ ->
-    val enableAnimation = when (val settings = settingsRepository.settings()) {
-        Loading -> true
-        is Exists -> settings.enableAnimation
-    }
+    val settings by rememberUpdatedState(settingsRepository.settings())
 
-    AboutUiState(
+    if (settings is Loading) return@providePresenterDefaults AboutUiState.Loading
+    AboutUiState.Loaded(
         versionName = aboutRepository.versionName(),
-        enableAnimation = enableAnimation
+        enableAnimation = (settings as Exists).enableAnimation,
+        enableFallbackMode = (settings as Exists).enableFallbackMode,
     )
 }

@@ -1,9 +1,13 @@
 package io.github.droidkaigi.confsched.about
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -11,6 +15,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -20,6 +25,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.about.generated.resources.about_droidkaigi
+import io.github.droidkaigi.confsched.about.AboutUiState.Loaded
+import io.github.droidkaigi.confsched.about.AboutUiState.Loading
 import io.github.droidkaigi.confsched.about.section.AboutDroidKaigiDetail
 import io.github.droidkaigi.confsched.about.section.AboutFooterLinks
 import io.github.droidkaigi.confsched.about.section.aboutCredits
@@ -59,10 +66,14 @@ fun NavController.navigateAboutScreen() {
     }
 }
 
-data class AboutUiState(
-    val versionName: String,
-    val enableAnimation: Boolean,
-)
+sealed interface AboutUiState {
+    data object Loading : AboutUiState
+    data class Loaded(
+        val versionName: String,
+        val enableAnimation: Boolean,
+        val enableFallbackMode: Boolean,
+    ) : AboutUiState
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,58 +104,70 @@ fun AboutScreen(
             bottom = contentPadding.calculateBottomPadding(),
         ),
     ) { padding ->
-        LazyColumn(
-            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            contentPadding = padding,
-            state = lazyListState,
-        ) {
-            item {
-                AboutDroidKaigiDetail(
-                    uiState = uiState,
-                    screenScrollState = lazyListState,
-                    onViewMapClick = {
-                        onAboutItemClick(AboutItem.Map)
-                    },
-                )
+        when (uiState) {
+            is Loaded -> {
+                LazyColumn(
+                    Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                    contentPadding = padding,
+                    state = lazyListState,
+                ) {
+                    item {
+                        AboutDroidKaigiDetail(
+                            uiState = uiState,
+                            screenScrollState = lazyListState,
+                            onViewMapClick = {
+                                onAboutItemClick(AboutItem.Map)
+                            },
+                        )
+                    }
+                    aboutCredits(
+                        onSponsorsItemClick = {
+                            onAboutItemClick(AboutItem.Sponsors)
+                        },
+                        onContributorsItemClick = {
+                            onAboutItemClick(AboutItem.Contributors)
+                        },
+                        onStaffItemClick = {
+                            onAboutItemClick(AboutItem.Staff)
+                        },
+                    )
+                    aboutOthers(
+                        onCodeOfConductItemClick = {
+                            onAboutItemClick(AboutItem.CodeOfConduct)
+                        },
+                        onLicenseItemClick = {
+                            onAboutItemClick(AboutItem.License)
+                        },
+                        onPrivacyPolicyItemClick = {
+                            onAboutItemClick(AboutItem.PrivacyPolicy)
+                        },
+                        onSettingsItemClick = {
+                            onAboutItemClick(AboutItem.Settings)
+                        },
+                    )
+                    item {
+                        AboutFooterLinks(
+                            versionName = uiState.versionName,
+                            onYouTubeClick = {
+                                onAboutItemClick(YouTube)
+                            },
+                            onXClick = {
+                                onAboutItemClick(X)
+                            },
+                            onMediumClick = {
+                                onAboutItemClick(Medium)
+                            },
+                        )
+                    }
+                }
             }
-            aboutCredits(
-                onSponsorsItemClick = {
-                    onAboutItemClick(AboutItem.Sponsors)
-                },
-                onContributorsItemClick = {
-                    onAboutItemClick(AboutItem.Contributors)
-                },
-                onStaffItemClick = {
-                    onAboutItemClick(AboutItem.Staff)
-                },
-            )
-            aboutOthers(
-                onCodeOfConductItemClick = {
-                    onAboutItemClick(AboutItem.CodeOfConduct)
-                },
-                onLicenseItemClick = {
-                    onAboutItemClick(AboutItem.License)
-                },
-                onPrivacyPolicyItemClick = {
-                    onAboutItemClick(AboutItem.PrivacyPolicy)
-                },
-                onSettingsItemClick = {
-                    onAboutItemClick(AboutItem.Settings)
-                },
-            )
-            item {
-                AboutFooterLinks(
-                    versionName = uiState.versionName,
-                    onYouTubeClick = {
-                        onAboutItemClick(YouTube)
-                    },
-                    onXClick = {
-                        onAboutItemClick(X)
-                    },
-                    onMediumClick = {
-                        onAboutItemClick(Medium)
-                    },
-                )
+            Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(padding).fillMaxSize(),
+                ) {
+                    CircularProgressIndicator()
+                }
             }
         }
     }
