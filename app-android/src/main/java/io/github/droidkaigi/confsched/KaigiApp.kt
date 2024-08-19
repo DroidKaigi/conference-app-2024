@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -91,11 +92,13 @@ import kotlinx.collections.immutable.PersistentList
 fun KaigiApp(
     windowSize: WindowSizeClass,
     displayFeatures: PersistentList<DisplayFeature>,
+    fontFamily: FontFamily,
     modifier: Modifier = Modifier,
 ) {
     val layoutDirection = LocalLayoutDirection.current
     KaigiTheme(
         colorContrast = colorContrast(),
+        fontFamily = fontFamily,
     ) {
         Surface(
             modifier = modifier.fillMaxSize(),
