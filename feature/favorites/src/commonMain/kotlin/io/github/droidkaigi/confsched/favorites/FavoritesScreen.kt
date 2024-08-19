@@ -116,6 +116,12 @@ fun FavoritesScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
+    val filterBackgroundColor = if (scrollBehavior.state.overlappedFraction > 0f) {
+        MaterialTheme.colorScheme.surfaceContainer
+    } else {
+        MaterialTheme.colorScheme.surface
+    }
+
     Scaffold(
         modifier = modifier
             .testTag(FavoritesScreenTestTag),
@@ -130,12 +136,6 @@ fun FavoritesScreen(
             )
         },
     ) { padding ->
-        val filterBackgroundColor = if (scrollBehavior.state.overlappedFraction > 0f) {
-            MaterialTheme.colorScheme.surfaceContainer
-        } else {
-            MaterialTheme.colorScheme.surface
-        }
-
         FavoriteSheet(
             uiState = uiState.favoritesSheetUiState,
             filterBackgroundColor = filterBackgroundColor,
