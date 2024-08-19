@@ -51,10 +51,6 @@
         </activity>
 
         <activity
-            android:name="io.github.droidkaigi.confsched.OssLicensesDarkModeLauncherActivity"
-            android:exported="false" />
-
-        <activity
             android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar" />
 
