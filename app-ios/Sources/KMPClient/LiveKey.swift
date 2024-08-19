@@ -66,14 +66,43 @@ extension StaffClient: DependencyKey {
 extension SponsorsClient: DependencyKey {
     public static let liveValue: SponsorsClient = .init(
         streamSponsors: {
-            sponsorsRepository.getSponsorStream().eraseToThrowingStream()
+            sponsorsRepository
+                .getSponsorStream()
+                .map{
+                    $0.map {
+                        let plan = switch $0.plan {
+                        case .platinum: Model.Sponsor.Plan.platinum
+                        case .gold: Model.Sponsor.Plan.gold
+                        case .supporter: Model.Sponsor.Plan.supporter
+                        }
+                        return Model.Sponsor(
+                            id: $0.name,
+                            logo: URL(string: $0.logo)!,
+                            link: URL(string: $0.link)!, 
+                            plan: plan
+                        )
+                    }
+                }
+                .eraseToThrowingStream()
         }
     )
 }
 
 extension ContributorClient: DependencyKey {
     public static let liveValue: ContributorClient = Self {
-        contributorRepository.getContributorStream().eraseToThrowingStream()
+        contributorRepository
+            .getContributorStream()
+            .map {
+                $0.map {
+                    Model.Contributor(
+                        id: Int($0.id),
+                        userName: $0.username,
+                        profileUrl: $0.profileUrl.map { URL(string: $0)! } ,
+                        iconUrl: URL(string: $0.iconUrl)!
+                    )
+                }
+            }
+            .eraseToThrowingStream()
     } refresh: {
         try await contributorRepository.refresh()
     }

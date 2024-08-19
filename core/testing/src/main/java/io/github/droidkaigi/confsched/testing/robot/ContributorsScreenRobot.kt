@@ -37,7 +37,13 @@ class ContributorsScreenRobot @Inject constructor(
             .performScrollToIndex(10)
     }
 
-    fun checkRangeContributorItemsDisplayed(
+    fun checkShowFirstAndSecondContributors() {
+        checkRangeContributorItemsDisplayed(
+            fromTo = 0..2,
+        )
+    }
+
+    private fun checkRangeContributorItemsDisplayed(
         fromTo: IntRange,
     ) {
         val contributorsList = Contributor.fakes().subList(fromTo.first, fromTo.last)

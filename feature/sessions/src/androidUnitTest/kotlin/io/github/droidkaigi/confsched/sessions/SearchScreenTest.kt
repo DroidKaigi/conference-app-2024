@@ -11,7 +11,6 @@ import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Conference
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Language
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
-import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
@@ -54,14 +53,13 @@ class SearchScreenTest(
                         }
                     }
                     describe("input search word to TextField") {
-                        val searchWord = "Demo"
                         run {
-                            inputSearchWord(searchWord)
+                            inputDemoSearchWord()
                         }
                         itShould("show search word and filtered items") {
                             captureScreenWithChecks {
-                                checkSearchWordDisplayed(searchWord)
-                                checkTimetableListItemsHasText(searchWord)
+                                checkDemoSearchWordDisplayed()
+                                checkTimetableListItemsHasDemoText()
                             }
                         }
                     }
@@ -122,7 +120,7 @@ class SearchScreenTest(
                         }
                         itShould("show drop down menu") {
                             captureScreenWithChecks {
-                                todoChecks("todo")
+                                checkDisplayedFilterLanguageChip()
                             }
                         }
                         Language.entries.forEach { language ->
