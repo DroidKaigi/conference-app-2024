@@ -2,10 +2,11 @@ package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performScrollToIndex
+import androidx.compose.ui.test.performScrollToNode
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.eventmap.EventMapItemTestTag
 import io.github.droidkaigi.confsched.eventmap.EventMapLazyColumnTestTag
@@ -46,23 +47,28 @@ class EventMapScreenRobot @Inject constructor(
     }
 
     fun scrollToFlamingoAndGiraffe() {
-        scrollLazyColumnByIndex(1)
+        scrollLazyColumnByRoomName(RoomType.Giraffe)
     }
 
     fun scrollToHedgehogAndIguana() {
-        scrollLazyColumnByIndex(3)
+        scrollLazyColumnByRoomName(RoomType.Hedgehog)
     }
 
     fun scrollToJellyfish() {
-        scrollLazyColumnByIndex(4)
+        scrollLazyColumnByRoomName(RoomType.Jellyfish)
     }
 
-    private fun scrollLazyColumnByIndex(
-        index: Int,
+    private fun scrollLazyColumnByRoomName(
+        roomType: RoomType,
     ) {
         composeTestRule
             .onNodeWithTag(EventMapLazyColumnTestTag)
-            .performScrollToIndex(index)
+            .performScrollToNode(
+                matcher = hasText(
+                    text = roomType.name,
+                    substring = true,
+                ),
+            )
     }
 
     fun clickEventMapTabOnGround() {
