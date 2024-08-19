@@ -11,8 +11,6 @@ internal data class ProfileCardJson(
     val occupation: String,
     val link: String,
     val image: String,
-    @Deprecated("Use cardType instead", replaceWith = ReplaceWith("cardType"))
-    val theme: String? = null,
     @SerialName("card_type")
     val cardType: String? = null,
 )
