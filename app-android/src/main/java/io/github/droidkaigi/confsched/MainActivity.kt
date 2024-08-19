@@ -1,5 +1,7 @@
 package io.github.droidkaigi.confsched
 
+import android.app.ActivityManager
+import android.content.Context
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
@@ -16,6 +18,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowCompat
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.WindowInfoTracker
@@ -120,4 +123,19 @@ private fun calculateDisplayFeatures(activity: ComponentActivity): PersistentLis
     }
 
     return displayFeatures
+}
+
+@Composable
+fun isDeviceWithLowMemory(): Boolean {
+    val context = LocalContext.current
+    val activityManager = remember {
+        context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager
+    }
+    val memoryInfo = remember {
+        ActivityManager.MemoryInfo().apply {
+            activityManager.getMemoryInfo(this)
+        }
+    }
+    val totalMemory = memoryInfo.totalMem
+    return totalMemory <= 2L * 1024 * 1024 * 1024
 }
