@@ -65,13 +65,6 @@ fun TimetableItemDetailContent(
         when (timetableItem) {
             is Session -> {
                 val currentLang = currentLang ?: Lang.ENGLISH
-                fun MultiLangText.getByLang(lang: Lang): String {
-                    return if (lang == Lang.JAPANESE) {
-                        jaTitle
-                    } else {
-                        enTitle
-                    }
-                }
                 DescriptionSection(
                     description = timetableItem.description.getByLang(currentLang),
                     onLinkClick = onLinkClick,

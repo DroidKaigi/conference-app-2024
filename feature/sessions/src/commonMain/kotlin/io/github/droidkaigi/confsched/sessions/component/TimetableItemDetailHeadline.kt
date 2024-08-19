@@ -41,13 +41,6 @@ fun TimetableItemDetailHeadline(
     modifier: Modifier = Modifier,
 ) {
     val currentLang = currentLang ?: Lang.ENGLISH
-    fun MultiLangText.getByLang(lang: Lang): String {
-        return if (lang == Lang.JAPANESE) {
-            jaTitle
-        } else {
-            enTitle
-        }
-    }
     Column(
         modifier = modifier
             // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
