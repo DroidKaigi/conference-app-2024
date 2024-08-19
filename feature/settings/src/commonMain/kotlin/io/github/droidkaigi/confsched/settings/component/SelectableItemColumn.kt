@@ -15,10 +15,11 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun SelectableItemColumn(
     currentValue: String,
-    onClickItem: () -> Unit
+    onClickItem: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(72.dp)
             .padding(start = 48.dp)

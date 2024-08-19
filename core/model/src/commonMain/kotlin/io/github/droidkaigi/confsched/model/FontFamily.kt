@@ -11,5 +11,5 @@ public enum class FontFamily(
     NotoSansJPRegular(
         displayName = "NotoSans",
         fileName = "noto_sans_jp_regular",
-    ),;
+    ),
 }

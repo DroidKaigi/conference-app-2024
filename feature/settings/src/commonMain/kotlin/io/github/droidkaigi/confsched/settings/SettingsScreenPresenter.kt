@@ -29,7 +29,7 @@ fun settingsScreenPresenter(
                 is SelectUseFontFamily -> settingsRepository.save(
                     settings = Settings.Exists(
                         useFontFamily = event.fontFamily,
-                    )
+                    ),
                 )
             }
         }

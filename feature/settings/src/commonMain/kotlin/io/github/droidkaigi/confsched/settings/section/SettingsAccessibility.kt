@@ -46,10 +46,10 @@ fun LazyListScope.accessibility(
                         currentValue = fontFamily.displayName,
                         onClickItem = {
                             onSelectUseFontFamily(fontFamily)
-                        }
+                        },
                     )
                 }
-            }
+            },
         )
     }
 

@@ -125,7 +125,7 @@ fun SettingsScreen(
         ) {
             accessibility(
                 uiState = uiState,
-                onSelectUseFontFamily = onSelectUseFontFamily
+                onSelectUseFontFamily = onSelectUseFontFamily,
             )
         }
     }
