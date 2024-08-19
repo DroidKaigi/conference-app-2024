@@ -118,7 +118,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onNode(hasTestTag(TimetableItemDetailHeadlineTestTag))
             .assertExists()
             .assertIsDisplayed()
-            .assertTextEquals(FakeSessionsApiClient.defaultSession.title.en!!)
+            .assertTextEquals(FakeSessionsApiClient.defaultSession.title.ja!!)
     }
 
     fun checkBookmarkedSession() {
