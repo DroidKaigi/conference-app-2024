@@ -105,9 +105,7 @@ public struct TimetableReducer : Sendable{
                     }))
                 }
             case let .favoriteResponse(.success(isFavorited)):
-                if !isFavorited {
-                    state.toast = .init(text: String(localized: "AddFavorite", bundle: .module))
-                }
+                //No response here on purpose. Toasts look bad here.
                 return .none
             case let .favoriteResponse(.failure(error)):
                 print(error.localizedDescription)
