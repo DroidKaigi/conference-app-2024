@@ -35,8 +35,9 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
         }.first
     }
     
-    func matchTopItem(for room: RoomType) -> Bool {
-        return items[0].timetableItem.room.type == room
+    func isTopLunch() -> Bool {        
+        return (items[0].timetableItem.title.enTitle.lowercased().contains("lunch")
+                && items[0].timetableItem.startsTimeString.contains("13:00"))
     }
 }
 

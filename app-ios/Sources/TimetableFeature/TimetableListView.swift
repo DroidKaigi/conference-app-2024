@@ -139,7 +139,7 @@ struct TimetableGridView: View {
                             
                         }.frame(height: 153)
                         
-                        if (timeBlock.items.count == 1 && timeBlock.matchTopItem(for: RoomType.roomJ)) {
+                        if (timeBlock.items.count == 1 && timeBlock.isTopLunch()) {
                             
                             timeBlock.getCellForRoom(
                                 room: RoomType.roomJ,
