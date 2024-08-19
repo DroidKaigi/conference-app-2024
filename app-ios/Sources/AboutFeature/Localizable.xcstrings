@@ -130,9 +130,15 @@
     },
     "NavigationTitle" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "About DroidKaigi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "DroidKaigiについて"
           }
         }
