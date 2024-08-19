@@ -12,7 +12,7 @@ public struct RoomTag: View {
 
     public var body: some View {
         HStack(spacing: 4) {
-            roomName.roomType.shape
+            RoomTypeShape(roomType: roomName.roomType)
             Text(roomName.currentLangTitle)
                 .textStyle(.labelMedium)
         }
@@ -25,42 +25,24 @@ public struct RoomTag: View {
     }
 }
 
-enum ThemeKey {
-    static let iguana = "iguana"
-    static let hedgehog = "hedgehog"
-    static let giraffe = "giraffe"
-    static let flamingo = "flamingo"
-    static let jellyfish = "jellyfish"
+enum ThemeKey: String {
+    case iguana
+    case hedgehog
+    case giraffe
+    case flamingo
+    case jellyfish
 }
-
 
 extension MultiLangText {
     var roomType: RoomType {
         switch enTitle.lowercased() {
-        case ThemeKey.flamingo: .roomF
-        case ThemeKey.giraffe: .roomG
-        case ThemeKey.hedgehog: .roomH
-        case ThemeKey.iguana: .roomI
-        case ThemeKey.jellyfish: .roomJ
+        case ThemeKey.flamingo.rawValue: .roomF
+        case ThemeKey.giraffe.rawValue: .roomG
+        case ThemeKey.hedgehog.rawValue: .roomH
+        case ThemeKey.iguana.rawValue: .roomI
+        case ThemeKey.jellyfish.rawValue: .roomJ
         default: .roomIj
         }
-    }
-}
-
-extension RoomType {
-    public var shape: some View {
-        Group {
-            switch self {
-            case .roomG: Image(.icCircleFill).renderingMode(.template)
-            case .roomH: Image(.icDiamondFill).renderingMode(.template)
-            case .roomF: Image(.icSharpDiamondFill).renderingMode(.template)
-            case .roomI: Image(.icSquareFill).renderingMode(.template)
-            case .roomJ: Image(.icTriangleFill).renderingMode(.template)
-            case .roomIj: Image(.icSquareFill).renderingMode(.template)
-            }
-        }
-        .foregroundStyle(theme.primaryColor)
-        .frame(width: 12, height: 12)
     }
 }
 
