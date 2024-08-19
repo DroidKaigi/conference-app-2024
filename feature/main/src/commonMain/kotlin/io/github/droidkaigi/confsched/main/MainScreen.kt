@@ -64,6 +64,7 @@ import io.github.droidkaigi.confsched.main.section.GlassLikeNavRail
 import io.github.droidkaigi.confsched.model.isBlurSupported
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.animation.FavoriteAnimationDirection
 import io.github.droidkaigi.confsched.ui.animation.ProvideFavoriteAnimation
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
 import org.jetbrains.compose.resources.DrawableResource
@@ -129,7 +130,11 @@ fun MainScreen(
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
     ProvideFavoriteAnimation(
-        navigationType == BottomNavigation,
+        if (navigationType == BottomNavigation) {
+            FavoriteAnimationDirection.Vertical
+        } else {
+            FavoriteAnimationDirection.Horizontal
+        },
     ) {
         MainScreen(
             uiState = uiState,

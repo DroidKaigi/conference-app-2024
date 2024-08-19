@@ -22,11 +22,11 @@ internal val LocalFavoriteAnimationScope: ProvidableCompositionLocal<FavoriteAni
 internal fun FavoriteAnimationScope(
     clock: Clock,
     coroutineScope: CoroutineScope,
-    isEnabled: Boolean,
+    direction: FavoriteAnimationDirection,
 ): FavoriteAnimationScope = FavoriteAnimationScopeImpl(
     clock = clock,
     coroutineScope = coroutineScope,
-    isEnabled = isEnabled,
+    direction = direction,
 )
 
 sealed interface FavoriteAnimationScope {
@@ -54,7 +54,7 @@ private data object DefaultFavoriteAnimationScope : FavoriteAnimationScope {
 private class FavoriteAnimationScopeImpl(
     private val clock: Clock,
     private val coroutineScope: CoroutineScope,
-    private val isEnabled: Boolean,
+    private val direction: FavoriteAnimationDirection,
 ) : FavoriteAnimationScope {
 
     private val specMutex = Mutex()
@@ -77,9 +77,6 @@ private class FavoriteAnimationScopeImpl(
     }
 
     override fun startAnimation(position: Offset) {
-        if (!isEnabled) {
-            return
-        }
         coroutineScope.launch {
             addAnimationSpec(startPosition = position)
             observeAnimation()
@@ -93,6 +90,7 @@ private class FavoriteAnimationScopeImpl(
                     startTime = clock.now().toEpochMilliseconds(),
                     startPosition = startPosition,
                     targetPosition = targetPosition,
+                    direction = direction,
                 ),
             )
         }
@@ -128,13 +126,18 @@ data class FavoriteAnimationSpec(
     val startTime: Long,
     val startPosition: Offset,
     val targetPosition: Offset,
+    val direction: FavoriteAnimationDirection,
 ) {
     private val targetXFromStart: Float = targetPosition.x - startPosition.x
     private val targetYFromStart: Float = targetPosition.y - startPosition.y
 
-    // Time to reach the target point during free fall
-    private val durationMillis: Long =
-        sqrt((2 * targetYFromStart).absoluteValue / GRAPHICAL_ACCELERATION).toLong() * 1000
+    // Time to reach the target point during animation
+    private val durationMillis: Long = when (direction) {
+        FavoriteAnimationDirection.Vertical -> targetYFromStart
+        FavoriteAnimationDirection.Horizontal -> targetXFromStart
+    }.let {
+        sqrt((2 * it).absoluteValue / GRAPHICAL_ACCELERATION).toLong() * 1000
+    }
     private val durationMillisWithTimesSpeed = durationMillis / TIMES_SPEED
 
     val endTime = startTime + durationMillisWithTimesSpeed
@@ -147,13 +150,25 @@ data class FavoriteAnimationSpec(
         val elapsedTime = elapsedTimeMillis.toFloat() / (1000 / TIMES_SPEED)
         val progress = elapsedTimeMillis / durationMillisWithTimesSpeed.toFloat()
 
-        val x = targetXFromStart * progress
-        val y = (0.5 * GRAPHICAL_ACCELERATION * elapsedTime.pow(2)).toFloat().adjustYSign()
+        return when (direction) {
+            FavoriteAnimationDirection.Vertical -> {
+                val x = targetXFromStart * progress
+                val y = (0.5 * GRAPHICAL_ACCELERATION * elapsedTime.pow(2)).toFloat().adjustYSign()
+                Offset(
+                    x = startPosition.x + x,
+                    y = startPosition.y + y,
+                )
+            }
 
-        return Offset(
-            x = startPosition.x + x,
-            y = startPosition.y + y,
-        )
+            FavoriteAnimationDirection.Horizontal -> {
+                val x = (0.5 * GRAPHICAL_ACCELERATION * (durationMillis / 1000 - elapsedTime).pow(2)).toFloat()
+                val y = targetYFromStart * progress
+                Offset(
+                    x = targetPosition.x + x,
+                    y = startPosition.y + y,
+                )
+            }
+        }
     }
 
     private fun Float.pow(exponent: Int): Float {
@@ -172,4 +187,9 @@ data class FavoriteAnimationSpec(
         private const val GRAPHICAL_ACCELERATION = 9.8f
         private const val TIMES_SPEED = 20
     }
+}
+
+enum class FavoriteAnimationDirection {
+    Vertical,
+    Horizontal,
 }
