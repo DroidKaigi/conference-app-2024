@@ -44,23 +44,23 @@ class EventMapScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
-    fun scrollToFlamingo() {
+    fun scrollToFlamingoRoomEvent() {
         scrollLazyColumnByRoomName(RoomType.Flamingo)
     }
 
-    fun scrollToGiraffe() {
+    fun scrollToGiraffeRoomEvent() {
         scrollLazyColumnByRoomName(RoomType.Giraffe)
     }
 
-    fun scrollToHedgehog() {
+    fun scrollToHedgehogRoomEvent() {
         scrollLazyColumnByRoomName(RoomType.Hedgehog)
     }
 
-    fun scrollToIguana() {
+    fun scrollToIguanaRoomEvent() {
         scrollLazyColumnByRoomName(RoomType.Iguana)
     }
 
-    fun scrollToJellyfish() {
+    fun scrollToJellyfishRoomEvent() {
         scrollLazyColumnByRoomName(RoomType.Jellyfish)
     }
 

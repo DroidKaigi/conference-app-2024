@@ -65,7 +65,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     run {
                         setupEventMapServer(ServerStatus.Operational)
                         setupScreenContent()
-                        scrollToFlamingo()
+                        scrollToFlamingoRoomEvent()
                     }
                     itShould("ensure that the room types for Flamingo are displayed.") {
                         captureScreenWithChecks(
@@ -75,7 +75,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                         )
                     }
                     run {
-                        scrollToGiraffe()
+                        scrollToGiraffeRoomEvent()
                     }
                     itShould("ensure that the room types for Giraffe are displayed.") {
                         captureScreenWithChecks(
@@ -85,7 +85,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                         )
                     }
                     run {
-                        scrollToHedgehog()
+                        scrollToHedgehogRoomEvent()
                     }
                     itShould("ensure that the room types for Hedgehog are displayed.") {
                         captureScreenWithChecks(
@@ -95,7 +95,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                         )
                     }
                     run {
-                        scrollToIguana()
+                        scrollToIguanaRoomEvent()
                     }
                     itShould("ensure that the room types for Iguana are displayed.") {
                         captureScreenWithChecks(
@@ -105,7 +105,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                         )
                     }
                     run {
-                        scrollToJellyfish()
+                        scrollToJellyfishRoomEvent()
                     }
                     itShould("ensure that the room types for Jellyfish are displayed.") {
                         captureScreenWithChecks(
