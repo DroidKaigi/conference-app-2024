@@ -534,9 +534,18 @@ private fun ImagePickerWithError(
                     .padding(bottom = 20.dp)
                     .testTag(ProfileCardSelectImageButtonTestTag),
             ) {
-                Icon(Icons.Default.Add, null)
-                Spacer(Modifier.width(8.dp))
-                Text(stringResource(ProfileCardRes.string.add_image))
+                Row {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = null,
+                        modifier = Modifier.alignByBaseline(),
+                    )
+                    Spacer(Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(ProfileCardRes.string.add_image),
+                        modifier = Modifier.alignByBaseline()
+                    )
+                }
             }
             if (errorMessage.isNotEmpty()) {
                 Text(
