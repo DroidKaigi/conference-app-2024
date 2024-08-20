@@ -80,7 +80,7 @@ fun TimetableItemDetailContent(
 
             is Special -> {
                 DescriptionSection(
-                    description = timetableItem.description.currentLangTitle,
+                    description = timetableItem.description.getByLang(currentLang),
                     onLinkClick = onLinkClick,
                 )
                 TargetAudienceSection(timetableItem = timetableItem)
