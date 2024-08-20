@@ -116,7 +116,7 @@ struct TimetableGridView: View {
         let rooms = RoomType.allCases.filter {$0 != RoomType.roomIj}
         
         ScrollView([.horizontal, .vertical]) {
-            Grid(alignment: .leading, horizontalSpacing: 2, verticalSpacing: 1) {
+            Grid(alignment: .leading, horizontalSpacing: 4, verticalSpacing: 2) {
                 GridRow {
                     Color.clear
                         .gridCellUnsizedAxes([.horizontal, .vertical])
@@ -136,17 +136,11 @@ struct TimetableGridView: View {
                             Spacer()
                             
                         }.frame(height: 153)
-                        
-//                        DashedDivider(axis: .vertical).frame(width: 1, height: 153)
 
                         ForEach(rooms, id: \.self) { room in
                             timeBlock.getCellForRoom(room: room, onTap: { item in
                                 store.send(.view(.timetableItemTapped(item)))
                             })
-                            //Divider().gridCellUnsizedAxes(.vertical)
-//                            DashedDivider(axis: .vertical).frame(width: 1)
-                            //
-//                            Divider()
                         }
                     }
                     DashedDivider(axis: .horizontal)
