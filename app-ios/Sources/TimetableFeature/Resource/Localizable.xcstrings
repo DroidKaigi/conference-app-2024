@@ -14,16 +14,6 @@
     "|" : {
 
     },
-    "AddFavorite" : {
-      "localizations" : {
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "ブックマークに追加されました"
-          }
-        }
-      }
-    },
     "Timetable" : {
       "localizations" : {
         "ja" : {

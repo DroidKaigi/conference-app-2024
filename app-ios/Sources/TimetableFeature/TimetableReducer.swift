@@ -14,7 +14,6 @@ public struct TimetableReducer : Sendable{
     @ObservableState
     public struct State: Equatable {
         var timetableItems: [TimetableTimeGroupItems] = [] //Should be simple objects
-        var toast: ToastState?
         
         public init(timetableItems: [TimetableTimeGroupItems] = []) {
             self.timetableItems = timetableItems
