@@ -1,8 +1,8 @@
 import Foundation
 import SwiftUI
 
-private actor SpeakerIconInMemoryCache {
-    static let shared = SpeakerIconInMemoryCache()
+private actor CircularUserIconInMemoryCache {
+    static let shared = CircularUserIconInMemoryCache()
     private init() {}
     
     private var cache: [String: Data] = [:]
@@ -36,7 +36,7 @@ public struct CircularUserIcon: View {
         }
         .clipShape(Circle())
         .task {
-            if let data = await SpeakerIconInMemoryCache.shared.data(urlString: urlString) {
+            if let data = await CircularUserIconInMemoryCache.shared.data(urlString: urlString) {
                 iconData = data
                 return
             }
@@ -47,7 +47,7 @@ public struct CircularUserIcon: View {
             let urlRequest = URLRequest(url: url, cachePolicy: .useProtocolCachePolicy)
             if let (data, _) = try? await URLSession.shared.data(for: urlRequest) {
                 iconData = data
-                await SpeakerIconInMemoryCache.shared.set(data: data, urlString: urlString)
+                await CircularUserIconInMemoryCache.shared.set(data: data, urlString: urlString)
             }
         }
     }
