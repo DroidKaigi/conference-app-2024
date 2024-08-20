@@ -1,30 +1,24 @@
 import ComposableArchitecture
 import Foundation
 import KMPClient
-import shared
-
-struct SponsorData: Equatable, Identifiable {
-    let id: String
-    let logo: URL
-    let link: URL
-}
+import Model
 
 @Reducer
-public struct SponsorReducer {
+public struct SponsorReducer : Sendable {
     @Dependency(\.sponsorsClient) var sponsorsData
     
     public init() { }
     
     @ObservableState
     public struct State: Equatable {
-        var platinums = [SponsorData]()
-        var golds = [SponsorData]()
-        var supporters = [SponsorData]()
+        var platinums = [Sponsor]()
+        var golds = [Sponsor]()
+        var supporters = [Sponsor]()
 
         public init() { }
     }
 
-    public enum Action {
+    public enum Action : Sendable {
         case onAppear
         case response(Result<[Sponsor], any Error>)
     }
@@ -36,24 +30,28 @@ public struct SponsorReducer {
             switch action {
             case .onAppear:
                 return .run { send in
-                    for try await sponsors in try sponsorsData.streamSponsors() {
-                        await send(.response(.success(sponsors)))
+                    do {
+                        for try await sponsors in try sponsorsData.streamSponsors() {
+                            await send(.response(.success(sponsors)))
+                        }
+                    } catch {
+                        await send(.response(.failure(error)))
                     }
                 }
                 .cancellable(id: CancelID.connection)
             case .response(.success(let sponsors)):
-                var platinums = [SponsorData]()
-                var golds = [SponsorData]()
-                var supporters = [SponsorData]()
+                var platinums = [Sponsor]()
+                var golds = [Sponsor]()
+                var supporters = [Sponsor]()
                 
                 sponsors.forEach {
                     switch $0.plan {
                     case .platinum:
-                        platinums.append(.init(id: $0.name, logo: .init(string: $0.logo)!, link: .init(string: $0.link)!))
+                        platinums.append($0)
                     case .gold:
-                        golds.append(.init(id: $0.name, logo: .init(string: $0.logo)!, link: .init(string: $0.link)!))
+                        golds.append($0)
                     case .supporter:
-                        supporters.append(.init(id: $0.name, logo: .init(string: $0.logo)!, link: .init(string: $0.link)!))
+                        supporters.append($0)
                     }
                 }
                 

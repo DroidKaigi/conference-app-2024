@@ -32,7 +32,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import kotlin.math.roundToInt
 
-private const val maxAboutHeaderOffsetDp = 40
+private const val MaxAboutHeaderOffsetDp = 40
 
 const val AboutDetailTestTag = "AboutDetailTestTag"
 
@@ -48,7 +48,7 @@ fun AboutDroidKaigiDetail(
             if (screenScrollState.layoutInfo.visibleItemsInfo.isNotEmpty() && screenScrollState.firstVisibleItemIndex == 0) {
                 val scrollOffset = screenScrollState.firstVisibleItemScrollOffset.toFloat()
                 val height = screenScrollState.layoutInfo.visibleItemsInfo.first().size
-                (maxAboutHeaderOffsetDp * (scrollOffset / height)).roundToInt()
+                (MaxAboutHeaderOffsetDp * (scrollOffset / height)).roundToInt()
             } else {
                 0
             }
@@ -81,6 +81,7 @@ fun AboutDroidKaigiDetail(
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
             modifier = Modifier
+                .fillMaxWidth()
                 .padding(
                     start = 16.dp,
                     end = 16.dp,

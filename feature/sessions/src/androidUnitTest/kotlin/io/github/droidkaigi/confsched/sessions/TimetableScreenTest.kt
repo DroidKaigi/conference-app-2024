@@ -154,6 +154,18 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                                 checkTimetableTabSelected(case.expectedInitialTab)
                             })
                         }
+                        describe("switch to grid timetable") {
+                            run {
+                                clickTimetableUiTypeChangeButton()
+                            }
+                            itShould("show timetable items for ${case.expectedInitialTab.name}") {
+                                captureScreenWithChecks(checks = {
+                                    checkTimetableGridDisplayed()
+                                    checkTimetableGridItemsDisplayed()
+                                    checkTimetableTabSelected(case.expectedInitialTab)
+                                })
+                            }
+                        }
                     }
                 }
                 listOf(

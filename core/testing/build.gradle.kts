@@ -19,6 +19,7 @@ dependencies {
     implementation(projects.feature.about)
     implementation(projects.feature.staff)
     implementation(projects.feature.sponsors)
+    implementation(projects.feature.settings)
     implementation(projects.feature.favorites)
     implementation(projects.feature.eventmap)
     implementation(projects.feature.contributors)
