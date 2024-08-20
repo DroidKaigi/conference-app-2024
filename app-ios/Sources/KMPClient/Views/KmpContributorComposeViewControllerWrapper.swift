@@ -1,5 +1,5 @@
 import SwiftUI
-@preconcurrency import shared
+import shared
 
 public struct KmpContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
     public typealias URLString = String
