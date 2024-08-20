@@ -24,9 +24,9 @@ fun SettingsItemRow(
     leadingIcon: ImageVector,
     itemName: String,
     currentValue: String,
+    modifier: Modifier = Modifier,
     selectableItems: (@Composable () -> Unit)? = null,
     onClickItem: (() -> Unit)? = null,
-    modifier: Modifier = Modifier,
 ) {
     var isExpand by rememberSaveable { mutableStateOf(false) }
 
