@@ -3,9 +3,15 @@
   "strings" : {
     "Acknowledgements" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "License"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "ライセンス"
           }
         }
@@ -13,9 +19,15 @@
     },
     "AppVersion" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "App Version"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "アプリバージョン"
           }
         }
@@ -23,9 +35,15 @@
     },
     "CodeOfConduct" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Code Of Conduct"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "行動規範"
           }
         }
@@ -50,9 +68,15 @@
     },
     "Contributers" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Contributor"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "コントリビューター"
           }
         }
@@ -60,6 +84,12 @@
     },
     "Credits" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Credits"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -70,9 +100,15 @@
     },
     "KeyVisualCheckMap" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "View Map"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "地図を見る"
           }
         }
@@ -80,9 +116,15 @@
     },
     "KeyVisualDateKey" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Date"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "日時"
           }
         }
@@ -90,9 +132,15 @@
     },
     "KeyVisualDateValue" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "2024.09.11(Wed) - 13(Fri)"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "2024.09.11(水) 〜 13(金)"
           }
         }
@@ -100,9 +148,15 @@
     },
     "KeyVisualPlaceKey" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Place"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "場所"
           }
         }
@@ -110,9 +164,15 @@
     },
     "KeyVisualPlaceValue" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Bellesalle Shibuya Garden"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "ベルサール渋谷ガーデン"
           }
         }
@@ -120,9 +180,15 @@
     },
     "KeyVisualText" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "DroidKaigi is a conference tailored for Android developers."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "DroidKaigiはAndroid技術情報の共有とコミュニケーションを目的に開催されるエンジニアが主役のAndroidカンファレンスです。"
           }
         }
@@ -130,9 +196,15 @@
     },
     "NavigationTitle" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "About DroidKaigi"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "DroidKaigiについて"
           }
         }
@@ -140,6 +212,12 @@
     },
     "Others" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Others"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
@@ -150,9 +228,15 @@
     },
     "PrivacyPolicy" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "プライバシーポリシー"
           }
         }
@@ -177,9 +261,15 @@
     },
     "Sponsors" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Sponsor"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "スポンサー"
           }
         }
@@ -187,9 +277,15 @@
     },
     "Staffs" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Staff"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "スタッフ"
           }
         }

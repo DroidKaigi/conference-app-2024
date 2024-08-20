@@ -37,11 +37,11 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
         fun behaviors(): List<DescribedBehavior<EventMapScreenRobot>> {
             return describeBehaviors<EventMapScreenRobot>(name = "EventMapScreenRobot") {
                 describe("when regardless of server status") {
-                    run {
+                    doIt {
                         setupScreenContent()
                     }
                     describe("when click floor level ground") {
-                        run {
+                        doIt {
                             clickEventMapTabOnGround()
                         }
                         itShould("showed ground floor level map") {
@@ -51,7 +51,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                         }
                     }
                     describe("when click floor level basement") {
-                        run {
+                        doIt {
                             clickEventMapTabOnBasement()
                         }
                         itShould("showed basement floor level map") {
@@ -62,7 +62,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     }
                 }
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupEventMapServer(ServerStatus.Operational)
                         setupScreenContent()
                         scrollToFlamingoRoomEvent()
@@ -74,7 +74,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                             },
                         )
                     }
-                    run {
+                    doIt {
                         scrollToGiraffeRoomEvent()
                     }
                     itShould("ensure that the room types for Giraffe are displayed.") {
@@ -84,7 +84,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                             },
                         )
                     }
-                    run {
+                    doIt {
                         scrollToHedgehogRoomEvent()
                     }
                     itShould("ensure that the room types for Hedgehog are displayed.") {
@@ -94,7 +94,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                             },
                         )
                     }
-                    run {
+                    doIt {
                         scrollToIguanaRoomEvent()
                     }
                     itShould("ensure that the room types for Iguana are displayed.") {
@@ -104,7 +104,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                             },
                         )
                     }
-                    run {
+                    doIt {
                         scrollToJellyfishRoomEvent()
                     }
                     itShould("ensure that the room types for Jellyfish are displayed.") {
@@ -116,7 +116,7 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     }
                 }
                 describe("when server is error") {
-                    run {
+                    doIt {
                         setupEventMapServer(ServerStatus.Error)
                         setupScreenContent()
                     }

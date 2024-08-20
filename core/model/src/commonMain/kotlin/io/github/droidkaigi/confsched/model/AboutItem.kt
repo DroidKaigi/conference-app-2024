@@ -8,6 +8,7 @@ sealed class AboutItem {
     data object CodeOfConduct : AboutItem()
     data object License : AboutItem()
     data object PrivacyPolicy : AboutItem()
+    data object Settings : AboutItem()
     data object YouTube : AboutItem()
     data object X : AboutItem()
     data object Medium : AboutItem()
