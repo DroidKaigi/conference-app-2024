@@ -1,3 +1,4 @@
 <resources>
-    <string name="app_name">DroidKaigi 2024</string>
+    <string name="app_name" translatable="false">DroidKaigi 2024</string>
+    <string name="no_compatible_browser_found">No compatible browser found</string>
 </resources>
