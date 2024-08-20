@@ -17,7 +17,6 @@ import conference_app_2024.feature.settings.generated.resources.section_item_tit
 import conference_app_2024.feature.settings.generated.resources.section_title_title_look_and_feel
 import io.github.droidkaigi.confsched.settings.SettingsRes
 import io.github.droidkaigi.confsched.settings.SettingsUiState
-import io.github.droidkaigi.confsched.settings.component.SelectableItemColumn
 import io.github.droidkaigi.confsched.settings.component.SettingsItemRow
 import org.jetbrains.compose.resources.stringResource
 
@@ -48,19 +47,8 @@ fun LazyListScope.lookAndFeel(
             } else {
                 stringResource(SettingsRes.string.disable)
             },
-            selectableItems = {
-                SelectableItemColumn(
-                    label = stringResource(SettingsRes.string.enable),
-                    onClickItem = {
-                        onSelectEnableAnimation(true)
-                    },
-                )
-                SelectableItemColumn(
-                    label = stringResource(SettingsRes.string.disable),
-                    onClickItem = {
-                        onSelectEnableAnimation(false)
-                    },
-                )
+            onClickItem = {
+                onSelectEnableAnimation(uiState.enableAnimation.not())
             },
         )
         SettingsItemRow(
@@ -72,19 +60,8 @@ fun LazyListScope.lookAndFeel(
             } else {
                 stringResource(SettingsRes.string.disable)
             },
-            selectableItems = {
-                SelectableItemColumn(
-                    label = stringResource(SettingsRes.string.enable),
-                    onClickItem = {
-                        onSelectFallbackMode(true)
-                    },
-                )
-                SelectableItemColumn(
-                    label = stringResource(SettingsRes.string.disable),
-                    onClickItem = {
-                        onSelectFallbackMode(false)
-                    },
-                )
+            onClickItem = {
+                onSelectFallbackMode(uiState.enableFallbackMode.not())
             },
         )
     }

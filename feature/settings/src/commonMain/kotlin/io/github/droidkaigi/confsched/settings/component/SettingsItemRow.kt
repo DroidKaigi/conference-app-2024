@@ -24,7 +24,8 @@ fun SettingsItemRow(
     leadingIcon: ImageVector,
     itemName: String,
     currentValue: String,
-    selectableItems: @Composable () -> Unit,
+    selectableItems: (@Composable () -> Unit)? = null,
+    onClickItem: (() -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
     var isExpand by rememberSaveable { mutableStateOf(false) }
@@ -32,7 +33,10 @@ fun SettingsItemRow(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { isExpand = isExpand.not() },
+            .clickable {
+                onClickItem?.invoke()
+                isExpand = isExpand.not()
+            },
     ) {
         Row(
             modifier = Modifier
@@ -62,7 +66,7 @@ fun SettingsItemRow(
             }
         }
         if (isExpand) {
-            selectableItems()
+            selectableItems?.invoke()
         }
     }
 }
