@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -76,6 +77,8 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.share.ShareNavigator
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
@@ -89,11 +92,13 @@ import kotlinx.collections.immutable.PersistentList
 fun KaigiApp(
     windowSize: WindowSizeClass,
     displayFeatures: PersistentList<DisplayFeature>,
+    fontFamily: FontFamily?,
     modifier: Modifier = Modifier,
 ) {
     val layoutDirection = LocalLayoutDirection.current
     KaigiTheme(
         colorContrast = colorContrast(),
+        fontFamily = fontFamily,
     ) {
         Surface(
             modifier = modifier.fillMaxSize(),
@@ -155,6 +160,10 @@ private fun KaigiNavHost(
                 staffScreens(
                     onNavigationIconClick = navController::popBackStack,
                     onStaffItemClick = externalNavController::navigate,
+                )
+
+                settingsScreens(
+                    onNavigationIconClick = navController::popBackStack,
                 )
 
                 sponsorsScreens(
@@ -225,6 +234,8 @@ private fun NavGraphBuilder.mainScreen(
                                 url = "$portalBaseUrl/about/privacy",
                             )
                         }
+
+                        AboutItem.Settings -> navController.navigate(settingsScreenRoute)
 
                         AboutItem.Staff -> navController.navigate(staffScreenRoute)
                         AboutItem.X -> externalNavController.navigate(
