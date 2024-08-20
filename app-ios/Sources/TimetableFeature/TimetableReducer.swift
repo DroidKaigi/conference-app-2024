@@ -103,7 +103,7 @@ public struct TimetableReducer : Sendable{
                         return item.isFavorited
                     }))
                 }
-            case let .favoriteResponse(.success(isFavorited)):
+            case .favoriteResponse(.success(_)):
                 //No response here on purpose. Toasts look bad here.
                 return .none
             case let .favoriteResponse(.failure(error)):
