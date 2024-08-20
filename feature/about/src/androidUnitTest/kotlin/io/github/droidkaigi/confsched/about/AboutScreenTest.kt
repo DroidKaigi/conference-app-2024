@@ -40,7 +40,7 @@ class AboutScreenTest(
         fun behaviors(): List<DescribedBehavior<AboutScreenRobot>> {
             return describeBehaviors("AboutScreen") {
                 describe("when launch") {
-                    run {
+                    doIt {
                         setupScreenContent()
                     }
                     itShould("show detail section") {
