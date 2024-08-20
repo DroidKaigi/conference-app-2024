@@ -94,7 +94,7 @@ fun FavoriteSheet(
                     timetable = uiState.timeTable,
                     onBookmarkClick = onBookmarkClick,
                     onTimetableItemClick = onTimetableItemClick,
-                    contentPadding = contentPadding,
+                    contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
                 )
             }
         }
