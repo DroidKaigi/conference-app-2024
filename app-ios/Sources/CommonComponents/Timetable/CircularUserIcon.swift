@@ -54,6 +54,6 @@ public struct CircularUserIcon: View {
 }
 
 #Preview {
-    CircularUserIcon(urlString: "https://github.com/mltokky.png")
+    CircularUserIcon(urlString: "https://avatars.githubusercontent.com/u/10727543?s=96&v=4")
         .frame(width: 32, height: 32)
 }
