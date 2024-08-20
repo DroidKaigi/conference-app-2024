@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -105,40 +106,52 @@ fun FavoriteSheet(
 @Composable
 private fun EmptyView(modifier: Modifier = Modifier) {
     LazyColumn(
-        modifier = modifier.testTag(FavoritesScreenEmptyViewTestTag).fillMaxSize(),
+        modifier = modifier
+            .testTag(FavoritesScreenEmptyViewTestTag)
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        Box(
-            modifier = Modifier
-                .background(
-                    color = MaterialTheme.colorScheme.onPrimary,
-                    shape = RoundedCornerShape(24.dp),
+        item {
+            Box(
+                modifier = Modifier
+                    .background(
+                        color = MaterialTheme.colorScheme.onPrimary,
+                        shape = RoundedCornerShape(24.dp),
+                    )
+                    .size(84.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    modifier = Modifier.size(36.dp),
+                    imageVector = Icons.Filled.Favorite,
+                    contentDescription = null,
+                    tint = Color.Green,
                 )
-                .size(84.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Icon(
-                modifier = Modifier.size(36.dp),
-                imageVector = Icons.Filled.Favorite,
-                contentDescription = null,
-                tint = Color.Green,
+            }
+        }
+        item {
+            Spacer(Modifier.height(12.dp))
+        }
+        item {
+            Text(
+                text = stringResource(FavoritesRes.string.empty_description),
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                textAlign = TextAlign.Center,
             )
         }
-        Spacer(Modifier.height(12.dp))
-        Text(
-            text = stringResource(FavoritesRes.string.empty_description),
-            style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface,
-            textAlign = TextAlign.Center,
-        )
-        Spacer(Modifier.height(6.dp))
-        Text(
-            text = stringResource(FavoritesRes.string.empty_guide),
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            textAlign = TextAlign.Center,
-        )
+        item {
+            Spacer(Modifier.height(6.dp))
+        }
+        item {
+            Text(
+                text = stringResource(FavoritesRes.string.empty_guide),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            )
+        }
     }
 }
 
