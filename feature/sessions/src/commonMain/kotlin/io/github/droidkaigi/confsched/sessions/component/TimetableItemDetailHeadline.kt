@@ -35,11 +35,10 @@ const val TimetableItemDetailHeadlineTestTag = "TimetableItemDetailHeadlineTestT
 
 @Composable
 fun TimetableItemDetailHeadline(
-    currentLang: Lang?,
+    currentLang: Lang,
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
-    val currentLang = currentLang ?: Lang.ENGLISH
     Column(
         modifier = modifier
             // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
