@@ -18,6 +18,7 @@ public data class Filters(
         categories.isEmpty() &&
         sessionTypes.isEmpty() &&
         languages.isEmpty() &&
+        !filterFavorite &&
         searchWord.isEmpty()
 
     fun isNotEmpty() = isEmpty().not()

@@ -56,9 +56,6 @@ public data class Timetable(
     }
 
     public fun filtered(filters: Filters): Timetable {
-        if (!filters.filterFavorite && filters.isEmpty()) {
-            return copy(timetableItems = TimetableItemList())
-        }
         var timetableItems = timetableItems.toList()
         if (filters.days.isNotEmpty()) {
             timetableItems = timetableItems.filter { timetableItem ->

@@ -15,6 +15,7 @@ import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.TimetableCategory
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItemList
 import io.github.droidkaigi.confsched.model.TimetableSessionType
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.Bookmark
@@ -65,7 +66,7 @@ fun searchScreenPresenter(
         }
     }
     val filteredSessions by rememberUpdatedState(
-        sessions.filtered(filters).timetableItems,
+        if (filters.isEmpty()) TimetableItemList() else sessions.filtered(filters).timetableItems,
     )
 
     val searchFilterDayUiState: SearchFilterUiState<DroidKaigi2024Day> by rememberUpdatedState(
