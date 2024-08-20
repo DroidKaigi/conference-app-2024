@@ -385,7 +385,7 @@ private class ExternalNavController(
         val specializedActivityIntent = Intent(Intent.ACTION_VIEW, uri)
             .addCategory(Intent.CATEGORY_BROWSABLE)
         val resolvedSpecializedList: MutableSet<String> =
-            pm.queryIntentActivities(browserActivityIntent, 0)
+            pm.queryIntentActivities(specializedActivityIntent, 0)
                 .map { it.activityInfo.packageName }
                 .toMutableSet()
 
