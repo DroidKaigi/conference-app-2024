@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="contributors_title">Contributors</string>
+    <string name="contributor_title">Contributor</string>
 </resources>
