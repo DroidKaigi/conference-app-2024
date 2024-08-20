@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.contributors.generated.resources.contributors_title
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.model.Contributor
@@ -27,6 +28,7 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
+import org.jetbrains.compose.resources.stringResource
 
 const val contributorsScreenRoute = "contributors"
 const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
@@ -106,7 +108,7 @@ fun ContributorsScreen(
         topBar = {
             if (!isTopAppBarHidden) {
                 AnimatedLargeTopAppBar(
-                    title = "Contributor",
+                    title = stringResource(ContributorsRes.string.contributors_title),
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
                     navIconContentDescription = "Back",
