@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.TimeLine
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.Empty
@@ -39,6 +40,7 @@ sealed interface TimetableUiState {
 
     data class GridTimetable(
         val timetableGridUiState: Map<DroidKaigi2024Day, TimetableGridUiState>,
+        val timeLine: TimeLine?,
     ) : TimetableUiState
 }
 
@@ -90,6 +92,7 @@ fun Timetable(
                     TimetableGrid(
                         uiState = requireNotNull(uiState.timetableGridUiState[selectedDay]),
                         timetableState = timetableStates.getValue(selectedDay),
+                        timeLine = uiState.timeLine,
                         selectedDay = selectedDay,
                         onTimetableItemClick = onTimetableItemClick,
                         modifier = Modifier

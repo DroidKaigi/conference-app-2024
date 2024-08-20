@@ -104,6 +104,7 @@ data class TimetableGridUiState(val timetable: Timetable)
 @Composable
 fun TimetableGrid(
     uiState: TimetableGridUiState,
+    timeLine: TimeLine?,
     timetableState: TimetableState,
     selectedDay: DroidKaigi2024Day,
     onTimetableItemClick: (TimetableItem) -> Unit,
@@ -112,6 +113,7 @@ fun TimetableGrid(
 ) {
     TimetableGrid(
         timetable = uiState.timetable,
+        timeLine = timeLine,
         timetableState = timetableState,
         selectedDay = selectedDay,
         onTimetableItemClick = onTimetableItemClick,
@@ -124,6 +126,7 @@ fun TimetableGrid(
 @Composable
 fun TimetableGrid(
     timetable: Timetable,
+    timeLine: TimeLine?,
     timetableState: TimetableState,
     selectedDay: DroidKaigi2024Day,
     onTimetableItemClick: (TimetableItem) -> Unit,
@@ -134,7 +137,6 @@ fun TimetableGrid(
     val layoutDirection = LocalLayoutDirection.current
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val animatedScope = LocalAnimatedVisibilityScope.current
-    val timeLine = TimeLine.now(LocalClock.current)
 
     Row(
         modifier = Modifier
@@ -408,6 +410,7 @@ fun TimetablePreview() {
             Surface {
                 TimetableGrid(
                     timetable = Timetable.fake(),
+                    timeLine = TimeLine.now(LocalClock.current),
                     selectedDay = DroidKaigi2024Day.ConferenceDay1,
                     timetableState = rememberTimetableGridState(),
                     onTimetableItemClick = {},
@@ -426,6 +429,7 @@ fun TimetableVerticalScale20PercentPreview() {
             Surface {
                 TimetableGrid(
                     timetable = Timetable.fake(),
+                    timeLine = TimeLine.now(LocalClock.current),
                     selectedDay = DroidKaigi2024Day.ConferenceDay1,
                     timetableState = rememberTimetableGridState(
                         screenScaleState = ScreenScaleState(0.2f, 0.2f),
@@ -446,6 +450,7 @@ fun TimetableVerticalScale40PercentPreview() {
             Surface {
                 TimetableGrid(
                     timetable = Timetable.fake(),
+                    timeLine = TimeLine.now(LocalClock.current),
                     selectedDay = DroidKaigi2024Day.ConferenceDay1,
                     timetableState = rememberTimetableGridState(
                         screenScaleState = ScreenScaleState(0.4f, 0.4f),
@@ -466,6 +471,7 @@ fun TimetableVerticalScale60PercentPreview() {
             Surface {
                 TimetableGrid(
                     timetable = Timetable.fake(),
+                    timeLine = TimeLine.now(LocalClock.current),
                     selectedDay = DroidKaigi2024Day.ConferenceDay1,
                     timetableState = rememberTimetableGridState(
                         screenScaleState = ScreenScaleState(0.6f, 0.6f),

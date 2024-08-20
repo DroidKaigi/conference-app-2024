@@ -9,6 +9,7 @@ import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.SessionsRepository
+import io.github.droidkaigi.confsched.model.TimeLine
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
@@ -19,6 +20,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreenEvent.UiTypeChange
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
@@ -102,11 +104,12 @@ fun timetableSheet(
         )
     } else {
         TimetableUiState.GridTimetable(
-            DroidKaigi2024Day.visibleDays().associateWith { day ->
+            timetableGridUiState = DroidKaigi2024Day.visibleDays().associateWith { day ->
                 TimetableGridUiState(
                     timetable = sessionTimetable.dayTimetable(day),
                 )
             },
+            timeLine = TimeLine.now(LocalClock.current)
         )
     }
 }
