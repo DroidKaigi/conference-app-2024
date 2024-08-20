@@ -39,11 +39,11 @@ class StaffScreenTest(
         fun behaviors(): List<DescribedBehavior<StaffScreenRobot>> {
             return describeBehaviors<StaffScreenRobot>(name = "StaffScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupStaffServer(StaffServerRobot.ServerStatus.Operational)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupScreenContent()
                         }
                         itShould("show first and second staffs") {
@@ -53,7 +53,7 @@ class StaffScreenTest(
                         }
 
                         describe("when scroll to index 10") {
-                            run {
+                            doIt {
                                 scrollToIndex10()
                             }
                             itShould("show staffs") {
@@ -65,11 +65,11 @@ class StaffScreenTest(
                     }
 
                     describe("when server is down") {
-                        run {
+                        doIt {
                             setupStaffServer(StaffServerRobot.ServerStatus.Error)
                         }
                         describe("when launch") {
-                            run {
+                            doIt {
                                 setupScreenContent()
                             }
                             itShould("does not show staff and show snackbar") {

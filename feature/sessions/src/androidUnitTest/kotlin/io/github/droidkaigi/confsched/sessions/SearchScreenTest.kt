@@ -42,7 +42,7 @@ class SearchScreenTest(
         fun behaviors(): List<DescribedBehavior<SearchScreenRobot>> {
             return describeBehaviors<SearchScreenRobot>(name = "SearchScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Operational)
                         setupSearchScreenContent()
                     }
@@ -53,7 +53,7 @@ class SearchScreenTest(
                         }
                     }
                     describe("input search word to TextField") {
-                        run {
+                        doIt {
                             inputDemoSearchWord()
                         }
                         itShould("show search word and filtered items") {
@@ -64,7 +64,7 @@ class SearchScreenTest(
                         }
                     }
                     describe("when filter day chip click") {
-                        run {
+                        doIt {
                             clickFilterDayChip()
                         }
                         itShould("show drop down menu") {
@@ -74,7 +74,7 @@ class SearchScreenTest(
                         }
                         ConferenceDay.entries.forEach { conference ->
                             describe("when click conference day ${conference.day}") {
-                                run {
+                                doIt {
                                     clickConferenceDay(
                                         clickDay = conference,
                                     )
@@ -90,7 +90,7 @@ class SearchScreenTest(
                         }
                     }
                     describe("when filter category chip click") {
-                        run {
+                        doIt {
                             clickFilterCategoryChip()
                         }
                         itShould("show drop down menu") {
@@ -100,7 +100,7 @@ class SearchScreenTest(
                         }
                         Category.entries.forEach { category ->
                             describe("when click category ${category.categoryName}") {
-                                run {
+                                doIt {
                                     clickCategory(
                                         category = category,
                                     )
@@ -114,7 +114,7 @@ class SearchScreenTest(
                         }
                     }
                     describe("when filter language chip click") {
-                        run {
+                        doIt {
                             scrollToFilterLanguageChip()
                             clickFilterLanguageChip()
                         }
@@ -125,7 +125,7 @@ class SearchScreenTest(
                         }
                         Language.entries.forEach { language ->
                             describe("when click language ${language.name}") {
-                                run {
+                                doIt {
                                     clickLanguage(
                                         language = language,
                                     )

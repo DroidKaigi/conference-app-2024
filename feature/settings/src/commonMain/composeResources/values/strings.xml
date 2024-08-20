@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Settings</string>
+    <string name="section_title_accessibility">Accessibility</string>
+    <string name="section_item_title_font">Font</string>
+</resources>

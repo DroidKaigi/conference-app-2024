@@ -6,7 +6,6 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot
-import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot.FloorLevel
 import io.github.droidkaigi.confsched.testing.robot.EventMapServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.robot.todoChecks
@@ -38,66 +37,86 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
         fun behaviors(): List<DescribedBehavior<EventMapScreenRobot>> {
             return describeBehaviors<EventMapScreenRobot>(name = "EventMapScreenRobot") {
                 describe("when regardless of server status") {
-                    run {
+                    doIt {
                         setupScreenContent()
                     }
                     describe("when click floor level ground") {
-                        run {
-                            clickEventMapTab(FloorLevel.Ground)
+                        doIt {
+                            clickEventMapTabOnGround()
                         }
                         itShould("showed ground floor level map") {
                             captureScreenWithChecks {
-                                checkEventMap(FloorLevel.Ground)
+                                checkEventMapOnGround()
                             }
                         }
                     }
                     describe("when click floor level basement") {
-                        run {
-                            clickEventMapTab(FloorLevel.Basement)
+                        doIt {
+                            clickEventMapTabOnBasement()
                         }
                         itShould("showed basement floor level map") {
                             captureScreenWithChecks {
-                                checkEventMap(FloorLevel.Basement)
+                                checkEventMapOnBasement()
                             }
                         }
                     }
                 }
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupEventMapServer(ServerStatus.Operational)
                         setupScreenContent()
-                        scrollLazyColumnByIndex(1)
+                        scrollToFlamingoRoomEvent()
                     }
-                    itShould("ensure that the room types for Flamingo and Giraffe are displayed.") {
+                    itShould("ensure that the room types for Flamingo are displayed.") {
                         captureScreenWithChecks(
                             checks = {
-                                checkEventMapItemByRoomName(roomName = "Flamingo")
-                                checkEventMapItemByRoomName(roomName = "Giraffe")
+                                checkEventMapItemFlamingo()
                             },
                         )
                     }
-                    run {
-                        scrollLazyColumnByIndex(3)
+                    doIt {
+                        scrollToGiraffeRoomEvent()
                     }
-                    itShould("ensure that the room types for Hedgehog and Iguana are displayed.") {
+                    itShould("ensure that the room types for Giraffe are displayed.") {
                         captureScreenWithChecks(
                             checks = {
-                                checkEventMapItemByRoomName(roomName = "Hedgehog")
-                                checkEventMapItemByRoomName(roomName = "Iguana")
+                                checkEventMapItemGiraffe()
                             },
                         )
                     }
-                    run {
-                        scrollLazyColumnByIndex(4)
+                    doIt {
+                        scrollToHedgehogRoomEvent()
+                    }
+                    itShould("ensure that the room types for Hedgehog are displayed.") {
+                        captureScreenWithChecks(
+                            checks = {
+                                checkEventMapItemHedgehog()
+                            },
+                        )
+                    }
+                    doIt {
+                        scrollToIguanaRoomEvent()
+                    }
+                    itShould("ensure that the room types for Iguana are displayed.") {
+                        captureScreenWithChecks(
+                            checks = {
+                                checkEventMapItemIguana()
+                            },
+                        )
+                    }
+                    doIt {
+                        scrollToJellyfishRoomEvent()
                     }
                     itShould("ensure that the room types for Jellyfish are displayed.") {
                         captureScreenWithChecks(
-                            checks = { checkEventMapItemByRoomName(roomName = "Jellyfish") },
+                            checks = {
+                                checkEventMapItemJellyfish()
+                            },
                         )
                     }
                 }
                 describe("when server is error") {
-                    run {
+                    doIt {
                         setupEventMapServer(ServerStatus.Error)
                         setupScreenContent()
                     }
