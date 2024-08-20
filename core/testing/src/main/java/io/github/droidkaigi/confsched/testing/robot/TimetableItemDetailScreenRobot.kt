@@ -16,12 +16,12 @@ import androidx.compose.ui.test.swipeUp
 import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
-import io.github.droidkaigi.confsched.data.sessions.fake
-import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
+import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenLazyColumnTestTag
+import io.github.droidkaigi.confsched.sessions.component.DescriptionMoreButtonTestTag
 import io.github.droidkaigi.confsched.sessions.component.SummaryCardTextTag
 import io.github.droidkaigi.confsched.sessions.component.TargetAudienceSectionTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
@@ -36,10 +36,11 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     TimetableServerRobot by timetableServerRobot,
     FontScaleRobot by fontScaleRobot {
 
-    suspend fun setupScreenContent() {
-        val firstSessionId = SessionsAllResponse.Companion.fake().sessions.first().id
+    suspend fun setupScreenContent(
+        sessionId: String = FakeSessionsApiClient.defaultSessionId,
+    ) {
         robotTestRule.setContentWithNavigation<TimetableItemDetailDestination>(
-            startDestination = { TimetableItemDetailDestination(firstSessionId) },
+            startDestination = { TimetableItemDetailDestination(sessionId) },
         ) {
             KaigiTheme {
                 TimetableItemDetailScreen(
@@ -47,11 +48,15 @@ class TimetableItemDetailScreenRobot @Inject constructor(
                     onLinkClick = { },
                     onCalendarRegistrationClick = { },
                     onShareClick = { },
+                    onFavoriteListClick = { },
                 )
             }
         }
         waitUntilIdle()
     }
+
+    suspend fun setupScreenContentWithLongDescription() =
+        setupScreenContent(FakeSessionsApiClient.defaultSessionIdWithLongDescription)
 
     suspend fun clickBookmarkButton() {
         composeTestRule
@@ -66,7 +71,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .performTouchInput {
                 swipeUp(
                     startY = visibleSize.height * 3F / 4,
-                    endY = visibleSize.height / 2F,
+                    endY = visibleSize.height / 4F,
                 )
             }
     }
@@ -77,6 +82,17 @@ class TimetableItemDetailScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(TimetableItemDetailScreenLazyColumnTestTag))
             .performScrollToIndex(index)
+    }
+
+    fun scrollToMiddleOfScreen() {
+        composeTestRule
+            .onRoot()
+            .performTouchInput {
+                swipeUp(
+                    startY = visibleSize.height / 2F,
+                    endY = visibleSize.height / 7F,
+                )
+            }
     }
 
     fun checkScreenCapture() {
@@ -102,7 +118,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onNode(hasTestTag(TimetableItemDetailHeadlineTestTag))
             .assertExists()
             .assertIsDisplayed()
-            .assertTextEquals("Demo Welcome Talk 1")
+            .assertTextEquals(FakeSessionsApiClient.defaultSession.title.ja!!)
     }
 
     fun checkBookmarkedSession() {
@@ -146,8 +162,14 @@ class TimetableItemDetailScreenRobot @Inject constructor(
         }
     }
 
+    fun checkDisplayingMoreButton() {
+        composeTestRule
+            .onNode(hasTestTag(DescriptionMoreButtonTestTag))
+            .assertExists()
+            .assertIsDisplayed()
+    }
+
     companion object {
-        val defaultSessionId: String =
-            SessionsAllResponse.fake().sessions.find { it.sessionType == "NORMAL" }!!.id
+        val defaultSessionId = FakeSessionsApiClient.defaultSession.id
     }
 }

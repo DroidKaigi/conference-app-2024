@@ -12,7 +12,7 @@ public struct TimetableView: View {
     }
     
     @State var timetableMode = TimetableMode.list
-    @State var switchModeIcon: String = "square.grid.2x2"
+    @State var switchModeIcon: ImageResource = .icGrid
     @State var selectedTab: DayTab = DayTab.day1
     
     public var body: some View {
@@ -45,7 +45,7 @@ public struct TimetableView: View {
         .frame(maxWidth: .infinity)
         .toolbar{
             ToolbarItem(placement: .topBarLeading) {
-                Text("Timetable")
+                Text("Timetable", bundle: .module)
                     .textStyle(.headlineMedium)
                     .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                 
@@ -65,14 +65,15 @@ public struct TimetableView: View {
                         switch timetableMode {
                         case .list:
                             timetableMode = .grid
-                            switchModeIcon = "list.bullet.indent"
+                            switchModeIcon = .icList
                         case .grid:
                             timetableMode = .list
-                            switchModeIcon = "square.grid.2x2"
+                            switchModeIcon = .icGrid
                         }
                     } label: {
-                        Image(systemName:switchModeIcon).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-                        .frame(width: 40, height: 40)
+                        Image(switchModeIcon)
+                            .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                            .frame(width: 40, height: 40)
                     }
                 }
             }
@@ -102,6 +103,8 @@ struct TimetableListView: View {
             .onAppear {
                 store.send(.view(.onAppear))
             }.background(AssetColors.Surface.surface.swiftUIColor)
+            
+            bottomTabBarPadding
         }
     }
 }
@@ -138,16 +141,25 @@ struct TimetableGridView: View {
                         }.frame(height: 153)
 
                         ForEach(rooms, id: \.self) { room in
-                            timeBlock.getCellForRoom(room: room, onTap: { item in
-                                store.send(.view(.timetableItemTapped(item)))
-                            })
+                            if let cell = timeBlock.getCellForRoom(room: room, onTap: { item in
+                                store.send(.view(.timetableItemTapped(item)))}) {
+                                cell
+                            } else {
+                                Color.clear
+                                    .frame(maxWidth: .infinity)
+                                    .padding(12)
+                                    .frame(width: 192, height: 153)
+                                    .background(Color.clear, in: RoundedRectangle(cornerRadius: 4))
+                            }
                         }
                     }
                     DashedDivider(axis: .horizontal)
                 }
             }.fixedSize(horizontal: false, vertical: true)
+            .padding(.trailing)
+            
+            bottomTabBarPadding
         }
-        
     }
 }
 
@@ -213,6 +225,11 @@ struct LineShape: Shape {
         
         return path
     }
+}
+
+fileprivate var bottomTabBarPadding: some View {
+    // bottom floating tabbar padding
+    Color.clear.padding(.bottom, 60)
 }
 
 extension RoomType {
@@ -283,15 +300,13 @@ extension RoomType {
 }
 
 extension TimetableTimeGroupItems {
-    func getCellForRoom(room: RoomType, onTap: @escaping (TimetableItemWithFavorite) -> Void) -> TimetableGridCard {
+    func getCellForRoom(room: RoomType, onTap: @escaping (TimetableItemWithFavorite) -> Void) -> TimetableGridCard? {
         return if let cell = getItem(for: room) {
             TimetableGridCard(timetableItem: cell.timetableItem) { timetableItem in
                 onTap(cell)
             }
         } else {
-            TimetableGridCard(timetableItem: nil) { _ in
-                // Does nothing / Space holder card
-            }
+            nil
         }
     }
 }

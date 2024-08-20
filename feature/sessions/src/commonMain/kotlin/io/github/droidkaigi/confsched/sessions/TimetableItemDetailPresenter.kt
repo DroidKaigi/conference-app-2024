@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import co.touchlab.kermit.Logger
 import conference_app_2024.feature.sessions.generated.resources.bookmarked_successfully
 import conference_app_2024.feature.sessions.generated.resources.view_bookmark_list
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
@@ -17,10 +18,11 @@ import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.model.TimetableSessionType.NORMAL
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.Bookmark
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.FavoriteListNavigated
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDescriptionLanguage
-import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.ViewBookmarkListRequestCompleted
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
+import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.droidkaigi.confsched.ui.rememberNavigationArgument
 import kotlinx.coroutines.flow.SharedFlow
@@ -29,7 +31,7 @@ import org.jetbrains.compose.resources.stringResource
 sealed interface TimetableItemDetailEvent {
     data class Bookmark(val timetableItem: TimetableItem) : TimetableItemDetailEvent
     data class SelectDescriptionLanguage(val language: Lang) : TimetableItemDetailEvent
-    data object ViewBookmarkListRequestCompleted : TimetableItemDetailEvent
+    data object FavoriteListNavigated : TimetableItemDetailEvent
 }
 
 @Composable
@@ -40,13 +42,14 @@ fun timetableItemDetailPresenter(
         key = timetableItemDetailScreenRouteItemIdParameterName,
         initialValue = "",
     ),
-): TimetableItemDetailScreenUiState = providePresenterDefaults<TimetableItemDetailScreenUiState> { userMessageStateHolder ->
+): TimetableItemDetailScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val timetableItemId = TimetableItemId(timetableItemIdArg)
     val timetableItemStateWithBookmark by rememberUpdatedState(
         sessionsRepository
             .timetableItemWithBookmark(timetableItemId),
     )
     var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
+    var shouldGoToFavoriteList by remember { mutableStateOf(false) }
     val bookmarkedSuccessfullyString = stringResource(SessionsRes.string.bookmarked_successfully)
     val viewBookmarkListString = stringResource(SessionsRes.string.view_bookmark_list)
 
@@ -60,19 +63,23 @@ fun timetableItemDetailPresenter(
                     sessionsRepository.toggleBookmark(timetableItem.id)
                     val oldBookmarked = timetableItemWithBookmark.second
                     if (!oldBookmarked) {
-                        userMessageStateHolder.showMessage(
+                        val result = userMessageStateHolder.showMessage(
                             message = bookmarkedSuccessfullyString,
                             actionLabel = viewBookmarkListString,
                             duration = Short,
                         )
+                        if (result == ActionPerformed) {
+                            shouldGoToFavoriteList = true
+                        }
                     }
-                }
-
-                is ViewBookmarkListRequestCompleted -> {
                 }
 
                 is SelectDescriptionLanguage -> {
                     selectedDescriptionLanguage = event.language
+                }
+
+                is FavoriteListNavigated -> {
+                    shouldGoToFavoriteList = false
                 }
             }
         }
@@ -82,6 +89,9 @@ fun timetableItemDetailPresenter(
         if (selectedDescriptionLanguage == null) {
             selectedDescriptionLanguage = Lang.valueOf(timetableItem.language.langOfSpeaker)
         }
+    }
+    Logger.d {
+        "timetableItemDetailPresenter receive timetableItemStateWithBookmark: ${timetableItemStateWithBookmark?.first?.id}"
     }
     val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
         ?: return@providePresenterDefaults Loading(timetableItemId, userMessageStateHolder)
@@ -95,5 +105,6 @@ fun timetableItemDetailPresenter(
         roomThemeKey = timetableItem.room.getThemeKey(),
         timetableItemId = timetableItemId,
         userMessageStateHolder = userMessageStateHolder,
+        shouldGoToFavoriteList = shouldGoToFavoriteList,
     )
 }

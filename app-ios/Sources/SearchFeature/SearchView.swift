@@ -123,9 +123,9 @@ public struct SearchView: View {
         selection: T?,
         defaultTitle: String,
         onSelect: @escaping (T) -> Void
-    ) -> some View where T.AllCases: RandomAccessCollection {
+    ) -> some View {
         Menu {
-            ForEach(T.allCases, id: \.id) { menuSelection in
+            ForEach(T.options, id: \.id) { menuSelection in
                 Button {
                     onSelect(menuSelection)
                 } label: {
@@ -148,7 +148,13 @@ public struct SearchView: View {
     }
 }
 
-extension DroidKaigi2024Day: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension DroidKaigi2024Day: @retroactive Selectable {}
+#else
+extension DroidKaigi2024Day: Selectable {}
+#endif
+
+extension DroidKaigi2024Day {
     public var id: Self {
         self
     }
@@ -165,9 +171,19 @@ extension DroidKaigi2024Day: Selectable {
             String(localized: "9/13", bundle: .module)
         }
     }
+
+    public static var options: [DroidKaigi2024Day] {
+        [.conferenceDay1, .conferenceDay2]
+    }
 }
 
-extension TimetableCategory: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension TimetableCategory: @retroactive Selectable {}
+#else
+extension TimetableCategory: Selectable {}
+#endif
+
+extension TimetableCategory {
     public var caseTitle: String {
         title.currentLangTitle
     }
@@ -178,7 +194,13 @@ extension TimetableCategory: Selectable {
     }
 }
 
-extension TimetableSessionType: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension TimetableSessionType: @retroactive Selectable {}
+#else
+extension TimetableSessionType: Selectable {}
+#endif
+
+extension TimetableSessionType {
     public var id: Self {
         self
     }
@@ -188,7 +210,13 @@ extension TimetableSessionType: Selectable {
     }
 }
 
-extension Lang: Selectable {
+#if hasFeature(RetroactiveAttribute)
+extension Lang: @retroactive Selectable {}
+#else
+extension Lang: Selectable {}
+#endif
+
+extension Lang {
     public var id: Self {
         self
     }

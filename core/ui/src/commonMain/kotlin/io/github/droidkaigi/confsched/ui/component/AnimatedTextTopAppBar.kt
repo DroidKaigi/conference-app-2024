@@ -14,6 +14,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 
@@ -25,7 +26,10 @@ fun AnimatedTextTopAppBar(
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
-    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors().copy(
+        scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+    ),
+    textColor: Color = MaterialTheme.colorScheme.onSurface,
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) {
     val scrollFraction = scrollBehavior?.state?.overlappedFraction ?: 0f
@@ -36,6 +40,7 @@ fun AnimatedTextTopAppBar(
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = title,
+                    color = textColor,
                     modifier = Modifier
                         .fillMaxWidth()
                         .graphicsLayer {
@@ -47,6 +52,7 @@ fun AnimatedTextTopAppBar(
 
                 Text(
                     text = title,
+                    color = textColor,
                     modifier = Modifier
                         .fillMaxWidth()
                         .align(Alignment.Center)

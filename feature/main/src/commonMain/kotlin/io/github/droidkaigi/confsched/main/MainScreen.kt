@@ -11,22 +11,21 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -61,14 +60,16 @@ import io.github.droidkaigi.confsched.designsystem.DesignSystemRes
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
 import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
+import io.github.droidkaigi.confsched.main.section.GlassLikeNavRail
 import io.github.droidkaigi.confsched.model.isBlurSupported
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.ui.animation.FavoriteAnimationDirection
+import io.github.droidkaigi.confsched.ui.animation.ProvideFavoriteAnimation
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
-import org.jetbrains.compose.resources.stringResource
 
 const val mainScreenRoute = "main"
 
@@ -128,14 +129,22 @@ fun MainScreen(
         snackbarHostState = snackbarHostState,
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
-    MainScreen(
-        uiState = uiState,
-        snackbarHostState = snackbarHostState,
-        navigationType = navigationType,
-        routeToTab = mainNestedGraphStateHolder::routeToTab,
-        onTabSelected = mainNestedGraphStateHolder::onTabSelected,
-        mainNestedNavGraph = mainNestedNavGraph,
-    )
+    ProvideFavoriteAnimation(
+        if (navigationType == BottomNavigation) {
+            FavoriteAnimationDirection.Vertical
+        } else {
+            FavoriteAnimationDirection.Horizontal
+        },
+    ) {
+        MainScreen(
+            uiState = uiState,
+            snackbarHostState = snackbarHostState,
+            navigationType = navigationType,
+            routeToTab = mainNestedGraphStateHolder::routeToTab,
+            onTabSelected = mainNestedGraphStateHolder::onTabSelected,
+            mainNestedNavGraph = mainNestedNavGraph,
+        )
+    }
 }
 
 sealed class IconRepresentation {
@@ -189,9 +198,9 @@ enum class MainScreenTab(
     ;
 
     companion object {
-        val size: Int get() = values().size
-        fun indexOf(tab: MainScreenTab): Int = values().indexOf(tab)
-        fun fromIndex(index: Int): MainScreenTab = values()[index]
+        val size: Int get() = entries.size
+        fun indexOf(tab: MainScreenTab): Int = entries.indexOf(tab)
+        fun fromIndex(index: Int): MainScreenTab = entries[index]
     }
 }
 
@@ -214,31 +223,37 @@ fun MainScreen(
     val mainNestedNavController = rememberNavController()
     val navBackStackEntry by mainNestedNavController.currentBackStackEntryAsState()
     val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
+    val hazeState = remember { HazeState() }
+
+    val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
+
     Row(modifier = modifier.fillMaxSize()) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
-            Column {
-                Text(text = "nav rail")
-                MainScreenTab.values().forEach { tab ->
-                    Button(onClick = { onTabSelected(mainNestedNavController, tab) }) {
-                        Text(text = stringResource(tab.label) + " " + (currentTab == tab))
-                    }
-                }
-            }
+            GlassLikeNavRail(
+                hazeState = hazeState,
+                onTabSelected = {
+                    onTabSelected(mainNestedNavController, it)
+                },
+                currentTab = currentTab ?: MainScreenTab.Timetable,
+                modifier = Modifier.padding(scaffoldPadding.value),
+            )
         }
-
-        val hazeState = remember { HazeState() }
 
         Scaffold(
             bottomBar = {
-                GlassLikeBottomNavigation(
-                    hazeState = hazeState,
-                    onTabSelected = {
-                        onTabSelected(mainNestedNavController, it)
-                    },
-                    modifier = Modifier.safeDrawingPadding(),
-                )
+                AnimatedVisibility(visible = navigationType == BottomNavigation) {
+                    GlassLikeBottomNavigation(
+                        hazeState = hazeState,
+                        onTabSelected = {
+                            onTabSelected(mainNestedNavController, it)
+                        },
+                        currentTab = currentTab ?: MainScreenTab.Timetable,
+                        modifier = Modifier.safeDrawingPadding(),
+                    )
+                }
             },
         ) { padding ->
+            scaffoldPadding.value = padding
             val hazeStyle =
                 HazeStyle(
                     tint = MaterialTheme.colorScheme.hazeTint,

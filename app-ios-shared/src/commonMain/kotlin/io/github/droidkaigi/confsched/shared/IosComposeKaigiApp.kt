@@ -32,6 +32,7 @@ import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import io.github.droidkaigi.confsched.sessions.navigateTimetableScreen
+import io.github.droidkaigi.confsched.sessions.navigateToSearchScreen
 import io.github.droidkaigi.confsched.sessions.navigateToTimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
@@ -88,6 +89,7 @@ private fun KaigiNavHost(
             onShareClick = {
                 navController.navigate(contributorsScreenRoute)
             },
+            onFavoriteListClick = {} // { navController.navigate(favoritesScreenRoute) }
         )
 
         // For KMP, we are not using navigation abstraction for contributors screen
@@ -117,6 +119,7 @@ private fun NavGraphBuilder.mainScreen(
         mainNestedGraph = { mainNestedNavController, contentPadding ->
             nestedSessionScreens(
                 modifier = Modifier,
+                onSearchClick = navController::navigateToSearchScreen,
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
                 contentPadding = contentPadding,
             )

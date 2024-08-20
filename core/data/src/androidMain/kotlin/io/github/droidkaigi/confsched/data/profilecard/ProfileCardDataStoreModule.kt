@@ -11,13 +11,13 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal class ProfileCardDataStoreModule {
+public class ProfileCardDataStoreModule {
     @Singleton
     @Provides
-    fun provideProfileCardDataStore(
+    public fun provideProfileCardDataStore(
         @ProfileCardDataStoreQualifier
         dataStore: DataStore<Preferences>,
     ): ProfileCardDataStore {
-        return ProfileCardDataStore(dataStore)
+        return DefaultProfileCardDataStore(dataStore)
     }
 }

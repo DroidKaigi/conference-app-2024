@@ -1,5 +1,4 @@
 <resources>
-    <string name="content_description_schedule_icon">スケジュール</string>
     <string name="content_description_user_icon">ユーザー</string>
     <string name="content_description_error_icon">エラー</string>
     <string name="bookmarked_successfully">ブックマークに追加されました</string>
@@ -29,4 +28,9 @@
     <string name="location_title">場所</string>
     <string name="language_title">対応言語</string>
     <string name="category_title">カテゴリ</string>
+    <string name="empty_search_result">「%1$s」と一致する検索結果がありません</string>
+    <string name="filter_chip_day">開催日</string>
+    <string name="filter_chip_category">カテゴリ</string>
+    <string name="filter_chip_session_type">セッション種別</string>
+    <string name="filter_chip_supported_language">対応言語</string>
 </resources>

@@ -17,6 +17,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -61,6 +62,7 @@ fun NavGraphBuilder.sessionScreens(
     onLinkClick: (url: String) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
+    onFavoriteListClick: () -> Unit,
 ) {
     composable<TimetableItemDetailDestination> {
         CompositionLocalProvider(
@@ -71,6 +73,7 @@ fun NavGraphBuilder.sessionScreens(
                 onLinkClick = onLinkClick,
                 onCalendarRegistrationClick = onCalendarRegistrationClick,
                 onShareClick = onShareClick,
+                onFavoriteListClick = onFavoriteListClick,
             )
         }
     }
@@ -88,6 +91,7 @@ fun TimetableItemDetailScreen(
     onLinkClick: (url: String) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
+    onFavoriteListClick: () -> Unit,
     eventEmitter: EventEmitter<TimetableItemDetailEvent> = rememberEventEmitter(),
     uiState: TimetableItemDetailScreenUiState = timetableItemDetailPresenter(
         events = eventEmitter,
@@ -98,6 +102,13 @@ fun TimetableItemDetailScreen(
         snackbarHostState = snackbarHostState,
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
+
+    LaunchedEffect(uiState is Loaded && uiState.shouldGoToFavoriteList) {
+        if (uiState is Loaded && uiState.shouldGoToFavoriteList) {
+            eventEmitter.tryEmit(TimetableItemDetailEvent.FavoriteListNavigated)
+            onFavoriteListClick()
+        }
+    }
 
     TimetableItemDetailScreen(
         uiState = uiState,
@@ -128,6 +139,7 @@ sealed interface TimetableItemDetailScreenUiState {
         val isLangSelectable: Boolean,
         val currentLang: Lang?,
         val roomThemeKey: String,
+        val shouldGoToFavoriteList: Boolean,
         override val timetableItemId: TimetableItemId,
         override val userMessageStateHolder: UserMessageStateHolder,
     ) : TimetableItemDetailScreenUiState
@@ -215,6 +227,7 @@ private fun TimetableItemDetailScreen(
                     ) {
                         item {
                             TimetableItemDetailHeadline(
+                                currentLang = uiState.currentLang,
                                 timetableItem = uiState.timetableItem,
                             )
                         }
@@ -272,6 +285,7 @@ fun TimetableItemDetailScreenPreview() {
                     roomThemeKey = "iguana",
                     timetableItemId = fakeSession.id,
                     userMessageStateHolder = UserMessageStateHolderImpl(),
+                    shouldGoToFavoriteList = false,
                 ),
                 onNavigationIconClick = {},
                 onBookmarkClick = {
@@ -287,4 +301,5 @@ fun TimetableItemDetailScreenPreview() {
     }
 }
 
-internal fun timetableDetailSharedContentStateKey(timetableItemId: TimetableItemId) = "timetable-item-${timetableItemId.value}"
+internal fun timetableDetailSharedContentStateKey(timetableItemId: TimetableItemId) =
+    "timetable-item-${timetableItemId.value}"

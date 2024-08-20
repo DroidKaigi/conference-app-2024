@@ -30,11 +30,11 @@ import conference_app_2024.feature.eventmap.generated.resources.eventmap
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.eventmap.component.EventMapItem
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTab
-import io.github.droidkaigi.confsched.eventmap.navigation.EventMapDestination
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
+import io.github.droidkaigi.confsched.ui.plus
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -49,7 +49,7 @@ const val EventMapItemTestTag = "EventMapItemTestTag:"
 fun NavGraphBuilder.eventMapScreens(
     onEventMapItemClick: (url: String) -> Unit,
 ) {
-    composable<EventMapDestination> {
+    composable(eventMapScreenRoute) {
         EventMapScreen(
             onEventMapItemClick = onEventMapItemClick,
         )
@@ -57,7 +57,7 @@ fun NavGraphBuilder.eventMapScreens(
 }
 
 fun NavController.navigateEventMapScreen() {
-    navigate(EventMapDestination) {
+    navigate(eventMapScreenRoute) {
         popUpTo(route = checkNotNull(graph.findStartDestination().route)) {
             saveState = true
         }
@@ -119,7 +119,10 @@ fun EventMapScreen(
         EventMap(
             eventMapEvents = uiState.eventMap,
             onEventMapItemClick = onEventMapItemClick,
-            modifier = Modifier.fillMaxSize().padding(padding)
+            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = padding.calculateTopPadding())
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
         )
     }
@@ -130,11 +133,12 @@ private fun EventMap(
     eventMapEvents: PersistentList<EventMapEvent>,
     onEventMapItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     LazyColumn(
         modifier = modifier
             .testTag(EventMapLazyColumnTestTag),
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = contentPadding + PaddingValues(horizontal = 16.dp),
     ) {
         item {
             EventMapTab()

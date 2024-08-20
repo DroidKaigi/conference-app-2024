@@ -87,6 +87,7 @@ let package = Package(
                 .firebaseAuth,
                 .firebaseRemoteConfig,
                 .tca,
+                .model
             ]
         ),
         
@@ -220,6 +221,7 @@ let package = Package(
                 .kmpClient,
                 .theme,
                 .model,
+                .commonComponents,
             ]
         ),
         .testTarget(

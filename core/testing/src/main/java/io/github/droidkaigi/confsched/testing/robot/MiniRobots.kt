@@ -7,6 +7,7 @@ import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.FakeContributorsApiClient
 import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
+import io.github.droidkaigi.confsched.data.profilecard.ProfileCardDataStore
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
@@ -14,8 +15,11 @@ import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
 import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
 import io.github.droidkaigi.confsched.model.ProfileCard
-import io.github.droidkaigi.confsched.model.ProfileCardRepository
+import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
+import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus
+import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus.AllNotEntered
+import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus.NoInputOtherThanImage
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.coroutines.test.TestDispatcher
@@ -30,6 +34,7 @@ inline fun <reified T : ScreenRobot> runRobot(robot: T, noinline block: suspend 
 
 class DefaultScreenRobot @Inject constructor(
     override val robotTestRule: RobotTestRule,
+    override val testDispatcher: TestDispatcher,
     private val composeScreenRobot: DefaultComposeScreenRobot,
     private val captureScreenRobot: DefaultCaptureScreenRobot,
     private val waitRobot: DefaultWaitRobot,
@@ -41,15 +46,18 @@ class DefaultScreenRobot @Inject constructor(
 
 interface ScreenRobot : ComposeScreenRobot, CaptureScreenRobot, WaitRobot {
     val robotTestRule: RobotTestRule
+    val testDispatcher: TestDispatcher
 
     fun <T : ScreenRobot> run(thiz: T, block: suspend T.() -> Unit) {
-        runTestWithLogging(timeout = 30.seconds) {
+        runTestWithLogging(context = testDispatcher, timeout = 30.seconds) {
             thiz.block()
         }
     }
 }
 
-class DefaultComposeScreenRobot @Inject constructor(private val robotTestRule: RobotTestRule) :
+class DefaultComposeScreenRobot @Inject constructor(
+    private val robotTestRule: RobotTestRule,
+) :
     ComposeScreenRobot {
     override val composeTestRule: ComposeTestRule
         get() = robotTestRule.composeTestRule
@@ -79,7 +87,8 @@ class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: R
         val roboOutputName = roboOutputName()
         if (roboOutputName.contains("[") && roboOutputName.contains("]")) {
             val name = roboOutputName.substringAfter("[").substringBefore("]")
-            val className = provideRoborazziContext().description?.className?.substringAfterLast(".")
+            val className =
+                provideRoborazziContext().description?.className?.substringAfterLast(".")
             if (className == null) {
                 robotTestRule.captureScreen(name)
                 checks()
@@ -235,7 +244,8 @@ interface SponsorsServerRobot {
     fun setupSponsorsServer(sererStatus: ServerStatus)
 }
 
-class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: SponsorsApiClient) : SponsorsServerRobot {
+class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: SponsorsApiClient) :
+    SponsorsServerRobot {
     private val fakeSponsorsApiClient = sponsorsApiClient as FakeSponsorsApiClient
     override fun setupSponsorsServer(sererStatus: ServerStatus) {
         fakeSponsorsApiClient.setup(
@@ -247,14 +257,33 @@ class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: Sponsors
     }
 }
 
-interface ProfileCardRepositoryRobot {
-    suspend fun saveProfileCard(profileCard: ProfileCard.Exists)
+interface ProfileCardDataStoreRobot {
+    enum class ProfileCardInputStatus {
+        NoInputOtherThanImage,
+        AllNotEntered,
+    }
+
+    suspend fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus)
 }
 
-class DefaultProfileCardRepositoryRobot @Inject constructor(
-    private val profileCardRepository: ProfileCardRepository,
-) : ProfileCardRepositoryRobot {
-    override suspend fun saveProfileCard(profileCard: ProfileCard.Exists) {
-        profileCardRepository.save(profileCard)
+class DefaultProfileCardDataStoreRobot @Inject constructor(
+    private val profileCardDataStore: ProfileCardDataStore,
+) : ProfileCardDataStoreRobot {
+    override suspend fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus) {
+        when (profileCardInputStatus) {
+            NoInputOtherThanImage -> {
+                profileCardDataStore.save(
+                    ProfileCard.Exists.fake().copy(
+                        nickname = "",
+                        occupation = "",
+                        link = "",
+                    ),
+                )
+            }
+
+            AllNotEntered -> {
+                // Do nothing
+            }
+        }
     }
 }

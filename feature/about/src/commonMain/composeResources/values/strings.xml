@@ -14,8 +14,9 @@
     <string name="code_of_conduct">Code Of Conduct</string>
     <string name="license">License</string>
     <string name="privacy_policy">Privacy Policy</string>
+    <string name="settings">Settings</string>
     <string name="app_version">App Version</string>
-    <string name="about_droidkaigi">About Droidkaigi</string>
+    <string name="about_droidkaigi">About DroidKaigi</string>
     <string name="content_description_youtube">YouTube</string>
     <string name="content_description_x">X</string>
     <string name="content_description_medium">Medium</string>

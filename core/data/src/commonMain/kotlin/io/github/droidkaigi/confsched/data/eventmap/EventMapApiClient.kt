@@ -4,6 +4,7 @@ import de.jensklingenberg.ktorfit.Ktorfit
 import de.jensklingenberg.ktorfit.http.GET
 import io.github.droidkaigi.confsched.data.NetworkService
 import io.github.droidkaigi.confsched.data.eventmap.response.EventMapResponse
+import io.github.droidkaigi.confsched.data.eventmap.response.MessageResponse
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.RoomIcon
@@ -11,7 +12,12 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 
 internal interface EventMapApi {
-    @GET("/events/droidkaigi2024/eventmap")
+    /**
+     * Gets event (project) and room information for DroidKaigi 2024 event.
+     *
+     * @return [EventMapResponse]
+     */
+    @GET("/events/droidkaigi2024/projects")
     suspend fun getEventMap(): EventMapResponse
 }
 
@@ -37,13 +43,13 @@ public interface EventMapApiClient {
 public fun EventMapResponse.toEventMapList(): PersistentList<EventMapEvent> {
     val roomIdToNameMap = this.rooms.associateBy({ it.id }, { it.name.ja to it.name.en })
 
-    return this.events
-        .mapNotNull { event ->
-            roomIdToNameMap[event.roomId]?.let { roomName ->
+    return this.projects
+        .mapNotNull { project ->
+            roomIdToNameMap[project.roomId]?.let { roomName ->
                 EventMapEvent(
                     name = MultiLangText(
-                        jaTitle = event.title.ja,
-                        enTitle = event.title.en,
+                        jaTitle = project.title.ja,
+                        enTitle = project.title.en,
                     ),
                     roomName = MultiLangText(
                         jaTitle = roomName.first,
@@ -51,10 +57,11 @@ public fun EventMapResponse.toEventMapList(): PersistentList<EventMapEvent> {
                     ),
                     roomIcon = roomName.second.toRoomIcon(),
                     description = MultiLangText(
-                        jaTitle = event.i18nDesc.ja,
-                        enTitle = event.i18nDesc.en,
+                        jaTitle = project.i18nDesc.ja,
+                        enTitle = project.i18nDesc.en,
                     ),
-                    moreDetailsUrl = event.moreDetailsUrl,
+                    moreDetailsUrl = project.moreDetailsUrl,
+                    message = project.message?.toMultiLangText(),
                 )
             }
         }
@@ -69,3 +76,6 @@ private fun String.toRoomIcon(): RoomIcon = when (this) {
     "Jellyfish" -> RoomIcon.Triangle
     else -> RoomIcon.None
 }
+
+private fun MessageResponse.toMultiLangText() =
+    if (ja != null && en != null) MultiLangText(jaTitle = ja, enTitle = en) else null
