@@ -12,9 +12,9 @@ final class SponsorFeatureTests: XCTestCase {
             $0.sponsorsClient.streamSponsors = {
                 AsyncThrowingStream {
                     $0.yield([
-                        .init(name: "Hoge", logo: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4", plan: .platinum, link: "https://2024.droidkaigi.jp/"),
-                        .init(name: "Huga", logo: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4", plan: .gold, link: "https://2024.droidkaigi.jp/"),
-                        .init(name: "FUga", logo: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4", plan: .supporter, link: "https://2024.droidkaigi.jp/"),
+                        .init(id: "Hoge", logo: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: URL(string: "https://2024.droidkaigi.jp/")!, plan: .platinum),
+                        .init(id: "Huga", logo: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: URL(string: "https://2024.droidkaigi.jp/")!, plan: .gold),
+                        .init(id: "FUga", logo: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: URL(string: "https://2024.droidkaigi.jp/")!, plan: .supporter),
                     ])
                     $0.finish()
                 }
@@ -23,13 +23,13 @@ final class SponsorFeatureTests: XCTestCase {
         await store.send(.onAppear)
         await store.receive(\.response.success) {
             $0.platinums = [
-                .init(id: "Hoge", logo: .init(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: .init(string: "https://2024.droidkaigi.jp/")!)
+                .init(id: "Hoge", logo: .init(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: .init(string: "https://2024.droidkaigi.jp/")!, plan: .platinum)
             ]
             $0.golds = [
-                .init(id: "Huga", logo: .init(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: .init(string: "https://2024.droidkaigi.jp/")!)
+                .init(id: "Huga", logo: .init(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: .init(string: "https://2024.droidkaigi.jp/")!, plan: .gold)
             ]
             $0.supporters = [
-                .init(id: "FUga", logo: .init(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: .init(string: "https://2024.droidkaigi.jp/")!)
+                .init(id: "FUga", logo: .init(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!, link: .init(string: "https://2024.droidkaigi.jp/")!, plan: .supporter)
             ]
         }
     }

@@ -126,6 +126,9 @@ fun AboutScreen(
                 onPrivacyPolicyItemClick = {
                     onAboutItemClick(AboutItem.PrivacyPolicy)
                 },
+                onSettingsItemClick = {
+                    onAboutItemClick(AboutItem.Settings)
+                },
             )
             item {
                 AboutFooterLinks(
