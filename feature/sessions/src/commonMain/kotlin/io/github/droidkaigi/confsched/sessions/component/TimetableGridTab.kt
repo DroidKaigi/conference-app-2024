@@ -62,7 +62,7 @@ fun TimetableDayTab(
                             .testTag(TimetableTabTestTag.plus(conferenceDay.ordinal))
                             .padding(
                                 horizontal = 8.dp,
-                                vertical = 16.dp
+                                vertical = 16.dp,
                             )
                             .height(26.dp),
                         selected = isSelected,
