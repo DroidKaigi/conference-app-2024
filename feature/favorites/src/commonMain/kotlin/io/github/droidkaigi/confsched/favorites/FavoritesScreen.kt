@@ -23,15 +23,15 @@ import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.section.FavoriteSheet
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState
+import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
-import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -102,7 +102,7 @@ fun FavoritesScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavoritesScreen(
+private fun FavoritesScreen(
     uiState: FavoritesScreenUiState,
     snackbarHostState: SnackbarHostState,
     onTimetableItemClick: (TimetableItem) -> Unit,
@@ -151,7 +151,12 @@ fun FavoritesScreenPreview() {
                     favoritesSheetUiState = FavoritesSheetUiState.FavoriteListUiState(
                         allFilterSelected = false,
                         currentDayFilter = persistentListOf(DroidKaigi2024Day.ConferenceDay1),
-                        timeTable = Timetable.fake(),
+                        timetableItemMap = persistentMapOf(
+                            TimeSlot(
+                                startTimeString = "10:00",
+                                endTimeString = "11:00",
+                            ) to listOf(),
+                        ),
                     ),
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
