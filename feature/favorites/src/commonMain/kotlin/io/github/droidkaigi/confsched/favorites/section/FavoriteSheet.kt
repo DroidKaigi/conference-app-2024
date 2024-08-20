@@ -28,14 +28,15 @@ import conference_app_2024.feature.favorites.generated.resources.empty_guide
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.FavoritesRes
 import io.github.droidkaigi.confsched.favorites.component.FavoriteFilters
+import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
-import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.model.fake
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -54,8 +55,15 @@ sealed interface FavoritesSheetUiState {
     data class FavoriteListUiState(
         override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
         override val allFilterSelected: Boolean,
-        val timeTable: Timetable,
-    ) : FavoritesSheetUiState
+        val timetableItemMap: PersistentMap<TimeSlot, List<TimetableItem>>,
+    ) : FavoritesSheetUiState {
+        data class TimeSlot(
+            val startTimeString: String,
+            val endTimeString: String,
+        ) {
+            val key: String get() = "$startTimeString-$endTimeString"
+        }
+    }
 
     data class Empty(
         override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
@@ -91,7 +99,7 @@ fun FavoriteSheet(
 
             is FavoritesSheetUiState.FavoriteListUiState -> {
                 FavoriteList(
-                    timetable = uiState.timeTable,
+                    timetableItemMap = uiState.timetableItemMap,
                     onBookmarkClick = onBookmarkClick,
                     onTimetableItemClick = onTimetableItemClick,
                     contentPadding = contentPadding,
@@ -150,7 +158,7 @@ fun FavoriteSheetPreview() {
                 uiState = FavoritesSheetUiState.FavoriteListUiState(
                     allFilterSelected = true,
                     currentDayFilter = persistentListOf(ConferenceDay1, ConferenceDay2),
-                    timeTable = Timetable.fake(),
+                    timetableItemMap = persistentMapOf(TimeSlot("10:00", "11:00") to listOf()),
                 ),
                 onAllFilterChipClick = {},
                 onDay1FilterChipClick = {},
