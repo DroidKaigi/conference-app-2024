@@ -104,7 +104,7 @@ fun FavoriteSheet(
 
 @Composable
 private fun EmptyView(modifier: Modifier = Modifier) {
-    LazyColumm(
+    LazyColumn(
         modifier = modifier.testTag(FavoritesScreenEmptyViewTestTag).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
