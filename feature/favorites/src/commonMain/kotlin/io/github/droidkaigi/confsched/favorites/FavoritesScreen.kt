@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -129,9 +128,9 @@ fun FavoritesScreen(
         targetValue = lerp(
             MaterialTheme.colorScheme.surface,
             MaterialTheme.colorScheme.surfaceContainer,
-            FastOutLinearInEasing.transform(fraction)
+            FastOutLinearInEasing.transform(fraction),
         ),
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
     )
 
     Scaffold(
