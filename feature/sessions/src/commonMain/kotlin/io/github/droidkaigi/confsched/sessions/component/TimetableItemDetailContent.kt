@@ -45,6 +45,7 @@ import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableItem.Special
+import io.github.droidkaigi.confsched.model.defaultLang
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import org.jetbrains.compose.resources.stringResource
@@ -56,14 +57,13 @@ const val DescriptionMoreButtonTestTag = "DescriptionMoreButtonTestTag"
 @Composable
 fun TimetableItemDetailContent(
     timetableItem: TimetableItem,
-    currentLang: Lang?,
+    currentLang: Lang,
     modifier: Modifier = Modifier,
     onLinkClick: (url: String) -> Unit,
 ) {
     Column(modifier = modifier) {
         when (timetableItem) {
             is Session -> {
-                val currentLang = currentLang ?: Lang.ENGLISH
                 DescriptionSection(
                     description = timetableItem.description.getByLang(currentLang),
                     onLinkClick = onLinkClick,

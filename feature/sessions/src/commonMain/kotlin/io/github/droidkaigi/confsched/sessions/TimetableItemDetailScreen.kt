@@ -137,7 +137,7 @@ sealed interface TimetableItemDetailScreenUiState {
         val timetableItemDetailSectionUiState: TimetableItemDetailSectionUiState,
         val isBookmarked: Boolean,
         val isLangSelectable: Boolean,
-        val currentLang: Lang?,
+        val currentLang: Lang,
         val roomThemeKey: String,
         val shouldGoToFavoriteList: Boolean,
         override val timetableItemId: TimetableItemId,
