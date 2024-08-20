@@ -1,6 +1,7 @@
 import SwiftUI
 import Theme
 import Model
+import CommonComponents
 
 struct ContributorListItemView: View {
     let contributor: Contributor
@@ -13,11 +14,8 @@ struct ContributorListItemView: View {
             }
         } label: {
             HStack(alignment: .center, spacing: 12) {
-                AsyncImage(url: contributor.iconUrl) {
-                    $0.image?.resizable()
-                }
-                .frame(width: 52, height: 52)
-                .clipShape(Circle())
+                CircularUserIcon(urlString: contributor.iconUrl.absoluteString)
+                    .frame(width: 52, height: 52)
 
                 Text(contributor.userName)
                     .textStyle(.bodyLarge)
