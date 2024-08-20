@@ -8,6 +8,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.Default
 import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.High
 import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast.Medium
@@ -259,6 +260,7 @@ private val fixedAccentColors = FixedAccentColors(
 @Composable
 fun KaigiTheme(
     colorContrast: ColorContrast = Default,
+    fontFamily: FontFamily? = dotGothic16FontFamily(),
     content: @Composable () -> Unit,
 ) {
     val colorScheme = when (colorContrast) {
@@ -269,7 +271,7 @@ fun KaigiTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        typography = appTypography(),
+        typography = appTypography(fontFamily),
         content = {
             CompositionLocalProvider(
                 value = LocalFixedAccentColors provides fixedAccentColors,

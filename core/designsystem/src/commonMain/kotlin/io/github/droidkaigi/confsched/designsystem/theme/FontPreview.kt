@@ -14,20 +14,26 @@ internal fun FontPreview() {
     Column(
         Modifier.background(color = Color.White),
     ) {
-        Text("Display Large", style = appTypography().displayLarge)
-        Text("Display Medium", style = appTypography().displayMedium)
-        Text("Display Small", style = appTypography().displaySmall)
-        Text("Headline Large", style = appTypography().headlineLarge)
-        Text("Headline Medium", style = appTypography().headlineMedium)
-        Text("Headline Small", style = appTypography().headlineSmall)
-        Text("Title Large", style = appTypography().titleLarge)
-        Text("Title Medium", style = appTypography().titleMedium)
-        Text("Title Small", style = appTypography().titleSmall)
-        Text("Label Large", style = appTypography().labelLarge)
-        Text("Label Medium", style = appTypography().labelMedium)
-        Text("Label Small", style = appTypography().labelSmall)
-        Text("Body Large", style = appTypography().bodyLarge)
-        Text("Body Medium", style = appTypography().bodyMedium)
-        Text("Body Small", style = appTypography().bodySmall)
+        val fonts = listOf(
+            dotGothic16FontFamily(),
+            // Add here when adding fonts.
+        )
+        fonts.forEach { fontFamily ->
+            Text("Display Large", style = appTypography(fontFamily).displayLarge)
+            Text("Display Medium", style = appTypography(fontFamily).displayMedium)
+            Text("Display Small", style = appTypography(fontFamily).displaySmall)
+            Text("Headline Large", style = appTypography(fontFamily).headlineLarge)
+            Text("Headline Medium", style = appTypography(fontFamily).headlineMedium)
+            Text("Headline Small", style = appTypography(fontFamily).headlineSmall)
+            Text("Title Large", style = appTypography(fontFamily).titleLarge)
+            Text("Title Medium", style = appTypography(fontFamily).titleMedium)
+            Text("Title Small", style = appTypography(fontFamily).titleSmall)
+            Text("Label Large", style = appTypography(fontFamily).labelLarge)
+            Text("Label Medium", style = appTypography(fontFamily).labelMedium)
+            Text("Label Small", style = appTypography(fontFamily).labelSmall)
+            Text("Body Large", style = appTypography(fontFamily).bodyLarge)
+            Text("Body Medium", style = appTypography(fontFamily).bodyMedium)
+            Text("Body Small", style = appTypography(fontFamily).bodySmall)
+        }
     }
 }
