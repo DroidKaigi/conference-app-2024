@@ -543,7 +543,7 @@ private fun ImagePickerWithError(
                     Spacer(Modifier.width(8.dp))
                     Text(
                         text = stringResource(ProfileCardRes.string.add_image),
-                        modifier = Modifier.alignByBaseline()
+                        modifier = Modifier.alignByBaseline(),
                     )
                 }
             }
