@@ -134,6 +134,7 @@ fun TimetableGrid(
     val layoutDirection = LocalLayoutDirection.current
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val animatedScope = LocalAnimatedVisibilityScope.current
+    val timeLine = TimeLine.now(LocalClock.current)
 
     Row(
         modifier = Modifier
@@ -146,6 +147,8 @@ fun TimetableGrid(
     ) {
         TimetableGridHours(
             timetableState = timetableState,
+            timeLine = timeLine,
+            selectedDay = selectedDay,
             coroutineScope = coroutineScope,
         ) { hour ->
             HoursItem(
@@ -164,6 +167,7 @@ fun TimetableGrid(
             TimetableGrid(
                 timetable = timetable,
                 timetableState = timetableState,
+                timeLine = timeLine,
                 selectedDay = selectedDay,
                 modifier = modifier,
                 contentPadding = PaddingValues(
@@ -204,12 +208,12 @@ fun TimetableGrid(
 fun TimetableGrid(
     timetable: Timetable,
     timetableState: TimetableState,
+    timeLine: TimeLine?,
     selectedDay: DroidKaigi2024Day,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
     content: @Composable (TimetableItem, Int) -> Unit,
 ) {
-    val timeLine = TimeLine.now(LocalClock.current)
     val coroutineScope = rememberCoroutineScope()
     val density = timetableState.density
     val verticalScale = timetableState.screenScaleState.verticalScale
@@ -240,29 +244,11 @@ fun TimetableGrid(
     val nestedScrollDispatcher = remember { NestedScrollDispatcher() }
 
     val currentTimeLineColor = MaterialTheme.colorScheme.primary
-    val currentTimeDotRadius = with(timetableState.density) {
-        TimetableSizes.currentTimeDotRadius.toPx()
-    }
+    val currentTimeDotRadius = with(timetableState.density) { TimetableSizes.currentTimeDotRadius.toPx() }
 
     LazyLayout(
         modifier = modifier
             .focusGroup()
-            .drawWithContent {
-                drawContent()
-                timetableScreen.timeLineOffsetY.value?.let {
-                    drawLine(
-                        color = currentTimeLineColor,
-                        start = Offset(0f, it),
-                        end = Offset(size.width, it),
-                        strokeWidth = linePxSize,
-                    )
-                    drawCircle(
-                        color = currentTimeLineColor,
-                        radius = currentTimeDotRadius,
-                        center = Offset(0f, it),
-                    )
-                }
-            }
             .clipToBounds()
             .nestedScroll(nestedScrollConnection, nestedScrollDispatcher)
             .drawBehind {
@@ -280,6 +266,22 @@ fun TimetableGrid(
                         Offset(it, 0f),
                         Offset(it, timetableScreen.height.toFloat()),
                         linePxSize,
+                    )
+                }
+            }
+            .drawWithContent {
+                drawContent()
+                timetableScreen.timeLineOffsetY.value?.let {
+                    drawLine(
+                        color = currentTimeLineColor,
+                        start = Offset(0f, it),
+                        end = Offset(size.width, it),
+                        strokeWidth = linePxSize,
+                    )
+                    drawCircle(
+                        color = currentTimeLineColor,
+                        radius = currentTimeDotRadius,
+                        center = Offset(0f, it),
                     )
                 }
             }
