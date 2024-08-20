@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import co.touchlab.kermit.Logger
 import conference_app_2024.feature.sessions.generated.resources.bookmarked_successfully
 import conference_app_2024.feature.sessions.generated.resources.view_bookmark_list
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
@@ -41,7 +42,7 @@ fun timetableItemDetailPresenter(
         key = timetableItemDetailScreenRouteItemIdParameterName,
         initialValue = "",
     ),
-): TimetableItemDetailScreenUiState = providePresenterDefaults<TimetableItemDetailScreenUiState> { userMessageStateHolder ->
+): TimetableItemDetailScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val timetableItemId = TimetableItemId(timetableItemIdArg)
     val timetableItemStateWithBookmark by rememberUpdatedState(
         sessionsRepository
@@ -88,6 +89,9 @@ fun timetableItemDetailPresenter(
         if (selectedDescriptionLanguage == null) {
             selectedDescriptionLanguage = Lang.valueOf(timetableItem.language.langOfSpeaker)
         }
+    }
+    Logger.d {
+        "timetableItemDetailPresenter receive timetableItemStateWithBookmark: ${timetableItemStateWithBookmark?.first?.id}"
     }
     val timetableItemStateWithBookmarkValue = timetableItemStateWithBookmark
         ?: return@providePresenterDefaults Loading(timetableItemId, userMessageStateHolder)

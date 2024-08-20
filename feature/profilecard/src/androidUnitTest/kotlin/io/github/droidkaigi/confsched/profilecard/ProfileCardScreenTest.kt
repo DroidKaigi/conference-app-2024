@@ -60,6 +60,17 @@ class ProfileCardScreenTest(
                     itShould("show card screen") {
                         captureScreenWithChecks {
                             checkCardScreenDisplayed()
+                            checkProfileCardFrontDisplayed()
+                        }
+                    }
+                    describe("flip prifle card") {
+                        run {
+                            flipProfileCard()
+                        }
+                        itShould("back side of the profile card is displayed") {
+                            captureScreenWithChecks {
+                                checkProfileCardBackDisplayed()
+                            }
                         }
                     }
                     describe("when click edit button") {

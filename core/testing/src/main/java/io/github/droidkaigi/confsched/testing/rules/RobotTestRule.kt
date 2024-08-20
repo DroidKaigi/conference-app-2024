@@ -30,6 +30,7 @@ import org.junit.rules.TestRule
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
+import org.robolectric.shadows.ShadowLog
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -91,6 +92,7 @@ class RobotTestRule(
                 override fun starting(description: Description) {
                     // To see logs in the console
                     Logger.setLogWriters(CommonWriter())
+                    ShadowLog.stream = System.out
                 }
             })
             .around(

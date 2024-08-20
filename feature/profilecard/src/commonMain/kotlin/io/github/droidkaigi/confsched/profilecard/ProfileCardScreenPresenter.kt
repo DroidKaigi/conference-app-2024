@@ -56,7 +56,7 @@ private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
             occupation = occupation,
             link = link,
             image = image,
-            theme = theme,
+            cardType = cardType,
         )
 
         ProfileCard.DoesNotExists, ProfileCard.Loading -> ProfileCardUiState.Edit()
@@ -70,7 +70,7 @@ private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
             occupation = occupation,
             link = link,
             image = image,
-            theme = theme,
+            cardType = cardType,
         )
 
         ProfileCard.DoesNotExists, ProfileCard.Loading -> null

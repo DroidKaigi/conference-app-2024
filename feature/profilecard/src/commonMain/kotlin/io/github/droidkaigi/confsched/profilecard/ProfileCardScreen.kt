@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.profilecard
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,6 +41,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -72,6 +74,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
+import conference_app_2024.feature.profilecard.generated.resources.card_type
 import conference_app_2024.feature.profilecard.generated.resources.create_card
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.image
@@ -82,13 +85,13 @@ import conference_app_2024.feature.profilecard.generated.resources.occupation
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_edit_description
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
 import conference_app_2024.feature.profilecard.generated.resources.select_theme
-import conference_app_2024.feature.profilecard.generated.resources.theme
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
-import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardScreenTheme
-import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardScreenTheme
+import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProfileCardTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
-import io.github.droidkaigi.confsched.model.ProfileCardTheme
+import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
@@ -101,7 +104,6 @@ import kotlin.io.encoding.ExperimentalEncodingApi
 
 const val profileCardScreenRoute = "profilecard"
 
-const val ProfileCardEditScreenTestTag = "ProfileCardEditScreenTestTag"
 const val ProfileCardEditScreenColumnTestTag = "ProfileCardEditScreenColumnTestTag"
 const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
 const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
@@ -133,7 +135,7 @@ internal sealed interface ProfileCardUiState {
         val occupation: String = "",
         val link: String = "",
         val image: String? = null,
-        val theme: ProfileCardTheme = ProfileCardTheme.Iguana,
+        val cardType: ProfileCardType = ProfileCardType.Iguana,
     ) : ProfileCardUiState
 
     data class Card(
@@ -141,7 +143,7 @@ internal sealed interface ProfileCardUiState {
         val occupation: String,
         val link: String,
         val image: String,
-        val theme: ProfileCardTheme,
+        val cardType: ProfileCardType,
     ) : ProfileCardUiState
 }
 
@@ -179,6 +181,7 @@ fun ProfileCardScreen(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ProfileCardScreen(
     contentPadding: PaddingValues,
@@ -194,6 +197,8 @@ internal fun ProfileCardScreen(
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
 
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+
     Scaffold(
         modifier = modifier,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -203,6 +208,32 @@ internal fun ProfileCardScreen(
             right = contentPadding.calculateRightPadding(layoutDirection),
             bottom = contentPadding.calculateBottomPadding(),
         ),
+        topBar = {
+            when (uiState.uiType) {
+                ProfileCardUiType.Loading -> {
+                    // NOOP
+                }
+                ProfileCardUiType.Edit -> {
+                    AnimatedTextTopAppBar(
+                        title = stringResource(ProfileCardRes.string.profile_card_title),
+                        scrollBehavior = scrollBehavior,
+                    )
+                }
+                ProfileCardUiType.Card -> {
+                    if (uiState.cardUiState == null) return@Scaffold
+                    ProvideProfileCardTheme(uiState.cardUiState.cardType.toString()) {
+                        AnimatedTextTopAppBar(
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = LocalProfileCardTheme.current.primaryColor,
+                            ),
+                            textColor = MaterialTheme.colorScheme.scrim,
+                            title = stringResource(ProfileCardRes.string.profile_card_title),
+                            scrollBehavior = scrollBehavior,
+                        )
+                    }
+                }
+            }
+        },
     ) { padding ->
         when (uiState.uiType) {
             ProfileCardUiType.Loading -> {
@@ -218,6 +249,7 @@ internal fun ProfileCardScreen(
                 EditScreen(
                     uiState = uiState.editUiState,
                     profileCardError = uiState.cardError,
+                    scrollBehavior = scrollBehavior,
                     onChangeNickname = {
                         eventEmitter.tryEmit(EditScreenEvent.OnChangeNickname(it))
                     },
@@ -268,6 +300,7 @@ internal fun ProfileCardScreen(
 internal fun EditScreen(
     uiState: ProfileCardUiState.Edit,
     profileCardError: ProfileCardError,
+    scrollBehavior: TopAppBarScrollBehavior,
     onChangeNickname: (String) -> Unit,
     onChangeOccupation: (String) -> Unit,
     onChangeLink: (String) -> Unit,
@@ -276,14 +309,12 @@ internal fun EditScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-
     var nickname by remember { mutableStateOf(uiState.nickname) }
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
-    var selectedTheme by remember { mutableStateOf(uiState.theme) }
+    var selectedCardType by remember { mutableStateOf(uiState.cardType) }
 
     val isValidInputs by remember {
         derivedStateOf {
@@ -291,102 +322,92 @@ internal fun EditScreen(
         }
     }
 
-    Scaffold(
-        modifier = modifier.testTag(ProfileCardEditScreenTestTag).padding(contentPadding),
-        topBar = {
-            AnimatedTextTopAppBar(
-                title = stringResource(ProfileCardRes.string.profile_card_title),
-                scrollBehavior = scrollBehavior,
-            )
-        },
-    ) { padding ->
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .nestedScroll(scrollBehavior.nestedScrollConnection)
+            .verticalScroll(rememberScrollState())
+            .padding(contentPadding)
+            .padding(horizontal = 16.dp)
+            .testTag(ProfileCardEditScreenColumnTestTag),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Text(stringResource(ProfileCardRes.string.profile_card_edit_description))
+
+        InputFieldWithError(
+            value = nickname,
+            labelString = stringResource(ProfileCardRes.string.nickname),
+            errorMessage = profileCardError.nicknameError,
+            textFieldTestTag = ProfileCardNicknameTextFieldTestTag,
+            onValueChange = {
+                nickname = it
+                onChangeNickname(it)
+            },
+        )
+        InputFieldWithError(
+            value = occupation,
+            labelString = stringResource(ProfileCardRes.string.occupation),
+            errorMessage = profileCardError.occupationError,
+            textFieldTestTag = ProfileCardOccupationTextFieldTestTag,
+            onValueChange = {
+                occupation = it
+                onChangeOccupation(it)
+            },
+        )
+        val linkLabel = stringResource(ProfileCardRes.string.link)
+            .plus(stringResource(ProfileCardRes.string.link_example_text))
+        InputFieldWithError(
+            value = link,
+            labelString = linkLabel,
+            errorMessage = profileCardError.linkError,
+            textFieldTestTag = ProfileCardLinkTextFieldTestTag,
+            onValueChange = {
+                link = it
+                onChangeLink(it)
+            },
+        )
+
         Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(rememberScrollState())
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .padding(padding)
-                .padding(horizontal = 16.dp)
-                .testTag(ProfileCardEditScreenColumnTestTag),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            Text(stringResource(ProfileCardRes.string.profile_card_edit_description))
-
-            InputFieldWithError(
-                value = nickname,
-                labelString = stringResource(ProfileCardRes.string.nickname),
-                errorMessage = profileCardError.nicknameError,
-                textFieldTestTag = ProfileCardNicknameTextFieldTestTag,
-                onValueChange = {
-                    nickname = it
-                    onChangeNickname(it)
+            Label(label = stringResource(ProfileCardRes.string.image))
+            ImagePickerWithError(
+                image = image,
+                onSelectedImage = {
+                    imageByteArray = it
+                    onChangeImage(it.toBase64())
                 },
-            )
-            InputFieldWithError(
-                value = occupation,
-                labelString = stringResource(ProfileCardRes.string.occupation),
-                errorMessage = profileCardError.occupationError,
-                textFieldTestTag = ProfileCardOccupationTextFieldTestTag,
-                onValueChange = {
-                    occupation = it
-                    onChangeOccupation(it)
-                },
-            )
-            val linkLabel = stringResource(ProfileCardRes.string.link)
-                .plus(stringResource(ProfileCardRes.string.link_example_text))
-            InputFieldWithError(
-                value = link,
-                labelString = linkLabel,
-                errorMessage = profileCardError.linkError,
-                textFieldTestTag = ProfileCardLinkTextFieldTestTag,
-                onValueChange = {
-                    link = it
-                    onChangeLink(it)
+                errorMessage = profileCardError.imageError,
+                onClearImage = {
+                    imageByteArray = null
+                    onChangeImage("")
                 },
             )
 
-            Column(
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-            ) {
-                Label(label = stringResource(ProfileCardRes.string.image))
-                ImagePickerWithError(
-                    image = image,
-                    onSelectedImage = {
-                        imageByteArray = it
-                        onChangeImage(it.toBase64())
-                    },
-                    errorMessage = profileCardError.imageError,
-                    onClearImage = {
-                        imageByteArray = null
-                        onChangeImage("")
-                    },
-                )
+            Text(stringResource(ProfileCardRes.string.select_theme))
 
-                Text(stringResource(ProfileCardRes.string.select_theme))
+            CardTypePiker(selectedCardType = selectedCardType, onClickImage = { selectedCardType = it })
 
-                ThemePiker(selectedTheme = selectedTheme, onClickImage = { selectedTheme = it })
-
-                Button(
-                    onClick = {
-                        onClickCreate(
-                            ProfileCard.Exists(
-                                nickname = nickname,
-                                occupation = occupation,
-                                link = link,
-                                image = imageByteArray?.toBase64() ?: "",
-                                theme = uiState.theme,
-                            ),
-                        )
-                    },
-                    enabled = isValidInputs,
-                    modifier = Modifier.fillMaxWidth()
-                        .testTag(ProfileCardCreateButtonTestTag),
-                ) {
-                    Text(
-                        modifier = Modifier.padding(8.dp),
-                        text = stringResource(ProfileCardRes.string.create_card),
+            Button(
+                onClick = {
+                    onClickCreate(
+                        ProfileCard.Exists(
+                            nickname = nickname,
+                            occupation = occupation,
+                            link = link,
+                            image = imageByteArray?.toBase64() ?: "",
+                            cardType = selectedCardType,
+                        ),
                     )
-                }
+                },
+                enabled = isValidInputs,
+                modifier = Modifier.fillMaxWidth()
+                    .testTag(ProfileCardCreateButtonTestTag),
+            ) {
+                Text(
+                    modifier = Modifier.padding(8.dp),
+                    text = stringResource(ProfileCardRes.string.create_card),
+                )
             }
         }
     }
@@ -530,26 +551,26 @@ private fun ImagePickerWithError(
 }
 
 @Composable
-internal fun ThemePiker(selectedTheme: ProfileCardTheme, onClickImage: (ProfileCardTheme) -> Unit) {
-    val themes = ProfileCardTheme.entries.chunked(2)
+internal fun CardTypePiker(selectedCardType: ProfileCardType, onClickImage: (ProfileCardType) -> Unit) {
+    val cardTypes = ProfileCardType.entries.chunked(2)
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        themes.forEach {
+        cardTypes.forEach {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
                 it.firstOrNull()?.let {
-                    ThemeImage(
+                    CardTypeImage(
                         modifier = Modifier.weight(1.0f),
-                        isSelected = selectedTheme == it,
+                        isSelected = selectedCardType == it,
                         onClickImage = onClickImage,
-                        theme = it,
+                        cardType = it,
                     )
                 }
                 it.getOrNull(1)?.let {
-                    ThemeImage(
+                    CardTypeImage(
                         modifier = Modifier.weight(1.0f),
-                        isSelected = selectedTheme == it,
+                        isSelected = selectedCardType == it,
                         onClickImage = onClickImage,
-                        theme = it,
+                        cardType = it,
                     )
                 }
             }
@@ -558,31 +579,26 @@ internal fun ThemePiker(selectedTheme: ProfileCardTheme, onClickImage: (ProfileC
 }
 
 @Composable
-private fun ThemeImage(
+private fun CardTypeImage(
     isSelected: Boolean,
-    theme: ProfileCardTheme,
+    cardType: ProfileCardType,
     modifier: Modifier = Modifier,
-    onClickImage: (ProfileCardTheme) -> Unit,
+    onClickImage: (ProfileCardType) -> Unit,
 ) {
-    val colorMap = buildMap {
-        put(ProfileCardTheme.Iguana, Color(0xFFB4FF79))
-        put(ProfileCardTheme.Hedgehog, Color(0xFFFEB258))
-        put(ProfileCardTheme.Giraffe, Color(0xFFFCF65F))
-        put(ProfileCardTheme.Flamingo, Color(0xFFFF8EBD))
-        put(ProfileCardTheme.Jellyfish, Color(0xFF6FD7F8))
-        put(ProfileCardTheme.None, Color.White)
+    val colorMap = ProfileCardType.entries.associateWith { type ->
+        ProfileCardTheme.of(type.name).primaryColor
     }
     val selectedBorderColor = MaterialTheme.colorScheme.surfaceTint
     val painter = rememberVectorPainter(Icons.Default.Check)
 
     Image(
-        painter = painterResource(ProfileCardRes.drawable.theme),
+        painter = painterResource(ProfileCardRes.drawable.card_type),
         contentDescription = null,
         modifier = modifier
             .selectedBorder(isSelected, selectedBorderColor, painter)
             .clip(RoundedCornerShape(2.dp))
-            .background(colorMap[theme]!!)
-            .clickable { onClickImage(theme) }
+            .background(colorMap[cardType]!!)
+            .clickable { onClickImage(cardType) }
             .padding(top = 36.dp, start = 30.dp, end = 30.dp, bottom = 36.dp),
     )
 }
@@ -632,20 +648,14 @@ internal fun CardScreen(
     isCreated: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
 ) {
-    ProvideProfileCardScreenTheme(uiState.theme.toString()) {
+    ProvideProfileCardTheme(uiState.cardType.toString()) {
         Column(
             modifier = modifier
                 .fillMaxSize()
-                .background(LocalProfileCardScreenTheme.current.primaryColor)
+                .background(LocalProfileCardTheme.current.primaryColor)
                 .testTag(ProfileCardCardScreenTestTag)
                 .padding(contentPadding),
         ) {
-            Text(
-                text = stringResource(ProfileCardRes.string.profile_card_title),
-                style = MaterialTheme.typography.headlineSmall,
-                color = Color.Black,
-                modifier = Modifier.fillMaxWidth().padding(start = 16.dp, top = 16.dp),
-            )
             Column(
                 modifier = Modifier.fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -659,8 +669,10 @@ internal fun CardScreen(
                 Button(
                     onClick = { onClickShareProfileCard() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    contentPadding = PaddingValues(vertical = 10.dp),
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    border = if (uiState.cardType == ProfileCardType.None) BorderStroke(0.5.dp, Color.Black) else null,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp),
                 ) {
                     Icon(
                         painter = painterResource(ProfileCardRes.drawable.icon_share),
@@ -671,11 +683,12 @@ internal fun CardScreen(
                     Spacer(Modifier.width(8.dp))
                     Text(
                         text = "共有する",
+                        modifier = Modifier.padding(8.dp),
                         style = MaterialTheme.typography.labelLarge,
                         color = Color.Black,
                     )
                 }
-                Spacer(Modifier.height(9.dp))
+                Spacer(Modifier.height(8.dp))
                 Text(
                     text = "編集する",
                     style = MaterialTheme.typography.labelLarge,

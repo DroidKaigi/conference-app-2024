@@ -2,7 +2,6 @@ import ComposableArchitecture
 import KMPClient
 import Model
 import Foundation
-@preconcurrency import class shared.Contributor
 
 @Reducer
 public struct ContributorReducer: Sendable {

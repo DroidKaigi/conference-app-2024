@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.PlayCircle
@@ -24,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +42,6 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
-import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableItem.Special
@@ -50,6 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val TargetAudienceSectionTestTag = "TargetAudienceSectionTestTag"
+const val DescriptionMoreButtonTestTag = "DescriptionMoreButtonTestTag"
 
 @Composable
 fun TimetableItemDetailContent(
@@ -62,13 +64,6 @@ fun TimetableItemDetailContent(
         when (timetableItem) {
             is Session -> {
                 val currentLang = currentLang ?: Lang.ENGLISH
-                fun MultiLangText.getByLang(lang: Lang): String {
-                    return if (lang == Lang.JAPANESE) {
-                        jaTitle
-                    } else {
-                        enTitle
-                    }
-                }
                 DescriptionSection(
                     description = timetableItem.description.getByLang(currentLang),
                     onLinkClick = onLinkClick,
@@ -106,26 +101,29 @@ private fun DescriptionSection(
     description: String,
     onLinkClick: (url: String) -> Unit,
 ) {
-    var isExpand by remember { mutableStateOf(false) }
+    var isExpand by rememberSaveable { mutableStateOf(false) }
     var isOverFlow by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.padding(8.dp)) {
-        ClickableLinkText(
-            content = description,
-            regex = "(https)(://[\\w/:%#$&?()~.=+\\-]+)".toRegex(),
-            onLinkClick = onLinkClick,
-            style = MaterialTheme.typography.bodyLarge,
-            maxLines = if (isExpand) Int.MAX_VALUE else 7,
-            overflow = if (isExpand) TextOverflow.Clip else TextOverflow.Ellipsis,
-            onOverflow = {
-                isOverFlow = it
-            },
-        )
+        SelectionContainer {
+            ClickableLinkText(
+                content = description,
+                regex = "(https)(://[\\w/:%#$&?()~.=+\\-]+)".toRegex(),
+                onLinkClick = onLinkClick,
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = if (isExpand) Int.MAX_VALUE else 7,
+                overflow = if (isExpand) TextOverflow.Clip else TextOverflow.Ellipsis,
+                onOverflow = {
+                    isOverFlow = it
+                },
+            )
+        }
         Spacer(Modifier.height(16.dp))
         AnimatedVisibility(
             visible = isExpand.not() && isOverFlow,
             enter = EnterTransition.None,
             exit = fadeOut(),
+            modifier = Modifier.testTag(DescriptionMoreButtonTestTag),
         ) {
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),
