@@ -18,7 +18,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+
+const val DropdownFilterChipTestTagPrefix = "DropdownFilterChipTestTag:"
 
 data class SearchFilterUiState<T>(
     val selectedItems: List<T>,
@@ -58,6 +61,7 @@ fun <T> DropdownFilterChip(
         ) {
             uiState.selectableItems.forEach { item ->
                 DropdownMenuItem(
+                    modifier = Modifier.testTag(DropdownFilterChipTestTagPrefix.plus(item)),
                     text = { dropdownMenuText(item) },
                     onClick = {
                         onSelectDropdownMenuItem(item)

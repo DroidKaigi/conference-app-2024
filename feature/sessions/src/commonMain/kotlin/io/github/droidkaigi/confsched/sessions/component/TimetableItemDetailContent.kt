@@ -42,7 +42,6 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
-import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableItem.Special
@@ -52,6 +51,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val TargetAudienceSectionTestTag = "TargetAudienceSectionTestTag"
+const val DescriptionMoreButtonTestTag = "DescriptionMoreButtonTestTag"
 
 @Composable
 fun TimetableItemDetailContent(
@@ -64,13 +64,6 @@ fun TimetableItemDetailContent(
         when (timetableItem) {
             is Session -> {
                 val currentLang = currentLang ?: Lang.ENGLISH
-                fun MultiLangText.getByLang(lang: Lang): String {
-                    return if (lang == Lang.JAPANESE) {
-                        jaTitle
-                    } else {
-                        enTitle
-                    }
-                }
                 DescriptionSection(
                     description = timetableItem.description.getByLang(currentLang),
                     onLinkClick = onLinkClick,
@@ -130,6 +123,7 @@ private fun DescriptionSection(
             visible = isExpand.not() && isOverFlow,
             enter = EnterTransition.None,
             exit = fadeOut(),
+            modifier = Modifier.testTag(DescriptionMoreButtonTestTag),
         ) {
             OutlinedButton(
                 modifier = Modifier.fillMaxWidth(),

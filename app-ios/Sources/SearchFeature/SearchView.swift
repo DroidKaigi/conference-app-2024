@@ -123,9 +123,9 @@ public struct SearchView: View {
         selection: T?,
         defaultTitle: String,
         onSelect: @escaping (T) -> Void
-    ) -> some View where T.AllCases: RandomAccessCollection {
+    ) -> some View {
         Menu {
-            ForEach(T.allCases, id: \.id) { menuSelection in
+            ForEach(T.options, id: \.id) { menuSelection in
                 Button {
                     onSelect(menuSelection)
                 } label: {
@@ -170,6 +170,10 @@ extension DroidKaigi2024Day {
         case .conferenceDay2:
             String(localized: "9/13", bundle: .module)
         }
+    }
+
+    public static var options: [DroidKaigi2024Day] {
+        [.conferenceDay1, .conferenceDay2]
     }
 }
 

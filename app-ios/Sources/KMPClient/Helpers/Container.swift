@@ -6,7 +6,7 @@ public func prepareFirebase() {
     FirebaseApp.configure()
 }
 
-public struct Container {
+public struct Container: Sendable {
     public static let shared: Container = .init()
 
     private let entryPoint: KmpEntryPoint
