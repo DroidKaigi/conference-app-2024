@@ -121,7 +121,7 @@ public struct SearchView: View {
     }
 
     // MEMO: All Category can get from timetable TimetableCategories get timetable model.
-    // (searchCategoryFilterChip have not conform to Selectable protocol.)
+    // (TimetableCategory don't have to conform to Selectable protocol.)
     private func searchCategoryFilterChip(
         allCategories: [TimetableCategory],
         selection: TimetableCategory?,
