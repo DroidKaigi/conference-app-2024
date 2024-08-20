@@ -16,6 +16,7 @@ import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.model.TimetableSessionType.NORMAL
+import io.github.droidkaigi.confsched.model.defaultLang
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.Bookmark
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.FavoriteListNavigated
@@ -48,7 +49,7 @@ fun timetableItemDetailPresenter(
         sessionsRepository
             .timetableItemWithBookmark(timetableItemId),
     )
-    var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
+    var selectedDescriptionLanguage by remember { mutableStateOf<Lang>(defaultLang()) }
     var shouldGoToFavoriteList by remember { mutableStateOf(false) }
     val bookmarkedSuccessfullyString = stringResource(SessionsRes.string.bookmarked_successfully)
     val viewBookmarkListString = stringResource(SessionsRes.string.view_bookmark_list)
@@ -82,12 +83,6 @@ fun timetableItemDetailPresenter(
                     shouldGoToFavoriteList = false
                 }
             }
-        }
-    }
-    SafeLaunchedEffect(timetableItemStateWithBookmark?.first) {
-        val timetableItem = timetableItemStateWithBookmark?.first ?: return@SafeLaunchedEffect
-        if (selectedDescriptionLanguage == null) {
-            selectedDescriptionLanguage = Lang.valueOf(timetableItem.language.langOfSpeaker)
         }
     }
     Logger.d {
