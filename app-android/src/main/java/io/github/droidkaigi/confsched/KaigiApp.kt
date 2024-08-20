@@ -86,8 +86,8 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -144,50 +144,50 @@ private fun KaigiNavHost(
             LocalSharedTransitionScope provides this,
         ) {
             CompositionLocalProvider(
-                LocalIsWideWidthScreen provides isWideWidthScreen
+                LocalIsWideWidthScreen provides isWideWidthScreen,
             ) {
-            NavHostWithSharedAxisX(
-                navController = navController,
-                startDestination = mainScreenRoute,
-            ) {
-                mainScreen(windowSize, navController, externalNavController)
-                sessionScreens(
-                    onNavigationIconClick = navController::popBackStack,
-                    onLinkClick = externalNavController::navigate,
-                    onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
-                    onShareClick = externalNavController::onShareClick,
-                    onFavoriteListClick = { navController.navigate(favoritesScreenRoute) },
-                )
+                NavHostWithSharedAxisX(
+                    navController = navController,
+                    startDestination = mainScreenRoute,
+                ) {
+                    mainScreen(windowSize, navController, externalNavController)
+                    sessionScreens(
+                        onNavigationIconClick = navController::popBackStack,
+                        onLinkClick = externalNavController::navigate,
+                        onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
+                        onShareClick = externalNavController::onShareClick,
+                        onFavoriteListClick = { navController.navigate(favoritesScreenRoute) },
+                    )
 
-                contributorsScreens(
-                    onNavigationIconClick = navController::popBackStack,
-                    onContributorItemClick = externalNavController::navigate,
-                )
+                    contributorsScreens(
+                        onNavigationIconClick = navController::popBackStack,
+                        onContributorItemClick = externalNavController::navigate,
+                    )
 
-                searchScreens(
-                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-                    onBackClick = navController::popBackStack,
-                )
+                    searchScreens(
+                        onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                        onBackClick = navController::popBackStack,
+                    )
 
-                staffScreens(
-                    onNavigationIconClick = navController::popBackStack,
-                    onStaffItemClick = externalNavController::navigate,
-                )
+                    staffScreens(
+                        onNavigationIconClick = navController::popBackStack,
+                        onStaffItemClick = externalNavController::navigate,
+                    )
 
-                settingsScreens(
-                    onNavigationIconClick = navController::popBackStack,
-                )
+                    settingsScreens(
+                        onNavigationIconClick = navController::popBackStack,
+                    )
 
-                sponsorsScreens(
-                    onNavigationIconClick = navController::popBackStack,
-                    onSponsorsItemClick = externalNavController::navigate,
-                )
+                    sponsorsScreens(
+                        onNavigationIconClick = navController::popBackStack,
+                        onSponsorsItemClick = externalNavController::navigate,
+                    )
 
-                favoritesScreens(
-                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-                    contentPadding = PaddingValues(),
-                )
-            }
+                    favoritesScreens(
+                        onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                        contentPadding = PaddingValues(),
+                    )
+                }
             }
         }
     }

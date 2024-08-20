@@ -33,8 +33,8 @@ import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentState
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.ui.icon
 import kotlinx.collections.immutable.PersistentMap
 
@@ -109,7 +109,7 @@ fun TimetableList(
                                         Modifier.sharedElement(
                                             state = rememberSharedContentState(
                                                 key = timetableDetailSharedContentStateKey(
-                                                    timetableItemId = timetableItem.id
+                                                    timetableItemId = timetableItem.id,
                                                 ),
                                             ),
                                             animatedVisibilityScope = animatedScope,
