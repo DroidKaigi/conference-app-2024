@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -86,6 +87,7 @@ import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -130,10 +132,20 @@ private fun KaigiNavHost(
     navController: NavHostController = rememberNavController(),
     externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
+    val isWideWidthScreen = when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> false
+        WindowWidthSizeClass.Medium -> true
+        WindowWidthSizeClass.Expanded -> true
+        else -> false
+    }
+
     SharedTransitionLayout(modifier = modifier) {
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
         ) {
+            CompositionLocalProvider(
+                LocalIsWideWidthScreen provides isWideWidthScreen
+            ) {
             NavHostWithSharedAxisX(
                 navController = navController,
                 startDestination = mainScreenRoute,
@@ -175,6 +187,7 @@ private fun KaigiNavHost(
                     onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
                     contentPadding = PaddingValues(),
                 )
+            }
             }
         }
     }
