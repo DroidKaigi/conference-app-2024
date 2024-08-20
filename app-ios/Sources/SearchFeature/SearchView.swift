@@ -8,12 +8,10 @@ import Theme
 
 public struct SearchView: View {
     @Bindable private var store: StoreOf<SearchReducer>
-    @State private var isfocused: Bool
-
+    @State private var isfocused: Bool = false
 
     public init(store: StoreOf<SearchReducer>) {
         self.store = store
-        self.isfocused = false
     }
 
     public var body: some View {
