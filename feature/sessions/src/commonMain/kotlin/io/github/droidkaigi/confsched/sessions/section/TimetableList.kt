@@ -123,8 +123,8 @@ fun TimetableList(
                                     timetableItem = timetableItem,
                                     onBookmarkClick = onBookmarkClick,
                                     modifier = timetableItemCardModifier
-                                        .fillMaxHeight()
-                                        .weight(1F),
+                                        .weight(1F)
+                                        .fillMaxHeight(),
                                     highlightWord = highlightWord,
                                     tags = {
                                         TimetableItemTag(
