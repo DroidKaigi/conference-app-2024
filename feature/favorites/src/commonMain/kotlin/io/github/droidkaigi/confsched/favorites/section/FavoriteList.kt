@@ -50,7 +50,7 @@ fun FavoriteList(
         items(timetable.timetableItems.windowed(columnNum, columnNum, true)) { windowedItems ->
             Row(
                 modifier = Modifier.height(IntrinsicSize.Max),
-                horizontalArrangement = Arrangement.spacedBy(10.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 windowedItems.forEach { timetableItem ->
                     TimetableItemCard(

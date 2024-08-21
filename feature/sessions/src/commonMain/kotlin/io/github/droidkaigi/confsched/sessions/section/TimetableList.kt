@@ -91,11 +91,11 @@ fun TimetableList(
                     endTime = time.endTimeString,
                 )
                 Spacer(modifier = Modifier.width(12.dp))
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     timetableItems.windowed(columnNum, columnNum, true).forEach { windowedItems ->
                         Row(
                             modifier = Modifier.height(IntrinsicSize.Max),
-                            horizontalArrangement = Arrangement.spacedBy(10.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
                             windowedItems.onEach { timetableItem ->
                                 val isBookmarked =
