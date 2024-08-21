@@ -59,6 +59,7 @@ import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
+import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
@@ -156,7 +157,8 @@ private fun FlipCardFront(
     Box(
         modifier = modifier
             .testTag(ProfileCardFlipCardFrontTestTag)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .hologramaticEffect(),
     ) {
         Image(
             painter = painterResource(background),
@@ -220,7 +222,8 @@ private fun FlipCardBack(
             .fillMaxSize()
             .graphicsLayer {
                 rotationY = 180f
-            },
+            }
+            .hologramaticEffect(),
         contentAlignment = Alignment.Center,
     ) {
         Image(

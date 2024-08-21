@@ -6,7 +6,11 @@ data class Orientation(
     val azimuth: Float,
     val pitch: Float,
     val roll: Float,
-)
+) {
+    companion object {
+        val ZERO = Orientation(0f, 0f, 0f)
+    }
+}
 
 internal interface OrientationSensorManager {
     val onOrientationChanged: (Orientation) -> Unit

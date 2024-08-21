@@ -213,12 +213,14 @@ internal fun ProfileCardScreen(
                 ProfileCardUiType.Loading -> {
                     // NOOP
                 }
+
                 ProfileCardUiType.Edit -> {
                     AnimatedTextTopAppBar(
                         title = stringResource(ProfileCardRes.string.profile_card_title),
                         scrollBehavior = scrollBehavior,
                     )
                 }
+
                 ProfileCardUiType.Card -> {
                     if (uiState.cardUiState == null) return@Scaffold
                     ProvideProfileCardTheme(uiState.cardUiState.cardType.toString()) {
@@ -386,7 +388,9 @@ internal fun EditScreen(
 
             Text(stringResource(ProfileCardRes.string.select_theme))
 
-            CardTypePiker(selectedCardType = selectedCardType, onClickImage = { selectedCardType = it })
+            CardTypePiker(
+                selectedCardType = selectedCardType,
+                onClickImage = { selectedCardType = it })
 
             Button(
                 onClick = {
@@ -551,7 +555,10 @@ private fun ImagePickerWithError(
 }
 
 @Composable
-internal fun CardTypePiker(selectedCardType: ProfileCardType, onClickImage: (ProfileCardType) -> Unit) {
+internal fun CardTypePiker(
+    selectedCardType: ProfileCardType,
+    onClickImage: (ProfileCardType) -> Unit,
+) {
     val cardTypes = ProfileCardType.entries.chunked(2)
 
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -669,7 +676,12 @@ internal fun CardScreen(
                 Button(
                     onClick = { onClickShareProfileCard() },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    border = if (uiState.cardType == ProfileCardType.None) BorderStroke(0.5.dp, Color.Black) else null,
+                    border = if (uiState.cardType == ProfileCardType.None) BorderStroke(
+                        0.5.dp,
+                        Color.Black
+                    ) else {
+                        null
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),

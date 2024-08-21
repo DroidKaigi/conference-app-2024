@@ -1,0 +1,40 @@
+package io.github.droidkaigi.confsched.ui
+
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+
+interface DeviceOrientationScope {
+    val orientation: Orientation
+}
+
+private class DeviceOrientationScopeImpl : DeviceOrientationScope {
+    override var orientation: Orientation by mutableStateOf(Orientation.ZERO)
+        private set
+
+    fun updateOrientation(orientation: Orientation) {
+        this.orientation = orientation
+    }
+}
+
+@Composable
+fun WithDeviceOrientation(
+    content: @Composable (DeviceOrientationScope.() -> Unit),
+) {
+    val scope = remember {
+        DeviceOrientationScopeImpl()
+    }
+    val sensorManager = getOrientationSensorManager {
+        scope.updateOrientation(it)
+    }
+    DisposableEffect(sensorManager) {
+        sensorManager.start()
+        onDispose {
+            sensorManager.stop()
+        }
+    }
+    content(scope)
+}
