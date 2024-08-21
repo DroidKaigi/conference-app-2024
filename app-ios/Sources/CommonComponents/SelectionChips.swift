@@ -5,7 +5,7 @@ import Theme
 public struct SelectionChips<SelectableCase: Selectable>: View where SelectableCase.AllCases: RandomAccessCollection {
     @Binding public var selected: SelectableCase?
     public var notSelectedTitle: String?
-    public var options: [SelectableCase]
+    public let options: [SelectableCase]
 
     public init(
         selected: Binding<SelectableCase?>,
