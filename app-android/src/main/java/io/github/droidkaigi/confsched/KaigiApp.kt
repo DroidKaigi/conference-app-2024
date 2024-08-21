@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -86,7 +85,6 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import kotlinx.collections.immutable.PersistentList
 
@@ -132,7 +130,6 @@ private fun KaigiNavHost(
     navController: NavHostController = rememberNavController(),
     externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
-
     SharedTransitionLayout(modifier = modifier) {
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
