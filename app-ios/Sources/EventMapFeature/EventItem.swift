@@ -11,7 +11,12 @@ struct EventItem: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 12) {
-                RoomTag(event.roomName)
+                RoomTag(.init(
+                    currentLangTitle: event.roomName.currentLangTitle,
+                    enTitle: event.roomName.enTitle,
+                    jaTitle: event.roomName.jaTitle
+                ))
+
                 Text(event.name.currentLangTitle)
                     .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
                     .textStyle(.titleMedium)

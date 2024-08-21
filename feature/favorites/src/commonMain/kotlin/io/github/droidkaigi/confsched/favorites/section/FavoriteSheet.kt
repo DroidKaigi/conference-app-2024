@@ -66,6 +66,7 @@ sealed interface FavoritesSheetUiState {
 @Composable
 fun FavoriteSheet(
     uiState: FavoritesSheetUiState,
+    filterBackgroundColor: Color,
     onTimetableItemClick: (TimetableItem) -> Unit,
     onAllFilterChipClick: () -> Unit,
     onDay1FilterChipClick: () -> Unit,
@@ -79,6 +80,7 @@ fun FavoriteSheet(
             allFilterSelected = uiState.isAllFilterSelected,
             day1FilterSelected = uiState.isDay1FilterSelected,
             day2FilterSelected = uiState.isDay2FilterSelected,
+            backgroundColor = filterBackgroundColor,
             onAllFilterChipClick = onAllFilterChipClick,
             onDay1FilterChipClick = onDay1FilterChipClick,
             onDay2FilterChipClick = onDay2FilterChipClick,
@@ -152,6 +154,7 @@ fun FavoriteSheetPreview() {
                     currentDayFilter = persistentListOf(ConferenceDay1, ConferenceDay2),
                     timeTable = Timetable.fake(),
                 ),
+                filterBackgroundColor = MaterialTheme.colorScheme.surface,
                 onAllFilterChipClick = {},
                 onDay1FilterChipClick = {},
                 onDay2FilterChipClick = {},
@@ -172,6 +175,7 @@ fun FavoriteSheetNoFavoritesPreview() {
                     allFilterSelected = false,
                     currentDayFilter = persistentListOf(ConferenceDay1, ConferenceDay2),
                 ),
+                filterBackgroundColor = MaterialTheme.colorScheme.surface,
                 onAllFilterChipClick = {},
                 onDay1FilterChipClick = {},
                 onDay2FilterChipClick = {},

@@ -17,7 +17,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+
+const val SettingsItemRowCurrentValueTextTestTag = "SettingsItemRowCurrentValueTextTestTag"
 
 @Composable
 fun SettingsItemRow(
@@ -56,6 +59,7 @@ fun SettingsItemRow(
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Text(
+                    modifier = Modifier.testTag(SettingsItemRowCurrentValueTextTestTag),
                     text = currentValue,
                     style = MaterialTheme.typography.bodySmall,
                 )

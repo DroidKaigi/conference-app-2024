@@ -12,8 +12,12 @@ import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerS
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.atTime
 import kotlinx.datetime.format
+import kotlinx.datetime.format.FormatStringsInDatetimeFormats
+import kotlinx.datetime.format.byUnicodePattern
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -38,12 +42,13 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
     }
 
     companion object {
+        @OptIn(FormatStringsInDatetimeFormats::class)
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
         fun behaviors(): List<DescribedBehavior<TimetableScreenRobot>> {
             return describeBehaviors<TimetableScreenRobot>(name = "TimetableScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Operational)
                         setupTimetableScreenContent()
                     }
@@ -55,7 +60,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         })
                     }
                     describe("click first session bookmark") {
-                        run {
+                        doIt {
                             clickFirstSessionBookmark()
                         }
                         itShould("show bookmarked session") {
@@ -65,7 +70,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                     describe("click first session") {
-                        run {
+                        doIt {
                             clickFirstSession()
                         }
                         itShould("show session detail") {
@@ -73,7 +78,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                     describe("scroll timetable") {
-                        run {
+                        doIt {
                             scrollTimetable()
                         }
                         itShould("first session is not displayed") {
@@ -83,7 +88,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                     describe("click conference day2 tab") {
-                        run {
+                        doIt {
                             clickTimetableTab(2)
                         }
                         itShould("change displayed day") {
@@ -93,7 +98,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                     describe("click timetable ui type change") {
-                        run {
+                        doIt {
                             clickTimetableUiTypeChangeButton()
                         }
                         itShould("change timetable ui type") {
@@ -103,7 +108,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             })
                         }
                         describe("scroll timetable") {
-                            run {
+                            doIt {
                                 scrollTimetable()
                             }
                             itShould("first session is not displayed") {
@@ -113,7 +118,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             }
                         }
                         describe("click conference day2 tab") {
-                            run {
+                            doIt {
                                 clickTimetableTab(2)
                             }
                             itShould("change displayed day") {
@@ -139,7 +144,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                     ),
                 ).forEach { case ->
                     describe("when the current date is ${case.date.format(LocalDate.Formats.ISO)}") {
-                        run {
+                        doIt {
                             setupTimetableServer(ServerStatus.Operational)
                             setupTimetableScreenContent(case.date.atTime(10, 0))
                         }
@@ -151,7 +156,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             })
                         }
                         describe("switch to grid timetable") {
-                            run {
+                            doIt {
                                 clickTimetableUiTypeChangeButton()
                             }
                             itShould("show timetable items for ${case.expectedInitialTab.name}") {
@@ -164,8 +169,43 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                 }
+                listOf(
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 11, hour = 10, minute = 0),
+                        shouldShowTimeLine = false,
+                    ),
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 12, hour = 10, minute = 30),
+                        shouldShowTimeLine = true,
+                    ),
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 13, hour = 11, minute = 0),
+                        shouldShowTimeLine = true,
+                    ),
+                ).forEach { case ->
+                    val formattedDateTime = case.dateTime.format(LocalDateTime.Format { byUnicodePattern("yyyy-MM-dd HH-mm") })
+                    describe("when the current datetime is $formattedDateTime") {
+                        run {
+                            setupTimetableServer(ServerStatus.Operational)
+                            setupTimetableScreenContent(case.dateTime)
+                            clickTimetableUiTypeChangeButton()
+                        }
+
+                        val formattedTime = case.dateTime.time.format(LocalTime.Format { byUnicodePattern("HH-mm") })
+                        val description = if (case.shouldShowTimeLine) {
+                            "show an indicator of the current time at $formattedTime"
+                        } else {
+                            "not show an indicator of the current time"
+                        }
+                        itShould(description) {
+                            captureScreenWithChecks {
+                                checkTimetableGridDisplayed()
+                            }
+                        }
+                    }
+                }
                 describe("when server is down") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Error)
                         setupTimetableScreenContent()
                     }
@@ -197,4 +237,9 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
 private data class InitialTabTestSpec(
     val date: LocalDate,
     val expectedInitialTab: DroidKaigi2024Day,
+)
+
+private data class TimeLineTestSpec(
+    val dateTime: LocalDateTime,
+    val shouldShowTimeLine: Boolean,
 )
