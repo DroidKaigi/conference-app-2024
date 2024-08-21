@@ -664,7 +664,7 @@ internal fun CardScreen(
                     .fillMaxSize()
                     .nestedScroll(scrollBehavior.nestedScrollConnection)
                     .verticalScroll(rememberScrollState())
-                    .padding(top = 32.dp)
+                    .padding(vertical = 32.dp)
                     .padding(contentPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
