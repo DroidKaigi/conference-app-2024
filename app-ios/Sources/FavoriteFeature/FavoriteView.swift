@@ -77,7 +77,8 @@ public struct FavoriteView: View {
     private var daySelection: some View {
         SelectionChips<DroidKaigi2024Day>(
             selected: $store.selectedDay.sending(\.view.selectedDayChanged),
-            notSelectedTitle: String(localized: "All", bundle: .module)
+            notSelectedTitle: String(localized: "All", bundle: .module),
+            options: DroidKaigi2024Day.options
         )
     }
 }
@@ -104,6 +105,10 @@ extension DroidKaigi2024Day {
         case .conferenceDay2:
             String(localized: "9/13", bundle: .module)
         }
+    }
+
+    public static var options: [DroidKaigi2024Day] {
+        [.conferenceDay1, .conferenceDay2]
     }
 }
 
