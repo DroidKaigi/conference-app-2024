@@ -225,6 +225,7 @@ internal fun ProfileCardScreen(
                         AnimatedTextTopAppBar(
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = LocalProfileCardTheme.current.primaryColor,
+                                scrolledContainerColor = LocalProfileCardTheme.current.primaryColor,
                             ),
                             textColor = MaterialTheme.colorScheme.scrim,
                             title = stringResource(ProfileCardRes.string.profile_card_title),
