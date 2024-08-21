@@ -22,10 +22,10 @@ import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.sessions.component.TimetableTime
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
+import io.github.droidkaigi.confsched.ui.component.TimetableTime
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.ui.icon
