@@ -81,9 +81,6 @@ fun TimetableList(
             end = 16.dp + contentPadding.calculateEndPadding(layoutDirection),
         ),
     ) {
-        item {
-            Text(text = isWideWidthScreen.toString())
-        }
         items(
             // TODO: Check whether the number of recompositions increases.
             items = uiState.timetableItemMap.toList(),
