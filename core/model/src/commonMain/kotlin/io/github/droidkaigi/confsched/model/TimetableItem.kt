@@ -99,6 +99,8 @@ public sealed class TimetableItem {
         "https://2024.droidkaigi.jp/en/timetable/${id.value}"
     }
 
+    public val isLunch: Boolean get() = startsTimeString.startsWith("13:00") && title.enTitle.lowercase().contains("lunch")
+
     fun getSupportedLangString(isJapaneseLocale: Boolean): String {
         val japanese = if (isJapaneseLocale) "日本語" else "Japanese"
         val english = if (isJapaneseLocale) "英語" else "English"

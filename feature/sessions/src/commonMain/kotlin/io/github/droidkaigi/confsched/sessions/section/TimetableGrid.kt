@@ -525,7 +525,7 @@ private data class TimetableLayout(
     val timetableLayouts = timetable.timetableItems.map {
         val timetableItemLayout = TimetableItemLayout(
             timetableItem = it,
-            rooms = rooms,
+            rooms = it.isLunch ?  : rooms,
             dayToStartTime = dayToStartTime,
             dayStartTime = dayStartTime!!,
             density = density,
