@@ -36,7 +36,7 @@ class KaigiAppTest(private val testCase: DescribedBehavior<KaigiAppRobot>) {
         fun behaviors(): List<DescribedBehavior<KaigiAppRobot>> {
             return describeBehaviors<KaigiAppRobot>(name = "KaigiApp") {
                 describe("when app is starting") {
-                    run {
+                    doIt {
                         waitUntilIdle()
                     }
                     itShould("show timetable items") {
