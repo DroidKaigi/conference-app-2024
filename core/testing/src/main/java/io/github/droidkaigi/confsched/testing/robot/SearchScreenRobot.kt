@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.assertAll
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filter
@@ -267,6 +268,12 @@ class SearchScreenRobot @Inject constructor(
             .assertAll(hasText(text = searchWord, ignoreCase = true))
     }
 
+    fun checkTimetableListExists() {
+        composeTestRule
+            .onNode(hasTestTag(TimetableListTestTag))
+            .assertExists()
+    }
+
     fun checkTimetableListDisplayed() {
         composeTestRule
             .onNode(hasTestTag(TimetableListTestTag))
@@ -278,5 +285,12 @@ class SearchScreenRobot @Inject constructor(
             .onAllNodesWithTag(TimetableItemCardTestTag)
             .onFirst()
             .assertIsDisplayed()
+    }
+
+    fun checkTimetableListItemsNotDisplayed() {
+        composeTestRule
+            .onAllNodesWithTag(TimetableItemCardTestTag)
+            .onFirst()
+            .assertIsNotDisplayed()
     }
 }
