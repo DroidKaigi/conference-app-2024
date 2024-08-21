@@ -240,6 +240,7 @@ internal fun ProfileCardScreen(
                         AnimatedTextTopAppBar(
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = LocalProfileCardTheme.current.primaryColor,
+                                scrolledContainerColor = LocalProfileCardTheme.current.primaryColor,
                             ),
                             textColor = MaterialTheme.colorScheme.scrim,
                             title = stringResource(ProfileCardRes.string.profile_card_title),
@@ -288,6 +289,7 @@ internal fun ProfileCardScreen(
                 if (uiState.cardUiState == null) return@Scaffold
                 CardScreen(
                     uiState = uiState.cardUiState,
+                    scrollBehavior = scrollBehavior,
                     onClickEdit = {
                         eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
@@ -656,11 +658,13 @@ fun Modifier.selectedBorder(
     this
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CardScreen(
     uiState: ProfileCardUiState.Card,
     onClickEdit: () -> Unit,
     onClickShareProfileCard: (ImageBitmap) -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
@@ -673,11 +677,15 @@ internal fun CardScreen(
             modifier = modifier
                 .fillMaxSize()
                 .background(LocalProfileCardTheme.current.primaryColor)
-                .testTag(ProfileCardCardScreenTestTag)
-                .padding(contentPadding),
+                .testTag(ProfileCardCardScreenTestTag),
         ) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .verticalScroll(rememberScrollState())
+                    .padding(vertical = 32.dp)
+                    .padding(contentPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
