@@ -166,50 +166,52 @@ internal fun CapturableCard(
         onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
     }
 
-    Box(
-        modifier = Modifier
-            .drawWithContent {
-                graphicsLayerFront.record {
-                    this@drawWithContent.drawContent()
-                }
-                drawLayer(graphicsLayerFront)
-            }
-    ) {
-        FlipCardFront(
-            uiState,
-            profileImage = profileImage,
+    Box {
+        Box(
             modifier = Modifier
-                .size(width = 300.dp, height = 380.dp)
-                .border(
-                    3.dp,
-                    Color.Black,
-                    RoundedCornerShape(8.dp)
-                )
-        )
-    }
-    Box(
-        modifier = Modifier
-            .drawWithContent {
-                graphicsLayerBack.record {
-                    this@drawWithContent.drawContent()
-                }
-                drawLayer(graphicsLayerBack)
-            }
-    ) {
-        FlipCardBack(
-            uiState,
-            imageBitmap,
+                .drawWithContent {
+                    graphicsLayerFront.record {
+                        this@drawWithContent.drawContent()
+                    }
+                    drawLayer(graphicsLayerFront)
+                },
+        ) {
+            FlipCardFront(
+                uiState,
+                profileImage = profileImage,
+                modifier = Modifier
+                    .size(width = 300.dp, height = 380.dp)
+                    .border(
+                        3.dp,
+                        Color.Black,
+                        RoundedCornerShape(8.dp),
+                    ),
+            )
+        }
+        Box(
             modifier = Modifier
-                .size(width = 300.dp, height = 380.dp)
-                .border(
-                    3.dp,
-                    Color.Black,
-                    RoundedCornerShape(8.dp)
-                )
-                .graphicsLayer {
-                    rotationY = 180f
-                }
-        )
+                .drawWithContent {
+                    graphicsLayerBack.record {
+                        this@drawWithContent.drawContent()
+                    }
+                    drawLayer(graphicsLayerBack)
+                },
+        ) {
+            FlipCardBack(
+                uiState,
+                imageBitmap,
+                modifier = Modifier
+                    .size(width = 300.dp, height = 380.dp)
+                    .border(
+                        3.dp,
+                        Color.Black,
+                        RoundedCornerShape(8.dp),
+                    )
+                    .graphicsLayer {
+                        rotationY = 180f
+                    },
+            )
+        }
     }
 }
 
