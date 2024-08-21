@@ -155,10 +155,24 @@ class SearchScreenTest(
                         setupTimetableServer(ServerStatus.Operational)
                         setupSearchScreenContent()
                     }
-                    itShould("show non-filtered timetable items") {
+                    itShould("no timetable items are displayed") {
                         captureScreenWithChecks {
-                            checkTimetableListDisplayed()
-                            checkTimetableListItemsDisplayed()
+                            checkTimetableListExists()
+                            checkTimetableListItemsNotDisplayed()
+                        }
+                    }
+
+                    describe("input search word to TextField") {
+                        doIt {
+                            inputDemoSearchWord()
+                        }
+                        itShould("show search word and filtered items") {
+                            captureScreenWithChecks {
+                                checkDemoSearchWordDisplayed()
+                                checkTimetableListItemsHasDemoText()
+                                checkTimetableListDisplayed()
+                                checkTimetableListItemsDisplayed()
+                            }
                         }
                     }
                 }
