@@ -248,7 +248,10 @@ private fun NavGraphBuilder.mainScreen(
                     }
                 },
             )
-            profileCardScreen(contentPadding)
+            profileCardScreen(
+                contentPadding = contentPadding,
+                onClickShareProfileCard = externalNavController::onShareProfileCardClick,
+            )
         },
     )
 }
