@@ -106,7 +106,7 @@ fun TimetableGridItem(
         derivedStateOf { (height - TimetableGridItemSizes.padding * 2) / 4 > titleMinHeightDp * 3 / 2 }
     }
 
-    ProvideRoomTheme(timetableItem.room.getThemeKey()) {
+    ProvideRoomTheme( if(timetableItem.isLunch) { "lunch" } else { timetableItem.room.getThemeKey()} ) {
         val titleTextStyle = MaterialTheme.typography.labelLarge.let {
             check(it.fontSize.isSp)
             val (titleFontSize, titleLineHeight) = calculateFontSizeAndLineHeight(
@@ -161,13 +161,15 @@ fun TimetableGridItem(
                         modifier = Modifier
                             .weight(1f, fill = false),
                     ) {
-                        Icon(
-                            modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
-                            imageVector = vectorResource(checkNotNull(timetableItem.room.icon)),
-                            contentDescription = timetableItem.room.name.currentLangTitle,
-                            tint = LocalRoomTheme.current.primaryColor,
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
+                        if (!timetableItem.isLunch) {
+                            Icon(
+                                modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
+                                imageVector = vectorResource(checkNotNull(timetableItem.room.icon)),
+                                contentDescription = timetableItem.room.name.currentLangTitle,
+                                tint = LocalRoomTheme.current.primaryColor,
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                        }
                         var scheduleTextStyle = MaterialTheme.typography.labelSmall
                         if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
                             scheduleTextStyle =
