@@ -274,6 +274,7 @@ internal fun ProfileCardScreen(
                 if (uiState.cardUiState == null) return@Scaffold
                 CardScreen(
                     uiState = uiState.cardUiState,
+                    scrollBehavior = scrollBehavior,
                     onClickEdit = {
                         eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
@@ -640,11 +641,13 @@ fun Modifier.selectedBorder(
     this
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CardScreen(
     uiState: ProfileCardUiState.Card,
     onClickEdit: () -> Unit,
     onClickShareProfileCard: () -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
@@ -654,11 +657,15 @@ internal fun CardScreen(
             modifier = modifier
                 .fillMaxSize()
                 .background(LocalProfileCardTheme.current.primaryColor)
-                .testTag(ProfileCardCardScreenTestTag)
-                .padding(contentPadding),
+                .testTag(ProfileCardCardScreenTestTag),
         ) {
             Column(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .nestedScroll(scrollBehavior.nestedScrollConnection)
+                    .verticalScroll(rememberScrollState())
+                    .padding(top = 32.dp)
+                    .padding(contentPadding),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center,
             ) {
