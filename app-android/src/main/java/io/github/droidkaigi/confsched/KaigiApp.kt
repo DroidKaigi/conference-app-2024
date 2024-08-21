@@ -197,6 +197,7 @@ private fun NavGraphBuilder.mainScreen(
                 contentPadding = contentPadding,
             )
             eventMapScreens(
+                contentPadding = contentPadding,
                 onEventMapItemClick = externalNavController::navigate,
             )
             favoritesScreens(

@@ -99,7 +99,12 @@ private fun favoritesSheet(
 ): FavoritesSheetUiState {
     val filteredSessions by rememberUpdatedState(
         favoriteSessions
-            .filtered(Filters(days = selectedDayFilters.toList())),
+            .filtered(
+                Filters(
+                    filterFavorite = true,
+                    days = selectedDayFilters.toList(),
+                ),
+            ),
     )
 
     return if (filteredSessions.isEmpty()) {

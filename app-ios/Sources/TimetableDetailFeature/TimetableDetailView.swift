@@ -109,13 +109,8 @@ public struct TimetableDetailView: View {
             
             ForEach(store.timetableItem.speakers, id: \.id) { speaker in
                 HStack(spacing: 12) {
-                    if let url = URL(string: speaker.iconUrl) {
-                        AsyncImage(url: url) {
-                            $0.image?.resizable()
-                        }
+                    CircularUserIcon(urlString: speaker.iconUrl)
                         .frame(width: 52, height: 52)
-                        .clipShape(Circle())
-                    }
                         
                     VStack(alignment: .leading, spacing: 8) {
                         Text(speaker.name)
