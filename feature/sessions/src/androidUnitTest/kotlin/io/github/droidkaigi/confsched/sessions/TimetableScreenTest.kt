@@ -47,7 +47,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
         fun behaviors(): List<DescribedBehavior<TimetableScreenRobot>> {
             return describeBehaviors<TimetableScreenRobot>(name = "TimetableScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Operational)
                         setupTimetableScreenContent()
                     }
@@ -59,7 +59,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         })
                     }
                     describe("click first session bookmark") {
-                        run {
+                        doIt {
                             clickFirstSessionBookmark()
                         }
                         itShould("show bookmarked session") {
@@ -69,7 +69,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                     describe("click first session") {
-                        run {
+                        doIt {
                             clickFirstSession()
                         }
                         itShould("show session detail") {
@@ -77,7 +77,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                     describe("scroll timetable") {
-                        run {
+                        doIt {
                             scrollTimetable()
                         }
                         itShould("first session is not displayed") {
@@ -87,7 +87,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                     describe("click conference day2 tab") {
-                        run {
+                        doIt {
                             clickTimetableTab(2)
                         }
                         itShould("change displayed day") {
@@ -97,7 +97,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                     describe("click timetable ui type change") {
-                        run {
+                        doIt {
                             clickTimetableUiTypeChangeButton()
                         }
                         itShould("change timetable ui type") {
@@ -107,7 +107,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             })
                         }
                         describe("scroll timetable") {
-                            run {
+                            doIt {
                                 scrollTimetable()
                             }
                             itShould("first session is not displayed") {
@@ -117,7 +117,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             }
                         }
                         describe("click conference day2 tab") {
-                            run {
+                            doIt {
                                 clickTimetableTab(2)
                             }
                             itShould("change displayed day") {
@@ -143,7 +143,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                     ),
                 ).forEach { case ->
                     describe("when the current date is ${case.date.format(LocalDate.Formats.ISO)}") {
-                        run {
+                        doIt {
                             setupTimetableServer(ServerStatus.Operational)
                             setupTimetableScreenContent(case.date.atTime(10, 0))
                         }
@@ -155,7 +155,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             })
                         }
                         describe("switch to grid timetable") {
-                            run {
+                            doIt {
                                 clickTimetableUiTypeChangeButton()
                             }
                             itShould("show timetable items for ${case.expectedInitialTab.name}") {
@@ -204,7 +204,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                     }
                 }
                 describe("when server is down") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Error)
                         setupTimetableScreenContent()
                     }
