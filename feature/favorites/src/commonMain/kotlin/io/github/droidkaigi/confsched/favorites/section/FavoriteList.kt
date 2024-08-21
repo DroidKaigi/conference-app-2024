@@ -33,7 +33,7 @@ fun FavoriteList(
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(12.dp),
-        contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding()),
+        contentPadding = PaddingValues(bottom = contentPadding.calculateBottomPadding().plus(16.dp)),
     ) {
         items(timetable.timetableItems) { timetableItem ->
             TimetableItemCard(

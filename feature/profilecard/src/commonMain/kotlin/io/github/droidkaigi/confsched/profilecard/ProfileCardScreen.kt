@@ -206,7 +206,7 @@ internal fun ProfileCardScreen(
             left = contentPadding.calculateLeftPadding(layoutDirection),
             top = contentPadding.calculateTopPadding(),
             right = contentPadding.calculateRightPadding(layoutDirection),
-            bottom = contentPadding.calculateBottomPadding(),
+            bottom = contentPadding.calculateBottomPadding().plus(16.dp),
         ),
         topBar = {
             when (uiState.uiType) {
