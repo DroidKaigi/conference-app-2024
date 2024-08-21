@@ -1,9 +1,12 @@
 import ComposableArchitecture
+import _PhotosUI_SwiftUI
 import KMPClient
 @preconcurrency import shared
 
 @Reducer
 public struct ProfileCardInputReducer: Sendable {
+    @Dependency(\.profileCardClient) private var profileCardClient
+
     public init() { }
 
     @ObservableState
@@ -11,15 +14,21 @@ public struct ProfileCardInputReducer: Sendable {
         public var nickname: String
         public var occupation: String
         public var link: String
+        public var photo: PhotosPickerItem?
+        public var cardType: ProfileCardType?
 
         public init(
             nickname: String = "",
             occupation: String = "",
-            link: String = ""
+            link: String = "",
+            photo: PhotosPickerItem? = nil,
+            cardType: ProfileCardType? = nil
         ) {
             self.nickname = nickname
             self.occupation = occupation
             self.link = link
+            self.photo = photo
+            self.cardType = cardType
         }
     }
 
@@ -30,12 +39,16 @@ public struct ProfileCardInputReducer: Sendable {
         @CasePathable
         public enum View {
             case onAppear
-            case onNicknameChanged(String)
-            case onOccupationChanged(String)
-            case onLinkChanged(String)
+            case nicknameChanged(String)
+            case occupationChanged(String)
+            case linkChanged(String)
+            case photoChanged(PhotosPickerItem?)
+            case cardTypeChanged(ProfileCardType?)
+            case createCardTapped
         }
 
         public enum Internal {
+            case profileCardSaved
         }
     }
 
@@ -47,18 +60,49 @@ public struct ProfileCardInputReducer: Sendable {
                 case .onAppear:
                     return .none
 
-                case let .onNicknameChanged(nickname):
+                case let .nicknameChanged(nickname):
                     state.nickname = nickname
                     return .none
 
-                case let .onOccupationChanged(occupation):
+                case let .occupationChanged(occupation):
                     state.occupation = occupation
                     return .none
 
-                case let .onLinkChanged(link):
+                case let .linkChanged(link):
                     state.link = link
                     return .none
+
+                case let .photoChanged(photo):
+                    state.photo = photo
+                    return .none
+
+                case let .cardTypeChanged(cardType):
+                    state.cardType = cardType
+                    return .none
+
+                case .createCardTapped:
+                    let nickname = state.nickname
+                    let link = state.link
+                    let occupation = state.occupation
+                    let image = state.photo?.itemIdentifier ?? ""
+                    let cardType = state.cardType ?? .none
+
+                    return .run { send in
+                        try await profileCardClient.save(
+                            .init(
+                                nickname: nickname,
+                                link: link,
+                                occupation: occupation,
+                                image: image,
+                                cardType: cardType
+                            )
+                        )
+
+                        await send(.internal(.profileCardSaved))
+                    }
                 }
+            case let .internal(internalAction):
+                return .none
             }
         }
     }

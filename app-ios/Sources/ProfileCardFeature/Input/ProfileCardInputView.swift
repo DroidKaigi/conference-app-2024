@@ -23,7 +23,7 @@ public struct ProfileCardInputView: View {
                         get: {
                             store.nickname
                         }, set: {
-                            store.send(.view(.onNicknameChanged($0)))
+                            store.send(.view(.nicknameChanged($0)))
                         }
                     )
                 )
@@ -34,7 +34,7 @@ public struct ProfileCardInputView: View {
                         get: {
                             store.occupation
                         }, set: {
-                            store.send(.view(.onOccupationChanged($0)))
+                            store.send(.view(.occupationChanged($0)))
                         }
                     )
                 )
@@ -46,18 +46,36 @@ public struct ProfileCardInputView: View {
                         get: {
                             store.link
                         }, set: {
-                            store.send(.view(.onLinkChanged($0)))
+                            store.send(.view(.linkChanged($0)))
                         }
                     )
                 )
 
                 ProfileCardInputImage(
-                    title: String(localized: "画像", bundle: .module),
-                    selectedImage: nil
+                    selectedPhoto: .init(
+                        get: {
+                            store.photo
+                        },
+                        set: {
+                            store.send(.view(.photoChanged($0)))
+                        }
+                    ), 
+                    title: String(localized: "画像", bundle: .module)
+                )
+
+                ProfileCardInputCardType(
+                    selectedCardType: .init(
+                        get: {
+                            store.cardType
+                        },
+                        set: {
+                            store.send(.view(.cardTypeChanged($0)))
+                        }
+                    )
                 )
 
                 Button {
-
+                    store.send(.view(.createCardTapped))
                 } label: {
                     Text("カードを作成する", bundle: .module)
                         .textStyle(.labelLarge)
@@ -69,10 +87,14 @@ public struct ProfileCardInputView: View {
             }
         }
         .padding(.horizontal, 16)
+        // bottom floating tabbar padding
+        .padding(.bottom, 60)
         .background(AssetColors.Surface.surface.swiftUIColor)
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(String(localized: "プロフィールカード", bundle: .module))
-        .onAppear { store.send(.view(.onAppear)) }
+        .onAppear { 
+            store.send(.view(.onAppear))
+        }
     }
 }
 
