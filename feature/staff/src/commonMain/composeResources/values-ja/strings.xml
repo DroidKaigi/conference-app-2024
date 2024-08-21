@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="sample">!!Please remove this resource when you add string resource!!</string>
+    <string name="staff_title">スタッフ</string>
 </resources>
