@@ -132,62 +132,52 @@ private fun KaigiNavHost(
     navController: NavHostController = rememberNavController(),
     externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
-    val isWideWidthScreen = when (windowSize.widthSizeClass) {
-        WindowWidthSizeClass.Compact -> false
-        WindowWidthSizeClass.Medium -> true
-        WindowWidthSizeClass.Expanded -> true
-        else -> false
-    }
 
     SharedTransitionLayout(modifier = modifier) {
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
         ) {
-            CompositionLocalProvider(
-                LocalIsWideWidthScreen provides isWideWidthScreen,
+            NavHostWithSharedAxisX(
+                navController = navController,
+                startDestination = mainScreenRoute,
             ) {
-                NavHostWithSharedAxisX(
-                    navController = navController,
-                    startDestination = mainScreenRoute,
-                ) {
-                    mainScreen(windowSize, navController, externalNavController)
-                    sessionScreens(
-                        onNavigationIconClick = navController::popBackStack,
-                        onLinkClick = externalNavController::navigate,
-                        onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
-                        onShareClick = externalNavController::onShareClick,
-                        onFavoriteListClick = { navController.navigate(favoritesScreenRoute) },
-                    )
+                mainScreen(windowSize, navController, externalNavController)
+                sessionScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onLinkClick = externalNavController::navigate,
+                    onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
+                    onShareClick = externalNavController::onShareClick,
+                    onFavoriteListClick = { navController.navigate(favoritesScreenRoute) },
+                )
 
-                    contributorsScreens(
-                        onNavigationIconClick = navController::popBackStack,
-                        onContributorItemClick = externalNavController::navigate,
-                    )
+                contributorsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onContributorItemClick = externalNavController::navigate,
+                )
 
-                    searchScreens(
-                        onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-                        onBackClick = navController::popBackStack,
-                    )
+                searchScreens(
+                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                    onBackClick = navController::popBackStack,
+                )
 
-                    staffScreens(
-                        onNavigationIconClick = navController::popBackStack,
-                        onStaffItemClick = externalNavController::navigate,
-                    )
+                staffScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onStaffItemClick = externalNavController::navigate,
+                )
 
-                    settingsScreens(
-                        onNavigationIconClick = navController::popBackStack,
-                    )
+                settingsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                )
 
-                    sponsorsScreens(
-                        onNavigationIconClick = navController::popBackStack,
-                        onSponsorsItemClick = externalNavController::navigate,
-                    )
+                sponsorsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onSponsorsItemClick = externalNavController::navigate,
+                )
 
-                    favoritesScreens(
-                        onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-                        contentPadding = PaddingValues(),
-                    )
-                }
+                favoritesScreens(
+                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                    contentPadding = PaddingValues(),
+                )
             }
         }
     }
