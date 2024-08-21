@@ -21,6 +21,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenLazyColumnTestTag
+import io.github.droidkaigi.confsched.sessions.component.DescriptionMoreButtonTestTag
 import io.github.droidkaigi.confsched.sessions.component.SummaryCardTextTag
 import io.github.droidkaigi.confsched.sessions.component.TargetAudienceSectionTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
@@ -35,9 +36,11 @@ class TimetableItemDetailScreenRobot @Inject constructor(
     TimetableServerRobot by timetableServerRobot,
     FontScaleRobot by fontScaleRobot {
 
-    suspend fun setupScreenContent() {
+    suspend fun setupScreenContent(
+        sessionId: String = FakeSessionsApiClient.defaultSessionId,
+    ) {
         robotTestRule.setContentWithNavigation<TimetableItemDetailDestination>(
-            startDestination = { TimetableItemDetailDestination(FakeSessionsApiClient.defaultSessionId) },
+            startDestination = { TimetableItemDetailDestination(sessionId) },
         ) {
             KaigiTheme {
                 TimetableItemDetailScreen(
@@ -51,6 +54,9 @@ class TimetableItemDetailScreenRobot @Inject constructor(
         }
         waitUntilIdle()
     }
+
+    suspend fun setupScreenContentWithLongDescription() =
+        setupScreenContent(FakeSessionsApiClient.defaultSessionIdWithLongDescription)
 
     suspend fun clickBookmarkButton() {
         composeTestRule
@@ -78,6 +84,17 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .performScrollToIndex(index)
     }
 
+    fun scrollToMiddleOfScreen() {
+        composeTestRule
+            .onRoot()
+            .performTouchInput {
+                swipeUp(
+                    startY = visibleSize.height / 2F,
+                    endY = visibleSize.height / 7F,
+                )
+            }
+    }
+
     fun checkScreenCapture() {
         composeTestRule
             .onNode(isRoot())
@@ -101,7 +118,7 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onNode(hasTestTag(TimetableItemDetailHeadlineTestTag))
             .assertExists()
             .assertIsDisplayed()
-            .assertTextEquals(FakeSessionsApiClient.defaultSession.title.en!!)
+            .assertTextEquals(FakeSessionsApiClient.defaultSession.title.ja!!)
     }
 
     fun checkBookmarkedSession() {
@@ -143,6 +160,13 @@ class TimetableItemDetailScreenRobot @Inject constructor(
                     substring = true,
                 )
         }
+    }
+
+    fun checkDisplayingMoreButton() {
+        composeTestRule
+            .onNode(hasTestTag(DescriptionMoreButtonTestTag))
+            .assertExists()
+            .assertIsDisplayed()
     }
 
     companion object {

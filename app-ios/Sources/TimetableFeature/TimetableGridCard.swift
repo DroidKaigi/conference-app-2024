@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 import Theme
 import class shared.TimetableItem
+import CommonComponents
 
 public struct TimetableGridCard: View {
     let timetableItem: TimetableItem
@@ -25,8 +26,8 @@ public struct TimetableGridCard: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
                     if cellCount == 1 {
-                        timetableItem.room.type.shape
-                            .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                        RoomTypeShape(roomType: .init(enTitle: timetableItem.room.name.enTitle))
+                        .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
                     }
                     Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                         .textStyle(.labelMedium)

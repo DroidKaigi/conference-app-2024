@@ -103,8 +103,8 @@ struct TimetableListView: View {
             .onAppear {
                 store.send(.view(.onAppear))
             }.background(AssetColors.Surface.surface.swiftUIColor)
-            // bottom floating tabbar padding
-            Color.clear.padding(.bottom, 60)
+            
+            bottomTabBarPadding
         }
     }
 }
@@ -165,6 +165,9 @@ struct TimetableGridView: View {
                     }
                 }
             }
+            .padding(.trailing)
+            
+            bottomTabBarPadding
         }
     }
 }
@@ -198,6 +201,11 @@ struct TimeGroupMiniList: View {
         }.background(Color.clear)
             
     }
+}
+
+fileprivate var bottomTabBarPadding: some View {
+    // bottom floating tabbar padding
+    Color.clear.padding(.bottom, 60)
 }
 
 extension RoomType {

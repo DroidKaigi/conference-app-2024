@@ -30,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
@@ -47,9 +48,9 @@ import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
-import io.github.droidkaigi.confsched.eventmap.navigation.EventMapDestination
 import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
 import io.github.droidkaigi.confsched.favorites.favoritesScreens
 import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
@@ -76,6 +77,8 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.share.ShareNavigator
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
@@ -89,11 +92,13 @@ import kotlinx.collections.immutable.PersistentList
 fun KaigiApp(
     windowSize: WindowSizeClass,
     displayFeatures: PersistentList<DisplayFeature>,
+    fontFamily: FontFamily?,
     modifier: Modifier = Modifier,
 ) {
     val layoutDirection = LocalLayoutDirection.current
     KaigiTheme(
         colorContrast = colorContrast(),
+        fontFamily = fontFamily,
     ) {
         Surface(
             modifier = modifier.fillMaxSize(),
@@ -157,6 +162,10 @@ private fun KaigiNavHost(
                     onStaffItemClick = externalNavController::navigate,
                 )
 
+                settingsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                )
+
                 sponsorsScreens(
                     onNavigationIconClick = navController::popBackStack,
                     onSponsorsItemClick = externalNavController::navigate,
@@ -188,6 +197,7 @@ private fun NavGraphBuilder.mainScreen(
                 contentPadding = contentPadding,
             )
             eventMapScreens(
+                contentPadding = contentPadding,
                 onEventMapItemClick = externalNavController::navigate,
             )
             favoritesScreens(
@@ -226,6 +236,8 @@ private fun NavGraphBuilder.mainScreen(
                             )
                         }
 
+                        AboutItem.Settings -> navController.navigate(settingsScreenRoute)
+
                         AboutItem.Staff -> navController.navigate(staffScreenRoute)
                         AboutItem.X -> externalNavController.navigate(
                             url = "https://twitter.com/DroidKaigi",
@@ -246,9 +258,9 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     override val startDestination: String = timetableScreenRoute
 
     override fun routeToTab(route: String): MainScreenTab? {
-        if (route.contains("${EventMapDestination::class.simpleName}")) return EventMap
         return when (route) {
             timetableScreenRoute -> Timetable
+            eventMapScreenRoute -> EventMap
             profileCardScreenRoute -> ProfileCard
             aboutScreenRoute -> About
             favoritesScreenRoute -> Favorite
@@ -374,7 +386,7 @@ private class ExternalNavController(
         val specializedActivityIntent = Intent(Intent.ACTION_VIEW, uri)
             .addCategory(Intent.CATEGORY_BROWSABLE)
         val resolvedSpecializedList: MutableSet<String> =
-            pm.queryIntentActivities(browserActivityIntent, 0)
+            pm.queryIntentActivities(specializedActivityIntent, 0)
                 .map { it.activityInfo.packageName }
                 .toMutableSet()
 

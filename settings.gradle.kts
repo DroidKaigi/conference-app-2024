@@ -30,6 +30,7 @@ include(
     ":feature:about",
     ":feature:sponsors",
     ":feature:staff",
+    ":feature:settings",
     ":feature:favorites",
     ":core:designsystem",
     ":core:data",
