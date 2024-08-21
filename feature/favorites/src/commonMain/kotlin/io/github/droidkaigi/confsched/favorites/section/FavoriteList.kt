@@ -48,7 +48,8 @@ fun FavoriteList(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         contentPadding = PaddingValues(
             top = 16.dp,
-            bottom = contentPadding.calculateBottomPadding(),
+            bottom = contentPadding.calculateBottomPadding()
+                .plus(16.dp), // Adjusting Snackbar position
             start = 16.dp + contentPadding.calculateStartPadding(layoutDirection),
             end = 16.dp + contentPadding.calculateEndPadding(layoutDirection),
         ),

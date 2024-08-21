@@ -220,7 +220,8 @@ internal fun ProfileCardScreen(
             left = contentPadding.calculateLeftPadding(layoutDirection),
             top = contentPadding.calculateTopPadding(),
             right = contentPadding.calculateRightPadding(layoutDirection),
-            bottom = contentPadding.calculateBottomPadding(),
+            bottom = contentPadding.calculateBottomPadding()
+                .plus(16.dp), // Adjusting Snackbar position
         ),
         topBar = {
             when (uiState.uiType) {
