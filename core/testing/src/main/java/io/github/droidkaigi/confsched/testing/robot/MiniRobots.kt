@@ -147,6 +147,16 @@ class DefaultFontScaleRobot @Inject constructor() : FontScaleRobot {
     }
 }
 
+interface DeviceQualifierRobot {
+    fun setQualifier(qualifier: String)
+}
+
+class DefaultDeviceQualifierRobot @Inject constructor() : DeviceQualifierRobot {
+    override fun setQualifier(qualifier: String) {
+        RuntimeEnvironment.setQualifiers(qualifier)
+    }
+}
+
 interface TimetableServerRobot {
     enum class ServerStatus {
         Operational,

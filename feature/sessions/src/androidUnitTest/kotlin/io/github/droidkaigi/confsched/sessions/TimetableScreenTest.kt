@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions
 
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
@@ -171,6 +172,20 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                     itShould("show error message") {
                         captureScreenWithChecks(checks = {
                             checkErrorSnackbarDisplayed()
+                        })
+                    }
+                }
+                describe("when device is tablet") {
+                    run {
+                        setQualifier(RobolectricDeviceQualifiers.MediumTablet)
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupTimetableScreenContent()
+                    }
+                    itShould("show timetable items") {
+                        captureScreenWithChecks(checks = {
+                            checkTimetableListDisplayed()
+                            checkTimetableListItemsDisplayed()
+                            checkTimetableTabSelected(DroidKaigi2024Day.ConferenceDay1)
                         })
                     }
                 }

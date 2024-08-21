@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -80,6 +81,9 @@ fun TimetableList(
             end = 16.dp + contentPadding.calculateEndPadding(layoutDirection),
         ),
     ) {
+        item {
+            Text(text = isWideWidthScreen.toString())
+        }
         items(
             // TODO: Check whether the number of recompositions increases.
             items = uiState.timetableItemMap.toList(),
