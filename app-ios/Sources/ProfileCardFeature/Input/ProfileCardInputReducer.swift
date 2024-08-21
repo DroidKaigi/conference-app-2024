@@ -84,16 +84,18 @@ public struct ProfileCardInputReducer: Sendable {
                     let nickname = state.nickname
                     let link = state.link
                     let occupation = state.occupation
-                    let image = state.photo?.itemIdentifier ?? ""
+                    let photo = state.photo
                     let cardType = state.cardType ?? .none
 
                     return .run { send in
+                        let base64String = try await photo?.loadTransferable(type: Data.self)?.base64EncodedString() ?? ""
+
                         try await profileCardClient.save(
                             .init(
                                 nickname: nickname,
                                 link: link,
                                 occupation: occupation,
-                                image: image,
+                                image: base64String,
                                 cardType: cardType
                             )
                         )
