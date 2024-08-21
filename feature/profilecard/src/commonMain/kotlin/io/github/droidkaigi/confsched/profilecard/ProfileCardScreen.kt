@@ -722,7 +722,7 @@ internal fun CardScreen(
                         border = if (uiState.cardType == ProfileCardType.None) {
                             BorderStroke(
                                 0.5.dp,
-                                Color.Black
+                                Color.Black,
                             )
                         } else {
                             null
@@ -782,7 +782,7 @@ private fun ShareableProfileCard(
                     this@drawWithContent.drawContent()
                 }
                 drawLayer(graphicsLayer)
-            }
+            },
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -799,7 +799,7 @@ private fun ShareableProfileCard(
                         .offset(x = 70.dp, y = 15.dp)
                         .rotate(10f)
                         .size(150.dp, 190.dp)
-                        .shadow(8.dp)
+                        .shadow(8.dp),
                 )
             }
             frontImage?.let {
@@ -810,7 +810,7 @@ private fun ShareableProfileCard(
                         .offset(x = (-70).dp, y = (-15).dp)
                         .rotate(-10f)
                         .size(150.dp, 190.dp)
-                        .shadow(16.dp)
+                        .shadow(16.dp),
                 )
             }
         }
