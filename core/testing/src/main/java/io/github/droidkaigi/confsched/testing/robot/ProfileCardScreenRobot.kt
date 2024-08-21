@@ -31,7 +31,7 @@ class ProfileCardScreenRobot @Inject constructor(
         robotTestRule.setContent {
             KaigiTheme {
                 ProfileCardScreen(
-                    onClickShareProfileCard = { _, _, -> },
+                    onClickShareProfileCard = { _, _ -> },
                 )
             }
         }
