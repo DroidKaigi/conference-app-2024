@@ -14,8 +14,8 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -248,7 +248,7 @@ fun MainScreen(
                             onTabSelected(mainNestedNavController, it)
                         },
                         currentTab = currentTab ?: MainScreenTab.Timetable,
-                        modifier = Modifier.safeDrawingPadding(),
+                        modifier = Modifier.navigationBarsPadding(),
                     )
                 }
             },
