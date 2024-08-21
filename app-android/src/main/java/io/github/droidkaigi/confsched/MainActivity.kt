@@ -8,7 +8,6 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -30,7 +29,6 @@ import io.github.droidkaigi.confsched.model.Settings.Exists
 import io.github.droidkaigi.confsched.model.Settings.Loading
 import io.github.droidkaigi.confsched.model.SettingsRepository
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -80,12 +78,6 @@ class MainActivity : ComponentActivity() {
             val settings = settingRepository.settings()
 
             val windowSize = calculateWindowSizeClass()
-            val isWideWidthScreen = when (windowSize.widthSizeClass) {
-                WindowWidthSizeClass.Compact -> false
-                WindowWidthSizeClass.Medium -> true
-                WindowWidthSizeClass.Expanded -> true
-                else -> false
-            }
             val displayFeatures = calculateDisplayFeatures(this)
 
             val fontFamily = when (settings) {
@@ -101,16 +93,12 @@ class MainActivity : ComponentActivity() {
             CompositionLocalProvider(
                 LocalClock provides clockProvider.clock(),
             ) {
-                CompositionLocalProvider(
-                    LocalIsWideWidthScreen provides isWideWidthScreen,
-                ) {
-                    repositoryProvider.Provide {
-                        KaigiApp(
-                            windowSize = windowSize,
-                            fontFamily = fontFamily,
-                            displayFeatures = displayFeatures,
-                        )
-                    }
+                repositoryProvider.Provide {
+                    KaigiApp(
+                        windowSize = windowSize,
+                        fontFamily = fontFamily,
+                        displayFeatures = displayFeatures,
+                    )
                 }
             }
         }

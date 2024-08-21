@@ -13,6 +13,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -26,11 +29,11 @@ import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
 import io.github.droidkaigi.confsched.ui.icon
 import io.github.droidkaigi.confsched.ui.plus
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun FavoriteList(
     timetable: Timetable,
@@ -39,7 +42,13 @@ fun FavoriteList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val isWideWidthScreen = LocalIsWideWidthScreen.current
+    val windowSize = calculateWindowSizeClass()
+    val isWideWidthScreen = when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> false
+        WindowWidthSizeClass.Medium -> true
+        WindowWidthSizeClass.Expanded -> true
+        else -> false
+    }
     val columnNum by remember { derivedStateOf { if (isWideWidthScreen) 2 else 1 } }
 
     LazyColumn(

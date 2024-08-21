@@ -1,8 +1,5 @@
 package io.github.droidkaigi.confsched.testing.robot
 
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
@@ -35,7 +32,6 @@ import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkedIc
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
 import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
 import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -50,7 +46,6 @@ class TimetableScreenRobot @Inject constructor(
     DeviceQualifierRobot by deviceQualifierRobot {
     val clickedItems = mutableSetOf<TimetableItem>()
 
-    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     fun setupTimetableScreenContent(customTime: LocalDateTime? = null) {
         val fakeClock = if (customTime != null) {
             FakeClock(customTime.toInstant(TimeZone.of("UTC+9")))
@@ -59,23 +54,14 @@ class TimetableScreenRobot @Inject constructor(
         }
 
         robotTestRule.setContent {
-            val windowSize = calculateWindowSizeClass()
-            val isWideWidthScreen = when (windowSize.widthSizeClass) {
-                WindowWidthSizeClass.Compact -> false
-                WindowWidthSizeClass.Medium -> true
-                WindowWidthSizeClass.Expanded -> true
-                else -> false
-            }
             CompositionLocalProvider(LocalClock provides fakeClock) {
-                CompositionLocalProvider(LocalIsWideWidthScreen provides isWideWidthScreen) {
-                    KaigiTheme {
-                        TimetableScreen(
-                            onTimetableItemClick = {
-                                clickedItems.add(it)
-                            },
-                            onSearchClick = {},
-                        )
-                    }
+                KaigiTheme {
+                    TimetableScreen(
+                        onTimetableItemClick = {
+                            clickedItems.add(it)
+                        },
+                        onSearchClick = {},
+                    )
                 }
             }
         }
