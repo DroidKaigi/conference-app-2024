@@ -55,7 +55,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -798,8 +797,7 @@ private fun ShareableProfileCard(
                     modifier = Modifier
                         .offset(x = 70.dp, y = 15.dp)
                         .rotate(10f)
-                        .size(150.dp, 190.dp)
-                        .shadow(8.dp),
+                        .size(150.dp, 190.dp),
                 )
             }
             frontImage?.let {
@@ -809,8 +807,7 @@ private fun ShareableProfileCard(
                     modifier = Modifier
                         .offset(x = (-70).dp, y = (-15).dp)
                         .rotate(-10f)
-                        .size(150.dp, 190.dp)
-                        .shadow(16.dp),
+                        .size(150.dp, 190.dp),
                 )
             }
         }
