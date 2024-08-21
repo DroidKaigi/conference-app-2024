@@ -128,7 +128,7 @@ internal fun FlipCard(
     ) {
         val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
         val imageBitmap = remember {
-            QRCode.ofSquares()
+            QRCode.ofCircles()
                 .build(uiState.link)
                 .renderToBytes().toImageBitmap()
         }
