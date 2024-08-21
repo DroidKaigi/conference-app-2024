@@ -150,8 +150,6 @@ internal fun CapturableCard(
 ) {
     val graphicsLayerFront = rememberGraphicsLayer()
     val graphicsLayerBack = rememberGraphicsLayer()
-    var frontImage: ImageBitmap? by remember { mutableStateOf(null) }
-    var backImage: ImageBitmap? by remember { mutableStateOf(null) }
     val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
     val imageBitmap = remember {
         QRCode.ofCircles()
@@ -161,8 +159,6 @@ internal fun CapturableCard(
 
     LaunchedEffect(Unit) {
         delay(300)
-        frontImage = graphicsLayerFront.toImageBitmap()
-        backImage = graphicsLayerBack.toImageBitmap()
         onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
     }
 
