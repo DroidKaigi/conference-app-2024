@@ -1,16 +1,23 @@
 package io.github.droidkaigi.confsched.favorites
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
@@ -117,6 +124,17 @@ private fun FavoritesScreen(
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
+    val fraction = if (scrollBehavior.state.overlappedFraction > 0.01f) 1f else 0f
+
+    val filterBackgroundColor by animateColorAsState(
+        targetValue = lerp(
+            MaterialTheme.colorScheme.surface,
+            MaterialTheme.colorScheme.surfaceContainer,
+            FastOutLinearInEasing.transform(fraction),
+        ),
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+    )
+
     Scaffold(
         modifier = modifier
             .testTag(FavoritesScreenTestTag),
@@ -125,11 +143,15 @@ private fun FavoritesScreen(
             AnimatedTextTopAppBar(
                 title = stringResource(FavoritesRes.string.favorite),
                 scrollBehavior = scrollBehavior,
+                colors = TopAppBarDefaults.topAppBarColors().copy(
+                    scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                ),
             )
         },
     ) { padding ->
         FavoriteSheet(
             uiState = uiState.favoritesSheetUiState,
+            filterBackgroundColor = filterBackgroundColor,
             onTimetableItemClick = onTimetableItemClick,
             onAllFilterChipClick = onAllFilterChipClick,
             onDay1FilterChipClick = onDay1FilterChipClick,

@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -26,6 +27,7 @@ import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetailSummaryCard
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.ui.UiRes
+import io.github.droidkaigi.confsched.ui.canShowLargeVector
 import io.github.droidkaigi.confsched.ui.provideAboutHeaderTitlePainter
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -58,22 +60,30 @@ fun AboutDroidKaigiDetail(
     Column(
         modifier = modifier.testTag(AboutDetailTestTag),
     ) {
-        Box {
+        Box(
+            modifier = Modifier.fillMaxWidth(),
+            contentAlignment = Alignment.Center,
+        ) {
+            val imageModifier = if (canShowLargeVector()) {
+                Modifier
+                    .fillMaxWidth()
+                    .offset(y = aboutHeaderOffset.dp)
+            } else {
+                // Some API Levels are not optimized to handle VectorDrawable, so OOM occurs when large VectorDrawable is displayed.
+                // Therefore, depending on the API Level, whether or not to display an Image in its full width should be separated.
+                Modifier
+            }
             Image(
                 painter = painterResource(UiRes.drawable.about_header_year),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = aboutHeaderOffset.dp),
+                modifier = imageModifier,
             )
             Image(
-                painter = provideAboutHeaderTitlePainter(),
+                painter = provideAboutHeaderTitlePainter(canShowLargeVector()),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .offset(y = aboutHeaderOffset.dp),
+                modifier = imageModifier,
             )
         }
         Text(

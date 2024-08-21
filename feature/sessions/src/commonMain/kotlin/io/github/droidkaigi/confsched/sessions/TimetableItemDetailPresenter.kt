@@ -25,6 +25,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.
 import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.droidkaigi.confsched.ui.rememberNavigationArgument
+import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.flow.SharedFlow
 import org.jetbrains.compose.resources.stringResource
 
@@ -48,7 +49,7 @@ fun timetableItemDetailPresenter(
         sessionsRepository
             .timetableItemWithBookmark(timetableItemId),
     )
-    var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
+    var selectedDescriptionLanguage by rememberRetained { mutableStateOf<Lang?>(null) }
     var shouldGoToFavoriteList by remember { mutableStateOf(false) }
     val bookmarkedSuccessfullyString = stringResource(SessionsRes.string.bookmarked_successfully)
     val viewBookmarkListString = stringResource(SessionsRes.string.view_bookmark_list)
