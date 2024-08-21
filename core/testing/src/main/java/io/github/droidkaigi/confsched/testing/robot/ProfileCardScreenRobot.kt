@@ -30,7 +30,9 @@ class ProfileCardScreenRobot @Inject constructor(
     fun setupScreenContent() {
         robotTestRule.setContent {
             KaigiTheme {
-                ProfileCardScreen()
+                ProfileCardScreen(
+                    onClickShareProfileCard = { _, _ -> },
+                )
             }
         }
         waitUntilIdle()
