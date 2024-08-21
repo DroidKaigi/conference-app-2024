@@ -1,5 +1,9 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertAll
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextContains
@@ -28,14 +32,17 @@ import io.github.droidkaigi.confsched.testing.utils.hasTestTag
 import io.github.droidkaigi.confsched.ui.Inject
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTitleTextTestTag
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
 
 const val DemoSearchWord = "Demo"
 
 class SearchScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
+    private val deviceQualifierRobot: DefaultDeviceQualifierRobot,
 ) : ScreenRobot by screenRobot,
-    TimetableServerRobot by timetableServerRobot {
+    TimetableServerRobot by timetableServerRobot,
+    DeviceQualifierRobot by deviceQualifierRobot {
     enum class ConferenceDay(
         val day: Int,
         val dateText: String,
@@ -60,13 +67,23 @@ class SearchScreenRobot @Inject constructor(
         ENGLISH("EN"),
     }
 
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     fun setupSearchScreenContent() {
         robotTestRule.setContent {
-            KaigiTheme {
-                SearchScreen(
-                    onTimetableItemClick = {},
-                    onBackClick = {},
-                )
+            val windowSize = calculateWindowSizeClass()
+            val isWideWidthScreen = when (windowSize.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> false
+                WindowWidthSizeClass.Medium -> true
+                WindowWidthSizeClass.Expanded -> true
+                else -> false
+            }
+            CompositionLocalProvider(LocalIsWideWidthScreen provides isWideWidthScreen) {
+                KaigiTheme {
+                    SearchScreen(
+                        onTimetableItemClick = {},
+                        onBackClick = {},
+                    )
+                }
             }
         }
         waitUntilIdle()

@@ -1,5 +1,9 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
@@ -14,21 +18,34 @@ import io.github.droidkaigi.confsched.favorites.section.FavoritesScreenEmptyView
 import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkButtonTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
+import io.github.droidkaigi.confsched.ui.compositionlocal.LocalIsWideWidthScreen
 import javax.inject.Inject
 
 class FavoritesScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
     private val userDataStore: UserDataStore,
+    private val deviceQualifierRobot: DefaultDeviceQualifierRobot,
 ) : ScreenRobot by screenRobot,
-    TimetableServerRobot by timetableServerRobot {
+    TimetableServerRobot by timetableServerRobot,
+    DeviceQualifierRobot by deviceQualifierRobot {
 
+    @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     fun setupFavoritesScreenContent() {
         robotTestRule.setContent {
-            KaigiTheme {
-                FavoritesScreen(
-                    onTimetableItemClick = {},
-                )
+            val windowSize = calculateWindowSizeClass()
+            val isWideWidthScreen = when (windowSize.widthSizeClass) {
+                WindowWidthSizeClass.Compact -> false
+                WindowWidthSizeClass.Medium -> true
+                WindowWidthSizeClass.Expanded -> true
+                else -> false
+            }
+            CompositionLocalProvider(LocalIsWideWidthScreen provides isWideWidthScreen) {
+                KaigiTheme {
+                    FavoritesScreen(
+                        onTimetableItemClick = {},
+                    )
+                }
             }
         }
         waitUntilIdle()

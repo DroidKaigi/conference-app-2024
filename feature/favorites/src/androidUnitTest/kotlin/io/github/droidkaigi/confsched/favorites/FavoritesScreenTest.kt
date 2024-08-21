@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.favorites
 
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
@@ -74,6 +75,20 @@ class FavoritesScreenTest(
                                 checks = { checkErrorSnackbarDisplayed() },
                             )
                         }
+                    }
+                }
+
+                describe("when device is tablet") {
+                    doIt {
+                        setQualifier(RobolectricDeviceQualifiers.MediumTablet)
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupFavoriteSession()
+                        setupFavoritesScreenContent()
+                    }
+                    itShould("show timetable items") {
+                        captureScreenWithChecks(
+                            checks = { checkTimetableListItemsDisplayed() },
+                        )
                     }
                 }
             }
