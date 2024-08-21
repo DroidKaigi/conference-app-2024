@@ -346,6 +346,16 @@ private class ExternalNavController(
         )
     }
 
+    fun onShareProfileCardClick(
+        text: String,
+        filePath: String,
+    ) {
+        shareNavigator.shareTextWithImage(
+            text = text,
+            filePath = filePath,
+        )
+    }
+
     @Suppress("SwallowedException")
     @RequiresApi(Build.VERSION_CODES.R)
     private fun navigateToNativeAppApi30(
