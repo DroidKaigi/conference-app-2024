@@ -1,9 +1,11 @@
 package io.github.droidkaigi.confsched.sessions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
@@ -13,6 +15,7 @@ import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.TimetableCategory
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItemList
 import io.github.droidkaigi.confsched.model.TimetableSessionType
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.Bookmark
@@ -51,17 +54,19 @@ fun searchScreenPresenter(
     val selectedSessionTypes = rememberRetained { mutableStateListOf<TimetableSessionType>() }
     val selectedCategories = rememberRetained { mutableStateListOf<TimetableCategory>() }
     val selectedLanguages = rememberRetained { mutableStateListOf<Lang>() }
-
-    val filteredSessions by rememberUpdatedState(
-        sessions.filtered(
+    val filters by remember {
+        derivedStateOf {
             Filters(
                 searchWord = searchWord,
                 days = selectedDays,
                 categories = selectedCategories,
                 sessionTypes = selectedSessionTypes,
                 languages = selectedLanguages,
-            ),
-        ).timetableItems,
+            )
+        }
+    }
+    val filteredSessions by rememberUpdatedState(
+        if (filters.isEmpty()) TimetableItemList() else sessions.filtered(filters).timetableItems,
     )
 
     val searchFilterDayUiState: SearchFilterUiState<DroidKaigi2024Day> by rememberUpdatedState(
@@ -147,7 +152,7 @@ fun searchScreenPresenter(
     }
 
     when {
-        filteredSessions.isEmpty() -> {
+        filters.isNotEmpty() && filteredSessions.isEmpty() -> {
             SearchScreenUiState.Empty(
                 searchWord = searchWord,
                 searchFilterDayUiState = searchFilterDayUiState,

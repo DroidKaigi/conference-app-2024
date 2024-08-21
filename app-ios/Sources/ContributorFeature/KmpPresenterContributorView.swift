@@ -8,14 +8,15 @@ import Theme
 struct KmpPresenterContributorView: View {
     private let repositories: any Repositories
     private let events: SkieSwiftMutableSharedFlow<any ContributorsScreenEvent>
+    private let onContributorButtonTapped: (URL) -> Void
     @State private var currentState: ContributorsUiState? = nil
-    @State private var showingUrl: IdentifiableURL?
 
-    init() {
+    init(onContributorButtonTapped: @escaping (URL) -> Void) {
         self.repositories = Container.shared.get(type: (any Repositories).self)
 
         self.events = SkieKotlinSharedFlowFactory<any ContributorsScreenEvent>()
             .createSkieKotlinSharedFlow(replay: 0, extraBufferCapacity: 0)
+        self.onContributorButtonTapped = onContributorButtonTapped
     }
 
     var body: some View {
@@ -30,9 +31,10 @@ struct KmpPresenterContributorView: View {
                                 profileUrl: value.profileUrl.map { URL(string: $0)! } ,
                                 iconUrl: URL(string: value.iconUrl)!
                             )
-                            ContributorListItemView(contributor: contributor) { url in
-                                showingUrl = IdentifiableURL(url)
-                            }
+                            ContributorListItemView(
+                                contributor: contributor,
+                                onContributorButtonTapped: onContributorButtonTapped
+                            )
                         }
                     }
                 }
@@ -45,10 +47,6 @@ struct KmpPresenterContributorView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(AssetColors.Surface.surface.swiftUIColor)
-        .sheet(item: $showingUrl, content: { url in
-            SafariView(url: url.id)
-                .ignoresSafeArea()
-        })
     }
 
     @MainActor
