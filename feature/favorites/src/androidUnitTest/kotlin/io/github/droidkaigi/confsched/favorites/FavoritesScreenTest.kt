@@ -39,7 +39,7 @@ class FavoritesScreenTest(
         fun behaviors(): List<DescribedBehavior<FavoritesScreenRobot>> {
             return describeBehaviors<FavoritesScreenRobot>(name = "FavoritesScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Operational)
                         setupFavoriteSession()
                         setupFavoritesScreenContent()
@@ -50,7 +50,7 @@ class FavoritesScreenTest(
                         )
                     }
                     describe("click first session bookmark") {
-                        run {
+                        doIt {
                             clickFirstSessionBookmark()
                         }
                         itShould("display empty view") {
@@ -62,11 +62,11 @@ class FavoritesScreenTest(
                 }
 
                 describe("when server is down") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Error)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupFavoritesScreenContent()
                         }
                         itShould("show error message") {

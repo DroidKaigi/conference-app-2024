@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		830BFA7C2C74EBF40017A600 /* compose-resources in Resources */ = {isa = PBXBuildFile; fileRef = 830BFA7B2C74EBF40017A600 /* compose-resources */; };
 		8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */; };
 		8C7DACB72BCBCCB0002C298A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C7DACB02BCBCCB0002C298A /* Preview Assets.xcassets */; };
 		8C7DACB82BCBCCB0002C298A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DACB22BCBCCB0002C298A /* App.swift */; };
@@ -15,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		830BFA7B2C74EBF40017A600 /* compose-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "compose-resources"; path = "../../app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64/compose-resources"; sourceTree = "<group>"; };
 		8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8C772B152BCBCBCA00F2BADC /* DroidKaigi2024App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DroidKaigi2024App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C7DACB02BCBCCB0002C298A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -42,6 +44,7 @@
 		8C772B0C2BCBCBCA00F2BADC = {
 			isa = PBXGroup;
 			children = (
+				830BFA7B2C74EBF40017A600 /* compose-resources */,
 				C412816C2C149FB500B458D1 /* DroidKaigi2024App-Info.plist */,
 				8C7DACC22BCBD111002C298A /* App */,
 				8C7DACC12BCBD0F1002C298A /* app-ios */,
@@ -152,6 +155,7 @@
 				8C7DACB92BCBCCB0002C298A /* Assets.xcassets in Resources */,
 				8C7DACB72BCBCCB0002C298A /* Preview Assets.xcassets in Resources */,
 				8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */,
+				830BFA7C2C74EBF40017A600 /* compose-resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,7 +177,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${SRCROOT}/../..\n./gradlew assembleSharedXCFramework --no-configuration-cache\n";
+			shellScript = "cd ${SRCROOT}/../..\n./gradlew assembleSharedXCFramework --no-configuration-cache\n./gradlew iosSimulatorArm64AggregateResources --no-configuration-cache\n\nRESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64\"\n\nmkdir ${RESOURCE_DIR}/compose-resources\ncp -R ${RESOURCE_DIR}/composeResources ${RESOURCE_DIR}/compose-resources\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

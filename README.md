@@ -14,7 +14,7 @@ In addition to the standard features of a conference app, the DroidKaigi 2024 of
 - **Contributors**: Discover the contributors behind the app.
 ...and more!
 
-![image](https://github.com/user-attachments/assets/ffed2cb2-455b-4de8-a9d2-be9ca0842b99)
+![image](https://github.com/user-attachments/assets/d1aeccc1-1e8e-475f-9c51-72fb595c6563)
 
 ## Try the app
 

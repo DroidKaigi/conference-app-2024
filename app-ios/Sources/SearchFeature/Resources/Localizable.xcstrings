@@ -2,11 +2,30 @@
   "sourceLanguage" : "en",
   "strings" : {
     "「%@」と一致する検索結果がありません" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing matched your search criteria \"%@\""
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "「%@」と一致する検索結果がありません"
+          }
+        }
+      }
     },
     "9/11" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "9/11"
+          }
+        },
+        "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "9/11"
@@ -21,12 +40,24 @@
             "state" : "translated",
             "value" : "9/12"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "9/12"
+          }
         }
       }
     },
     "9/13" : {
       "localizations" : {
         "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "9/13"
+          }
+        },
+        "ja" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "9/13"
@@ -41,6 +72,12 @@
             "state" : "translated",
             "value" : "Category"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カテゴリ"
+          }
         }
       }
     },
@@ -50,6 +87,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Session type"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "セッション種別"
           }
         }
       }
@@ -61,6 +104,12 @@
             "state" : "translated",
             "value" : "Supported languages"
           }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "対応言語"
+          }
         }
       }
     },
@@ -70,6 +119,12 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Day"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開催日"
           }
         }
       }
