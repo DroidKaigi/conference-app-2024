@@ -23,6 +23,8 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.ui.component.TimetableTime
@@ -104,7 +106,12 @@ fun FavoriteListPreview() {
         Surface {
             FavoriteList(
                 timetableItemMap = persistentMapOf(
-                    TimeSlot("10:00", "11:00") to listOf(),
+                    TimeSlot(
+                        startTimeString = "10:00",
+                        endTimeString = "11:00",
+                    ) to listOf(
+                        Session.fake(),
+                    ),
                 ),
                 onBookmarkClick = {},
                 onTimetableItemClick = {},

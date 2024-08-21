@@ -26,6 +26,8 @@ import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
@@ -155,7 +157,9 @@ fun FavoritesScreenPreview() {
                             TimeSlot(
                                 startTimeString = "10:00",
                                 endTimeString = "11:00",
-                            ) to listOf(),
+                            ) to listOf(
+                                Session.fake(),
+                            ),
                         ),
                     ),
                     userMessageStateHolder = UserMessageStateHolderImpl(),

@@ -33,6 +33,8 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.fake
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
@@ -158,7 +160,14 @@ fun FavoriteSheetPreview() {
                 uiState = FavoritesSheetUiState.FavoriteListUiState(
                     allFilterSelected = true,
                     currentDayFilter = persistentListOf(ConferenceDay1, ConferenceDay2),
-                    timetableItemMap = persistentMapOf(TimeSlot("10:00", "11:00") to listOf()),
+                    timetableItemMap = persistentMapOf(
+                        TimeSlot(
+                            startTimeString = "10:00",
+                            endTimeString = "11:00",
+                        ) to listOf(
+                            Session.fake(),
+                        ),
+                    ),
                 ),
                 onAllFilterChipClick = {},
                 onDay1FilterChipClick = {},
