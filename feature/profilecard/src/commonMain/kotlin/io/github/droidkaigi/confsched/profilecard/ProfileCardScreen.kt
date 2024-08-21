@@ -100,7 +100,6 @@ import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
-import io.github.droidkaigi.confsched.ui.saveToDisk
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -121,7 +120,7 @@ const val ProfileCardEditButtonTestTag = "ProfileCardEditButtonTestTag"
 
 fun NavGraphBuilder.profileCardScreen(
     contentPadding: PaddingValues,
-    onClickShareProfileCard: (String, String) -> Unit,
+    onClickShareProfileCard: (String, ImageBitmap) -> Unit,
 ) {
     composable(profileCardScreenRoute) {
         ProfileCardScreen(
@@ -183,7 +182,7 @@ internal data class ProfileCardScreenState(
 
 @Composable
 fun ProfileCardScreen(
-    onClickShareProfileCard: (String, String) -> Unit,
+    onClickShareProfileCard: (String, ImageBitmap) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
@@ -199,7 +198,7 @@ fun ProfileCardScreen(
 @Composable
 internal fun ProfileCardScreen(
     contentPadding: PaddingValues,
-    onClickShareProfileCard: (String, String) -> Unit,
+    onClickShareProfileCard: (String, ImageBitmap) -> Unit,
     modifier: Modifier = Modifier,
     eventEmitter: EventEmitter<ProfileCardScreenEvent> = rememberEventEmitter(),
     uiState: ProfileCardScreenState = profileCardScreenPresenter(eventEmitter),
@@ -291,11 +290,10 @@ internal fun ProfileCardScreen(
                     onClickEdit = {
                         eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
-                    onClickShareProfileCard = { imageAbsolutePath ->
+                    onClickShareProfileCard = { imageBitmap ->
                         // TODO Make it better written.
                         val shareText = "${uiState.cardUiState.nickname}'s profile card"
-                        onClickShareProfileCard(shareText, imageAbsolutePath)
-                        eventEmitter.tryEmit(CardScreenEvent.Share)
+                        onClickShareProfileCard(shareText, imageBitmap)
                     },
                     contentPadding = padding,
                     isCreated = true,
@@ -661,7 +659,7 @@ fun Modifier.selectedBorder(
 internal fun CardScreen(
     uiState: ProfileCardUiState.Card,
     onClickEdit: () -> Unit,
-    onClickShareProfileCard: (String) -> Unit,
+    onClickShareProfileCard: (ImageBitmap) -> Unit,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
@@ -697,8 +695,7 @@ internal fun CardScreen(
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            val imageAbsolutePath = graphicsLayer.toImageBitmap().saveToDisk()
-                            onClickShareProfileCard(imageAbsolutePath)
+                            onClickShareProfileCard(graphicsLayer.toImageBitmap())
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),

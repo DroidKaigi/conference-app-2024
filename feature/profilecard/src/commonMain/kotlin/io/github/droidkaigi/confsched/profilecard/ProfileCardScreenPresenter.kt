@@ -19,6 +19,7 @@ import io.github.droidkaigi.confsched.model.localProfileCardRepository
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiType.Card
 import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 internal sealed interface ProfileCardScreenEvent
@@ -45,7 +46,6 @@ internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
 }
 
 internal sealed interface CardScreenEvent : ProfileCardScreenEvent {
-    data object Share : CardScreenEvent
     data object Edit : CardScreenEvent
 }
 
@@ -120,20 +120,18 @@ internal fun profileCardScreenPresenter(
             when (event) {
                 is CardScreenEvent.Edit -> {
                     isLoading = true
-                    userMessageStateHolder.showMessage("Edit")
+                    launch {
+                        userMessageStateHolder.showMessage("Edit")
+                    }
                     uiType = ProfileCardUiType.Edit
-                    isLoading = false
-                }
-
-                is CardScreenEvent.Share -> {
-                    isLoading = true
-                    userMessageStateHolder.showMessage("Share Profile Card")
                     isLoading = false
                 }
 
                 is EditScreenEvent.Create -> {
                     isLoading = true
-                    userMessageStateHolder.showMessage("Create Profile Card")
+                    launch {
+                        userMessageStateHolder.showMessage("Create Profile Card")
+                    }
                     repository.save(event.profileCard)
                     uiType = Card
                     isLoading = false
@@ -141,7 +139,9 @@ internal fun profileCardScreenPresenter(
 
                 is EditScreenEvent.SelectImage -> {
                     isLoading = true
-                    userMessageStateHolder.showMessage("Select Image")
+                    launch {
+                        userMessageStateHolder.showMessage("Select Image")
+                    }
                     isLoading = false
                 }
 
