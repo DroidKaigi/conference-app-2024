@@ -15,6 +15,7 @@ class App : Application(), ServerEnvironmentModule.HasServerEnvironment {
 
     override fun onCreate() {
         super.onCreate()
+        AppContext.setUp(applicationContext)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 }
