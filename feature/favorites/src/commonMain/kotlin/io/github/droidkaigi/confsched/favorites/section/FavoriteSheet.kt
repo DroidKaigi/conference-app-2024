@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
@@ -105,14 +107,14 @@ fun FavoriteSheet(
 
 @Composable
 private fun EmptyView(modifier: Modifier = Modifier) {
-    LazyColumn(
+    Column(
         modifier = modifier
             .testTag(FavoritesScreenEmptyViewTestTag)
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        item {
             Box(
                 modifier = Modifier
                     .background(
@@ -129,22 +131,15 @@ private fun EmptyView(modifier: Modifier = Modifier) {
                     tint = Color.Green,
                 )
             }
-        }
-        item {
             Spacer(Modifier.height(12.dp))
         }
-        item {
             Text(
                 text = stringResource(FavoritesRes.string.empty_description),
                 style = MaterialTheme.typography.titleLarge,
                 color = MaterialTheme.colorScheme.onSurface,
                 textAlign = TextAlign.Center,
             )
-        }
-        item {
             Spacer(Modifier.height(6.dp))
-        }
-        item {
             Text(
                 text = stringResource(FavoritesRes.string.empty_guide),
                 style = MaterialTheme.typography.bodyMedium,
@@ -152,8 +147,6 @@ private fun EmptyView(modifier: Modifier = Modifier) {
                 textAlign = TextAlign.Center,
             )
         }
-    }
-}
 
 @Composable
 @Preview
