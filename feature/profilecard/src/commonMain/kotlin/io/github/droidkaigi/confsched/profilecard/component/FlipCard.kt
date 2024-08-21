@@ -43,6 +43,7 @@ import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.card_back_blue
 import conference_app_2024.feature.profilecard.generated.resources.card_back_green
@@ -158,8 +159,11 @@ internal fun CapturableCard(
     }
 
     LaunchedEffect(Unit) {
-        delay(300)
-        onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
+        try {
+            onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
+        } catch (e: IllegalArgumentException) {
+            Logger.e("IllegalArgumentException is thrown from screenshot test: $e")
+        }
     }
 
     Box {
