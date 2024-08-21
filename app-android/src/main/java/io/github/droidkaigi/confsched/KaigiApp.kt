@@ -28,6 +28,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
@@ -80,6 +81,7 @@ import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.share.ShareNavigator
+import io.github.droidkaigi.confsched.share.saveToDisk
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
@@ -134,11 +136,20 @@ private fun KaigiNavHost(
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
         ) {
+            val context = LocalContext.current
             NavHostWithSharedAxisX(
                 navController = navController,
                 startDestination = mainScreenRoute,
             ) {
-                mainScreen(windowSize, navController, externalNavController)
+                mainScreen(
+                    windowSize,
+                    navController,
+                    externalNavController,
+                    onClickShareProfileCard = { shareText, imageBitmap ->
+                        val imageAbsolutePath = imageBitmap.saveToDisk(context)
+                        externalNavController.onShareProfileCardClick(shareText, imageAbsolutePath)
+                    },
+                )
                 sessionScreens(
                     onNavigationIconClick = navController::popBackStack,
                     onLinkClick = externalNavController::navigate,
@@ -185,6 +196,7 @@ private fun NavGraphBuilder.mainScreen(
     navController: NavHostController,
     @Suppress("UnusedParameter")
     externalNavController: ExternalNavController,
+    onClickShareProfileCard: (String, ImageBitmap) -> Unit,
 ) {
     mainScreen(
         windowSize = windowSize,
@@ -249,7 +261,10 @@ private fun NavGraphBuilder.mainScreen(
                     }
                 },
             )
-            profileCardScreen(contentPadding)
+            profileCardScreen(
+                contentPadding = contentPadding,
+                onClickShareProfileCard = onClickShareProfileCard,
+            )
         },
     )
 }
@@ -344,6 +359,16 @@ private class ExternalNavController(
             "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}\n" +
                 "${timetableItem.title.currentLangTitle}\n" +
                 timetableItem.url,
+        )
+    }
+
+    fun onShareProfileCardClick(
+        text: String,
+        filePath: String,
+    ) {
+        shareNavigator.shareTextWithImage(
+            text = text,
+            filePath = filePath,
         )
     }
 
