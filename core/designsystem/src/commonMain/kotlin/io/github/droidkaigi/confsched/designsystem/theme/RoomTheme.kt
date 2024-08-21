@@ -37,6 +37,12 @@ sealed interface RoomTheme {
         override val dimColor = Color(0xFF121E25)
     }
 
+    data object Lunch : RoomTheme {
+        override val primaryColor = Color(0xFFC1C8C9)
+        override val containerColor = Color(0xFFC1C8C9).copy(alpha = 0.1f)
+        override val dimColor = Color(0xFF121E25)
+    }
+
     val primaryColor: Color
     val containerColor: Color
     val dimColor: Color
@@ -49,6 +55,7 @@ sealed interface RoomTheme {
                 "giraffe" -> Giraffe
                 "flamingo" -> Flamingo
                 "jellyfish" -> Jellyfish
+                "lunch" -> Lunch
                 else -> null
             }
         }
