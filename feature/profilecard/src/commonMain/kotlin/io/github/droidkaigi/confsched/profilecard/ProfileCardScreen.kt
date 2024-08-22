@@ -685,6 +685,7 @@ internal fun CardScreen(
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
+            // Not for display, for sharing
             ShareableProfileCard(
                 uiState = uiState,
                 graphicsLayer = graphicsLayer,
