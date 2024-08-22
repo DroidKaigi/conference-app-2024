@@ -33,6 +33,22 @@
         }
       }
     },
+    "Cancel" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "キャンセル"
+          }
+        }
+      }
+    },
     "CodeOfConduct" : {
       "localizations" : {
         "en" : {
@@ -287,6 +303,70 @@
           "stringUnit" : {
             "state" : "needs_review",
             "value" : "スタッフ"
+          }
+        }
+      }
+    },
+    "Switch" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "切り替える"
+          }
+        }
+      }
+    },
+    "SwitchComposeModeAlertMessage" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch UI from SwiftUI to Compose Multiplatform. Are you sure you want to do?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "UIをSwiftUIからCompose Multiplatformへ切り替えます。よろしいですか？"
+          }
+        }
+      }
+    },
+    "SwitchComposeModeAlertTitle" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch UI"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
+            "value" : "UIを切り替える"
+          }
+        }
+      }
+    },
+    "SwitchComposeMultiplatform" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Switch Compose Multiplatform"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compose Multiplatformへ切り替える"
           }
         }
       }

@@ -40,7 +40,6 @@ public struct TimetableView: View {
             }
             Spacer()
         }
-        .toast($store.toast)
         .background(AssetColors.Surface.surface.swiftUIColor)
         .frame(maxWidth: .infinity)
         .toolbar{
