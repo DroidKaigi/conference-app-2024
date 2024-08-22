@@ -22,8 +22,15 @@ import io.github.droidkaigi.confsched.data.staff.DefaultStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.DefaultStaffRepository
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
 import io.github.droidkaigi.confsched.data.user.UserDataStore
+import io.github.droidkaigi.confsched.model.AboutRepository
+import io.github.droidkaigi.confsched.model.BuildConfigProvider
+import io.github.droidkaigi.confsched.data.about.DefaultAboutRepository
+import io.github.droidkaigi.confsched.data.profilecard.DefaultProfileCardDataStore
+import io.github.droidkaigi.confsched.data.profilecard.DefaultProfileCardRepository
+import io.github.droidkaigi.confsched.data.profilecard.ProfileCardDataStore
 import io.github.droidkaigi.confsched.model.ContributorsRepository
 import io.github.droidkaigi.confsched.model.EventMapRepository
+import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.SponsorsRepository
 import io.github.droidkaigi.confsched.model.StaffRepository
@@ -115,6 +122,31 @@ public val dataModule: Module = module {
         )
         SessionCacheDataStore(dataStore, get())
     }
+    single<ProfileCardDataStore> {
+        val dataStore = createDataStore(
+            coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
+            producePath = {
+                val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
+                    directory = NSDocumentDirectory,
+                    inDomain = NSUserDomainMask,
+                    appropriateForURL = null,
+                    create = false,
+                    error = null,
+                )
+                requireNotNull(documentDirectory).path + "/confsched2024.profilecard.preferences_pb"
+            },
+        )
+        DefaultProfileCardDataStore(dataStore)
+    }
+
+    single<BuildConfigProvider> {
+        object : BuildConfigProvider {
+            override val versionName: String
+                get() = "0.1.0"
+            override val debugBuild: Boolean
+                get() = false
+        }
+    }
 
     singleOf(::DefaultAuthApi) bind AuthApi::class
     singleOf(::DefaultSessionsApiClient) bind SessionsApiClient::class
@@ -129,6 +161,8 @@ public val dataModule: Module = module {
     singleOf(::DefaultStaffRepository) bind StaffRepository::class
     singleOf(::DefaultSponsorsRepository) bind SponsorsRepository::class
     singleOf(::DefaultEventMapRepository) bind EventMapRepository::class
+    singleOf(::DefaultAboutRepository) bind AboutRepository::class
+    singleOf(::DefaultProfileCardRepository) bind ProfileCardRepository::class
     single<Repositories> {
         DefaultRepositories(
             mapOf(
@@ -137,6 +171,8 @@ public val dataModule: Module = module {
                 StaffRepository::class to get<StaffRepository>(),
                 SponsorsRepository::class to get<SponsorsRepository>(),
                 EventMapRepository::class to get<EventMapRepository>(),
+                AboutRepository::class to get<AboutRepository>(),
+                ProfileCardRepository::class to get<ProfileCardRepository>(),
             ),
         )
     }
