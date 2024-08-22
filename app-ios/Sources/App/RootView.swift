@@ -11,6 +11,7 @@ import TimetableDetailFeature
 import TimetableFeature
 import EventMapFeature
 import Theme
+import KMPClient
 
 public enum DroidKaigiAppTab: Hashable {
     case timetable
@@ -30,25 +31,31 @@ public struct RootView: View {
     }
 
     public var body: some View {
-        Group {
-            switch selection {
-            case .timetable:
-                timetableTab
-            case .map:
-                eventMapTab
-            case .favorite:
-                favoriteTab
-            case .about:
-                aboutTab
-            case .idCard:
-                idCardTab
+        switch store.viewType {
+        case .swiftUI:
+            Group {
+                switch selection {
+                case .timetable:
+                    timetableTab
+                case .map:
+                    eventMapTab
+                case .favorite:
+                    favoriteTab
+                case .about:
+                    aboutTab
+                case .idCard:
+                    idCardTab
+                }
             }
+            .navigationBarTitleStyle(
+                color: AssetColors.Surface.onSurface.swiftUIColor,
+                titleTextStyle: .titleMedium,
+                largeTitleTextStyle: .headlineSmall
+            )
+        case .compose:
+            KmpAppComposeViewControllerWrapper()
+                .ignoresSafeArea(.all)
         }
-        .navigationBarTitleStyle(
-            color: AssetColors.Surface.onSurface.swiftUIColor,
-            titleTextStyle: .titleMedium,
-            largeTitleTextStyle: .headlineSmall
-        )
     }
 
     @MainActor

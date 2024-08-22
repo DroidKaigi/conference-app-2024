@@ -76,6 +76,20 @@ class FavoritesScreenTest(
                         }
                     }
                 }
+
+                describe("when device is tablet") {
+                    doIt {
+                        setupTabletDevice()
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupFavoriteSession()
+                        setupFavoritesScreenContent()
+                    }
+                    itShould("show timetable items") {
+                        captureScreenWithChecks(
+                            checks = { checkTimetableListItemsDisplayed() },
+                        )
+                    }
+                }
             }
         }
     }
