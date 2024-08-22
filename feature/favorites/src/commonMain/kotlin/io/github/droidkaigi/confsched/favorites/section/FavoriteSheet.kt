@@ -18,7 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
@@ -92,7 +91,6 @@ fun FavoriteSheet(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-
     val scrollFraction = scrollBehavior?.state?.overlappedFraction ?: 0f
     val favoriteFiltersBackgroundColor = if (scrollFraction > 0f) {
         TopAppBarDefaults.topAppBarColors().scrolledContainerColor
