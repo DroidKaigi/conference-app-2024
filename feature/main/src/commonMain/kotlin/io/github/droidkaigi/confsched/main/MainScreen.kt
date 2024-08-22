@@ -27,6 +27,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -221,8 +222,14 @@ fun MainScreen(
     modifier: Modifier = Modifier,
 ) {
     val mainNestedNavController = rememberNavController()
-    val navBackStackEntry by mainNestedNavController.currentBackStackEntryAsState()
-    val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
+
+    val navBackStackEntryRoute =
+        mainNestedNavController.currentBackStackEntryAsState().value?.destination?.route
+    val lastEntryRoute by rememberSaveable(navBackStackEntryRoute) {
+        mutableStateOf(navBackStackEntryRoute)
+    }
+    val currentTab = lastEntryRoute?.routeToTab() ?: MainScreenTab.Timetable
+
     val hazeState = remember { HazeState() }
 
     val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
@@ -234,7 +241,7 @@ fun MainScreen(
                 onTabSelected = {
                     onTabSelected(mainNestedNavController, it)
                 },
-                currentTab = currentTab ?: MainScreenTab.Timetable,
+                currentTab = currentTab,
                 modifier = Modifier.padding(scaffoldPadding.value),
             )
         }
@@ -247,7 +254,7 @@ fun MainScreen(
                         onTabSelected = {
                             onTabSelected(mainNestedNavController, it)
                         },
-                        currentTab = currentTab ?: MainScreenTab.Timetable,
+                        currentTab = currentTab,
                         modifier = Modifier.navigationBarsPadding(),
                     )
                 }
