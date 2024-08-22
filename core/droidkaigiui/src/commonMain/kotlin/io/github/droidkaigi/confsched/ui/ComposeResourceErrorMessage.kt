@@ -1,7 +1,7 @@
 package io.github.droidkaigi.confsched.ui
 
 import androidx.compose.runtime.Composable
-import conference_app_2024.core.ui.generated.resources.connection_failed
+import conference_app_2024.core.droidkaigiui.generated.resources.connection_failed
 import io.github.droidkaigi.confsched.model.AppError
 import io.github.droidkaigi.confsched.model.AppError.InternetConnectionException
 import org.jetbrains.compose.resources.stringResource
@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
 internal fun composeResourceErrorMessages(): List<ComposeResourceErrorMessage> = listOf(
     ComposeResourceErrorMessage(
         InternetConnectionException::class,
-        stringResource(UiRes.string.connection_failed),
+        stringResource(DroidKaigiUiRes.string.connection_failed),
     ),
 )
 

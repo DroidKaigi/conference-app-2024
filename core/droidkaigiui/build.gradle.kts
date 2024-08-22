@@ -7,7 +7,9 @@ plugins {
     id("droidkaigi.primitive.detekt")
 }
 
-android.namespace = "io.github.droidkaigi.confsched.core.ui"
+// https://github.com/DroidKaigi/conference-app-2024/issues/485#issuecomment-2304251937
+// (KT-66568)[https://youtrack.jetbrains.com/issue/KT-66568/w-KLIB-resolver-The-same-uniquename...-found-in-more-than-one-library]
+android.namespace = "io.github.droidkaigi.confsched.core.droidkaigiui"
 
 kotlin {
     sourceSets {

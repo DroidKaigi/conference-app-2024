@@ -12,7 +12,7 @@ kotlin {
                 implementation(compose.materialIconsExtended)
                 implementation(projects.core.model)
                 implementation(projects.core.designsystem)
-                implementation(projects.core.ui)
+                implementation(projects.core.droidkaigiui)
                 implementation(libs.haze)
             }
         }

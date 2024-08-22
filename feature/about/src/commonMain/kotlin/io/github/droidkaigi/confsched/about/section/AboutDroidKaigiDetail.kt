@@ -21,12 +21,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import conference_app_2024.core.ui.generated.resources.about_header_year
+import conference_app_2024.core.droidkaigiui.generated.resources.about_header_year
 import conference_app_2024.feature.about.generated.resources.description
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetailSummaryCard
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.ui.UiRes
+import io.github.droidkaigi.confsched.ui.DroidKaigiUiRes
 import io.github.droidkaigi.confsched.ui.canShowLargeVector
 import io.github.droidkaigi.confsched.ui.provideAboutHeaderTitlePainter
 import org.jetbrains.compose.resources.painterResource
@@ -74,7 +74,7 @@ fun AboutDroidKaigiDetail(
                 Modifier
             }
             Image(
-                painter = painterResource(UiRes.drawable.about_header_year),
+                painter = painterResource(DroidKaigiUiRes.drawable.about_header_year),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = imageModifier,

@@ -11,8 +11,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.painter.Painter
-import conference_app_2024.core.ui.generated.resources.about_header_title
-import io.github.droidkaigi.confsched.core.ui.R
+import conference_app_2024.core.droidkaigiui.generated.resources.about_header_title
+import io.github.droidkaigi.confsched.core.droidkaigiui.R
 import org.jetbrains.compose.resources.painterResource
 
 @OptIn(ExperimentalAnimationGraphicsApi::class)
@@ -32,6 +32,6 @@ actual fun provideAboutHeaderTitlePainter(enableAnimation: Boolean): Painter {
 
         painter
     } else {
-        painterResource(UiRes.drawable.about_header_title)
+        painterResource(DroidKaigiUiRes.drawable.about_header_title)
     }
 }

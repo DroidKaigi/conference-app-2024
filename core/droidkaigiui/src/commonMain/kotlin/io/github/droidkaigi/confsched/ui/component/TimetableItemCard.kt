@@ -43,14 +43,14 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import conference_app_2024.core.ui.generated.resources.bookmarked
-import conference_app_2024.core.ui.generated.resources.image
-import conference_app_2024.core.ui.generated.resources.not_bookmarked
+import conference_app_2024.core.droidkaigiui.generated.resources.bookmarked
+import conference_app_2024.core.droidkaigiui.generated.resources.image
+import conference_app_2024.core.droidkaigiui.generated.resources.not_bookmarked
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
-import io.github.droidkaigi.confsched.ui.UiRes
+import io.github.droidkaigi.confsched.ui.DroidKaigiUiRes
 import io.github.droidkaigi.confsched.ui.animation.LocalFavoriteAnimationScope
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
@@ -136,7 +136,7 @@ fun TimetableItemCard(
                                         BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                                         CircleShape,
                                     ),
-                                contentDescription = stringResource(UiRes.string.image),
+                                contentDescription = stringResource(DroidKaigiUiRes.string.image),
                             )
                             Text(
                                 text = speaker.name,
@@ -160,7 +160,7 @@ fun TimetableItemCard(
                         ) {
                             Icon(
                                 Icons.Filled.Info,
-                                contentDescription = stringResource(UiRes.string.image),
+                                contentDescription = stringResource(DroidKaigiUiRes.string.image),
                                 tint = MaterialTheme.colorScheme.error,
                             )
                             Text(
@@ -208,7 +208,7 @@ private fun FavoriteButton(
         if (isBookmarked) {
             Icon(
                 Filled.Favorite,
-                contentDescription = stringResource(UiRes.string.bookmarked),
+                contentDescription = stringResource(DroidKaigiUiRes.string.bookmarked),
                 tint = MaterialTheme.colorScheme.primaryFixed,
                 modifier = Modifier
                     .testTag(TimetableItemCardBookmarkedIconTestTag),
@@ -216,7 +216,7 @@ private fun FavoriteButton(
         } else {
             Icon(
                 Outlined.FavoriteBorder,
-                contentDescription = stringResource(UiRes.string.not_bookmarked),
+                contentDescription = stringResource(DroidKaigiUiRes.string.not_bookmarked),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
