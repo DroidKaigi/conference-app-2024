@@ -747,7 +747,7 @@ internal fun CardScreen(
                     }
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "編集する",
+                        text = "Edit",
                         style = MaterialTheme.typography.labelLarge,
                         color = Color.Black,
                         modifier = Modifier
