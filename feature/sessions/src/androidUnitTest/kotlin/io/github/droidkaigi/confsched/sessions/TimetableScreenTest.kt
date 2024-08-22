@@ -184,7 +184,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                 ).forEach { case ->
                     val formattedDateTime = case.dateTime.format(LocalDateTime.Format { byUnicodePattern("yyyy-MM-dd HH-mm") })
                     describe("when the current datetime is $formattedDateTime") {
-                        run {
+                        doIt {
                             setupTimetableServer(ServerStatus.Operational)
                             setupTimetableScreenContent(case.dateTime)
                             clickTimetableUiTypeChangeButton()
