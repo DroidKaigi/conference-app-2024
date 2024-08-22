@@ -1,5 +1,5 @@
 {
-  "originHash" : "fc296cbf51ba156d83c222f42852e5fa16b6bcd01ef05b8c01c34d58995a19e3",
+  "originHash" : "10f753e5f1a93093f807e1552339d8d8d460876d08e87ea924cceb1f79d262fb",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -98,6 +98,15 @@
       "state" : {
         "revision" : "a0bc79961d7be727d258d33d5a6b2f1023270ba1",
         "version" : "1.22.5"
+      }
+    },
+    {
+      "identity" : "licenselist",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/cybozu/LicenseList.git",
+      "state" : {
+        "revision" : "0828b88c1a6130d56ede2cc6c41ec50068a7ebd6",
+        "version" : "0.7.0"
       }
     },
     {
@@ -215,6 +224,15 @@
       "state" : {
         "revision" : "303e5c5c36d6a558407d364878df131c3546fad8",
         "version" : "510.0.2"
+      }
+    },
+    {
+      "identity" : "swiftgenplugin",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SwiftGen/SwiftGenPlugin",
+      "state" : {
+        "revision" : "879b85a470cacd70c19e22eb7e11a3aed66f4068",
+        "version" : "6.6.2"
       }
     },
     {
