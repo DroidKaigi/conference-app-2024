@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.sessions
 
-import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
@@ -151,7 +150,7 @@ class SearchScreenTest(
 
                 describe("when device is tablet") {
                     doIt {
-                        setupTestDevice(RobolectricDeviceQualifiers.MediumTablet)
+                        setupTabletDevice()
                         setupTimetableServer(ServerStatus.Operational)
                         setupSearchScreenContent()
                     }

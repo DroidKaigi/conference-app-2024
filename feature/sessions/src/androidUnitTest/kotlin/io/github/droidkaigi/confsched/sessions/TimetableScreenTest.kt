@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.sessions
 
-import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
@@ -171,19 +170,38 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                 }
                 listOf(
                     TimeLineTestSpec(
-                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 11, hour = 10, minute = 0),
+                        dateTime = LocalDateTime(
+                            year = 2024,
+                            monthNumber = 9,
+                            dayOfMonth = 11,
+                            hour = 10,
+                            minute = 0,
+                        ),
                         shouldShowTimeLine = false,
                     ),
                     TimeLineTestSpec(
-                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 12, hour = 10, minute = 30),
+                        dateTime = LocalDateTime(
+                            year = 2024,
+                            monthNumber = 9,
+                            dayOfMonth = 12,
+                            hour = 10,
+                            minute = 30,
+                        ),
                         shouldShowTimeLine = true,
                     ),
                     TimeLineTestSpec(
-                        dateTime = LocalDateTime(year = 2024, monthNumber = 9, dayOfMonth = 13, hour = 11, minute = 0),
+                        dateTime = LocalDateTime(
+                            year = 2024,
+                            monthNumber = 9,
+                            dayOfMonth = 13,
+                            hour = 11,
+                            minute = 0,
+                        ),
                         shouldShowTimeLine = true,
                     ),
                 ).forEach { case ->
-                    val formattedDateTime = case.dateTime.format(LocalDateTime.Format { byUnicodePattern("yyyy-MM-dd HH-mm") })
+                    val formattedDateTime =
+                        case.dateTime.format(LocalDateTime.Format { byUnicodePattern("yyyy-MM-dd HH-mm") })
                     describe("when the current datetime is $formattedDateTime") {
                         run {
                             setupTimetableServer(ServerStatus.Operational)
@@ -191,7 +209,8 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             clickTimetableUiTypeChangeButton()
                         }
 
-                        val formattedTime = case.dateTime.time.format(LocalTime.Format { byUnicodePattern("HH-mm") })
+                        val formattedTime =
+                            case.dateTime.time.format(LocalTime.Format { byUnicodePattern("HH-mm") })
                         val description = if (case.shouldShowTimeLine) {
                             "show an indicator of the current time at $formattedTime"
                         } else {
@@ -216,8 +235,8 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                     }
                 }
                 describe("when device is tablet") {
-                    run {
-                        setupTestDevice(RobolectricDeviceQualifiers.MediumTablet)
+                    doIt {
+                        setupTabletDevice()
                         setupTimetableServer(ServerStatus.Operational)
                         setupTimetableScreenContent()
                     }

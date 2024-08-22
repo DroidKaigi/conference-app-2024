@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.github.takahirom.roborazzi.roboOutputName
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
@@ -155,12 +156,12 @@ class DefaultFontScaleRobot @Inject constructor() : FontScaleRobot {
 }
 
 interface DeviceSetupRobot {
-    fun setupTestDevice(qualifier: String)
+    fun setupTabletDevice()
 }
 
 class DefaultDeviceSetupRobot @Inject constructor() : DeviceSetupRobot {
-    override fun setupTestDevice(qualifier: String) {
-        RuntimeEnvironment.setQualifiers(qualifier)
+    override fun setupTabletDevice() {
+        RuntimeEnvironment.setQualifiers(RobolectricDeviceQualifiers.MediumTablet)
     }
 }
 

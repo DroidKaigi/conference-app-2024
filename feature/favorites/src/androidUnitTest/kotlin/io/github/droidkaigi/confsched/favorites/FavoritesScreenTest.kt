@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.favorites
 
-import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
@@ -80,7 +79,7 @@ class FavoritesScreenTest(
 
                 describe("when device is tablet") {
                     doIt {
-                        setupTestDevice(RobolectricDeviceQualifiers.MediumTablet)
+                        setupTabletDevice()
                         setupTimetableServer(ServerStatus.Operational)
                         setupFavoriteSession()
                         setupFavoritesScreenContent()
