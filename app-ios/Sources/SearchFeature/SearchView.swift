@@ -8,7 +8,7 @@ import Theme
 
 public struct SearchView: View {
     @Bindable private var store: StoreOf<SearchReducer>
-    @State private var isfocused: Bool = false
+    @State private var isFocused: Bool = false
 
     public init(store: StoreOf<SearchReducer>) {
         self.store = store
@@ -57,9 +57,8 @@ public struct SearchView: View {
         .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
         .onAppear {
             store.send(.view(.onAppear))
-            DispatchQueue.main.async {
-                isfocused = true
-            }
+            isfocused = true
+
         }
     }
 
