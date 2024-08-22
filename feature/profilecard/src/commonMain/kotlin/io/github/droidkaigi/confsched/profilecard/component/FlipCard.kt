@@ -129,7 +129,7 @@ internal fun FlipCard(
     ) {
         val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
         val imageBitmap = remember {
-            QRCode.ofCircles()
+            QRCode.ofSquares()
                 .build(uiState.link)
                 .renderToBytes().toImageBitmap()
         }
@@ -153,7 +153,7 @@ internal fun CapturableCard(
     val graphicsLayerBack = rememberGraphicsLayer()
     val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
     val imageBitmap = remember {
-        QRCode.ofCircles()
+        QRCode.ofSquares()
             .build(uiState.link)
             .renderToBytes().toImageBitmap()
     }
@@ -351,7 +351,7 @@ fun FlipCardBackPreview() {
         ) {
             FlipCardBack(
                 uiState = uiState,
-                bitmap = QRCode.ofCircles().build(uiState.link).renderToBytes().toImageBitmap(),
+                bitmap = QRCode.ofSquares().build(uiState.link).renderToBytes().toImageBitmap(),
             )
         }
     }
