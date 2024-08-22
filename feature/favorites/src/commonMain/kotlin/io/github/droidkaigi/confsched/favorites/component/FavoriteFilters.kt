@@ -46,19 +46,16 @@ fun FavoriteFilters(
             selected = allFilterSelected,
             onClick = onAllFilterChipClick,
             text = stringResource(FavoritesRes.string.filter_all),
-            modifier = Modifier,
         )
         FavoriteFilterChip(
             selected = day1FilterSelected,
             onClick = onDay1FilterChipClick,
             text = stringResource(FavoritesRes.string.filter_day1),
-            modifier = Modifier,
         )
         FavoriteFilterChip(
             selected = day2FilterSelected,
             onClick = onDay2FilterChipClick,
             text = stringResource(FavoritesRes.string.filter_day2),
-            modifier = Modifier,
         )
     }
 }
