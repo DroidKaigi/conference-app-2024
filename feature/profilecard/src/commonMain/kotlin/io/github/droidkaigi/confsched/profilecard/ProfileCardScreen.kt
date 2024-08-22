@@ -739,7 +739,7 @@ internal fun CardScreen(
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "共有する",
+                            text = "Share",
                             modifier = Modifier.padding(8.dp),
                             style = MaterialTheme.typography.labelLarge,
                             color = Color.Black,
