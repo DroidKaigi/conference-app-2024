@@ -60,6 +60,9 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
+import io.github.droidkaigi.confsched.ui.DeviceOrientationScope
+import io.github.droidkaigi.confsched.ui.ProvideDeviceOrientation
+import io.github.droidkaigi.confsched.ui.WithDeviceOrientation
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
@@ -128,17 +131,20 @@ internal fun FlipCard(
                 .build(uiState.link)
                 .renderToBytes().toImageBitmap()
         }
-        if (isBack) { // Back
-            FlipCardBack(uiState, imageBitmap)
-        } else { // Front
-            FlipCardFront(
-                uiState = uiState,
-                profileImage = profileImage,
-            )
+        WithDeviceOrientation {
+            if (isBack) { // Back
+                FlipCardBack(uiState, imageBitmap)
+            } else { // Front
+                FlipCardFront(
+                    uiState = uiState,
+                    profileImage = profileImage,
+                )
+            }
         }
     }
 }
 
+context(DeviceOrientationScope)
 @Composable
 private fun FlipCardFront(
     uiState: Card,
@@ -222,8 +228,7 @@ private fun FlipCardBack(
             .fillMaxSize()
             .graphicsLayer {
                 rotationY = 180f
-            }
-            .hologramaticEffect(),
+            },
         contentAlignment = Alignment.Center,
     ) {
         Image(
@@ -251,10 +256,12 @@ fun FlipCardFrontPreview() {
     KaigiTheme {
         Surface(modifier = Modifier.size(300.dp, 380.dp)) {
             ProvideProfileCardTheme(uiState.cardType.name) {
-                FlipCardFront(
-                    uiState = uiState,
-                    profileImage = profileImage,
-                )
+                ProvideDeviceOrientation {
+                    FlipCardFront(
+                        uiState = uiState,
+                        profileImage = profileImage,
+                    )
+                }
             }
         }
     }

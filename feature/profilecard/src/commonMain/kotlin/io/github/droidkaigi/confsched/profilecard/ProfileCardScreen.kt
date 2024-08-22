@@ -406,7 +406,8 @@ internal fun EditScreen(
 
             CardTypePiker(
                 selectedCardType = selectedCardType,
-                onClickImage = { selectedCardType = it })
+                onClickImage = { selectedCardType = it },
+            )
 
             Button(
                 onClick = {
@@ -706,10 +707,12 @@ internal fun CardScreen(
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    border = if (uiState.cardType == ProfileCardType.None) BorderStroke(
-                        0.5.dp,
-                        Color.Black
-                    ) else {
+                    border = if (uiState.cardType == ProfileCardType.None) {
+                        BorderStroke(
+                            0.5.dp,
+                            Color.Black,
+                        )
+                    } else {
                         null
                     },
                     modifier = Modifier
