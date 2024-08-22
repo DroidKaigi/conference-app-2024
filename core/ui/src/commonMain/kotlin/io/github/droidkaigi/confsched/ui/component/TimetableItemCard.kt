@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
@@ -119,7 +120,7 @@ fun TimetableItemCard(
 
                     timetableItem.speakers.forEach { speaker ->
                         Row(
-                            modifier = Modifier.padding(top = 4.dp),
+                            modifier = Modifier.height(36.dp).padding(top = 4.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
@@ -152,7 +153,9 @@ fun TimetableItemCard(
                 if (timetableItem is Session) {
                     timetableItem.message?.let {
                         Row(
-                            modifier = Modifier.padding(top = 8.dp),
+                            modifier = Modifier
+                                .padding(top = 8.dp)
+                                .height(IntrinsicSize.Min),
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
                             Icon(
