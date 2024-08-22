@@ -217,7 +217,7 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                 }
                 describe("when device is tablet") {
                     run {
-                        setQualifier(RobolectricDeviceQualifiers.MediumTablet)
+                        setupTestDevice(RobolectricDeviceQualifiers.MediumTablet)
                         setupTimetableServer(ServerStatus.Operational)
                         setupTimetableScreenContent()
                     }

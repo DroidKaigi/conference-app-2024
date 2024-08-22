@@ -151,7 +151,7 @@ class SearchScreenTest(
 
                 describe("when device is tablet") {
                     doIt {
-                        setQualifier(RobolectricDeviceQualifiers.MediumTablet)
+                        setupTestDevice(RobolectricDeviceQualifiers.MediumTablet)
                         setupTimetableServer(ServerStatus.Operational)
                         setupSearchScreenContent()
                     }

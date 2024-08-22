@@ -20,10 +20,10 @@ class FavoritesScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
     private val userDataStore: UserDataStore,
-    private val deviceQualifierRobot: DefaultDeviceQualifierRobot,
+    private val deviceSetupRobot: DefaultDeviceSetupRobot,
 ) : ScreenRobot by screenRobot,
     TimetableServerRobot by timetableServerRobot,
-    DeviceQualifierRobot by deviceQualifierRobot {
+    DeviceSetupRobot by deviceSetupRobot {
 
     fun setupFavoritesScreenContent() {
         robotTestRule.setContent {

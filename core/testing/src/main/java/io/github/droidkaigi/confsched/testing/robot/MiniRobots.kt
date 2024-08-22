@@ -154,12 +154,12 @@ class DefaultFontScaleRobot @Inject constructor() : FontScaleRobot {
     }
 }
 
-interface DeviceQualifierRobot {
-    fun setQualifier(qualifier: String)
+interface DeviceSetupRobot {
+    fun setupTestDevice(qualifier: String)
 }
 
-class DefaultDeviceQualifierRobot @Inject constructor() : DeviceQualifierRobot {
-    override fun setQualifier(qualifier: String) {
+class DefaultDeviceSetupRobot @Inject constructor() : DeviceSetupRobot {
+    override fun setupTestDevice(qualifier: String) {
         RuntimeEnvironment.setQualifiers(qualifier)
     }
 }
