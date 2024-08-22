@@ -12,7 +12,7 @@ struct ProfileCardInputCardType: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("テーマ選択", bundle: .module)
+            Text("Select Theme", bundle: .module)
                 .textStyle(.titleMedium)
                 .foregroundStyle(.white)
 

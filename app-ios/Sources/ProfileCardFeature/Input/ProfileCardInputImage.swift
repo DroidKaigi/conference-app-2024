@@ -46,7 +46,7 @@ struct ProfileCardInputImage: View {
                             .renderingMode(.template)
                             .frame(width: 18, height: 18)
 
-                        Text("画像を追加", bundle: .module)
+                        Text("Add Image", bundle: .module)
                             .textStyle(.labelLarge)
                     }
                     .padding(EdgeInsets(top: 11, leading: 16, bottom: 11, trailing: 24))
@@ -79,7 +79,7 @@ struct ProfileCardInputImage: View {
 
 #Preview {
     ProfileCardInputTextField(
-        title: "ニックネーム",
+        title: "Nickname",
         text: .init(get: { "" }, set: {_ in})
     )
 }

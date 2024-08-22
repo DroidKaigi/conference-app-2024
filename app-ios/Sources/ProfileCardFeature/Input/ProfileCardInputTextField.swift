@@ -29,7 +29,7 @@ struct ProfileCardInputTextField: View {
 
 #Preview {
     ProfileCardInputTextField(
-        title: "ニックネーム",
+        title: "Nickname",
         text: .init(get: { "" }, set: {_ in})
     )
 }

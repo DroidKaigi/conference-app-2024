@@ -13,12 +13,12 @@ public struct ProfileCardInputView: View {
     public var body: some View {
         ScrollView {
             VStack(spacing: 32) {
-                Text("会場やSNSで自分を紹介できるプロフィールカードを作ってみましょう！", bundle: .module)
+                Text("Let's create a profile card to introduce yourself at events or on social media!", bundle: .module)
                     .textStyle(.bodyLarge)
                     .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
 
                 ProfileCardInputTextField(
-                    title: String(localized: "ニックネーム", bundle: .module),
+                    title: String(localized: "Nickname", bundle: .module),
                     text: .init(
                         get: {
                             store.nickname
@@ -29,7 +29,7 @@ public struct ProfileCardInputView: View {
                 )
 
                 ProfileCardInputTextField(
-                    title: String(localized: "職種", bundle: .module),
+                    title: String(localized: "Occupation", bundle: .module),
                     text: .init(
                         get: {
                             store.occupation
@@ -40,7 +40,7 @@ public struct ProfileCardInputView: View {
                 )
 
                 ProfileCardInputTextField(
-                    title: String(localized: "リンク（ex.X、Instagram...）", bundle: .module),
+                    title: String(localized: "Link（ex.X、Instagram...）", bundle: .module),
                     placeholder: "https://",
                     text: .init(
                         get: {
@@ -60,7 +60,7 @@ public struct ProfileCardInputView: View {
                             store.send(.view(.photoChanged($0)))
                         }
                     ), 
-                    title: String(localized: "画像", bundle: .module)
+                    title: String(localized: "Image", bundle: .module)
                 )
 
                 ProfileCardInputCardType(
@@ -77,7 +77,7 @@ public struct ProfileCardInputView: View {
                 Button {
                     store.send(.view(.createCardTapped))
                 } label: {
-                    Text("カードを作成する", bundle: .module)
+                    Text("Create Card", bundle: .module)
                         .textStyle(.labelLarge)
                         .frame(maxWidth: .infinity, minHeight: 56, alignment: .center)
                         .foregroundStyle(AssetColors.Primary.onPrimary.swiftUIColor)
@@ -91,7 +91,7 @@ public struct ProfileCardInputView: View {
         .padding(.bottom, 60)
         .background(AssetColors.Surface.surface.swiftUIColor)
         .navigationBarTitleDisplayMode(.large)
-        .navigationTitle(String(localized: "プロフィールカード", bundle: .module))
+        .navigationTitle(String(localized: "Profile Card", bundle: .module))
         .onAppear { 
             store.send(.view(.onAppear))
         }

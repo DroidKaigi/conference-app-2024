@@ -4,32 +4,95 @@
     "" : {
 
     },
-    "カードを作成する" : {
-
+    "Add Image" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画像を追加"
+          }
+        }
+      }
     },
-    "テーマ選択" : {
-
+    "Create Card" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "カードを作成する"
+          }
+        }
+      }
     },
-    "ニックネーム" : {
-
+    "Image" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "画像"
+          }
+        }
+      }
     },
-    "プロフィールカード" : {
-
+    "Let's create a profile card to introduce yourself at events or on social media!" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "会場やSNSで自分を紹介できるプロフィールカードを作ってみましょう！"
+          }
+        }
+      }
     },
-    "リンク（ex.X、Instagram...）" : {
-
+    "Link（ex.X、Instagram...）" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "リンク（ex.X、Instagram...）"
+          }
+        }
+      }
     },
-    "会場やSNSで自分を紹介できるプロフィールカードを作ってみましょう！" : {
-
+    "Nickname" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ニックネーム"
+          }
+        }
+      }
     },
-    "画像" : {
-
+    "Occupation" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "職種"
+          }
+        }
+      }
     },
-    "画像を追加" : {
-
+    "Profile Card" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "プロフィールカード"
+          }
+        }
+      }
     },
-    "職種" : {
-
+    "Select Theme" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テーマ選択"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"
