@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.data
 
 import de.jensklingenberg.ktorfit.Ktorfit
+import io.github.droidkaigi.confsched.data.about.DefaultAboutRepository
 import io.github.droidkaigi.confsched.data.auth.AuthApi
 import io.github.droidkaigi.confsched.data.auth.DefaultAuthApi
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
@@ -11,6 +12,9 @@ import io.github.droidkaigi.confsched.data.core.defaultKtorConfig
 import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.DefaultEventMapRepository
 import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
+import io.github.droidkaigi.confsched.data.profilecard.DefaultProfileCardDataStore
+import io.github.droidkaigi.confsched.data.profilecard.DefaultProfileCardRepository
+import io.github.droidkaigi.confsched.data.profilecard.ProfileCardDataStore
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsRepository
 import io.github.droidkaigi.confsched.data.sessions.SessionCacheDataStore
@@ -24,10 +28,6 @@ import io.github.droidkaigi.confsched.data.staff.StaffApiClient
 import io.github.droidkaigi.confsched.data.user.UserDataStore
 import io.github.droidkaigi.confsched.model.AboutRepository
 import io.github.droidkaigi.confsched.model.BuildConfigProvider
-import io.github.droidkaigi.confsched.data.about.DefaultAboutRepository
-import io.github.droidkaigi.confsched.data.profilecard.DefaultProfileCardDataStore
-import io.github.droidkaigi.confsched.data.profilecard.DefaultProfileCardRepository
-import io.github.droidkaigi.confsched.data.profilecard.ProfileCardDataStore
 import io.github.droidkaigi.confsched.model.ContributorsRepository
 import io.github.droidkaigi.confsched.model.EventMapRepository
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
