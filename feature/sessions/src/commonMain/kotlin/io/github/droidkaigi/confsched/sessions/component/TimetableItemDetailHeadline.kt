@@ -16,19 +16,24 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.sessions.generated.resources.english
+import conference_app_2024.feature.sessions.generated.resources.japanese
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
+import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val TimetableItemDetailHeadlineTestTag = "TimetableItemDetailHeadlineTestTag"
@@ -100,7 +105,19 @@ fun TimetableItemDetailHeadline(
 
 @Composable
 fun TimetableItemDetailLanguageSwitcher(modifier: Modifier = Modifier) {
-    // TODO
+    Row(modifier = modifier) {
+        Text(
+            text = stringResource(SessionsRes.string.japanese),
+            style = MaterialTheme.typography.labelMedium,
+        )
+        VerticalDivider(
+            color = MaterialTheme.colorScheme.outlineVariant,
+        )
+        Text(
+            text = stringResource(SessionsRes.string.english),
+            style = MaterialTheme.typography.labelMedium,
+        )
+    }
 }
 
 @Composable
