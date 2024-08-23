@@ -52,7 +52,7 @@ fun TimetableItemDetailHeadline(
     onLanguageSwitch: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val currentLang = currentLang ?: Lang.ENGLISH
+    val currentLang = currentLang ?: timetableItem.language.toLang()
     Column(
         modifier = modifier
             // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
