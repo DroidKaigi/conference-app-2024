@@ -51,14 +51,13 @@ public struct SearchView: View {
                     store.send(.view(.searchWordChanged($0)))
                 }
             ),
-            isPresented: $isfocused,
+            isPresented: $isFocused,
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
         .onAppear {
             store.send(.view(.onAppear))
-            isfocused = true
-
+            isFocused = true
         }
     }
 
