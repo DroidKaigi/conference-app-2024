@@ -30,6 +30,7 @@ import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
+import io.github.droidkaigi.confsched.ui.component.AnimatedMediumTopAppBar
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.stringResource
@@ -111,7 +112,7 @@ fun StaffScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (!isTopAppBarHidden) {
-                AnimatedLargeTopAppBar(
+                AnimatedMediumTopAppBar(
                     title = stringResource(StaffRes.string.staff_title),
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
