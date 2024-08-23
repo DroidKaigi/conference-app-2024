@@ -116,7 +116,10 @@ fun TimetableItemDetailLanguageSwitcher(
     onLanguageSwitch: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(modifier = modifier) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         TextButton(onClick = { onLanguageSwitch(Lang.JAPANESE) }) {
             Text(
                 text = stringResource(SessionsRes.string.japanese),
@@ -129,6 +132,7 @@ fun TimetableItemDetailLanguageSwitcher(
             )
         }
         VerticalDivider(
+            modifier = Modifier.height(11.dp),
             color = MaterialTheme.colorScheme.outlineVariant,
         )
         TextButton(onClick = { onLanguageSwitch(Lang.ENGLISH) }) {
