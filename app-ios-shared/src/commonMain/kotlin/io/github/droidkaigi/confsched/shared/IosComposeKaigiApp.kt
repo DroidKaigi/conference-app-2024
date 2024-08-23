@@ -55,6 +55,8 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
+import platform.Foundation.NSURL
+import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -103,7 +105,7 @@ private fun KaigiNavHost(
         )
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
-            onLinkClick = {}, //externalNavController::navigate,
+            onLinkClick = ExternalNavController()::navigate,
             onCalendarRegistrationClick = {},//externalNavController::navigateToCalendarRegistration,
             // For debug
 //            onShareClick = externalNavController::onShareClick,
@@ -115,7 +117,7 @@ private fun KaigiNavHost(
 
         contributorsScreens(
             onNavigationIconClick = navController::popBackStack,
-            onContributorItemClick = {}//externalNavController::navigate,
+            onContributorItemClick = ExternalNavController()::navigate,
         )
 
         searchScreens(
@@ -125,7 +127,7 @@ private fun KaigiNavHost(
 
         staffScreens(
             onNavigationIconClick = navController::popBackStack,
-            onStaffItemClick = {}//externalNavController::navigate,
+            onStaffItemClick = ExternalNavController()::navigate,
         )
 
         settingsScreens(
@@ -134,7 +136,7 @@ private fun KaigiNavHost(
 
         sponsorsScreens(
             onNavigationIconClick = navController::popBackStack,
-            onSponsorsItemClick = {} //externalNavController::navigate,
+            onSponsorsItemClick = ExternalNavController()::navigate,
         )
 
         favoritesScreens(
@@ -162,7 +164,7 @@ private fun NavGraphBuilder.mainScreen(
             )
             eventMapScreens(
                 contentPadding = contentPadding,
-                onEventMapItemClick = {}//externalNavController::navigate,
+                onEventMapItemClick = ExternalNavController()::navigate,
             )
             favoritesScreens(
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
@@ -177,43 +179,47 @@ private fun NavGraphBuilder.mainScreen(
                         "https://portal.droidkaigi.jp/en"
                     }
                     when (aboutItem) {
-                        AboutItem.Map -> {}
-//                            externalNavController.navigate(
-//                            url = "https://goo.gl/maps/vv9sE19JvRjYKtSP9",
-//                        )
+                        AboutItem.Map -> {
+                            ExternalNavController().navigate(
+                                url = "https://goo.gl/maps/vv9sE19JvRjYKtSP9"
+                            )
+                        }
 
                         AboutItem.Sponsors -> navController.navigate(sponsorsScreenRoute)
                         AboutItem.CodeOfConduct -> {
-//                            externalNavController.navigate(
-//                                url = "$portalBaseUrl/about/code-of-conduct",
-//                            )
+                            ExternalNavController().navigate(
+                                url = "$portalBaseUrl/about/code-of-conduct",
+                            )
                         }
 
                         AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
                         AboutItem.License -> {} //externalNavController.navigateToLicenseScreen()
-                        AboutItem.Medium -> {}
-//                            externalNavController.navigate(
-//                            url = "https://medium.com/droidkaigi",
-//                        )
+                        AboutItem.Medium -> {
+                            ExternalNavController().navigate(
+                                url = "https://medium.com/droidkaigi",
+                            )
+                        }
 
                         AboutItem.PrivacyPolicy -> {
-//                            externalNavController.navigate(
-//                                url = "$portalBaseUrl/about/privacy",
-//                            )
+                            ExternalNavController().navigate(
+                                url = "$portalBaseUrl/about/privacy",
+                            )
                         }
 
                         AboutItem.Settings -> {} //navController.navigate(settingsScreenRoute)
 
                         AboutItem.Staff -> navController.navigate(staffScreenRoute)
-                        AboutItem.X -> {}
-//                            externalNavController.navigate(
-//                            url = "https://twitter.com/DroidKaigi",
-//                        )
+                        AboutItem.X -> {
+                            ExternalNavController().navigate(
+                                url = "https://twitter.com/DroidKaigi",
+                            )
+                        }
 
-                        AboutItem.YouTube -> {}
-//                            externalNavController.navigate(
-//                            url = "https://www.youtube.com/c/DroidKaigi",
-//                        )
+                        AboutItem.YouTube -> {
+                            ExternalNavController().navigate(
+                                url = "https://www.youtube.com/c/DroidKaigi",
+                            )
+                        }
                     }
                 },
             )
@@ -246,5 +252,18 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
             ProfileCard -> mainNestedNavController.navigateProfileCardScreen()
             Favorite -> mainNestedNavController.navigateFavoritesScreen()
         }
+    }
+}
+
+private class ExternalNavController {
+    fun navigate(url: String) {
+        navigateToSafari(url = url)
+    }
+
+    private fun navigateToSafari(
+        url: String,
+    ) {
+        val nsUrl = NSURL(string = url)
+        UIApplication.sharedApplication.openURL(nsUrl)
     }
 }
