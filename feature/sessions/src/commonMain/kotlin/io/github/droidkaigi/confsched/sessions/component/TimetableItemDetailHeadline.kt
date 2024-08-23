@@ -99,6 +99,11 @@ fun TimetableItemDetailHeadline(
 }
 
 @Composable
+fun TimetableItemDetailLanguageSwitcher(modifier: Modifier = Modifier) {
+    // TODO
+}
+
+@Composable
 @Preview
 fun TimetableItemDetailHeadlinePreview() {
     KaigiTheme {
