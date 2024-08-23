@@ -66,7 +66,7 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
-import io.github.droidkaigi.confsched.ui.WithDeviceOrientation
+import io.github.droidkaigi.confsched.droidkaigiui.WithDeviceOrientation
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource

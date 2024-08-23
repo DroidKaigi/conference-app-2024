@@ -102,10 +102,10 @@ import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.profilecard.component.CapturableCard
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
-import io.github.droidkaigi.confsched.ui.component.resetScroll
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.component.resetScroll
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource

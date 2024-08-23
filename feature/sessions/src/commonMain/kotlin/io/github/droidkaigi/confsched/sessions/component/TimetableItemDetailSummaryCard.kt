@@ -48,7 +48,7 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.model.getDefaultLocale
 import io.github.droidkaigi.confsched.model.nameAndFloor
 import io.github.droidkaigi.confsched.sessions.SessionsRes
-import io.github.droidkaigi.confsched.ui.dashedRoundRect
+import io.github.droidkaigi.confsched.droidkaigiui.dashedRoundRect
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

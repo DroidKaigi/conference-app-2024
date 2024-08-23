@@ -27,11 +27,11 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridItemTestTa
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
-import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkButtonTestTag
-import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkedIconTestTag
-import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
-import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardBookmarkButtonTestTag
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardBookmarkedIconTestTag
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardTestTag
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.FakeClock
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant

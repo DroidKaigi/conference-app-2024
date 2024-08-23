@@ -23,8 +23,8 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreenEvent.UiTypeChange
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.Flow

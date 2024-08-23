@@ -15,7 +15,7 @@ import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
 import io.github.droidkaigi.confsched.testing.utils.hasTestTag
-import io.github.droidkaigi.confsched.ui.Inject
+import io.github.droidkaigi.confsched.droidkaigiui.Inject
 
 class ContributorsScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,

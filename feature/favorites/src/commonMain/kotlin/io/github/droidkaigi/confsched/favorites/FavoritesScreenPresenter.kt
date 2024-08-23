@@ -21,7 +21,7 @@ import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.localSessionsRepository
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap

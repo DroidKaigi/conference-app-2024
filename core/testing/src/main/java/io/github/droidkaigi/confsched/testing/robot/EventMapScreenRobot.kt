@@ -11,7 +11,7 @@ import io.github.droidkaigi.confsched.eventmap.EventMapLazyColumnTestTag
 import io.github.droidkaigi.confsched.eventmap.EventMapScreen
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTabImageTestTag
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTabTestTagPrefix
-import io.github.droidkaigi.confsched.ui.Inject
+import io.github.droidkaigi.confsched.droidkaigiui.Inject
 
 class EventMapScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,

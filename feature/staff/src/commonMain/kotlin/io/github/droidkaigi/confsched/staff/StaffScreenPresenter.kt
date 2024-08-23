@@ -6,7 +6,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.model.StaffRepository
 import io.github.droidkaigi.confsched.model.localStaffRepository
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
 sealed interface StaffScreenEvent

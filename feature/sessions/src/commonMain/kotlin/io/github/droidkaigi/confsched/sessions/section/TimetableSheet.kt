@@ -28,7 +28,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.GridTimetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.ListTimetable
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 
 const val TimetableTabTestTag = "TimetableTab"
 

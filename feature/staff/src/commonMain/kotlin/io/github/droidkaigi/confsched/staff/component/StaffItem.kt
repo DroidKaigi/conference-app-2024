@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.fakes
-import io.github.droidkaigi.confsched.ui.previewOverride
-import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
+import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
+import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 private val staffIconShape = CircleShape

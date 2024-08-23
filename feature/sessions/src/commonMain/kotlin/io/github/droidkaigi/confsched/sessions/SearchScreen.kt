@@ -33,10 +33,10 @@ import io.github.droidkaigi.confsched.sessions.component.SearchFilters
 import io.github.droidkaigi.confsched.sessions.component.SearchTextFieldAppBar
 import io.github.droidkaigi.confsched.sessions.section.SearchList
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val searchScreenRoute = "search"

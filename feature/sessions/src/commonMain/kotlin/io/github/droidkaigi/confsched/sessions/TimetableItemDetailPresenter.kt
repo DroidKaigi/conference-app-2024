@@ -22,9 +22,9 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.Favorite
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDescriptionLanguage
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
-import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
-import io.github.droidkaigi.confsched.ui.rememberNavigationArgument
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageResult.ActionPerformed
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
+import io.github.droidkaigi.confsched.droidkaigiui.rememberNavigationArgument
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.coroutines.flow.SharedFlow
 import org.jetbrains.compose.resources.stringResource

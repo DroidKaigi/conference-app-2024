@@ -17,7 +17,7 @@ import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiType.Card
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
