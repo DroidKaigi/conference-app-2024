@@ -43,7 +43,7 @@ fun TimetableDayTab(
     val selectedTabIndex = selectedDay.tabIndex()
     val selectedColor = Color(0xFF4AFF82)
     Column(
-        modifier = modifier.padding(top = 16.dp, start = 16.dp),
+        modifier = modifier.padding(top = 16.dp, start = 16.dp, end = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
     ) {
