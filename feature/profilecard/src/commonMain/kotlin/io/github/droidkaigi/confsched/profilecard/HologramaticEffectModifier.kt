@@ -61,15 +61,14 @@ private data class HologramaticEffectNode(
         val pitchRatio = pitchDegree / 90f
         val rollRatio = rollDegree / 180f
 
-        val alpha = 0.4f * (80f - rollDegree.absoluteValue) / 80f
-
         drawInFrontOf {
             translate(
-//                left = -(size.width * 0.5f) * rollRatio,
+                left = -(size.width * 0.5f) * rollRatio / 2f,
                 top = (size.height * 0.5f) * pitchRatio,
             ) {
                 if (rollDegree in -80f..80f) {
                     DRAW_PATH_STATES.forEach { state ->
+                        val alpha = state.alpha * (80f - rollDegree.absoluteValue) / 80f
                         val offset = state.offset.toPx()
 
                         drawRect(
@@ -85,9 +84,9 @@ private data class HologramaticEffectNode(
                                 colorStops = arrayOf(
                                     0.0f to Transparent,
                                     0.45f to Transparent,
-                                    0.5f - state.width / 2f to state.color,
+                                    0.5f - state.width / 2f to state.startColor,
                                     0.5f to Color.White,
-                                    0.5f + state.width / 2f to state.color,
+                                    0.5f + state.width / 2f to state.endColor,
                                     0.55f to Transparent,
                                     1.0f to Transparent,
                                 ),
@@ -96,8 +95,8 @@ private data class HologramaticEffectNode(
                                     offset.coerceAtMost(0f),
                                 ),
                                 end = Offset(
-                                    size.width * 1.5f + offset.coerceAtLeast(0f),
-                                    size.width * 1.5f + offset.coerceAtLeast(0f),
+                                    size.width * 2.0f + offset.coerceAtLeast(0f),
+                                    size.width * 2.0f + offset.coerceAtLeast(0f),
                                 ),
                             ),
                             alpha = alpha,
@@ -115,24 +114,40 @@ private data class HologramaticEffectNode(
 
     private data class DrawPathState(
         val offset: Dp,
-        val color: Color,
+        val startColor: Color,
+        val endColor: Color,
         @FloatRange(from = 0.0, to = 0.1)
         val width: Float,
-    )
+        @FloatRange(from = 0.0, to = 1.0)
+        val alpha: Float,
+    ) {
+        constructor(
+            offset: Dp,
+            color: Color,
+            width: Float,
+            alpha: Float,
+        ) : this(
+            offset = offset,
+            startColor = color,
+            endColor = color,
+            width = width,
+            alpha = alpha
+        )
+    }
 
     companion object {
 
         private const val PI = 3.14159265359
 
         private val Transparent = Color(0, 0, 0, 0)
-        private val LightPink = Color(255, 163, 182)
+        private val LightGreen = Color(194, 255, 182)
         private val LightPurple = Color(221, 169, 255)
         private val LightBlue = Color(162, 209, 255)
 
         private val DRAW_PATH_STATES = listOf(
-            DrawPathState(((-400).dp), LightPink, 0.04f),
-            DrawPathState((-200).dp, LightBlue, 0.02f),
-            DrawPathState(170.dp, LightPurple, 0.01f),
+            DrawPathState(((-450).dp), LightGreen, LightBlue, 0.03f, 0.3f),
+            DrawPathState((-200).dp, LightBlue, 0.02f, 0.4f),
+            DrawPathState(50.dp, LightPurple, 0.01f, 0.5f),
         )
     }
 }
