@@ -30,7 +30,6 @@ import io.github.droidkaigi.confsched.sponsors.SponsorsListUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsRes
 import io.github.droidkaigi.confsched.sponsors.component.SponsorHeader
 import io.github.droidkaigi.confsched.sponsors.component.SponsorItem
-import io.github.droidkaigi.confsched.ui.plus
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

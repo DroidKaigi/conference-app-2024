@@ -14,8 +14,8 @@ import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.github.droidkaigi.confsched.ui.DeviceOrientationScope
-import io.github.droidkaigi.confsched.ui.Orientation
+import io.github.droidkaigi.confsched.droidkaigiui.DeviceOrientationScope
+import io.github.droidkaigi.confsched.droidkaigiui.Orientation
 import kotlin.math.absoluteValue
 
 fun Modifier.hologramaticEffect(deviceOrientationScope: DeviceOrientationScope) = this then HologramaticEffectElement(

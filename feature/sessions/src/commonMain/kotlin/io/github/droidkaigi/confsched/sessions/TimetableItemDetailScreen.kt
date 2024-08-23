@@ -46,11 +46,11 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHead
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"

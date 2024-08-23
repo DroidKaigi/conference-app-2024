@@ -28,7 +28,7 @@ import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.AboutItem.Medium
 import io.github.droidkaigi.confsched.model.AboutItem.X
 import io.github.droidkaigi.confsched.model.AboutItem.YouTube
-import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppBar
 import org.jetbrains.compose.resources.stringResource
 
 const val aboutScreenRoute = "about"

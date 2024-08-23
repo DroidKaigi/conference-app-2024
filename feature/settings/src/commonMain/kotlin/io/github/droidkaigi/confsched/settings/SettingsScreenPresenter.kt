@@ -9,7 +9,7 @@ import io.github.droidkaigi.confsched.model.Settings
 import io.github.droidkaigi.confsched.model.SettingsRepository
 import io.github.droidkaigi.confsched.model.localSettingsRepository
 import io.github.droidkaigi.confsched.settings.SettingsScreenEvent.SelectUseFontFamily
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
 sealed interface SettingsScreenEvent {

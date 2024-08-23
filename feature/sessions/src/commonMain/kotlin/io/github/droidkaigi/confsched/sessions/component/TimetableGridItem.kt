@@ -59,9 +59,9 @@ import io.github.droidkaigi.confsched.model.TimetableSpeaker
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.section.TimetableSizes
-import io.github.droidkaigi.confsched.ui.icon
-import io.github.droidkaigi.confsched.ui.previewOverride
-import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
+import io.github.droidkaigi.confsched.droidkaigiui.icon
+import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
+import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.DateTimeUnit

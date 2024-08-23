@@ -26,9 +26,9 @@ import conference_app_2024.feature.about.generated.resources.description
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.about.component.AboutDroidKaigiDetailSummaryCard
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.ui.DroidKaigiUiRes
-import io.github.droidkaigi.confsched.ui.canShowLargeVector
-import io.github.droidkaigi.confsched.ui.provideAboutHeaderTitlePainter
+import io.github.droidkaigi.confsched.droidkaigiui.DroidKaigiUiRes
+import io.github.droidkaigi.confsched.droidkaigiui.canShowLargeVector
+import io.github.droidkaigi.confsched.droidkaigiui.provideAboutHeaderTitlePainter
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

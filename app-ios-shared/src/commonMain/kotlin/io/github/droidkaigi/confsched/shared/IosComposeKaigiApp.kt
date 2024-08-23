@@ -54,7 +54,7 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
-import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
 import platform.UIKit.UIViewController
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)

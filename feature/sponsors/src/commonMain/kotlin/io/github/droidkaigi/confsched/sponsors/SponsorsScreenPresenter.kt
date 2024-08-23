@@ -10,7 +10,7 @@ import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.SponsorsRepository
 import io.github.droidkaigi.confsched.model.localSponsorsRepository
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow

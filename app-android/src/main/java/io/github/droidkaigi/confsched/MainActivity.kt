@@ -28,7 +28,7 @@ import io.github.droidkaigi.confsched.model.Settings.DoesNotExists
 import io.github.droidkaigi.confsched.model.Settings.Exists
 import io.github.droidkaigi.confsched.model.Settings.Loading
 import io.github.droidkaigi.confsched.model.SettingsRepository
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
