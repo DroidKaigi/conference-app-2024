@@ -19,7 +19,7 @@ import io.github.droidkaigi.confsched.ui.Orientation
 import kotlin.math.absoluteValue
 
 fun Modifier.hologramaticEffect(deviceOrientationScope: DeviceOrientationScope) = this then HologramaticEffectElement(
-    orientation = deviceOrientationScope.orientation
+    orientation = deviceOrientationScope.orientation,
 )
 
 private data class HologramaticEffectElement(
