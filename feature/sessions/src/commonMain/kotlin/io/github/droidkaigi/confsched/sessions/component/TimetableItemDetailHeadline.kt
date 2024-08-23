@@ -74,7 +74,7 @@ fun TimetableItemDetailHeadline(
             }
             Spacer(modifier = Modifier.weight(1f))
             if (isLangSelectable) {
-                TimetableItemDetailLanguageSwitcher(
+                LanguageSwitcher(
                     currentLang = currentLang,
                     onLanguageSelect = onLanguageSelect,
                 )
@@ -119,7 +119,7 @@ fun TimetableItemDetailHeadline(
 }
 
 @Composable
-fun TimetableItemDetailLanguageSwitcher(
+private fun LanguageSwitcher(
     currentLang: Lang,
     onLanguageSelect: (Lang) -> Unit,
     modifier: Modifier = Modifier,
