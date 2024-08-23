@@ -116,35 +116,37 @@ fun TimetableItemDetailLanguageSwitcher(
     onLanguageSwitch: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val availableLangs: Map<String, Lang> = mapOf(
+        stringResource(SessionsRes.string.japanese) to Lang.JAPANESE,
+        stringResource(SessionsRes.string.english) to Lang.ENGLISH,
+    )
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        TextButton(onClick = { onLanguageSwitch(Lang.JAPANESE) }) {
-            Text(
-                text = stringResource(SessionsRes.string.japanese),
-                color = if (currentLang == Lang.JAPANESE) {
+        val lastIndex = availableLangs.size - 1
+        availableLangs.entries.forEachIndexed { index, (label, lang) ->
+            TextButton(
+                onClick = { onLanguageSwitch(lang) },
+            ) {
+                val isSelected = currentLang == lang
+                val contentColor = if (isSelected) {
                     LocalRoomTheme.current.primaryColor
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                style = MaterialTheme.typography.labelMedium,
-            )
-        }
-        VerticalDivider(
-            modifier = Modifier.height(11.dp),
-            color = MaterialTheme.colorScheme.outlineVariant,
-        )
-        TextButton(onClick = { onLanguageSwitch(Lang.ENGLISH) }) {
-            Text(
-                text = stringResource(SessionsRes.string.english),
-                color = if (currentLang == Lang.ENGLISH) {
-                    LocalRoomTheme.current.primaryColor
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-                style = MaterialTheme.typography.labelMedium,
-            )
+                }
+                Text(
+                    text = label,
+                    color = contentColor,
+                    style = MaterialTheme.typography.labelMedium,
+                )
+            }
+            if (index < lastIndex) {
+                VerticalDivider(
+                    modifier = Modifier.height(11.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant,
+                )
+            }
         }
     }
 }
