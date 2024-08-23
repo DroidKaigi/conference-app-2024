@@ -16,7 +16,7 @@ interface DeviceOrientationScope {
 }
 
 private class DeviceOrientationScopeImpl : DeviceOrientationScope {
-    override var orientation: Orientation by mutableStateOf(Orientation.ZERO)
+    override var orientation: Orientation by mutableStateOf(Orientation.Zero)
         private set
 
     fun updateOrientation(orientation: Orientation) {

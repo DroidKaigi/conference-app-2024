@@ -53,7 +53,7 @@ private data class HologramaticEffectNode(
         val rollRatio = rollDegree / 180f
 
         drawInFrontOf {
-            DRAW_PATH_CONFIGS.forEach { config ->
+            DrawPathConfigs.forEach { config ->
                 translate(
                     left = -(size.width * 0.5f) * rollRatio / 2f,
                     top = (size.height * 0.5f) * pitchRatio * config.speed,
@@ -100,7 +100,7 @@ private data class HologramaticEffectNode(
     }
 
     private fun radianToDegree(radian: Float): Float {
-        return (radian * 180f / PI).toFloat()
+        return (radian * 180f / Pi).toFloat()
     }
 
     private data class DrawPathConfig(
@@ -132,7 +132,7 @@ private data class HologramaticEffectNode(
 
     companion object {
 
-        private const val PI = 3.14159265359
+        private const val Pi = 3.14159265359
 
         private val Transparent = Color(0, 0, 0, 0)
         private val LightGreen = Color(0xFF45E761)
@@ -140,7 +140,7 @@ private data class HologramaticEffectNode(
         private val LightPurple = Color(0xFF9B51E0)
         private val LightBlue = Color(0xFF44ADE7)
 
-        private val DRAW_PATH_CONFIGS = listOf(
+        private val DrawPathConfigs = listOf(
             DrawPathConfig(
                 offset = ((-450).dp),
                 startColor = LightGreen,

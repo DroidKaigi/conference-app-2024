@@ -8,7 +8,7 @@ data class Orientation(
     val roll: Float,
 ) {
     companion object {
-        val ZERO = Orientation(0f, 0f, 0f)
+        val Zero = Orientation(0f, 0f, 0f)
     }
 }
 
