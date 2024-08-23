@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -44,7 +43,6 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-
 
 const val FavoritesScreenEmptyViewTestTag = "FavoritesScreenEmptyViewTestTag"
 
@@ -124,17 +122,15 @@ private fun EmptyView(modifier: Modifier = Modifier) {
             .testTag(FavoritesScreenEmptyViewTestTag)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
     ) {
             Box(
                 modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.onPrimary,
-                        shape = RoundedCornerShape(24.dp),
-                    )
+                    .background(color = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(24.dp),)
                     .size(84.dp),
-                contentAlignment = Alignment.Center,
+                    contentAlignment = Alignment.Center,
             ) {
                 Icon(
                     modifier = Modifier.size(36.dp),
@@ -144,21 +140,21 @@ private fun EmptyView(modifier: Modifier = Modifier) {
                 )
             }
             Spacer(Modifier.height(12.dp))
-        }
-            Text(
-                text = stringResource(FavoritesRes.string.empty_description),
-                style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                textAlign = TextAlign.Center,
+                Text(
+                    text = stringResource(FavoritesRes.string.empty_description),
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    textAlign = TextAlign.Center,
             )
             Spacer(Modifier.height(6.dp))
-            Text(
-                text = stringResource(FavoritesRes.string.empty_guide),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
+                Text(
+                    text = stringResource(FavoritesRes.string.empty_guide),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
             )
         }
+    }
 
 @Composable
 @Preview
