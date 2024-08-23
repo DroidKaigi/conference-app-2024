@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.favorites.section
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -47,7 +48,7 @@ import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentMapOf
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun FavoriteList(
     timetableItemMap: PersistentMap<TimeSlot, List<TimetableItem>>,
@@ -99,7 +100,8 @@ fun FavoriteList(
                 modifier = Modifier
                     .onGloballyPositioned {
                         rowHeight = it.size.height
-                    },
+                    }
+                    .animateItemPlacement(),
             ) {
                 TimetableTime(
                     modifier = Modifier
