@@ -176,9 +176,7 @@ private fun TimetableItemDetailScreen(
             if (uiState is Loaded) {
                 ProvideRoomTheme(uiState.roomThemeKey) {
                     TimetableItemDetailTopAppBar(
-                        isLangSelectable = uiState.isLangSelectable,
                         onNavigationIconClick = onNavigationIconClick,
-                        onSelectedLanguage = onSelectedLanguage,
                         scrollBehavior = scrollBehavior,
                     )
                 }

@@ -32,9 +32,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimetableItemDetailTopAppBar(
-    isLangSelectable: Boolean,
     onNavigationIconClick: () -> Unit,
-    onSelectedLanguage: (Lang) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
 ) {
@@ -53,48 +51,6 @@ fun TimetableItemDetailTopAppBar(
                 )
             }
         },
-        actions = {
-            if (isLangSelectable) {
-                var expanded by remember { mutableStateOf(false) }
-
-                IconButton(onClick = { expanded = true }) {
-                    Icon(
-                        imageVector = Icons.Outlined.GTranslate,
-                        contentDescription = "Select Language",
-                    )
-                }
-
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                ) {
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = stringResource(SessionsRes.string.japanese),
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                        },
-                        onClick = {
-                            onSelectedLanguage(Lang.JAPANESE)
-                            expanded = false
-                        },
-                    )
-                    DropdownMenuItem(
-                        text = {
-                            Text(
-                                text = stringResource(SessionsRes.string.english),
-                                style = MaterialTheme.typography.bodySmall,
-                            )
-                        },
-                        onClick = {
-                            onSelectedLanguage(Lang.ENGLISH)
-                            expanded = false
-                        },
-                    )
-                }
-            }
-        },
         scrollBehavior = scrollBehavior,
     )
 }
@@ -107,9 +63,7 @@ fun TimetableItemDetailTopAppBarPreview() {
         ProvideFakeRoomTheme {
             Surface {
                 TimetableItemDetailTopAppBar(
-                    isLangSelectable = true,
                     onNavigationIconClick = {},
-                    onSelectedLanguage = {},
                     scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
                 )
             }
@@ -125,9 +79,7 @@ fun TimetableItemDetailTopAppBarUnSelectablePreview() {
         ProvideFakeRoomTheme {
             Surface {
                 TimetableItemDetailTopAppBar(
-                    isLangSelectable = false,
                     onNavigationIconClick = {},
-                    onSelectedLanguage = {},
                     scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
                 )
             }
