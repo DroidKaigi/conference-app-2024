@@ -65,8 +65,10 @@ private fun FavoriteFilterChip(
     selected: Boolean,
     text: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     FilterChip(
+        modifier = modifier.padding(top = 8.dp, bottom = 12.dp),
         selected = selected,
         onClick = onClick,
         label = { Text(text) },
