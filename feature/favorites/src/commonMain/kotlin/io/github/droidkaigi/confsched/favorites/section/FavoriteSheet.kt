@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
@@ -14,10 +15,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -75,6 +79,7 @@ sealed interface FavoritesSheetUiState {
     ) : FavoritesSheetUiState
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteSheet(
     uiState: FavoritesSheetUiState,
@@ -85,8 +90,16 @@ fun FavoriteSheet(
     onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
+    val scrollFraction = scrollBehavior?.state?.overlappedFraction ?: 0f
+    val favoriteFiltersBackgroundColor = if (scrollFraction > 0f) {
+        TopAppBarDefaults.topAppBarColors().scrolledContainerColor
+    } else {
+        TopAppBarDefaults.topAppBarColors().containerColor
+    }
+
     Column(modifier = modifier.fillMaxSize()) {
         FavoriteFilters(
             allFilterSelected = uiState.isAllFilterSelected,
@@ -96,6 +109,9 @@ fun FavoriteSheet(
             onAllFilterChipClick = onAllFilterChipClick,
             onDay1FilterChipClick = onDay1FilterChipClick,
             onDay2FilterChipClick = onDay2FilterChipClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(favoriteFiltersBackgroundColor),
         )
 
         when (uiState) {
@@ -156,6 +172,7 @@ private fun EmptyView(modifier: Modifier = Modifier) {
         }
     }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun FavoriteSheetPreview() {
@@ -185,6 +202,7 @@ fun FavoriteSheetPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun FavoriteSheetNoFavoritesPreview() {

@@ -9,6 +9,11 @@ import TimetableFeature
 import TimetableDetailFeature
 import shared
 
+public enum ViewType {
+    case swiftUI
+    case compose
+}
+
 @Reducer
 public struct RootReducer {
     public init() {}
@@ -41,6 +46,7 @@ public struct RootReducer {
         public var favorite: FavoriteReducer.State
         public var about: AboutReducer.State
         public var paths: Paths = .init()
+        public var viewType: ViewType = .swiftUI
 
         public struct Paths: Equatable {
             public var timetable = StackState<Path.Timetable.State>()
@@ -90,6 +96,20 @@ public struct RootReducer {
             AboutReducer()
         }
         navigationReducer
+        delegateReducer
+    }
+
+    private var delegateReducer: some ReducerOf<Self> {
+        Reduce { state, action in
+            switch action {
+            case .about(.delegate(.switchComposeMode)):
+                state.viewType = .compose
+                return .none
+            default:
+                return .none
+            }
+        }
+        .forEach(\.paths.about, action: \.paths.about)
     }
 
     private var navigationReducer: some ReducerOf<Self> {

@@ -158,6 +158,7 @@ private fun FavoritesScreen(
             onDay2FilterChipClick = onDay2FilterChipClick,
             onBookmarkClick = onBookmarkClick,
             contentPadding = contentPadding,
+            scrollBehavior = scrollBehavior,
             modifier = Modifier.padding(
                 top = padding.calculateTopPadding(),
             ).nestedScroll(scrollBehavior.nestedScrollConnection),

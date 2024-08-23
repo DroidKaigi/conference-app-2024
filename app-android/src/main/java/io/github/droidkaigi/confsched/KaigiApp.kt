@@ -136,7 +136,6 @@ private fun KaigiNavHost(
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
         ) {
-            val context = LocalContext.current
             NavHostWithSharedAxisX(
                 navController = navController,
                 startDestination = mainScreenRoute,
@@ -145,10 +144,6 @@ private fun KaigiNavHost(
                     windowSize,
                     navController,
                     externalNavController,
-                    onClickShareProfileCard = { shareText, imageBitmap ->
-                        val imageAbsolutePath = imageBitmap.saveToDisk(context)
-                        externalNavController.onShareProfileCardClick(shareText, imageAbsolutePath)
-                    },
                 )
                 sessionScreens(
                     onNavigationIconClick = navController::popBackStack,
@@ -196,7 +191,6 @@ private fun NavGraphBuilder.mainScreen(
     navController: NavHostController,
     @Suppress("UnusedParameter")
     externalNavController: ExternalNavController,
-    onClickShareProfileCard: (String, ImageBitmap) -> Unit,
 ) {
     mainScreen(
         windowSize = windowSize,
@@ -263,7 +257,7 @@ private fun NavGraphBuilder.mainScreen(
             )
             profileCardScreen(
                 contentPadding = contentPadding,
-                onClickShareProfileCard = onClickShareProfileCard,
+                onClickShareProfileCard = externalNavController::onShareProfileCardClick,
             )
         },
     )
@@ -364,11 +358,12 @@ private class ExternalNavController(
 
     fun onShareProfileCardClick(
         text: String,
-        filePath: String,
+        imageBitmap: ImageBitmap,
     ) {
+        val imageAbsolutePath = imageBitmap.saveToDisk(context)
         shareNavigator.shareTextWithImage(
             text = text,
-            filePath = filePath,
+            filePath = imageAbsolutePath,
         )
     }
 

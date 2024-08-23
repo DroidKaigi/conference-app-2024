@@ -35,8 +35,10 @@ const val DemoSearchWord = "Demo"
 class SearchScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
+    private val deviceSetupRobot: DefaultDeviceSetupRobot,
 ) : ScreenRobot by screenRobot,
-    TimetableServerRobot by timetableServerRobot {
+    TimetableServerRobot by timetableServerRobot,
+    DeviceSetupRobot by deviceSetupRobot {
     enum class ConferenceDay(
         val day: Int,
         val dateText: String,
