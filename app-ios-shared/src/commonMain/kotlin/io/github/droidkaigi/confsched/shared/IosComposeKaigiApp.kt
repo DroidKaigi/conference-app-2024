@@ -11,17 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.window.ComposeUIViewController
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.github.droidkaigi.confsched.about.aboutScreen
 import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
-import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.data.Repositories
@@ -52,6 +49,7 @@ import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreens
+import io.github.droidkaigi.confsched.shared.share.shareTextWithImage
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
@@ -101,9 +99,7 @@ private fun KaigiNavHost(
         mainScreen(
             windowSize = windowSize,
             navController = navController,
-            onClickShareProfileCard = { shareText, image ->
-
-            }
+            onClickShareProfileCard = ::shareTextWithImage
         )
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
