@@ -23,6 +23,10 @@ private var eventMapRepository: any EventMapRepository {
     Container.shared.get(type: (any EventMapRepository).self)
 }
 
+private var profileCardRepository: any ProfileCardRepository {
+    Container.shared.get(type: (any ProfileCardRepository).self)
+}
+
 extension TimetableClient: DependencyKey {
     public static let liveValue: TimetableClient = .init(
         streamTimetable: {
@@ -111,5 +115,19 @@ extension ContributorClient: DependencyKey {
 extension EventMapClient: DependencyKey {
     public static let liveValue: EventMapClient = .init {
         eventMapRepository.getEventMapStream().eraseToThrowingStream()
+    }
+}
+
+extension ProfileCardClient: DependencyKey {
+    public static let liveValue: ProfileCardClient = .init { param in
+        try await profileCardRepository.save(
+            profileCard: .init(
+                nickname: param.nickname,
+                occupation: param.occupation,
+                link: param.link,
+                image: param.image,
+                cardType: param.cardType
+            )
+        )
     }
 }

@@ -148,6 +148,23 @@ public val dataModule: Module = module {
         }
     }
 
+    single<ProfileCardDataStore> {
+        val dataStore = createDataStore(
+            coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
+            producePath = {
+                val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
+                    directory = NSDocumentDirectory,
+                    inDomain = NSUserDomainMask,
+                    appropriateForURL = null,
+                    create = false,
+                    error = null,
+                )
+                requireNotNull(documentDirectory).path + "/confsched2024.profilecard.preferences_pb"
+            },
+        )
+        DefaultProfileCardDataStore(dataStore)
+    }
+
     singleOf(::DefaultAuthApi) bind AuthApi::class
     singleOf(::DefaultSessionsApiClient) bind SessionsApiClient::class
     singleOf(::DefaultContributorsApiClient) bind ContributorsApiClient::class
