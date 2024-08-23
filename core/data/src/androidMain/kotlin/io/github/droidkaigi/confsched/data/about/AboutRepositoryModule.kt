@@ -19,7 +19,7 @@ public abstract class AboutRepositoryModule {
     @RepositoryQualifier
     @IntoMap
     @ClassKey(AboutRepository::class)
-    public abstract fun bind(repository: DefaultAboutRepository): Any
+    public abstract fun bind(repository: AboutRepository): Any
 
     public companion object {
         @Provides

@@ -193,10 +193,6 @@ fun BottomBarTabs(
             modifier = modifier.fillMaxSize(),
         ) {
             for (tab in MainScreenTab.entries) {
-                val alpha by animateFloatAsState(
-                    targetValue = if (selectedTab == tab) 1f else .35f,
-                    label = "alpha",
-                )
                 val scale by animateFloatAsState(
                     targetValue = if (selectedTab == tab) 1f else .98f,
                     visibilityThreshold = .000001f,
@@ -216,7 +212,6 @@ fun BottomBarTabs(
                     modifier =
                     Modifier
                         .scale(scale)
-                        .alpha(alpha)
                         .fillMaxHeight()
                         .weight(1f)
                         .pointerInput(Unit) {

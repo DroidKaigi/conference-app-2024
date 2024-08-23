@@ -205,7 +205,8 @@ private fun TimetableScreen(
                 uiState = uiState.contentUiState,
                 onFavoriteClick = onBookmarkClick,
                 contentPadding = PaddingValues(
-                    bottom = innerPadding.calculateBottomPadding(),
+                    bottom = innerPadding.calculateBottomPadding()
+                        .plus(16.dp), // Adjusting Snackbar position
                     start = innerPadding.calculateStartPadding(layoutDirection),
                     end = innerPadding.calculateEndPadding(layoutDirection),
                 ),

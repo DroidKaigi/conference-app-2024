@@ -154,7 +154,7 @@ public struct TimetableDetailView: View {
                     icon: Image(.icLanguage),
                     title: String(localized: "TimeTableDetailLanguage", bundle: .module),
                     titleColor: store.timetableItem.room.roomTheme.primaryColor,
-                    content: store.timetableItem.getSupportedLangString(isJapaneseLocale: LocaleKt.getDefaultLocale() == .japan)
+                    content: store.timetableItem.getSupportedLangString(isJapaneseLocale: Locale_iosKt.getDefaultLocale() == .japan)
                 )
                 InformationRow(
                     icon: Image(.icCategory),

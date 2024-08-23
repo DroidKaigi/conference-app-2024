@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,6 +44,7 @@ import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -53,6 +55,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -63,6 +66,7 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.vector.VectorPainter
@@ -95,11 +99,13 @@ import io.github.droidkaigi.confsched.designsystem.theme.ProfileCardTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
+import io.github.droidkaigi.confsched.profilecard.component.CapturableCard
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
+import io.github.droidkaigi.confsched.ui.component.resetScroll
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -212,6 +218,14 @@ internal fun ProfileCardScreen(
     )
 
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    LaunchedEffect(uiState.uiType) {
+        if (
+            uiState.uiType == ProfileCardUiType.Card ||
+            uiState.uiType == ProfileCardUiType.Edit
+        ) {
+            scrollBehavior.resetScroll()
+        }
+    }
 
     Scaffold(
         modifier = modifier,
@@ -220,7 +234,8 @@ internal fun ProfileCardScreen(
             left = contentPadding.calculateLeftPadding(layoutDirection),
             top = contentPadding.calculateTopPadding(),
             right = contentPadding.calculateRightPadding(layoutDirection),
-            bottom = contentPadding.calculateBottomPadding(),
+            bottom = contentPadding.calculateBottomPadding()
+                .plus(16.dp), // Adjusting Snackbar position
         ),
         topBar = {
             when (uiState.uiType) {
@@ -241,6 +256,7 @@ internal fun ProfileCardScreen(
                         AnimatedTextTopAppBar(
                             colors = TopAppBarDefaults.topAppBarColors(
                                 containerColor = LocalProfileCardTheme.current.primaryColor,
+                                scrolledContainerColor = LocalProfileCardTheme.current.primaryColor,
                             ),
                             textColor = MaterialTheme.colorScheme.scrim,
                             title = stringResource(ProfileCardRes.string.profile_card_title),
@@ -289,6 +305,7 @@ internal fun ProfileCardScreen(
                 if (uiState.cardUiState == null) return@Scaffold
                 CardScreen(
                     uiState = uiState.cardUiState,
+                    scrollBehavior = scrollBehavior,
                     onClickEdit = {
                         eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
@@ -663,11 +680,13 @@ fun Modifier.selectedBorder(
     this
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CardScreen(
     uiState: ProfileCardUiState.Card,
     onClickEdit: () -> Unit,
     onClickShareProfileCard: (ImageBitmap) -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
@@ -676,71 +695,131 @@ internal fun CardScreen(
     val graphicsLayer = rememberGraphicsLayer()
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
-        Column(
-            modifier = modifier
-                .fillMaxSize()
-                .background(LocalProfileCardTheme.current.primaryColor)
-                .testTag(ProfileCardCardScreenTestTag)
-                .padding(contentPadding),
-        ) {
+        Box {
+            // Not for display, for sharing
+            ShareableProfileCard(
+                uiState = uiState,
+                graphicsLayer = graphicsLayer,
+                contentPadding = contentPadding,
+            )
             Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
+                modifier = modifier
+                    .fillMaxSize()
+                    .background(LocalProfileCardTheme.current.primaryColor)
+                    .testTag(ProfileCardCardScreenTestTag),
             ) {
-                FlipCard(
+                Column(
                     modifier = Modifier
-                        .drawWithContent {
-                            graphicsLayer.record {
-                                this@drawWithContent.drawContent()
-                            }
-                            drawLayer(graphicsLayer)
-                        },
-                    uiState = uiState,
-                    isCreated = isCreated,
-                )
-                Spacer(Modifier.height(32.dp))
-                Button(
-                    onClick = {
-                        coroutineScope.launch {
-                            onClickShareProfileCard(graphicsLayer.toImageBitmap())
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.White),
-                    border = if (uiState.cardType == ProfileCardType.None) {
-                        BorderStroke(
-                            0.5.dp,
-                            Color.Black,
-                        )
-                    } else {
-                        null
-                    },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .fillMaxSize()
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .verticalScroll(rememberScrollState())
+                        .padding(vertical = 32.dp)
+                        .padding(contentPadding),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
                 ) {
-                    Icon(
-                        painter = painterResource(ProfileCardRes.drawable.icon_share),
-                        contentDescription = "Share",
-                        tint = Color.Black,
-                        modifier = Modifier.size(18.dp),
+                    FlipCard(
+                        uiState = uiState,
+                        isCreated = isCreated,
                     )
-                    Spacer(Modifier.width(8.dp))
+                    Spacer(Modifier.height(32.dp))
+                    Button(
+                        onClick = {
+                            coroutineScope.launch {
+                                onClickShareProfileCard(graphicsLayer.toImageBitmap())
+                            }
+                        },
+                        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                        border = if (uiState.cardType == ProfileCardType.None) {
+                            BorderStroke(
+                                0.5.dp,
+                                Color.Black,
+                            )
+                        } else {
+                            null
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp),
+                    ) {
+                        Icon(
+                            painter = painterResource(ProfileCardRes.drawable.icon_share),
+                            contentDescription = "Share",
+                            tint = Color.Black,
+                            modifier = Modifier.size(18.dp),
+                        )
+                        Spacer(Modifier.width(8.dp))
+                        Text(
+                            text = "Share",
+                            modifier = Modifier.padding(8.dp),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Color.Black,
+                        )
+                    }
+                    Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "共有する",
-                        modifier = Modifier.padding(8.dp),
+                        text = "Edit",
                         style = MaterialTheme.typography.labelLarge,
                         color = Color.Black,
+                        modifier = Modifier
+                            .clickable { onClickEdit() }
+                            .testTag(ProfileCardEditButtonTestTag),
                     )
                 }
-                Spacer(Modifier.height(8.dp))
-                Text(
-                    text = "編集する",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = Color.Black,
+            }
+        }
+    }
+}
+
+@Composable
+private fun ShareableProfileCard(
+    uiState: ProfileCardUiState.Card,
+    graphicsLayer: GraphicsLayer,
+    contentPadding: PaddingValues,
+) {
+    var frontImage: ImageBitmap? by remember { mutableStateOf(null) }
+    var backImage: ImageBitmap? by remember { mutableStateOf(null) }
+    CapturableCard(
+        uiState = uiState,
+        onCaptured = { front, back ->
+            frontImage = front
+            backImage = back
+        },
+    )
+    Box(
+        modifier = Modifier.padding(contentPadding)
+            .drawWithContent {
+                graphicsLayer.record {
+                    this@drawWithContent.drawContent()
+                }
+                drawLayer(graphicsLayer)
+            },
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(LocalProfileCardTheme.current.primaryColor)
+                .padding(vertical = 50.dp),
+        ) {
+            backImage?.let {
+                Image(
+                    bitmap = it,
+                    contentDescription = null,
                     modifier = Modifier
-                        .clickable { onClickEdit() }
-                        .testTag(ProfileCardEditButtonTestTag),
+                        .offset(x = 70.dp, y = 15.dp)
+                        .rotate(10f)
+                        .size(150.dp, 190.dp),
+                )
+            }
+            frontImage?.let {
+                Image(
+                    bitmap = it,
+                    contentDescription = null,
+                    modifier = Modifier
+                        .offset(x = (-70).dp, y = (-15).dp)
+                        .rotate(-10f)
+                        .size(150.dp, 190.dp),
                 )
             }
         }

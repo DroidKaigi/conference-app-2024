@@ -138,19 +138,13 @@ class ProfileCardScreenRobot @Inject constructor(
 
     fun checkProfileCardFrontDisplayed() {
         composeTestRule
-            .onNode(
-                hasTestTag(ProfileCardFlipCardFrontTestTag),
-                useUnmergedTree = true,
-            )
+            .onNode(hasTestTag(ProfileCardFlipCardFrontTestTag))
             .assertIsDisplayed()
     }
 
     fun checkProfileCardBackDisplayed() {
         composeTestRule
-            .onNode(
-                hasTestTag(ProfileCardFlipCardBackTestTag),
-                useUnmergedTree = true,
-            )
+            .onNode(hasTestTag(ProfileCardFlipCardBackTestTag))
             .assertIsDisplayed()
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -28,16 +30,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import co.touchlab.kermit.Logger
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.card_back_blue
 import conference_app_2024.feature.profilecard.generated.resources.card_back_green
@@ -140,6 +146,77 @@ internal fun FlipCard(
                     profileImage = profileImage,
                 )
             }
+        }
+    }
+}
+
+@Composable
+internal fun CapturableCard(
+    uiState: Card,
+    onCaptured: (ImageBitmap, ImageBitmap) -> Unit,
+) {
+    val graphicsLayerFront = rememberGraphicsLayer()
+    val graphicsLayerBack = rememberGraphicsLayer()
+    val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
+    val imageBitmap = remember {
+        QRCode.ofSquares()
+            .build(uiState.link)
+            .renderToBytes().toImageBitmap()
+    }
+
+    LaunchedEffect(Unit) {
+        try {
+            onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
+        } catch (e: IllegalArgumentException) {
+            Logger.e("IllegalArgumentException is thrown from screenshot test: $e")
+        }
+    }
+
+    Box {
+        Box(
+            modifier = Modifier
+                .drawWithContent {
+                    graphicsLayerFront.record {
+                        this@drawWithContent.drawContent()
+                    }
+                    drawLayer(graphicsLayerFront)
+                },
+        ) {
+            FlipCardFront(
+                uiState,
+                profileImage = profileImage,
+                modifier = Modifier
+                    .size(width = 300.dp, height = 380.dp)
+                    .border(
+                        3.dp,
+                        Color.Black,
+                        RoundedCornerShape(8.dp),
+                    ),
+            )
+        }
+        Box(
+            modifier = Modifier
+                .drawWithContent {
+                    graphicsLayerBack.record {
+                        this@drawWithContent.drawContent()
+                    }
+                    drawLayer(graphicsLayerBack)
+                },
+        ) {
+            FlipCardBack(
+                uiState,
+                imageBitmap,
+                modifier = Modifier
+                    .size(width = 300.dp, height = 380.dp)
+                    .border(
+                        3.dp,
+                        Color.Black,
+                        RoundedCornerShape(8.dp),
+                    )
+                    .graphicsLayer {
+                        rotationY = 180f
+                    },
+            )
         }
     }
 }
@@ -284,7 +361,7 @@ fun FlipCardBackPreview() {
         ) {
             FlipCardBack(
                 uiState = uiState,
-                bitmap = QRCode.ofCircles().build(uiState.link).renderToBytes().toImageBitmap(),
+                bitmap = QRCode.ofSquares().build(uiState.link).renderToBytes().toImageBitmap(),
             )
         }
     }
