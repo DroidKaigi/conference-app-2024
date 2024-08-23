@@ -153,7 +153,9 @@ private fun LanguageSwitcher(
                     Icon(
                         imageVector = Icons.Default.Check,
                         contentDescription = null,
-                        modifier = Modifier.size(16.dp),
+                        modifier = Modifier
+                            .padding(end = 4.dp)
+                            .size(12.dp),
                         tint = contentColor,
                     )
                 }
