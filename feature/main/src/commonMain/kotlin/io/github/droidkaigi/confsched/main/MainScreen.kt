@@ -24,7 +24,6 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -225,10 +224,14 @@ fun MainScreen(
 
     val navBackStackEntryRoute =
         mainNestedNavController.currentBackStackEntryAsState().value?.destination?.route
-    val lastEntryRoute by rememberSaveable(navBackStackEntryRoute) {
-        mutableStateOf(navBackStackEntryRoute)
+
+    // The rememberSaveable key isn't used when returning from the back stack, so we can ignore the null value of the route using this rememberSaveable.
+    // This prevents unexpected animations when navigating back.
+    // https://github.com/DroidKaigi/conference-app-2024/pull/732/files#r1727479543
+    val lastEntryRoute = rememberSaveable(navBackStackEntryRoute) {
+        navBackStackEntryRoute ?: "timetable"
     }
-    val currentTab = lastEntryRoute?.routeToTab() ?: MainScreenTab.Timetable
+    val currentTab = lastEntryRoute.routeToTab() ?: MainScreenTab.Timetable
 
     val hazeState = remember { HazeState() }
 
