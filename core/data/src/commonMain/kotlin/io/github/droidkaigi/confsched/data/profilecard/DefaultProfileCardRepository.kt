@@ -7,7 +7,7 @@ import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 
-internal class DefaultProfileCardRepository(
+public class DefaultProfileCardRepository(
     private val profileCardDataStore: ProfileCardDataStore,
 ) : ProfileCardRepository {
     @Composable
