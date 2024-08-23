@@ -64,6 +64,10 @@ fun TimetableItemDetailHeadline(
                     tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+            Spacer(modifier = Modifier.weight(1f))
+            TimetableItemDetailLanguageSwitcher(
+                currentLang = currentLang,
+            )
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
