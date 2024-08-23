@@ -104,10 +104,18 @@ fun TimetableItemDetailHeadline(
 }
 
 @Composable
-fun TimetableItemDetailLanguageSwitcher(modifier: Modifier = Modifier) {
+fun TimetableItemDetailLanguageSwitcher(
+    currentLang: Lang,
+    modifier: Modifier = Modifier,
+) {
     Row(modifier = modifier) {
         Text(
             text = stringResource(SessionsRes.string.japanese),
+            color = if (currentLang == Lang.JAPANESE) {
+                LocalRoomTheme.current.primaryColor
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
             style = MaterialTheme.typography.labelMedium,
         )
         VerticalDivider(
@@ -115,6 +123,11 @@ fun TimetableItemDetailLanguageSwitcher(modifier: Modifier = Modifier) {
         )
         Text(
             text = stringResource(SessionsRes.string.english),
+            color = if (currentLang == Lang.ENGLISH) {
+                LocalRoomTheme.current.primaryColor
+            } else {
+                MaterialTheme.colorScheme.onSurfaceVariant
+            },
             style = MaterialTheme.typography.labelMedium,
         )
     }
