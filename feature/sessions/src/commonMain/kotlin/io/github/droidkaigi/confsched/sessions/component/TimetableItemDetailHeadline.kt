@@ -49,7 +49,7 @@ fun TimetableItemDetailHeadline(
     currentLang: Lang?,
     timetableItem: TimetableItem,
     isLangSelectable: Boolean,
-    onLanguageSwitch: (Lang) -> Unit,
+    onLanguageSelect: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val currentLang = currentLang ?: timetableItem.language.toLang()
@@ -76,7 +76,7 @@ fun TimetableItemDetailHeadline(
             if (isLangSelectable) {
                 TimetableItemDetailLanguageSwitcher(
                     currentLang = currentLang,
-                    onLanguageSwitch = onLanguageSwitch,
+                    onLanguageSelect = onLanguageSelect,
                 )
             }
         }
@@ -121,7 +121,7 @@ fun TimetableItemDetailHeadline(
 @Composable
 fun TimetableItemDetailLanguageSwitcher(
     currentLang: Lang,
-    onLanguageSwitch: (Lang) -> Unit,
+    onLanguageSelect: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val normalizedCurrentLang = if (currentLang == Lang.MIXED) {
@@ -140,7 +140,7 @@ fun TimetableItemDetailLanguageSwitcher(
         val lastIndex = availableLangs.size - 1
         availableLangs.entries.forEachIndexed { index, (label, lang) ->
             TextButton(
-                onClick = { onLanguageSwitch(lang) },
+                onClick = { onLanguageSelect(lang) },
                 contentPadding = PaddingValues(12.dp),
             ) {
                 val isSelected = normalizedCurrentLang == lang
@@ -183,7 +183,7 @@ fun TimetableItemDetailHeadlinePreview() {
                     timetableItem = TimetableItem.Session.fake(),
                     currentLang = Lang.JAPANESE,
                     isLangSelectable = true,
-                    onLanguageSwitch = {},
+                    onLanguageSelect = {},
                 )
             }
         }
@@ -200,7 +200,7 @@ fun TimetableItemDetailHeadlineWithEnglishPreview() {
                     timetableItem = TimetableItem.Session.fake(),
                     currentLang = Lang.ENGLISH,
                     isLangSelectable = true,
-                    onLanguageSwitch = {},
+                    onLanguageSelect = {},
                 )
             }
         }
@@ -217,7 +217,7 @@ fun TimetableItemDetailHeadlineWithMixedPreview() {
                     timetableItem = TimetableItem.Session.fake(),
                     currentLang = Lang.MIXED,
                     isLangSelectable = true,
-                    onLanguageSwitch = {},
+                    onLanguageSelect = {},
                 )
             }
         }
