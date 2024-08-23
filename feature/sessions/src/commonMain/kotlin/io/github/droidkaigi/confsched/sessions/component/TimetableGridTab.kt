@@ -49,8 +49,10 @@ fun TimetableDayTab(
         stateList.addAll(DroidKaigi2024Day.visibleDays().map { 24.dp }) // default indicator width
         stateList
     }
+    val paddingAroundTab =
+        (tabWidth - indicatorWidths.reduce { acc, width -> acc + width }) / (indicatorWidths.size * 2)
     Column(
-        modifier = modifier.padding(horizontal = 20.dp, vertical = 16.dp),
+        modifier = modifier.padding(horizontal = 20.dp - paddingAroundTab, vertical = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
     ) {
