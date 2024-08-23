@@ -171,16 +171,17 @@ internal fun CapturableCard(
             .build(uiState.link)
             .renderToBytes().toImageBitmap()
     }
-    var isQrCodeWithLogoLoaded by remember { mutableStateOf(false) }
+    var isQrCodeWithLogoRendered by remember { mutableStateOf(false) }
 
-    LaunchedEffect(isQrCodeWithLogoLoaded) {
+    LaunchedEffect(isQrCodeWithLogoRendered) {
         if (logoImage.isEmpty()) {
             logoImage = getDrawableResourceBytes(
                 environment = getSystemResourceEnvironment(),
                 resource = ProfileCardRes.drawable.droidkaigi_logo,
             )
         }
-        if (isQrCodeWithLogoLoaded) {
+        // after qr code rendered with logo, tell the event to parent component
+        if (isQrCodeWithLogoRendered) {
             try {
                 onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
             } catch (e: IllegalArgumentException) {
@@ -219,7 +220,7 @@ internal fun CapturableCard(
                     }
                     drawLayer(graphicsLayerBack)
                     if (logoImage.isNotEmpty()) {
-                        isQrCodeWithLogoLoaded = true
+                        isQrCodeWithLogoRendered = true
                     }
                 },
         ) {
