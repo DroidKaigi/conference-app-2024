@@ -51,10 +51,10 @@ fun TimetableItemDetailHeadline(
         modifier = modifier
             // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
             .background(LocalRoomTheme.current.dimColor)
-            .padding(8.dp)
+            .padding(horizontal = 8.dp)
             .fillMaxWidth(),
     ) {
-        Row {
+        Row(verticalAlignment = Alignment.CenterVertically) {
             TimetableItemTag(
                 tagText = timetableItem.room.name.currentLangTitle,
                 tagColor = LocalRoomTheme.current.primaryColor,
