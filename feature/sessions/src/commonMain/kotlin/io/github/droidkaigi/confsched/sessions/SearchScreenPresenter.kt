@@ -9,6 +9,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.Lang
@@ -27,7 +28,6 @@ import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.SelectSessionTy
 import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.UpdateSearchWord
 import io.github.droidkaigi.confsched.sessions.component.SearchFilterUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.Flow

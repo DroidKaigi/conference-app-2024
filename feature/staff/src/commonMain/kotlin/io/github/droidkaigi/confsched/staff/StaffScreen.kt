@@ -23,14 +23,14 @@ import androidx.navigation.compose.composable
 import conference_app_2024.feature.staff.generated.resources.staff_title
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.model.Staff
-import io.github.droidkaigi.confsched.model.fakes
-import io.github.droidkaigi.confsched.staff.component.StaffItem
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
+import io.github.droidkaigi.confsched.model.Staff
+import io.github.droidkaigi.confsched.model.fakes
+import io.github.droidkaigi.confsched.staff.component.StaffItem
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
