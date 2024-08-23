@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -116,27 +117,31 @@ fun TimetableItemDetailLanguageSwitcher(
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {
-        Text(
-            text = stringResource(SessionsRes.string.japanese),
-            color = if (currentLang == Lang.JAPANESE) {
-                LocalRoomTheme.current.primaryColor
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            },
-            style = MaterialTheme.typography.labelMedium,
-        )
+        TextButton(onClick = { onLanguageSwitch(Lang.JAPANESE) }) {
+            Text(
+                text = stringResource(SessionsRes.string.japanese),
+                color = if (currentLang == Lang.JAPANESE) {
+                    LocalRoomTheme.current.primaryColor
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                style = MaterialTheme.typography.labelMedium,
+            )
+        }
         VerticalDivider(
             color = MaterialTheme.colorScheme.outlineVariant,
         )
-        Text(
-            text = stringResource(SessionsRes.string.english),
-            color = if (currentLang == Lang.ENGLISH) {
-                LocalRoomTheme.current.primaryColor
-            } else {
-                MaterialTheme.colorScheme.onSurfaceVariant
-            },
-            style = MaterialTheme.typography.labelMedium,
-        )
+        TextButton(onClick = { onLanguageSwitch(Lang.ENGLISH) }) {
+            Text(
+                text = stringResource(SessionsRes.string.english),
+                color = if (currentLang == Lang.ENGLISH) {
+                    LocalRoomTheme.current.primaryColor
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
+                style = MaterialTheme.typography.labelMedium,
+            )
+        }
     }
 }
 
