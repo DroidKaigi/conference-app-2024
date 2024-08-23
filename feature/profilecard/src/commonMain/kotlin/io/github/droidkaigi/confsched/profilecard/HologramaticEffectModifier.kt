@@ -9,13 +9,10 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.ContentDrawScope
 import androidx.compose.ui.graphics.drawscope.translate
-import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.node.DrawModifierNode
-import androidx.compose.ui.node.GlobalPositionAwareModifierNode
 import androidx.compose.ui.node.ModifierNodeElement
 import androidx.compose.ui.platform.InspectorInfo
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.ui.DeviceOrientationScope
 import io.github.droidkaigi.confsched.ui.Orientation
@@ -140,7 +137,7 @@ private data class HologramaticEffectNode(
         private val LightGreen = Color(0xFF45E761)
         private val LightPink = Color(0xFFFF53CF)
         private val LightPurple = Color(0xFF9B51E0)
-        private val LightBlue =  Color(0xFF44ADE7)
+        private val LightBlue = Color(0xFF44ADE7)
 
         private val DRAW_PATH_CONFIGS = listOf(
             DrawPathConfig(
@@ -149,21 +146,21 @@ private data class HologramaticEffectNode(
                 endColor = LightPink,
                 width = 0.03f,
                 alpha = 0.3f,
-                speed = 1.0f
+                speed = 1.0f,
             ),
             DrawPathConfig(
                 offset = (-200).dp,
                 color = LightPurple,
                 width = 0.02f,
                 alpha = 0.4f,
-                speed = 0.6f
+                speed = 0.6f,
             ),
             DrawPathConfig(
                 offset = 50.dp,
                 color = LightBlue,
                 width = 0.01f,
                 alpha = 0.5f,
-                speed = 0.3f
+                speed = 0.3f,
             ),
         )
     }
