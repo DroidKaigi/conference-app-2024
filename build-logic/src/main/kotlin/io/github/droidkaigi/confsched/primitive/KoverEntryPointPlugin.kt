@@ -13,7 +13,10 @@ class KoverEntryPointPlugin : Plugin<Project> {
 
             rootProject.subprojects {
                 if (this@subprojects.name == target.name) return@subprojects
-                this@subprojects.pluginManager.apply(koverPlugin)
+                // https://github.com/DroidKaigi/conference-app-2024/issues/485#issuecomment-2304251937
+                this@subprojects.beforeEvaluate { // wrap with beforeEvaluate
+                    this@subprojects.pluginManager.apply(koverPlugin)
+                }
                 target.dependencies.add("kover", this@subprojects)
             }
 

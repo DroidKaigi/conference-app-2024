@@ -147,6 +147,34 @@ class SearchScreenTest(
                         }
                     }
                 }
+
+                describe("when device is tablet") {
+                    doIt {
+                        setupTabletDevice()
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupSearchScreenContent()
+                    }
+                    itShould("no timetable items are displayed") {
+                        captureScreenWithChecks {
+                            checkTimetableListExists()
+                            checkTimetableListItemsNotDisplayed()
+                        }
+                    }
+
+                    describe("input search word to TextField") {
+                        doIt {
+                            inputDemoSearchWord()
+                        }
+                        itShould("show search word and filtered items") {
+                            captureScreenWithChecks {
+                                checkDemoSearchWordDisplayed()
+                                checkTimetableListItemsHasDemoText()
+                                checkTimetableListDisplayed()
+                                checkTimetableListItemsDisplayed()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
