@@ -141,7 +141,7 @@ internal fun FlipCard(
         } else { // Front
             WithDeviceOrientation {
                 FlipCardFront(
-                    modifier = Modifier.hologramaticEffect(),
+                    modifier = Modifier.hologramaticEffect(this@WithDeviceOrientation),
                     uiState = uiState,
                     profileImage = profileImage,
                 )
