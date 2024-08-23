@@ -3,6 +3,7 @@ import ComposableArchitecture
 import ContributorFeature
 import FavoriteFeature
 import LicenseList
+import ProfileCardFeature
 import SearchFeature
 import SponsorFeature
 import StaffFeature
@@ -18,7 +19,7 @@ public enum DroidKaigiAppTab: Hashable {
     case map
     case favorite
     case about
-    case idCard
+    case profileCard
 }
 
 public struct RootView: View {
@@ -43,8 +44,8 @@ public struct RootView: View {
                     favoriteTab
                 case .about:
                     aboutTab
-                case .idCard:
-                    idCardTab
+                case .profileCard:
+                    profileCardTab
                 }
             }
             .navigationBarTitleStyle(
@@ -66,7 +67,7 @@ public struct RootView: View {
             (tab: .map, icon: .icMap),
             (tab: .favorite, icon: .icFav),
             (tab: .about, icon: .icInfo),
-            (tab: .idCard, icon: .icProfileCard),
+            (tab: .profileCard, icon: .icProfileCard),
         ]
         HStack(spacing: 36) {
             ForEach(items, id: \.tab) { item in
@@ -185,12 +186,17 @@ public struct RootView: View {
     }
 
     @MainActor
-    private var idCardTab: some View {
+    private var profileCardTab: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-                ScrollView {
-                    Text("ID Card Feature")
-                }
+                ProfileCardInputView(
+                    store: Store(
+                        initialState: .init(),
+                        reducer: {
+                            ProfileCardInputReducer()
+                        }
+                    )
+                )
                 tabItems
             }
         }
