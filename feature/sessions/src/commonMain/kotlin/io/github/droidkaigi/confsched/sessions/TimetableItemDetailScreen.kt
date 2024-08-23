@@ -229,6 +229,7 @@ private fun TimetableItemDetailScreen(
                             TimetableItemDetailHeadline(
                                 currentLang = uiState.currentLang,
                                 timetableItem = uiState.timetableItem,
+                                onLanguageSwitch = onSelectedLanguage,
                             )
                         }
 

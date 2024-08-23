@@ -42,6 +42,7 @@ const val TimetableItemDetailHeadlineTestTag = "TimetableItemDetailHeadlineTestT
 fun TimetableItemDetailHeadline(
     currentLang: Lang?,
     timetableItem: TimetableItem,
+    onLanguageSwitch: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val currentLang = currentLang ?: Lang.ENGLISH
@@ -67,6 +68,7 @@ fun TimetableItemDetailHeadline(
             Spacer(modifier = Modifier.weight(1f))
             TimetableItemDetailLanguageSwitcher(
                 currentLang = currentLang,
+                onLanguageSwitch = onLanguageSwitch,
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -110,6 +112,7 @@ fun TimetableItemDetailHeadline(
 @Composable
 fun TimetableItemDetailLanguageSwitcher(
     currentLang: Lang,
+    onLanguageSwitch: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {
@@ -146,6 +149,7 @@ fun TimetableItemDetailHeadlinePreview() {
                 TimetableItemDetailHeadline(
                     timetableItem = TimetableItem.Session.fake(),
                     currentLang = Lang.JAPANESE,
+                    onLanguageSwitch = {},
                 )
             }
         }
@@ -161,6 +165,7 @@ fun TimetableItemDetailHeadlineWithEnglishPreview() {
                 TimetableItemDetailHeadline(
                     timetableItem = TimetableItem.Session.fake(),
                     currentLang = Lang.ENGLISH,
+                    onLanguageSwitch = {},
                 )
             }
         }
@@ -176,6 +181,7 @@ fun TimetableItemDetailHeadlineWithMixedPreview() {
                 TimetableItemDetailHeadline(
                     timetableItem = TimetableItem.Session.fake(),
                     currentLang = Lang.MIXED,
+                    onLanguageSwitch = {},
                 )
             }
         }
