@@ -124,6 +124,11 @@ fun TimetableItemDetailLanguageSwitcher(
     onLanguageSwitch: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val normalizedCurrentLang = if (currentLang == Lang.MIXED) {
+        Lang.ENGLISH
+    } else {
+        currentLang
+    }
     val availableLangs: Map<String, Lang> = mapOf(
         stringResource(SessionsRes.string.japanese) to Lang.JAPANESE,
         stringResource(SessionsRes.string.english) to Lang.ENGLISH,
@@ -138,7 +143,7 @@ fun TimetableItemDetailLanguageSwitcher(
                 onClick = { onLanguageSwitch(lang) },
                 contentPadding = PaddingValues(12.dp),
             ) {
-                val isSelected = currentLang == lang
+                val isSelected = normalizedCurrentLang == lang
                 val contentColor = if (isSelected) {
                     LocalRoomTheme.current.primaryColor
                 } else {
