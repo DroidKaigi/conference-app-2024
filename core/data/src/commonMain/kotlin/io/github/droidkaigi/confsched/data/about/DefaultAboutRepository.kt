@@ -3,9 +3,8 @@ package io.github.droidkaigi.confsched.data.about
 import androidx.compose.runtime.Composable
 import io.github.droidkaigi.confsched.model.AboutRepository
 import io.github.droidkaigi.confsched.model.BuildConfigProvider
-import io.github.droidkaigi.confsched.ui.Inject
 
-public class DefaultAboutRepository @Inject constructor(
+public class DefaultAboutRepository(
     private val buildConfigProvider: BuildConfigProvider,
 ) : AboutRepository {
     @Composable

@@ -72,3 +72,9 @@ fun AnimatedTextTopAppBar(
         scrollBehavior = scrollBehavior,
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+fun TopAppBarScrollBehavior.resetScroll() {
+    this.state.heightOffset = 0f
+    this.state.contentOffset = 0f
+}
