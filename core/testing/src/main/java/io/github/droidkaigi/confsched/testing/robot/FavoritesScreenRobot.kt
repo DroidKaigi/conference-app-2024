@@ -9,11 +9,11 @@ import androidx.compose.ui.test.performClick
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.user.UserDataStore
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardBookmarkButtonTestTag
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardTestTag
 import io.github.droidkaigi.confsched.favorites.FavoritesScreen
 import io.github.droidkaigi.confsched.favorites.section.FavoritesScreenEmptyViewTestTag
 import io.github.droidkaigi.confsched.model.TimetableItemId
-import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardBookmarkButtonTestTag
-import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardTestTag
 import javax.inject.Inject
 
 class FavoritesScreenRobot @Inject constructor(

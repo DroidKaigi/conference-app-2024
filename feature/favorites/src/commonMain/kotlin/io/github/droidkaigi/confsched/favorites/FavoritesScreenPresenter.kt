@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.AllFilter
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Bookmark
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Day1Filter
@@ -21,7 +22,6 @@ import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.localSessionsRepository
-import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap

@@ -19,13 +19,13 @@ import androidx.navigation.compose.composable
 import conference_app_2024.feature.settings.generated.resources.settings_title
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.model.FontFamily
-import io.github.droidkaigi.confsched.settings.section.accessibility
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
+import io.github.droidkaigi.confsched.model.FontFamily
+import io.github.droidkaigi.confsched.settings.section.accessibility
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

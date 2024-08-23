@@ -66,6 +66,10 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.FakeClock
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimeLine
 import io.github.droidkaigi.confsched.model.Timetable
@@ -80,10 +84,6 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridRooms
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState.Companion
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
-import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.FakeClock
-import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
-import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
-import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit

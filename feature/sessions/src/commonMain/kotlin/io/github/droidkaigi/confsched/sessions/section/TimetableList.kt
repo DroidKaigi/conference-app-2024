@@ -34,15 +34,15 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
-import io.github.droidkaigi.confsched.model.Timetable
-import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableTime
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.droidkaigiui.icon
+import io.github.droidkaigi.confsched.model.Timetable
+import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import kotlinx.collections.immutable.PersistentMap
 
 const val TimetableListTestTag = "TimetableList"

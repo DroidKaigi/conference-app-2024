@@ -28,6 +28,10 @@ import conference_app_2024.feature.favorites.generated.resources.favorite
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppBar
 import io.github.droidkaigi.confsched.favorites.section.FavoriteSheet
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
@@ -35,10 +39,6 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
-import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppBar
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import org.jetbrains.compose.resources.stringResource

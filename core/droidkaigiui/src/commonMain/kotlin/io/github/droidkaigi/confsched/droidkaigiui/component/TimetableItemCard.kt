@@ -48,11 +48,11 @@ import conference_app_2024.core.droidkaigiui.generated.resources.image
 import conference_app_2024.core.droidkaigiui.generated.resources.not_bookmarked
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
-import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.droidkaigiui.DroidKaigiUiRes
 import io.github.droidkaigi.confsched.droidkaigiui.animation.LocalFavoriteAnimationScope
 import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
+import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import org.jetbrains.compose.resources.stringResource
 
 const val TimetableItemCardBookmarkButtonTestTag = "TimetableItemCardBookmarkButton"

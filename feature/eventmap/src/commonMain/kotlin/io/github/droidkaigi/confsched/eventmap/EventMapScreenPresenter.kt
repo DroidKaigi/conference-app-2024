@@ -4,9 +4,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.EventMapRepository
 import io.github.droidkaigi.confsched.model.localEventMapRepository
-import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 
 sealed interface EventMapScreenEvent
