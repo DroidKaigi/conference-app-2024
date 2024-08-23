@@ -45,14 +45,7 @@ private data class HologramaticEffectNode(
     var orientation: Orientation,
 ) :
     Modifier.Node(),
-    GlobalPositionAwareModifierNode,
     DrawModifierNode {
-
-    private var size = IntSize.Zero
-
-    override fun onGloballyPositioned(coordinates: LayoutCoordinates) {
-        size = coordinates.size
-    }
 
     override fun ContentDrawScope.draw() {
         val pitchDegree = radianToDegree(orientation.pitch)
@@ -62,14 +55,14 @@ private data class HologramaticEffectNode(
         val rollRatio = rollDegree / 180f
 
         drawInFrontOf {
-            translate(
-                left = -(size.width * 0.5f) * rollRatio / 2f,
-                top = (size.height * 0.5f) * pitchRatio,
-            ) {
-                if (rollDegree in -80f..80f) {
-                    DRAW_PATH_STATES.forEach { state ->
-                        val alpha = state.alpha * (80f - rollDegree.absoluteValue) / 80f
-                        val offset = state.offset.toPx()
+            DRAW_PATH_CONFIGS.forEach { config ->
+                translate(
+                    left = -(size.width * 0.5f) * rollRatio / 2f,
+                    top = (size.height * 0.5f) * pitchRatio * config.speed,
+                ) {
+                    if (rollDegree in -80f..80f) {
+                        val alpha = config.alpha * (80f - rollDegree.absoluteValue) / 80f
+                        val offset = config.offset.toPx()
 
                         drawRect(
                             topLeft = Offset(
@@ -84,9 +77,9 @@ private data class HologramaticEffectNode(
                                 colorStops = arrayOf(
                                     0.0f to Transparent,
                                     0.45f to Transparent,
-                                    0.5f - state.width / 2f to state.startColor,
+                                    0.5f - config.width / 2f to config.startColor,
                                     0.5f to Color.White,
-                                    0.5f + state.width / 2f to state.endColor,
+                                    0.5f + config.width / 2f to config.endColor,
                                     0.55f to Transparent,
                                     1.0f to Transparent,
                                 ),
@@ -112,7 +105,7 @@ private data class HologramaticEffectNode(
         return (radian * 180f / PI).toFloat()
     }
 
-    private data class DrawPathState(
+    private data class DrawPathConfig(
         val offset: Dp,
         val startColor: Color,
         val endColor: Color,
@@ -120,18 +113,22 @@ private data class HologramaticEffectNode(
         val width: Float,
         @FloatRange(from = 0.0, to = 1.0)
         val alpha: Float,
+        @FloatRange(from = 0.0, to = 1.0)
+        val speed: Float,
     ) {
         constructor(
             offset: Dp,
             color: Color,
             width: Float,
             alpha: Float,
+            speed: Float,
         ) : this(
             offset = offset,
             startColor = color,
             endColor = color,
             width = width,
-            alpha = alpha
+            alpha = alpha,
+            speed = speed,
         )
     }
 
@@ -140,14 +137,34 @@ private data class HologramaticEffectNode(
         private const val PI = 3.14159265359
 
         private val Transparent = Color(0, 0, 0, 0)
-        private val LightGreen = Color(194, 255, 182)
-        private val LightPurple = Color(221, 169, 255)
-        private val LightBlue = Color(162, 209, 255)
+        private val LightGreen = Color(0xFF45E761)
+        private val LightPink = Color(0xFFFF53CF)
+        private val LightPurple = Color(0xFF9B51E0)
+        private val LightBlue =  Color(0xFF44ADE7)
 
-        private val DRAW_PATH_STATES = listOf(
-            DrawPathState(((-450).dp), LightGreen, LightBlue, 0.03f, 0.3f),
-            DrawPathState((-200).dp, LightBlue, 0.02f, 0.4f),
-            DrawPathState(50.dp, LightPurple, 0.01f, 0.5f),
+        private val DRAW_PATH_CONFIGS = listOf(
+            DrawPathConfig(
+                offset = ((-450).dp),
+                startColor = LightGreen,
+                endColor = LightPink,
+                width = 0.03f,
+                alpha = 0.3f,
+                speed = 1.0f
+            ),
+            DrawPathConfig(
+                offset = (-200).dp,
+                color = LightPurple,
+                width = 0.02f,
+                alpha = 0.4f,
+                speed = 0.6f
+            ),
+            DrawPathConfig(
+                offset = 50.dp,
+                color = LightBlue,
+                width = 0.01f,
+                alpha = 0.5f,
+                speed = 0.3f
+            ),
         )
     }
 }
