@@ -14,7 +14,7 @@ internal actual fun getOrientationSensorManager(
     onOrientationChanged: (Orientation) -> Unit,
 ): OrientationSensorManager {
     val context = LocalContext.current
-    return remember(context) {
+    return remember(context, onOrientationChanged) {
         AndroidOrientationSensorManager(
             context = context,
             onOrientationChanged = onOrientationChanged,

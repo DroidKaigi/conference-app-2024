@@ -9,7 +9,7 @@ import platform.Foundation.NSOperationQueue
 internal actual fun getOrientationSensorManager(
     onOrientationChanged: (Orientation) -> Unit,
 ): OrientationSensorManager {
-    return remember {
+    return remember(onOrientationChanged) {
         IosOrientationSensorManager(
             onOrientationChanged = onOrientationChanged,
         )
