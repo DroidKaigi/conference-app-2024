@@ -46,10 +46,10 @@ class SearchScreenTest(
                         setupTimetableServer(ServerStatus.Operational)
                         setupSearchScreenContent()
                     }
-                    itShould("show non-filtered timetable items") {
+                    itShould("no timetable items are displayed") {
                         captureScreenWithChecks {
-                            checkTimetableListDisplayed()
-                            checkTimetableListItemsDisplayed()
+                            checkTimetableListExists()
+                            checkTimetableListItemsNotDisplayed()
                         }
                     }
                     describe("input search word to TextField") {
@@ -60,6 +60,8 @@ class SearchScreenTest(
                             captureScreenWithChecks {
                                 checkDemoSearchWordDisplayed()
                                 checkTimetableListItemsHasDemoText()
+                                checkTimetableListDisplayed()
+                                checkTimetableListItemsDisplayed()
                             }
                         }
                     }
@@ -84,6 +86,8 @@ class SearchScreenTest(
                                         checkTimetableListItemByConferenceDay(
                                             checkDay = conference,
                                         )
+                                        checkTimetableListDisplayed()
+                                        checkTimetableListItemsDisplayed()
                                     }
                                 }
                             }
@@ -108,6 +112,8 @@ class SearchScreenTest(
                                 itShould("selected category ${category.categoryName}") {
                                     captureScreenWithChecks {
                                         checkTimetableListItemByCategory(category)
+                                        checkTimetableListDisplayed()
+                                        checkTimetableListItemsDisplayed()
                                     }
                                 }
                             }
@@ -133,8 +139,38 @@ class SearchScreenTest(
                                 itShould("selected language ${language.name}") {
                                     captureScreenWithChecks {
                                         checkTimetableListItemByLanguage(language)
+                                        checkTimetableListDisplayed()
+                                        checkTimetableListItemsDisplayed()
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+
+                describe("when device is tablet") {
+                    doIt {
+                        setupTabletDevice()
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupSearchScreenContent()
+                    }
+                    itShould("no timetable items are displayed") {
+                        captureScreenWithChecks {
+                            checkTimetableListExists()
+                            checkTimetableListItemsNotDisplayed()
+                        }
+                    }
+
+                    describe("input search word to TextField") {
+                        doIt {
+                            inputDemoSearchWord()
+                        }
+                        itShould("show search word and filtered items") {
+                            captureScreenWithChecks {
+                                checkDemoSearchWordDisplayed()
+                                checkTimetableListItemsHasDemoText()
+                                checkTimetableListDisplayed()
+                                checkTimetableListItemsDisplayed()
                             }
                         }
                     }

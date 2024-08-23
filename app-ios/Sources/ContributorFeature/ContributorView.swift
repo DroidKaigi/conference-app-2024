@@ -20,13 +20,13 @@ public struct ContributorView: View {
                 "KMP Presenter"
 
             case .fullKmp:
-                "KMP Compose view"
+                "KMP Compose View"
             }
         }
     }
 
-    @State private var viewType: ViewType = .swift
-
+    @State private var selectedTab: ViewType = .swift
+    @Namespace var namespace
     @Bindable var store: StoreOf<ContributorReducer>
 
     public init(store: StoreOf<ContributorReducer>) {
@@ -35,23 +35,24 @@ public struct ContributorView: View {
 
     public var body: some View {
         VStack(spacing: 0) {
-            Picker("", selection: $viewType) {
-                ForEach(ViewType.allCases, id: \.self) { segment in
-                    Text(segment.title)
-                }
-            }
-            .pickerStyle(.segmented)
-            .padding(16)
+            tabBar
 
-            switch viewType {
+            switch selectedTab {
             case .swift:
                 SwiftUIContributorView(store: store)
 
             case .kmpPresenter:
-                KmpPresenterContributorView()
-
+                KmpPresenterContributorView {
+                    store.send(.view(.contributorButtonTapped($0)))
+                }
+                .tag(ViewType.kmpPresenter)
             case .fullKmp:
-                KmpContributorComposeViewControllerWrapper()
+                KmpContributorComposeViewControllerWrapper { urlString in
+                    guard let url = URL(string: urlString) else {
+                        return
+                    }
+                    store.send(.view(.contributorButtonTapped(url)))
+                }
             }
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
@@ -61,6 +62,41 @@ public struct ContributorView: View {
             SafariView(url: url.id)
                 .ignoresSafeArea()
         })
+    }
+    
+    @MainActor
+    private var tabBar: some View {
+        HStack {
+            ForEach(ViewType.allCases, id: \.self) { tab in
+                Button {
+                    selectedTab = tab
+                } label: {
+                    ZStack {
+                        Text(tab.title)
+                            .textStyle(.titleMedium)
+                            .foregroundStyle(
+                                selectedTab == tab ? AssetColors.Primary.primaryFixed.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor
+                            )
+                        VStack {
+                            Spacer()
+                            Group {
+                                if selectedTab == tab {
+                                    AssetColors.Primary.primaryFixed.swiftUIColor
+                                        .matchedGeometryEffect(id: "underline", in: namespace, properties: .frame)
+                                } else {
+                                    Color.clear
+                                }
+                            }
+                            .frame(height: 3)
+                        }
+                    }
+                    .frame(height: 52, alignment: .center)
+                    .frame(maxWidth: .infinity)
+                    .animation(.spring(), value: selectedTab)
+                }
+                .frame(maxWidth: .infinity)
+            }
+        }
     }
 }
 

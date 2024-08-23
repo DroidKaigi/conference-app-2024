@@ -40,8 +40,10 @@ import javax.inject.Inject
 class TimetableScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
+    private val deviceSetupRobot: DefaultDeviceSetupRobot,
 ) : ScreenRobot by screenRobot,
-    TimetableServerRobot by timetableServerRobot {
+    TimetableServerRobot by timetableServerRobot,
+    DeviceSetupRobot by deviceSetupRobot {
     val clickedItems = mutableSetOf<TimetableItem>()
 
     fun setupTimetableScreenContent(customTime: LocalDateTime? = null) {

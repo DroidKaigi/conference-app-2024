@@ -1,5 +1,6 @@
 import SwiftUI
 import Theme
+import CommonComponents
 
 struct StaffLabel: View {
     let name: String
@@ -7,15 +8,12 @@ struct StaffLabel: View {
 
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
-            AsyncImage(url: icon) {
-                $0.image?.resizable()
-            }
-            .frame(width: 52, height: 52)
-            .clipShape(Circle())
-            .overlay(
-                Circle()
-                    .stroke(AssetColors.Outline.outline.swiftUIColor, lineWidth: 1)
-            )
+            CircularUserIcon(urlString: icon.absoluteString)
+                .frame(width: 52, height: 52)
+                .overlay(
+                    Circle()
+                        .stroke(AssetColors.Outline.outline.swiftUIColor, lineWidth: 1)
+                )
 
             Text(name)
                 .textStyle(.bodyLarge)
@@ -27,5 +25,5 @@ struct StaffLabel: View {
 }
 
 #Preview {
-    StaffLabel(name: "hoge", icon: .init(string: "")!)
+    StaffLabel(name: "hoge", icon: .init(string: "https://avatars.githubusercontent.com/u/10727543?s=156&v=4")!)
 }

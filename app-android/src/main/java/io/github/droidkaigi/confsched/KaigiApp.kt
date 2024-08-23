@@ -29,6 +29,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
@@ -81,6 +82,7 @@ import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.share.ShareNavigator
+import io.github.droidkaigi.confsched.share.saveToDisk
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
@@ -140,7 +142,11 @@ private fun KaigiNavHost(
                 navController = navController,
                 startDestination = mainScreenRoute,
             ) {
-                mainScreen(windowSize, navController, externalNavController)
+                mainScreen(
+                    windowSize,
+                    navController,
+                    externalNavController,
+                )
                 sessionScreens(
                     onNavigationIconClick = navController::popBackStack,
                     onLinkClick = externalNavController::navigate,
@@ -199,6 +205,7 @@ private fun NavGraphBuilder.mainScreen(
                 contentPadding = contentPadding,
             )
             eventMapScreens(
+                contentPadding = contentPadding,
                 onEventMapItemClick = externalNavController::navigate,
             )
             favoritesScreens(
@@ -250,7 +257,10 @@ private fun NavGraphBuilder.mainScreen(
                     }
                 },
             )
-            profileCardScreen(contentPadding)
+            profileCardScreen(
+                contentPadding = contentPadding,
+                onClickShareProfileCard = externalNavController::onShareProfileCardClick,
+            )
         },
     )
 }
@@ -348,6 +358,17 @@ private class ExternalNavController(
             "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}\n" +
                 "${timetableItem.title.currentLangTitle}\n" +
                 timetableItem.url,
+        )
+    }
+
+    fun onShareProfileCardClick(
+        text: String,
+        imageBitmap: ImageBitmap,
+    ) {
+        val imageAbsolutePath = imageBitmap.saveToDisk(context)
+        shareNavigator.shareTextWithImage(
+            text = text,
+            filePath = imageAbsolutePath,
         )
     }
 

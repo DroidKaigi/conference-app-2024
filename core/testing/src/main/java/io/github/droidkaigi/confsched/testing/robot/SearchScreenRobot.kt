@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.assertAll
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertTextContains
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.filter
@@ -34,8 +35,10 @@ const val DemoSearchWord = "Demo"
 class SearchScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
+    private val deviceSetupRobot: DefaultDeviceSetupRobot,
 ) : ScreenRobot by screenRobot,
-    TimetableServerRobot by timetableServerRobot {
+    TimetableServerRobot by timetableServerRobot,
+    DeviceSetupRobot by deviceSetupRobot {
     enum class ConferenceDay(
         val day: Int,
         val dateText: String,
@@ -267,6 +270,12 @@ class SearchScreenRobot @Inject constructor(
             .assertAll(hasText(text = searchWord, ignoreCase = true))
     }
 
+    fun checkTimetableListExists() {
+        composeTestRule
+            .onNode(hasTestTag(TimetableListTestTag))
+            .assertExists()
+    }
+
     fun checkTimetableListDisplayed() {
         composeTestRule
             .onNode(hasTestTag(TimetableListTestTag))
@@ -278,5 +287,12 @@ class SearchScreenRobot @Inject constructor(
             .onAllNodesWithTag(TimetableItemCardTestTag)
             .onFirst()
             .assertIsDisplayed()
+    }
+
+    fun checkTimetableListItemsNotDisplayed() {
+        composeTestRule
+            .onAllNodesWithTag(TimetableItemCardTestTag)
+            .onFirst()
+            .assertIsNotDisplayed()
     }
 }
