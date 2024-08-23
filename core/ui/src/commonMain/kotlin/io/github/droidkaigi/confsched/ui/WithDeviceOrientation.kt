@@ -54,16 +54,3 @@ fun WithDeviceOrientation(
 
     content(scope)
 }
-
-@Composable
-fun ProvideDeviceOrientation(
-    orientation: Orientation = Orientation.ZERO,
-    content: @Composable DeviceOrientationScope.() -> Unit,
-) {
-    val scope = remember {
-        DeviceOrientationScopeImpl().apply {
-            updateOrientation(orientation)
-        }
-    }
-    content(scope)
-}

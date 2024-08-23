@@ -66,7 +66,6 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
-import io.github.droidkaigi.confsched.ui.ProvideDeviceOrientation
 import io.github.droidkaigi.confsched.ui.WithDeviceOrientation
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
@@ -332,12 +331,10 @@ fun FlipCardFrontPreview() {
     KaigiTheme {
         Surface(modifier = Modifier.size(300.dp, 380.dp)) {
             ProvideProfileCardTheme(uiState.cardType.name) {
-                ProvideDeviceOrientation {
-                    FlipCardFront(
-                        uiState = uiState,
-                        profileImage = profileImage,
-                    )
-                }
+                FlipCardFront(
+                    uiState = uiState,
+                    profileImage = profileImage,
+                )
             }
         }
     }
