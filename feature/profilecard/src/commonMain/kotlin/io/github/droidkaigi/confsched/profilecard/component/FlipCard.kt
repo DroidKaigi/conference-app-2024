@@ -66,7 +66,6 @@ import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
-import io.github.droidkaigi.confsched.ui.DeviceOrientationScope
 import io.github.droidkaigi.confsched.ui.ProvideDeviceOrientation
 import io.github.droidkaigi.confsched.ui.WithDeviceOrientation
 import io.ktor.util.decodeBase64Bytes
@@ -137,11 +136,13 @@ internal fun FlipCard(
                 .build(uiState.link)
                 .renderToBytes().toImageBitmap()
         }
-        WithDeviceOrientation {
-            if (isBack) { // Back
-                FlipCardBack(uiState, imageBitmap)
-            } else { // Front
+
+        if (isBack) { // Back
+            FlipCardBack(uiState, imageBitmap)
+        } else { // Front
+            WithDeviceOrientation {
                 FlipCardFront(
+                    modifier = Modifier.hologramaticEffect(),
                     uiState = uiState,
                     profileImage = profileImage,
                 )
@@ -221,7 +222,6 @@ internal fun CapturableCard(
     }
 }
 
-context(DeviceOrientationScope)
 @Composable
 private fun FlipCardFront(
     uiState: Card,
@@ -240,8 +240,7 @@ private fun FlipCardFront(
     Box(
         modifier = modifier
             .testTag(ProfileCardFlipCardFrontTestTag)
-            .fillMaxSize()
-            .hologramaticEffect(),
+            .fillMaxSize(),
     ) {
         Image(
             painter = painterResource(background),
