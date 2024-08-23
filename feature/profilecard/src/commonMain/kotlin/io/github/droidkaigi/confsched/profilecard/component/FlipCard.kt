@@ -57,6 +57,7 @@ import conference_app_2024.feature.profilecard.generated.resources.card_front_or
 import conference_app_2024.feature.profilecard.generated.resources.card_front_pink
 import conference_app_2024.feature.profilecard.generated.resources.card_front_white
 import conference_app_2024.feature.profilecard.generated.resources.card_front_yellow
+import conference_app_2024.feature.profilecard.generated.resources.droidkaigi_logo
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
@@ -67,6 +68,9 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.getDrawableResourceBytes
+import org.jetbrains.compose.resources.getSystemResourceEnvironment
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import qrcode.QRCode
@@ -75,6 +79,7 @@ const val ProfileCardFlipCardTestTag = "ProfileCardFlipCardTestTag"
 const val ProfileCardFlipCardFrontTestTag = "ProfileCardFlipCardFrontTestTag"
 const val ProfileCardFlipCardBackTestTag = "ProfileCardFlipCardBackTestTag"
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun FlipCard(
     uiState: Card,
@@ -106,8 +111,13 @@ internal fun FlipCard(
             easing = FastOutSlowInEasing,
         ),
     )
+    var logoImage by remember { mutableStateOf(ByteArray(0)) }
 
     LaunchedEffect(Unit) {
+        logoImage = getDrawableResourceBytes(
+            environment = getSystemResourceEnvironment(),
+            resource = ProfileCardRes.drawable.droidkaigi_logo,
+        )
         if (isCreated) {
             initialRotation = targetRotation
             delay(400)
@@ -128,8 +138,9 @@ internal fun FlipCard(
         elevation = CardDefaults.cardElevation(10.dp),
     ) {
         val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
-        val imageBitmap = remember {
+        val imageBitmap = remember(logoImage) {
             QRCode.ofSquares()
+                .withLogo(logoImage, 400, 400)
                 .build(uiState.link)
                 .renderToBytes().toImageBitmap()
         }
@@ -144,6 +155,7 @@ internal fun FlipCard(
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun CapturableCard(
     uiState: Card,
@@ -152,17 +164,28 @@ internal fun CapturableCard(
     val graphicsLayerFront = rememberGraphicsLayer()
     val graphicsLayerBack = rememberGraphicsLayer()
     val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
-    val imageBitmap = remember {
+    var logoImage by remember { mutableStateOf(ByteArray(0)) }
+    val imageBitmap = remember(logoImage) {
         QRCode.ofSquares()
+            .withLogo(logoImage, 400, 400)
             .build(uiState.link)
             .renderToBytes().toImageBitmap()
     }
+    var isQrCodeWithLogoLoaded by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
-        try {
-            onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
-        } catch (e: IllegalArgumentException) {
-            Logger.e("IllegalArgumentException is thrown from screenshot test: $e")
+    LaunchedEffect(isQrCodeWithLogoLoaded) {
+        if (logoImage.isEmpty()) {
+            logoImage = getDrawableResourceBytes(
+                environment = getSystemResourceEnvironment(),
+                resource = ProfileCardRes.drawable.droidkaigi_logo,
+            )
+        }
+        if (isQrCodeWithLogoLoaded) {
+            try {
+                onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
+            } catch (e: IllegalArgumentException) {
+                Logger.e("IllegalArgumentException is thrown from screenshot test: $e")
+            }
         }
     }
 
@@ -195,6 +218,9 @@ internal fun CapturableCard(
                         this@drawWithContent.drawContent()
                     }
                     drawLayer(graphicsLayerBack)
+                    if (logoImage.isNotEmpty()) {
+                        isQrCodeWithLogoLoaded = true
+                    }
                 },
         ) {
             FlipCardBack(
