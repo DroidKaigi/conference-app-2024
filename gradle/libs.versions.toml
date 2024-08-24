@@ -8,9 +8,11 @@ kotlin = "2.0.10"
 androidxCore = "1.13.1"
 androidDesugarJdkLibs = "2.0.4"
 compose = "2024.06.00"
-# Confirm that the Compose for Desktop app is available to launch when update this version number.
-# https://youtrack.jetbrains.com/issue/CMP-5077/Compose-navigation-crash-v2.8.0-alpha08-UnsatisfiedLinkError
-composeMultiplatform = "1.7.0-alpha02"
+# TODO: To use Navigation-Compose on the Desktop App, the Compose Multiplatform plugin needs to be updated because the 2.8.0-alpha08 version of Navigation Compose requires the 1.7.0 or higher version of Compose Multiplatform.
+#  https://youtrack.jetbrains.com/issue/CMP-5077/Compose-navigation-crash-v2.8.0-alpha08-UnsatisfiedLinkError
+#  But the above version of Compose Multiplatform has a timeout issue on Robolectric testing, therefore, it needs to wait to fix that issue.
+#  https://github.com/DroidKaigi/conference-app-2024/pull/453
+composeMultiplatform = "1.6.11"
 rin = "0.1.0"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"

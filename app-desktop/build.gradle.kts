@@ -6,13 +6,11 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(projects.core.designsystem)
-                implementation(compose.ui)
+                implementation(libs.kotlinxCoroutinesCore)
             }
         }
         desktopMain {
             dependencies {
-                implementation(compose.desktop.currentOs)
                 implementation(libs.kotlinxCoroutinesSwing)
             }
         }

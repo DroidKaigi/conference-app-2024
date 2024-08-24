@@ -13,16 +13,43 @@ class KmpDesktopPlugin : Plugin<Project> {
 
             with(pluginManager) {
                 apply("droidkaigi.primitive.kmp")
-                apply("droidkaigi.primitive.kmp.compose")
+                // TODO: Want to apply the KmpCompose Plugin to include common libraries for Compose Multiplatform.
+//                apply("droidkaigi.primitive.kmp.compose")
                 apply(libs.plugin("jetbrainsCompose").pluginId)
                 apply(libs.plugin("composeCompiler").pluginId)
             }
 
             kotlin {
                 jvm("desktop")
+
+                with(sourceSets) {
+                    getByName("commonMain").apply {
+                        dependencies {
+                            // TODO: Want to remove these compose.dependencies implementations by applying the KmpCompose Plugin.
+                            implementation(compose.dependencies.ui)
+                            implementation(compose.dependencies.runtime)
+                            implementation(compose.dependencies.foundation)
+                            implementation(compose.dependencies.material3)
+                            @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+                            implementation(compose.dependencies.components.resources)
+                            implementation(libs.library("rin"))
+                            // TODO: To enable this implementation, needs to update Compose Multiplatform Plugin to use Navigation-Compose on Desktop App,
+//                            implementation(libs.library("composeNavigation"))
+                            implementation(libs.library("composeMaterialWindowSize"))
+                            implementation(libs.library("androidxLifecycleViewModel"))
+                            implementation(libs.library("androidxLifecycleViewModelCompose"))
+                            implementation(libs.library("androidxLifecycleCommon"))
+                        }
+                    }
+                    getByName("desktopMain").apply {
+                        dependencies {
+                            implementation(compose.dependencies.desktop.currentOs)
+                        }
+                    }
+                }
             }
 
-            val compose = extensions.get("compose") as org.jetbrains.compose.ComposeExtension
+            val compose = extensions["compose"] as org.jetbrains.compose.ComposeExtension
             compose.extensions.configure<org.jetbrains.compose.desktop.DesktopExtension> {
                 application {
                     mainClass = "io.github.droidkaigi.confsched.DesktopKaigiAppKt"
