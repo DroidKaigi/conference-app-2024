@@ -15,7 +15,6 @@ import io.github.droidkaigi.confsched.favorites.FavoritesScreen
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenTestTag
 import io.github.droidkaigi.confsched.favorites.section.FavoritesScreenEmptyViewTestTag
 import io.github.droidkaigi.confsched.model.TimetableItemId
-import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkButtonTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
 import javax.inject.Inject
