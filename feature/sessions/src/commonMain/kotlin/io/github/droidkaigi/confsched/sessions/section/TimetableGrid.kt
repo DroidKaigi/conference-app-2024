@@ -522,7 +522,7 @@ private data class TimetableItemLayout(
         ((displayEndsAt - timetableItem.startsAt).inWholeMinutes * minutePx).roundToInt()
     val top = ((timetableItem.startsAt - dayStart).inWholeMinutes * minutePx).toInt()
     val bottom = top + height
-    
+
     val width: Int
     val left: Int
     val right: Int
@@ -530,7 +530,7 @@ private data class TimetableItemLayout(
     init {
         if (timetableItem.isLunch) {
             width = with(density) { TimetableSizes.columnWidth.roundToPx() * 5 }
-            left = 0 //rooms.indexOf(RoomType.RoomF) * width //.indexOf(timetableItem.room) * width
+            left = 0 // rooms.indexOf(RoomType.RoomF) * width //.indexOf(timetableItem.room) * width
             right = left + width
         } else {
             width = with(density) { TimetableSizes.columnWidth.roundToPx() }
@@ -538,9 +538,6 @@ private data class TimetableItemLayout(
             right = left + width
         }
     }
-
-
-
 
     fun isVisible(
         screenWidth: Int,
