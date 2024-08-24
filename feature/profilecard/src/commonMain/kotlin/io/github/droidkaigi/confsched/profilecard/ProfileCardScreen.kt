@@ -54,6 +54,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.CornerRadius
@@ -536,6 +537,7 @@ private fun ImagePickerWithError(
     onClearImage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val clearButtonShadowColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
     Column(modifier = modifier) {
         image?.let {
             Box(
@@ -554,8 +556,15 @@ private fun ImagePickerWithError(
                     onClick = onClearImage,
                     modifier = Modifier
                         .graphicsLayer {
-                            translationX = 6.dp.toPx()
-                            translationY = -6.dp.toPx()
+                            translationX = 9.dp.toPx()
+                            translationY = -9.dp.toPx()
+                        }
+                        .drawBehind {
+                            drawCircle(
+                                color = clearButtonShadowColor,
+                                radius = 12.dp.toPx(),
+                                center = Offset(x = 12.dp.toPx(), y = 14.dp.toPx()),
+                            )
                         }
                         .size(24.dp)
                         .align(Alignment.TopEnd),
