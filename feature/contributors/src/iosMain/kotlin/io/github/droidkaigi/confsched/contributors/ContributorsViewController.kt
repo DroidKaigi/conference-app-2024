@@ -1,8 +1,8 @@
 package io.github.droidkaigi.confsched.contributors
 
 import io.github.droidkaigi.confsched.data.Repositories
-import io.github.droidkaigi.confsched.ui.composeViewController
-import io.github.droidkaigi.confsched.ui.presenterStateFlow
+import io.github.droidkaigi.confsched.droidkaigiui.composeViewController
+import io.github.droidkaigi.confsched.droidkaigiui.presenterStateFlow
 import kotlinx.coroutines.flow.Flow
 import platform.UIKit.UIViewController
 import kotlin.reflect.KClass

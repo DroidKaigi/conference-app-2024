@@ -15,6 +15,9 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import androidx.compose.ui.test.performTextInput
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.Inject
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardTestTag
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardTitleTextTestTag
 import io.github.droidkaigi.confsched.sessions.SearchScreen
 import io.github.droidkaigi.confsched.sessions.component.DropdownFilterChipTestTagPrefix
 import io.github.droidkaigi.confsched.sessions.component.SearchFiltersFilterCategoryChipTestTag
@@ -26,9 +29,6 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
 import io.github.droidkaigi.confsched.testing.utils.assertTextDoesNotContain
 import io.github.droidkaigi.confsched.testing.utils.hasTestTag
-import io.github.droidkaigi.confsched.ui.Inject
-import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
-import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTitleTextTestTag
 
 const val DemoSearchWord = "Demo"
 

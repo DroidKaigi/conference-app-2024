@@ -13,11 +13,11 @@ import conference_app_2024.feature.profilecard.generated.resources.link
 import conference_app_2024.feature.profilecard.generated.resources.nickname
 import conference_app_2024.feature.profilecard.generated.resources.occupation
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiType.Card
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
