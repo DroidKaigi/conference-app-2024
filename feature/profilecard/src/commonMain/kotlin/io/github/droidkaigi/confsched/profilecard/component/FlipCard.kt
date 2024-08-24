@@ -30,7 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -178,8 +179,24 @@ internal fun CapturableCard(
             .renderToBytes().toImageBitmap()
     }
     var isQrCodeWithLogoRendered by remember { mutableStateOf(false) }
+    var isFrontCaptured by remember { mutableStateOf(false) }
+    var isBackCaptured by remember { mutableStateOf(false) }
+    var isFrontSizeNonZero by remember { mutableStateOf(false) }
+    var isBackSizeNonZero by remember { mutableStateOf(false) }
 
-    LaunchedEffect(isQrCodeWithLogoRendered) {
+    LaunchedEffect(isFrontCaptured, isBackCaptured, isFrontSizeNonZero, isBackSizeNonZero, isQrCodeWithLogoRendered) {
+        // In ComposableMultiplatform, an ImageBitmap is not Null, but may come with a size of 0.
+        // If the process reaches the Image's Composable with a size of 0, the application will crash with the following error.
+        // Uncaught Kotlin exception: kotlin.IllegalStateException: Size is unspecified
+        if (
+            isFrontCaptured.not() ||
+            isBackCaptured.not() ||
+            isFrontSizeNonZero.not() ||
+            isBackSizeNonZero.not()
+        ) {
+            return@LaunchedEffect
+        }
+
         if (logoImage.isEmpty()) {
             logoImage = getDrawableResourceBytes(
                 environment = getSystemResourceEnvironment(),
@@ -199,11 +216,18 @@ internal fun CapturableCard(
     Box {
         Box(
             modifier = Modifier
-                .drawWithContent {
-                    graphicsLayerFront.record {
-                        this@drawWithContent.drawContent()
+                .drawWithCache {
+                    onDrawWithContent {
+                        graphicsLayerFront.record {
+                            this@onDrawWithContent.drawContent()
+                        }
+                        drawLayer(graphicsLayerFront)
                     }
-                    drawLayer(graphicsLayerFront)
+                }
+                .onGloballyPositioned {
+                    isFrontCaptured = true
+                    isFrontSizeNonZero =
+                        graphicsLayerFront.size.width > 0 && graphicsLayerFront.size.height > 0
                 },
         ) {
             FlipCardFront(
@@ -220,14 +244,21 @@ internal fun CapturableCard(
         }
         Box(
             modifier = Modifier
-                .drawWithContent {
-                    graphicsLayerBack.record {
-                        this@drawWithContent.drawContent()
+                .drawWithCache {
+                    onDrawWithContent {
+                        graphicsLayerBack.record {
+                            this@onDrawWithContent.drawContent()
+                        }
+                        drawLayer(graphicsLayerBack)
+                        if (logoImage.isNotEmpty()) {
+                            isQrCodeWithLogoRendered = true
+                        }
                     }
-                    drawLayer(graphicsLayerBack)
-                    if (logoImage.isNotEmpty()) {
-                        isQrCodeWithLogoRendered = true
-                    }
+                }
+                .onGloballyPositioned {
+                    isBackCaptured = true
+                    isBackSizeNonZero =
+                        graphicsLayerBack.size.width > 0 && graphicsLayerBack.size.height > 0
                 },
         ) {
             FlipCardBack(

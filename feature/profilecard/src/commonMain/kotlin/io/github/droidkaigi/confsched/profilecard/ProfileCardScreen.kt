@@ -696,6 +696,7 @@ internal fun CardScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
+    var isReadyShare by remember { mutableStateOf(false) }
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
@@ -704,6 +705,9 @@ internal fun CardScreen(
                 uiState = uiState,
                 graphicsLayer = graphicsLayer,
                 contentPadding = contentPadding,
+                onReadyShare = {
+                    isReadyShare = true
+                }
             )
             Column(
                 modifier = modifier
@@ -727,6 +731,7 @@ internal fun CardScreen(
                     )
                     Spacer(Modifier.height(32.dp))
                     Button(
+                        enabled = isReadyShare,
                         onClick = {
                             coroutineScope.launch {
                                 onClickShareProfileCard(graphicsLayer.toImageBitmap())
@@ -781,6 +786,7 @@ private fun ShareableProfileCard(
     uiState: ProfileCardUiState.Card,
     graphicsLayer: GraphicsLayer,
     contentPadding: PaddingValues,
+    onReadyShare: () -> Unit,
 ) {
     var frontImage: ImageBitmap? by remember { mutableStateOf(null) }
     var backImage: ImageBitmap? by remember { mutableStateOf(null) }
@@ -789,6 +795,7 @@ private fun ShareableProfileCard(
         onCaptured = { front, back ->
             frontImage = front
             backImage = back
+            onReadyShare()
         },
     )
     Box(
