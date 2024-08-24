@@ -37,8 +37,7 @@ jobs:
         with:
           script: |
             const { IOS_REVIEWERS } = process.env
-            const author = context.payload.pull_request.user.login;
-            const reviewers = IOS_REVIEWERS.split(',').filter(reviewer => reviewer !== author)
+            const reviewers = IOS_REVIEWERS.split(',')
 
             await github.rest.pulls.requestReviewers({
               owner: context.repo.owner,

@@ -6,8 +6,7 @@ import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.StaffScreenRobot
-import io.github.droidkaigi.confsched.testing.robot.StaffServerRobot.ServerStatus.Error
-import io.github.droidkaigi.confsched.testing.robot.StaffServerRobot.ServerStatus.Operational
+import io.github.droidkaigi.confsched.testing.robot.StaffServerRobot
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
@@ -41,36 +40,46 @@ class StaffScreenTest(
             return describeBehaviors<StaffScreenRobot>(name = "StaffScreen") {
                 describe("when server is operational") {
                     run {
-                        setupStaffServer(Operational)
+                        setupStaffServer(StaffServerRobot.ServerStatus.Operational)
                     }
                     describe("when launch") {
                         run {
                             setupScreenContent()
                         }
-                        itShould("show staff screen") {
-                            captureScreenWithChecks(
-                                checks = {
-                                    checkExistsStaffItem()
-                                },
-                            )
+                        itShould("show first and second staffs") {
+                            captureScreenWithChecks {
+                                checkShowFirstAndSecondStaffs()
+                            }
                         }
-                    }
-                }
 
-                describe("when server is down") {
-                    run {
-                        setupStaffServer(Error)
-                    }
-                    describe("when launch") {
-                        run {
-                            setupScreenContent()
+                        describe("when scroll to index 10") {
+                            run {
+                                scrollToIndex10()
+                            }
+                            itShould("show staffs") {
+                                captureScreenWithChecks {
+                                    checkStaffItemsDisplayed()
+                                }
+                            }
                         }
-                        itShould("show snackbar") {
-                            captureScreenWithChecks(
-                                checks = {
-                                    checkDoesNotExistsStaffItem()
-                                },
-                            )
+                    }
+
+                    describe("when server is down") {
+                        run {
+                            setupStaffServer(StaffServerRobot.ServerStatus.Error)
+                        }
+                        describe("when launch") {
+                            run {
+                                setupScreenContent()
+                            }
+                            itShould("does not show staff and show snackbar") {
+                                captureScreenWithChecks(
+                                    checks = {
+                                        checkDoesNotFirstStaffItemDisplayed()
+                                        checkErrorSnackbarDisplayed()
+                                    },
+                                )
+                            }
                         }
                     }
                 }

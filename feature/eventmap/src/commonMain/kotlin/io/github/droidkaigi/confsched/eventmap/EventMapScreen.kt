@@ -35,6 +35,7 @@ import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
+import io.github.droidkaigi.confsched.ui.plus
 import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
@@ -119,7 +120,10 @@ fun EventMapScreen(
         EventMap(
             eventMapEvents = uiState.eventMap,
             onEventMapItemClick = onEventMapItemClick,
-            modifier = Modifier.fillMaxSize().padding(padding)
+            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = padding.calculateTopPadding())
                 .nestedScroll(scrollBehavior.nestedScrollConnection),
         )
     }
@@ -130,11 +134,12 @@ private fun EventMap(
     eventMapEvents: PersistentList<EventMapEvent>,
     onEventMapItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     LazyColumn(
         modifier = modifier
             .testTag(EventMapLazyColumnTestTag),
-        contentPadding = PaddingValues(horizontal = 16.dp),
+        contentPadding = contentPadding + PaddingValues(horizontal = 16.dp),
     ) {
         item {
             EventMapTab()

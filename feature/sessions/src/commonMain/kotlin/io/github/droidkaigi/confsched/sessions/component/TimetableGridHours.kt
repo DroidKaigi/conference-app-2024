@@ -118,7 +118,7 @@ fun TimetableGridHours(
                     },
                 )
             },
-        itemProvider = itemProvider,
+        itemProvider = { itemProvider },
     ) { constraints ->
         data class ItemData(val placeable: Placeable, val hoursItem: HoursItemLayout)
         hoursScreen.updateBounds(width = constraints.maxWidth, height = constraints.maxHeight)
