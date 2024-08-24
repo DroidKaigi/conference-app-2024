@@ -41,7 +41,7 @@ class FavoritesScreenTest(
                 describe("when server is operational") {
                     doIt {
                         setupTimetableServer(ServerStatus.Operational)
-                        setupFavoriteSession()
+                        setupFavoriteSessions()
                         setupFavoritesScreenContent()
                     }
                     itShould("display favorite session") {
@@ -91,7 +91,7 @@ class FavoritesScreenTest(
                     doIt {
                         setupTabletDevice()
                         setupTimetableServer(ServerStatus.Operational)
-                        setupFavoriteSession()
+                        setupFavoriteSessions()
                         setupFavoritesScreenContent()
                     }
                     itShould("show timetable items") {
