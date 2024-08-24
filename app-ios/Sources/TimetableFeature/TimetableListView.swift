@@ -205,12 +205,11 @@ struct DashedDivider: View {
         } else {
             shape.frame(width: 1).padding(0)
         }
-        //shape
     }
 }
 
 struct LineShape: Shape {
-    public var axis: Axis
+    public let axis: Axis
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
