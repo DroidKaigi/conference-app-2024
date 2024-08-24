@@ -120,26 +120,27 @@ class UserMessageStateHolderImpl : UserMessageStateHolder {
                 .first()
         } catch (e: CancellationException) {
             Logger.d { "UserMessageStateHolderImpl.showMessage CancellationException" }
-            val newMessages = _messageUiState.userMessages.toMutableList()
-            newMessages.find { it.id == newMessage.id }?.let { userMessage ->
-                newMessages.remove(userMessage)
-            }
-            _messageUiState = _messageUiState.copy(userMessages = newMessages)
+            removeMessageById(newMessage.id)
             coroutineContext.ensureActive()
             throw e
         }
         Logger.d { "UserMessageStateHolderImpl.showMessage after first messageResult:$messageResult" }
-        val newMessages = _messageUiState.userMessages.toMutableList()
-        newMessages.find { it.id == newMessage.id }?.let { userMessage ->
-            newMessages.remove(userMessage)
-        }
-        _messageUiState = _messageUiState.copy(userMessages = newMessages)
+        removeMessageById(newMessage.id)
         Logger.d { "UserMessageStateHolderImpl.showMessage end _messageUiState:$_messageUiState" }
         return messageResult
     }
+
+    private fun removeMessageById(newMessageId: Int) {
+        val newMessages = _messageUiState.userMessages.toMutableList()
+        newMessages.find { it.id == newMessageId }?.let { userMessage ->
+            newMessages.remove(userMessage)
+        }
+        _messageUiState = _messageUiState.copy(userMessages = newMessages)
+    }
 }
 
-@Composable fun rememberUserMessageStateHolder(): UserMessageStateHolder {
+@Composable
+fun rememberUserMessageStateHolder(): UserMessageStateHolder {
     return rememberRetained { UserMessageStateHolderImpl() }
 }
 
