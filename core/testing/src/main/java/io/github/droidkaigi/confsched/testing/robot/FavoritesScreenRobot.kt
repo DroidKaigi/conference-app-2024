@@ -6,12 +6,16 @@ import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.swipeUp
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.user.UserDataStore
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.FavoritesScreen
+import io.github.droidkaigi.confsched.favorites.FavoritesScreenTestTag
 import io.github.droidkaigi.confsched.favorites.section.FavoritesScreenEmptyViewTestTag
 import io.github.droidkaigi.confsched.model.TimetableItemId
+import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardBookmarkButtonTestTag
 import io.github.droidkaigi.confsched.ui.component.TimetableItemCardTestTag
 import javax.inject.Inject
@@ -69,5 +73,16 @@ class FavoritesScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasText("Fake IO Exception"))
             .isDisplayed()
+    }
+
+    fun scrollFavorites() {
+        composeTestRule
+            .onNode(hasTestTag(FavoritesScreenTestTag))
+            .performTouchInput {
+                swipeUp(
+                    startY = visibleSize.height * 4F / 5,
+                    endY = visibleSize.height / 5F,
+                )
+            }
     }
 }

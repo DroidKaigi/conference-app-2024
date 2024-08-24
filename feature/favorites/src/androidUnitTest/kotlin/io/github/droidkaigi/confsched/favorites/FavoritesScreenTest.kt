@@ -59,6 +59,16 @@ class FavoritesScreenTest(
                             )
                         }
                     }
+                    describe("scroll favorites") {
+                        doIt {
+                            scrollFavorites()
+                        }
+                        itShould("display favorite session") {
+                            captureScreenWithChecks(
+                                checks = { checkTimetableListItemsDisplayed() },
+                            )
+                        }
+                    }
                 }
 
                 describe("when server is down") {
