@@ -178,16 +178,18 @@ internal fun CapturableCard(
             .build(uiState.link)
             .renderToBytes().toImageBitmap()
     }
-    var isQrCodeWithLogoRendered by remember { mutableStateOf(false) }
     var isFrontCaptured by remember { mutableStateOf(false) }
     var isBackCaptured by remember { mutableStateOf(false) }
     var isFrontSizeNonZero by remember { mutableStateOf(false) }
     var isBackSizeNonZero by remember { mutableStateOf(false) }
 
-    LaunchedEffect(isFrontCaptured, isBackCaptured, isFrontSizeNonZero, isBackSizeNonZero, isQrCodeWithLogoRendered) {
+    LaunchedEffect(isFrontCaptured, isBackCaptured, isFrontSizeNonZero, isBackSizeNonZero) {
         // In ComposableMultiplatform, an ImageBitmap is not Null, but may come with a size of 0.
         // If the process reaches the Image's Composable with a size of 0, the application will crash with the following error.
         // Uncaught Kotlin exception: kotlin.IllegalStateException: Size is unspecified
+        Logger.d {
+            "isFrontCaptured: $isFrontCaptured, isBackCaptured: $isBackCaptured, isFrontSizeNonZero: $isFrontSizeNonZero, isBackSizeNonZero: $isBackSizeNonZero"
+        }
         if (
             isFrontCaptured.not() ||
             isBackCaptured.not() ||
@@ -204,13 +206,7 @@ internal fun CapturableCard(
             )
         }
         // after qr code rendered with logo, tell the event to parent component
-        if (isQrCodeWithLogoRendered) {
-            try {
-                onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
-            } catch (e: IllegalArgumentException) {
-                Logger.e("IllegalArgumentException is thrown from screenshot test: $e")
-            }
-        }
+        onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
     }
 
     Box {
@@ -221,13 +217,14 @@ internal fun CapturableCard(
                         graphicsLayerFront.record {
                             this@onDrawWithContent.drawContent()
                         }
+                        isFrontSizeNonZero =
+                            graphicsLayerFront.size.width > 0 && graphicsLayerFront.size.height > 0
                         drawLayer(graphicsLayerFront)
                     }
                 }
                 .onGloballyPositioned {
                     isFrontCaptured = true
-                    isFrontSizeNonZero =
-                        graphicsLayerFront.size.width > 0 && graphicsLayerFront.size.height > 0
+                    Logger.d { "graphicsLayerFront:$graphicsLayerFront" }
                 },
         ) {
             FlipCardFront(
@@ -249,16 +246,13 @@ internal fun CapturableCard(
                         graphicsLayerBack.record {
                             this@onDrawWithContent.drawContent()
                         }
+                        isBackSizeNonZero =
+                            graphicsLayerBack.size.width > 0 && graphicsLayerBack.size.height > 0
                         drawLayer(graphicsLayerBack)
-                        if (logoImage.isNotEmpty()) {
-                            isQrCodeWithLogoRendered = true
-                        }
                     }
                 }
                 .onGloballyPositioned {
                     isBackCaptured = true
-                    isBackSizeNonZero =
-                        graphicsLayerBack.size.width > 0 && graphicsLayerBack.size.height > 0
                 },
         ) {
             FlipCardBack(
