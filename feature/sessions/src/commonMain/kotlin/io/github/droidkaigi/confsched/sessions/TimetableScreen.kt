@@ -34,6 +34,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -163,7 +164,7 @@ private fun TimetableScreen(
                             modifier = Modifier.weight(1F),
                         )
                         IconButton(
-                            onClick = onSearchClick,
+                            onClick = dropUnlessResumed(block = onSearchClick),
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Search,

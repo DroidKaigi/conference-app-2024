@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.dropUnlessStarted
 import conference_app_2024.feature.sessions.generated.resources.content_description_error_icon
 import conference_app_2024.feature.sessions.generated.resources.content_description_user_icon
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -137,9 +138,7 @@ fun TimetableGridItem(
                 )
                 .width(TimetableGridItemSizes.width)
                 .height(height)
-                .clickable {
-                    onTimetableItemClick(timetableItem)
-                }
+                .clickable(onClick = dropUnlessStarted { onTimetableItemClick(timetableItem) })
                 .padding(
                     horizontal = TimetableGridItemSizes.padding,
                     vertical = if (isNarrowedVerticalPadding) {
