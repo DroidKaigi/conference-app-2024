@@ -54,8 +54,8 @@ import conference_app_2024.feature.main.generated.resources.timetable
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.haze
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.DesignSystemRes
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -112,8 +112,8 @@ fun MainScreen(
     windowSize: WindowSizeClass,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
-    eventEmitter: EventEmitter<MainScreenEvent> = rememberEventEmitter(),
-    uiState: MainScreenUiState = mainScreenPresenter(eventEmitter),
+    eventFlow: EventFlow<MainScreenEvent> = rememberEventFlow(),
+    uiState: MainScreenUiState = mainScreenPresenter(eventFlow),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 

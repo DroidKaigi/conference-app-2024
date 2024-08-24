@@ -97,18 +97,16 @@ TimetableScreen ----> timetableScreenPresenter -> sessionsRepository
 ```kotlin
 @Composable
 fun timetableScreenPresenter(
-    events: Flow<TimetableScreenEvent>,
+    events: EventEmitter<TimetableScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     ...
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is Bookmark -> {
-                    sessionsRepository.toggleBookmark(event.timetableItem.id)
-                }
-                ...
+    EventEffect(Unit) { event ->
+        when (event) {
+            is Bookmark -> {
+                sessionsRepository.toggleBookmark(event.timetableItem.id)
             }
+            ...
         }
     }
     ...
@@ -176,7 +174,7 @@ SessionsRepository ----> timetableScreenPresenter
 ```kotlin
 @Composable
 fun timetableScreenPresenter(
-    events: Flow<TimetableScreenEvent>,
+    events: EventEmitter<TimetableScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     // Sessions are updated in the timetable() function
@@ -189,10 +187,8 @@ fun timetableScreenPresenter(
         ),
     )
     ...
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            ...
-        }
+    EventEffect(events) { event ->
+        ...
     }
     TimetableScreenUiState(
         contentUiState = timetableUiState,

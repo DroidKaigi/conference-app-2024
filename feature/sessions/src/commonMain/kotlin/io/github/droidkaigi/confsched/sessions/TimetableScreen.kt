@@ -41,8 +41,8 @@ import androidx.navigation.compose.composable
 import conference_app_2024.feature.sessions.generated.resources.ic_grid_view
 import conference_app_2024.feature.sessions.generated.resources.ic_view_timeline
 import conference_app_2024.feature.sessions.generated.resources.timetable
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -98,9 +98,9 @@ fun TimetableScreen(
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    eventEmitter: EventEmitter<TimetableScreenEvent> = rememberEventEmitter(),
+    eventFlow: EventFlow<TimetableScreenEvent> = rememberEventFlow(),
     uiState: TimetableScreenUiState = timetableScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     ),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -115,10 +115,10 @@ fun TimetableScreen(
         onSearchClick = onSearchClick,
         onTimetableItemClick = onTimetableItemClick,
         onBookmarkClick = { item, bookmarked ->
-            eventEmitter.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
+            eventFlow.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
         },
         onTimetableUiChangeClick = {
-            eventEmitter.tryEmit(TimetableScreenEvent.UiTypeChange)
+            eventFlow.tryEmit(TimetableScreenEvent.UiTypeChange)
         },
         contentPadding = contentPadding,
         modifier = modifier,

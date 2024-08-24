@@ -25,8 +25,8 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.favorites.generated.resources.favorite
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -79,8 +79,8 @@ fun FavoritesScreen(
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    eventEmitter: EventEmitter<FavoritesScreenEvent> = rememberEventEmitter(),
-    uiState: FavoritesScreenUiState = favoritesScreenPresenter(events = eventEmitter),
+    eventFlow: EventFlow<FavoritesScreenEvent> = rememberEventFlow(),
+    uiState: FavoritesScreenUiState = favoritesScreenPresenter(events = eventFlow),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -93,16 +93,16 @@ fun FavoritesScreen(
         snackbarHostState = snackbarHostState,
         onTimetableItemClick = onTimetableItemClick,
         onAllFilterChipClick = {
-            eventEmitter.tryEmit(FavoritesScreenEvent.AllFilter)
+            eventFlow.tryEmit(FavoritesScreenEvent.AllFilter)
         },
         onDay1FilterChipClick = {
-            eventEmitter.tryEmit(FavoritesScreenEvent.Day1Filter)
+            eventFlow.tryEmit(FavoritesScreenEvent.Day1Filter)
         },
         onDay2FilterChipClick = {
-            eventEmitter.tryEmit(FavoritesScreenEvent.Day2Filter)
+            eventFlow.tryEmit(FavoritesScreenEvent.Day2Filter)
         },
         onBookmarkClick = { timetableItem ->
-            eventEmitter.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
+            eventFlow.tryEmit(FavoritesScreenEvent.Bookmark(timetableItem))
         },
         contentPadding = contentPadding,
         modifier = modifier,

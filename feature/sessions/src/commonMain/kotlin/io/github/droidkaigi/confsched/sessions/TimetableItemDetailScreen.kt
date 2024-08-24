@@ -28,8 +28,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.component.LoadingText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
@@ -92,9 +92,9 @@ fun TimetableItemDetailScreen(
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
     onFavoriteListClick: () -> Unit,
-    eventEmitter: EventEmitter<TimetableItemDetailEvent> = rememberEventEmitter(),
+    eventFlow: EventFlow<TimetableItemDetailEvent> = rememberEventFlow(),
     uiState: TimetableItemDetailScreenUiState = timetableItemDetailPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     ),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -105,7 +105,7 @@ fun TimetableItemDetailScreen(
 
     LaunchedEffect(uiState is Loaded && uiState.shouldGoToFavoriteList) {
         if (uiState is Loaded && uiState.shouldGoToFavoriteList) {
-            eventEmitter.tryEmit(TimetableItemDetailEvent.FavoriteListNavigated)
+            eventFlow.tryEmit(TimetableItemDetailEvent.FavoriteListNavigated)
             onFavoriteListClick()
         }
     }
@@ -114,13 +114,13 @@ fun TimetableItemDetailScreen(
         uiState = uiState,
         onNavigationIconClick = onNavigationIconClick,
         onBookmarkClick = {
-            eventEmitter.tryEmit(TimetableItemDetailEvent.Bookmark(it))
+            eventFlow.tryEmit(TimetableItemDetailEvent.Bookmark(it))
         },
         onLinkClick = onLinkClick,
         onCalendarRegistrationClick = onCalendarRegistrationClick,
         onShareClick = onShareClick,
         onSelectedLanguage = {
-            eventEmitter.tryEmit(TimetableItemDetailEvent.SelectDescriptionLanguage(it))
+            eventFlow.tryEmit(TimetableItemDetailEvent.SelectDescriptionLanguage(it))
         },
         snackbarHostState = snackbarHostState,
     )
