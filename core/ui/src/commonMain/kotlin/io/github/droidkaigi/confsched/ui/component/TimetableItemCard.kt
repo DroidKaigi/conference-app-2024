@@ -34,8 +34,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -71,6 +73,8 @@ fun TimetableItemCard(
     modifier: Modifier = Modifier,
     highlightWord: String = "",
 ) {
+    val haptic = LocalHapticFeedback.current
+
     val highlightBackgroundColor = MaterialTheme.colorScheme.surfaceTint.copy(alpha = 0.14f)
     val annotatedTitleString = remember(
         timetableItem.title.currentLangTitle,
@@ -176,6 +180,10 @@ fun TimetableItemCard(
             FavoriteButton(
                 isBookmarked = isBookmarked,
                 onClick = {
+                    if (!isBookmarked) {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }
+
                     onBookmarkClick(timetableItem, true)
                 },
             )
