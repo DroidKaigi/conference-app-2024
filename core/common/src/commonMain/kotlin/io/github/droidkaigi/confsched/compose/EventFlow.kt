@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 
 typealias EventFlow<T> = MutableSharedFlow<T>
 
@@ -21,9 +22,11 @@ fun <EVENT> EventEffect(
     block: suspend CoroutineScope.(EVENT) -> Unit,
 ) {
     SafeLaunchedEffect(eventFlow) {
-        eventFlow.collect { event ->
-            launch {
-                block(event)
+        supervisorScope {
+            eventFlow.collect { event ->
+                launch {
+                    block(event)
+                }
             }
         }
     }
