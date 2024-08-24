@@ -20,17 +20,19 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import conference_app_2024.feature.staff.generated.resources.staff_title
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.staff.component.StaffItem
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
-import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val staffScreenRoute = "staff"
@@ -69,8 +71,8 @@ fun StaffScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventEmitter<StaffScreenEvent>()
-    val uiState = staffScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<StaffScreenEvent>()
+    val uiState = staffScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -110,7 +112,7 @@ fun StaffScreen(
         topBar = {
             if (!isTopAppBarHidden) {
                 AnimatedLargeTopAppBar(
-                    title = "Staff",
+                    title = stringResource(StaffRes.string.staff_title),
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
                     navIconContentDescription = "Back",

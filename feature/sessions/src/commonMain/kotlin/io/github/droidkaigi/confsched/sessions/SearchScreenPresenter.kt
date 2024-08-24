@@ -1,18 +1,23 @@
 package io.github.droidkaigi.confsched.sessions
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.EventEffect
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.TimetableCategory
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItemList
 import io.github.droidkaigi.confsched.model.TimetableSessionType
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.Bookmark
@@ -24,10 +29,8 @@ import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.SelectSessionTy
 import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.UpdateSearchWord
 import io.github.droidkaigi.confsched.sessions.component.SearchFilterUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
-import kotlinx.coroutines.flow.Flow
 
 sealed interface SearchScreenEvent {
     data class Bookmark(val timetableItem: TimetableItem) : SearchScreenEvent
@@ -41,7 +44,7 @@ sealed interface SearchScreenEvent {
 
 @Composable
 fun searchScreenPresenter(
-    events: Flow<SearchScreenEvent>,
+    events: EventFlow<SearchScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): SearchScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val sessions by rememberUpdatedState(sessionsRepository.timetable())
@@ -51,17 +54,19 @@ fun searchScreenPresenter(
     val selectedSessionTypes = rememberRetained { mutableStateListOf<TimetableSessionType>() }
     val selectedCategories = rememberRetained { mutableStateListOf<TimetableCategory>() }
     val selectedLanguages = rememberRetained { mutableStateListOf<Lang>() }
-
-    val filteredSessions by rememberUpdatedState(
-        sessions.filtered(
+    val filters by remember {
+        derivedStateOf {
             Filters(
                 searchWord = searchWord,
                 days = selectedDays,
                 categories = selectedCategories,
                 sessionTypes = selectedSessionTypes,
                 languages = selectedLanguages,
-            ),
-        ).timetableItems,
+            )
+        }
+    }
+    val filteredSessions by rememberUpdatedState(
+        if (filters.isEmpty()) TimetableItemList() else sessions.filtered(filters).timetableItems,
     )
 
     val searchFilterDayUiState: SearchFilterUiState<DroidKaigi2024Day> by rememberUpdatedState(
@@ -96,58 +101,56 @@ fun searchScreenPresenter(
         ),
     )
 
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is Bookmark -> {
-                    sessionsRepository.toggleBookmark(event.timetableItem.id)
-                }
+    EventEffect(events) { event ->
+        when (event) {
+            is Bookmark -> {
+                sessionsRepository.toggleBookmark(event.timetableItem.id)
+            }
 
-                is UpdateSearchWord -> {
-                    searchWord = event.word
-                }
+            is UpdateSearchWord -> {
+                searchWord = event.word
+            }
 
-                is ClearSearchWord -> {
-                    searchWord = ""
-                }
+            is ClearSearchWord -> {
+                searchWord = ""
+            }
 
-                is SelectDay -> {
-                    if (selectedDays.contains(event.day)) {
-                        selectedDays.remove(event.day)
-                    } else {
-                        selectedDays.add(event.day)
-                    }
+            is SelectDay -> {
+                if (selectedDays.contains(event.day)) {
+                    selectedDays.remove(event.day)
+                } else {
+                    selectedDays.add(event.day)
                 }
+            }
 
-                is SelectCategory -> {
-                    if (selectedCategories.contains(event.category)) {
-                        selectedCategories.remove(event.category)
-                    } else {
-                        selectedCategories.add(event.category)
-                    }
+            is SelectCategory -> {
+                if (selectedCategories.contains(event.category)) {
+                    selectedCategories.remove(event.category)
+                } else {
+                    selectedCategories.add(event.category)
                 }
+            }
 
-                is SelectSessionType -> {
-                    if (selectedSessionTypes.contains(event.sessionType)) {
-                        selectedSessionTypes.remove(event.sessionType)
-                    } else {
-                        selectedSessionTypes.add(event.sessionType)
-                    }
+            is SelectSessionType -> {
+                if (selectedSessionTypes.contains(event.sessionType)) {
+                    selectedSessionTypes.remove(event.sessionType)
+                } else {
+                    selectedSessionTypes.add(event.sessionType)
                 }
+            }
 
-                is SelectLanguage -> {
-                    if (selectedLanguages.contains(event.language)) {
-                        selectedLanguages.remove(event.language)
-                    } else {
-                        selectedLanguages.add(event.language)
-                    }
+            is SelectLanguage -> {
+                if (selectedLanguages.contains(event.language)) {
+                    selectedLanguages.remove(event.language)
+                } else {
+                    selectedLanguages.add(event.language)
                 }
             }
         }
     }
 
     when {
-        filteredSessions.isEmpty() -> {
+        filters.isNotEmpty() && filteredSessions.isEmpty() -> {
             SearchScreenUiState.Empty(
                 searchWord = searchWord,
                 searchFilterDayUiState = searchFilterDayUiState,

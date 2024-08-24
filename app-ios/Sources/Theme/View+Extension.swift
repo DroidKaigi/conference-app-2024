@@ -1,6 +1,7 @@
 import SwiftUI
 
 extension View {
+    @MainActor
     public func navigationBarTitleStyle(color: Color, titleTextStyle: TextStyle, largeTitleTextStyle: TextStyle) -> some View {
         let uiColor = UIColor(color)
         UINavigationBar.appearance().titleTextAttributes = [

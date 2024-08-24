@@ -47,11 +47,11 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
         fun behaviors(): List<DescribedBehavior<TimetableItemDetailScreenRobot>> {
             return describeBehaviors<TimetableItemDetailScreenRobot>(name = "TimetableItemDetailScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Operational)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupScreenContent()
                         }
                         itShould("show session detail title") {
@@ -65,7 +65,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             checkAccessibilityCapture()
                         }
                         describe("click bookmark") {
-                            run {
+                            doIt {
                                 clickBookmarkButton()
                             }
                             itShould("show bookmarked session") {
@@ -76,7 +76,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 )
                             }
                             describe("click bookmark again") {
-                                run {
+                                doIt {
                                     clickBookmarkButton()
                                 }
                                 itShould("show unBookmarked session") {
@@ -90,7 +90,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             }
                         }
                         describe("scroll") {
-                            run {
+                            doIt {
                                 scroll()
                             }
                             itShould("show scrolled session detail") {
@@ -102,8 +102,20 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             }
                         }
                     }
+                    describe("when the description is lengthy") {
+                        doIt {
+                            setupScreenContentWithLongDescription()
+                            scrollToMiddleOfScreen()
+                            waitUntilIdle()
+                        }
+                        itShould("display a more button") {
+                            captureScreenWithChecks {
+                                checkDisplayingMoreButton()
+                            }
+                        }
+                    }
                     describe("when font scale is small") {
-                        run {
+                        doIt {
                             setFontScale(0.5f)
                             setupScreenContent()
                         }
@@ -116,7 +128,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         }
                     }
                     describe("when font scale is large") {
-                        run {
+                        doIt {
                             setFontScale(1.5f)
                             setupScreenContent()
                             scrollLazyColumnByIndex(1)
@@ -130,7 +142,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         }
                     }
                     describe("when font scale is huge") {
-                        run {
+                        doIt {
                             setFontScale(2.0f)
                             setupScreenContent()
                             scrollLazyColumnByIndex(1)

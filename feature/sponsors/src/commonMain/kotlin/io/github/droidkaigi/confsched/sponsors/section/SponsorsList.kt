@@ -15,6 +15,7 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.sponsors.generated.resources.gold_sponsor
 import conference_app_2024.feature.sponsors.generated.resources.platinum_sponsor
@@ -29,10 +30,13 @@ import io.github.droidkaigi.confsched.sponsors.SponsorsListUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsRes
 import io.github.droidkaigi.confsched.sponsors.component.SponsorHeader
 import io.github.droidkaigi.confsched.sponsors.component.SponsorItem
-import io.github.droidkaigi.confsched.ui.plus
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+
+const val SponsorsListLazyVerticalGridTestTag = "SponsorsListLazyVerticalGridTestTag"
+const val SponsorsListSponsorHeaderTestTagPrefix = "SponsorsListSponsorHeaderTestTag:"
+const val SponsorsListSponsorItemTestTagPrefix = "SponsorsListSponsorItemTestTag:"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,13 +58,23 @@ fun SponsorsList(
                 } else {
                     it
                 }
-            },
-        contentPadding = contentPadding + PaddingValues(horizontal = 12.dp),
+            }
+            .testTag(SponsorsListLazyVerticalGridTestTag),
+        contentPadding = PaddingValues(
+            start = 16.dp,
+            end = 16.dp,
+            bottom = 48.dp + contentPadding.calculateBottomPadding(),
+        ),
     ) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             SponsorHeader(
                 text = stringResource(SponsorsRes.string.platinum_sponsor),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(
+                        SponsorsListSponsorHeaderTestTagPrefix
+                            .plus(stringResource(SponsorsRes.string.platinum_sponsor)),
+                    ),
             )
         }
         items(
@@ -70,7 +84,8 @@ fun SponsorsList(
             SponsorItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(110.dp),
+                    .height(110.dp)
+                    .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
                 sponsor = sponsor,
                 onSponsorsItemClick = onSponsorsItemClick,
             )
@@ -83,7 +98,12 @@ fun SponsorsList(
         item(span = { GridItemSpan(maxLineSpan) }) {
             SponsorHeader(
                 text = stringResource(SponsorsRes.string.gold_sponsor),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(
+                        SponsorsListSponsorHeaderTestTagPrefix
+                            .plus(stringResource(SponsorsRes.string.gold_sponsor)),
+                    ),
             )
         }
         items(
@@ -93,7 +113,8 @@ fun SponsorsList(
             SponsorItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(77.dp),
+                    .height(77.dp)
+                    .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
                 sponsor = sponsor,
                 onSponsorsItemClick = onSponsorsItemClick,
             )
@@ -106,7 +127,12 @@ fun SponsorsList(
         item(span = { GridItemSpan(maxLineSpan) }) {
             SponsorHeader(
                 text = stringResource(SponsorsRes.string.supporters),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(
+                        SponsorsListSponsorHeaderTestTagPrefix
+                            .plus(stringResource(SponsorsRes.string.supporters)),
+                    ),
             )
         }
         items(
@@ -116,7 +142,8 @@ fun SponsorsList(
             SponsorItem(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(77.dp),
+                    .height(77.dp)
+                    .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
                 sponsor = sponsor,
                 onSponsorsItemClick = onSponsorsItemClick,
             )

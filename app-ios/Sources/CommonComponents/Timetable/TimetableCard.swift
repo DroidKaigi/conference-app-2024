@@ -26,7 +26,11 @@ public struct TimetableCard: View {
         } label: {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
-                    RoomTag(timetableItem.room.name)
+                    RoomTag(.init(
+                        currentLangTitle: timetableItem.room.name.currentLangTitle,
+                        enTitle: timetableItem.room.name.enTitle,
+                        jaTitle: timetableItem.room.name.jaTitle
+                    ))
                     ForEach(timetableItem.language.labels, id: \.self) { label in
                         LanguageTag(label)
                     }
@@ -54,18 +58,8 @@ public struct TimetableCard: View {
                 
                 ForEach(timetableItem.speakers, id: \.id) { speaker in
                     HStack(spacing: 8) {
-                        Group {
-                            if let url = URL(string: speaker.iconUrl) {
-                                AsyncImage(url: url) {
-                                    $0.image?.resizable()
-                                }
-                            } else {
-                                Circle().stroke(Color.gray)
-                            }
-                        }
-                        .frame(width: 32, height: 32)
-                        .clipShape(Circle())
-
+                        CircularUserIcon(urlString: speaker.iconUrl)
+                            .frame(width: 32, height: 32)
                         Text(speaker.name)
                             .textStyle(.titleSmall)
                             .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)

@@ -28,7 +28,7 @@ kotlin {
                     binaryOption("bundleShortVersionString", version.toString())
 
                     val includeToXCF = if (project.properties["app.ios.shared.debug"] == "true") {
-                        this.target.name == "iosSimulatorArm64" && this.debuggable
+                        (this.target.name == "iosSimulatorArm64" && this.debuggable) || (this.target.name == "iosArm64" && this.debuggable)
                     } else {
                         true
                     }
@@ -52,14 +52,17 @@ kotlin {
             dependencies {
                 api(projects.core.model)
                 api(projects.core.data)
-                api(projects.core.ui)
+                api(projects.core.droidkaigiui)
                 api(projects.feature.main)
                 api(projects.feature.sessions)
                 api(projects.feature.eventmap)
+                api(projects.feature.sponsors)
+                api(projects.feature.settings)
                 api(projects.feature.contributors)
                 api(projects.feature.profilecard)
                 api(projects.feature.about)
                 api(projects.feature.staff)
+                api(projects.feature.favorites)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(libs.skieAnnotation)
             }

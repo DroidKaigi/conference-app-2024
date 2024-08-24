@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.primitive
 
+import com.google.devtools.ksp.gradle.KspTaskNative
 import io.github.droidkaigi.confsched.primitive.Arch.ALL
 import io.github.droidkaigi.confsched.primitive.Arch.ARM
 import io.github.droidkaigi.confsched.primitive.Arch.X86
@@ -8,6 +9,8 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
+import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 @Suppress("unused")
 class KmpKtorfitPlugin : Plugin<Project> {
@@ -43,6 +46,15 @@ class KmpKtorfitPlugin : Plugin<Project> {
                 (listOf("CommonMainMetadata", "Android") + iosConfigs).forEach {
                     add("ksp$it", libs.library("ktorfitKsp"))
                 }
+            }
+
+            // https://github.com/DroidKaigi/conference-app-2024/issues/485#issuecomment-2304251937
+            tasks.withType<KspTaskNative>().configureEach {
+                notCompatibleWithConfigurationCache("Configuration chache not supported for a system property read at configuration time")
+
+            }
+            tasks.withType<KotlinNativeLink>().configureEach {
+                notCompatibleWithConfigurationCache("Configuration chache not supported for a system property read at configuration time")
             }
         }
     }

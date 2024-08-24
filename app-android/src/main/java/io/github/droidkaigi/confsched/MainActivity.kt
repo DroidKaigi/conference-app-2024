@@ -21,7 +21,14 @@ import androidx.window.layout.DisplayFeature
 import androidx.window.layout.WindowInfoTracker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.model.FontFamily.DotGothic16Regular
+import io.github.droidkaigi.confsched.model.FontFamily.SystemDefault
+import io.github.droidkaigi.confsched.model.Settings.DoesNotExists
+import io.github.droidkaigi.confsched.model.Settings.Exists
+import io.github.droidkaigi.confsched.model.Settings.Loading
+import io.github.droidkaigi.confsched.model.SettingsRepository
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
@@ -35,6 +42,9 @@ class MainActivity : ComponentActivity() {
 
     @Inject
     lateinit var repositoryProvider: RepositoryProvider
+
+    @Inject
+    lateinit var settingRepository: SettingsRepository
 
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,14 +75,28 @@ class MainActivity : ComponentActivity() {
         WindowCompat.getInsetsController(window, window.decorView)
             .isAppearanceLightStatusBars = false
         setContent {
+            val settings = settingRepository.settings()
+
             val windowSize = calculateWindowSizeClass()
             val displayFeatures = calculateDisplayFeatures(this)
+
+            val fontFamily = when (settings) {
+                DoesNotExists, Loading -> dotGothic16FontFamily()
+                is Exists -> {
+                    when (settings.useFontFamily) {
+                        DotGothic16Regular -> dotGothic16FontFamily()
+                        SystemDefault -> null
+                    }
+                }
+            }
+
             CompositionLocalProvider(
                 LocalClock provides clockProvider.clock(),
             ) {
                 repositoryProvider.Provide {
                     KaigiApp(
                         windowSize = windowSize,
+                        fontFamily = fontFamily,
                         displayFeatures = displayFeatures,
                     )
                 }

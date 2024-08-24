@@ -10,7 +10,12 @@ import androidx.compose.runtime.setValue
 import co.touchlab.kermit.Logger
 import conference_app_2024.feature.sessions.generated.resources.bookmarked_successfully
 import conference_app_2024.feature.sessions.generated.resources.view_bookmark_list
+import io.github.droidkaigi.confsched.compose.EventEffect
+import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageResult.ActionPerformed
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
+import io.github.droidkaigi.confsched.droidkaigiui.rememberNavigationArgument
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -22,10 +27,7 @@ import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.Favorite
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDescriptionLanguage
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loading
-import io.github.droidkaigi.confsched.ui.UserMessageResult.ActionPerformed
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
-import io.github.droidkaigi.confsched.ui.rememberNavigationArgument
-import kotlinx.coroutines.flow.SharedFlow
+import io.github.takahirom.rin.rememberRetained
 import org.jetbrains.compose.resources.stringResource
 
 sealed interface TimetableItemDetailEvent {
@@ -36,7 +38,7 @@ sealed interface TimetableItemDetailEvent {
 
 @Composable
 fun timetableItemDetailPresenter(
-    events: SharedFlow<TimetableItemDetailEvent>,
+    events: EventFlow<TimetableItemDetailEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
     timetableItemIdArg: String = rememberNavigationArgument(
         key = timetableItemDetailScreenRouteItemIdParameterName,
@@ -48,39 +50,37 @@ fun timetableItemDetailPresenter(
         sessionsRepository
             .timetableItemWithBookmark(timetableItemId),
     )
-    var selectedDescriptionLanguage by remember { mutableStateOf<Lang?>(null) }
+    var selectedDescriptionLanguage by rememberRetained { mutableStateOf<Lang?>(null) }
     var shouldGoToFavoriteList by remember { mutableStateOf(false) }
     val bookmarkedSuccessfullyString = stringResource(SessionsRes.string.bookmarked_successfully)
     val viewBookmarkListString = stringResource(SessionsRes.string.view_bookmark_list)
 
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is Bookmark -> {
-                    val timetableItemWithBookmark = timetableItemStateWithBookmark
-                    val timetableItem =
-                        timetableItemWithBookmark?.first ?: return@collect
-                    sessionsRepository.toggleBookmark(timetableItem.id)
-                    val oldBookmarked = timetableItemWithBookmark.second
-                    if (!oldBookmarked) {
-                        val result = userMessageStateHolder.showMessage(
-                            message = bookmarkedSuccessfullyString,
-                            actionLabel = viewBookmarkListString,
-                            duration = Short,
-                        )
-                        if (result == ActionPerformed) {
-                            shouldGoToFavoriteList = true
-                        }
+    EventEffect(events) { event ->
+        when (event) {
+            is Bookmark -> {
+                val timetableItemWithBookmark = timetableItemStateWithBookmark
+                val timetableItem =
+                    timetableItemWithBookmark?.first ?: return@EventEffect
+                sessionsRepository.toggleBookmark(timetableItem.id)
+                val oldBookmarked = timetableItemWithBookmark.second
+                if (!oldBookmarked) {
+                    val result = userMessageStateHolder.showMessage(
+                        message = bookmarkedSuccessfullyString,
+                        actionLabel = viewBookmarkListString,
+                        duration = Short,
+                    )
+                    if (result == ActionPerformed) {
+                        shouldGoToFavoriteList = true
                     }
                 }
+            }
 
-                is SelectDescriptionLanguage -> {
-                    selectedDescriptionLanguage = event.language
-                }
+            is SelectDescriptionLanguage -> {
+                selectedDescriptionLanguage = event.language
+            }
 
-                is FavoriteListNavigated -> {
-                    shouldGoToFavoriteList = false
-                }
+            is FavoriteListNavigated -> {
+                shouldGoToFavoriteList = false
             }
         }
     }

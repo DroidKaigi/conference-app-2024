@@ -32,3 +32,8 @@ extension EventMapClient: TestDependencyKey {
     public static let previewValue: Self = Self()
     public static let testValue: Self = Self()
 }
+
+extension ProfileCardClient: TestDependencyKey {
+    public static let previewValue: Self = Self()
+    public static let testValue: Self = Self()
+}

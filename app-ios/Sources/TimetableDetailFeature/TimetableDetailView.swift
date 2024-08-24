@@ -94,7 +94,12 @@ public struct TimetableDetailView: View {
     @MainActor var headLine: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
-                RoomTag(store.timetableItem.room.name)
+                RoomTag(.init(
+                    currentLangTitle: store.timetableItem.room.name.currentLangTitle,
+                    enTitle: store.timetableItem.room.name.enTitle,
+                    jaTitle: store.timetableItem.room.name.jaTitle
+                ))
+
                 ForEach(store.timetableItem.language.labels, id: \.self) { label in
                     LanguageTag(label)
                 }
@@ -109,13 +114,8 @@ public struct TimetableDetailView: View {
             
             ForEach(store.timetableItem.speakers, id: \.id) { speaker in
                 HStack(spacing: 12) {
-                    if let url = URL(string: speaker.iconUrl) {
-                        AsyncImage(url: url) {
-                            $0.image?.resizable()
-                        }
+                    CircularUserIcon(urlString: speaker.iconUrl)
                         .frame(width: 52, height: 52)
-                        .clipShape(Circle())
-                    }
                         
                     VStack(alignment: .leading, spacing: 8) {
                         Text(speaker.name)
@@ -154,7 +154,7 @@ public struct TimetableDetailView: View {
                     icon: Image(.icLanguage),
                     title: String(localized: "TimeTableDetailLanguage", bundle: .module),
                     titleColor: store.timetableItem.room.roomTheme.primaryColor,
-                    content: store.timetableItem.getSupportedLangString(isJapaneseLocale: LocaleKt.getDefaultLocale() == .japan)
+                    content: store.timetableItem.getSupportedLangString(isJapaneseLocale: Locale_iosKt.getDefaultLocale() == .japan)
                 )
                 InformationRow(
                     icon: Image(.icCategory),

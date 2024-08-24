@@ -11,11 +11,11 @@ import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.ContributorsTestTag
 import io.github.droidkaigi.confsched.contributors.component.ContributorsItemImageTestTagPrefix
 import io.github.droidkaigi.confsched.contributors.component.ContributorsUserNameTextTestTagPrefix
+import io.github.droidkaigi.confsched.droidkaigiui.Inject
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
 import io.github.droidkaigi.confsched.testing.utils.hasTestTag
-import io.github.droidkaigi.confsched.ui.Inject
 
 class ContributorsScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,
@@ -37,7 +37,13 @@ class ContributorsScreenRobot @Inject constructor(
             .performScrollToIndex(10)
     }
 
-    fun checkRangeContributorItemsDisplayed(
+    fun checkShowFirstAndSecondContributors() {
+        checkRangeContributorItemsDisplayed(
+            fromTo = 0..2,
+        )
+    }
+
+    private fun checkRangeContributorItemsDisplayed(
         fromTo: IntRange,
     ) {
         val contributorsList = Contributor.fakes().subList(fromTo.first, fromTo.last)

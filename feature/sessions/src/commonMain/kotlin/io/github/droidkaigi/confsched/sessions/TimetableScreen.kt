@@ -41,9 +41,14 @@ import androidx.navigation.compose.composable
 import conference_app_2024.feature.sessions.generated.resources.ic_grid_view
 import conference_app_2024.feature.sessions.generated.resources.ic_view_timeline
 import conference_app_2024.feature.sessions.generated.resources.timetable
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.FakeClock
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -52,11 +57,6 @@ import io.github.droidkaigi.confsched.model.TimetableUiType.Grid
 import io.github.droidkaigi.confsched.sessions.section.Timetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.compositionlocal.FakeClock
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.toPersistentMap
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -98,9 +98,9 @@ fun TimetableScreen(
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
-    eventEmitter: EventEmitter<TimetableScreenEvent> = rememberEventEmitter(),
+    eventFlow: EventFlow<TimetableScreenEvent> = rememberEventFlow(),
     uiState: TimetableScreenUiState = timetableScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     ),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -115,10 +115,10 @@ fun TimetableScreen(
         onSearchClick = onSearchClick,
         onTimetableItemClick = onTimetableItemClick,
         onBookmarkClick = { item, bookmarked ->
-            eventEmitter.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
+            eventFlow.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
         },
         onTimetableUiChangeClick = {
-            eventEmitter.tryEmit(TimetableScreenEvent.UiTypeChange)
+            eventFlow.tryEmit(TimetableScreenEvent.UiTypeChange)
         },
         contentPadding = contentPadding,
         modifier = modifier,
@@ -205,7 +205,8 @@ private fun TimetableScreen(
                 uiState = uiState.contentUiState,
                 onFavoriteClick = onBookmarkClick,
                 contentPadding = PaddingValues(
-                    bottom = innerPadding.calculateBottomPadding(),
+                    bottom = innerPadding.calculateBottomPadding()
+                        .plus(16.dp), // Adjusting Snackbar position
                     start = innerPadding.calculateStartPadding(layoutDirection),
                     end = innerPadding.calculateEndPadding(layoutDirection),
                 ),

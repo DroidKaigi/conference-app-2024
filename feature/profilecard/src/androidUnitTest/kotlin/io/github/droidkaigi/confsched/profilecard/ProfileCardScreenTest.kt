@@ -40,7 +40,7 @@ class ProfileCardScreenTest(
         fun behaviors(): List<DescribedBehavior<ProfileCardScreenRobot>> {
             return describeBehaviors("ProfileCardScreen") {
                 describe("when profile card is does not exists") {
-                    run {
+                    doIt {
                         setupSavedProfileCard(ProfileCardInputStatus.AllNotEntered)
                         setupScreenContent()
                     }
@@ -53,18 +53,19 @@ class ProfileCardScreenTest(
                     // FIXME Currently, the test code does not allow the user to select and input an image from the Add Image button.
                 }
                 describe("when profile card is exists") {
-                    run {
+                    doIt {
                         setupSavedProfileCard(ProfileCardInputStatus.NoInputOtherThanImage)
                         setupScreenContent()
                     }
                     itShould("show card screen") {
                         captureScreenWithChecks {
+                            checkShareProfileCardButtonEnabled()
                             checkCardScreenDisplayed()
                             checkProfileCardFrontDisplayed()
                         }
                     }
                     describe("flip prifle card") {
-                        run {
+                        doIt {
                             flipProfileCard()
                         }
                         itShould("back side of the profile card is displayed") {
@@ -74,7 +75,7 @@ class ProfileCardScreenTest(
                         }
                     }
                     describe("when click edit button") {
-                        run {
+                        doIt {
                             clickEditButton()
                         }
                         itShould("show edit screen") {
@@ -83,7 +84,7 @@ class ProfileCardScreenTest(
                             }
                         }
                         describe("when if a required field has not been filled in") {
-                            run {
+                            doIt {
                                 scrollToTestTag(ProfileCardCreateButtonTestTag)
                             }
                             itShould("make sure the Create button is deactivated") {
@@ -96,7 +97,7 @@ class ProfileCardScreenTest(
                             val nickname = "test"
                             val occupation = "test"
                             val link = "test"
-                            run {
+                            doIt {
                                 inputNickName(nickname)
                                 inputOccupation(occupation)
                                 inputLink(link)

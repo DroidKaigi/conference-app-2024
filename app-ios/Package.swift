@@ -69,6 +69,7 @@ let package = Package(
                 .sponsorFeature,
                 .timetableFeature,
                 .timetableDetailFeature,
+                .profileCardFeature,
                 .eventMapFeature,
                 .tca,
                 .kmpClient,
@@ -87,6 +88,7 @@ let package = Package(
                 .firebaseAuth,
                 .firebaseRemoteConfig,
                 .tca,
+                .model
             ]
         ),
         
@@ -246,6 +248,17 @@ let package = Package(
                 .tca
             ]
         ),
+        
+        .target(
+            name: "ProfileCardFeature",
+            dependencies: [
+                .tca,
+                .theme,
+                .commonComponents,
+                .kmpClient,
+            ]
+        ),
+
         .target(name: "CommonComponents", dependencies: [.theme, .kmpModule, .model]),
         .target(name: "Model", dependencies: [.kmpModule, .theme]),
         // Please run ./gradlew app-ios-shared:assembleSharedXCFramework first
@@ -276,6 +289,7 @@ extension Target.Dependency {
     static let sponsorFeature: Target.Dependency = "SponsorFeature"
     static let contributorFeature: Target.Dependency = "ContributorFeature"
     static let eventMapFeature: Target.Dependency = "EventMapFeature"
+    static let profileCardFeature: Target.Dependency = "ProfileCardFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
     static let kmpClient: Target.Dependency = "KMPClient"
     static let eventKitClient: Target.Dependency = "EventKitClient"

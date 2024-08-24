@@ -38,23 +38,21 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
         fun behaviors(): List<DescribedBehavior<ContributorsScreenRobot>> {
             return describeBehaviors<ContributorsScreenRobot>(name = "ContributorsScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupContributorServer(ContributorsServerRobot.ServerStatus.Operational)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupScreenContent()
                         }
                         itShould("show first and second contributors") {
                             captureScreenWithChecks {
-                                checkRangeContributorItemsDisplayed(
-                                    fromTo = 0..2,
-                                )
+                                checkShowFirstAndSecondContributors()
                             }
                         }
 
                         describe("when scroll to index 10") {
-                            run {
+                            doIt {
                                 scrollToIndex10()
                             }
                             itShould("show contributors") {
@@ -66,11 +64,11 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                     }
 
                     describe("when server is down") {
-                        run {
+                        doIt {
                             setupContributorServer(ContributorsServerRobot.ServerStatus.Error)
                         }
                         describe("when launch") {
-                            run {
+                            doIt {
                                 setupScreenContent()
                             }
                             itShould("does not show contributor and show snackbar") {

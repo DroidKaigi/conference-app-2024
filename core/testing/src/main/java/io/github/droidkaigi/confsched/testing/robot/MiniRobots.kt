@@ -1,26 +1,35 @@
 package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.github.takahirom.roborazzi.roboOutputName
 import io.github.droidkaigi.confsched.data.contributors.ContributorsApiClient
 import io.github.droidkaigi.confsched.data.contributors.FakeContributorsApiClient
 import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
-import io.github.droidkaigi.confsched.data.profilecard.FakeProfileCardDataStore
 import io.github.droidkaigi.confsched.data.profilecard.ProfileCardDataStore
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
+import io.github.droidkaigi.confsched.data.settings.SettingsDataStore
 import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
 import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
 import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
+import io.github.droidkaigi.confsched.model.FontFamily
+import io.github.droidkaigi.confsched.model.ProfileCard
+import io.github.droidkaigi.confsched.model.Settings
+import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.testing.coroutines.runTestWithLogging
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus.AllNotEntered
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus.NoInputOtherThanImage
+import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus
+import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus.UseDotGothic16FontFamily
+import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus.UseSystemDefaultFont
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.shadows.ShadowLooper
@@ -86,7 +95,8 @@ class DefaultCaptureScreenRobot @Inject constructor(private val robotTestRule: R
         val roboOutputName = roboOutputName()
         if (roboOutputName.contains("[") && roboOutputName.contains("]")) {
             val name = roboOutputName.substringAfter("[").substringBefore("]")
-            val className = provideRoborazziContext().description?.className?.substringAfterLast(".")
+            val className =
+                provideRoborazziContext().description?.className?.substringAfterLast(".")
             if (className == null) {
                 robotTestRule.captureScreen(name)
                 checks()
@@ -142,6 +152,16 @@ interface FontScaleRobot {
 class DefaultFontScaleRobot @Inject constructor() : FontScaleRobot {
     override fun setFontScale(fontScale: Float) {
         RuntimeEnvironment.setFontScale(fontScale)
+    }
+}
+
+interface DeviceSetupRobot {
+    fun setupTabletDevice()
+}
+
+class DefaultDeviceSetupRobot @Inject constructor() : DeviceSetupRobot {
+    override fun setupTabletDevice() {
+        RuntimeEnvironment.setQualifiers(RobolectricDeviceQualifiers.MediumTablet)
     }
 }
 
@@ -242,7 +262,8 @@ interface SponsorsServerRobot {
     fun setupSponsorsServer(sererStatus: ServerStatus)
 }
 
-class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: SponsorsApiClient) : SponsorsServerRobot {
+class DefaultSponsorsServerRobot @Inject constructor(sponsorsApiClient: SponsorsApiClient) :
+    SponsorsServerRobot {
     private val fakeSponsorsApiClient = sponsorsApiClient as FakeSponsorsApiClient
     override fun setupSponsorsServer(sererStatus: ServerStatus) {
         fakeSponsorsApiClient.setup(
@@ -260,19 +281,62 @@ interface ProfileCardDataStoreRobot {
         AllNotEntered,
     }
 
-    fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus)
+    suspend fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus)
 }
 
 class DefaultProfileCardDataStoreRobot @Inject constructor(
-    profileCardDataStore: ProfileCardDataStore,
+    private val profileCardDataStore: ProfileCardDataStore,
 ) : ProfileCardDataStoreRobot {
-    private val fakeProfileCardDataStore = profileCardDataStore as FakeProfileCardDataStore
-    override fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus) {
-        fakeProfileCardDataStore.setup(
-            when (profileCardInputStatus) {
-                NoInputOtherThanImage -> FakeProfileCardDataStore.Status.NoInputOtherThanImage
-                AllNotEntered -> FakeProfileCardDataStore.Status.AllNotEntered
-            },
-        )
+    override suspend fun setupSavedProfileCard(profileCardInputStatus: ProfileCardInputStatus) {
+        when (profileCardInputStatus) {
+            NoInputOtherThanImage -> {
+                profileCardDataStore.save(
+                    ProfileCard.Exists.fake().copy(
+                        nickname = "",
+                        occupation = "",
+                        link = "",
+                    ),
+                )
+            }
+
+            AllNotEntered -> {
+                // Do nothing
+            }
+        }
     }
+}
+
+interface SettingsDataStoreRobot {
+    enum class SettingsStatus {
+        UseDotGothic16FontFamily,
+        UseSystemDefaultFont,
+    }
+
+    suspend fun setupSettings(settingsStatus: SettingsStatus)
+    fun get(): Flow<Settings>
+}
+
+class DefaultSettingsDataStoreRobot @Inject constructor(
+    private val settingsDataStore: SettingsDataStore,
+) : SettingsDataStoreRobot {
+    override suspend fun setupSettings(settingsStatus: SettingsStatus) {
+        when (settingsStatus) {
+            UseDotGothic16FontFamily -> {
+                settingsDataStore.save(
+                    Settings.Exists(
+                        useFontFamily = FontFamily.DotGothic16Regular,
+                    ),
+                )
+            }
+            UseSystemDefaultFont -> {
+                settingsDataStore.save(
+                    Settings.Exists(
+                        useFontFamily = FontFamily.SystemDefault,
+                    ),
+                )
+            }
+        }
+    }
+
+    override fun get(): Flow<Settings> = settingsDataStore.get()
 }

@@ -24,19 +24,22 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
+import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
+import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
-import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
-import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val TimetableItemDetailHeadlineTestTag = "TimetableItemDetailHeadlineTestTag"
 
 @Composable
 fun TimetableItemDetailHeadline(
+    currentLang: Lang?,
     timetableItem: TimetableItem,
     modifier: Modifier = Modifier,
 ) {
+    val currentLang = currentLang ?: Lang.ENGLISH
     Column(
         modifier = modifier
             // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
@@ -60,7 +63,7 @@ fun TimetableItemDetailHeadline(
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             modifier = Modifier.testTag(TimetableItemDetailHeadlineTestTag),
-            text = timetableItem.title.currentLangTitle,
+            text = timetableItem.title.getByLang(currentLang),
             style = MaterialTheme.typography.headlineSmall,
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -103,6 +106,37 @@ fun TimetableItemDetailHeadlinePreview() {
             Surface {
                 TimetableItemDetailHeadline(
                     timetableItem = TimetableItem.Session.fake(),
+                    currentLang = Lang.JAPANESE,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun TimetableItemDetailHeadlineWithEnglishPreview() {
+    KaigiTheme {
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailHeadline(
+                    timetableItem = TimetableItem.Session.fake(),
+                    currentLang = Lang.ENGLISH,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun TimetableItemDetailHeadlineWithMixedPreview() {
+    KaigiTheme {
+        ProvideFakeRoomTheme {
+            Surface {
+                TimetableItemDetailHeadline(
+                    timetableItem = TimetableItem.Session.fake(),
+                    currentLang = Lang.MIXED,
                 )
             }
         }

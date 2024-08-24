@@ -39,33 +39,59 @@ class SponsorsScreenTest(
         fun behaviors(): List<DescribedBehavior<SponsorsScreenRobot>> {
             return describeBehaviors<SponsorsScreenRobot>(name = "SponsorsScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupSponsorsServer(ServerStatus.Operational)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupScreenContent()
                         }
-                        itShould("display sponsors") {
-                            captureScreenWithChecks(
-                                checks = { checkSponsorsDisplayed() },
-                            )
+                        itShould("display platinum sponsors") {
+                            captureScreenWithChecks {
+                                checkSponsorItemsDisplayed()
+                                checkDisplayPlatinumSponsors()
+                            }
+                        }
+
+                        describe("when scroll to gold sponsors header") {
+                            doIt {
+                                scrollToGoldSponsorsHeader()
+                            }
+                            itShould("display gold sponsors") {
+                                captureScreenWithChecks {
+                                    checkSponsorItemsDisplayed()
+                                    checkDisplayGoldSponsors()
+                                }
+                            }
+                        }
+
+                        describe("when scroll to supporters header") {
+                            doIt {
+                                scrollToSupportersSponsorsHeader()
+                            }
+                            itShould("display supporters sponsors") {
+                                captureScreenWithChecks {
+                                    checkSponsorItemsDisplayed()
+                                    checkDisplaySupportersSponsors()
+                                }
+                            }
                         }
                     }
                 }
 
                 describe("when server is down") {
-                    run {
+                    doIt {
                         setupSponsorsServer(ServerStatus.Error)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupScreenContent()
                         }
-                        itShould("show error message") {
-                            captureScreenWithChecks(
-                                checks = { checkErrorSnackbarDisplayed() },
-                            )
+                        itShould("does not show sponsors and show snackbar") {
+                            captureScreenWithChecks {
+                                checkDoesNotSponsorItemsDisplayed()
+                                checkErrorSnackbarDisplayed()
+                            }
                         }
                     }
                 }
