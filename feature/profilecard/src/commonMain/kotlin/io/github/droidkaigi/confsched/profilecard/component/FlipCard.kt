@@ -74,7 +74,10 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.profilecard.decodeBase64Bytes
 import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
 import io.github.droidkaigi.confsched.profilecard.toCardUiState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getDrawableResourceBytes
 import org.jetbrains.compose.resources.getSystemResourceEnvironment
@@ -126,10 +129,12 @@ internal fun FlipCard(
             environment = getSystemResourceEnvironment(),
             resource = ProfileCardRes.drawable.droidkaigi_logo,
         )
-        qrCodeByteArray = QRCode.ofSquares()
-            .withLogo(logoImage, 400, 400)
-            .build(uiState.link)
-            .renderToBytes()
+        launch(Dispatchers.IO) {
+            qrCodeByteArray = QRCode.ofSquares()
+                .withLogo(logoImage, 400, 400)
+                .build(uiState.link)
+                .renderToBytes()
+        }
         if (isCreated) {
             initialRotation = targetRotation
             delay(400)
@@ -211,10 +216,12 @@ internal fun CapturableCard(
             )
         }
         if (qrCodeByteArray.isEmpty()) {
-            qrCodeByteArray = QRCode.ofSquares()
-                .withLogo(logoImage, 400, 400)
-                .build(uiState.link)
-                .renderToBytes()
+            launch(Dispatchers.IO) {
+                qrCodeByteArray = QRCode.ofSquares()
+                    .withLogo(logoImage, 400, 400)
+                    .build(uiState.link)
+                    .renderToBytes()
+            }
         }
         // after qr code rendered with logo, tell the event to parent component
         delay(300)
