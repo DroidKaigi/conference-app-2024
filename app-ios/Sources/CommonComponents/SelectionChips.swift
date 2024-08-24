@@ -5,11 +5,17 @@ import Theme
 public struct SelectionChips<SelectableCase: Selectable>: View where SelectableCase.AllCases: RandomAccessCollection {
     @Binding public var selected: SelectableCase?
     public var notSelectedTitle: String?
+    public let options: [SelectableCase]
 
-    public init(selected: Binding<SelectableCase?>, notSelectedTitle: String? = nil) {
-        self._selected = selected
-        self.notSelectedTitle = notSelectedTitle
-    }
+    public init(
+        selected: Binding<SelectableCase?>,
+        notSelectedTitle: String? = nil,
+        options: [SelectableCase] = SelectableCase.allCases as! [SelectableCase]
+    ) {
+            self._selected = selected
+            self.notSelectedTitle = notSelectedTitle
+            self.options = options
+        }
 
     public var body: some View {
         ScrollView(.horizontal) {
@@ -24,7 +30,7 @@ public struct SelectionChips<SelectableCase: Selectable>: View where SelectableC
                     }
                 }
 
-                ForEach(SelectableCase.allCases) { selection in
+                ForEach(options) { selection in
                     SelectionChip(
                         title: selection.caseTitle,
                         isMultiSelect: false,
