@@ -755,7 +755,7 @@ internal fun CardScreen(
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.White,
-                            disabledContainerColor = Color.White
+                            disabledContainerColor = Color.White,
                         ),
                         border = if (uiState.cardType == ProfileCardType.None) {
                             BorderStroke(

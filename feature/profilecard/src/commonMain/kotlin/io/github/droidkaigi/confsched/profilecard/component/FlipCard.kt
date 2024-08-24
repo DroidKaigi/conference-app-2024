@@ -150,10 +150,10 @@ internal fun FlipCard(
         elevation = CardDefaults.cardElevation(10.dp),
     ) {
         val profileImagePainter = rememberAsyncImagePainter(
-            model = remember { uiState.image.decodeBase64Bytes() }
+            model = remember { uiState.image.decodeBase64Bytes() },
         )
         val qrcodeImagePainter = rememberAsyncImagePainter(
-            model = qrCodeByteArray
+            model = qrCodeByteArray,
         )
         if (isBack) { // Back
             FlipCardBack(uiState, qrcodeImagePainter)
@@ -178,7 +178,7 @@ internal fun CapturableCard(
     val graphicsLayerFront = rememberGraphicsLayer()
     val graphicsLayerBack = rememberGraphicsLayer()
     val profileImagePainter = rememberAsyncImagePainter(
-        model = remember { uiState.image.decodeBase64Bytes() }
+        model = remember { uiState.image.decodeBase64Bytes() },
     )
     var logoImage by remember { mutableStateOf(ByteArray(0)) }
     var isFrontCaptured by remember { mutableStateOf(false) }
