@@ -28,7 +28,7 @@ kotlin {
                     binaryOption("bundleShortVersionString", version.toString())
 
                     val includeToXCF = if (project.properties["app.ios.shared.debug"] == "true") {
-                        this.target.name == "iosSimulatorArm64" && this.debuggable
+                        (this.target.name == "iosSimulatorArm64" && this.debuggable) || (this.target.name == "iosArm64" && this.debuggable)
                     } else {
                         true
                     }
