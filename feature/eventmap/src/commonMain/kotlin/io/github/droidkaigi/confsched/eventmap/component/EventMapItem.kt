@@ -27,11 +27,11 @@ import conference_app_2024.feature.eventmap.generated.resources.read_more
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
+import io.github.droidkaigi.confsched.droidkaigiui.toResDrawable
 import io.github.droidkaigi.confsched.eventmap.EventMapRes
 import io.github.droidkaigi.confsched.model.EventMapEvent
 import io.github.droidkaigi.confsched.model.RoomIcon
 import io.github.droidkaigi.confsched.model.fakes
-import io.github.droidkaigi.confsched.ui.toResDrawable
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

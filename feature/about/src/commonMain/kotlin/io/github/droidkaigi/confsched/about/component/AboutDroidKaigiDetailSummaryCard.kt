@@ -22,7 +22,7 @@ import conference_app_2024.feature.about.generated.resources.place_link
 import conference_app_2024.feature.about.generated.resources.place_title
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
-import io.github.droidkaigi.confsched.ui.dashedRoundRect
+import io.github.droidkaigi.confsched.droidkaigiui.dashedRoundRect
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

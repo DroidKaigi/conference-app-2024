@@ -33,6 +33,11 @@ import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.component.LoadingText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
@@ -46,11 +51,6 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHead
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"

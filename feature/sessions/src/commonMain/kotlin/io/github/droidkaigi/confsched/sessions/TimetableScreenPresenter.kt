@@ -9,6 +9,8 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.SessionsRepository
@@ -23,8 +25,6 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreenEvent.UiTypeChange
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.coroutines.flow.Flow

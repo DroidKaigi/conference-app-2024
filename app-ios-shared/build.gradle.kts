@@ -52,7 +52,7 @@ kotlin {
             dependencies {
                 api(projects.core.model)
                 api(projects.core.data)
-                api(projects.core.ui)
+                api(projects.core.droidkaigiui)
                 api(projects.feature.main)
                 api(projects.feature.sessions)
                 api(projects.feature.eventmap)

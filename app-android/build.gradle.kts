@@ -108,7 +108,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
-    implementation(projects.core.ui)
+    implementation(projects.core.droidkaigiui)
     implementation(libs.composeNavigation)
     implementation(libs.composeHiltNavigation)
     implementation(libs.composeMaterialWindowSize)
