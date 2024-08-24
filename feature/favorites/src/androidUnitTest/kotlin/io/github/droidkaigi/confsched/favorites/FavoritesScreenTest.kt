@@ -77,7 +77,7 @@ class FavoritesScreenTest(
                             doIt {
                                 clickFirstSessionBookmark()
                             }
-                            itShould("display empty view") {
+                            itShould("display favorite session without first session") {
                                 captureScreenWithChecks(
                                     checks = { checkTimetableListItemsDisplayed() },
                                 )
@@ -87,9 +87,9 @@ class FavoritesScreenTest(
                             doIt {
                                 scrollFavorites()
                             }
-                            itShould("display favorite session") {
+                            itShould("first session is not displayed") {
                                 captureScreenWithChecks(
-                                    checks = { checkTimetableListItemsDisplayed() },
+                                    checks = { checkTimetableListFirstItemNotDisplayed() },
                                 )
                             }
                         }

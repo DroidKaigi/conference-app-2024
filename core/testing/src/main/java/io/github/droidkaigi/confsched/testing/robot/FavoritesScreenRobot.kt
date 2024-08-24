@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
@@ -57,6 +58,14 @@ class FavoritesScreenRobot @Inject constructor(
             .onAllNodes(hasTestTag(TimetableItemCardTestTag))
             .onFirst()
             .assertIsDisplayed()
+        waitUntilIdle()
+    }
+
+    fun checkTimetableListFirstItemNotDisplayed() {
+        composeTestRule
+            .onAllNodes(hasTestTag(TimetableItemCardTestTag))
+            .onFirst()
+            .assertIsNotDisplayed()
         waitUntilIdle()
     }
 
