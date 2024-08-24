@@ -39,6 +39,12 @@ class FavoritesScreenRobot @Inject constructor(
         waitUntilIdle()
     }
 
+    suspend fun setupSingleFavoriteSession() {
+        userDataStore.toggleFavorite(
+            TimetableItemId(FakeSessionsApiClient.defaultSessionId),
+        )
+    }
+
     suspend fun setupFavoriteSessions() {
         FakeSessionsApiClient.defaultSessionIds.forEach {
             userDataStore.toggleFavorite(TimetableItemId(it))

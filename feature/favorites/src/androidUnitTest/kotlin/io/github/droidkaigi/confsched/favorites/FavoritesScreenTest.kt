@@ -41,36 +41,60 @@ class FavoritesScreenTest(
                 describe("when server is operational") {
                     doIt {
                         setupTimetableServer(ServerStatus.Operational)
-                        setupFavoriteSessions()
-                        setupFavoritesScreenContent()
                     }
-                    itShould("display favorite session") {
-                        captureScreenWithChecks(
-                            checks = { checkTimetableListItemsDisplayed() },
-                        )
-                    }
-                    describe("click first session bookmark") {
+                    describe("setup single favorite session") {
                         doIt {
-                            clickFirstSessionBookmark()
-                        }
-                        itShould("display empty view") {
-                            captureScreenWithChecks(
-                                checks = { checkEmptyViewDisplayed() },
-                            )
-                        }
-                    }
-                    describe("scroll favorites") {
-                        doIt {
-                            scrollFavorites()
+                            setupSingleFavoriteSession()
+                            setupFavoritesScreenContent()
                         }
                         itShould("display favorite session") {
                             captureScreenWithChecks(
                                 checks = { checkTimetableListItemsDisplayed() },
                             )
                         }
+                        describe("click first session bookmark") {
+                            doIt {
+                                clickFirstSessionBookmark()
+                            }
+                            itShould("display empty view") {
+                                captureScreenWithChecks(
+                                    checks = { checkEmptyViewDisplayed() },
+                                )
+                            }
+                        }
+                    }
+                    describe("setup many favorite sessions") {
+                        doIt {
+                            setupFavoriteSessions()
+                            setupFavoritesScreenContent()
+                        }
+                        itShould("display favorite session") {
+                            captureScreenWithChecks(
+                                checks = { checkTimetableListItemsDisplayed() },
+                            )
+                        }
+                        describe("click first session bookmark") {
+                            doIt {
+                                clickFirstSessionBookmark()
+                            }
+                            itShould("display empty view") {
+                                captureScreenWithChecks(
+                                    checks = { checkTimetableListItemsDisplayed() },
+                                )
+                            }
+                        }
+                        describe("scroll favorites") {
+                            doIt {
+                                scrollFavorites()
+                            }
+                            itShould("display favorite session") {
+                                captureScreenWithChecks(
+                                    checks = { checkTimetableListItemsDisplayed() },
+                                )
+                            }
+                        }
                     }
                 }
-
                 describe("when server is down") {
                     doIt {
                         setupTimetableServer(ServerStatus.Error)
