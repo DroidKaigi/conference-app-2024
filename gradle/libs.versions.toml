@@ -124,7 +124,8 @@ qrcodeKotlin = { group = "io.github.g0dkar", name = "qrcode-kotlin", version = "
 androidxFragment = { module = "androidx.fragment:fragment", version.ref = "androidxFragment" }
 androidxCoreKtx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
 androidxAppCompat = { module = "androidx.appcompat:appcompat", version = "1.7.0" }
-androidxLifecycleLifecycleRuntimeKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
+androidxLifecycleRuntime = { module = "androidx.lifecycle:lifecycle-runtime", version.ref = "androidxLifecycle" }
+androidxLifecycleRuntimeCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version = "2.8.0" }
 androidxLifecycleViewModel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "androidxLifecycle" }
 androidxLifecycleViewModelCompose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version = "2.8.0" }
 androidxLifecycleCommon = { module = "androidx.lifecycle:lifecycle-common", version.ref = "androidxLifecycle" }
