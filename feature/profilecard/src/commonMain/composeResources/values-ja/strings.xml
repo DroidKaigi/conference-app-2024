@@ -14,4 +14,5 @@
     <string name="add_validate_format">%1$sを追加してください</string>
     <string name="share">共有する</string>
     <string name="edit">編集する</string>
+    <string name="share_description">DroidKaigiのプロフィールカードを作成しました！イベントでつながりましょう。#DroidKaigi</string>
 </resources>

@@ -94,6 +94,7 @@ import conference_app_2024.feature.profilecard.generated.resources.profile_card_
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
 import conference_app_2024.feature.profilecard.generated.resources.select_theme
 import conference_app_2024.feature.profilecard.generated.resources.share
+import conference_app_2024.feature.profilecard.generated.resources.share_description
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
@@ -305,6 +306,8 @@ internal fun ProfileCardScreen(
 
             ProfileCardUiType.Card -> {
                 if (uiState.cardUiState == null) return@Scaffold
+                val shareText = stringResource(ProfileCardRes.string.share_description)
+
                 CardScreen(
                     uiState = uiState.cardUiState,
                     scrollBehavior = scrollBehavior,
@@ -312,8 +315,6 @@ internal fun ProfileCardScreen(
                         eventEmitter.tryEmit(CardScreenEvent.Edit)
                     },
                     onClickShareProfileCard = { imageBitmap ->
-                        // TODO Make it better written.
-                        val shareText = "${uiState.cardUiState.nickname}'s profile card"
                         onClickShareProfileCard(shareText, imageBitmap)
                     },
                     contentPadding = padding,
