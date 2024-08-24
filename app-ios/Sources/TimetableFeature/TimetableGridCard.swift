@@ -11,7 +11,7 @@ public struct TimetableGridCard: View {
     
     public init(
         timetableItem: TimetableItem,
-        cellCount: Int? = 1,
+        cellCount: Int,
         onTap: @escaping (TimetableItem) -> Void
     ) {
         self.timetableItem = timetableItem
@@ -31,13 +31,13 @@ public struct TimetableGridCard: View {
                     }
                     Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                         .textStyle(.labelMedium)
-                        .foregroundStyle(cellCount>1 ? AssetColors.Surface.onSurfaceVariant.swiftUIColor : timetableItem.room.roomTheme.primaryColor)
+                        .foregroundStyle(cellCount > 1 ? AssetColors.Surface.onSurfaceVariant.swiftUIColor : timetableItem.room.roomTheme.primaryColor)
                     Spacer()
                 }
                 
                 Text(timetableItem.title.currentLangTitle)
                     .textStyle(.titleMedium)
-                    .foregroundStyle(cellCount>1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor)
+                    .foregroundStyle(cellCount > 1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor)
                     .multilineTextAlignment(.leading)
                 
                 Spacer()
@@ -64,8 +64,8 @@ public struct TimetableGridCard: View {
             .frame(maxWidth: .infinity)
             .padding(12)
             .frame(width: 192*CGFloat(cellCount)+CGFloat(12*(cellCount-1)), height: 153)
-            .background(cellCount>1 ? AssetColors.Surface.surfaceContainer.swiftUIColor : timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
-            .overlay(RoundedRectangle(cornerRadius: 4).stroke(cellCount>1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
+            .background(cellCount > 1 ? AssetColors.Surface.surfaceContainer.swiftUIColor : timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(cellCount > 1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
         }
     }
 }
@@ -73,7 +73,7 @@ public struct TimetableGridCard: View {
 #Preview {
     VStack {
         TimetableGridCard(
-            timetableItem: TimetableItem.Session.companion.fake(),
+            timetableItem: TimetableItem.Session.companion.fake(), cellCount: 1,
             onTap: { _ in }
         )
         .padding(.horizontal, 16)

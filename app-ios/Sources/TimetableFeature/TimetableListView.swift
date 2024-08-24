@@ -209,7 +209,7 @@ fileprivate var bottomTabBarPadding: some View {
 }
 
 extension RoomType {
-    public func toRoom() -> TimetableRoom {
+    func toRoom() -> TimetableRoom {
         switch self {
         case .roomI:
             return TimetableRoom(
