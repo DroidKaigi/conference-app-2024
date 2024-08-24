@@ -17,7 +17,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.sponsors.generated.resources.content_description_back
 import conference_app_2024.feature.sponsors.generated.resources.sponsor
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -74,8 +74,8 @@ fun SponsorsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventEmitter<SponsorsScreenEvent>()
-    val uiState = sponsorsScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<SponsorsScreenEvent>()
+    val uiState = sponsorsScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 

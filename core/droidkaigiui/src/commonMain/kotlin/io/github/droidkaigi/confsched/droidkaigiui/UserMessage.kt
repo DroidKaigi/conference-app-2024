@@ -13,9 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import co.touchlab.kermit.Logger
 import io.github.takahirom.rin.rememberRetained
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlin.coroutines.coroutineContext
 
 /**
  * SnackbarMessageEffect shows a snackbar message when a [UserMessage] is emitted by [userMessageStateHolder].
@@ -89,42 +92,55 @@ class UserMessageStateHolderImpl : UserMessageStateHolder {
         val newMessage = UserMessage(message, actionLabel = actionLabel, duration = duration)
         messages.add(newMessage)
         _messageUiState = _messageUiState.copy(userMessages = messages)
-        val messageResult = snapshotFlow {
-            _messageUiState
-        }.filter { messageState ->
-            val filterResult = messageState.userMessages.find { it.id == newMessage.id }?.let { userMessage ->
-                val messageResult = userMessage.userMessageResult
-                messageResult != null
-            } ?: false
-            Logger.d {
-                "UserMessageStateHolderImpl.showMessage filter message messageState:$messageState newMessage:$newMessage filterResult:$filterResult"
-            }
-            filterResult
-        }
-            .map { messageState ->
-                val userMessage =
-                    checkNotNull(messageState.userMessages.find { it.id == newMessage.id })
+        val messageResult = try {
+            snapshotFlow {
+                _messageUiState
+            }.filter { messageState ->
+                val filterResult =
+                    messageState.userMessages.find { it.id == newMessage.id }?.let { userMessage ->
+                        val messageResult = userMessage.userMessageResult
+                        messageResult != null
+                    } ?: false
                 Logger.d {
-                    "UserMessageStateHolderImpl.showMessage map message messageState:$messageState newMessage:$newMessage userMessage:$userMessage"
+                    "UserMessageStateHolderImpl.showMessage filter message messageState:$messageState newMessage:$newMessage filterResult:$filterResult"
                 }
-                checkNotNull(
-                    userMessage
-                        .userMessageResult,
-                )
+                filterResult
             }
-            .first()
-        Logger.d { "UserMessageStateHolderImpl.showMessage after first messageResult:$messageResult" }
-        val newMessages = _messageUiState.userMessages.toMutableList()
-        newMessages.find { it.id == newMessage.id }?.let { userMessage ->
-            newMessages.remove(userMessage)
+                .map { messageState ->
+                    val userMessage =
+                        checkNotNull(messageState.userMessages.find { it.id == newMessage.id })
+                    Logger.d {
+                        "UserMessageStateHolderImpl.showMessage map message messageState:$messageState newMessage:$newMessage userMessage:$userMessage"
+                    }
+                    checkNotNull(
+                        userMessage
+                            .userMessageResult,
+                    )
+                }
+                .first()
+        } catch (e: CancellationException) {
+            Logger.d { "UserMessageStateHolderImpl.showMessage CancellationException" }
+            removeMessageById(newMessage.id)
+            coroutineContext.ensureActive()
+            throw e
         }
-        _messageUiState = _messageUiState.copy(userMessages = newMessages)
+        Logger.d { "UserMessageStateHolderImpl.showMessage after first messageResult:$messageResult" }
+        removeMessageById(newMessage.id)
         Logger.d { "UserMessageStateHolderImpl.showMessage end _messageUiState:$_messageUiState" }
         return messageResult
     }
+
+    private fun removeMessageById(newMessageId: Int) {
+        val newMessages = _messageUiState.userMessages.toMutableList()
+        newMessages.find { it.id == newMessageId }?.let { userMessage ->
+            newMessages.remove(userMessage)
+        }
+        _messageUiState = _messageUiState.copy(userMessages = newMessages)
+    }
 }
 
-@Composable fun rememberUserMessageStateHolder(): UserMessageStateHolder {
+@Composable
+fun rememberUserMessageStateHolder(): UserMessageStateHolder {
     return rememberRetained { UserMessageStateHolderImpl() }
 }
 

@@ -17,7 +17,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.settings.generated.resources.settings_title
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -59,8 +59,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventEmitter<SettingsScreenEvent>()
-    val uiState = settingsScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<SettingsScreenEvent>()
+    val uiState = settingsScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -72,7 +72,7 @@ fun SettingsScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
-        onSelectUseFontFamily = { eventEmitter.tryEmit(SettingsScreenEvent.SelectUseFontFamily(it)) },
+        onSelectUseFontFamily = { eventFlow.tryEmit(SettingsScreenEvent.SelectUseFontFamily(it)) },
         modifier = modifier,
         isTopAppBarHidden = isTopAppBarHidden,
     )

@@ -20,7 +20,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.contributors.generated.resources.contributor_title
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -65,9 +65,9 @@ fun ContributorsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventEmitter<ContributorsScreenEvent>()
+    val eventFlow = rememberEventFlow<ContributorsScreenEvent>()
     val uiState = contributorsScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     )
 
     val snackbarHostState = remember { SnackbarHostState() }

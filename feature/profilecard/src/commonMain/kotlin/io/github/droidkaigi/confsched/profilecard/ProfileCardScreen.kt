@@ -95,8 +95,8 @@ import conference_app_2024.feature.profilecard.generated.resources.profile_card_
 import conference_app_2024.feature.profilecard.generated.resources.select_theme
 import conference_app_2024.feature.profilecard.generated.resources.share
 import conference_app_2024.feature.profilecard.generated.resources.share_description
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProfileCardTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
@@ -199,7 +199,7 @@ fun ProfileCardScreen(
         contentPadding = contentPadding,
         onClickShareProfileCard = onClickShareProfileCard,
         modifier = modifier,
-        eventEmitter = rememberEventEmitter(),
+        eventFlow = rememberEventFlow(),
     )
 }
 
@@ -209,8 +209,8 @@ internal fun ProfileCardScreen(
     contentPadding: PaddingValues,
     onClickShareProfileCard: (String, ImageBitmap) -> Unit,
     modifier: Modifier = Modifier,
-    eventEmitter: EventEmitter<ProfileCardScreenEvent> = rememberEventEmitter(),
-    uiState: ProfileCardScreenState = profileCardScreenPresenter(eventEmitter),
+    eventFlow: EventFlow<ProfileCardScreenEvent> = rememberEventFlow(),
+    uiState: ProfileCardScreenState = profileCardScreenPresenter(eventFlow),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
@@ -286,19 +286,19 @@ internal fun ProfileCardScreen(
                     profileCardError = uiState.cardError,
                     scrollBehavior = scrollBehavior,
                     onChangeNickname = {
-                        eventEmitter.tryEmit(EditScreenEvent.OnChangeNickname(it))
+                        eventFlow.tryEmit(EditScreenEvent.OnChangeNickname(it))
                     },
                     onChangeOccupation = {
-                        eventEmitter.tryEmit(EditScreenEvent.OnChangeOccupation(it))
+                        eventFlow.tryEmit(EditScreenEvent.OnChangeOccupation(it))
                     },
                     onChangeLink = {
-                        eventEmitter.tryEmit(EditScreenEvent.OnChangeLink(it))
+                        eventFlow.tryEmit(EditScreenEvent.OnChangeLink(it))
                     },
                     onChangeImage = {
-                        eventEmitter.tryEmit(EditScreenEvent.OnChangeImage(it))
+                        eventFlow.tryEmit(EditScreenEvent.OnChangeImage(it))
                     },
                     onClickCreate = {
-                        eventEmitter.tryEmit(EditScreenEvent.Create(it))
+                        eventFlow.tryEmit(EditScreenEvent.Create(it))
                     },
                     contentPadding = padding,
                 )
@@ -312,7 +312,7 @@ internal fun ProfileCardScreen(
                     uiState = uiState.cardUiState,
                     scrollBehavior = scrollBehavior,
                     onClickEdit = {
-                        eventEmitter.tryEmit(CardScreenEvent.Edit)
+                        eventFlow.tryEmit(CardScreenEvent.Edit)
                     },
                     onClickShareProfileCard = { imageBitmap ->
                         onClickShareProfileCard(shareText, imageBitmap)

@@ -29,7 +29,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
 import conference_app_2024.feature.eventmap.generated.resources.eventmap
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppBar
@@ -81,9 +81,9 @@ fun EventMapScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val eventEmitter = rememberEventEmitter<EventMapScreenEvent>()
+    val eventFlow = rememberEventFlow<EventMapScreenEvent>()
     val uiState = eventMapScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     )
 
     val snackbarHostState = remember { SnackbarHostState() }
