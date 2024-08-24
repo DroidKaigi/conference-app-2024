@@ -753,7 +753,10 @@ internal fun CardScreen(
                                 onClickShareProfileCard(graphicsLayer.toImageBitmap())
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White,
+                            disabledContainerColor = Color.White
+                        ),
                         border = if (uiState.cardType == ProfileCardType.None) {
                             BorderStroke(
                                 0.5.dp,
