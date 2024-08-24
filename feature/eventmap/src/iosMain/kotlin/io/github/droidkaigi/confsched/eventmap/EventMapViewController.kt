@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.eventmap
 
+import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.droidkaigiui.composeViewController
 import io.github.droidkaigi.confsched.droidkaigiui.presenterStateFlow
@@ -20,7 +21,7 @@ fun eventMapViewController(
 @Suppress("unused")
 fun eventMapScreenPresenterStateFlow(
     repositories: Map<KClass<*>, Any>,
-    events: Flow<EventMapScreenEvent>,
+    events: EventFlow<EventMapScreenEvent>,
 ): Flow<EventMapUiState> = presenterStateFlow(
     events = events,
     repositories = repositories,
