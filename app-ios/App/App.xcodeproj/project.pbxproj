@@ -193,7 +193,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${SRCROOT}/../..\n./gradlew assembleSharedXCFramework --no-configuration-cache\n./gradlew iosSimulatorArm64AggregateResources --no-configuration-cache\n\nRESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64\"\n\nmkdir ${RESOURCE_DIR}/compose-resources\ncp -R ${RESOURCE_DIR}/composeResources ${RESOURCE_DIR}/compose-resources\n";
+			shellScript = "cd ${SRCROOT}/../..\n\n./gradlew assembleSharedXCFramework --no-configuration-cache\n./gradlew iosSimulatorArm64AggregateResources --no-configuration-cache\n./gradlew iosArm64AggregateResources --no-configuration-cache\n\nSIMULATOR_RESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64\"\nDEVICE_RESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosArm64\"\n\nmkdir -p ${SIMULATOR_RESOURCE_DIR}/composeResources\nmkdir -p ${DEVICE_RESOURCE_DIR}/composeResources\n\nmkdir -p ${SIMULATOR_RESOURCE_DIR}/compose-resources\nmkdir -p ${DEVICE_RESOURCE_DIR}/compose-resources\n\ncp -R ${SIMULATOR_RESOURCE_DIR}/composeResources ${SIMULATOR_RESOURCE_DIR}/compose-resources\ncp -R ${DEVICE_RESOURCE_DIR}/composeResources ${DEVICE_RESOURCE_DIR}/compose-resources\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
