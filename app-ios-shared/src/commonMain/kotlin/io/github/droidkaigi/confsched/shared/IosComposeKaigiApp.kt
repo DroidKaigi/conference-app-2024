@@ -17,6 +17,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import io.github.droidkaigi.confsched.about.aboutScreen
+import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
@@ -55,6 +56,9 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
+import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
+import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
@@ -231,6 +235,10 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     override fun routeToTab(route: String): MainScreenTab? {
         return when (route) {
             timetableScreenRoute -> Timetable
+            eventMapScreenRoute -> EventMap
+            profileCardScreenRoute -> ProfileCard
+            aboutScreenRoute -> About
+            favoritesScreenRoute -> Favorite
             else -> null
         }
     }
