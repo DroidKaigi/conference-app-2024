@@ -65,9 +65,9 @@ fun ContributorsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventFlow<ContributorsScreenEvent>()
+    val eventFlow = rememberEventFlow<ContributorsScreenEvent>()
     val uiState = contributorsScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     )
 
     val snackbarHostState = remember { SnackbarHostState() }

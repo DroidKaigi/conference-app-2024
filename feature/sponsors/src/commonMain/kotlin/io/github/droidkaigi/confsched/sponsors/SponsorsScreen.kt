@@ -74,8 +74,8 @@ fun SponsorsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventFlow<SponsorsScreenEvent>()
-    val uiState = sponsorsScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<SponsorsScreenEvent>()
+    val uiState = sponsorsScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 

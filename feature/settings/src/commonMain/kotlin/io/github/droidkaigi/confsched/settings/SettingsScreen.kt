@@ -59,8 +59,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventFlow<SettingsScreenEvent>()
-    val uiState = settingsScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<SettingsScreenEvent>()
+    val uiState = settingsScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -72,7 +72,7 @@ fun SettingsScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
-        onSelectUseFontFamily = { eventEmitter.tryEmit(SettingsScreenEvent.SelectUseFontFamily(it)) },
+        onSelectUseFontFamily = { eventFlow.tryEmit(SettingsScreenEvent.SelectUseFontFamily(it)) },
         modifier = modifier,
         isTopAppBarHidden = isTopAppBarHidden,
     )

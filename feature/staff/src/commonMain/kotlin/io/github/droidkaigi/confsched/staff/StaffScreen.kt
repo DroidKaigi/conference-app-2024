@@ -71,8 +71,8 @@ fun StaffScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventFlow<StaffScreenEvent>()
-    val uiState = staffScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<StaffScreenEvent>()
+    val uiState = staffScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 

@@ -70,16 +70,16 @@ timetableScreenPresenter ----> TimetableScreen
 @Composable
 fun TimetableScreen(
     ...
-    eventEmitter: EventEmitter<TimetableScreenEvent> = rememberEventEmitter<TimetableScreenEvent>(),
+    eventFlow: EventFlow<TimetableScreenEvent> = rememberEventFlow<TimetableScreenEvent>(),
     uiState: TimetableScreenUiState = timetableScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     ),
 ) {
     ...
     TimetableScreen(
         uiState = uiState,
         onBookmarkClick = { item, bookmarked ->
-            eventEmitter.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
+            eventFlow.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
         },
 ```
 
@@ -97,7 +97,7 @@ TimetableScreen ----> timetableScreenPresenter -> sessionsRepository
 ```kotlin
 @Composable
 fun timetableScreenPresenter(
-    events: EventEmitter<TimetableScreenEvent>,
+    events: EventFlow<TimetableScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     ...
@@ -174,7 +174,7 @@ SessionsRepository ----> timetableScreenPresenter
 ```kotlin
 @Composable
 fun timetableScreenPresenter(
-    events: EventEmitter<TimetableScreenEvent>,
+    events: EventFlow<TimetableScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     // Sessions are updated in the timetable() function
@@ -214,7 +214,7 @@ timetableScreenPresenter ----> TimetableScreen
 fun TimetableScreen(
     ...,
     uiState: TimetableScreenUiState = timetableScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     ),
 ) {
     ...

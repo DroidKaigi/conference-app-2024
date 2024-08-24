@@ -81,9 +81,9 @@ fun EventMapScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val eventEmitter = rememberEventFlow<EventMapScreenEvent>()
+    val eventFlow = rememberEventFlow<EventMapScreenEvent>()
     val uiState = eventMapScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     )
 
     val snackbarHostState = remember { SnackbarHostState() }
