@@ -707,7 +707,7 @@ internal fun CardScreen(
                 contentPadding = contentPadding,
                 onReadyShare = {
                     isReadyShare = true
-                }
+                },
             )
             Column(
                 modifier = modifier
