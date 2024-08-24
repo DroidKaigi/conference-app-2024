@@ -48,7 +48,7 @@ internal sealed interface CardScreenEvent : ProfileCardScreenEvent {
     data object Edit : CardScreenEvent
 }
 
-private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
+internal fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
     return when (this) {
         is ProfileCard.Exists -> ProfileCardUiState.Edit(
             nickname = nickname,
@@ -62,7 +62,7 @@ private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
     }
 }
 
-private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
+internal fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
     return when (this) {
         is ProfileCard.Exists -> ProfileCardUiState.Card(
             nickname = nickname,

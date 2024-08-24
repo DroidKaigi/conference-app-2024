@@ -36,6 +36,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -45,6 +47,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
+import coil3.compose.rememberAsyncImagePainter
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.card_back_blue
 import conference_app_2024.feature.profilecard.generated.resources.card_back_green
@@ -68,8 +71,9 @@ import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
+import io.github.droidkaigi.confsched.profilecard.decodeBase64Bytes
 import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
-import io.ktor.util.decodeBase64Bytes
+import io.github.droidkaigi.confsched.profilecard.toCardUiState
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.getDrawableResourceBytes
@@ -115,12 +119,17 @@ internal fun FlipCard(
         ),
     )
     var logoImage by remember { mutableStateOf(ByteArray(0)) }
+    var qrCodeByteArray by remember { mutableStateOf(ByteArray(0)) }
 
     LaunchedEffect(Unit) {
         logoImage = getDrawableResourceBytes(
             environment = getSystemResourceEnvironment(),
             resource = ProfileCardRes.drawable.droidkaigi_logo,
         )
+        qrCodeByteArray = QRCode.ofSquares()
+            .withLogo(logoImage, 400, 400)
+            .build(uiState.link)
+            .renderToBytes()
         if (isCreated) {
             initialRotation = targetRotation
             delay(400)
@@ -140,22 +149,20 @@ internal fun FlipCard(
             },
         elevation = CardDefaults.cardElevation(10.dp),
     ) {
-        val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
-        val imageBitmap = remember(logoImage) {
-            QRCode.ofSquares()
-                .withLogo(logoImage, 400, 400)
-                .build(uiState.link)
-                .renderToBytes().toImageBitmap()
-        }
-
+        val profileImagePainter = rememberAsyncImagePainter(
+            model = remember { uiState.image.decodeBase64Bytes() }
+        )
+        val qrcodeImagePainter = rememberAsyncImagePainter(
+            model = qrCodeByteArray
+        )
         if (isBack) { // Back
-            FlipCardBack(uiState, imageBitmap)
+            FlipCardBack(uiState, qrcodeImagePainter)
         } else { // Front
             WithDeviceOrientation {
                 FlipCardFront(
                     modifier = Modifier.hologramaticEffect(this@WithDeviceOrientation),
                     uiState = uiState,
-                    profileImage = profileImage,
+                    profileImagePainter = profileImagePainter,
                 )
             }
         }
@@ -170,18 +177,16 @@ internal fun CapturableCard(
 ) {
     val graphicsLayerFront = rememberGraphicsLayer()
     val graphicsLayerBack = rememberGraphicsLayer()
-    val profileImage = remember { uiState.image.decodeBase64Bytes().toImageBitmap() }
+    val profileImagePainter = rememberAsyncImagePainter(
+        model = remember { uiState.image.decodeBase64Bytes() }
+    )
     var logoImage by remember { mutableStateOf(ByteArray(0)) }
-    val imageBitmap = remember(logoImage) {
-        QRCode.ofSquares()
-            .withLogo(logoImage, 400, 400)
-            .build(uiState.link)
-            .renderToBytes().toImageBitmap()
-    }
     var isFrontCaptured by remember { mutableStateOf(false) }
     var isBackCaptured by remember { mutableStateOf(false) }
     var isFrontSizeNonZero by remember { mutableStateOf(false) }
     var isBackSizeNonZero by remember { mutableStateOf(false) }
+    var qrCodeByteArray by remember { mutableStateOf(ByteArray(0)) }
+    val qrcodeImagePainter = rememberAsyncImagePainter(qrCodeByteArray)
 
     LaunchedEffect(isFrontCaptured, isBackCaptured, isFrontSizeNonZero, isBackSizeNonZero) {
         // In ComposableMultiplatform, an ImageBitmap is not Null, but may come with a size of 0.
@@ -205,7 +210,14 @@ internal fun CapturableCard(
                 resource = ProfileCardRes.drawable.droidkaigi_logo,
             )
         }
+        if (qrCodeByteArray.isEmpty()) {
+            qrCodeByteArray = QRCode.ofSquares()
+                .withLogo(logoImage, 400, 400)
+                .build(uiState.link)
+                .renderToBytes()
+        }
         // after qr code rendered with logo, tell the event to parent component
+        delay(300)
         onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
     }
 
@@ -229,7 +241,7 @@ internal fun CapturableCard(
         ) {
             FlipCardFront(
                 uiState,
-                profileImage = profileImage,
+                profileImagePainter,
                 modifier = Modifier
                     .size(width = 300.dp, height = 380.dp)
                     .border(
@@ -257,7 +269,7 @@ internal fun CapturableCard(
         ) {
             FlipCardBack(
                 uiState,
-                imageBitmap,
+                qrcodeImagePainter,
                 modifier = Modifier
                     .size(width = 300.dp, height = 380.dp)
                     .border(
@@ -276,7 +288,7 @@ internal fun CapturableCard(
 @Composable
 private fun FlipCardFront(
     uiState: Card,
-    profileImage: ImageBitmap,
+    profileImagePainter: Painter,
     modifier: Modifier = Modifier,
 ) {
     val background = when (uiState.cardType) {
@@ -305,7 +317,7 @@ private fun FlipCardFront(
         ) {
             Spacer(Modifier.height(103.dp))
             Image(
-                bitmap = profileImage,
+                painter = profileImagePainter,
                 contentDescription = null,
                 modifier = Modifier
                     .clip(CircleShape)
@@ -338,7 +350,7 @@ private fun FlipCardFront(
 @Composable
 private fun FlipCardBack(
     uiState: Card,
-    bitmap: ImageBitmap,
+    painter: Painter,
     modifier: Modifier = Modifier,
 ) {
     val background = when (uiState.cardType) {
@@ -365,7 +377,7 @@ private fun FlipCardBack(
             contentScale = ContentScale.Crop,
         )
         Image(
-            bitmap = bitmap,
+            painter = painter,
             contentDescription = null,
             modifier = Modifier.size(160.dp),
         )
@@ -375,17 +387,15 @@ private fun FlipCardBack(
 @Composable
 @Preview
 fun FlipCardFrontPreview() {
-    val uiState = ProfileCard.Exists.fake().let { (nickname, occupation, link, image, cardType) ->
-        Card(nickname, occupation, link, image, cardType)
-    }
-    val profileImage = uiState.image.decodeBase64Bytes().toImageBitmap()
+    val uiState = ProfileCard.Exists.fake().toCardUiState()!!
+    val painter = BitmapPainter(uiState.image.decodeBase64Bytes().toImageBitmap())
 
     KaigiTheme {
         Surface(modifier = Modifier.size(300.dp, 380.dp)) {
             ProvideProfileCardTheme(uiState.cardType.name) {
                 FlipCardFront(
                     uiState = uiState,
-                    profileImage = profileImage,
+                    profileImagePainter = painter,
                 )
             }
         }
@@ -395,9 +405,9 @@ fun FlipCardFrontPreview() {
 @Composable
 @Preview
 fun FlipCardBackPreview() {
-    val uiState = ProfileCard.Exists.fake().let { (nickname, occupation, link, image, cardType) ->
-        Card(nickname, occupation, link, image, cardType)
-    }
+    val uiState = ProfileCard.Exists.fake().toCardUiState()!!
+    val painter =
+        BitmapPainter(QRCode.ofSquares().build(uiState.link).renderToBytes().toImageBitmap())
 
     KaigiTheme {
         Surface(
@@ -409,7 +419,7 @@ fun FlipCardBackPreview() {
         ) {
             FlipCardBack(
                 uiState = uiState,
-                bitmap = QRCode.ofSquares().build(uiState.link).renderToBytes().toImageBitmap(),
+                painter = painter,
             )
         }
     }

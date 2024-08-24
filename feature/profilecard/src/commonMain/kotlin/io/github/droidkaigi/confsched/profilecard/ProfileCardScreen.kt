@@ -468,10 +468,10 @@ internal fun EditScreen(
 }
 
 @OptIn(ExperimentalEncodingApi::class)
-private fun ByteArray.toBase64(): String = Base64.encode(this)
+fun ByteArray.toBase64(): String = Base64.encode(this)
 
 @OptIn(ExperimentalEncodingApi::class)
-private fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
+fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
 
 @Composable
 internal fun Label(label: String) {
