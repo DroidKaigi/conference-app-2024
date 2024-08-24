@@ -83,6 +83,7 @@ import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
 import conference_app_2024.feature.profilecard.generated.resources.card_type
 import conference_app_2024.feature.profilecard.generated.resources.create_card
+import conference_app_2024.feature.profilecard.generated.resources.edit
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
@@ -92,6 +93,7 @@ import conference_app_2024.feature.profilecard.generated.resources.occupation
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_edit_description
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
 import conference_app_2024.feature.profilecard.generated.resources.select_theme
+import conference_app_2024.feature.profilecard.generated.resources.share
 import io.github.droidkaigi.confsched.compose.EventEmitter
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
@@ -196,7 +198,7 @@ fun ProfileCardScreen(
         contentPadding = contentPadding,
         onClickShareProfileCard = onClickShareProfileCard,
         modifier = modifier,
-        rememberEventEmitter(),
+        eventEmitter = rememberEventEmitter(),
     )
 }
 
@@ -742,15 +744,17 @@ internal fun CardScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
+                        val shareLabel = stringResource(ProfileCardRes.string.share)
+
                         Icon(
                             painter = painterResource(ProfileCardRes.drawable.icon_share),
-                            contentDescription = "Share",
+                            contentDescription = shareLabel,
                             tint = Color.Black,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "Share",
+                            text = shareLabel,
                             modifier = Modifier.padding(8.dp),
                             style = MaterialTheme.typography.labelLarge,
                             color = Color.Black,
@@ -758,7 +762,7 @@ internal fun CardScreen(
                     }
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "Edit",
+                        text = stringResource(ProfileCardRes.string.edit),
                         style = MaterialTheme.typography.labelLarge,
                         color = Color.Black,
                         modifier = Modifier
