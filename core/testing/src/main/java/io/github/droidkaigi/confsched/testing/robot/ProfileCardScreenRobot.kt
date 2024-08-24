@@ -142,6 +142,7 @@ class ProfileCardScreenRobot @Inject constructor(
     }
 
     fun checkShareProfileCardButtonEnabled() {
+        wait5Seconds()
         composeTestRule
             .onNode(hasTestTag(ProfileCardShareButtonTestTag))
             .assertIsEnabled()
