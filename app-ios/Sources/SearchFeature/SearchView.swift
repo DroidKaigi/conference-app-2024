@@ -8,6 +8,7 @@ import Theme
 
 public struct SearchView: View {
     @Bindable private var store: StoreOf<SearchReducer>
+    @State private var isFocused: Bool = false
 
     public init(store: StoreOf<SearchReducer>) {
         self.store = store
@@ -50,11 +51,13 @@ public struct SearchView: View {
                     store.send(.view(.searchWordChanged($0)))
                 }
             ),
+            isPresented: $isFocused,
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
         .onAppear {
             store.send(.view(.onAppear))
+            isFocused = true
         }
     }
 

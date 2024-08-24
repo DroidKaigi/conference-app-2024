@@ -67,6 +67,7 @@ fun TimetableItemDetailBottomAppBar(
                 )
             }
         },
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
     )
 }
 
