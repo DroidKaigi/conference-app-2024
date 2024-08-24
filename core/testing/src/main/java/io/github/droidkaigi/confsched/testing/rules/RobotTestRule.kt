@@ -91,11 +91,11 @@ class RobotTestRule(
             .outerRule(HiltAndroidAutoInjectRule(testInstance))
             .around(CoroutinesTestRule())
             .around(TimeZoneTestRule())
-            .around(object: TestWatcher() {
+            .around(object : TestWatcher() {
                 override fun starting(description: Description?) {
                     super.starting(description)
                     // https://github.com/robolectric/robolectric/issues/9043#issuecomment-2125998323
-                    val uiDispatcher : AndroidUiDispatcher = ReflectionHelpers.getField(AndroidUiDispatcher.Main, "element")
+                    val uiDispatcher: AndroidUiDispatcher = ReflectionHelpers.getField(AndroidUiDispatcher.Main, "element")
                     ReflectionHelpers.setField(uiDispatcher, "choreographer", Choreographer.getInstance())
                 }
             })

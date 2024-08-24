@@ -44,7 +44,7 @@ class ProfileCardScreenRobot @Inject constructor(
         ReflectionHelpers
             .callInstanceMethod<RenderNode>(
                 robotTestRule.composeTestRule.activity.window.decorView,
-                "updateDisplayListIfDirty"
+                "updateDisplayListIfDirty",
             )
         waitUntilIdle()
     }
