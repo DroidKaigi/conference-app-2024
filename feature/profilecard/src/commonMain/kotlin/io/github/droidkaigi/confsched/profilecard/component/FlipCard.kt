@@ -224,7 +224,7 @@ internal fun CapturableCard(
             }
         }
         // after qr code rendered with logo, tell the event to parent component
-        delay(300)
+        delay(500)
         onCaptured(graphicsLayerFront.toImageBitmap(), graphicsLayerBack.toImageBitmap())
     }
 
