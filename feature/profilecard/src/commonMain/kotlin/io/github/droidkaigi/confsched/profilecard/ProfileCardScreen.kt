@@ -79,6 +79,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import co.touchlab.kermit.Logger
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
 import conference_app_2024.feature.profilecard.generated.resources.card_type
@@ -126,6 +127,7 @@ const val ProfileCardSelectImageButtonTestTag = "ProfileCardSelectImageButtonTes
 const val ProfileCardCreateButtonTestTag = "ProfileCardCreateButtonTestTag"
 const val ProfileCardCardScreenTestTag = "ProfileCardCardScreenTestTag"
 const val ProfileCardEditButtonTestTag = "ProfileCardEditButtonTestTag"
+const val ProfileCardShareButtonTestTag = "ProfileCardShareButtonTestTag"
 
 fun NavGraphBuilder.profileCardScreen(
     contentPadding: PaddingValues,
@@ -696,6 +698,7 @@ internal fun CardScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
+    var isShareReady by remember { mutableStateOf(false) }
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
@@ -704,6 +707,10 @@ internal fun CardScreen(
                 uiState = uiState,
                 graphicsLayer = graphicsLayer,
                 contentPadding = contentPadding,
+                onReadyShare = {
+                    Logger.d { "Ready to share" }
+                    isShareReady = true
+                },
             )
             Column(
                 modifier = modifier
@@ -726,7 +733,9 @@ internal fun CardScreen(
                         isCreated = isCreated,
                     )
                     Spacer(Modifier.height(32.dp))
+                    Logger.d { "isReadyShare: $isShareReady uiState.cardType:${uiState.cardType}" }
                     Button(
+                        enabled = isShareReady,
                         onClick = {
                             coroutineScope.launch {
                                 onClickShareProfileCard(graphicsLayer.toImageBitmap())
@@ -743,6 +752,7 @@ internal fun CardScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
+                            .testTag(ProfileCardShareButtonTestTag)
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
                         val shareLabel = stringResource(ProfileCardRes.string.share)
@@ -781,6 +791,7 @@ private fun ShareableProfileCard(
     uiState: ProfileCardUiState.Card,
     graphicsLayer: GraphicsLayer,
     contentPadding: PaddingValues,
+    onReadyShare: () -> Unit,
 ) {
     var frontImage: ImageBitmap? by remember { mutableStateOf(null) }
     var backImage: ImageBitmap? by remember { mutableStateOf(null) }
@@ -789,6 +800,7 @@ private fun ShareableProfileCard(
         onCaptured = { front, back ->
             frontImage = front
             backImage = back
+            onReadyShare()
         },
     )
     Box(
