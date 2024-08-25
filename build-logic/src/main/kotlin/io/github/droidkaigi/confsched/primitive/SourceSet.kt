@@ -5,6 +5,7 @@ import java.util.Properties
 
 enum class Arch(val arch: String?) {
     ARM("arm64"),
+    ARM_SIMULATOR("arm64Simulator"),
     X86("x86_64"),
     ALL(null),
     ;
@@ -23,5 +24,5 @@ val Project.activeArch
                 Properties().apply {
                     load(it.reader(Charsets.UTF_8))
                 }.getProperty("arch")
-            } ?: System.getenv("arch")
+            } ?: System.getenv("arch") ?: properties["app.ios.shared.arch"] as? String
     )

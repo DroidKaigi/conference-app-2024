@@ -1,3 +1,4 @@
+import io.github.droidkaigi.confsched.primitive.activeArch
 import org.jetbrains.compose.ComposePlugin.CommonComponentsDependencies
 import org.jetbrains.kotlin.gradle.plugin.mpp.BitcodeEmbeddingMode
 import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
@@ -27,10 +28,11 @@ kotlin {
                     binaryOption("bundleVersion", version.toString())
                     binaryOption("bundleShortVersionString", version.toString())
 
-                    val includeToXCF = if (project.properties["app.ios.shared.debug"] == "true") {
-                        (this.target.name == "iosSimulatorArm64" && this.debuggable) || (this.target.name == "iosArm64" && this.debuggable)
-                    } else {
-                        true
+                    val includeToXCF = when (project.activeArch) {
+                        io.github.droidkaigi.confsched.primitive.Arch.ARM -> this.target.name.contains("iosArm64") || this.target.name.contains("iosSimulatorArm64")
+                        io.github.droidkaigi.confsched.primitive.Arch.ARM_SIMULATOR -> this.target.name.contains("iosSimulatorArm64")
+                        io.github.droidkaigi.confsched.primitive.Arch.X86 -> this.target.name.contains("iosX64")
+                        io.github.droidkaigi.confsched.primitive.Arch.ALL -> true
                     }
                     if (includeToXCF) {
                         xcf.add(this)
