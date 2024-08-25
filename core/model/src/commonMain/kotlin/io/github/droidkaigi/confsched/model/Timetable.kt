@@ -169,19 +169,50 @@ public fun Timetable.Companion.fake(): Timetable {
                 val start = DroidKaigi2024Day.Workday.start + (index * 60 * 60 + dayOffsetSeconds).seconds
                 val end = DroidKaigi2024Day.Workday.start + (index * 60 * 60 + dayOffsetSeconds + 40 * 60).seconds
                 val fake = Session.fake()
-                add(
-                    fake
-                        .copy(
-                            id = TimetableItemId("$day$index"),
-                            title = MultiLangText(
-                                jaTitle = "${fake.title.jaTitle} $day $index",
-                                enTitle = "${fake.title.enTitle} $day $index",
+
+                if(start == DroidKaigi2024Day.Workday.start + 13.hours) {
+                    add(
+                        TimetableItem.Special(
+                            id = TimetableItemId("7"),
+                            title = MultiLangText("Lunch break", "Lunch break"),
+                            startsAt = DroidKaigi2024Day.Workday.start + 13.hours,
+                            endsAt = DroidKaigi2024Day.Workday.start + 13.hours + 60.minutes,
+                            category = TimetableCategory(
+                                id = 28657,
+                                title = MultiLangText("その他", "Other"),
                             ),
+                            sessionType = TimetableSessionType.NORMAL,
                             room = roomsIterator.next(),
-                            startsAt = start,
-                            endsAt = end,
+                            targetAudience = "",
+                            language = TimetableLanguage(
+                                langOfSpeaker = "",
+                                isInterpretationTarget = false,
+                            ),
+                            asset = TimetableAsset(null, null),
+                            levels = persistentListOf(
+                            ),
+                            speakers = persistentListOf(),
+                            description = MultiLangText(
+                                jaTitle = "Lunch break",
+                                enTitle = "Lunch break",
+                            ),
                         ),
-                )
+                    )
+                } else {
+                    add(
+                        fake
+                            .copy(
+                                id = TimetableItemId("$day$index"),
+                                title = MultiLangText(
+                                    jaTitle = "${fake.title.jaTitle} $day $index",
+                                    enTitle = "${fake.title.enTitle} $day $index",
+                                ),
+                                room = roomsIterator.next(),
+                                startsAt = start,
+                                endsAt = end,
+                            ),
+                    )
+                }
             }
         }
         add(
