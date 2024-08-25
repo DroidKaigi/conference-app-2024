@@ -2,12 +2,11 @@ package io.github.droidkaigi.confsched.data.profilecard
 
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
+import io.github.droidkaigi.confsched.testing.utils.readResourceFile
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import okio.FileSystem
 import okio.Path.Companion.toPath
-import okio.SYSTEM
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -77,10 +76,9 @@ class ProfileCardJsonTest {
 
     @Test
     fun `throw exception when both theme and card_type are not exist`() {
-        val jsonString =
-            FileSystem.SYSTEM.read("src/commonTest/resources/profilecard/invalid.json".toPath()) {
-                readUtf8()
-            }
+        val jsonString = readResourceFile("profilecard/invalid.json".toPath()) {
+            readUtf8()
+        }
 
         assertFails {
             Json.decodeFromString<ProfileCardJson>(jsonString).toModel()
@@ -88,7 +86,7 @@ class ProfileCardJsonTest {
     }
 
     private fun readJsonString(version: Int): String {
-        return FileSystem.SYSTEM.read("src/commonTest/resources/profilecard/v$version.json".toPath()) {
+        return readResourceFile("profilecard/v$version.json".toPath()) {
             readUtf8()
         }
     }
@@ -102,10 +100,10 @@ class ProfileCardJsonTest {
     }
 
     private fun assertSerializedJson(actual: String) {
-        val expected =
-            FileSystem.SYSTEM.read("src/commonTest/resources/profilecard/v2.json".toPath()) {
-                readUtf8()
-            }
+        val expected = readResourceFile("profilecard/v2.json".toPath()) {
+            readUtf8()
+        }
+
 
         assertEquals(expected.trim(), actual.trim())
     }

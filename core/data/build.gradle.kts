@@ -53,6 +53,7 @@ kotlin {
         commonTest {
             dependencies {
                 implementation(projects.core.model)
+                implementation(projects.core.testing)
                 implementation(libs.kotlinTest)
                 implementation(libs.okIo)
                 implementation(libs.ktorKotlinxSerialization)
