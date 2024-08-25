@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -23,6 +24,7 @@ import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -48,6 +50,7 @@ import androidx.compose.ui.unit.sp
 import conference_app_2024.core.droidkaigiui.generated.resources.bookmarked
 import conference_app_2024.core.droidkaigiui.generated.resources.image
 import conference_app_2024.core.droidkaigiui.generated.resources.not_bookmarked
+import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.droidkaigiui.DroidKaigiUiRes
@@ -99,7 +102,11 @@ fun TimetableItemCard(
                     ),
                     shape = RoundedCornerShape(4.dp),
                 )
-                .clickable { onTimetableItemClick(timetableItem) },
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = rememberRipple(color = LocalRoomTheme.current.primaryColor),
+                    onClick = { onTimetableItemClick(timetableItem) },
+                ),
         ) {
             val contentPadding = 12.dp
             Column(
