@@ -19,8 +19,6 @@ import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
-import io.github.droidkaigi.confsched.profilecard.ProfileCardUiType.Card
-import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.stringResource
 
 internal sealed interface ProfileCardScreenEvent
@@ -119,30 +117,18 @@ internal fun profileCardScreenPresenter(
     EventEffect(events) { event ->
         when (event) {
             is CardScreenEvent.Edit -> {
-                isLoading = true
-                launch {
-                    userMessageStateHolder.showMessage("Edit")
-                }
                 uiType = ProfileCardUiType.Edit
-                isLoading = false
             }
 
             is EditScreenEvent.Create -> {
                 isLoading = true
-                launch {
-                    userMessageStateHolder.showMessage("Create Profile Card")
-                }
                 repository.save(event.profileCard)
-                uiType = Card
+                uiType = ProfileCardUiType.Card
                 isLoading = false
             }
 
             is EditScreenEvent.SelectImage -> {
-                isLoading = true
-                launch {
-                    userMessageStateHolder.showMessage("Select Image")
-                }
-                isLoading = false
+                // NOOP Put in some processing if necessary.
             }
 
             is EditScreenEvent.OnChangeNickname -> {
