@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.shared.share
 
 import androidx.compose.ui.graphics.ImageBitmap
+import co.touchlab.kermit.Logger
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
 
@@ -9,9 +10,9 @@ class ShareNavigator {
         val items = mutableListOf<Any>(text)
         image.toUiImage()?.let {
             items.add(it)
-            println("Success to create UIImage from ImageBitmap.")
+            Logger.d("Success to create UIImage from ImageBitmap.")
         } ?: run {
-            println("Failed to create UIImage from ImageBitmap.")
+            Logger.d("Failed to create UIImage from ImageBitmap.")
         }
 
         val activityViewController = UIActivityViewController(items, null)
