@@ -124,16 +124,7 @@ internal fun profileCardScreenPresenter(
     var qrCodeImageByteArray by remember { mutableStateOf(ByteArray(0)) }
     SafeLaunchedEffect(cardUiState) {
         cardUiState?.link?.let { link ->
-            launch(repository.ioDispatcher) {
-                val logoImage = getDrawableResourceBytes(
-                    environment = getSystemResourceEnvironment(),
-                    resource = ProfileCardRes.drawable.droidkaigi_logo,
-                )
-                qrCodeImageByteArray = QRCode.ofSquares()
-                    .withLogo(logoImage, 400, 400)
-                    .build(link)
-                    .renderToBytes()
-            }
+            qrCodeImageByteArray = repository.loadQrCodeImageByteArray(link, ProfileCardRes.drawable.droidkaigi_logo)
         }
     }
 
