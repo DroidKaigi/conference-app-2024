@@ -10,6 +10,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 
 @Composable
@@ -17,19 +18,21 @@ fun SelectableItemColumn(
     currentValue: String,
     onClickItem: () -> Unit,
     modifier: Modifier = Modifier,
+    fontFamily: FontFamily? = null,
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
             .height(72.dp)
-            .padding(start = 48.dp)
             .clickable {
                 onClickItem()
-            },
+            }
+            .padding(start = 48.dp),
         verticalArrangement = Arrangement.Center,
     ) {
         Text(
             text = currentValue,
+            fontFamily = fontFamily,
             style = MaterialTheme.typography.bodyLarge,
         )
     }
