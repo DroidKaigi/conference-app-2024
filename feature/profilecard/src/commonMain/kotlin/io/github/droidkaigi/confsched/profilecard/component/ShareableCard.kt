@@ -26,7 +26,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState
 
 @Composable
-internal fun ShareableProfileCard(
+internal fun ShareableCard(
     uiState: ProfileCardUiState.Card,
     graphicsLayer: GraphicsLayer,
     profileImagePainter: Painter,

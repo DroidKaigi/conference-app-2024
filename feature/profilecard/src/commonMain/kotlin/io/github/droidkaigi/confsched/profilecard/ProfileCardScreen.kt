@@ -112,7 +112,7 @@ import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
-import io.github.droidkaigi.confsched.profilecard.component.ShareableProfileCard
+import io.github.droidkaigi.confsched.profilecard.component.ShareableCard
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -716,7 +716,7 @@ internal fun CardScreen(
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
             // Not for display, for sharing
-            ShareableProfileCard(
+            ShareableCard(
                 uiState = uiState,
                 graphicsLayer = graphicsLayer,
                 profileImagePainter = rememberProfileImagePainter(uiState.image),
