@@ -35,7 +35,7 @@ internal fun FlipCard(
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
 ) {
-    var initialRotation = rememberInitialRotation(isCreated)
+    var initialRotation = rememberAnimatedInitialRotation(isCreated)
     var isFlipped by remember { mutableStateOf(false) }
     val rotation by animateFloatAsState(
         targetValue = if (isFlipped) 180f else initialRotation,
@@ -72,7 +72,7 @@ internal fun FlipCard(
 }
 
 @Composable
-private fun rememberInitialRotation(isCreated: Boolean): Float {
+private fun rememberAnimatedInitialRotation(isCreated: Boolean): Float {
     var isCreated by rememberSaveable { mutableStateOf(isCreated) }
     var initialRotation by remember { mutableStateOf(0f) }
     val targetRotation by animateFloatAsState(
