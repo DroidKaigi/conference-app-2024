@@ -550,7 +550,9 @@ private data class TimetableItemLayout(
         val screenTop = -scrollY
         val screenBottom = -scrollY + screenHeight
         val xInside =
-            left in screenLeft..screenRight || right in screenLeft..screenRight
+            left in screenLeft..screenRight || right in screenLeft..screenRight ||
+                left <= screenLeft && right >= screenRight
+
         val yInside =
             top in screenTop..screenBottom || bottom in screenTop..screenBottom ||
                 (top <= screenTop && screenBottom <= bottom)

@@ -106,7 +106,7 @@ fun TimetableGridItem(
         derivedStateOf { (height - TimetableGridItemSizes.padding * 2) / 4 > titleMinHeightDp * 3 / 2 }
     }
 
-    ProvideRoomTheme(if (timetableItem.isLunch) "lunch" else timetableItem.room.getThemeKey()) {
+    ProvideRoomTheme(timetableItem.room.getThemeKey(timetableItem.isLunch)) {
         val titleTextStyle = MaterialTheme.typography.labelLarge.let {
             check(it.fontSize.isSp)
             val (titleFontSize, titleLineHeight) = calculateFontSizeAndLineHeight(
