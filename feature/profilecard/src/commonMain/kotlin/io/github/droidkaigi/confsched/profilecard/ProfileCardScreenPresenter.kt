@@ -12,13 +12,13 @@ import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
 import conference_app_2024.feature.profilecard.generated.resources.nickname
 import conference_app_2024.feature.profilecard.generated.resources.occupation
+import io.github.droidkaigi.confsched.compose.EventEffect
+import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
-import io.github.droidkaigi.confsched.profilecard.ProfileCardUiType.Card
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
-import kotlinx.coroutines.flow.Flow
 import org.jetbrains.compose.resources.stringResource
 
 internal sealed interface ProfileCardScreenEvent
@@ -45,7 +45,6 @@ internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
 }
 
 internal sealed interface CardScreenEvent : ProfileCardScreenEvent {
-    data object Share : CardScreenEvent
     data object Edit : CardScreenEvent
 }
 
@@ -79,7 +78,7 @@ private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
 
 @Composable
 internal fun profileCardScreenPresenter(
-    events: Flow<ProfileCardScreenEvent>,
+    events: EventFlow<ProfileCardScreenEvent>,
     repository: ProfileCardRepository = localProfileCardRepository(),
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
     val nicknameValidationErrorString = stringResource(
@@ -115,59 +114,45 @@ internal fun profileCardScreenPresenter(
         }
     }
 
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is CardScreenEvent.Edit -> {
-                    isLoading = true
-                    userMessageStateHolder.showMessage("Edit")
-                    uiType = ProfileCardUiType.Edit
-                    isLoading = false
-                }
+    EventEffect(events) { event ->
+        when (event) {
+            is CardScreenEvent.Edit -> {
+                uiType = ProfileCardUiType.Edit
+            }
 
-                is CardScreenEvent.Share -> {
-                    isLoading = true
-                    userMessageStateHolder.showMessage("Share Profile Card")
-                    isLoading = false
-                }
+            is EditScreenEvent.Create -> {
+                isLoading = true
+                repository.save(event.profileCard)
+                uiType = ProfileCardUiType.Card
+                isLoading = false
+            }
 
-                is EditScreenEvent.Create -> {
-                    isLoading = true
-                    userMessageStateHolder.showMessage("Create Profile Card")
-                    repository.save(event.profileCard)
-                    uiType = Card
-                    isLoading = false
-                }
+            is EditScreenEvent.SelectImage -> {
+                // NOOP Put in some processing if necessary.
+            }
 
-                is EditScreenEvent.SelectImage -> {
-                    isLoading = true
-                    userMessageStateHolder.showMessage("Select Image")
-                    isLoading = false
-                }
+            is EditScreenEvent.OnChangeNickname -> {
+                cardError = cardError.copy(
+                    nicknameError = if (event.nickname.isEmpty()) nicknameValidationErrorString else "",
+                )
+            }
 
-                is EditScreenEvent.OnChangeNickname -> {
-                    cardError = cardError.copy(
-                        nicknameError = if (event.nickname.isEmpty()) nicknameValidationErrorString else "",
-                    )
-                }
+            is EditScreenEvent.OnChangeOccupation -> {
+                cardError = cardError.copy(
+                    occupationError = if (event.occupation.isEmpty()) occupationValidationErrorString else "",
+                )
+            }
 
-                is EditScreenEvent.OnChangeOccupation -> {
-                    cardError = cardError.copy(
-                        occupationError = if (event.occupation.isEmpty()) occupationValidationErrorString else "",
-                    )
-                }
+            is EditScreenEvent.OnChangeLink -> {
+                cardError = cardError.copy(
+                    linkError = if (event.link.isEmpty()) linkValidationErrorString else "",
+                )
+            }
 
-                is EditScreenEvent.OnChangeLink -> {
-                    cardError = cardError.copy(
-                        linkError = if (event.link.isEmpty()) linkValidationErrorString else "",
-                    )
-                }
-
-                is EditScreenEvent.OnChangeImage -> {
-                    cardError = cardError.copy(
-                        imageError = if (event.image.isEmpty()) imageValidationErrorString else "",
-                    )
-                }
+            is EditScreenEvent.OnChangeImage -> {
+                cardError = cardError.copy(
+                    imageError = if (event.image.isEmpty()) imageValidationErrorString else "",
+                )
             }
         }
     }

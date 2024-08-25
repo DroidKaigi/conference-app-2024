@@ -12,7 +12,7 @@ composeMultiplatform = "1.6.11"
 rin = "0.1.0"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
-composeHiltNavigation= "1.2.0"
+composeHiltNavigation = "1.2.0"
 androidxLifecycle = "2.8.4"
 androidxActivity = "1.9.1"
 androidxFragment = "1.8.2"
@@ -106,12 +106,12 @@ composeMaterialWindowSize = "dev.chrisbanes.material3:material3-window-size-clas
 composeMaterialIcon = { module = "androidx.compose.material:material-icons-extended" }
 composeUiTestManifest = { module = "androidx.compose.ui:ui-test-manifest" }
 composeUiTestJunit4 = { module = "androidx.compose.ui:ui-test-junit4" }
-composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha08" }
+composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version = "2.8.0-alpha09" }
 coreBundle = { module = "org.jetbrains.androidx.core:core-bundle", version = "1.0.0" }
 composeHiltNavigation = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "composeHiltNavigation" }
 composeLintCheck = { module = "com.slack.lint.compose:compose-lint-checks", version = "1.3.1" }
 coil = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
-coilNetwork = { module = "io.coil-kt.coil3:coil-network-ktor2", version.ref = "coil"  }
+coilNetwork = { module = "io.coil-kt.coil3:coil-network-ktor2", version.ref = "coil" }
 coilTest = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 composeShimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version = "1.0.5" }
 rin = { module = "io.github.takahirom.rin:rin", version.ref = "rin" }

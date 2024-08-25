@@ -44,11 +44,11 @@ fun EventMapTab(
         modifier = modifier.draggable(
             orientation = Orientation.Horizontal,
             state = rememberDraggableState { delta ->
-                if (selectedTabIndex == 0 && delta > ChangeTabDeltaThreshold) {
-                    selectedTabIndex = 1
-                }
-                if (selectedTabIndex == 1 && delta < -ChangeTabDeltaThreshold) {
+                if (selectedTabIndex == 1 && delta > ChangeTabDeltaThreshold) {
                     selectedTabIndex = 0
+                }
+                if (selectedTabIndex == 0 && delta < -ChangeTabDeltaThreshold) {
+                    selectedTabIndex = 1
                 }
             },
         ),

@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import android.graphics.RenderNode
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
@@ -17,9 +18,11 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardLinkTextFieldTestTa
 import io.github.droidkaigi.confsched.profilecard.ProfileCardNicknameTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardOccupationTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardScreen
+import io.github.droidkaigi.confsched.profilecard.ProfileCardShareButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardBackTestTag
 import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardFrontTestTag
 import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardTestTag
+import org.robolectric.util.ReflectionHelpers
 import javax.inject.Inject
 
 class ProfileCardScreenRobot @Inject constructor(
@@ -30,9 +33,19 @@ class ProfileCardScreenRobot @Inject constructor(
     fun setupScreenContent() {
         robotTestRule.setContent {
             KaigiTheme {
-                ProfileCardScreen()
+                ProfileCardScreen(
+                    onClickShareProfileCard = { _, _ -> },
+                )
             }
         }
+        waitUntilIdle()
+        // Render correctly
+        // See HardwareRenderingScreenshot.getRenderNode
+        ReflectionHelpers
+            .callInstanceMethod<RenderNode>(
+                robotTestRule.composeTestRule.activity.window.decorView,
+                "updateDisplayListIfDirty",
+            )
         waitUntilIdle()
     }
 
@@ -128,6 +141,12 @@ class ProfileCardScreenRobot @Inject constructor(
             .assertTextEquals(link)
     }
 
+    fun checkShareProfileCardButtonEnabled() {
+        composeTestRule
+            .onNode(hasTestTag(ProfileCardShareButtonTestTag))
+            .assertIsEnabled()
+    }
+
     fun checkCardScreenDisplayed() {
         composeTestRule
             .onNode(hasTestTag(ProfileCardCardScreenTestTag))
@@ -136,19 +155,13 @@ class ProfileCardScreenRobot @Inject constructor(
 
     fun checkProfileCardFrontDisplayed() {
         composeTestRule
-            .onNode(
-                hasTestTag(ProfileCardFlipCardFrontTestTag),
-                useUnmergedTree = true,
-            )
+            .onNode(hasTestTag(ProfileCardFlipCardFrontTestTag))
             .assertIsDisplayed()
     }
 
     fun checkProfileCardBackDisplayed() {
         composeTestRule
-            .onNode(
-                hasTestTag(ProfileCardFlipCardBackTestTag),
-                useUnmergedTree = true,
-            )
+            .onNode(hasTestTag(ProfileCardFlipCardBackTestTag))
             .assertIsDisplayed()
     }
 }

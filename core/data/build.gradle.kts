@@ -44,7 +44,6 @@ kotlin {
         }
 
         iosMain {
-            dependsOn(getByName("commonMain"))
             dependencies {
                 implementation(libs.ktorClientDarwin)
                 api(libs.koin)

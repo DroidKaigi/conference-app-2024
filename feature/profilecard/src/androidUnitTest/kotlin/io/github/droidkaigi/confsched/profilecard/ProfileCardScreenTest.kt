@@ -59,6 +59,7 @@ class ProfileCardScreenTest(
                     }
                     itShould("show card screen") {
                         captureScreenWithChecks {
+                            checkShareProfileCardButtonEnabled()
                             checkCardScreenDisplayed()
                             checkProfileCardFrontDisplayed()
                         }

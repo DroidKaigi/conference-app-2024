@@ -1,6 +1,3 @@
-// FIXME: When the API is ready, remove Suppress annotation below.
-@file:Suppress("UnusedPrivateProperty", "UnusedPrivateMember")
-
 package io.github.droidkaigi.confsched.data.sponsors
 
 import de.jensklingenberg.ktorfit.Ktorfit
@@ -19,7 +16,7 @@ internal interface SponsorApi {
      *
      * @return [SponsorsResponse]
      */
-    @GET("/events/droidkaigi2023/sponsor")
+    @GET("/events/droidkaigi2024/sponsor")
     suspend fun getSponsors(): SponsorsResponse
 }
 

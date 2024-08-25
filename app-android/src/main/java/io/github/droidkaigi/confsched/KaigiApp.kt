@@ -8,6 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -28,6 +29,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
@@ -48,6 +50,8 @@ import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
@@ -80,12 +84,12 @@ import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.share.ShareNavigator
+import io.github.droidkaigi.confsched.share.saveToDisk
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
-import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
+import io.github.droidkaigi.confsched2024.R
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -138,7 +142,11 @@ private fun KaigiNavHost(
                 navController = navController,
                 startDestination = mainScreenRoute,
             ) {
-                mainScreen(windowSize, navController, externalNavController)
+                mainScreen(
+                    windowSize,
+                    navController,
+                    externalNavController,
+                )
                 sessionScreens(
                     onNavigationIconClick = navController::popBackStack,
                     onLinkClick = externalNavController::navigate,
@@ -249,7 +257,10 @@ private fun NavGraphBuilder.mainScreen(
                     }
                 },
             )
-            profileCardScreen(contentPadding)
+            profileCardScreen(
+                contentPadding = contentPadding,
+                onClickShareProfileCard = externalNavController::onShareProfileCardClick,
+            )
         },
     )
 }
@@ -301,13 +312,16 @@ private class ExternalNavController(
 ) {
     fun navigate(url: String) {
         val uri: Uri = url.toUri()
-        val launched = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val nativeAppLaunched = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             navigateToNativeAppApi30(context = context, uri = uri)
         } else {
             navigateToNativeApp(context = context, uri = uri)
         }
-        if (launched.not()) {
-            navigateToCustomTab(context = context, uri = uri)
+        if (nativeAppLaunched) return
+
+        val customTabLaunched = navigateToCustomTab(context = context, uri = uri)
+        if (customTabLaunched.not()) {
+            Toast.makeText(context, R.string.no_compatible_browser_found, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -344,6 +358,17 @@ private class ExternalNavController(
             "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}\n" +
                 "${timetableItem.title.currentLangTitle}\n" +
                 timetableItem.url,
+        )
+    }
+
+    fun onShareProfileCardClick(
+        text: String,
+        imageBitmap: ImageBitmap,
+    ) {
+        val imageAbsolutePath = imageBitmap.saveToDisk(context)
+        shareNavigator.shareTextWithImage(
+            text = text,
+            filePath = imageAbsolutePath,
         )
     }
 
@@ -404,14 +429,20 @@ private class ExternalNavController(
         return true
     }
 
+    @Suppress("SwallowedException")
     private fun navigateToCustomTab(
         context: Context,
         uri: Uri,
-    ) {
-        CustomTabsIntent.Builder()
-            .setShowTitle(true)
-            .build()
-            .launchUrl(context, uri)
+    ): Boolean {
+        return try {
+            CustomTabsIntent.Builder()
+                .setShowTitle(true)
+                .build()
+                .launchUrl(context, uri)
+            true
+        } catch (ex: ActivityNotFoundException) {
+            false
+        }
     }
 }
 

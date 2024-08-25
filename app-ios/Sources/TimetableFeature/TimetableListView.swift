@@ -40,7 +40,6 @@ public struct TimetableView: View {
             }
             Spacer()
         }
-        .toast($store.toast)
         .background(AssetColors.Surface.surface.swiftUIColor)
         .frame(maxWidth: .infinity)
         .toolbar{
@@ -119,22 +118,23 @@ struct TimetableGridView: View {
         let rooms = RoomType.allCases.filter {$0 != RoomType.roomIj}
         
         ScrollView([.horizontal, .vertical]) {
-            Grid {
+            Grid(alignment: .leading, horizontalSpacing: 4, verticalSpacing: 2) {
                 GridRow {
                     Color.clear
                         .gridCellUnsizedAxes([.horizontal, .vertical])
                     
                     ForEach(rooms, id: \.self) { column in
                         let room = column.toRoom()
-                        Text(room.name.currentLangTitle).foregroundStyle(room.roomTheme.primaryColor)
+                        Text(room.name.currentLangTitle).foregroundStyle(room.roomTheme.primaryColor).textStyle(.titleMedium)
                             .frame(width: 192)
+
                     }
                 }
-                
+                DashedDivider(axis: .horizontal)
                 ForEach(store.timetableItems, id: \.self) { timeBlock in
                     GridRow {
                         VStack {
-                            Text(timeBlock.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+                            Text(timeBlock.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor).textStyle(.labelMedium)
                             Spacer()
                             
                         }.frame(height: 153)
@@ -163,8 +163,9 @@ struct TimetableGridView: View {
                             }
                         }
                     }
+                    DashedDivider(axis: .horizontal)
                 }
-            }
+            }.fixedSize(horizontal: false, vertical: true)
             .padding(.trailing)
             
             bottomTabBarPadding
@@ -180,9 +181,9 @@ struct TimeGroupMiniList: View {
     var body: some View {
         HStack {
             VStack {
-                Text(contents.startsTimeString)
-                Text("|")
-                Text(contents.endsTimeString)
+                Text(contents.startsTimeString).textStyle(.titleMedium)
+                Text("|").font(.system(size: 8))
+                Text(contents.endsTimeString).textStyle(.titleMedium)
                 Spacer()
             }.padding(10).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
             VStack {
@@ -200,6 +201,38 @@ struct TimeGroupMiniList: View {
             }
         }.background(Color.clear)
             
+    }
+}
+
+struct DashedDivider: View {
+    public let axis: Axis
+    
+    var body: some View {
+        let shape = LineShape(axis: axis)
+            .stroke(style: .init(dash: [2]))
+            .foregroundStyle(AssetColors.Outline.outlineVariant.swiftUIColor)
+        if axis == .horizontal {
+            shape.frame(height: 1)
+        } else {
+            shape.frame(width: 1).padding(0)
+        }
+    }
+}
+
+struct LineShape: Shape {
+    public let axis: Axis
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 0, y: 0))
+       
+        if axis == .horizontal {
+            path.addLine(to: CGPoint(x: rect.width, y: 0))
+        } else {
+            path.addLine(to: CGPoint(x: 0, y: rect.height))
+        }
+        
+        return path
     }
 }
 
