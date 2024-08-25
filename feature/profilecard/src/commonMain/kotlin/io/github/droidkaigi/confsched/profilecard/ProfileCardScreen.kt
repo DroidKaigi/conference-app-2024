@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -56,6 +57,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -554,9 +556,10 @@ private fun ImagePickerWithError(
                     onClick = onClearImage,
                     modifier = Modifier
                         .graphicsLayer {
-                            translationX = 6.dp.toPx()
-                            translationY = -6.dp.toPx()
+                            translationX = 9.dp.toPx()
+                            translationY = -9.dp.toPx()
                         }
+                        .shadow(elevation = 4.dp, shape = CircleShape)
                         .size(24.dp)
                         .align(Alignment.TopEnd),
                     colors = IconButtonDefaults
