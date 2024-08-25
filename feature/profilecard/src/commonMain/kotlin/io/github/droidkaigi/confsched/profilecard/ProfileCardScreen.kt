@@ -114,6 +114,7 @@ import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.profilecard.component.CapturableCard
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
+import io.github.droidkaigi.confsched.profilecard.component.InvertSystemBarAppearance
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
@@ -711,6 +712,10 @@ internal fun CardScreen(
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
     var isShareReady by remember { mutableStateOf(false) }
+
+    // The background of this screen is light, contrasting any other screen in the app.
+    // Invert the content color of system bars to accommodate this unique property.
+    InvertSystemBarAppearance()
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
