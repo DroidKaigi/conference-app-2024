@@ -712,6 +712,8 @@ internal fun CardScreen(
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
     var isShareReady by remember { mutableStateOf(false) }
+    val profileCardImagePainter = rememberProfileImagePainter(uiState.image)
+    val qrCodeImagePainter = rememberAsyncImagePainter(qrCodeImageByte)
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
@@ -719,8 +721,8 @@ internal fun CardScreen(
             ShareableCard(
                 uiState = uiState,
                 graphicsLayer = graphicsLayer,
-                profileImagePainter = rememberProfileImagePainter(uiState.image),
-                qrCodeImagePainter = rememberAsyncImagePainter(qrCodeImageByte),
+                profileImagePainter = profileCardImagePainter,
+                qrCodeImagePainter = qrCodeImagePainter,
                 onReadyShare = {
                     Logger.d { "Ready to share" }
                     isShareReady = true
@@ -744,8 +746,8 @@ internal fun CardScreen(
                 ) {
                     FlipCard(
                         uiState = uiState,
-                        profileImagePainter = rememberProfileImagePainter(uiState.image),
-                        qrCodeImagePainter = rememberAsyncImagePainter(qrCodeImageByte),
+                        profileImagePainter = profileCardImagePainter,
+                        qrCodeImagePainter = qrCodeImagePainter,
                         isCreated = isCreated,
                     )
                     Spacer(Modifier.height(32.dp))
