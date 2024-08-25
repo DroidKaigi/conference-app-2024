@@ -468,10 +468,10 @@ internal fun EditScreen(
 }
 
 @OptIn(ExperimentalEncodingApi::class)
-fun ByteArray.toBase64(): String = Base64.encode(this)
+internal fun ByteArray.toBase64(): String = Base64.encode(this)
 
 @OptIn(ExperimentalEncodingApi::class)
-fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
+internal fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
 
 @Composable
 internal fun Label(label: String) {
@@ -661,7 +661,7 @@ private fun CardTypeImage(
     )
 }
 
-fun Modifier.selectedBorder(
+private fun Modifier.selectedBorder(
     isSelected: Boolean,
     selectedBorderColor: Color,
     vectorPainter: VectorPainter,
