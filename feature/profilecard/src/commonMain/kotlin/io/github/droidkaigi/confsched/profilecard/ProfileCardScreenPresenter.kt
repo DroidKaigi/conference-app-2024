@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import conference_app_2024.feature.profilecard.generated.resources.add_validate_format
+import conference_app_2024.feature.profilecard.generated.resources.droidkaigi_logo
 import conference_app_2024.feature.profilecard.generated.resources.enter_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
@@ -19,7 +20,12 @@ import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
+import org.jetbrains.compose.resources.getDrawableResourceBytes
+import org.jetbrains.compose.resources.getSystemResourceEnvironment
 import org.jetbrains.compose.resources.stringResource
+import qrcode.QRCode
 
 internal sealed interface ProfileCardScreenEvent
 
@@ -76,6 +82,7 @@ internal fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun profileCardScreenPresenter(
     events: EventFlow<ProfileCardScreenEvent>,
@@ -111,6 +118,22 @@ internal fun profileCardScreenPresenter(
             is ProfileCard.Exists -> ProfileCardUiType.Card
             ProfileCard.DoesNotExists -> ProfileCardUiType.Edit
             ProfileCard.Loading -> ProfileCardUiType.Loading
+        }
+    }
+
+    var qrCodeImageByteArray by remember { mutableStateOf(ByteArray(0)) }
+    SafeLaunchedEffect(cardUiState) {
+        cardUiState?.link?.let { link ->
+            launch(repository.ioDispatcher) {
+                val logoImage = getDrawableResourceBytes(
+                    environment = getSystemResourceEnvironment(),
+                    resource = ProfileCardRes.drawable.droidkaigi_logo,
+                )
+                qrCodeImageByteArray = QRCode.ofSquares()
+                    .withLogo(logoImage, 400, 400)
+                    .build(link)
+                    .renderToBytes()
+            }
         }
     }
 
@@ -164,5 +187,6 @@ internal fun profileCardScreenPresenter(
         cardError = cardError,
         uiType = uiType,
         userMessageStateHolder = userMessageStateHolder,
+        qrCodeImageByteArray = qrCodeImageByteArray,
     )
 }

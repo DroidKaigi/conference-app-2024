@@ -194,6 +194,7 @@ internal data class ProfileCardScreenState(
     val cardError: ProfileCardError,
     val uiType: ProfileCardUiType,
     val userMessageStateHolder: UserMessageStateHolder,
+    val qrCodeImageByteArray: ByteArray? = null,
 )
 
 @Composable
