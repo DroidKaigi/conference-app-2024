@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.profilecard.component
+package io.github.droidkaigi.confsched.profilecard.section
 
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState

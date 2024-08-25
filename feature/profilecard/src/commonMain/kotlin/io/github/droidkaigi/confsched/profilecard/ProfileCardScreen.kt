@@ -112,9 +112,9 @@ import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppB
 import io.github.droidkaigi.confsched.droidkaigiui.component.resetScroll
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
-import io.github.droidkaigi.confsched.profilecard.component.CapturableCard
-import io.github.droidkaigi.confsched.profilecard.component.FlipCard
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
+import io.github.droidkaigi.confsched.profilecard.section.CapturableCard
+import io.github.droidkaigi.confsched.profilecard.section.FlipCard
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
