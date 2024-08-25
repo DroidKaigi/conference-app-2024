@@ -35,7 +35,13 @@ class KmpIosPlugin : Plugin<Project> {
                         }
                         iosArm64()
                     }
-                    ARM_SIMULATOR -> iosSimulatorArm64()
+
+                    ARM_SIMULATOR -> iosSimulatorArm64 {
+                        binaries.forEach {
+                            it.freeCompilerArgs += simulatorLinkerOptions
+                        }
+                    }
+
                     X86 -> iosX64()
                     ALL -> {
                         iosArm64()
