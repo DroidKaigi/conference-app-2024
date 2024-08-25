@@ -85,7 +85,7 @@ fun TimetableList(
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag),
         state = scrollState,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp),
         contentPadding = PaddingValues(
             top = contentPadding.calculateTopPadding(),
             bottom = contentPadding.calculateBottomPadding(),
