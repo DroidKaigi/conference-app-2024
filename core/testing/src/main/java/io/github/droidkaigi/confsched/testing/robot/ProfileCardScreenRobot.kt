@@ -19,9 +19,9 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardNicknameTextFieldTe
 import io.github.droidkaigi.confsched.profilecard.ProfileCardOccupationTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardScreen
 import io.github.droidkaigi.confsched.profilecard.ProfileCardShareButtonTestTag
+import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardTestTag
 import io.github.droidkaigi.confsched.profilecard.section.ProfileCardFlipCardBackTestTag
 import io.github.droidkaigi.confsched.profilecard.section.ProfileCardFlipCardFrontTestTag
-import io.github.droidkaigi.confsched.profilecard.section.ProfileCardFlipCardTestTag
 import org.robolectric.util.ReflectionHelpers
 import javax.inject.Inject
 
