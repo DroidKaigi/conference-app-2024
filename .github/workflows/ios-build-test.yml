@@ -22,3 +22,7 @@ jobs:
         working-directory: app-ios
       - run: make test-app-debug
         working-directory: app-ios
+      - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: app-ios-shared-xcframework
+          path: app-ios-shared/build/XCFrameworks
