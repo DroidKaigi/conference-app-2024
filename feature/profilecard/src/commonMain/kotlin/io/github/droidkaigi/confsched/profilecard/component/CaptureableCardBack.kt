@@ -17,35 +17,30 @@ import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.rememberGraphicsLayer
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
+import coil3.compose.AsyncImagePainter
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 
 @Composable
-internal fun CapturableCardBackEffect(
+internal fun BackgroundCapturableCardBack(
     uiState: Card,
-    qrCodeImagePainter: Painter,
+    qrCodeImagePainter: AsyncImagePainter,
     onCaptured: (ImageBitmap) -> Unit,
 ) {
+    val clock = LocalClock.current
     val graphicsLayer: GraphicsLayer = rememberGraphicsLayer()
-    var isBackCaptured by remember { mutableStateOf(false) }
-    var isBackSizeNonZero by remember { mutableStateOf(false) }
+    var lastCaptureTime by remember { mutableStateOf(0L) }
 
-    LaunchedEffect(isBackCaptured, isBackSizeNonZero) {
-        // In ComposableMultiplatform, an ImageBitmap is not Null, but may come with a size of 0.
-        // If the process reaches the Image's Composable with a size of 0, the application will crash with the following error.
-        // Uncaught Kotlin exception: kotlin.IllegalStateException: Size is unspecified
-        Logger.d { "isBackCaptured: $isBackCaptured, isBackSizeNonZero: $isBackSizeNonZero" }
-        if (isBackCaptured.not() || isBackSizeNonZero.not()) {
+    LaunchedEffect(lastCaptureTime) {
+        if (lastCaptureTime == 0L) {
             return@LaunchedEffect
         }
-
-        // after qr code rendered with logo, tell the event to parent component
-        delay(300)
+        qrCodeImagePainter.state.first { it is AsyncImagePainter.State.Success }
+        Logger.d { "BackgroundCapturableCardBack: onCaptured" }
         onCaptured(graphicsLayer.toImageBitmap())
     }
 
@@ -56,13 +51,11 @@ internal fun CapturableCardBackEffect(
                     graphicsLayer.record {
                         this@onDrawWithContent.drawContent()
                     }
-                    isBackSizeNonZero =
-                        graphicsLayer.size.width > 0 && graphicsLayer.size.height > 0
+                    if (graphicsLayer.size.height > 0 && graphicsLayer.size.width > 0) {
+                        lastCaptureTime = clock.now().toEpochMilliseconds()
+                    }
                     drawLayer(graphicsLayer)
                 }
-            }
-            .onGloballyPositioned {
-                isBackCaptured = true
             },
     ) {
         FlipCardBack(

@@ -15,36 +15,30 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.rememberGraphicsLayer
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
+import coil3.compose.AsyncImagePainter
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.first
 
 @Composable
-internal fun CapturableCardFrontEffect(
+internal fun BackgroundCapturableCardFront(
     uiState: Card,
-    profileImagePainter: Painter,
+    profileImagePainter: AsyncImagePainter,
     onCaptured: (ImageBitmap) -> Unit,
 ) {
+    val clock = LocalClock.current
     val graphicsLayer = rememberGraphicsLayer()
-    val isFrontSizeNonZero = { graphicsLayer.size.width > 0 && graphicsLayer.size.height > 0 }
-    var isFrontCaptured: Boolean by remember { mutableStateOf(false) }
+    var lastCaptureTime by remember { mutableStateOf(0L) }
 
-    LaunchedEffect(isFrontCaptured, isFrontSizeNonZero) {
-        // In ComposableMultiplatform, an ImageBitmap is not Null, but may come with a size of 0.
-        // If the process reaches the Image's Composable with a size of 0, the application will crash with the following error.
-        // Uncaught Kotlin exception: kotlin.IllegalStateException: Size is unspecified
-        Logger.d {
-            "isFrontCaptured: $isFrontCaptured, isFrontSizeNonZero: ${isFrontSizeNonZero()}"
-        }
-        if (isFrontCaptured.not() || isFrontSizeNonZero().not()) {
+    LaunchedEffect(lastCaptureTime) {
+        if (lastCaptureTime == 0L) {
             return@LaunchedEffect
         }
-        // after qr code rendered with logo, tell the event to parent component
-        delay(300)
+        profileImagePainter.state.first { it is AsyncImagePainter.State.Success }
+        Logger.d { "BackgroundCapturableCardFront: onCaptured" }
         onCaptured(graphicsLayer.toImageBitmap())
     }
 
@@ -55,12 +49,11 @@ internal fun CapturableCardFrontEffect(
                     graphicsLayer.record {
                         this@onDrawWithContent.drawContent()
                     }
+                    if (graphicsLayer.size.height > 0 && graphicsLayer.size.width > 0) {
+                        lastCaptureTime = clock.now().toEpochMilliseconds()
+                    }
                     drawLayer(graphicsLayer)
                 }
-            }
-            .onGloballyPositioned {
-                isFrontCaptured = true
-                Logger.d { "graphicsLayer:$graphicsLayer" }
             },
     ) {
         FlipCardFront(

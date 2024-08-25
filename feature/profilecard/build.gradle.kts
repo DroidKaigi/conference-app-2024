@@ -16,6 +16,7 @@ kotlin {
                 implementation(libs.composeNavigation)
                 implementation(compose.materialIconsExtended)
                 implementation(libs.peekabooImagePicker)
+                implementation(libs.qrcodeKotlin)
             }
         }
         androidTarget {

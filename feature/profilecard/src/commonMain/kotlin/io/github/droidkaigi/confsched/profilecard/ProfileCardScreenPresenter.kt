@@ -124,7 +124,7 @@ internal fun profileCardScreenPresenter(
             qrCodeImageByteArray = repository
                 .loadQrCodeImageByteArray(
                     link = link,
-                    centerLogoRes = ProfileCardRes.drawable.droidkaigi_logo
+                    centerLogoRes = ProfileCardRes.drawable.droidkaigi_logo,
                 )
         }
     }

@@ -20,8 +20,8 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImagePainter
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState
 
@@ -29,8 +29,8 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState
 internal fun ShareableCard(
     uiState: ProfileCardUiState.Card,
     graphicsLayer: GraphicsLayer,
-    profileImagePainter: Painter,
-    qrCodeImagePainter: Painter,
+    profileImagePainter: AsyncImagePainter,
+    qrCodeImagePainter: AsyncImagePainter,
     onReadyShare: () -> Unit,
 ) {
     var frontImage: ImageBitmap? by remember { mutableStateOf(null) }
@@ -42,14 +42,14 @@ internal fun ShareableCard(
         }
     }
 
-    CapturableCardFrontEffect(
+    BackgroundCapturableCardFront(
         uiState = uiState,
         profileImagePainter = profileImagePainter,
     ) {
         frontImage = it
     }
 
-    CapturableCardBackEffect(
+    BackgroundCapturableCardBack(
         uiState = uiState,
         qrCodeImagePainter = qrCodeImagePainter,
     ) {
