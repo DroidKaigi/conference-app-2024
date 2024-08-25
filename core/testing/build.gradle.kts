@@ -3,6 +3,7 @@ plugins {
     id("droidkaigi.primitive.kmp.android")
     id("droidkaigi.primitive.kmp.android.hilt")
     id("droidkaigi.primitive.kmp.compose")
+    id("droidkaigi.primitive.kmp.ios")
     id("droidkaigi.primitive.detekt")
 }
 
@@ -41,7 +42,19 @@ kotlin {
                 implementation(libs.composablePreviewScannerJvm)
                 implementation(libs.roborazziPreviewScannerSupport)
             }
-
         }
+
+        commonMain  {
+            dependencies {
+                implementation(libs.okIo)
+            }
+        }
+
+        iosMain  {
+            dependencies {
+                implementation(libs.okIo)
+            }
+        }
+
     }
 }
