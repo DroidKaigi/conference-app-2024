@@ -5,7 +5,7 @@ import java.util.Properties
 
 enum class Arch(val arch: String?) {
     ARM("arm64"),
-    ARM_SIMULATOR("arm64Simulator"),
+    ARM_SIMULATOR_DEBUG("arm64SimulatorDebug"),
     X86("x86_64"),
     ALL(null),
     ;

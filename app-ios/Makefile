@@ -17,7 +17,7 @@ build-kmp-module:
 .PHONY: build-kmp-module-debug
 build-kmp-module-debug:
 	cd .. && \
-	./gradlew app-ios-shared:assembleSharedXCFramework -Papp.ios.shared.arch=arm64Simulator --no-configuration-cache
+	./gradlew app-ios-shared:assembleSharedXCFramework -Papp.ios.shared.arch=arm64SimulatorDebug --no-configuration-cache
 
 .PHONY: build-app-debug
 build-app-debug: build-kmp-module-debug

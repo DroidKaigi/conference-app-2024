@@ -2,7 +2,7 @@ package io.github.droidkaigi.confsched.primitive
 
 import io.github.droidkaigi.confsched.primitive.Arch.ALL
 import io.github.droidkaigi.confsched.primitive.Arch.ARM
-import io.github.droidkaigi.confsched.primitive.Arch.ARM_SIMULATOR
+import io.github.droidkaigi.confsched.primitive.Arch.ARM_SIMULATOR_DEBUG
 import io.github.droidkaigi.confsched.primitive.Arch.X86
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -36,7 +36,7 @@ class KmpIosPlugin : Plugin<Project> {
                         iosArm64()
                     }
 
-                    ARM_SIMULATOR -> iosSimulatorArm64 {
+                    ARM_SIMULATOR_DEBUG -> iosSimulatorArm64 {
                         binaries.forEach {
                             it.freeCompilerArgs += simulatorLinkerOptions
                         }

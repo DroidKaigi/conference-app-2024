@@ -12,7 +12,7 @@ target_arch=""
 # Determine the target architecture based on SDK_NAME and ARCHS
 if [[ "$SDK_NAME" == *"simulator"* ]]; then
     if [[ "$ARCHS" == *"arm64"* ]]; then
-        target_arch="arm64Simulator"
+        target_arch="arm64SimulatorDebug"
     elif [[ "$ARCHS" == *"x86_64"* ]]; then
         target_arch="x86_64"
     fi
