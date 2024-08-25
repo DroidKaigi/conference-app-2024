@@ -16,7 +16,7 @@ public struct TimetableGridCard: View {
     ) {
         self.timetableItem = timetableItem
         self.onTap = onTap
-        self.cellCount = cellCount ?? 1
+        self.cellCount = cellCount
     }
 
     public var body: some View {

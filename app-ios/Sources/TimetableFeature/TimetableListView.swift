@@ -150,7 +150,7 @@ struct TimetableGridView: View {
                             
                         } else {
                             ForEach(rooms, id: \.self) { room in
-                                if let cell = timeBlock.getCellForRoom(room: room, onTap: { item in
+                                if let cell = timeBlock.getCellForRoom(room: room, cellCount: 1, onTap: { item in
                                     store.send(.view(.timetableItemTapped(item)))}) {
                                     cell
                                 } else {
@@ -276,9 +276,9 @@ extension RoomType {
 }
 
 extension TimetableTimeGroupItems {
-    func getCellForRoom(room: RoomType, cellCount: Int?=1, onTap: @escaping (TimetableItemWithFavorite) -> Void) -> TimetableGridCard? {
+    func getCellForRoom(room: RoomType, cellCount: Int, onTap: @escaping (TimetableItemWithFavorite) -> Void) -> TimetableGridCard? {
         return if let cell = getItem(for: room) {
-            TimetableGridCard(timetableItem: cell.timetableItem, cellCount: cellCount ?? 1) { timetableItem in
+            TimetableGridCard(timetableItem: cell.timetableItem, cellCount: cellCount) { timetableItem in
                 onTap(cell)
             }
         } else {
