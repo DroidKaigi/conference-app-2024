@@ -28,6 +28,6 @@ fi
 
 # Execute Gradle command with the determined architecture
 echo "Building for architecture: $target_arch"
-./gradlew assembleSharedXCFramework --no-configuration-cache -Papp.ios.shared.arch="$target_arch"
+./gradlew assembleSharedXCFramework --no-configuration-cache -Papp.ios.shared.arch=$target_arch
 
 echo "Build completed for $target_arch"

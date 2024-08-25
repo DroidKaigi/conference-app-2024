@@ -12,6 +12,7 @@ enum class Arch(val arch: String?) {
 
     companion object {
         fun findByArch(arch: String?): Arch {
+            println("input arch: $arch")
             return values().firstOrNull { it.arch == arch } ?: ALL
         }
     }
@@ -24,5 +25,5 @@ val Project.activeArch
                 Properties().apply {
                     load(it.reader(Charsets.UTF_8))
                 }.getProperty("arch")
-            } ?: System.getenv("arch") ?: properties["app.ios.shared.arch"] as? String
+            } ?: properties["app.ios.shared.arch"] as? String ?: System.getenv("arch")
     )
