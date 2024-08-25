@@ -63,7 +63,7 @@ public struct TimetableGridCard: View {
             }
             .frame(maxWidth: .infinity)
             .padding(12)
-            .frame(width: 192*CGFloat(cellCount)+CGFloat(12*(cellCount-1)), height: 153)
+            .frame(width: 192 * CGFloat(cellCount) + CGFloat(12 * (cellCount - 1)), height: 153)
             .background(cellCount > 1 ? AssetColors.Surface.surfaceContainer.swiftUIColor : timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
             .overlay(RoundedRectangle(cornerRadius: 4).stroke(cellCount > 1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
         }
