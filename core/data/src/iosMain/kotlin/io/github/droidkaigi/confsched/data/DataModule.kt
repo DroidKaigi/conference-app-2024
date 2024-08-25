@@ -185,7 +185,12 @@ public val dataModule: Module = module {
     singleOf(::DefaultSponsorsRepository) bind SponsorsRepository::class
     singleOf(::DefaultEventMapRepository) bind EventMapRepository::class
     singleOf(::DefaultAboutRepository) bind AboutRepository::class
-    singleOf(::DefaultProfileCardRepository) bind ProfileCardRepository::class
+    single<ProfileCardRepository> {
+        DefaultProfileCardRepository(
+            profileCardDataStore = get(),
+            ioDispatcher = get(named("IoDispatcher")),
+        )
+    }
     single<Repositories> {
         DefaultRepositories(
             mapOf(

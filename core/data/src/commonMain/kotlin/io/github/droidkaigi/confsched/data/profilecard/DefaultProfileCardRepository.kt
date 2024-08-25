@@ -6,9 +6,11 @@ import androidx.compose.runtime.remember
 import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
+import kotlinx.coroutines.CoroutineDispatcher
 
 public class DefaultProfileCardRepository(
     private val profileCardDataStore: ProfileCardDataStore,
+    override val ioDispatcher: CoroutineDispatcher,
 ) : ProfileCardRepository {
     @Composable
     override fun profileCard(): ProfileCard {
