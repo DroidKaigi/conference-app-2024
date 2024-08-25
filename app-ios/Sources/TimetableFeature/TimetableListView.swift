@@ -194,7 +194,7 @@ struct TimeGroupMiniList: View {
 }
 
 struct DashedDivider: View {
-    public var axis: Axis
+    public let axis: Axis
     
     var body: some View {
         let shape = LineShape(axis: axis)
