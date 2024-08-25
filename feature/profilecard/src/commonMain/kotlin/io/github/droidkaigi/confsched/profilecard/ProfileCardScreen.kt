@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -56,6 +58,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -72,17 +75,21 @@ import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import co.touchlab.kermit.Logger
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
 import conference_app_2024.feature.profilecard.generated.resources.card_type
 import conference_app_2024.feature.profilecard.generated.resources.create_card
+import conference_app_2024.feature.profilecard.generated.resources.edit
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
@@ -92,20 +99,23 @@ import conference_app_2024.feature.profilecard.generated.resources.occupation
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_edit_description
 import conference_app_2024.feature.profilecard.generated.resources.profile_card_title
 import conference_app_2024.feature.profilecard.generated.resources.select_theme
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import conference_app_2024.feature.profilecard.generated.resources.share
+import conference_app_2024.feature.profilecard.generated.resources.share_description
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProfileCardTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.component.resetScroll
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
 import io.github.droidkaigi.confsched.profilecard.component.CapturableCard
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
+import io.github.droidkaigi.confsched.profilecard.component.InvertSystemBarAppearance
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
-import io.github.droidkaigi.confsched.ui.component.resetScroll
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -123,6 +133,7 @@ const val ProfileCardSelectImageButtonTestTag = "ProfileCardSelectImageButtonTes
 const val ProfileCardCreateButtonTestTag = "ProfileCardCreateButtonTestTag"
 const val ProfileCardCardScreenTestTag = "ProfileCardCardScreenTestTag"
 const val ProfileCardEditButtonTestTag = "ProfileCardEditButtonTestTag"
+const val ProfileCardShareButtonTestTag = "ProfileCardShareButtonTestTag"
 
 fun NavGraphBuilder.profileCardScreen(
     contentPadding: PaddingValues,
@@ -196,7 +207,7 @@ fun ProfileCardScreen(
         contentPadding = contentPadding,
         onClickShareProfileCard = onClickShareProfileCard,
         modifier = modifier,
-        rememberEventEmitter(),
+        eventFlow = rememberEventFlow(),
     )
 }
 
@@ -206,11 +217,12 @@ internal fun ProfileCardScreen(
     contentPadding: PaddingValues,
     onClickShareProfileCard: (String, ImageBitmap) -> Unit,
     modifier: Modifier = Modifier,
-    eventEmitter: EventEmitter<ProfileCardScreenEvent> = rememberEventEmitter(),
-    uiState: ProfileCardScreenState = profileCardScreenPresenter(eventEmitter),
+    eventFlow: EventFlow<ProfileCardScreenEvent> = rememberEventFlow(),
+    uiState: ProfileCardScreenState = profileCardScreenPresenter(eventFlow),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
@@ -228,7 +240,12 @@ internal fun ProfileCardScreen(
     }
 
     Scaffold(
-        modifier = modifier,
+        modifier = modifier
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    keyboardController?.hide()
+                }
+            },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
@@ -283,19 +300,19 @@ internal fun ProfileCardScreen(
                     profileCardError = uiState.cardError,
                     scrollBehavior = scrollBehavior,
                     onChangeNickname = {
-                        eventEmitter.tryEmit(EditScreenEvent.OnChangeNickname(it))
+                        eventFlow.tryEmit(EditScreenEvent.OnChangeNickname(it))
                     },
                     onChangeOccupation = {
-                        eventEmitter.tryEmit(EditScreenEvent.OnChangeOccupation(it))
+                        eventFlow.tryEmit(EditScreenEvent.OnChangeOccupation(it))
                     },
                     onChangeLink = {
-                        eventEmitter.tryEmit(EditScreenEvent.OnChangeLink(it))
+                        eventFlow.tryEmit(EditScreenEvent.OnChangeLink(it))
                     },
                     onChangeImage = {
-                        eventEmitter.tryEmit(EditScreenEvent.OnChangeImage(it))
+                        eventFlow.tryEmit(EditScreenEvent.OnChangeImage(it))
                     },
                     onClickCreate = {
-                        eventEmitter.tryEmit(EditScreenEvent.Create(it))
+                        eventFlow.tryEmit(EditScreenEvent.Create(it))
                     },
                     contentPadding = padding,
                 )
@@ -303,15 +320,15 @@ internal fun ProfileCardScreen(
 
             ProfileCardUiType.Card -> {
                 if (uiState.cardUiState == null) return@Scaffold
+                val shareText = stringResource(ProfileCardRes.string.share_description)
+
                 CardScreen(
                     uiState = uiState.cardUiState,
                     scrollBehavior = scrollBehavior,
                     onClickEdit = {
-                        eventEmitter.tryEmit(CardScreenEvent.Edit)
+                        eventFlow.tryEmit(CardScreenEvent.Edit)
                     },
                     onClickShareProfileCard = { imageBitmap ->
-                        // TODO Make it better written.
-                        val shareText = "${uiState.cardUiState.nickname}'s profile card"
                         onClickShareProfileCard(shareText, imageBitmap)
                     },
                     contentPadding = padding,
@@ -549,9 +566,10 @@ private fun ImagePickerWithError(
                     onClick = onClearImage,
                     modifier = Modifier
                         .graphicsLayer {
-                            translationX = 6.dp.toPx()
-                            translationY = -6.dp.toPx()
+                            translationX = 9.dp.toPx()
+                            translationY = -9.dp.toPx()
                         }
+                        .shadow(elevation = 4.dp, shape = CircleShape)
                         .size(24.dp)
                         .align(Alignment.TopEnd),
                     colors = IconButtonDefaults
@@ -693,6 +711,11 @@ internal fun CardScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
+    var isShareReady by remember { mutableStateOf(false) }
+
+    // The background of this screen is light, contrasting any other screen in the app.
+    // Invert the content color of system bars to accommodate this unique property.
+    InvertSystemBarAppearance()
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
@@ -701,6 +724,10 @@ internal fun CardScreen(
                 uiState = uiState,
                 graphicsLayer = graphicsLayer,
                 contentPadding = contentPadding,
+                onReadyShare = {
+                    Logger.d { "Ready to share" }
+                    isShareReady = true
+                },
             )
             Column(
                 modifier = modifier
@@ -723,7 +750,9 @@ internal fun CardScreen(
                         isCreated = isCreated,
                     )
                     Spacer(Modifier.height(32.dp))
+                    Logger.d { "isReadyShare: $isShareReady uiState.cardType:${uiState.cardType}" }
                     Button(
+                        enabled = isShareReady,
                         onClick = {
                             coroutineScope.launch {
                                 onClickShareProfileCard(graphicsLayer.toImageBitmap())
@@ -740,17 +769,20 @@ internal fun CardScreen(
                         },
                         modifier = Modifier
                             .fillMaxWidth()
+                            .testTag(ProfileCardShareButtonTestTag)
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
+                        val shareLabel = stringResource(ProfileCardRes.string.share)
+
                         Icon(
                             painter = painterResource(ProfileCardRes.drawable.icon_share),
-                            contentDescription = "Share",
+                            contentDescription = shareLabel,
                             tint = Color.Black,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "Share",
+                            text = shareLabel,
                             modifier = Modifier.padding(8.dp),
                             style = MaterialTheme.typography.labelLarge,
                             color = Color.Black,
@@ -758,7 +790,7 @@ internal fun CardScreen(
                     }
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        text = "Edit",
+                        text = stringResource(ProfileCardRes.string.edit),
                         style = MaterialTheme.typography.labelLarge,
                         color = Color.Black,
                         modifier = Modifier
@@ -776,6 +808,7 @@ private fun ShareableProfileCard(
     uiState: ProfileCardUiState.Card,
     graphicsLayer: GraphicsLayer,
     contentPadding: PaddingValues,
+    onReadyShare: () -> Unit,
 ) {
     var frontImage: ImageBitmap? by remember { mutableStateOf(null) }
     var backImage: ImageBitmap? by remember { mutableStateOf(null) }
@@ -784,6 +817,7 @@ private fun ShareableProfileCard(
         onCaptured = { front, back ->
             frontImage = front
             backImage = back
+            onReadyShare()
         },
     )
     Box(

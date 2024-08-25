@@ -3,23 +3,21 @@ package io.github.droidkaigi.confsched.eventmap
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
-import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.EventEffect
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.EventMapRepository
 import io.github.droidkaigi.confsched.model.localEventMapRepository
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
-import kotlinx.coroutines.flow.Flow
 
 sealed interface EventMapScreenEvent
 
 @Composable
 fun eventMapScreenPresenter(
-    events: Flow<EventMapScreenEvent>,
+    events: EventFlow<EventMapScreenEvent>,
     eventMapRepository: EventMapRepository = localEventMapRepository(),
 ): EventMapUiState = providePresenterDefaults { userMessageStateHolder ->
     val eventMap by rememberUpdatedState(eventMapRepository.eventMapEvents())
-    SafeLaunchedEffect(Unit) {
-        events.collect {
-        }
+    EventEffect(events) { event ->
     }
     EventMapUiState(
         eventMap = eventMap,

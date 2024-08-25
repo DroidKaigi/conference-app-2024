@@ -9,7 +9,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.core.model)
-                implementation(projects.core.ui)
+                implementation(projects.core.droidkaigiui)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(projects.core.designsystem)
                 implementation(libs.moleculeRuntime)

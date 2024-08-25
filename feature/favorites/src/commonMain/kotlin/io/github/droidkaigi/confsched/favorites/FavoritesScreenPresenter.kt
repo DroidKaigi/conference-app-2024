@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.EventEffect
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.AllFilter
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Bookmark
 import io.github.droidkaigi.confsched.favorites.FavoritesScreenEvent.Day1Filter
@@ -21,12 +23,10 @@ import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.localSessionsRepository
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
 import kotlinx.collections.immutable.toPersistentSet
-import kotlinx.coroutines.flow.Flow
 
 sealed interface FavoritesScreenEvent {
     data class Bookmark(val timetableItem: TimetableItem) : FavoritesScreenEvent
@@ -38,7 +38,7 @@ sealed interface FavoritesScreenEvent {
 
 @Composable
 fun favoritesScreenPresenter(
-    events: Flow<FavoritesScreenEvent>,
+    events: EventFlow<FavoritesScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): FavoritesScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val favoriteSessions by rememberUpdatedState(
@@ -56,33 +56,32 @@ fun favoritesScreenPresenter(
         ),
     )
 
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is Bookmark -> {
-                    sessionsRepository.toggleBookmark(event.timetableItem.id)
+    EventEffect(events) { event ->
+        when (event) {
+            is Bookmark -> {
+                sessionsRepository.toggleBookmark(event.timetableItem.id)
+            }
+
+            AllFilter -> {
+                allFilterSelected = true
+                currentDayFilters = emptySet()
+            }
+
+            Day1Filter, Day2Filter -> {
+                allFilterSelected = false
+
+                val dayType = if (event is Day1Filter) {
+                    ConferenceDay1
+                } else {
+                    ConferenceDay2
                 }
 
-                AllFilter -> {
-                    allFilterSelected = true
-                    currentDayFilters = emptySet()
-                }
-
-                Day1Filter, Day2Filter -> {
-                    allFilterSelected = false
-
-                    val dayType = if (event is Day1Filter) {
-                        ConferenceDay1
-                    } else {
-                        ConferenceDay2
-                    }
-
-                    currentDayFilters = if (currentDayFilters.contains(dayType) && currentDayFilters.size >= 2) {
+                currentDayFilters =
+                    if (currentDayFilters.contains(dayType) && currentDayFilters.size >= 2) {
                         currentDayFilters - dayType
                     } else {
                         currentDayFilters + dayType
                     }
-                }
             }
         }
     }

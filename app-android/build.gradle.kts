@@ -25,8 +25,8 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 2
+        versionName = "1.0.0"
     }
     signingConfigs {
         create("dev") {
@@ -108,7 +108,7 @@ dependencies {
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
-    implementation(projects.core.ui)
+    implementation(projects.core.droidkaigiui)
     implementation(libs.composeNavigation)
     implementation(libs.composeHiltNavigation)
     implementation(libs.composeMaterialWindowSize)
