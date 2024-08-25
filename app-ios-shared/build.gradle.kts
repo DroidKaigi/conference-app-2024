@@ -16,6 +16,8 @@ kotlin {
     val frameworkName = "shared"
     val xcf = XCFramework(frameworkName)
 
+    val activeArch = project.activeArch
+    logger.lifecycle("activeArch: $activeArch")
     targets.filterIsInstance<KotlinNativeTarget>()
         .forEach {
             it.binaries {
@@ -28,7 +30,7 @@ kotlin {
                     binaryOption("bundleVersion", version.toString())
                     binaryOption("bundleShortVersionString", version.toString())
 
-                    val includeToXCF = when (project.activeArch) {
+                    val includeToXCF = when (activeArch) {
                         io.github.droidkaigi.confsched.primitive.Arch.ARM -> this.target.name.contains("iosArm64") || this.target.name.contains("iosSimulatorArm64")
                         io.github.droidkaigi.confsched.primitive.Arch.ARM_SIMULATOR -> this.target.name.contains("iosSimulatorArm64")
                         io.github.droidkaigi.confsched.primitive.Arch.X86 -> this.target.name.contains("iosX64")
