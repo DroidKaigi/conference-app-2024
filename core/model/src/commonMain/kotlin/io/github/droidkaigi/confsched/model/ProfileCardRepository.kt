@@ -2,7 +2,6 @@ package io.github.droidkaigi.confsched.model
 
 import androidx.compose.runtime.Composable
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
-import kotlinx.coroutines.CoroutineDispatcher
 import org.jetbrains.compose.resources.DrawableResource
 
 interface ProfileCardRepository {
