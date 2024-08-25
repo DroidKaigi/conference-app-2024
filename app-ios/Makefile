@@ -14,8 +14,13 @@ build-kmp-module:
 	cd .. && \
 	./gradlew app-ios-shared:assembleSharedXCFramework --no-configuration-cache
 
+.PHONY: build-kmp-module-debug
+build-kmp-module-debug:
+	cd .. && \
+	./gradlew app-ios-shared:assembleSharedXCFramework -Papp.ios.shared.arch=arm64SimulatorDebug --no-configuration-cache
+
 .PHONY: build-app-debug
-build-app-debug: build-kmp-module
+build-app-debug: build-kmp-module-debug
 	set -o pipefail && \
 		xcodebuild -project $(PROJECT_FILE) \
 		-scheme $(SCHEME_NAME_APP) \
@@ -39,7 +44,7 @@ test-app-debug:
 .PHONY: bootstrap
 bootstrap:
 	make setup && \
-	make build-kmp-module && \
+	make build-kmp-module-debug && \
 	make open
 
 # Gradle Utility
