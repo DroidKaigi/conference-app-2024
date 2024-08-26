@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -52,12 +51,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -69,8 +68,6 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.layer.GraphicsLayer
-import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -85,6 +82,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
+import coil3.compose.rememberAsyncImagePainter
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
 import conference_app_2024.feature.profilecard.generated.resources.card_type
@@ -112,9 +110,10 @@ import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppB
 import io.github.droidkaigi.confsched.droidkaigiui.component.resetScroll
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
-import io.github.droidkaigi.confsched.profilecard.component.CapturableCard
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
+import io.github.droidkaigi.confsched.profilecard.component.InvertSystemBarAppearance
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
+import io.github.droidkaigi.confsched.profilecard.component.ShareableCard
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -194,6 +193,7 @@ internal data class ProfileCardScreenState(
     val cardError: ProfileCardError,
     val uiType: ProfileCardUiType,
     val userMessageStateHolder: UserMessageStateHolder,
+    val qrCodeImageByteArray: ByteArray? = null,
 )
 
 @Composable
@@ -332,6 +332,7 @@ internal fun ProfileCardScreen(
                     },
                     contentPadding = padding,
                     isCreated = true,
+                    qrCodeImageByte = uiState.qrCodeImageByteArray,
                 )
             }
         }
@@ -468,10 +469,10 @@ internal fun EditScreen(
 }
 
 @OptIn(ExperimentalEncodingApi::class)
-private fun ByteArray.toBase64(): String = Base64.encode(this)
+internal fun ByteArray.toBase64(): String = Base64.encode(this)
 
 @OptIn(ExperimentalEncodingApi::class)
-private fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
+internal fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
 
 @Composable
 internal fun Label(label: String) {
@@ -661,7 +662,7 @@ private fun CardTypeImage(
     )
 }
 
-fun Modifier.selectedBorder(
+private fun Modifier.selectedBorder(
     isSelected: Boolean,
     selectedBorderColor: Color,
     vectorPainter: VectorPainter,
@@ -704,6 +705,7 @@ internal fun CardScreen(
     onClickEdit: () -> Unit,
     onClickShareProfileCard: (ImageBitmap) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
+    qrCodeImageByte: ByteArray?,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
@@ -711,14 +713,21 @@ internal fun CardScreen(
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
     var isShareReady by remember { mutableStateOf(false) }
+    val profileCardImagePainter = rememberProfileImagePainter(uiState.image)
+    val qrCodeImagePainter = rememberAsyncImagePainter(qrCodeImageByte)
+
+    // The background of this screen is light, contrasting any other screen in the app.
+    // Invert the content color of system bars to accommodate this unique property.
+    InvertSystemBarAppearance()
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
             // Not for display, for sharing
-            ShareableProfileCard(
+            ShareableCard(
                 uiState = uiState,
                 graphicsLayer = graphicsLayer,
-                contentPadding = contentPadding,
+                profileImagePainter = profileCardImagePainter,
+                qrCodeImagePainter = qrCodeImagePainter,
                 onReadyShare = {
                     Logger.d { "Ready to share" }
                     isShareReady = true
@@ -742,6 +751,8 @@ internal fun CardScreen(
                 ) {
                     FlipCard(
                         uiState = uiState,
+                        profileImagePainter = profileCardImagePainter,
+                        qrCodeImagePainter = qrCodeImagePainter,
                         isCreated = isCreated,
                     )
                     Spacer(Modifier.height(32.dp))
@@ -753,7 +764,10 @@ internal fun CardScreen(
                                 onClickShareProfileCard(graphicsLayer.toImageBitmap())
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White,
+                            disabledContainerColor = Color.White,
+                        ),
                         border = if (uiState.cardType == ProfileCardType.None) {
                             BorderStroke(
                                 0.5.dp,
@@ -799,58 +813,8 @@ internal fun CardScreen(
 }
 
 @Composable
-private fun ShareableProfileCard(
-    uiState: ProfileCardUiState.Card,
-    graphicsLayer: GraphicsLayer,
-    contentPadding: PaddingValues,
-    onReadyShare: () -> Unit,
-) {
-    var frontImage: ImageBitmap? by remember { mutableStateOf(null) }
-    var backImage: ImageBitmap? by remember { mutableStateOf(null) }
-    CapturableCard(
-        uiState = uiState,
-        onCaptured = { front, back ->
-            frontImage = front
-            backImage = back
-            onReadyShare()
-        },
-    )
-    Box(
-        modifier = Modifier.padding(contentPadding)
-            .drawWithContent {
-                graphicsLayer.record {
-                    this@drawWithContent.drawContent()
-                }
-                drawLayer(graphicsLayer)
-            },
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(LocalProfileCardTheme.current.primaryColor)
-                .padding(vertical = 50.dp),
-        ) {
-            backImage?.let {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset(x = 70.dp, y = 15.dp)
-                        .rotate(10f)
-                        .size(150.dp, 190.dp),
-                )
-            }
-            frontImage?.let {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset(x = (-70).dp, y = (-15).dp)
-                        .rotate(-10f)
-                        .size(150.dp, 190.dp),
-                )
-            }
-        }
-    }
-}
+private fun rememberProfileImagePainter(
+    imageBase64String: String,
+) = rememberAsyncImagePainter(
+    model = rememberSaveable { imageBase64String.decodeBase64Bytes() },
+)

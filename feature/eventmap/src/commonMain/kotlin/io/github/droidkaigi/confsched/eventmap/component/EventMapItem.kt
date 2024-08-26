@@ -27,6 +27,7 @@ import conference_app_2024.feature.eventmap.generated.resources.read_more
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
+import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.droidkaigiui.toResDrawable
 import io.github.droidkaigi.confsched.eventmap.EventMapRes
 import io.github.droidkaigi.confsched.model.EventMapEvent
@@ -62,7 +63,7 @@ fun EventMapItem(
                 Text(
                     text = eventMapEvent.name.currentLangTitle,
                     style = MaterialTheme.typography.titleMedium,
-                    color = LocalRoomTheme.current.primaryColor,
+                    color = MaterialTheme.colorScheme.primaryFixed,
                 )
             }
             Spacer(Modifier.height(8.dp))
@@ -88,7 +89,7 @@ fun EventMapItem(
                     Text(
                         text = stringResource(EventMapRes.string.read_more),
                         style = MaterialTheme.typography.labelLarge,
-                        color = LocalRoomTheme.current.primaryColor,
+                        color = MaterialTheme.colorScheme.primaryFixed,
                     )
                 }
             }

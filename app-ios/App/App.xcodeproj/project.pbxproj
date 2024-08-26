@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		830BFA7C2C74EBF40017A600 /* compose-resources in Resources */ = {isa = PBXBuildFile; fileRef = 830BFA7B2C74EBF40017A600 /* compose-resources */; };
+		83CD07FE2C7B1F5400CDEFDB /* compose-resources in Resources */ = {isa = PBXBuildFile; fileRef = 83CD07FD2C7B1F5400CDEFDB /* compose-resources */; };
 		8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */; };
 		8C7074772C7791BD00FD4F39 /* ci_post_clone.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8C7074762C7791BD00FD4F39 /* ci_post_clone.sh */; };
 		8C7074792C7791DF00FD4F39 /* ci_pre_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8C7074782C7791DF00FD4F39 /* ci_pre_xcodebuild.sh */; };
@@ -18,7 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		830BFA7B2C74EBF40017A600 /* compose-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "compose-resources"; path = "../../app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64/compose-resources"; sourceTree = "<group>"; };
+		83CD07FD2C7B1F5400CDEFDB /* compose-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "compose-resources"; path = "../../app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/compose-resources"; sourceTree = "<group>"; };
 		8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8C7074762C7791BD00FD4F39 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		8C7074782C7791DF00FD4F39 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
@@ -57,8 +57,8 @@
 		8C772B0C2BCBCBCA00F2BADC = {
 			isa = PBXGroup;
 			children = (
+				83CD07FD2C7B1F5400CDEFDB /* compose-resources */,
 				8C7074752C77919300FD4F39 /* ci_scripts */,
-				830BFA7B2C74EBF40017A600 /* compose-resources */,
 				C412816C2C149FB500B458D1 /* DroidKaigi2024App-Info.plist */,
 				8C7DACC22BCBD111002C298A /* App */,
 				8C7DACC12BCBD0F1002C298A /* app-ios */,
@@ -171,7 +171,7 @@
 				8C7DACB72BCBCCB0002C298A /* Preview Assets.xcassets in Resources */,
 				8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */,
 				8C7074772C7791BD00FD4F39 /* ci_post_clone.sh in Resources */,
-				830BFA7C2C74EBF40017A600 /* compose-resources in Resources */,
+				83CD07FE2C7B1F5400CDEFDB /* compose-resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,7 +194,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${SRCROOT}/../..\n\n./gradlew assembleSharedXCFramework --no-configuration-cache\n./gradlew iosSimulatorArm64AggregateResources --no-configuration-cache\n./gradlew iosArm64AggregateResources --no-configuration-cache\n\nSIMULATOR_RESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64\"\nDEVICE_RESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosArm64\"\n\nmkdir -p ${SIMULATOR_RESOURCE_DIR}/composeResources\nmkdir -p ${DEVICE_RESOURCE_DIR}/composeResources\n\nmkdir -p ${SIMULATOR_RESOURCE_DIR}/compose-resources\nmkdir -p ${DEVICE_RESOURCE_DIR}/compose-resources\n\ncp -R ${SIMULATOR_RESOURCE_DIR}/composeResources ${SIMULATOR_RESOURCE_DIR}/compose-resources\ncp -R ${DEVICE_RESOURCE_DIR}/composeResources ${DEVICE_RESOURCE_DIR}/compose-resources\n";
+			shellScript = "cd ${SRCROOT}/../..\n\n./build_xcframework_with_xcode_environment_variable.sh\n./gradlew iosSimulatorArm64AggregateResources --no-configuration-cache\n./gradlew iosX64AggregateResources --no-configuration-cache\n\nARM_RESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64\"\nX64_RESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosX64\"\nRESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/compose-resources\"\n\nmkdir -p ${ARM_RESOURCE_DIR}/composeResources\nmkdir -p ${X64_RESOURCE_DIR}/composeResources\n\nmkdir -p ${RESOURCE_DIR}\n\ncp -R ${ARM_RESOURCE_DIR}/composeResources ${RESOURCE_DIR}\n\n# Check if X64 resources exist and are not empty\nif [ -d \"${X64_RESOURCE_DIR}/composeResources\" ] && [ \"$(ls -A \"${X64_RESOURCE_DIR}/composeResources\")\" ]; then\n    # Copy X64 resources\n    cp -R \"${X64_RESOURCE_DIR}/composeResources\" \"${RESOURCE_DIR}\"\nelse\n    echo \"Warning: X64_RESOURCE_DIR is empty or does not exist. Skipping X64 resource copy.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

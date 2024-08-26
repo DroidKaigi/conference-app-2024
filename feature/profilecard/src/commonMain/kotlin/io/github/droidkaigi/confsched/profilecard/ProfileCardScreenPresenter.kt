@@ -7,6 +7,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import conference_app_2024.feature.profilecard.generated.resources.add_validate_format
+import conference_app_2024.feature.profilecard.generated.resources.droidkaigi_logo
 import conference_app_2024.feature.profilecard.generated.resources.enter_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
@@ -19,6 +20,7 @@ import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
 internal sealed interface ProfileCardScreenEvent
@@ -48,7 +50,7 @@ internal sealed interface CardScreenEvent : ProfileCardScreenEvent {
     data object Edit : CardScreenEvent
 }
 
-private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
+internal fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
     return when (this) {
         is ProfileCard.Exists -> ProfileCardUiState.Edit(
             nickname = nickname,
@@ -62,7 +64,7 @@ private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
     }
 }
 
-private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
+internal fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
     return when (this) {
         is ProfileCard.Exists -> ProfileCardUiState.Card(
             nickname = nickname,
@@ -76,6 +78,7 @@ private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun profileCardScreenPresenter(
     events: EventFlow<ProfileCardScreenEvent>,
@@ -111,6 +114,18 @@ internal fun profileCardScreenPresenter(
             is ProfileCard.Exists -> ProfileCardUiType.Card
             ProfileCard.DoesNotExists -> ProfileCardUiType.Edit
             ProfileCard.Loading -> ProfileCardUiType.Loading
+        }
+    }
+
+    var qrCodeImageByteArray by remember { mutableStateOf(ByteArray(0)) }
+    val link = cardUiState?.link
+    SafeLaunchedEffect(link) {
+        link?.let { link ->
+            qrCodeImageByteArray = repository
+                .loadQrCodeImageByteArray(
+                    link = link,
+                    centerLogoRes = ProfileCardRes.drawable.droidkaigi_logo,
+                )
         }
     }
 
@@ -164,5 +179,6 @@ internal fun profileCardScreenPresenter(
         cardError = cardError,
         uiType = uiType,
         userMessageStateHolder = userMessageStateHolder,
+        qrCodeImageByteArray = qrCodeImageByteArray,
     )
 }
