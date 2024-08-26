@@ -49,6 +49,7 @@ public struct TimetableCard: View {
                             )
                             .frame(width: 24, height: 24)
                     }
+                    .sensoryFeedback(.impact, trigger: isFavorite) { _, newValue in newValue }
                 }
                 
                 Text(timetableItem.title.currentLangTitle)
