@@ -122,39 +122,41 @@ private fun EmptyView(modifier: Modifier = Modifier) {
             .testTag(FavoritesScreenEmptyViewTestTag)
             .fillMaxSize()
             .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
-            Box(
-                modifier = Modifier
-                    .background(color = MaterialTheme.colorScheme.onPrimary,
-                    shape = RoundedCornerShape(24.dp),)
-                    .size(84.dp),
-                    contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    modifier = Modifier.size(36.dp),
-                    imageVector = Icons.Filled.Favorite,
-                    contentDescription = null,
-                    tint = Color.Green,
+        Box(
+            modifier = Modifier
+                .background(
+                    color = MaterialTheme.colorScheme.onPrimary,
+                    shape = RoundedCornerShape(24.dp),
                 )
-            }
-            Spacer(Modifier.height(12.dp))
-                Text(
-                    text = stringResource(FavoritesRes.string.empty_description),
-                    style = MaterialTheme.typography.titleLarge,
-                    color = MaterialTheme.colorScheme.onSurface,
-                    textAlign = TextAlign.Center,
-            )
-            Spacer(Modifier.height(6.dp))
-                Text(
-                    text = stringResource(FavoritesRes.string.empty_guide),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
+                .size(84.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Icon(
+                modifier = Modifier.size(36.dp),
+                imageVector = Icons.Filled.Favorite,
+                contentDescription = null,
+                tint = Color.Green,
             )
         }
+        Spacer(Modifier.height(12.dp))
+        Text(
+            text = stringResource(FavoritesRes.string.empty_description),
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface,
+            textAlign = TextAlign.Center,
+        )
+        Spacer(Modifier.height(6.dp))
+        Text(
+            text = stringResource(FavoritesRes.string.empty_guide),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            textAlign = TextAlign.Center,
+        )
     }
+}
 
 @Composable
 @Preview
