@@ -5,7 +5,7 @@ import okio.Path.Companion.toPath
 
 actual inline fun <T> readResourceFile(filePath: okio.Path, block: okio.BufferedSource.() -> T): T {
     return FileSystem.SYSTEM.read(
-        "src".toPath().div("commonTest").div("resources").div(filePath)
+        "src".toPath().div("commonTest").div("resources").div(filePath),
     ) {
         block()
     }

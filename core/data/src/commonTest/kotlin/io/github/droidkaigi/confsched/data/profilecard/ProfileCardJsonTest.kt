@@ -104,7 +104,6 @@ class ProfileCardJsonTest {
             readUtf8()
         }
 
-
         assertEquals(expected.trim(), actual.trim())
     }
 }

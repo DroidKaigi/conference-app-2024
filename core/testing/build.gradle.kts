@@ -44,17 +44,16 @@ kotlin {
             }
         }
 
-        commonMain  {
+        commonMain {
             dependencies {
                 implementation(libs.okIo)
             }
         }
 
-        iosMain  {
+        iosMain {
             dependencies {
                 implementation(libs.okIo)
             }
         }
-
     }
 }
