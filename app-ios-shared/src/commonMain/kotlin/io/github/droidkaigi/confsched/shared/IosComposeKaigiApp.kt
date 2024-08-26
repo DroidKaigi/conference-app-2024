@@ -58,6 +58,7 @@ import io.github.droidkaigi.confsched.staff.staffScreens
 import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
+import io.github.droidkaigi.confsched.favorites.favoritesScreenWithNavigationIconRoute
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
 import platform.Foundation.NSURL
@@ -116,7 +117,11 @@ private fun KaigiNavHost(
             onLinkClick = externalNavController::navigate,
             onCalendarRegistrationClick = {},//externalNavController::navigateToCalendarRegistration,
             onShareClick = externalNavController::onShareClick,
-            onFavoriteListClick = {} // { navController.navigate(favoritesScreenRoute) }
+            onFavoriteListClick = {
+                navController.navigate(
+                    favoritesScreenWithNavigationIconRoute
+                )
+            },
         )
 
         contributorsScreens(
@@ -144,6 +149,7 @@ private fun KaigiNavHost(
         )
 
         favoritesScreens(
+            onNavigationIconClick = navController::popBackStack,
             onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
             contentPadding = PaddingValues(),
         )
@@ -170,6 +176,7 @@ private fun NavGraphBuilder.mainScreen(
                 onEventMapItemClick = externalNavController::navigate,
             )
             favoritesScreens(
+                onNavigationIconClick = navController::popBackStack,
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
                 contentPadding = contentPadding,
             )
