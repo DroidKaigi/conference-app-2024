@@ -5,6 +5,20 @@ import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
 
 class ShareNavigator {
+    fun share(text: String) {
+        val items = mutableListOf<Any>(text)
+
+        val activityViewController = UIActivityViewController(items, null)
+        val keyWindow = UIApplication.sharedApplication.keyWindow
+        val rootViewController = keyWindow?.rootViewController
+
+        rootViewController?.presentViewController(
+            viewControllerToPresent = activityViewController,
+            animated = true,
+            completion = null,
+        )
+    }
+
     fun shareTextWithImage(text: String, image: ImageBitmap) {
         val items = mutableListOf<Any>(text)
         image.toUiImage()?.let {
