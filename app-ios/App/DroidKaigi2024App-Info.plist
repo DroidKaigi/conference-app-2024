@@ -9,7 +9,5 @@
 	</array>
 	<key>NSCalendarsUsageDescription</key>
     <string>カレンダーにイベントを追加するためにカレンダーへのアクセスが必要です。</string>
-    <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-    <string>カレンダーにイベントを追加するためにカレンダーへの書き込みアクセスが必要です。</string>
 </dict>
 </plist>
