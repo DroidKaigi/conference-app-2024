@@ -45,17 +45,22 @@ public class DefaultSessionsRepository(
             userDataStore.getFavoriteSessionStream(),
         ) { timetable, favorites ->
             timetable.copy(bookmarks = favorites)
-        }.collect {
-            if (!it.isEmpty()) {
-                emit(it)
-            }
-            if (first) {
-                first = false
-                Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
-                sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
-                Logger.d("DefaultSessionsRepository onStart fetched")
-            }
         }
+            .catch {
+                Logger.e("Fail getTimetableStream: $it")
+                emit(Timetable())
+            }
+            .collect {
+                if (!it.isEmpty()) {
+                    emit(it)
+                }
+                if (first) {
+                    first = false
+                    Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
+                    sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+                    Logger.d("DefaultSessionsRepository onStart fetched")
+                }
+            }
     }
 
     private suspend fun refreshSessionData() {

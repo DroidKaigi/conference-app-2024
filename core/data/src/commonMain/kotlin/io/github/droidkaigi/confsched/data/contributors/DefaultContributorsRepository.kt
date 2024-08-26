@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.data.contributors
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.Contributor
@@ -11,6 +12,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 
 public class DefaultContributorsRepository(
@@ -36,6 +38,10 @@ public class DefaultContributorsRepository(
                 refresh()
             }
         }
+            .catch {
+                Logger.e("Fail getContributorStream: $it")
+                emit(contributorsStateFlow.value)
+            }
     }
 
     override suspend fun refresh() {
