@@ -19,11 +19,13 @@ public struct KmpAppComposeViewControllerWrapper: UIViewControllerRepresentable 
     public func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
     }
     
-    public func openLicenseScreen() {
-        if let rootViewController = UIApplication.shared.keyWindow?.rootViewController {
-            let licenseView = LicenseListView()
-            let hostingController = UIHostingController(rootView: licenseView)
-            rootViewController.present(hostingController, animated: true, completion: nil)
+    private func openLicenseScreen() {
+        if let windowScene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
+            if let rootViewController = windowScene.windows.first?.rootViewController {
+                let licenseView = LicenseListView()
+                let hostingController = UIHostingController(rootView: licenseView)
+                rootViewController.present(hostingController, animated: true, completion: nil)
+            }
         }
     }
 }
