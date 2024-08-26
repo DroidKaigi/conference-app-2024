@@ -155,7 +155,7 @@ private fun KaigiNavHost(
                     onShareClick = externalNavController::onShareClick,
                     onFavoriteListClick = {
                         navController.navigate(
-                            favoritesScreenWithNavigationIconRoute
+                            favoritesScreenWithNavigationIconRoute,
                         )
                     },
                 )

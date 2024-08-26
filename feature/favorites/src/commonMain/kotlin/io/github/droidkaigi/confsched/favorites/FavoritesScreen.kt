@@ -89,9 +89,9 @@ data class FavoritesScreenUiState(
 
 @Composable
 fun FavoritesScreen(
-    onNavigationIconClick: (() -> Unit)? = null,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
+    onNavigationIconClick: (() -> Unit)? = null,
     contentPadding: PaddingValues = PaddingValues(),
     eventFlow: EventFlow<FavoritesScreenEvent> = rememberEventFlow(),
     uiState: FavoritesScreenUiState = favoritesScreenPresenter(events = eventFlow),
