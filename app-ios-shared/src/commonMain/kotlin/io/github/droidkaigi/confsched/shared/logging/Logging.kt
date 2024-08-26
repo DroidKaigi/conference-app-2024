@@ -1,15 +1,13 @@
 package io.github.droidkaigi.confsched.shared.logging
 
-import co.touchlab.kermit.LogWriter
 import co.touchlab.kermit.Logger
+import co.touchlab.kermit.XcodeSeverityWriter
 
 internal object Logging {
     fun initialize() {
         with(Logger) {
             setTag("KaigiApp")
-            setLogWriters(getPlatformLogWriters())
+            setLogWriters(XcodeSeverityWriter())
         }
     }
 }
-
-internal expect fun getPlatformLogWriters(): List<LogWriter>
