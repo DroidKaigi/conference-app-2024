@@ -5,7 +5,7 @@ import Model
 
 public struct SponsorView: View {
     private let store: StoreOf<SponsorReducer>
-    @State var selectedSponsorData: Sponsor?
+    @State private var selectedSponsorData: Sponsor?
 
     public init(store: StoreOf<SponsorReducer>) {
         self.store = store
