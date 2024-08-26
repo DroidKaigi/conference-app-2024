@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -28,6 +29,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.CollectionInfo
+import androidx.compose.ui.semantics.CollectionItemInfo
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.collectionInfo
+import androidx.compose.ui.semantics.collectionItemInfo
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.sessions.generated.resources.english
 import conference_app_2024.feature.sessions.generated.resources.japanese
@@ -134,16 +143,34 @@ private fun LanguageSwitcher(
         stringResource(SessionsRes.string.english) to Lang.ENGLISH,
     )
     Row(
-        modifier = modifier,
+        modifier = modifier
+            .selectableGroup()
+            .semantics {
+                collectionInfo = CollectionInfo(
+                    rowCount = availableLangs.size,
+                    columnCount = 1,
+                )
+            },
         verticalAlignment = Alignment.CenterVertically,
     ) {
         val lastIndex = availableLangs.size - 1
         availableLangs.entries.forEachIndexed { index, (label, lang) ->
+            val isSelected = normalizedCurrentLang == lang
             TextButton(
                 onClick = { onLanguageSelect(lang) },
+                modifier = Modifier
+                    .semantics {
+                        role = Role.Tab
+                        selected = isSelected
+                        collectionItemInfo = CollectionItemInfo(
+                            rowIndex = index,
+                            rowSpan = 1,
+                            columnIndex = 1,
+                            columnSpan = 1,
+                        )
+                    },
                 contentPadding = PaddingValues(12.dp),
             ) {
-                val isSelected = normalizedCurrentLang == lang
                 val contentColor = if (isSelected) {
                     LocalRoomTheme.current.primaryColor
                 } else {
