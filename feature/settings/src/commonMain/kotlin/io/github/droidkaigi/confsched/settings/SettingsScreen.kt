@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.settings
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -14,6 +15,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.settings.generated.resources.settings_title
@@ -24,6 +27,7 @@ import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
+import io.github.droidkaigi.confsched.droidkaigiui.plus
 import io.github.droidkaigi.confsched.model.FontFamily
 import io.github.droidkaigi.confsched.settings.section.accessibility
 import org.jetbrains.compose.resources.stringResource
@@ -120,7 +124,7 @@ fun SettingsScreen(
                         it
                     }
                 },
-            contentPadding = padding,
+            contentPadding = padding + PaddingValues(vertical = 20.dp, horizontal = 16.dp),
             state = lazyListState,
         ) {
             accessibility(
