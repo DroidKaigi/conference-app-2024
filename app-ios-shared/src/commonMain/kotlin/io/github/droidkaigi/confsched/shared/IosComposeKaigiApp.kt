@@ -58,6 +58,7 @@ import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreens
+import io.github.droidkaigi.confsched.shared.logging.Logging
 import io.github.droidkaigi.confsched.shared.share.ShareNavigator
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
@@ -87,6 +88,7 @@ fun kaigiAppController(
         LocalRepositories provides repositories.map
     ) {
         val windowSizeClass = calculateWindowSizeClass()
+        Logging.initialize()
         KaigiApp(
             windowSize = windowSizeClass,
         )
