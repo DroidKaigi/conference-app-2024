@@ -68,6 +68,7 @@ import platform.UIKit.UIViewController
 @Suppress("UNUSED")
 fun kaigiAppController(
     repositories: Repositories,
+    onLicenseScreenRequest: () -> Unit,
 ): UIViewController = ComposeUIViewController {
     CompositionLocalProvider(
         LocalRepositories provides repositories.map
@@ -75,6 +76,7 @@ fun kaigiAppController(
         val windowSizeClass = calculateWindowSizeClass()
         KaigiApp(
             windowSize = windowSizeClass,
+            onLicenseScreenRequest = onLicenseScreenRequest,
         )
     }
 }
@@ -83,6 +85,7 @@ fun kaigiAppController(
 fun KaigiApp(
     windowSize: WindowSizeClass,
     modifier: Modifier = Modifier,
+    onLicenseScreenRequest: () -> Unit
 ) {
     KaigiTheme {
         Surface(
@@ -91,6 +94,7 @@ fun KaigiApp(
         ) {
             KaigiNavHost(
                 windowSize = windowSize,
+                onLicenseScreenRequest = onLicenseScreenRequest,
             )
         }
     }
@@ -104,12 +108,14 @@ private fun KaigiNavHost(
     externalNavController: ExternalNavController = ExternalNavController(
         shareNavigator = ShareNavigator(),
     ),
+    onLicenseScreenRequest: () -> Unit
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
         mainScreen(
             windowSize = windowSize,
             navController = navController,
             externalNavController = externalNavController,
+            onLicenseScreenRequest = onLicenseScreenRequest,
         )
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
@@ -154,6 +160,7 @@ private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     navController: NavHostController,
     externalNavController: ExternalNavController,
+    onLicenseScreenRequest: () -> Unit,
 ) {
     mainScreen(
         windowSize = windowSize,
@@ -194,7 +201,7 @@ private fun NavGraphBuilder.mainScreen(
                         }
 
                         AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
-                        AboutItem.License -> {} //externalNavController.navigateToLicenseScreen()
+                        AboutItem.License -> onLicenseScreenRequest()
                         AboutItem.Medium -> externalNavController.navigate(
                             url = "https://medium.com/droidkaigi",
                         )
@@ -266,6 +273,11 @@ private class ExternalNavController(
     ) {
         val nsUrl = NSURL(string = url)
         UIApplication.sharedApplication.openURL(nsUrl)
+    }
+
+    // TODO Use this method.
+    fun navigateToLicenseScreen() {
+
     }
 
     fun onShareClick(timetableItem: TimetableItem) {
