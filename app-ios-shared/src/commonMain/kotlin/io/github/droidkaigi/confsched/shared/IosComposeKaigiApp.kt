@@ -9,6 +9,8 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.window.ComposeUIViewController
@@ -61,6 +63,8 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import platform.EventKit.EKEntityType.EKEntityTypeEvent
 import platform.EventKit.EKEvent
 import platform.EventKit.EKEventStore
@@ -110,10 +114,7 @@ fun KaigiApp(
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
     navController: NavHostController = rememberNavController(),
-    // If necessary, make modifications to use remember as in the KaigiApp.kt implementation.
-    externalNavController: ExternalNavController = ExternalNavController(
-        shareNavigator = ShareNavigator(),
-    ),
+    externalNavController: ExternalNavController = rememberExternalNavController()
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
         mainScreen(
@@ -268,8 +269,22 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     }
 }
 
+@Composable
+private fun rememberExternalNavController(): ExternalNavController {
+    val shareNavigator = ShareNavigator()
+    val coroutineScope = rememberCoroutineScope()
+
+    return remember {
+        ExternalNavController(
+            shareNavigator = shareNavigator,
+            coroutineScope = coroutineScope
+        )
+    }
+}
+
 private class ExternalNavController(
     private val shareNavigator: ShareNavigator,
+    private val coroutineScope: CoroutineScope,
 ) {
     fun navigate(url: String) {
         navigateToSafari(url = url)
@@ -314,7 +329,7 @@ private class ExternalNavController(
 
             // -[UIViewController init] must be used from main thread only
             // 'Modifications to the layout engine must not be performed from a background thread after it has been accessed from the main thread.'
-            runOnMainThread {
+            coroutineScope.launch {
                 val keyWindow = UIApplication.sharedApplication.keyWindow
                 val rootViewController = keyWindow?.rootViewController
 
