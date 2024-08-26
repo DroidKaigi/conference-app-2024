@@ -63,6 +63,11 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
+import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
+import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
+import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import platform.EventKit.EKEntityType.EKEntityTypeEvent
@@ -126,11 +131,7 @@ private fun KaigiNavHost(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
             onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
-            // For debug
-//            onShareClick = externalNavController::onShareClick,
-            onShareClick = {
-                navController.navigate(contributorsScreenRoute)
-            },
+            onShareClick = externalNavController::onShareClick,
             onFavoriteListClick = {} // { navController.navigate(favoritesScreenRoute) }
         )
 
@@ -351,6 +352,14 @@ private class ExternalNavController(
                 )
             }
         }
+    }
+
+    fun onShareClick(timetableItem: TimetableItem) {
+        shareNavigator.share(
+            "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}\n" +
+                "${timetableItem.title.currentLangTitle}\n" +
+                timetableItem.url,
+        )
     }
 
     fun onShareProfileCardClick(
