@@ -60,6 +60,7 @@ import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreenRoute
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
@@ -205,7 +206,7 @@ private fun NavGraphBuilder.mainScreen(
                             )
                         }
 
-                        AboutItem.Settings -> {} //navController.navigate(settingsScreenRoute)
+                        AboutItem.Settings -> navController.navigate(settingsScreenRoute)
 
                         AboutItem.Staff -> navController.navigate(staffScreenRoute)
                         AboutItem.X -> externalNavController.navigate(
