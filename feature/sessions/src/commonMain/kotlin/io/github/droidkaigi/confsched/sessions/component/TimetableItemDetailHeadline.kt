@@ -169,7 +169,7 @@ private fun LanguageSwitcher(
                         collectionItemInfo = CollectionItemInfo(
                             rowIndex = index,
                             rowSpan = 1,
-                            columnIndex = 1,
+                            columnIndex = 0,
                             columnSpan = 1,
                         )
                     },
