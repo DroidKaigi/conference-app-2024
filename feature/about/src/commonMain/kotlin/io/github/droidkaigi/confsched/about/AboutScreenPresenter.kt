@@ -1,9 +1,9 @@
 package io.github.droidkaigi.confsched.about
 
 import androidx.compose.runtime.Composable
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.AboutRepository
 import io.github.droidkaigi.confsched.model.localAboutRepository
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 
 @Composable
 fun aboutScreenPresenter(

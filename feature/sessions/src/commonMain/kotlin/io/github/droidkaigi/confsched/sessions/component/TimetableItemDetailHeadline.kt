@@ -33,12 +33,12 @@ import conference_app_2024.feature.sessions.generated.resources.english
 import conference_app_2024.feature.sessions.generated.resources.japanese
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
+import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsRes
-import io.github.droidkaigi.confsched.ui.component.TimetableItemTag
-import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 

@@ -7,13 +7,16 @@ import CommonComponents
 public struct TimetableGridCard: View {
     let timetableItem: TimetableItem
     let onTap: (TimetableItem) -> Void
+    let cellCount: Int
     
     public init(
         timetableItem: TimetableItem,
+        cellCount: Int,
         onTap: @escaping (TimetableItem) -> Void
     ) {
         self.timetableItem = timetableItem
         self.onTap = onTap
+        self.cellCount = cellCount
     }
 
     public var body: some View {
@@ -22,17 +25,19 @@ public struct TimetableGridCard: View {
         } label: {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 4) {
-                    RoomTypeShape(roomType: .init(enTitle: timetableItem.room.name.enTitle))
+                    if cellCount == 1 {
+                        RoomTypeShape(roomType: .init(enTitle: timetableItem.room.name.enTitle))
                         .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                    }
                     Text("\(timetableItem.startsTimeString) - \(timetableItem.endsTimeString)")
                         .textStyle(.labelMedium)
-                        .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                        .foregroundStyle(cellCount > 1 ? AssetColors.Surface.onSurfaceVariant.swiftUIColor : timetableItem.room.roomTheme.primaryColor)
                     Spacer()
                 }
                 
                 Text(timetableItem.title.currentLangTitle)
                     .textStyle(.titleMedium)
-                    .foregroundStyle(timetableItem.room.roomTheme.primaryColor)
+                    .foregroundStyle(cellCount > 1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor)
                     .multilineTextAlignment(.leading)
                 
                 Spacer()
@@ -58,9 +63,9 @@ public struct TimetableGridCard: View {
             }
             .frame(maxWidth: .infinity)
             .padding(12)
-            .frame(width: 192, height: 153)
-            .background(timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
-            .overlay(RoundedRectangle(cornerRadius: 4).stroke(timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
+            .frame(width: 192 * CGFloat(cellCount) + CGFloat(12 * (cellCount - 1)), height: 153)
+            .background(cellCount > 1 ? AssetColors.Surface.surfaceContainer.swiftUIColor : timetableItem.room.roomTheme.containerColor, in: RoundedRectangle(cornerRadius: 4))
+            .overlay(RoundedRectangle(cornerRadius: 4).stroke(cellCount > 1 ? AssetColors.Surface.onSurface.swiftUIColor : timetableItem.room.roomTheme.primaryColor, lineWidth: 1))
         }
     }
 }
@@ -68,7 +73,7 @@ public struct TimetableGridCard: View {
 #Preview {
     VStack {
         TimetableGridCard(
-            timetableItem: TimetableItem.Session.companion.fake(),
+            timetableItem: TimetableItem.Session.companion.fake(), cellCount: 1,
             onTap: { _ in }
         )
         .padding(.horizontal, 16)

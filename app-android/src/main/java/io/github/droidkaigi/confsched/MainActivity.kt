@@ -22,13 +22,13 @@ import androidx.window.layout.WindowInfoTracker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
 import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.model.FontFamily.DotGothic16Regular
 import io.github.droidkaigi.confsched.model.FontFamily.SystemDefault
 import io.github.droidkaigi.confsched.model.Settings.DoesNotExists
 import io.github.droidkaigi.confsched.model.Settings.Exists
 import io.github.droidkaigi.confsched.model.Settings.Loading
 import io.github.droidkaigi.confsched.model.SettingsRepository
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList

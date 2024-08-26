@@ -50,7 +50,11 @@ public class FakeSessionsApiClient : SessionsApiClient {
     public companion object {
         public val defaultSession: SessionResponse = SessionsAllResponse.fake()
             .filterConferenceDaySessions().sessions.find { it.sessionType == "NORMAL" }!!
-        public val defaultSessionId: String = defaultSession!!.id
+        public val defaultSessionId: String = defaultSession.id
+
+        public val defaultSessions: List<SessionResponse> = SessionsAllResponse.fake()
+            .filterConferenceDaySessions().sessions.filter { it.sessionType == "NORMAL" }.take(7)
+        public val defaultSessionIds: List<String> = defaultSessions.map { it.id }
 
         public val defaultSessionWithLongDescription: SessionResponse = SessionsAllResponse.fake()
             .filterConferenceDaySessions().sessions.find {

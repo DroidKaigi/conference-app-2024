@@ -86,3 +86,23 @@ Sometimes an error will occur if the JDK versions do not match. In the case of a
 You select Xcode > Settings > Locations and set your $JAVA_HOME path manually.
 
 JFYI: https://qiita.com/nacho4d/items/6d04c9287c55c26fca95
+
+### Case3: You are using x86_64 Mac and want to build the project
+
+If you are using x86_64 Mac and want to build the project, you need to specify the architecture when building XCFramework.
+
+```shell
+./gradlew app-ios-shared:assembleSharedXCFramework -Papp.ios.shared.arch=x86_64 --no-configuration-cache
+```
+
+Then, you can build the project with Xcode.
+
+### Case4: Want to build the project for the device
+
+If you want to build the project for the device, you need to specify the architecture when building XCFramework.
+
+```shell
+./gradlew app-ios-shared:assembleSharedXCFramework -Papp.ios.shared.arch=arm64 --no-configuration-cache
+```
+
+Then, you can build the project with Xcode.
