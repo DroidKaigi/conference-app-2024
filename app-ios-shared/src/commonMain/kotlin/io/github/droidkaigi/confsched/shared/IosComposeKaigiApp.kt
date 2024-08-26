@@ -63,11 +63,6 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
-import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
-import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
-import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import platform.EventKit.EKEntityType.EKEntityTypeEvent
