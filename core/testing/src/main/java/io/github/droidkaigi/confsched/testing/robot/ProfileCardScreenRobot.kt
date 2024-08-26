@@ -18,7 +18,6 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardLinkTextFieldTestTa
 import io.github.droidkaigi.confsched.profilecard.ProfileCardNicknameTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardOccupationTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardScreen
-import io.github.droidkaigi.confsched.profilecard.ProfileCardShareButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardBackTestTag
 import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardFrontTestTag
 import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardTestTag
@@ -139,12 +138,6 @@ class ProfileCardScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(ProfileCardLinkTextFieldTestTag))
             .assertTextEquals(link)
-    }
-
-    fun checkShareProfileCardButtonEnabled() {
-        composeTestRule
-            .onNode(hasTestTag(ProfileCardShareButtonTestTag))
-            .assertIsEnabled()
     }
 
     fun checkCardScreenDisplayed() {

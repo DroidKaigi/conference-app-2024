@@ -28,7 +28,7 @@ class SettingsScreenRobot @Inject constructor(
     private enum class FontFamily(
         val displayName: String,
     ) {
-        DotGothic16Regular("DotGothic"),
+        DotGothic16Regular("DotGothic16"),
         SystemDefault("System Default"),
     }
 

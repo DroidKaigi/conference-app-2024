@@ -45,6 +45,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import platform.Foundation.NSDocumentDirectory
@@ -165,6 +166,11 @@ public val dataModule: Module = module {
         DefaultProfileCardDataStore(dataStore)
     }
 
+    // Since Kotlin/Native doesn't support Dispatchers.IO, we use Dispatchers.Default instead.
+    single(named("IoDispatcher")) {
+        Dispatchers.Default
+    }
+
     singleOf(::DefaultAuthApi) bind AuthApi::class
     singleOf(::DefaultSessionsApiClient) bind SessionsApiClient::class
     singleOf(::DefaultContributorsApiClient) bind ContributorsApiClient::class
@@ -179,7 +185,12 @@ public val dataModule: Module = module {
     singleOf(::DefaultSponsorsRepository) bind SponsorsRepository::class
     singleOf(::DefaultEventMapRepository) bind EventMapRepository::class
     singleOf(::DefaultAboutRepository) bind AboutRepository::class
-    singleOf(::DefaultProfileCardRepository) bind ProfileCardRepository::class
+    single<ProfileCardRepository> {
+        DefaultProfileCardRepository(
+            profileCardDataStore = get(),
+            ioDispatcher = get(named("IoDispatcher")),
+        )
+    }
     single<Repositories> {
         DefaultRepositories(
             mapOf(
