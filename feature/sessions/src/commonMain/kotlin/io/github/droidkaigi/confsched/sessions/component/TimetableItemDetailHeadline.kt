@@ -34,12 +34,14 @@ import androidx.compose.ui.semantics.CollectionItemInfo
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.collectionItemInfo
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.selected
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.sessions.generated.resources.english
 import conference_app_2024.feature.sessions.generated.resources.japanese
+import conference_app_2024.feature.sessions.generated.resources.select_language
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
@@ -142,10 +144,12 @@ private fun LanguageSwitcher(
         stringResource(SessionsRes.string.japanese) to Lang.JAPANESE,
         stringResource(SessionsRes.string.english) to Lang.ENGLISH,
     )
+    val switcherContentDescription = stringResource(SessionsRes.string.select_language)
     Row(
         modifier = modifier
             .selectableGroup()
             .semantics {
+                contentDescription = switcherContentDescription
                 collectionInfo = CollectionInfo(
                     rowCount = availableLangs.size,
                     columnCount = 1,
