@@ -1,6 +1,11 @@
 package io.github.droidkaigi.confsched.eventmap.component
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -59,7 +64,7 @@ fun EventMapTab(
             FloorLevel.entries.reversed().forEachIndexed { index, floorLevel ->
                 EventMapChip(
                     modifier = Modifier.testTag(EventMapTabTestTagPrefix.plus(floorLevel.floorName)),
-                    selected = selectedTabIndex == index,
+                    isSelected = selectedTabIndex == index,
                     text = floorLevel.floorName,
                     onClick = { selectedTabIndex = index },
                 )
@@ -88,18 +93,22 @@ fun EventMapTab(
 
 @Composable
 private fun EventMapChip(
-    selected: Boolean,
+    isSelected: Boolean,
     text: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     FilterChip(
         modifier = modifier,
-        selected = selected,
+        selected = isSelected,
         onClick = onClick,
         label = { Text(text) },
         leadingIcon = {
-            if (selected) {
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = fadeIn() + expandHorizontally(),
+                exit = fadeOut() + shrinkHorizontally(),
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
                     contentDescription = null,
