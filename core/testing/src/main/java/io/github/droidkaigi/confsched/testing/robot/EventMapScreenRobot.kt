@@ -6,12 +6,12 @@ import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.Inject
 import io.github.droidkaigi.confsched.eventmap.EventMapItemTestTag
 import io.github.droidkaigi.confsched.eventmap.EventMapLazyColumnTestTag
 import io.github.droidkaigi.confsched.eventmap.EventMapScreen
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTabImageTestTag
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTabTestTagPrefix
-import io.github.droidkaigi.confsched.ui.Inject
 
 class EventMapScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,

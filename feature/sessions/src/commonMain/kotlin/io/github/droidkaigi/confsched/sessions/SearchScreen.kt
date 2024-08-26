@@ -18,9 +18,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableCategory
@@ -33,10 +37,6 @@ import io.github.droidkaigi.confsched.sessions.component.SearchFilters
 import io.github.droidkaigi.confsched.sessions.component.SearchTextFieldAppBar
 import io.github.droidkaigi.confsched.sessions.section.SearchList
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val searchScreenRoute = "search"
@@ -69,8 +69,8 @@ fun SearchScreen(
     onTimetableItemClick: (TimetableItem) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    eventEmitter: EventEmitter<SearchScreenEvent> = rememberEventEmitter(),
-    uiState: SearchScreenUiState = searchScreenPresenter(eventEmitter),
+    eventFlow: EventFlow<SearchScreenEvent> = rememberEventFlow(),
+    uiState: SearchScreenUiState = searchScreenPresenter(eventFlow),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -82,13 +82,13 @@ fun SearchScreen(
     SearchScreen(
         uiState = uiState,
         onTimetableItemClick = onTimetableItemClick,
-        onTimetableItemBookmark = { eventEmitter.tryEmit(SearchScreenEvent.Bookmark(it)) },
-        onSearchWordChanged = { eventEmitter.tryEmit(SearchScreenEvent.UpdateSearchWord(it)) },
-        onClearSearchWordClick = { eventEmitter.tryEmit(SearchScreenEvent.ClearSearchWord) },
-        onSelectDay = { eventEmitter.tryEmit(SearchScreenEvent.SelectDay(it)) },
-        onSelectSessionType = { eventEmitter.tryEmit(SearchScreenEvent.SelectSessionType(it)) },
-        onSelectCategory = { eventEmitter.tryEmit(SearchScreenEvent.SelectCategory(it)) },
-        onSelectLanguage = { eventEmitter.tryEmit(SearchScreenEvent.SelectLanguage(it)) },
+        onTimetableItemBookmark = { eventFlow.tryEmit(SearchScreenEvent.Bookmark(it)) },
+        onSearchWordChanged = { eventFlow.tryEmit(SearchScreenEvent.UpdateSearchWord(it)) },
+        onClearSearchWordClick = { eventFlow.tryEmit(SearchScreenEvent.ClearSearchWord) },
+        onSelectDay = { eventFlow.tryEmit(SearchScreenEvent.SelectDay(it)) },
+        onSelectSessionType = { eventFlow.tryEmit(SearchScreenEvent.SelectSessionType(it)) },
+        onSelectCategory = { eventFlow.tryEmit(SearchScreenEvent.SelectCategory(it)) },
+        onSelectLanguage = { eventFlow.tryEmit(SearchScreenEvent.SelectLanguage(it)) },
         onBackClick = onBackClick,
         modifier = modifier,
     )

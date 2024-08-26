@@ -16,7 +16,7 @@ internal interface SponsorApi {
      *
      * @return [SponsorsResponse]
      */
-    @GET("/events/droidkaigi2023/sponsor")
+    @GET("/events/droidkaigi2024/sponsor")
     suspend fun getSponsors(): SponsorsResponse
 }
 

@@ -8,7 +8,10 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
-import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.EventEffect
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.SessionsRepository
@@ -23,11 +26,8 @@ import io.github.droidkaigi.confsched.sessions.TimetableScreenEvent.UiTypeChange
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalClock
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
-import kotlinx.coroutines.flow.Flow
 
 sealed interface TimetableScreenEvent {
     data class Bookmark(val timetableItem: TimetableItem, val bookmarked: Boolean) :
@@ -38,7 +38,7 @@ sealed interface TimetableScreenEvent {
 
 @Composable
 fun timetableScreenPresenter(
-    events: Flow<TimetableScreenEvent>,
+    events: EventFlow<TimetableScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val sessions by rememberUpdatedState(sessionsRepository.timetable())
@@ -55,21 +55,19 @@ fun timetableScreenPresenter(
         ),
     )
 
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is Bookmark -> {
-                    sessionsRepository.toggleBookmark(event.timetableItem.id)
-                }
+    EventEffect(events) { event ->
+        when (event) {
+            is Bookmark -> {
+                sessionsRepository.toggleBookmark(event.timetableItem.id)
+            }
 
-                UiTypeChange -> {
-                    timetableUiType =
-                        if (timetableUiType == TimetableUiType.List) {
-                            Grid
-                        } else {
-                            TimetableUiType.List
-                        }
-                }
+            UiTypeChange -> {
+                timetableUiType =
+                    if (timetableUiType == TimetableUiType.List) {
+                        Grid
+                    } else {
+                        TimetableUiType.List
+                    }
             }
         }
     }
