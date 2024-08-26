@@ -11,9 +11,9 @@ public struct TimetableView: View {
         self.store = store
     }
     
-    @State var timetableMode = TimetableMode.list
-    @State var switchModeIcon: ImageResource = .icGrid
-    @State var selectedTab: DayTab = DayTab.day1
+    @State private var timetableMode = TimetableMode.list
+    @State private var switchModeIcon: ImageResource = .icGrid
+    @State private var selectedTab: DayTab = DayTab.day1
     
     public var body: some View {
         VStack {
