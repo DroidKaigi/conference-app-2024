@@ -34,6 +34,11 @@ public struct TimetableTimeGroupItems: Identifiable, Equatable, Hashable {
             $0.timetableItem.room.type == room   //TODO: roomIj handling not decided?
         }.first
     }
+    
+    func isTopLunch() -> Bool {        
+        return (items[0].timetableItem.title.enTitle.lowercased().contains("lunch")
+                && items[0].timetableItem.startsTimeString.contains("13:00"))
+    }
 }
 
 // This exists only for previews now.

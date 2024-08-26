@@ -16,9 +16,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-java
-      - name: Set up XCFramework arch filter
-        run: echo "arch=arm64" >> local.properties
       - run: make build-app-debug
         working-directory: app-ios
       - run: make test-app-debug
         working-directory: app-ios
+      - uses: actions/upload-artifact@0b7f8abb1508181956e8e162db84b466c27e18ce # v3.1.2
+        with:
+          name: app-ios-shared-xcframework
+          path: app-ios-shared/build/XCFrameworks

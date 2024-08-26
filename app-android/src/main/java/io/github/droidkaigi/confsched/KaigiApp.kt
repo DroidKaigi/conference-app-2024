@@ -8,6 +8,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.CalendarContract
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -49,6 +50,8 @@ import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.designsystem.theme.ColorContrast
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
@@ -86,8 +89,7 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
-import io.github.droidkaigi.confsched.ui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalSharedTransitionScope
+import io.github.droidkaigi.confsched2024.R
 import kotlinx.collections.immutable.PersistentList
 
 @Composable
@@ -136,7 +138,6 @@ private fun KaigiNavHost(
         CompositionLocalProvider(
             LocalSharedTransitionScope provides this,
         ) {
-            val context = LocalContext.current
             NavHostWithSharedAxisX(
                 navController = navController,
                 startDestination = mainScreenRoute,
@@ -145,10 +146,6 @@ private fun KaigiNavHost(
                     windowSize,
                     navController,
                     externalNavController,
-                    onClickShareProfileCard = { shareText, imageBitmap ->
-                        val imageAbsolutePath = imageBitmap.saveToDisk(context)
-                        externalNavController.onShareProfileCardClick(shareText, imageAbsolutePath)
-                    },
                 )
                 sessionScreens(
                     onNavigationIconClick = navController::popBackStack,
@@ -196,7 +193,6 @@ private fun NavGraphBuilder.mainScreen(
     navController: NavHostController,
     @Suppress("UnusedParameter")
     externalNavController: ExternalNavController,
-    onClickShareProfileCard: (String, ImageBitmap) -> Unit,
 ) {
     mainScreen(
         windowSize = windowSize,
@@ -263,7 +259,7 @@ private fun NavGraphBuilder.mainScreen(
             )
             profileCardScreen(
                 contentPadding = contentPadding,
-                onClickShareProfileCard = onClickShareProfileCard,
+                onClickShareProfileCard = externalNavController::onShareProfileCardClick,
             )
         },
     )
@@ -316,13 +312,16 @@ private class ExternalNavController(
 ) {
     fun navigate(url: String) {
         val uri: Uri = url.toUri()
-        val launched = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        val nativeAppLaunched = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             navigateToNativeAppApi30(context = context, uri = uri)
         } else {
             navigateToNativeApp(context = context, uri = uri)
         }
-        if (launched.not()) {
-            navigateToCustomTab(context = context, uri = uri)
+        if (nativeAppLaunched) return
+
+        val customTabLaunched = navigateToCustomTab(context = context, uri = uri)
+        if (customTabLaunched.not()) {
+            Toast.makeText(context, R.string.no_compatible_browser_found, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -364,11 +363,12 @@ private class ExternalNavController(
 
     fun onShareProfileCardClick(
         text: String,
-        filePath: String,
+        imageBitmap: ImageBitmap,
     ) {
+        val imageAbsolutePath = imageBitmap.saveToDisk(context)
         shareNavigator.shareTextWithImage(
             text = text,
-            filePath = filePath,
+            filePath = imageAbsolutePath,
         )
     }
 
@@ -429,14 +429,20 @@ private class ExternalNavController(
         return true
     }
 
+    @Suppress("SwallowedException")
     private fun navigateToCustomTab(
         context: Context,
         uri: Uri,
-    ) {
-        CustomTabsIntent.Builder()
-            .setShowTitle(true)
-            .build()
-            .launchUrl(context, uri)
+    ): Boolean {
+        return try {
+            CustomTabsIntent.Builder()
+                .setShowTitle(true)
+                .build()
+                .launchUrl(context, uri)
+            true
+        } catch (ex: ActivityNotFoundException) {
+            false
+        }
     }
 }
 

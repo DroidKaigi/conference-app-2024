@@ -12,6 +12,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
 import conference_app_2024.feature.sessions.generated.resources.calendar_add_on
 import conference_app_2024.feature.sessions.generated.resources.content_description_calendar
@@ -34,6 +36,8 @@ fun TimetableItemDetailBottomAppBar(
     modifier: Modifier = Modifier,
     onShareClick: (TimetableItem) -> Unit,
 ) {
+    val haptic = LocalHapticFeedback.current
+
     BottomAppBar(
         modifier = modifier,
         actions = {
@@ -53,7 +57,13 @@ fun TimetableItemDetailBottomAppBar(
         floatingActionButton = {
             FloatingActionButton(
                 modifier = Modifier.testTag(TimetableItemDetailBookmarkIconTestTag),
-                onClick = { onBookmarkClick(timetableItem) },
+                onClick = {
+                    if (!isBookmarked) {
+                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                    }
+
+                    onBookmarkClick(timetableItem)
+                },
                 containerColor = MaterialTheme.colorScheme.secondaryContainer,
             ) {
                 val contentDescription = if (isBookmarked) {
@@ -67,6 +77,7 @@ fun TimetableItemDetailBottomAppBar(
                 )
             }
         },
+        containerColor = MaterialTheme.colorScheme.surfaceContainer,
     )
 }
 

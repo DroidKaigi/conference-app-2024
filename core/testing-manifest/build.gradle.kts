@@ -7,5 +7,5 @@ plugins {
 android.namespace = "io.github.droidkaigi.confsched.core.testing"
 
 dependencies {
-    implementation(projects.core.ui)
+    implementation(projects.core.droidkaigiui)
 }
