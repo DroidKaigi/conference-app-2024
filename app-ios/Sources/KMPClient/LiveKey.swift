@@ -53,13 +53,21 @@ extension StaffClient: DependencyKey {
             staffRepository
                 .staffs()
                 .map {
-                    $0.map {
-                        Model.Staff(
-                            id: Int($0.id),
-                            name: $0.username,
-                            icon: URL(string: $0.iconUrl)!,
-                            github: URL(string: $0.profileUrl)!
-                        )
+                    switch onEnum(of: $0) {
+                    case let .success((data)):
+                        return data.map {
+                            Model.Staff(
+                                id: Int($0.id),
+                                name: $0.username,
+                                icon: URL(string: $0.iconUrl)!,
+                                github: URL(string: $0.profileUrl)!
+                            )
+                        }
+                    case let .failure(error):
+                        print(error)
+                        return []
+                    default:
+                        return []
                     }
                 }
                 .eraseToThrowingStream()

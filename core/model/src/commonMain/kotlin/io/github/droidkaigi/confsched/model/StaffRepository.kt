@@ -6,9 +6,14 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.cancellation.CancellationException
 
+public sealed interface StreamResponse<out D> {
+    public data class Success<D>(val data: D) : StreamResponse<D>
+    public data class Failure(val e: Throwable) : StreamResponse<Nothing>
+}
+
 interface StaffRepository {
 
-    public fun staffs(): Flow<PersistentList<Staff>>
+    public fun staffs(): Flow<StreamResponse<PersistentList<Staff>>>
 
     @Throws(CancellationException::class)
     public suspend fun refresh()
