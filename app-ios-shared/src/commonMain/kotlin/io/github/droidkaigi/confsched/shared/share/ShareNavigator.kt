@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.shared.share
 
 import androidx.compose.ui.graphics.ImageBitmap
 import co.touchlab.kermit.Logger
+import io.github.droidkaigi.confsched.droidkaigiui.toUiImage
 import platform.UIKit.UIActivityViewController
 import platform.UIKit.UIApplication
 
