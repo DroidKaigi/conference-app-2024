@@ -189,8 +189,8 @@ public fun Timetable.Companion.fake(): Timetable {
             TimetableItem.Special(
                 id = TimetableItemId("7"),
                 title = MultiLangText("Lunch break", "Lunch break"),
-                startsAt = DroidKaigi2024Day.Workday.start + 13.hours,
-                endsAt = DroidKaigi2024Day.Workday.start + 13.hours + 60.minutes,
+                startsAt = DroidKaigi2024Day.ConferenceDay1.start + 13.hours,
+                endsAt = DroidKaigi2024Day.ConferenceDay1.start + 13.hours + 60.minutes,
                 category = TimetableCategory(
                     id = 28657,
                     title = MultiLangText("その他", "Other"),
