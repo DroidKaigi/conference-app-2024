@@ -34,4 +34,3 @@ fun profileCardScreenPresenterStateFlow(
 ) {
     profileCardScreenPresenter(events)
 }
-
