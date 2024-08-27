@@ -153,25 +153,6 @@ public val dataModule: Module = module {
         }
     }
 
-    // TODO Duplicate processing?
-    // TODO If not necessary, remove it in another task.
-    single<ProfileCardDataStore> {
-        val dataStore = createDataStore(
-            coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
-            producePath = {
-                val documentDirectory: NSURL? = NSFileManager.defaultManager.URLForDirectory(
-                    directory = NSDocumentDirectory,
-                    inDomain = NSUserDomainMask,
-                    appropriateForURL = null,
-                    create = false,
-                    error = null,
-                )
-                requireNotNull(documentDirectory).path + "/confsched2024.profilecard.preferences_pb"
-            },
-        )
-        DefaultProfileCardDataStore(dataStore)
-    }
-
     single<SettingsDataStore> {
         val dataStore = createDataStore(
             coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
