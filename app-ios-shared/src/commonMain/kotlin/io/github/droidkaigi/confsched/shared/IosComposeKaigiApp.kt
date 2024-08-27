@@ -81,11 +81,18 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 import platform.darwin.NSObject
 
+private object ExternalNavControllerLink {
+    var onLicenseScreenRequest: (() -> Unit)? = null
+}
+
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Suppress("UNUSED")
 fun kaigiAppController(
     repositories: Repositories,
+    onLicenseScreenRequest: () -> Unit,
 ): UIViewController = ComposeUIViewController {
+    ExternalNavControllerLink.onLicenseScreenRequest = onLicenseScreenRequest
+
     CompositionLocalProvider(
         LocalRepositories provides repositories.map
     ) {
@@ -215,7 +222,7 @@ private fun NavGraphBuilder.mainScreen(
                         }
 
                         AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
-                        AboutItem.License -> {} //externalNavController.navigateToLicenseScreen()
+                        AboutItem.License -> externalNavController.navigateToLicenseScreen()
                         AboutItem.Medium -> externalNavController.navigate(
                             url = "https://medium.com/droidkaigi",
                         )
@@ -301,6 +308,10 @@ private class ExternalNavController(
     ) {
         val nsUrl = NSURL(string = url)
         UIApplication.sharedApplication.openURL(nsUrl)
+    }
+
+    fun navigateToLicenseScreen() {
+        ExternalNavControllerLink.onLicenseScreenRequest?.invoke()
     }
 
     /**

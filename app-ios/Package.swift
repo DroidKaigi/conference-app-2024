@@ -88,7 +88,8 @@ let package = Package(
                 .firebaseAuth,
                 .firebaseRemoteConfig,
                 .tca,
-                .model
+                .model,
+                .licenseList,
             ]
         ),
         
