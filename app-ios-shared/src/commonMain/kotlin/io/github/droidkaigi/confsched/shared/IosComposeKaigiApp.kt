@@ -9,6 +9,8 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.window.ComposeUIViewController
@@ -16,6 +18,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.about.aboutScreen
 import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
@@ -61,9 +64,20 @@ import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import platform.EventKit.EKEntityType.EKEntityTypeEvent
+import platform.EventKit.EKEvent
+import platform.EventKit.EKEventStore
+import platform.EventKitUI.EKEventEditViewAction
+import platform.EventKitUI.EKEventEditViewController
+import platform.EventKitUI.EKEventEditViewDelegateProtocol
+import platform.Foundation.NSDate
 import platform.Foundation.NSURL
+import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
+import platform.darwin.NSObject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Suppress("UNUSED")
@@ -102,10 +116,7 @@ fun KaigiApp(
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
     navController: NavHostController = rememberNavController(),
-    // If necessary, make modifications to use remember as in the KaigiApp.kt implementation.
-    externalNavController: ExternalNavController = ExternalNavController(
-        shareNavigator = ShareNavigator(),
-    ),
+    externalNavController: ExternalNavController = rememberExternalNavController()
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
         mainScreen(
@@ -116,7 +127,7 @@ private fun KaigiNavHost(
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
-            onCalendarRegistrationClick = {},//externalNavController::navigateToCalendarRegistration,
+            onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
             onShareClick = externalNavController::onShareClick,
             onFavoriteListClick = {} // { navController.navigate(favoritesScreenRoute) }
         )
@@ -256,8 +267,22 @@ class KaigiAppMainNestedGraphStateHolder : MainNestedGraphStateHolder {
     }
 }
 
+@Composable
+private fun rememberExternalNavController(): ExternalNavController {
+    val shareNavigator = ShareNavigator()
+    val coroutineScope = rememberCoroutineScope()
+
+    return remember {
+        ExternalNavController(
+            shareNavigator = shareNavigator,
+            coroutineScope = coroutineScope
+        )
+    }
+}
+
 private class ExternalNavController(
     private val shareNavigator: ShareNavigator,
+    private val coroutineScope: CoroutineScope,
 ) {
     fun navigate(url: String) {
         navigateToSafari(url = url)
@@ -268,6 +293,62 @@ private class ExternalNavController(
     ) {
         val nsUrl = NSURL(string = url)
         UIApplication.sharedApplication.openURL(nsUrl)
+    }
+
+    /**
+     * Navigate to Calendar Registration
+     */
+    fun navigateToCalendarRegistration(timetableItem: TimetableItem) {
+        val eventStore = EKEventStore()
+
+        eventStore.requestAccessToEntityType(EKEntityTypeEvent) { granted, error ->
+            if (granted.not()) {
+                // TODO Display a message asking the user to add permissions.
+                // TODO Otherwise, the privileges will remain permanently denied.
+                Logger.e("Calendar access was denied by the user.")
+                return@requestAccessToEntityType
+            }
+
+            if (error != null) {
+                Logger.e("An error occurred while requesting calendar access: ${error.localizedDescription}")
+                return@requestAccessToEntityType
+            }
+
+            val event = EKEvent.eventWithEventStore(eventStore).apply {
+                // NSDate.dateWithTimeIntervalSince1970 receives the time in seconds.
+                //　Therefore, milliseconds are converted to seconds.
+                startDate = NSDate.dateWithTimeIntervalSince1970(timetableItem.startsAt.toEpochMilliseconds() / 1000.0)
+                endDate = NSDate.dateWithTimeIntervalSince1970(timetableItem.endsAt.toEpochMilliseconds() / 1000.0)
+                title = "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.title.currentLangTitle}"
+                notes = timetableItem.url
+                location = timetableItem.room.name.currentLangTitle
+                calendar = eventStore.defaultCalendarForNewEvents
+            }
+
+            // -[UIViewController init] must be used from main thread only
+            // 'Modifications to the layout engine must not be performed from a background thread after it has been accessed from the main thread.'
+            coroutineScope.launch {
+                val keyWindow = UIApplication.sharedApplication.keyWindow
+                val rootViewController = keyWindow?.rootViewController
+
+                val eventEditVC = EKEventEditViewController().apply {
+                    this.event = event
+                    this.eventStore = eventStore
+                    this.editViewDelegate = object : NSObject(), EKEventEditViewDelegateProtocol {
+                        override fun eventEditViewController(controller: EKEventEditViewController, didCompleteWithAction: EKEventEditViewAction) {
+                            // Process to return to the application after pressing cancel or add in the calendar application.
+                            controller.dismissViewControllerAnimated(true, null)
+                        }
+                    }
+                }
+
+                rootViewController?.presentViewController(
+                    viewControllerToPresent = eventEditVC,
+                    animated = true,
+                    completion = null,
+                )
+            }
+        }
     }
 
     fun onShareClick(timetableItem: TimetableItem) {
