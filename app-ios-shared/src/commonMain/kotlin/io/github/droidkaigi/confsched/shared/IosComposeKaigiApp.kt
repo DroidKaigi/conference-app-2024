@@ -58,6 +58,7 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.shared.logging.Logging
 import io.github.droidkaigi.confsched.shared.share.ShareNavigator
@@ -225,7 +226,7 @@ private fun NavGraphBuilder.mainScreen(
                             )
                         }
 
-                        AboutItem.Settings -> {} //navController.navigate(settingsScreenRoute)
+                        AboutItem.Settings -> navController.navigate(settingsScreenRoute)
 
                         AboutItem.Staff -> navController.navigate(staffScreenRoute)
                         AboutItem.X -> externalNavController.navigate(
