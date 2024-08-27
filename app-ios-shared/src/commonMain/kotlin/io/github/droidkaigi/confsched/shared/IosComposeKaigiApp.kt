@@ -23,8 +23,11 @@ import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
+import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
 import io.github.droidkaigi.confsched.favorites.favoritesScreens
 import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
@@ -38,10 +41,12 @@ import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
 import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.Lang.JAPANESE
+import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import io.github.droidkaigi.confsched.model.defaultLang
 import io.github.droidkaigi.confsched.profilecard.navigateProfileCardScreen
 import io.github.droidkaigi.confsched.profilecard.profileCardScreen
+import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
 import io.github.droidkaigi.confsched.sessions.navigateTimetableScreen
 import io.github.droidkaigi.confsched.sessions.navigateToSearchScreen
 import io.github.droidkaigi.confsched.sessions.navigateToTimetableItemDetailScreen
@@ -49,18 +54,14 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreens
+import io.github.droidkaigi.confsched.shared.logging.Logging
 import io.github.droidkaigi.confsched.shared.share.ShareNavigator
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreenRoute
 import io.github.droidkaigi.confsched.sponsors.sponsorsScreens
 import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
-import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
-import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
-import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
-import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
-import io.github.droidkaigi.confsched.settings.settingsScreenRoute
 import platform.Foundation.NSURL
 import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
@@ -74,6 +75,7 @@ fun kaigiAppController(
         LocalRepositories provides repositories.map
     ) {
         val windowSizeClass = calculateWindowSizeClass()
+        Logging.initialize()
         KaigiApp(
             windowSize = windowSizeClass,
         )
