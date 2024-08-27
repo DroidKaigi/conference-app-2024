@@ -18,12 +18,14 @@ import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItemId
 import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlin.coroutines.coroutineContext
 
 public class DefaultSessionsRepository(
     private val sessionsApi: SessionsApiClient,
@@ -59,7 +61,14 @@ public class DefaultSessionsRepository(
                 if (first) {
                     first = false
                     Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
-                    sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+                    try {
+                        sessionCacheDataStore.save(sessionsApi.sessionsAllResponse())
+                    } catch (e: Exception) {
+                        // SKIE doesn't support throwing exceptions from Flow.
+                        // For more information, please refer to https://github.com/touchlab/SKIE/discussions/19 .
+                        coroutineContext.ensureActive()
+                        Logger.e("Failed to refresh Timetable in getTimetableStream()", e)
+                    }
                     Logger.d("DefaultSessionsRepository onStart fetched")
                 }
             }
