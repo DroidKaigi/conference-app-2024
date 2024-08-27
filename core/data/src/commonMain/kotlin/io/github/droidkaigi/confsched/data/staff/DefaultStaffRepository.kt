@@ -28,7 +28,9 @@ public class DefaultStaffRepository(
             }
         }
             .catch {
-                Logger.e("Fail staffs: $it")
+                // SKIE doesn't support throwing exceptions from Flow.
+                // For more information, please refer to https://github.com/touchlab/SKIE/discussions/19 .
+                Logger.e("Failed to refresh in staffs()", it)
                 emit(staffsStateFlow.value)
             }
     }
