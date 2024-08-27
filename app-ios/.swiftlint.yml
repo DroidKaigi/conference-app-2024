@@ -8,7 +8,7 @@ opt_in_rules:
   - sorted_imports
 
 included:
-  - App/DroidKaigi2023
+  - App/DroidKaigi2024
   - Modules/Package.swift
   - Modules/Sources
   - Modules/Tests
