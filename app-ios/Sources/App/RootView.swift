@@ -189,14 +189,9 @@ public struct RootView: View {
     private var profileCardTab: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-                ProfileCardInputView(
-                    store: Store(
-                        initialState: .init(),
-                        reducer: {
-                            ProfileCardInputReducer()
-                        }
-                    )
-                )
+                KmpProfileCardComposeViewControllerWrapper { text, image in
+                    // TODO Implement a sharing function.
+                }
                 tabItems
             }
         }

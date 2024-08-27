@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.sessions
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -162,26 +162,29 @@ private fun TimetableScreen(
                             fontWeight = FontWeight.W400,
                             modifier = Modifier.weight(1F),
                         )
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = null,
-                            modifier = Modifier.padding(8.dp).clickable {
-                                onSearchClick()
-                            },
-                        )
+                        IconButton(
+                            onClick = onSearchClick,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = null,
+                            )
+                        }
                         Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
                             val iconRes = if (timetableUiType == Grid) {
                                 SessionsRes.drawable.ic_view_timeline
                             } else {
                                 SessionsRes.drawable.ic_grid_view
                             }
-                            Image(
-                                painter = painterResource(iconRes),
-                                contentDescription = null,
-                                modifier = Modifier.padding(8.dp).clickable {
-                                    onTimetableUiChangeClick()
-                                }.testTag(TimetableUiTypeChangeButtonTestTag),
-                            )
+                            IconButton(
+                                onClick = onTimetableUiChangeClick,
+                                modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
+                            ) {
+                                Image(
+                                    painter = painterResource(iconRes),
+                                    contentDescription = null,
+                                )
+                            }
                         }
                     }
                 },
