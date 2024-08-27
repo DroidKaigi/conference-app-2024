@@ -47,6 +47,8 @@ public class DefaultSessionsRepository(
             timetable.copy(bookmarks = favorites)
         }
             .catch {
+                // SKIE doesn't support throwing exceptions from Flow.
+                // For more information, please refer to https://github.com/touchlab/SKIE/discussions/19 .
                 Logger.e("Failed to refresh in getTimetableStream()", it)
                 emit(Timetable())
             }
