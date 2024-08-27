@@ -28,7 +28,7 @@ public class DefaultSponsorsRepository(
             }
         }
             .catch {
-                Logger.e("Fail getSponsorStream: $it")
+                Logger.e("Failed to refresh in getSponsorStream()", it)
                 emit(sponsorsStateFlow.value)
             }
     }

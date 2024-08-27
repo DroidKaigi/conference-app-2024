@@ -47,7 +47,7 @@ public class DefaultSessionsRepository(
             timetable.copy(bookmarks = favorites)
         }
             .catch {
-                Logger.e("Fail getTimetableStream: $it")
+                Logger.e("Failed to refresh in getTimetableStream()", it)
                 emit(Timetable())
             }
             .collect {

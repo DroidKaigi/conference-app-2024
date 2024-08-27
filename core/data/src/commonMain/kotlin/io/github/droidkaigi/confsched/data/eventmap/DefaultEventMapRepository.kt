@@ -39,7 +39,7 @@ public class DefaultEventMapRepository(
             }
         }
             .catch {
-                Logger.e("Fail getEventMapStream: $it")
+                Logger.e("Failed to refresh in getEventMapStream()", it)
                 emit(eventMapStateFlow.value)
             }
     }

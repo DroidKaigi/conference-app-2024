@@ -39,7 +39,7 @@ public class DefaultContributorsRepository(
             }
         }
             .catch {
-                Logger.e("Fail getContributorStream: $it")
+                Logger.e("Failed to refresh in getContributorStream()", it)
                 emit(contributorsStateFlow.value)
             }
     }
