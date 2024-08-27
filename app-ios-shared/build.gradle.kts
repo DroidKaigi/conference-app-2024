@@ -53,6 +53,7 @@ kotlin {
                     export(projects.feature.main)
                     export(projects.feature.sessions)
                     export(projects.feature.contributors)
+                    export(projects.feature.profilecard)
                     export(projects.core.model)
                     export(projects.core.data)
                     export(CommonComponentsDependencies.resources)

@@ -155,7 +155,7 @@ fun NavController.navigateProfileCardScreen() {
     }
 }
 
-internal sealed interface ProfileCardUiState {
+sealed interface ProfileCardUiState {
     data class Edit(
         val nickname: String = "",
         val occupation: String = "",
@@ -173,20 +173,20 @@ internal sealed interface ProfileCardUiState {
     ) : ProfileCardUiState
 }
 
-internal data class ProfileCardError(
+data class ProfileCardError(
     val nicknameError: String = "",
     val occupationError: String = "",
     val linkError: String = "",
     val imageError: String = "",
 )
 
-internal enum class ProfileCardUiType {
+enum class ProfileCardUiType {
     Loading,
     Edit,
     Card,
 }
 
-internal data class ProfileCardScreenState(
+data class ProfileCardScreenState(
     val isLoading: Boolean,
     val editUiState: ProfileCardUiState.Edit,
     val cardUiState: ProfileCardUiState.Card?,
