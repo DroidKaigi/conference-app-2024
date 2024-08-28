@@ -51,6 +51,18 @@ class ProfileCardScreenTest(
                     }
                     // FIXME Add a test to confirm that it is possible to transition to the Card screen after entering the required input fields, including images.
                     // FIXME Currently, the test code does not allow the user to select and input an image from the Add Image button.
+                    describe("when url is invalid") {
+                        // This Url is invalid because it does not have a domain name like "https://not-valid-url.com".
+                        val invalidUrl = "https://not-valid-url"
+                        doIt {
+                            inputLink(invalidUrl)
+                        }
+                        itShould("show error message") {
+                            captureScreenWithChecks {
+                                checkLinkError(invalidUrl)
+                            }
+                        }
+                    }
                 }
                 describe("when profile card is exists") {
                     doIt {
@@ -63,7 +75,7 @@ class ProfileCardScreenTest(
                             checkProfileCardFrontDisplayed()
                         }
                     }
-                    describe("flip prifle card") {
+                    describe("flip profile card") {
                         doIt {
                             flipProfileCard()
                         }

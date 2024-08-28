@@ -159,8 +159,12 @@ internal fun profileCardScreenPresenter(
             }
 
             is EditScreenEvent.OnChangeLink -> {
+                // Only matches if the link is in this format "${(http or https}://${domain}.${tld}/${sub directory}".
+                // Sub domain and sub directory are optional.
+                // ex. https://www.example.com/hogefuga/foobar
+                val invalidFormat = event.link.matches(Regex("^https?://(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(?:/\\S*)?\$")).not()
                 cardError = cardError.copy(
-                    linkError = if (event.link.isEmpty()) linkValidationErrorString else "",
+                    linkError = if (event.link.isEmpty() || invalidFormat) linkValidationErrorString else "",
                 )
             }
 

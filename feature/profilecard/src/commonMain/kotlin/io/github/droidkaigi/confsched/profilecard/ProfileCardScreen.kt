@@ -134,6 +134,7 @@ const val ProfileCardEditScreenColumnTestTag = "ProfileCardEditScreenColumnTestT
 const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
 const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
 const val ProfileCardLinkTextFieldTestTag = "ProfileCardLinkTextFieldTestTag"
+const val ProfileCardInputErrorTextTestTag = "ProfileCardInputErrorTextTestTag"
 const val ProfileCardSelectImageButtonTestTag = "ProfileCardSelectImageButtonTestTag"
 const val ProfileCardCreateButtonTestTag = "ProfileCardCreateButtonTestTag"
 const val ProfileCardCardScreenTestTag = "ProfileCardCardScreenTestTag"
@@ -558,7 +559,7 @@ private fun InputFieldWithError(
                     start = 16.dp,
                     top = 4.dp,
                     end = 16.dp,
-                ),
+                ).testTag(ProfileCardInputErrorTextTestTag.plus(value)),
         )
     }
 }
