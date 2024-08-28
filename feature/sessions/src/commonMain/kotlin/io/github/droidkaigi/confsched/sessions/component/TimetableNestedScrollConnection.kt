@@ -1,5 +1,7 @@
 package io.github.droidkaigi.confsched.sessions.component
 
+import androidx.compose.foundation.gestures.FlingBehavior
+import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.geometry.Offset
@@ -8,12 +10,47 @@ import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.unit.Velocity
 
 internal data class TimetableNestedScrollConnection(
+    val flingBehavior: FlingBehavior,
     val minOffset: () -> Float,
     val currentOffset: () -> Float,
     val onOffsetChange: (Float) -> Unit,
 ) : NestedScrollConnection {
 
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
+        return dispatchScroll(
+            available = available,
+        )
+    }
+
+    override suspend fun onPreFling(available: Velocity): Velocity {
+        val outerScopeScroll: (Offset) -> Offset = { delta ->
+            dispatchScroll(delta)
+        }
+
+        val scrollScope = object : ScrollScope {
+            override fun scrollBy(pixels: Float): Float {
+                val delta = Offset(x = 0f, y = pixels)
+                val consumed = outerScopeScroll(delta)
+                return consumed.y
+            }
+        }
+
+        var consumedVelocity: Velocity
+        with(scrollScope) {
+            with(flingBehavior) {
+                consumedVelocity = available - Velocity(0f, performFling(available.y))
+            }
+        }
+
+        return consumedVelocity
+    }
+
+    /**
+     * Consume scroll event and update offset.
+     * @param available available scroll offset
+     * @return consumed scroll offset
+     */
+    private fun dispatchScroll(available: Offset): Offset {
         val availableY = available.y
 
         val currentOffset = currentOffset()
@@ -24,27 +61,7 @@ internal data class TimetableNestedScrollConnection(
 
         onOffsetChange(nextOffset)
 
-        return if (availableY < 0f) {
-            Offset(x = 0f, y = consumed)
-        } else {
-            Offset.Zero
-        }
-    }
-
-    override fun onPostScroll(
-        consumed: Offset,
-        available: Offset,
-        source: NestedScrollSource,
-    ): Offset {
-        return super.onPostScroll(consumed, available, source)
-    }
-
-    override suspend fun onPreFling(available: Velocity): Velocity {
-        return super.onPreFling(available)
-    }
-
-    override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
-        return super.onPostFling(consumed, available)
+        return Offset(x = 0f, y = consumed)
     }
 }
 
@@ -52,8 +69,11 @@ internal data class TimetableNestedScrollConnection(
 internal fun rememberTimetableNestedScrollConnection(
     timetableScope: TimetableScope,
 ): TimetableNestedScrollConnection {
-    return remember(timetableScope) {
+    val flingBehavior = rememberFlingBehavior()
+
+    return remember(timetableScope, flingBehavior) {
         TimetableNestedScrollConnection(
+            flingBehavior = flingBehavior,
             minOffset = { -timetableScope.dayTabHeight },
             currentOffset = { timetableScope.dayTabOffsetY },
             onOffsetChange = { timetableScope.updateDayTabOffset(it) },
