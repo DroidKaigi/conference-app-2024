@@ -189,9 +189,7 @@ public struct RootView: View {
     private var profileCardTab: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-                KmpProfileCardComposeViewControllerWrapper { text, image in
-                    // TODO Implement a sharing function.
-                }
+                KmpProfileCardComposeViewControllerWrapper()
                 tabItems
             }
         }
