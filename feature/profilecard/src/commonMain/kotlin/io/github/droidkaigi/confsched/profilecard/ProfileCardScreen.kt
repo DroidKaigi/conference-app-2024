@@ -497,6 +497,7 @@ private fun InputFieldWithError(
     errorMessage: String,
     textFieldTestTag: String,
     onValueChange: (String) -> Unit,
+    maxLines: Int = 1,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -515,6 +516,7 @@ private fun InputFieldWithError(
             onValueChange = onValueChange,
             isError = isError,
             shape = RoundedCornerShape(4.dp),
+            maxLines = maxLines,
             modifier = Modifier
                 .indicatorLine(
                     enabled = false,
