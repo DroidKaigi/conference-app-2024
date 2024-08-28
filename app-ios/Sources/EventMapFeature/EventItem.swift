@@ -4,9 +4,8 @@ import Theme
 import shared
 
 struct EventItem: View {
-    @State private var isDescriptionExpanded: Bool = false
-    @State private var canBeExpanded: Bool = false
     let event: EventMapEvent
+    let onTappedMoreDetail: (URL) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -28,29 +27,16 @@ struct EventItem: View {
                 Text(event.description_.currentLangTitle)
                     .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     .textStyle(.bodyLarge)
-                    .lineLimit(isDescriptionExpanded ? nil : 3)
-                    .background {
-                        ViewThatFits(in: .vertical) {
-                            Text(event.description_.currentLangTitle)
-                                .textStyle(.bodyLarge)
-                                .hidden()
-                            // Just for receiving onAppear event if the description exceeds its line limit
-                            Color.clear
-                                .onAppear {
-                                    canBeExpanded = true
-                                }
-                        }
-                    }
+
                 if let message = event.message {
                     Text(message.currentLangTitle)
                         .foregroundStyle(AssetColors.Tertiary.tertiary.swiftUIColor)
                         .textStyle(.bodyMedium)
                 }
                 
-                if canBeExpanded {
+                if let urlString = event.moreDetailsUrl, let url = URL(string: urlString) {
                     Button {
-                        isDescriptionExpanded = true
-                        canBeExpanded = false
+                        onTappedMoreDetail(url)
                     } label: {
                         Text(String(localized: "Detail", bundle: .module))
                             .textStyle(.labelLarge)
@@ -71,10 +57,9 @@ struct EventItem: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
-        .animation(.default, value: isDescriptionExpanded)
     }
 }
 
 #Preview {
-    EventItem(event: EventMapEvent.companion.fakes().first!)
+    EventItem(event: EventMapEvent.companion.fakes().first!) { _ in }
 }

@@ -73,6 +73,7 @@ import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -155,7 +156,7 @@ fun NavController.navigateProfileCardScreen() {
     }
 }
 
-internal sealed interface ProfileCardUiState {
+sealed interface ProfileCardUiState {
     data class Edit(
         val nickname: String = "",
         val occupation: String = "",
@@ -173,20 +174,20 @@ internal sealed interface ProfileCardUiState {
     ) : ProfileCardUiState
 }
 
-internal data class ProfileCardError(
+data class ProfileCardError(
     val nicknameError: String = "",
     val occupationError: String = "",
     val linkError: String = "",
     val imageError: String = "",
 )
 
-internal enum class ProfileCardUiType {
+enum class ProfileCardUiType {
     Loading,
     Edit,
     Card,
 }
 
-internal data class ProfileCardScreenState(
+data class ProfileCardScreenState(
     val isLoading: Boolean,
     val editUiState: ProfileCardUiState.Edit,
     val cardUiState: ProfileCardUiState.Card?,
@@ -420,21 +421,25 @@ internal fun EditScreen(
         )
 
         Column(
+            modifier = Modifier.padding(bottom = 20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            Label(label = stringResource(ProfileCardRes.string.image))
-            ImagePickerWithError(
-                image = image,
-                onSelectedImage = {
-                    imageByteArray = it
-                    onChangeImage(it.toBase64())
-                },
-                errorMessage = profileCardError.imageError,
-                onClearImage = {
-                    imageByteArray = null
-                    onChangeImage("")
-                },
-            )
+            Column {
+                Label(label = stringResource(ProfileCardRes.string.image))
+                Spacer(modifier = Modifier.height(12.dp))
+                ImagePickerWithError(
+                    image = image,
+                    onSelectedImage = {
+                        imageByteArray = it
+                        onChangeImage(it.toBase64())
+                    },
+                    errorMessage = profileCardError.imageError,
+                    onClearImage = {
+                        imageByteArray = null
+                        onChangeImage("")
+                    },
+                )
+            }
 
             Text(stringResource(ProfileCardRes.string.select_theme))
 
@@ -457,10 +462,11 @@ internal fun EditScreen(
                 },
                 enabled = isValidInputs,
                 modifier = Modifier.fillMaxWidth()
+                    .padding(top = 12.dp)
                     .testTag(ProfileCardCreateButtonTestTag),
             ) {
                 Text(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(10.dp),
                     text = stringResource(ProfileCardRes.string.create_card),
                 )
             }
@@ -558,7 +564,9 @@ private fun ImagePickerWithError(
                 Image(
                     bitmap = image,
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
+                        .fillMaxSize()
                         .clip(RoundedCornerShape(2.dp))
                         .align(Alignment.BottomStart),
                 )

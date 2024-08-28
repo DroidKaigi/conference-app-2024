@@ -23,7 +23,7 @@ import io.github.droidkaigi.confsched.model.localProfileCardRepository
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
-internal sealed interface ProfileCardScreenEvent
+sealed interface ProfileCardScreenEvent
 
 internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
     data class OnChangeNickname(

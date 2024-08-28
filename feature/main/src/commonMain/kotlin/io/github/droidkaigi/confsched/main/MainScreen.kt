@@ -49,6 +49,7 @@ import conference_app_2024.core.designsystem.generated.resources.ic_timetable_of
 import conference_app_2024.core.designsystem.generated.resources.ic_timetable_on
 import conference_app_2024.feature.main.generated.resources.about
 import conference_app_2024.feature.main.generated.resources.event_map
+import conference_app_2024.feature.main.generated.resources.favorite
 import conference_app_2024.feature.main.generated.resources.profile_card
 import conference_app_2024.feature.main.generated.resources.timetable
 import dev.chrisbanes.haze.HazeState
@@ -158,42 +159,36 @@ enum class MainScreenTab(
     val iconOff: DrawableResource,
     val iconOn: DrawableResource,
     val label: StringResource,
-    val contentDescription: StringResource,
     val testTag: String = "mainScreenTab:$label",
 ) {
     Timetable(
         iconOff = DesignSystemRes.drawable.ic_timetable_off,
         iconOn = DesignSystemRes.drawable.ic_timetable_on,
         label = MainRes.string.timetable,
-        contentDescription = MainRes.string.timetable,
     ),
 
     EventMap(
         iconOff = DesignSystemRes.drawable.ic_map_off,
         iconOn = DesignSystemRes.drawable.ic_map_on,
         label = MainRes.string.event_map,
-        contentDescription = MainRes.string.event_map,
     ),
 
     Favorite(
         iconOff = DesignSystemRes.drawable.ic_fav_off,
         iconOn = DesignSystemRes.drawable.ic_fav_on,
-        label = MainRes.string.event_map,
-        contentDescription = MainRes.string.event_map,
+        label = MainRes.string.favorite,
     ),
 
     About(
         iconOff = DesignSystemRes.drawable.ic_info_off,
         iconOn = DesignSystemRes.drawable.ic_info_on,
         label = MainRes.string.about,
-        contentDescription = MainRes.string.about,
     ),
 
     ProfileCard(
         iconOff = DesignSystemRes.drawable.ic_profilecard_off,
         iconOn = DesignSystemRes.drawable.ic_profilecard_on,
         label = MainRes.string.profile_card,
-        contentDescription = MainRes.string.profile_card,
     ),
     ;
 

@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.ComposeUIViewController
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -26,11 +27,13 @@ import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
 import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
 import io.github.droidkaigi.confsched.favorites.favoritesScreenRoute
+import io.github.droidkaigi.confsched.favorites.favoritesScreenWithNavigationIconRoute
 import io.github.droidkaigi.confsched.favorites.favoritesScreens
 import io.github.droidkaigi.confsched.favorites.navigateFavoritesScreen
 import io.github.droidkaigi.confsched.main.MainNestedGraphStateHolder
@@ -43,7 +46,13 @@ import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
 import io.github.droidkaigi.confsched.model.AboutItem
+import io.github.droidkaigi.confsched.model.FontFamily.DotGothic16Regular
+import io.github.droidkaigi.confsched.model.FontFamily.SystemDefault
 import io.github.droidkaigi.confsched.model.Lang.JAPANESE
+import io.github.droidkaigi.confsched.model.Settings.DoesNotExists
+import io.github.droidkaigi.confsched.model.Settings.Exists
+import io.github.droidkaigi.confsched.model.Settings.Loading
+import io.github.droidkaigi.confsched.model.SettingsRepository
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import io.github.droidkaigi.confsched.model.defaultLang
@@ -57,6 +66,7 @@ import io.github.droidkaigi.confsched.sessions.nestedSessionScreens
 import io.github.droidkaigi.confsched.sessions.searchScreens
 import io.github.droidkaigi.confsched.sessions.sessionScreens
 import io.github.droidkaigi.confsched.sessions.timetableScreenRoute
+import io.github.droidkaigi.confsched.settings.settingsScreenRoute
 import io.github.droidkaigi.confsched.settings.settingsScreens
 import io.github.droidkaigi.confsched.shared.logging.Logging
 import io.github.droidkaigi.confsched.shared.share.ShareNavigator
@@ -79,18 +89,38 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 import platform.darwin.NSObject
 
+private object ExternalNavControllerLink {
+    var onLicenseScreenRequest: (() -> Unit)? = null
+}
+
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Suppress("UNUSED")
 fun kaigiAppController(
     repositories: Repositories,
+    onLicenseScreenRequest: () -> Unit,
 ): UIViewController = ComposeUIViewController {
+    ExternalNavControllerLink.onLicenseScreenRequest = onLicenseScreenRequest
+
     CompositionLocalProvider(
         LocalRepositories provides repositories.map
     ) {
         val windowSizeClass = calculateWindowSizeClass()
+
+        val settingsRepository = LocalRepositories.current[SettingsRepository::class] as SettingsRepository
+        val fontFamily = when (val settings = settingsRepository.settings()) {
+            DoesNotExists, Loading -> dotGothic16FontFamily()
+            is Exists -> {
+                when (settings.useFontFamily) {
+                    DotGothic16Regular -> dotGothic16FontFamily()
+                    SystemDefault -> null
+                }
+            }
+        }
+
         Logging.initialize()
         KaigiApp(
             windowSize = windowSizeClass,
+            fontFamily = fontFamily,
         )
     }
 }
@@ -98,9 +128,12 @@ fun kaigiAppController(
 @Composable
 fun KaigiApp(
     windowSize: WindowSizeClass,
+    fontFamily: FontFamily?,
     modifier: Modifier = Modifier,
 ) {
-    KaigiTheme {
+    KaigiTheme(
+        fontFamily = fontFamily,
+    ) {
         Surface(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
@@ -129,7 +162,11 @@ private fun KaigiNavHost(
             onLinkClick = externalNavController::navigate,
             onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
             onShareClick = externalNavController::onShareClick,
-            onFavoriteListClick = {} // { navController.navigate(favoritesScreenRoute) }
+            onFavoriteListClick = {
+                navController.navigate(
+                    favoritesScreenWithNavigationIconRoute
+                )
+            },
         )
 
         contributorsScreens(
@@ -157,6 +194,7 @@ private fun KaigiNavHost(
         )
 
         favoritesScreens(
+            onNavigationIconClick = navController::popBackStack,
             onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
             contentPadding = PaddingValues(),
         )
@@ -183,6 +221,7 @@ private fun NavGraphBuilder.mainScreen(
                 onEventMapItemClick = externalNavController::navigate,
             )
             favoritesScreens(
+                onNavigationIconClick = navController::popBackStack,
                 onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
                 contentPadding = contentPadding,
             )
@@ -207,7 +246,7 @@ private fun NavGraphBuilder.mainScreen(
                         }
 
                         AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
-                        AboutItem.License -> {} //externalNavController.navigateToLicenseScreen()
+                        AboutItem.License -> externalNavController.navigateToLicenseScreen()
                         AboutItem.Medium -> externalNavController.navigate(
                             url = "https://medium.com/droidkaigi",
                         )
@@ -218,7 +257,7 @@ private fun NavGraphBuilder.mainScreen(
                             )
                         }
 
-                        AboutItem.Settings -> {} //navController.navigate(settingsScreenRoute)
+                        AboutItem.Settings -> navController.navigate(settingsScreenRoute)
 
                         AboutItem.Staff -> navController.navigate(staffScreenRoute)
                         AboutItem.X -> externalNavController.navigate(
@@ -293,6 +332,10 @@ private class ExternalNavController(
     ) {
         val nsUrl = NSURL(string = url)
         UIApplication.sharedApplication.openURL(nsUrl)
+    }
+
+    fun navigateToLicenseScreen() {
+        ExternalNavControllerLink.onLicenseScreenRequest?.invoke()
     }
 
     /**
