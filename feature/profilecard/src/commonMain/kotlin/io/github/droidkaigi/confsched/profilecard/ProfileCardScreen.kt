@@ -73,6 +73,7 @@ import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -563,7 +564,9 @@ private fun ImagePickerWithError(
                 Image(
                     bitmap = image,
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
+                        .fillMaxSize()
                         .clip(RoundedCornerShape(2.dp))
                         .align(Alignment.BottomStart),
                 )
