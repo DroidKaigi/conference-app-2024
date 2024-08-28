@@ -3,8 +3,8 @@ import _PhotosUI_SwiftUI
 import Theme
 
 struct ProfileCardInputImage: View {
-    @State var isPickerPresented = false
-    @State var selectedImage: Image?
+    @State private var isPickerPresented = false
+    @State private var selectedImage: Image?
     @Binding var selectedPhoto: PhotosPickerItem?
     var title: String
 

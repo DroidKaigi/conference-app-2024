@@ -84,6 +84,7 @@ public struct TimetableDetailView: View {
                 .background(AssetColors.Secondary.secondaryContainer.swiftUIColor)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }
+            .sensoryFeedback(.impact, trigger: store.isFavorited) { _, newValue in newValue }
         }
         .frame(height: 80)
         .frame(maxWidth: .infinity)

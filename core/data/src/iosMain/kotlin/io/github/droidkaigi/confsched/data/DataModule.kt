@@ -19,6 +19,9 @@ import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsApiClient
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsRepository
 import io.github.droidkaigi.confsched.data.sessions.SessionCacheDataStore
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
+import io.github.droidkaigi.confsched.data.settings.DefaultSettingsDataStore
+import io.github.droidkaigi.confsched.data.settings.DefaultSettingsRepository
+import io.github.droidkaigi.confsched.data.settings.SettingsDataStore
 import io.github.droidkaigi.confsched.data.sponsors.DefaultSponsorsApiClient
 import io.github.droidkaigi.confsched.data.sponsors.DefaultSponsorsRepository
 import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
@@ -32,6 +35,7 @@ import io.github.droidkaigi.confsched.model.ContributorsRepository
 import io.github.droidkaigi.confsched.model.EventMapRepository
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.SessionsRepository
+import io.github.droidkaigi.confsched.model.SettingsRepository
 import io.github.droidkaigi.confsched.model.SponsorsRepository
 import io.github.droidkaigi.confsched.model.StaffRepository
 import io.ktor.client.HttpClient
@@ -149,7 +153,7 @@ public val dataModule: Module = module {
         }
     }
 
-    single<ProfileCardDataStore> {
+    single<SettingsDataStore> {
         val dataStore = createDataStore(
             coroutineScope = CoroutineScope(Dispatchers.Default + SupervisorJob()),
             producePath = {
@@ -160,10 +164,10 @@ public val dataModule: Module = module {
                     create = false,
                     error = null,
                 )
-                requireNotNull(documentDirectory).path + "/confsched2024.profilecard.preferences_pb"
+                requireNotNull(documentDirectory).path + "/confsched2024.settings.preferences_pb"
             },
         )
-        DefaultProfileCardDataStore(dataStore)
+        DefaultSettingsDataStore(dataStore)
     }
 
     // Since Kotlin/Native doesn't support Dispatchers.IO, we use Dispatchers.Default instead.
@@ -191,6 +195,11 @@ public val dataModule: Module = module {
             ioDispatcher = get(named("IoDispatcher")),
         )
     }
+    single<SettingsRepository> {
+        DefaultSettingsRepository(
+            settingsDataStore = get(),
+        )
+    }
     single<Repositories> {
         DefaultRepositories(
             mapOf(
@@ -201,6 +210,7 @@ public val dataModule: Module = module {
                 EventMapRepository::class to get<EventMapRepository>(),
                 AboutRepository::class to get<AboutRepository>(),
                 ProfileCardRepository::class to get<ProfileCardRepository>(),
+                SettingsRepository::class to get<SettingsRepository>(),
             ),
         )
     }

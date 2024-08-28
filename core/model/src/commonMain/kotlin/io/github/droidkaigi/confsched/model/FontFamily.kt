@@ -5,7 +5,7 @@ public enum class FontFamily(
     val fileName: String? = null,
 ) {
     DotGothic16Regular(
-        displayName = "DotGothic",
+        displayName = "DotGothic16",
         fileName = "dot_gothic16_regular",
     ),
     SystemDefault(
