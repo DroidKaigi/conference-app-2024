@@ -57,7 +57,7 @@ internal data class TimetableNestedScrollConnection(
         val availableY = available.y
 
         val currentOffset = currentOffset()
-        val minOffset = minOffset()
+        val minOffset = minOffset().coerceAtMost(0f)
 
         val nextOffset = (currentOffset + availableY).coerceIn(minOffset, 0f)
         val consumed = nextOffset - currentOffset
