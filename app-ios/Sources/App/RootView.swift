@@ -1,7 +1,6 @@
 import AboutFeature
 import ComposableArchitecture
 import ContributorFeature
-import CommonComponents
 import FavoriteFeature
 import LicenseList
 import ProfileCardFeature
@@ -190,10 +189,7 @@ public struct RootView: View {
     private var profileCardTab: some View {
         NavigationStack {
             ZStack(alignment: .bottom) {
-                KmpProfileCardComposeViewControllerWrapper { text, image in
-                    let shareNavigator = ShareNavigator()
-                    shareNavigator.shareTextWithImage(text: text, image: image)
-                }
+                KmpProfileCardComposeViewControllerWrapper()
                 tabItems
             }
         }
