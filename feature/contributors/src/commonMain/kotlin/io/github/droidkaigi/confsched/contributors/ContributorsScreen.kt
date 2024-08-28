@@ -24,9 +24,9 @@ import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
 import io.github.droidkaigi.confsched.model.Contributor
+import io.github.droidkaigi.confsched.ui.component.AnimatedMediumTopAppBar
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.stringResource
 
@@ -107,7 +107,7 @@ fun ContributorsScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (!isTopAppBarHidden) {
-                AnimatedLargeTopAppBar(
+                AnimatedMediumTopAppBar(
                     title = stringResource(ContributorsRes.string.contributor_title),
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
