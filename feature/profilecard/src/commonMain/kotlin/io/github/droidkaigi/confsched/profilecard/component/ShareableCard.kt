@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.profilecard.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -68,9 +67,8 @@ internal fun ShareableCard(
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .fillMaxWidth()
                 .background(LocalProfileCardTheme.current.primaryColor)
-                .padding(vertical = 50.dp),
+                .padding(vertical = 50.dp, horizontal = 120.dp),
         ) {
             backImage?.let {
                 Image(
