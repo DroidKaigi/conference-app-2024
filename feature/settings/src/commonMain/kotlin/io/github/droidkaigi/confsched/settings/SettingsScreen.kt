@@ -24,11 +24,11 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedMediumTopAppBar
 import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
 import io.github.droidkaigi.confsched.droidkaigiui.plus
 import io.github.droidkaigi.confsched.model.FontFamily
 import io.github.droidkaigi.confsched.settings.section.accessibility
-import io.github.droidkaigi.confsched.ui.component.AnimatedMediumTopAppBar
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
