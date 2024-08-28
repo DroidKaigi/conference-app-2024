@@ -232,7 +232,7 @@ private fun BottomBarTabs(
                                 action = {
                                     onTabSelected(tab)
                                     true
-                                }
+                                },
                             )
                             contentDescription = label
                             role = Role.Tab

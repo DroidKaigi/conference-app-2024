@@ -214,7 +214,7 @@ private fun NavRailTabs(
                                 action = {
                                     onTabSelected(tab)
                                     true
-                                }
+                                },
                             )
                             contentDescription = label
                             role = Role.Tab
