@@ -9,3 +9,10 @@ fun rememberAsyncImagePainter(url: String): Painter {
         model = url,
     )
 }
+
+@Composable
+fun rememberAsyncImagePainter(model: Any): Painter {
+    return coil3.compose.rememberAsyncImagePainter(
+        model = model,
+    )
+}
