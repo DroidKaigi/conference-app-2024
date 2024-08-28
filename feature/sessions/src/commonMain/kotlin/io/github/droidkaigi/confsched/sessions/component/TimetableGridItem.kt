@@ -45,9 +45,9 @@ import conference_app_2024.feature.sessions.generated.resources.content_descript
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
+import io.github.droidkaigi.confsched.droidkaigiui.component.speakerPainter
 import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
-import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.RoomType.RoomH
 import io.github.droidkaigi.confsched.model.TimetableAsset
@@ -279,7 +279,7 @@ private fun SpeakerIcon(
 ) {
     Image(
         painter = previewOverride(previewPainter = { rememberVectorPainter(image = Icons.Default.Person) }) {
-            rememberAsyncImagePainter(iconUrl)
+            speakerPainter(iconUrl)
         },
         contentDescription = stringResource(SessionsRes.string.content_description_user_icon),
         modifier = modifier
@@ -287,6 +287,7 @@ private fun SpeakerIcon(
                 BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 CircleShape,
             )
+            .width(TimetableGridItemSizes.speakerHeight)
             .height(TimetableGridItemSizes.speakerHeight)
             .layout { measurable, constraints ->
                 // To keep circle shape, it needs to match the vertical size when pinching in
