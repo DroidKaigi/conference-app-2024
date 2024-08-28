@@ -497,8 +497,8 @@ private fun InputFieldWithError(
     errorMessage: String,
     textFieldTestTag: String,
     onValueChange: (String) -> Unit,
-    maxLines: Int = 1,
     modifier: Modifier = Modifier,
+    maxLines: Int = 1,
 ) {
     Column(modifier = modifier) {
         val isError = errorMessage.isNotEmpty()
