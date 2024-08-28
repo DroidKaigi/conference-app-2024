@@ -14,6 +14,6 @@ actual fun speakerPainter(url: String): Painter {
         model = ImageRequest.Builder(LocalContext.current)
             .data(url)
             .placeholder(R.drawable.icon_place_hoolder)
-            .build()
+            .build(),
     )
 }
