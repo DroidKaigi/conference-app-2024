@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.favorites
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.EventEffect
@@ -23,6 +22,7 @@ import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.localSessionsRepository
+import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.collections.immutable.toPersistentMap
@@ -46,8 +46,8 @@ fun favoritesScreenPresenter(
             .timetable()
             .filtered(Filters(filterFavorite = true)),
     )
-    var allFilterSelected by remember { mutableStateOf(true) }
-    var currentDayFilters by remember { mutableStateOf(emptySet<DroidKaigi2024Day>()) }
+    var allFilterSelected by rememberRetained { mutableStateOf(true) }
+    var currentDayFilters by rememberRetained { mutableStateOf(emptySet<DroidKaigi2024Day>()) }
     val favoritesSheetUiState by rememberUpdatedState(
         favoritesSheet(
             favoriteSessions = favoriteSessions,
