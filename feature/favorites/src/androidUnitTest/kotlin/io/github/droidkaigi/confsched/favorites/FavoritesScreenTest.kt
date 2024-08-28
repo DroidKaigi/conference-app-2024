@@ -39,34 +39,68 @@ class FavoritesScreenTest(
         fun behaviors(): List<DescribedBehavior<FavoritesScreenRobot>> {
             return describeBehaviors<FavoritesScreenRobot>(name = "FavoritesScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Operational)
-                        setupFavoriteSession()
-                        setupFavoritesScreenContent()
                     }
-                    itShould("display favorite session") {
-                        captureScreenWithChecks(
-                            checks = { checkTimetableListItemsDisplayed() },
-                        )
-                    }
-                    describe("click first session bookmark") {
-                        run {
-                            clickFirstSessionBookmark()
+                    describe("setup single favorite session") {
+                        doIt {
+                            setupSingleFavoriteSession()
+                            setupFavoritesScreenContent()
                         }
-                        itShould("display empty view") {
+                        itShould("display favorite session") {
                             captureScreenWithChecks(
-                                checks = { checkEmptyViewDisplayed() },
+                                checks = { checkTimetableListItemsDisplayed() },
                             )
+                        }
+                        describe("click first session bookmark") {
+                            doIt {
+                                clickFirstSessionBookmark()
+                            }
+                            itShould("display empty view") {
+                                captureScreenWithChecks(
+                                    checks = { checkEmptyViewDisplayed() },
+                                )
+                            }
+                        }
+                    }
+                    describe("setup many favorite sessions") {
+                        doIt {
+                            setupFavoriteSessions()
+                            setupFavoritesScreenContent()
+                        }
+                        itShould("display favorite session") {
+                            captureScreenWithChecks(
+                                checks = { checkTimetableListItemsDisplayed() },
+                            )
+                        }
+                        describe("click first session bookmark") {
+                            doIt {
+                                clickFirstSessionBookmark()
+                            }
+                            itShould("display favorite session without first session") {
+                                captureScreenWithChecks(
+                                    checks = { checkTimetableListItemsDisplayed() },
+                                )
+                            }
+                        }
+                        describe("scroll favorites") {
+                            doIt {
+                                scrollFavorites()
+                            }
+                            itShould("first session is not displayed") {
+                                captureScreenWithChecks(
+                                    checks = { checkTimetableListFirstItemNotDisplayed() },
+                                )
+                            }
                         }
                     }
                 }
-
                 describe("when server is down") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Error)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupFavoritesScreenContent()
                         }
                         itShould("show error message") {
@@ -74,6 +108,20 @@ class FavoritesScreenTest(
                                 checks = { checkErrorSnackbarDisplayed() },
                             )
                         }
+                    }
+                }
+
+                describe("when device is tablet") {
+                    doIt {
+                        setupTabletDevice()
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupFavoriteSessions()
+                        setupFavoritesScreenContent()
+                    }
+                    itShould("show timetable items") {
+                        captureScreenWithChecks(
+                            checks = { checkTimetableListItemsDisplayed() },
+                        )
                     }
                 }
             }

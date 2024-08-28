@@ -39,11 +39,11 @@ class SponsorsScreenTest(
         fun behaviors(): List<DescribedBehavior<SponsorsScreenRobot>> {
             return describeBehaviors<SponsorsScreenRobot>(name = "SponsorsScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupSponsorsServer(ServerStatus.Operational)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupScreenContent()
                         }
                         itShould("display platinum sponsors") {
@@ -54,7 +54,7 @@ class SponsorsScreenTest(
                         }
 
                         describe("when scroll to gold sponsors header") {
-                            run {
+                            doIt {
                                 scrollToGoldSponsorsHeader()
                             }
                             itShould("display gold sponsors") {
@@ -66,7 +66,7 @@ class SponsorsScreenTest(
                         }
 
                         describe("when scroll to supporters header") {
-                            run {
+                            doIt {
                                 scrollToSupportersSponsorsHeader()
                             }
                             itShould("display supporters sponsors") {
@@ -80,11 +80,11 @@ class SponsorsScreenTest(
                 }
 
                 describe("when server is down") {
-                    run {
+                    doIt {
                         setupSponsorsServer(ServerStatus.Error)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupScreenContent()
                         }
                         itShould("does not show sponsors and show snackbar") {

@@ -45,6 +45,9 @@ import conference_app_2024.feature.sessions.generated.resources.content_descript
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
+import io.github.droidkaigi.confsched.droidkaigiui.icon
+import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
+import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.RoomType.RoomH
 import io.github.droidkaigi.confsched.model.TimetableAsset
@@ -59,9 +62,6 @@ import io.github.droidkaigi.confsched.model.TimetableSpeaker
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import io.github.droidkaigi.confsched.sessions.section.TimetableSizes
-import io.github.droidkaigi.confsched.ui.icon
-import io.github.droidkaigi.confsched.ui.previewOverride
-import io.github.droidkaigi.confsched.ui.rememberAsyncImagePainter
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.datetime.DateTimeUnit

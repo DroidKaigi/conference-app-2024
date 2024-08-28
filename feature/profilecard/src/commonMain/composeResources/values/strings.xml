@@ -12,4 +12,7 @@
     <string name="add_image">Add Image</string>
     <string name="enter_validate_format">Please enter a %1$s</string>
     <string name="add_validate_format">Please add %1$s</string>
+    <string name="share">Share</string>
+    <string name="edit">Edit</string>
+    <string name="share_description">Check out my DroidKaigi Profile Card! Let's connect at the event. #DroidKaigi</string>
 </resources>

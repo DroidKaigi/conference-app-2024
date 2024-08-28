@@ -42,29 +42,31 @@ class SearchScreenTest(
         fun behaviors(): List<DescribedBehavior<SearchScreenRobot>> {
             return describeBehaviors<SearchScreenRobot>(name = "SearchScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Operational)
                         setupSearchScreenContent()
                     }
-                    itShould("show non-filtered timetable items") {
+                    itShould("no timetable items are displayed") {
                         captureScreenWithChecks {
-                            checkTimetableListDisplayed()
-                            checkTimetableListItemsDisplayed()
+                            checkTimetableListExists()
+                            checkTimetableListItemsNotDisplayed()
                         }
                     }
                     describe("input search word to TextField") {
-                        run {
+                        doIt {
                             inputDemoSearchWord()
                         }
                         itShould("show search word and filtered items") {
                             captureScreenWithChecks {
                                 checkDemoSearchWordDisplayed()
                                 checkTimetableListItemsHasDemoText()
+                                checkTimetableListDisplayed()
+                                checkTimetableListItemsDisplayed()
                             }
                         }
                     }
                     describe("when filter day chip click") {
-                        run {
+                        doIt {
                             clickFilterDayChip()
                         }
                         itShould("show drop down menu") {
@@ -74,7 +76,7 @@ class SearchScreenTest(
                         }
                         ConferenceDay.entries.forEach { conference ->
                             describe("when click conference day ${conference.day}") {
-                                run {
+                                doIt {
                                     clickConferenceDay(
                                         clickDay = conference,
                                     )
@@ -84,13 +86,15 @@ class SearchScreenTest(
                                         checkTimetableListItemByConferenceDay(
                                             checkDay = conference,
                                         )
+                                        checkTimetableListDisplayed()
+                                        checkTimetableListItemsDisplayed()
                                     }
                                 }
                             }
                         }
                     }
                     describe("when filter category chip click") {
-                        run {
+                        doIt {
                             clickFilterCategoryChip()
                         }
                         itShould("show drop down menu") {
@@ -100,7 +104,7 @@ class SearchScreenTest(
                         }
                         Category.entries.forEach { category ->
                             describe("when click category ${category.categoryName}") {
-                                run {
+                                doIt {
                                     clickCategory(
                                         category = category,
                                     )
@@ -108,13 +112,15 @@ class SearchScreenTest(
                                 itShould("selected category ${category.categoryName}") {
                                     captureScreenWithChecks {
                                         checkTimetableListItemByCategory(category)
+                                        checkTimetableListDisplayed()
+                                        checkTimetableListItemsDisplayed()
                                     }
                                 }
                             }
                         }
                     }
                     describe("when filter language chip click") {
-                        run {
+                        doIt {
                             scrollToFilterLanguageChip()
                             clickFilterLanguageChip()
                         }
@@ -125,7 +131,7 @@ class SearchScreenTest(
                         }
                         Language.entries.forEach { language ->
                             describe("when click language ${language.name}") {
-                                run {
+                                doIt {
                                     clickLanguage(
                                         language = language,
                                     )
@@ -133,8 +139,38 @@ class SearchScreenTest(
                                 itShould("selected language ${language.name}") {
                                     captureScreenWithChecks {
                                         checkTimetableListItemByLanguage(language)
+                                        checkTimetableListDisplayed()
+                                        checkTimetableListItemsDisplayed()
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+
+                describe("when device is tablet") {
+                    doIt {
+                        setupTabletDevice()
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupSearchScreenContent()
+                    }
+                    itShould("no timetable items are displayed") {
+                        captureScreenWithChecks {
+                            checkTimetableListExists()
+                            checkTimetableListItemsNotDisplayed()
+                        }
+                    }
+
+                    describe("input search word to TextField") {
+                        doIt {
+                            inputDemoSearchWord()
+                        }
+                        itShould("show search word and filtered items") {
+                            captureScreenWithChecks {
+                                checkDemoSearchWordDisplayed()
+                                checkTimetableListItemsHasDemoText()
+                                checkTimetableListDisplayed()
+                                checkTimetableListItemsDisplayed()
                             }
                         }
                     }

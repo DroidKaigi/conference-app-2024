@@ -14,7 +14,6 @@ public struct TimetableReducer : Sendable{
     @ObservableState
     public struct State: Equatable {
         var timetableItems: [TimetableTimeGroupItems] = [] //Should be simple objects
-        var toast: ToastState?
         
         public init(timetableItems: [TimetableTimeGroupItems] = []) {
             self.timetableItems = timetableItems
@@ -26,7 +25,7 @@ public struct TimetableReducer : Sendable{
         case view(View)
         case requestDay(DayTab)
         case response(Result<[TimetableItemWithFavorite], any Error>)
-        case favoriteResponse(Result<Bool, any Error>)
+        case favoriteResponse(Result<Void, any Error>)
         
         public enum View : Sendable {
             case onAppear
@@ -101,13 +100,9 @@ public struct TimetableReducer : Sendable{
                 return .run { send in
                     await send(.favoriteResponse(Result {
                         try await timetableClient.toggleBookmark(id: item.timetableItem.id)
-                        return item.isFavorited
                     }))
                 }
-            case let .favoriteResponse(.success(isFavorited)):
-                if !isFavorited {
-                    state.toast = .init(text: String(localized: "AddFavorite", bundle: .module))
-                }
+            case .favoriteResponse(.success):
                 return .none
             case let .favoriteResponse(.failure(error)):
                 print(error.localizedDescription)

@@ -25,8 +25,8 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        versionCode = 1
-        versionName = "0.1.0"
+        versionCode = 3
+        versionName = "1.0.1"
     }
     signingConfigs {
         create("dev") {
@@ -103,11 +103,12 @@ dependencies {
     implementation(projects.feature.about)
     implementation(projects.feature.sponsors)
     implementation(projects.feature.staff)
+    implementation(projects.feature.settings)
     implementation(projects.feature.favorites)
     implementation(projects.core.model)
     implementation(projects.core.data)
     implementation(projects.core.designsystem)
-    implementation(projects.core.ui)
+    implementation(projects.core.droidkaigiui)
     implementation(libs.composeNavigation)
     implementation(libs.composeHiltNavigation)
     implementation(libs.composeMaterialWindowSize)
@@ -115,6 +116,7 @@ dependencies {
     implementation(libs.androidxWindow)
     implementation(libs.kermit)
     implementation(libs.firebaseDynamicLinks)
+    implementation(libs.androidxAppCompat)
     debugImplementation(projects.core.testingManifest)
     testImplementation(projects.core.testing)
     testImplementation(libs.composablePreviewScanner)

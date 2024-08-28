@@ -3,31 +3,30 @@ package io.github.droidkaigi.confsched.sponsors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
-import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.EventEffect
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
 import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.SponsorsRepository
 import io.github.droidkaigi.confsched.model.localSponsorsRepository
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.Flow
 
 sealed interface SponsorsScreenEvent
 
 @Composable
 fun sponsorsScreenPresenter(
-    events: Flow<SponsorsScreenEvent>,
+    events: EventFlow<SponsorsScreenEvent>,
     sponsorsRepository: SponsorsRepository = localSponsorsRepository(),
 ): SponsorsScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val sponsors by rememberUpdatedState(sponsorsRepository.sponsors())
     val sponsorListUiState by rememberUpdatedState(
         sponsorList(sponsors = sponsors),
     )
-    SafeLaunchedEffect(Unit) {
-        events.collect {}
+    EventEffect(events) { event ->
     }
     SponsorsScreenUiState(
         sponsorsListUiState = sponsorListUiState,
