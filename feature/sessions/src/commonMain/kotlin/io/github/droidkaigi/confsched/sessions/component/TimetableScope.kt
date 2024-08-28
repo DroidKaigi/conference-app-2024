@@ -30,7 +30,7 @@ internal sealed interface TimetableScope {
     val dayTabHeight: Float
     val dayTabOffsetY: Float
     fun setDayTabHeight(height: Float)
-    fun updateDayTabOffset(offset: Float)
+    fun updateDayTabOffsetY(offset: Float)
 }
 
 private class TimetableScopeImpl(
@@ -52,7 +52,7 @@ private class TimetableScopeImpl(
         _dayTabHeight.value = height
     }
 
-    override fun updateDayTabOffset(offset: Float) {
+    override fun updateDayTabOffsetY(offset: Float) {
         _dayTabOffsetY.value = offset
     }
 }

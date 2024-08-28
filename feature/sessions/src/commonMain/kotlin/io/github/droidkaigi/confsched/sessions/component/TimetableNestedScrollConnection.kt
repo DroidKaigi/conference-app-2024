@@ -38,7 +38,10 @@ internal data class TimetableNestedScrollConnection(
         var consumedVelocity: Velocity
         with(scrollScope) {
             with(flingBehavior) {
-                consumedVelocity = available - Velocity(0f, performFling(available.y))
+                val remainingVelocity = available.copy(
+                    y = performFling(available.y),
+                )
+                consumedVelocity = available - remainingVelocity
             }
         }
 
@@ -76,7 +79,7 @@ internal fun rememberTimetableNestedScrollConnection(
             flingBehavior = flingBehavior,
             minOffset = { -timetableScope.dayTabHeight },
             currentOffset = { timetableScope.dayTabOffsetY },
-            onOffsetChange = { timetableScope.updateDayTabOffset(it) },
+            onOffsetChange = { timetableScope.updateDayTabOffsetY(it) },
         )
     }
 }
