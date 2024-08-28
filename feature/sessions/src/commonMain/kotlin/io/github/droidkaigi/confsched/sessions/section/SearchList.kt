@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.sessions.component.WithTimetableScope
 
 @Composable
 fun SearchList(
@@ -15,13 +16,15 @@ fun SearchList(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    TimetableList(
-        uiState = uiState,
-        scrollState = rememberLazyListState(),
-        onBookmarkClick = onBookmarkClick,
-        onTimetableItemClick = onTimetableItemClick,
-        contentPadding = contentPadding,
-        highlightWord = highlightWord,
-        modifier = modifier,
-    )
+    WithTimetableScope {
+        TimetableList(
+            uiState = uiState,
+            scrollState = rememberLazyListState(),
+            onBookmarkClick = onBookmarkClick,
+            onTimetableItemClick = onTimetableItemClick,
+            contentPadding = contentPadding,
+            highlightWord = highlightWord,
+            modifier = modifier,
+        )
+    }
 }

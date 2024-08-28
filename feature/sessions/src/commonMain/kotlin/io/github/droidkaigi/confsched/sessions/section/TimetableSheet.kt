@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -19,13 +20,17 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimeLine
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
+import io.github.droidkaigi.confsched.sessions.component.WithTimetableScope
+import io.github.droidkaigi.confsched.sessions.component.rememberTimetableScope
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.GridTimetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.ListTimetable
@@ -53,67 +58,85 @@ fun Timetable(
     modifier: Modifier = Modifier,
 ) {
     val clock = LocalClock.current
-    var selectedDay by rememberSaveable { mutableStateOf(DroidKaigi2024Day.initialSelectedTabDay(clock)) }
+    var selectedDay by rememberSaveable {
+        mutableStateOf(
+            DroidKaigi2024Day.initialSelectedTabDay(
+                clock,
+            ),
+        )
+    }
     val layoutDirection = LocalLayoutDirection.current
+
+    val scope = rememberTimetableScope(isListTimetable = uiState is ListTimetable)
+
     Surface(
         modifier = modifier.padding(contentPadding.calculateTopPadding()),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
+        WithTimetableScope(
+            scope = scope,
         ) {
-            TimetableDayTab(
-                selectedDay = selectedDay,
-                onDaySelected = { day ->
-                    selectedDay = day
-                },
-            )
-            when (uiState) {
-                is ListTimetable -> {
-                    val scrollStates = rememberListTimetableScrollStates()
-                    TimetableList(
-                        uiState = requireNotNull(uiState.timetableListUiStates[selectedDay]),
-                        scrollState = scrollStates.getValue(selectedDay),
-                        onTimetableItemClick = onTimetableItemClick,
-                        onBookmarkClick = onFavoriteClick,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f),
-                        contentPadding = PaddingValues(
-                            bottom = contentPadding.calculateBottomPadding(),
-                            start = contentPadding.calculateStartPadding(layoutDirection),
-                            end = contentPadding.calculateEndPadding(layoutDirection),
-                        ),
-                    )
-                }
-
-                is GridTimetable -> {
-                    val timetableStates = rememberGridTimetableStates()
-                    TimetableGrid(
-                        uiState = requireNotNull(uiState.timetableGridUiState[selectedDay]),
-                        timetableState = timetableStates.getValue(selectedDay),
-                        timeLine = uiState.timeLine,
-                        selectedDay = selectedDay,
-                        onTimetableItemClick = onTimetableItemClick,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f),
-                        contentPadding = PaddingValues(
-                            bottom = contentPadding.calculateBottomPadding(),
-                            start = contentPadding.calculateStartPadding(layoutDirection),
-                        ),
-                    )
-                }
-
-                Empty -> {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        CircularProgressIndicator(
+            Column(
+                modifier = Modifier
+                    .fillMaxSize(),
+            ) {
+                TimetableDayTab(
+                    selectedDay = selectedDay,
+                    onDaySelected = { day ->
+                        selectedDay = day
+                    },
+                    modifier = Modifier.onGloballyPositioned {
+                        setDayTabHeight(it.size.height.toFloat())
+                    }.offset {
+                        IntOffset(x = 0, y = dayTabOffsetY.toInt())
+                    },
+                )
+                when (uiState) {
+                    is ListTimetable -> {
+                        val scrollStates = rememberListTimetableScrollStates()
+                        TimetableList(
+                            uiState = requireNotNull(uiState.timetableListUiStates[selectedDay]),
+                            scrollState = scrollStates.getValue(selectedDay),
+                            onTimetableItemClick = onTimetableItemClick,
+                            onBookmarkClick = onFavoriteClick,
                             modifier = Modifier
-                                .padding(16.dp),
+                                .fillMaxSize()
+                                .weight(1f),
+                            contentPadding = PaddingValues(
+                                bottom = contentPadding.calculateBottomPadding(),
+                                start = contentPadding.calculateStartPadding(layoutDirection),
+                                end = contentPadding.calculateEndPadding(layoutDirection),
+                            ),
                         )
+                    }
+
+                    is GridTimetable -> {
+                        val timetableStates = rememberGridTimetableStates()
+                        TimetableGrid(
+                            uiState = requireNotNull(uiState.timetableGridUiState[selectedDay]),
+                            timetableState = timetableStates.getValue(selectedDay),
+                            timeLine = uiState.timeLine,
+                            selectedDay = selectedDay,
+                            onTimetableItemClick = onTimetableItemClick,
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .weight(1f),
+                            contentPadding = PaddingValues(
+                                bottom = contentPadding.calculateBottomPadding(),
+                                start = contentPadding.calculateStartPadding(layoutDirection),
+                            ),
+                        )
+                    }
+
+                    Empty -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator(
+                                modifier = Modifier
+                                    .padding(16.dp),
+                            )
+                        }
                     }
                 }
             }
