@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
@@ -117,7 +118,7 @@ fun ContributorsScreen(
         Contributors(
             contributors = uiState.contributors,
             onContributorsItemClick = onContributorsItemClick,
-            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = padding.calculateTopPadding())

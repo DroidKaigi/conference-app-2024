@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import io.github.droidkaigi.confsched.compose.rememberEventEmitter
@@ -30,6 +31,7 @@ import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
+import io.github.droidkaigi.confsched.ui.plus
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -130,7 +132,7 @@ fun StaffScreen(
                     }
                 }
                 .testTag(StaffScreenLazyColumnTestTag),
-            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
         ) {
             items(uiState.staff) { staff ->
                 StaffItem(
