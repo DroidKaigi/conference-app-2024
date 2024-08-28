@@ -77,7 +77,7 @@ sealed interface EventMapUiState {
     val userMessageStateHolder: UserMessageStateHolder
 
     data class Loading(
-        override val userMessageStateHolder: UserMessageStateHolder
+        override val userMessageStateHolder: UserMessageStateHolder,
     ) : EventMapUiState
     data class Exists(
         override val userMessageStateHolder: UserMessageStateHolder,
