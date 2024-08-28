@@ -13,6 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.ComposeUIViewController
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -26,6 +27,7 @@ import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
 import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
@@ -44,7 +46,13 @@ import io.github.droidkaigi.confsched.main.MainScreenTab.Timetable
 import io.github.droidkaigi.confsched.main.mainScreen
 import io.github.droidkaigi.confsched.main.mainScreenRoute
 import io.github.droidkaigi.confsched.model.AboutItem
+import io.github.droidkaigi.confsched.model.FontFamily.DotGothic16Regular
+import io.github.droidkaigi.confsched.model.FontFamily.SystemDefault
 import io.github.droidkaigi.confsched.model.Lang.JAPANESE
+import io.github.droidkaigi.confsched.model.Settings.DoesNotExists
+import io.github.droidkaigi.confsched.model.Settings.Exists
+import io.github.droidkaigi.confsched.model.Settings.Loading
+import io.github.droidkaigi.confsched.model.SettingsRepository
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import io.github.droidkaigi.confsched.model.defaultLang
@@ -97,9 +105,22 @@ fun kaigiAppController(
         LocalRepositories provides repositories.map
     ) {
         val windowSizeClass = calculateWindowSizeClass()
+
+        val settingsRepository = LocalRepositories.current[SettingsRepository::class] as SettingsRepository
+        val fontFamily = when (val settings = settingsRepository.settings()) {
+            DoesNotExists, Loading -> dotGothic16FontFamily()
+            is Exists -> {
+                when (settings.useFontFamily) {
+                    DotGothic16Regular -> dotGothic16FontFamily()
+                    SystemDefault -> null
+                }
+            }
+        }
+
         Logging.initialize()
         KaigiApp(
             windowSize = windowSizeClass,
+            fontFamily = fontFamily,
         )
     }
 }
@@ -107,9 +128,12 @@ fun kaigiAppController(
 @Composable
 fun KaigiApp(
     windowSize: WindowSizeClass,
+    fontFamily: FontFamily?,
     modifier: Modifier = Modifier,
 ) {
-    KaigiTheme {
+    KaigiTheme(
+        fontFamily = fontFamily,
+    ) {
         Surface(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
