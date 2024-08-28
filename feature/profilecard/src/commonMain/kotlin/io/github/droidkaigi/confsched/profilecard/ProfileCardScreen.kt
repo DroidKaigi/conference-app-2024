@@ -420,21 +420,25 @@ internal fun EditScreen(
         )
 
         Column(
+            modifier = Modifier.padding(bottom = 20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            Label(label = stringResource(ProfileCardRes.string.image))
-            ImagePickerWithError(
-                image = image,
-                onSelectedImage = {
-                    imageByteArray = it
-                    onChangeImage(it.toBase64())
-                },
-                errorMessage = profileCardError.imageError,
-                onClearImage = {
-                    imageByteArray = null
-                    onChangeImage("")
-                },
-            )
+            Column {
+                Label(label = stringResource(ProfileCardRes.string.image))
+                Spacer(modifier = Modifier.height(12.dp))
+                ImagePickerWithError(
+                    image = image,
+                    onSelectedImage = {
+                        imageByteArray = it
+                        onChangeImage(it.toBase64())
+                    },
+                    errorMessage = profileCardError.imageError,
+                    onClearImage = {
+                        imageByteArray = null
+                        onChangeImage("")
+                    },
+                )
+            }
 
             Text(stringResource(ProfileCardRes.string.select_theme))
 
@@ -457,10 +461,11 @@ internal fun EditScreen(
                 },
                 enabled = isValidInputs,
                 modifier = Modifier.fillMaxWidth()
+                    .padding(top = 12.dp)
                     .testTag(ProfileCardCreateButtonTestTag),
             ) {
                 Text(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(10.dp),
                     text = stringResource(ProfileCardRes.string.create_card),
                 )
             }
