@@ -41,6 +41,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -806,14 +807,27 @@ internal fun CardScreen(
                         )
                     }
                     Spacer(Modifier.height(8.dp))
-                    Text(
-                        text = stringResource(ProfileCardRes.string.edit),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = Color.Black,
+                    TextButton(
+                        onClick = {
+                            onClickEdit()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
                         modifier = Modifier
-                            .clickable { onClickEdit() }
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
                             .testTag(ProfileCardEditButtonTestTag),
-                    )
+                    ) {
+                        Text(
+                            text = stringResource(ProfileCardRes.string.edit),
+                            modifier = Modifier.padding(8.dp),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Color.Black
+                        )
+                    }
+
                 }
             }
         }
