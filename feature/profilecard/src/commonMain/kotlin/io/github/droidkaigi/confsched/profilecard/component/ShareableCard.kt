@@ -17,9 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
 import com.preat.peekaboo.image.picker.toImageBitmap
@@ -28,11 +30,10 @@ import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.fake
+import io.github.droidkaigi.confsched.model.generateColoredImageBase64
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState
+import io.github.droidkaigi.confsched.profilecard.decodeBase64Bytes
 import io.github.droidkaigi.confsched.profilecard.toCardUiState
-import okio.FileSystem
-import okio.Path.Companion.toPath
-import okio.SYSTEM
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -120,14 +121,14 @@ private fun ShareableCardContent(
 @Preview
 fun ShareableCardPreview() {
     val uiState = ProfileCard.Exists.fake().toCardUiState()!!
-    val frontImage =
-        FileSystem.SYSTEM.read("src/commonTest/resources/FlipCardFront.png".toPath()) {
-            readByteArray()
-        }.toImageBitmap()
-    val backImage =
-        FileSystem.SYSTEM.read("src/commonTest/resources/FlipCardBack.png".toPath()) {
-            readByteArray()
-        }.toImageBitmap()
+    val frontImage = generateColoredImageBase64(
+        color = Color.LightGray,
+        size = IntSize(300, 380),
+    ).decodeBase64Bytes().toImageBitmap()
+    val backImage = generateColoredImageBase64(
+        color = Color.DarkGray,
+        size = IntSize(300, 380),
+    ).decodeBase64Bytes().toImageBitmap()
 
     KaigiTheme {
         Surface {
