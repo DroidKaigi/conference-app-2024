@@ -8,6 +8,6 @@
 		<string>ja</string>
 	</array>
 	<key>NSCalendarsUsageDescription</key>
-    <string>カレンダーにイベントを追加するためにカレンダーへのアクセスが必要です。</string>
+	<string>Use for adding events to your calendar</string>
 </dict>
 </plist>
