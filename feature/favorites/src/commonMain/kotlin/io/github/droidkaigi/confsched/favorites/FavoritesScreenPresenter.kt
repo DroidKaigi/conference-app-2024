@@ -42,9 +42,7 @@ fun favoritesScreenPresenter(
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): FavoritesScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val favoriteSessions by rememberUpdatedState(
-        sessionsRepository
-            .timetable()
-            .filtered(Filters(filterFavorite = true)),
+        sessionsRepository.timetable()
     )
     var allFilterSelected by remember { mutableStateOf(true) }
     var currentDayFilters by remember { mutableStateOf(emptySet<DroidKaigi2024Day>()) }
@@ -102,7 +100,6 @@ private fun favoritesSheet(
         favoriteSessions
             .filtered(
                 Filters(
-                    filterFavorite = true,
                     days = selectedDayFilters.toList(),
                 ),
             )
@@ -125,6 +122,7 @@ private fun favoritesSheet(
             currentDayFilter = selectedDayFilters.toPersistentList(),
             allFilterSelected = allFilterSelected,
             timetableItemMap = filteredSessions,
+            timetable = favoriteSessions
         )
     }
 }

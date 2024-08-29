@@ -1,5 +1,8 @@
 package io.github.droidkaigi.confsched.favorites.section
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -41,6 +44,7 @@ import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableTime
 import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
+import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
@@ -52,6 +56,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Composable
 fun FavoriteList(
     timetableItemMap: PersistentMap<TimeSlot, List<TimetableItem>>,
+    timetable: Timetable,
     onBookmarkClick: (TimetableItem) -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
@@ -103,15 +108,19 @@ fun FavoriteList(
                     }
                     .animateItemPlacement(),
             ) {
-                TimetableTime(
-                    modifier = Modifier
-                        .onGloballyPositioned {
-                            timeTextHeight = it.size.height
-                        }
-                        .offset { IntOffset(0, timeTextOffset) },
-                    startTime = time.startTimeString,
-                    endTime = time.endTimeString,
-                )
+                val bookmarkedTimetableItems = timetableItems.filter { timetable.bookmarks.contains(it.id) }
+
+                if (bookmarkedTimetableItems.isNotEmpty()) {
+                    TimetableTime(
+                        modifier = Modifier
+                            .onGloballyPositioned {
+                                timeTextHeight = it.size.height
+                            }
+                            .offset { IntOffset(0, timeTextOffset) },
+                        startTime = time.startTimeString,
+                        endTime = time.endTimeString,
+                    )
+                }
                 Spacer(modifier = Modifier.width(16.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                     timetableItems.windowed(columnNum, columnNum, true).forEach { windowedItems ->
@@ -120,35 +129,45 @@ fun FavoriteList(
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
                             windowedItems.onEach { timetableItem ->
-                                TimetableItemCard(
-                                    modifier = Modifier
-                                        .weight(1F)
-                                        .fillMaxHeight(),
-                                    isBookmarked = true,
-                                    tags = {
-                                        TimetableItemTag(
-                                            tagText = timetableItem.room.name.currentLangTitle,
-                                            icon = timetableItem.room.icon,
-                                            tagColor = LocalRoomTheme.current.primaryColor,
-                                            modifier = Modifier.background(LocalRoomTheme.current.containerColor),
-                                        )
-                                        timetableItem.language.labels.forEach { label ->
+                                val isBookmarked =
+                                    timetable.bookmarks.contains(timetableItem.id)
+                                AnimatedVisibility(
+                                    visible = isBookmarked,
+                                    enter = fadeIn(),
+                                    exit = fadeOut()
+                                ) {
+                                    TimetableItemCard(
+                                        modifier = Modifier
+                                            .weight(1F)
+                                            .fillMaxHeight(),
+                                        isBookmarked = true,
+                                        tags = {
                                             TimetableItemTag(
-                                                tagText = label,
-                                                tagColor = MaterialTheme.colorScheme.outline,
+                                                tagText = timetableItem.room.name.currentLangTitle,
+                                                icon = timetableItem.room.icon,
+                                                tagColor = LocalRoomTheme.current.primaryColor,
+                                                modifier = Modifier.background(
+                                                    LocalRoomTheme.current.containerColor
+                                                ),
                                             )
-                                        }
-                                        timetableItem.day?.let {
-                                            TimetableItemTag(
-                                                tagText = "9/${it.dayOfMonth}",
-                                                tagColor = MaterialTheme.colorScheme.outline,
-                                            )
-                                        }
-                                    },
-                                    timetableItem = timetableItem,
-                                    onTimetableItemClick = onTimetableItemClick,
-                                    onBookmarkClick = { item, _ -> onBookmarkClick(item) },
-                                )
+                                            timetableItem.language.labels.forEach { label ->
+                                                TimetableItemTag(
+                                                    tagText = label,
+                                                    tagColor = MaterialTheme.colorScheme.outline,
+                                                )
+                                            }
+                                            timetableItem.day?.let {
+                                                TimetableItemTag(
+                                                    tagText = "9/${it.dayOfMonth}",
+                                                    tagColor = MaterialTheme.colorScheme.outline,
+                                                )
+                                            }
+                                        },
+                                        timetableItem = timetableItem,
+                                        onTimetableItemClick = onTimetableItemClick,
+                                        onBookmarkClick = { item, _ -> onBookmarkClick(item) },
+                                    )
+                                }
                             }
                             if (windowedItems.size < columnNum) {
                                 repeat(columnNum - windowedItems.size) {
@@ -177,6 +196,7 @@ fun FavoriteListPreview() {
                         Session.fake(),
                     ),
                 ),
+                timetable = Timetable.fake(),
                 onBookmarkClick = {},
                 onTimetableItemClick = {},
             )

@@ -36,6 +36,7 @@ import io.github.droidkaigi.confsched.favorites.section.FavoriteSheet
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
@@ -184,6 +185,7 @@ fun FavoritesScreenPreview() {
                                 Session.fake(),
                             ),
                         ),
+                        timetable = Timetable.fake()
                     ),
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),

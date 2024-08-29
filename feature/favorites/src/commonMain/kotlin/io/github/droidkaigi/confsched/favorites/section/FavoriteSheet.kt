@@ -38,6 +38,7 @@ import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.Fa
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
+import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
@@ -64,6 +65,7 @@ sealed interface FavoritesSheetUiState {
         override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
         override val allFilterSelected: Boolean,
         val timetableItemMap: PersistentMap<TimeSlot, List<TimetableItem>>,
+        val timetable: Timetable,
     ) : FavoritesSheetUiState {
         data class TimeSlot(
             val startTimeString: String,
@@ -122,6 +124,7 @@ fun FavoriteSheet(
             is FavoritesSheetUiState.FavoriteListUiState -> {
                 FavoriteList(
                     timetableItemMap = uiState.timetableItemMap,
+                    timetable = uiState.timetable,
                     onBookmarkClick = onBookmarkClick,
                     onTimetableItemClick = onTimetableItemClick,
                     contentPadding = contentPadding,
@@ -192,6 +195,7 @@ fun FavoriteSheetPreview() {
                             Session.fake(),
                         ),
                     ),
+                    timetable = Timetable.fake()
                 ),
                 filterBackgroundColor = MaterialTheme.colorScheme.surface,
                 onAllFilterChipClick = {},
