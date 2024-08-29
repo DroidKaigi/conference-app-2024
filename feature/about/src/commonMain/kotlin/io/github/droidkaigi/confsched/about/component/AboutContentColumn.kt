@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import conference_app_2024.feature.about.generated.resources.staff
 import io.github.droidkaigi.confsched.about.AboutRes
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -40,7 +41,7 @@ fun AboutContentColumn(
             .fillMaxWidth()
             .height(73.dp)
             .testTag(testTag)
-            .clickable { onClickAction() },
+            .clickable(onClick = dropUnlessResumed(block = onClickAction)),
     ) {
         Row(
             modifier = Modifier
