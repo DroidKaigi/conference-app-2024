@@ -122,7 +122,9 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     }
                     itShould("show error message") {
                         captureScreenWithChecks(
-                            checks = todoChecks("This screen is still empty now. Please add some checks."),
+                            checks = {
+                                checkErrorSnackbarDisplayed()
+                            }
                         )
                     }
                 }
