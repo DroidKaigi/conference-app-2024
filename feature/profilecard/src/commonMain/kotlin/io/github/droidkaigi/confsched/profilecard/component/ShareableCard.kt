@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -21,7 +20,6 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
 import com.preat.peekaboo.image.picker.toImageBitmap
@@ -87,7 +85,6 @@ private fun ShareableCardContent(
     backImage: ImageBitmap?,
     modifier: Modifier = Modifier,
 ) {
-
     Box(modifier = modifier) {
         Box(
             contentAlignment = Alignment.Center,
