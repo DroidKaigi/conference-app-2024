@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -19,10 +21,21 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
+import com.preat.peekaboo.image.picker.toImageBitmap
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalProfileCardTheme
+import io.github.droidkaigi.confsched.designsystem.theme.ProvideProfileCardTheme
+import io.github.droidkaigi.confsched.model.ProfileCard
+import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState
+import io.github.droidkaigi.confsched.profilecard.toCardUiState
+import okio.FileSystem
+import okio.Path.Companion.toPath
+import okio.SYSTEM
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 internal fun ShareableCard(
@@ -55,7 +68,7 @@ internal fun ShareableCard(
         backImage = it
     }
 
-    Box(
+    ShareableCardContent(
         modifier = Modifier
             .drawWithContent {
                 graphicsLayer.record {
@@ -63,7 +76,19 @@ internal fun ShareableCard(
                 }
                 drawLayer(graphicsLayer)
             },
-    ) {
+        frontImage = frontImage,
+        backImage = backImage,
+    )
+}
+
+@Composable
+private fun ShareableCardContent(
+    frontImage: ImageBitmap?,
+    backImage: ImageBitmap?,
+    modifier: Modifier = Modifier,
+) {
+
+    Box(modifier = modifier) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
@@ -89,6 +114,28 @@ internal fun ShareableCard(
                         .rotate(-10f)
                         .size(150.dp, 190.dp),
                 )
+            }
+        }
+    }
+}
+
+@Composable
+@Preview
+fun ShareableCardPreview() {
+    val uiState = ProfileCard.Exists.fake().toCardUiState()!!
+    val frontImage =
+        FileSystem.SYSTEM.read("src/commonTest/resources/FlipCardFront.png".toPath()) {
+            readByteArray()
+        }.toImageBitmap()
+    val backImage =
+        FileSystem.SYSTEM.read("src/commonTest/resources/FlipCardBack.png".toPath()) {
+            readByteArray()
+        }.toImageBitmap()
+
+    KaigiTheme {
+        Surface {
+            ProvideProfileCardTheme(uiState.cardType.name) {
+                ShareableCardContent(frontImage, backImage)
             }
         }
     }
