@@ -10,6 +10,9 @@ import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
 
 @Composable
 actual fun speakerPainter(url: String): Painter {
+    // TODO Use DrawableResource
+    // https://github.com/DroidKaigi/conference-app-2024/pull/864/files#r1736437080
+    // https://github.com/coil-kt/coil/issues/2077
     return rememberAsyncImagePainter(
         model = ImageRequest.Builder(LocalContext.current)
             .data(url)
