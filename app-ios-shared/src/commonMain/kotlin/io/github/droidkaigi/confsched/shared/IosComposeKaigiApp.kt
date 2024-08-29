@@ -26,6 +26,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
+import conference_app_2024.app_ios_shared.generated.resources.permission_required
 import io.github.droidkaigi.confsched.about.aboutScreen
 import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
@@ -85,6 +86,7 @@ import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import platform.EventKit.EKEntityType.EKEntityTypeEvent
 import platform.EventKit.EKEvent
 import platform.EventKit.EKEventStore
@@ -119,8 +121,7 @@ fun kaigiAppController(
     val snackbarHostState = remember { SnackbarHostState() }
 
     ExternalNavControllerLink.apply {
-        // TODO Use Kotlin Multiplatform Resources
-        val snackbarMessage = "Authorization is required to add sessions to the calendar."
+        val snackbarMessage = stringResource(AppIosSharedRes.string.permission_required)
 
         this.onLicenseScreenRequest = onLicenseScreenRequest
         this.onAccessCalendarIsDenied = {
