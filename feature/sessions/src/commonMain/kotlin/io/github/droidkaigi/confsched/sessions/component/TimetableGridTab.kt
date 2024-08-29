@@ -36,6 +36,7 @@ fun TimetableDayTab(
     onDaySelected: (day: DroidKaigi2024Day) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // TODO Refactor
     val density = LocalDensity.current
     val tabWidth = with(density) {
         // calculate width from sp
@@ -51,8 +52,10 @@ fun TimetableDayTab(
     }
     val paddingAroundTab =
         (tabWidth - indicatorWidths.reduce { acc, width -> acc + width }) / (indicatorWidths.size * 2)
+    val columnHorizontalPadding = 0.dp.coerceAtLeast(20.dp - paddingAroundTab)
+
     Column(
-        modifier = modifier.padding(horizontal = 20.dp - paddingAroundTab, vertical = 16.dp),
+        modifier = modifier.padding(horizontal = columnHorizontalPadding, vertical = 16.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.Start,
     ) {
