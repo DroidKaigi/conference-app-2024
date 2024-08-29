@@ -58,8 +58,7 @@ fun AboutContentColumn(
                     .padding(
                         horizontal = 12.dp,
                     ),
-                // TODO: Migrate this to theme's color
-                tint = Color.Green,
+                tint = MaterialTheme.colorScheme.primaryFixed,
             )
             Text(
                 text = label,
