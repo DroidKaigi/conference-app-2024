@@ -79,6 +79,7 @@ kotlin {
                 api(projects.feature.favorites)
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(libs.skieAnnotation)
+                implementation(compose.components.resources)
             }
         }
         iosTest {
