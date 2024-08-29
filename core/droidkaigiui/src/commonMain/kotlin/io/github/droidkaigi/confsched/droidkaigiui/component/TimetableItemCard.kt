@@ -138,13 +138,7 @@ fun TimetableItemCard(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             // TODO: Fixed image loading again but its still slow. Maybe we need smaller images?
-                            val painter = previewOverride(
-                                previewPainter = {
-                                    rememberVectorPainter(image = Icons.Default.Person)
-                                },
-                            ) {
-                                speakerPainter(speaker.iconUrl)
-                            }
+                            val painter = speakerPainter(speaker.iconUrl)
                             Image(
                                 painter = painter,
                                 modifier = Modifier
