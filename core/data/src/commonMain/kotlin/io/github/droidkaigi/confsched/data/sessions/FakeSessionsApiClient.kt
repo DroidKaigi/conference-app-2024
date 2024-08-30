@@ -215,10 +215,7 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                     isPlenumSession = false,
                     targetAudience = "For App developer アプリ開発者向け",
                     interpretationTarget = false,
-                    asset = SessionAssetResponse(
-                        videoUrl = "https://www.youtube.com/watch?v=hFdKCyJ-Z9A",
-                        slideUrl = "https://droidkaigi.jp/2021/",
-                    ),
+                    asset = SessionAssetResponse(videoUrl = null, slideUrl = null),
                     levels = listOf("INTERMEDIATE"),
                 )
                 sessions.add(session)
