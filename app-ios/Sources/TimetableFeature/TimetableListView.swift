@@ -137,7 +137,7 @@ struct TimetableGridView: View {
                             Text(timeBlock.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor).textStyle(.labelMedium)
                             Spacer()
                             
-                        }.frame(height: 153)
+                        }.frame(width: 40, height: 153)
                         
                         if (timeBlock.items.count == 1 && timeBlock.isTopLunch()) {
                             
