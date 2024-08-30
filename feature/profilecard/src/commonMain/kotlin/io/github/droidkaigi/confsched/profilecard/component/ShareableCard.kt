@@ -98,7 +98,7 @@ private fun ShareableCardContent(
                     bitmap = it,
                     contentDescription = null,
                     modifier = Modifier
-                        .offset(x = 70.dp, y = 15.dp)
+                        .offset(x = 70.dp, y = 35.dp)
                         .rotate(10f)
                         .size(150.dp, 190.dp),
                 )
@@ -108,7 +108,7 @@ private fun ShareableCardContent(
                     bitmap = it,
                     contentDescription = null,
                     modifier = Modifier
-                        .offset(x = (-70).dp, y = (-15).dp)
+                        .offset(x = (-70).dp, y = (-35).dp)
                         .rotate(-10f)
                         .size(150.dp, 190.dp),
                 )
