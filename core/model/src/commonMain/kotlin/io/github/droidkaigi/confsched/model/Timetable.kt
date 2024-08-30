@@ -169,6 +169,7 @@ public fun Timetable.Companion.fake(): Timetable {
                 val start = DroidKaigi2024Day.Workday.start + (index * 60 * 60 + dayOffsetSeconds).seconds
                 val end = DroidKaigi2024Day.Workday.start + (index * 60 * 60 + dayOffsetSeconds + 40 * 60).seconds
                 val fake = Session.fake()
+
                 add(
                     fake
                         .copy(
@@ -184,6 +185,32 @@ public fun Timetable.Companion.fake(): Timetable {
                 )
             }
         }
+        add(
+            TimetableItem.Special(
+                id = TimetableItemId("7"),
+                title = MultiLangText("Lunch break", "Lunch break"),
+                startsAt = DroidKaigi2024Day.ConferenceDay1.start + 13.hours,
+                endsAt = DroidKaigi2024Day.ConferenceDay1.start + 13.hours + 60.minutes,
+                category = TimetableCategory(
+                    id = 28657,
+                    title = MultiLangText("その他", "Other"),
+                ),
+                sessionType = TimetableSessionType.NORMAL,
+                room = roomsIterator.next(),
+                targetAudience = "",
+                language = TimetableLanguage(
+                    langOfSpeaker = "",
+                    isInterpretationTarget = false,
+                ),
+                asset = TimetableAsset(null, null),
+                levels = persistentListOf(),
+                speakers = persistentListOf(),
+                description = MultiLangText(
+                    jaTitle = "Lunch break",
+                    enTitle = "Lunch break",
+                ),
+            ),
+        )
         add(
             TimetableItem.Special(
                 id = TimetableItemId("3"),

@@ -520,11 +520,24 @@ private data class TimetableItemLayout(
     private val displayEndsAt = timetableItem.endsAt.minus(1, DateTimeUnit.MINUTE)
     val height =
         ((displayEndsAt - timetableItem.startsAt).inWholeMinutes * minutePx).roundToInt()
-    val width = with(density) { TimetableSizes.columnWidth.roundToPx() }
-    val left = rooms.indexOf(timetableItem.room) * width
     val top = ((timetableItem.startsAt - dayStart).inWholeMinutes * minutePx).toInt()
-    val right = left + width
     val bottom = top + height
+
+    val width: Int
+    val left: Int
+    val right: Int
+
+    init {
+        if (timetableItem.isLunch) {
+            width = with(density) { TimetableSizes.columnWidth.roundToPx() * 5 }
+            left = 0 // rooms.indexOf(RoomType.RoomF) * width //.indexOf(timetableItem.room) * width
+            right = left + width
+        } else {
+            width = with(density) { TimetableSizes.columnWidth.roundToPx() }
+            left = rooms.indexOf(timetableItem.room) * width
+            right = left + width
+        }
+    }
 
     fun isVisible(
         screenWidth: Int,
@@ -537,7 +550,9 @@ private data class TimetableItemLayout(
         val screenTop = -scrollY
         val screenBottom = -scrollY + screenHeight
         val xInside =
-            left in screenLeft..screenRight || right in screenLeft..screenRight
+            left in screenLeft..screenRight || right in screenLeft..screenRight ||
+                left <= screenLeft && right >= screenRight
+
         val yInside =
             top in screenTop..screenBottom || bottom in screenTop..screenBottom ||
                 (top <= screenTop && screenBottom <= bottom)
