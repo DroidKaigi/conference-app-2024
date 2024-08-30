@@ -186,6 +186,13 @@ class TimetableItemDetailScreenRobot @Inject constructor(
         checkVideoAssetButtonDisplayed()
     }
 
+    fun checkAssetSectionDoesNotDisplayed() {
+        composeTestRule
+            .onAllNodes(hasTestTag(TimetableItemDetailContentArchiveSectionTestTag))
+            .onFirst()
+            .assertIsNotDisplayed()
+    }
+
     fun checkOnlySlideAssetButtonDisplayed() {
         checkSlideAssetButtonDisplayed()
         checkVideoAssetButtonDoesNotDisplayed()

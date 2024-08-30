@@ -101,6 +101,16 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 )
                             }
                         }
+                        describe("when scroll to bottom") {
+                            doIt {
+                                scrollLazyColumnByIndex(2)
+                            }
+                            itShould("both assets does not displayed") {
+                                captureScreenWithChecks {
+                                    checkAssetSectionDoesNotDisplayed()
+                                }
+                            }
+                        }
                     }
                     describe("when the description is lengthy") {
                         doIt {
