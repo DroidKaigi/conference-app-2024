@@ -2,6 +2,7 @@
 <resources>
     <string name="timetable">タイムテーブル</string>
     <string name="event_map">イベントマップ</string>
+    <string name="favorite">お気に入り</string>
     <string name="profile_card">プロフィールカード</string>
     <string name="about">About</string>
     <string name="contributor">コントリビューター</string>

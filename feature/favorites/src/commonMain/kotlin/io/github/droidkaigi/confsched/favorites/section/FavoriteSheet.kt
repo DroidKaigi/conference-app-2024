@@ -7,15 +7,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,14 +34,17 @@ import conference_app_2024.feature.favorites.generated.resources.empty_guide
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.favorites.FavoritesRes
 import io.github.droidkaigi.confsched.favorites.component.FavoriteFilters
+import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay1
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day.ConferenceDay2
-import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.fake
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentMapOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -54,8 +63,15 @@ sealed interface FavoritesSheetUiState {
     data class FavoriteListUiState(
         override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
         override val allFilterSelected: Boolean,
-        val timeTable: Timetable,
-    ) : FavoritesSheetUiState
+        val timetableItemMap: PersistentMap<TimeSlot, List<TimetableItem>>,
+    ) : FavoritesSheetUiState {
+        data class TimeSlot(
+            val startTimeString: String,
+            val endTimeString: String,
+        ) {
+            val key: String get() = "$startTimeString-$endTimeString"
+        }
+    }
 
     data class Empty(
         override val currentDayFilter: PersistentList<DroidKaigi2024Day>,
@@ -63,6 +79,7 @@ sealed interface FavoritesSheetUiState {
     ) : FavoritesSheetUiState
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FavoriteSheet(
     uiState: FavoritesSheetUiState,
@@ -73,8 +90,16 @@ fun FavoriteSheet(
     onDay2FilterChipClick: () -> Unit,
     onBookmarkClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
+    val scrollFraction = scrollBehavior?.state?.overlappedFraction ?: 0f
+    val favoriteFiltersBackgroundColor = if (scrollFraction > 0f) {
+        TopAppBarDefaults.topAppBarColors().scrolledContainerColor
+    } else {
+        TopAppBarDefaults.topAppBarColors().containerColor
+    }
+
     Column(modifier = modifier.fillMaxSize()) {
         FavoriteFilters(
             allFilterSelected = uiState.isAllFilterSelected,
@@ -84,6 +109,9 @@ fun FavoriteSheet(
             onAllFilterChipClick = onAllFilterChipClick,
             onDay1FilterChipClick = onDay1FilterChipClick,
             onDay2FilterChipClick = onDay2FilterChipClick,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(favoriteFiltersBackgroundColor),
         )
 
         when (uiState) {
@@ -93,7 +121,7 @@ fun FavoriteSheet(
 
             is FavoritesSheetUiState.FavoriteListUiState -> {
                 FavoriteList(
-                    timetable = uiState.timeTable,
+                    timetableItemMap = uiState.timetableItemMap,
                     onBookmarkClick = onBookmarkClick,
                     onTimetableItemClick = onTimetableItemClick,
                     contentPadding = contentPadding,
@@ -106,7 +134,10 @@ fun FavoriteSheet(
 @Composable
 private fun EmptyView(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.testTag(FavoritesScreenEmptyViewTestTag).fillMaxSize(),
+        modifier = modifier
+            .testTag(FavoritesScreenEmptyViewTestTag)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -143,6 +174,7 @@ private fun EmptyView(modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun FavoriteSheetPreview() {
@@ -152,7 +184,14 @@ fun FavoriteSheetPreview() {
                 uiState = FavoritesSheetUiState.FavoriteListUiState(
                     allFilterSelected = true,
                     currentDayFilter = persistentListOf(ConferenceDay1, ConferenceDay2),
-                    timeTable = Timetable.fake(),
+                    timetableItemMap = persistentMapOf(
+                        TimeSlot(
+                            startTimeString = "10:00",
+                            endTimeString = "11:00",
+                        ) to listOf(
+                            Session.fake(),
+                        ),
+                    ),
                 ),
                 filterBackgroundColor = MaterialTheme.colorScheme.surface,
                 onAllFilterChipClick = {},
@@ -165,6 +204,7 @@ fun FavoriteSheetPreview() {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 @Preview
 fun FavoriteSheetNoFavoritesPreview() {

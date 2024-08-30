@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
@@ -42,6 +43,12 @@ import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -49,9 +56,9 @@ import androidx.compose.ui.unit.sp
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.animation.onGloballyPositionedWithFavoriteAnimationScope
+import io.github.droidkaigi.confsched.droidkaigiui.useIf
 import io.github.droidkaigi.confsched.main.MainScreenTab
-import io.github.droidkaigi.confsched.ui.animation.onGloballyPositionedWithFavoriteAnimationScope
-import io.github.droidkaigi.confsched.ui.useIf
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -77,7 +84,7 @@ fun GlassLikeNavRail(
             ),
     ) {
         NavRailTabs(
-            selectedTab = currentTab.ordinal,
+            selectedTab = currentTab,
             onTabSelected = { onTabSelected(it) },
         )
 
@@ -159,8 +166,8 @@ fun GlassLikeNavRail(
 }
 
 @Composable
-fun NavRailTabs(
-    selectedTab: Int,
+private fun NavRailTabs(
+    selectedTab: MainScreenTab,
     onTabSelected: (MainScreenTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -172,16 +179,17 @@ fun NavRailTabs(
         LocalContentColor provides Color.White,
     ) {
         Column(
-            modifier = modifier.padding(vertical = 12.dp).fillMaxWidth(),
+            modifier = modifier.padding(vertical = 12.dp).fillMaxWidth().selectableGroup(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             for (tab in MainScreenTab.entries) {
+                val selected = selectedTab == tab
                 val alpha by animateFloatAsState(
-                    targetValue = if (selectedTab == MainScreenTab.indexOf(tab)) 1f else .35f,
+                    targetValue = if (selected) 1f else .35f,
                     label = "alpha",
                 )
                 val scale by animateFloatAsState(
-                    targetValue = if (selectedTab == MainScreenTab.indexOf(tab)) 1f else .98f,
+                    targetValue = if (selected) 1f else .98f,
                     visibilityThreshold = .000001f,
                     animationSpec = spring(
                         stiffness = Spring.StiffnessLow,
@@ -189,23 +197,40 @@ fun NavRailTabs(
                     ),
                     label = "scale",
                 )
+                val label = stringResource(tab.label)
                 Column(
-                    modifier = Modifier.scale(scale).alpha(alpha).weight(1f).pointerInput(Unit) {
-                        detectTapGestures {
-                            onTabSelected(tab)
+                    modifier = Modifier
+                        .scale(scale)
+                        .alpha(alpha)
+                        .weight(1f)
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                onTabSelected(tab)
+                            }
                         }
-                    },
+                        .semantics {
+                            onClick(
+                                label = null,
+                                action = {
+                                    onTabSelected(tab)
+                                    true
+                                },
+                            )
+                            contentDescription = label
+                            role = Role.Tab
+                            this.selected = selected
+                        },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    val iconRes = if (selectedTab == MainScreenTab.indexOf(tab)) {
+                    val iconRes = if (selected) {
                         tab.iconOn
                     } else {
                         tab.iconOff
                     }
                     Icon(
                         painter = painterResource(iconRes),
-                        contentDescription = "tab ${stringResource(tab.contentDescription)}",
+                        contentDescription = null,
                         modifier = Modifier.useIf(
                             tab == MainScreenTab.Favorite,
                         ) {

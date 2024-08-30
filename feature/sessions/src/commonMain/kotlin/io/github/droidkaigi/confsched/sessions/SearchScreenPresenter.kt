@@ -8,7 +8,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
+import io.github.droidkaigi.confsched.compose.EventEffect
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Filters
 import io.github.droidkaigi.confsched.model.Lang
@@ -27,10 +29,8 @@ import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.SelectSessionTy
 import io.github.droidkaigi.confsched.sessions.SearchScreenEvent.UpdateSearchWord
 import io.github.droidkaigi.confsched.sessions.component.SearchFilterUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
-import io.github.droidkaigi.confsched.ui.providePresenterDefaults
 import io.github.takahirom.rin.rememberRetained
 import kotlinx.collections.immutable.toPersistentMap
-import kotlinx.coroutines.flow.Flow
 
 sealed interface SearchScreenEvent {
     data class Bookmark(val timetableItem: TimetableItem) : SearchScreenEvent
@@ -44,7 +44,7 @@ sealed interface SearchScreenEvent {
 
 @Composable
 fun searchScreenPresenter(
-    events: Flow<SearchScreenEvent>,
+    events: EventFlow<SearchScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): SearchScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val sessions by rememberUpdatedState(sessionsRepository.timetable())
@@ -96,56 +96,54 @@ fun searchScreenPresenter(
     val searchFilterLanguageUiState: SearchFilterUiState<Lang> by rememberUpdatedState(
         SearchFilterUiState(
             selectedItems = selectedLanguages,
-            selectableItems = sessions.languages.map { it.toLang() },
+            selectableItems = sessions.languages.map { it.toLang() }.distinct(),
             selectedValuesText = selectedLanguages.joinToString { it.tagName },
         ),
     )
 
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is Bookmark -> {
-                    sessionsRepository.toggleBookmark(event.timetableItem.id)
-                }
+    EventEffect(events) { event ->
+        when (event) {
+            is Bookmark -> {
+                sessionsRepository.toggleBookmark(event.timetableItem.id)
+            }
 
-                is UpdateSearchWord -> {
-                    searchWord = event.word
-                }
+            is UpdateSearchWord -> {
+                searchWord = event.word
+            }
 
-                is ClearSearchWord -> {
-                    searchWord = ""
-                }
+            is ClearSearchWord -> {
+                searchWord = ""
+            }
 
-                is SelectDay -> {
-                    if (selectedDays.contains(event.day)) {
-                        selectedDays.remove(event.day)
-                    } else {
-                        selectedDays.add(event.day)
-                    }
+            is SelectDay -> {
+                if (selectedDays.contains(event.day)) {
+                    selectedDays.remove(event.day)
+                } else {
+                    selectedDays.add(event.day)
                 }
+            }
 
-                is SelectCategory -> {
-                    if (selectedCategories.contains(event.category)) {
-                        selectedCategories.remove(event.category)
-                    } else {
-                        selectedCategories.add(event.category)
-                    }
+            is SelectCategory -> {
+                if (selectedCategories.contains(event.category)) {
+                    selectedCategories.remove(event.category)
+                } else {
+                    selectedCategories.add(event.category)
                 }
+            }
 
-                is SelectSessionType -> {
-                    if (selectedSessionTypes.contains(event.sessionType)) {
-                        selectedSessionTypes.remove(event.sessionType)
-                    } else {
-                        selectedSessionTypes.add(event.sessionType)
-                    }
+            is SelectSessionType -> {
+                if (selectedSessionTypes.contains(event.sessionType)) {
+                    selectedSessionTypes.remove(event.sessionType)
+                } else {
+                    selectedSessionTypes.add(event.sessionType)
                 }
+            }
 
-                is SelectLanguage -> {
-                    if (selectedLanguages.contains(event.language)) {
-                        selectedLanguages.remove(event.language)
-                    } else {
-                        selectedLanguages.add(event.language)
-                    }
+            is SelectLanguage -> {
+                if (selectedLanguages.contains(event.language)) {
+                    selectedLanguages.remove(event.language)
+                } else {
+                    selectedLanguages.add(event.language)
                 }
             }
         }

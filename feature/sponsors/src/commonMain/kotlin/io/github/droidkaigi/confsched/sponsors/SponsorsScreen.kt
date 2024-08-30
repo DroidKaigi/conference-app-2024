@@ -12,24 +12,23 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.sponsors.generated.resources.content_description_back
 import conference_app_2024.feature.sponsors.generated.resources.sponsor
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
 import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.sponsors.section.SponsorsList
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
-import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.stringResource
@@ -42,15 +41,8 @@ fun NavGraphBuilder.sponsorsScreens(
     onSponsorsItemClick: (url: String) -> Unit,
 ) {
     composable(sponsorsScreenRoute) {
-        val lifecycleOwner = LocalLifecycleOwner.current
-
         SponsorsScreen(
-            onNavigationIconClick = {
-                handleOnClickIfNotNavigating(
-                    lifecycleOwner,
-                    onNavigationIconClick,
-                )
-            },
+            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
             onSponsorsItemClick = onSponsorsItemClick,
         )
     }
@@ -74,8 +66,8 @@ fun SponsorsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventEmitter<SponsorsScreenEvent>()
-    val uiState = sponsorsScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<SponsorsScreenEvent>()
+    val uiState = sponsorsScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 

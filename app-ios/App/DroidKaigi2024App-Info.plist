@@ -7,5 +7,7 @@
 		<string>en</string>
 		<string>ja</string>
 	</array>
+	<key>NSCalendarsUsageDescription</key>
+	<string>Use for adding events to your calendar</string>
 </dict>
 </plist>

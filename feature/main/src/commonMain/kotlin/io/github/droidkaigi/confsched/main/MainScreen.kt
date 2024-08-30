@@ -14,8 +14,8 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -24,9 +24,9 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -49,24 +49,25 @@ import conference_app_2024.core.designsystem.generated.resources.ic_timetable_of
 import conference_app_2024.core.designsystem.generated.resources.ic_timetable_on
 import conference_app_2024.feature.main.generated.resources.about
 import conference_app_2024.feature.main.generated.resources.event_map
+import conference_app_2024.feature.main.generated.resources.favorite
 import conference_app_2024.feature.main.generated.resources.profile_card
 import conference_app_2024.feature.main.generated.resources.timetable
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeStyle
 import dev.chrisbanes.haze.haze
-import io.github.droidkaigi.confsched.compose.EventEmitter
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.DesignSystemRes
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.animation.FavoriteAnimationDirection
+import io.github.droidkaigi.confsched.droidkaigiui.animation.ProvideFavoriteAnimation
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
 import io.github.droidkaigi.confsched.main.NavigationType.BottomNavigation
 import io.github.droidkaigi.confsched.main.NavigationType.NavigationRail
 import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
 import io.github.droidkaigi.confsched.main.section.GlassLikeNavRail
 import io.github.droidkaigi.confsched.model.isBlurSupported
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.animation.FavoriteAnimationDirection
-import io.github.droidkaigi.confsched.ui.animation.ProvideFavoriteAnimation
-import io.github.droidkaigi.confsched.ui.compositionlocal.LocalAnimatedVisibilityScope
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
@@ -112,8 +113,8 @@ fun MainScreen(
     windowSize: WindowSizeClass,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
-    eventEmitter: EventEmitter<MainScreenEvent> = rememberEventEmitter(),
-    uiState: MainScreenUiState = mainScreenPresenter(eventEmitter),
+    eventFlow: EventFlow<MainScreenEvent> = rememberEventFlow(),
+    uiState: MainScreenUiState = mainScreenPresenter(eventFlow),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -158,42 +159,36 @@ enum class MainScreenTab(
     val iconOff: DrawableResource,
     val iconOn: DrawableResource,
     val label: StringResource,
-    val contentDescription: StringResource,
     val testTag: String = "mainScreenTab:$label",
 ) {
     Timetable(
         iconOff = DesignSystemRes.drawable.ic_timetable_off,
         iconOn = DesignSystemRes.drawable.ic_timetable_on,
         label = MainRes.string.timetable,
-        contentDescription = MainRes.string.timetable,
     ),
 
     EventMap(
         iconOff = DesignSystemRes.drawable.ic_map_off,
         iconOn = DesignSystemRes.drawable.ic_map_on,
         label = MainRes.string.event_map,
-        contentDescription = MainRes.string.event_map,
     ),
 
     Favorite(
         iconOff = DesignSystemRes.drawable.ic_fav_off,
         iconOn = DesignSystemRes.drawable.ic_fav_on,
-        label = MainRes.string.event_map,
-        contentDescription = MainRes.string.event_map,
+        label = MainRes.string.favorite,
     ),
 
     About(
         iconOff = DesignSystemRes.drawable.ic_info_off,
         iconOn = DesignSystemRes.drawable.ic_info_on,
         label = MainRes.string.about,
-        contentDescription = MainRes.string.about,
     ),
 
     ProfileCard(
         iconOff = DesignSystemRes.drawable.ic_profilecard_off,
         iconOn = DesignSystemRes.drawable.ic_profilecard_on,
         label = MainRes.string.profile_card,
-        contentDescription = MainRes.string.profile_card,
     ),
     ;
 
@@ -221,8 +216,18 @@ fun MainScreen(
     modifier: Modifier = Modifier,
 ) {
     val mainNestedNavController = rememberNavController()
-    val navBackStackEntry by mainNestedNavController.currentBackStackEntryAsState()
-    val currentTab = navBackStackEntry?.destination?.route?.routeToTab()
+
+    val navBackStackEntryRoute =
+        mainNestedNavController.currentBackStackEntryAsState().value?.destination?.route
+
+    // The rememberSaveable key isn't used when returning from the back stack, so we can ignore the null value of the route using this rememberSaveable.
+    // This prevents unexpected animations when navigating back.
+    // https://github.com/DroidKaigi/conference-app-2024/pull/732/files#r1727479543
+    val lastEntryRoute = rememberSaveable(navBackStackEntryRoute) {
+        navBackStackEntryRoute ?: "timetable"
+    }
+    val currentTab = lastEntryRoute.routeToTab() ?: MainScreenTab.Timetable
+
     val hazeState = remember { HazeState() }
 
     val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
@@ -234,7 +239,7 @@ fun MainScreen(
                 onTabSelected = {
                     onTabSelected(mainNestedNavController, it)
                 },
-                currentTab = currentTab ?: MainScreenTab.Timetable,
+                currentTab = currentTab,
                 modifier = Modifier.padding(scaffoldPadding.value),
             )
         }
@@ -247,8 +252,8 @@ fun MainScreen(
                         onTabSelected = {
                             onTabSelected(mainNestedNavController, it)
                         },
-                        currentTab = currentTab ?: MainScreenTab.Timetable,
-                        modifier = Modifier.safeDrawingPadding(),
+                        currentTab = currentTab,
+                        modifier = Modifier.navigationBarsPadding(),
                     )
                 }
             },

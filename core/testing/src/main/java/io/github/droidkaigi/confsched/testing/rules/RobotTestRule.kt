@@ -2,8 +2,10 @@ package io.github.droidkaigi.confsched.testing.rules
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Choreographer
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.AndroidUiDispatcher
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,6 +33,7 @@ import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 import org.junit.runners.model.Statement
 import org.robolectric.shadows.ShadowLog
+import org.robolectric.util.ReflectionHelpers
 import javax.inject.Inject
 import kotlin.reflect.KClass
 
@@ -88,6 +91,14 @@ class RobotTestRule(
             .outerRule(HiltAndroidAutoInjectRule(testInstance))
             .around(CoroutinesTestRule())
             .around(TimeZoneTestRule())
+            .around(object : TestWatcher() {
+                override fun starting(description: Description?) {
+                    super.starting(description)
+                    // https://github.com/robolectric/robolectric/issues/9043#issuecomment-2125998323
+                    val uiDispatcher: AndroidUiDispatcher = ReflectionHelpers.getField(AndroidUiDispatcher.Main, "element")
+                    ReflectionHelpers.setField(uiDispatcher, "choreographer", Choreographer.getInstance())
+                }
+            })
             .around(object : TestWatcher() {
                 override fun starting(description: Description) {
                     // To see logs in the console

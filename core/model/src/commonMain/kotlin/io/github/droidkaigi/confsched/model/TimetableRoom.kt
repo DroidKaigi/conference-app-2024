@@ -15,39 +15,8 @@ data class TimetableRoom(
         }
         return sort.compareTo(other.sort)
     }
-
+    
     fun getThemeKey(isLunch: Boolean? = false): String = if (isLunch == true) "lunch" else name.enTitle.lowercase()
-
-    // TODO: Names are updated but the shapes need to be checked
-    fun getShape(): Shapes {
-        return when (name.enTitle) {
-            "Flamingo" -> {
-                Shapes.SQUARE
-            }
-            "Giraffe" -> {
-                Shapes.CIRCLE
-            }
-            "Hedgehog" -> {
-                Shapes.SHARP_DIAMOND
-            }
-            "Iguana" -> {
-                Shapes.DIAMOND
-            }
-            "Jellyfish" -> {
-                Shapes.DIAMOND
-            }
-            else -> {
-                Shapes.SQUARE
-            }
-        }
-    }
-
-    enum class Shapes {
-        SQUARE,
-        CIRCLE,
-        SHARP_DIAMOND,
-        DIAMOND,
-    }
 }
 
 val TimetableRoom.nameAndFloor: String

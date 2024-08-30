@@ -1,5 +1,10 @@
 package io.github.droidkaigi.confsched.favorites.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -43,17 +48,17 @@ fun FavoriteFilters(
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         FavoriteFilterChip(
-            selected = allFilterSelected,
+            isSelected = allFilterSelected,
             onClick = onAllFilterChipClick,
             text = stringResource(FavoritesRes.string.filter_all),
         )
         FavoriteFilterChip(
-            selected = day1FilterSelected,
+            isSelected = day1FilterSelected,
             onClick = onDay1FilterChipClick,
             text = stringResource(FavoritesRes.string.filter_day1),
         )
         FavoriteFilterChip(
-            selected = day2FilterSelected,
+            isSelected = day2FilterSelected,
             onClick = onDay2FilterChipClick,
             text = stringResource(FavoritesRes.string.filter_day2),
         )
@@ -62,16 +67,22 @@ fun FavoriteFilters(
 
 @Composable
 private fun FavoriteFilterChip(
-    selected: Boolean,
+    isSelected: Boolean,
     text: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     FilterChip(
-        selected = selected,
+        modifier = modifier.padding(top = 8.dp, bottom = 12.dp),
+        selected = isSelected,
         onClick = onClick,
         label = { Text(text) },
         leadingIcon = {
-            if (selected) {
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = fadeIn() + expandHorizontally(),
+                exit = fadeOut() + shrinkHorizontally(),
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
                     contentDescription = null,

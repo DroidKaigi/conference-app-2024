@@ -16,21 +16,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.platform.testTag
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.staff.generated.resources.staff_title
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.staff.component.StaffItem
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
-import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -45,15 +44,8 @@ fun NavGraphBuilder.staffScreens(
     onStaffItemClick: (url: String) -> Unit,
 ) {
     composable(staffScreenRoute) {
-        val lifecycleOwner = LocalLifecycleOwner.current
-
         StaffScreen(
-            onNavigationIconClick = {
-                handleOnClickIfNotNavigating(
-                    lifecycleOwner,
-                    onNavigationIconClick,
-                )
-            },
+            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
             onStaffItemClick = onStaffItemClick,
         )
     }
@@ -71,8 +63,8 @@ fun StaffScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventEmitter<StaffScreenEvent>()
-    val uiState = staffScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<StaffScreenEvent>()
+    val uiState = staffScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 

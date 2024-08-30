@@ -29,6 +29,7 @@ kotlin {
                 implementation(libs.ktorKotlinxSerialization)
                 implementation(libs.ktorContentNegotiation)
                 implementation(libs.kermit)
+                implementation(libs.qrcodeKotlin)
             }
         }
 
@@ -44,7 +45,6 @@ kotlin {
         }
 
         iosMain {
-            dependsOn(getByName("commonMain"))
             dependencies {
                 implementation(libs.ktorClientDarwin)
                 api(libs.koin)

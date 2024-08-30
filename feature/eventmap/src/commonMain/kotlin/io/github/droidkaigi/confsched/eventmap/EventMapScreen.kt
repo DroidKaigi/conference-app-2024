@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.eventmap
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +20,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -29,15 +32,15 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
 import conference_app_2024.feature.eventmap.generated.resources.eventmap
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.plus
+import io.github.droidkaigi.confsched.droidkaigiui.rememberUserMessageStateHolder
 import io.github.droidkaigi.confsched.eventmap.component.EventMapItem
 import io.github.droidkaigi.confsched.eventmap.component.EventMapTab
 import io.github.droidkaigi.confsched.model.EventMapEvent
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.component.AnimatedTextTopAppBar
-import io.github.droidkaigi.confsched.ui.plus
-import io.github.droidkaigi.confsched.ui.rememberUserMessageStateHolder
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
@@ -70,10 +73,17 @@ fun NavController.navigateEventMapScreen() {
     }
 }
 
-data class EventMapUiState(
-    val eventMap: PersistentList<EventMapEvent>,
-    val userMessageStateHolder: UserMessageStateHolder,
-)
+sealed interface EventMapUiState {
+    val userMessageStateHolder: UserMessageStateHolder
+
+    data class Loading(
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ) : EventMapUiState
+    data class Exists(
+        override val userMessageStateHolder: UserMessageStateHolder,
+        val eventMap: PersistentList<EventMapEvent>,
+    ) : EventMapUiState
+}
 
 @Composable
 fun EventMapScreen(
@@ -81,9 +91,9 @@ fun EventMapScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    val eventEmitter = rememberEventEmitter<EventMapScreenEvent>()
+    val eventFlow = rememberEventFlow<EventMapScreenEvent>()
     val uiState = eventMapScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     )
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -131,7 +141,7 @@ fun EventMapScreen(
         ),
     ) { padding ->
         EventMap(
-            eventMapEvents = uiState.eventMap,
+            uiState = uiState,
             onEventMapItemClick = onEventMapItemClick,
             contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
             modifier = Modifier
@@ -144,7 +154,7 @@ fun EventMapScreen(
 
 @Composable
 private fun EventMap(
-    eventMapEvents: PersistentList<EventMapEvent>,
+    uiState: EventMapUiState,
     onEventMapItemClick: (url: String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
@@ -158,21 +168,35 @@ private fun EventMap(
             EventMapTab()
             Spacer(Modifier.height(26.dp))
         }
-        itemsIndexed(eventMapEvents) { index, eventMapEvent ->
-            EventMapItem(
-                eventMapEvent = eventMapEvent,
-                onClick = onEventMapItemClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(EventMapItemTestTag.plus(eventMapEvent.roomName.enTitle)),
-            )
-            if (eventMapEvents.lastIndex != index) {
-                Spacer(Modifier.height(24.dp))
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.outlineVariant,
-                )
-                Spacer(Modifier.height(24.dp))
+        when (uiState) {
+            is EventMapUiState.Exists -> {
+                itemsIndexed(uiState.eventMap) { index, eventMapEvent ->
+                    EventMapItem(
+                        eventMapEvent = eventMapEvent,
+                        onClick = onEventMapItemClick,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .testTag(EventMapItemTestTag.plus(eventMapEvent.roomName.enTitle)),
+                    )
+                    if (uiState.eventMap.lastIndex != index) {
+                        Spacer(Modifier.height(24.dp))
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                        )
+                        Spacer(Modifier.height(24.dp))
+                    }
+                }
+            }
+            is EventMapUiState.Loading -> {
+                item {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(contentPadding).fillMaxWidth(),
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
             }
         }
         item {
@@ -185,7 +209,10 @@ private fun EventMap(
 @Preview
 fun PreviewEventMapScreen() {
     EventMapScreen(
-        uiState = EventMapUiState(persistentListOf(), rememberUserMessageStateHolder()),
+        uiState = EventMapUiState.Exists(
+            userMessageStateHolder = rememberUserMessageStateHolder(),
+            eventMap = persistentListOf(),
+        ),
         snackbarHostState = SnackbarHostState(),
         onEventMapItemClick = {},
     )

@@ -8,6 +8,7 @@ import Theme
 
 public struct SearchView: View {
     @Bindable private var store: StoreOf<SearchReducer>
+    @State private var isFocused: Bool = false
 
     public init(store: StoreOf<SearchReducer>) {
         self.store = store
@@ -50,11 +51,13 @@ public struct SearchView: View {
                     store.send(.view(.searchWordChanged($0)))
                 }
             ),
+            isPresented: $isFocused,
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
         .onAppear {
             store.send(.view(.onAppear))
+            isFocused = true
         }
     }
 
@@ -180,13 +183,7 @@ public struct SearchView: View {
     }
 }
 
-#if hasFeature(RetroactiveAttribute)
-extension DroidKaigi2024Day: @retroactive Selectable {}
-#else
-extension DroidKaigi2024Day: Selectable {}
-#endif
-
-extension DroidKaigi2024Day {
+extension DroidKaigi2024Day: Model.Selectable {
     public var id: Self {
         self
     }
@@ -209,13 +206,7 @@ extension DroidKaigi2024Day {
     }
 }
 
-#if hasFeature(RetroactiveAttribute)
-extension TimetableSessionType: @retroactive Selectable {}
-#else
-extension TimetableSessionType: Selectable {}
-#endif
-
-extension TimetableSessionType {
+extension TimetableSessionType: Model.Selectable {
     public var id: Self {
         self
     }
@@ -225,13 +216,7 @@ extension TimetableSessionType {
     }
 }
 
-#if hasFeature(RetroactiveAttribute)
-extension Lang: @retroactive Selectable {}
-#else
-extension Lang: Selectable {}
-#endif
-
-extension Lang {
+extension Lang: Model.Selectable {
     public var id: Self {
         self
     }

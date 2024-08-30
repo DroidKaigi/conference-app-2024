@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.settings
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -13,19 +14,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.settings.generated.resources.settings_title
-import io.github.droidkaigi.confsched.compose.rememberEventEmitter
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.plus
 import io.github.droidkaigi.confsched.model.FontFamily
 import io.github.droidkaigi.confsched.settings.section.accessibility
-import io.github.droidkaigi.confsched.ui.SnackbarMessageEffect
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.ui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.ui.component.AnimatedLargeTopAppBar
-import io.github.droidkaigi.confsched.ui.handleOnClickIfNotNavigating
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -35,15 +37,8 @@ fun NavGraphBuilder.settingsScreens(
     onNavigationIconClick: () -> Unit,
 ) {
     composable(settingsScreenRoute) {
-        val lifecycleOwner = LocalLifecycleOwner.current
-
         SettingsScreen(
-            onNavigationIconClick = {
-                handleOnClickIfNotNavigating(
-                    lifecycleOwner,
-                    onNavigationIconClick,
-                )
-            },
+            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
         )
     }
 }
@@ -59,8 +54,8 @@ fun SettingsScreen(
     modifier: Modifier = Modifier,
     isTopAppBarHidden: Boolean = false,
 ) {
-    val eventEmitter = rememberEventEmitter<SettingsScreenEvent>()
-    val uiState = settingsScreenPresenter(events = eventEmitter)
+    val eventFlow = rememberEventFlow<SettingsScreenEvent>()
+    val uiState = settingsScreenPresenter(events = eventFlow)
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -72,7 +67,7 @@ fun SettingsScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
         onBackClick = onNavigationIconClick,
-        onSelectUseFontFamily = { eventEmitter.tryEmit(SettingsScreenEvent.SelectUseFontFamily(it)) },
+        onSelectUseFontFamily = { eventFlow.tryEmit(SettingsScreenEvent.SelectUseFontFamily(it)) },
         modifier = modifier,
         isTopAppBarHidden = isTopAppBarHidden,
     )
@@ -120,7 +115,7 @@ fun SettingsScreen(
                         it
                     }
                 },
-            contentPadding = padding,
+            contentPadding = padding + PaddingValues(vertical = 20.dp, horizontal = 16.dp),
             state = lazyListState,
         ) {
             accessibility(

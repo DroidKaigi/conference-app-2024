@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -28,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.BlurredEdgeTreatment
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
@@ -44,6 +44,12 @@ import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -51,10 +57,10 @@ import androidx.compose.ui.unit.sp
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.animation.onGloballyPositionedWithFavoriteAnimationScope
+import io.github.droidkaigi.confsched.droidkaigiui.useIf
 import io.github.droidkaigi.confsched.main.MainScreenTab
 import io.github.droidkaigi.confsched.model.isBlurSupported
-import io.github.droidkaigi.confsched.ui.animation.onGloballyPositionedWithFavoriteAnimationScope
-import io.github.droidkaigi.confsched.ui.useIf
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -176,7 +182,7 @@ fun GlassLikeBottomNavigation(
 }
 
 @Composable
-fun BottomBarTabs(
+private fun BottomBarTabs(
     selectedTab: MainScreenTab,
     onTabSelected: (MainScreenTab) -> Unit,
     modifier: Modifier = Modifier,
@@ -190,15 +196,12 @@ fun BottomBarTabs(
         LocalContentColor provides Color.White,
     ) {
         Row(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize().selectableGroup(),
         ) {
             for (tab in MainScreenTab.entries) {
-                val alpha by animateFloatAsState(
-                    targetValue = if (selectedTab == tab) 1f else .35f,
-                    label = "alpha",
-                )
+                val selected = selectedTab == tab
                 val scale by animateFloatAsState(
-                    targetValue = if (selectedTab == tab) 1f else .98f,
+                    targetValue = if (selected) 1f else .98f,
                     visibilityThreshold = .000001f,
                     animationSpec =
                     spring(
@@ -207,22 +210,33 @@ fun BottomBarTabs(
                     ),
                     label = "scale",
                 )
-                val iconRes = if (selectedTab == tab) {
+                val iconRes = if (selected) {
                     tab.iconOn
                 } else {
                     tab.iconOff
                 }
+                val label = stringResource(tab.label)
                 Column(
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .scale(scale)
-                        .alpha(alpha)
                         .fillMaxHeight()
                         .weight(1f)
                         .pointerInput(Unit) {
                             detectTapGestures {
                                 onTabSelected(tab)
                             }
+                        }
+                        .semantics {
+                            onClick(
+                                label = null,
+                                action = {
+                                    onTabSelected(tab)
+                                    true
+                                },
+                            )
+                            contentDescription = label
+                            role = Role.Tab
+                            this.selected = selected
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
@@ -237,7 +251,7 @@ fun BottomBarTabs(
                             }
                         },
                         painter = painterResource(iconRes),
-                        contentDescription = "tab ${stringResource(tab.contentDescription)}",
+                        contentDescription = null,
                     )
                 }
             }

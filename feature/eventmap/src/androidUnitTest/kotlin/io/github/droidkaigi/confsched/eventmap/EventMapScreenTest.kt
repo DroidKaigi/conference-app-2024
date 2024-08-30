@@ -8,7 +8,6 @@ import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.EventMapScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.EventMapServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
-import io.github.droidkaigi.confsched.testing.robot.todoChecks
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import org.junit.Rule
 import org.junit.Test
@@ -122,7 +121,9 @@ class EventMapScreenTest(val behavior: DescribedBehavior<EventMapScreenRobot>) {
                     }
                     itShould("show error message") {
                         captureScreenWithChecks(
-                            checks = todoChecks("This screen is still empty now. Please add some checks."),
+                            checks = {
+                                checkErrorSnackbarDisplayed()
+                            },
                         )
                     }
                 }

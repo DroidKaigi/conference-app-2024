@@ -25,7 +25,7 @@ class AndroidComposePlugin : Plugin<Project> {
                 implementation(libs.library("composeMaterial"))
                 implementation(libs.library("composeMaterial3"))
                 implementation(libs.library("composeUiToolingPreview"))
-                implementation(libs.library("androidxLifecycleLifecycleRuntimeKtx"))
+                implementation(libs.library("androidxLifecycleRuntime"))
                 implementation(libs.library("androidxActivityActivityCompose"))
                 implementation(libs.library("lottieCompose"))
                 testImplementation(libs.library("junit"))

@@ -7,17 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		830BFA7C2C74EBF40017A600 /* compose-resources in Resources */ = {isa = PBXBuildFile; fileRef = 830BFA7B2C74EBF40017A600 /* compose-resources */; };
+		83CD07FE2C7B1F5400CDEFDB /* compose-resources in Resources */ = {isa = PBXBuildFile; fileRef = 83CD07FD2C7B1F5400CDEFDB /* compose-resources */; };
 		8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */; };
+		8C7074772C7791BD00FD4F39 /* ci_post_clone.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8C7074762C7791BD00FD4F39 /* ci_post_clone.sh */; };
+		8C7074792C7791DF00FD4F39 /* ci_pre_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8C7074782C7791DF00FD4F39 /* ci_pre_xcodebuild.sh */; };
 		8C7DACB72BCBCCB0002C298A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C7DACB02BCBCCB0002C298A /* Preview Assets.xcassets */; };
 		8C7DACB82BCBCCB0002C298A /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C7DACB22BCBCCB0002C298A /* App.swift */; };
 		8C7DACB92BCBCCB0002C298A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C7DACB32BCBCCB0002C298A /* Assets.xcassets */; };
 		8C7DACC52BCBD18A002C298A /* App in Frameworks */ = {isa = PBXBuildFile; productRef = 8C7DACC42BCBD18A002C298A /* App */; };
+		9EA589E52C7F98E6007EE5EC /* InfoPlist.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 9EA589E42C7F98E6007EE5EC /* InfoPlist.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		830BFA7B2C74EBF40017A600 /* compose-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "compose-resources"; path = "../../app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64/compose-resources"; sourceTree = "<group>"; };
+		83CD07FD2C7B1F5400CDEFDB /* compose-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "compose-resources"; path = "../../app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/compose-resources"; sourceTree = "<group>"; };
 		8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8C7074762C7791BD00FD4F39 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
+		8C7074782C7791DF00FD4F39 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
 		8C772B152BCBCBCA00F2BADC /* DroidKaigi2024App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DroidKaigi2024App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8C7DACB02BCBCCB0002C298A /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		8C7DACB22BCBCCB0002C298A /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -25,6 +30,7 @@
 		8C7DACB52BCBCCB0002C298A /* App.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = App.entitlements; sourceTree = "<group>"; };
 		8C7DACBB2BCBCDA0002C298A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		8C7DACC12BCBD0F1002C298A /* app-ios */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "app-ios"; path = ..; sourceTree = "<group>"; };
+		9EA589E42C7F98E6007EE5EC /* InfoPlist.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = InfoPlist.xcstrings; sourceTree = "<group>"; };
 		C412816C2C149FB500B458D1 /* DroidKaigi2024App-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "DroidKaigi2024App-Info.plist"; sourceTree = "<group>"; };
 		C495D60A2C075130003B324E /* App.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = App.xctestplan; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -41,10 +47,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8C7074752C77919300FD4F39 /* ci_scripts */ = {
+			isa = PBXGroup;
+			children = (
+				8C7074762C7791BD00FD4F39 /* ci_post_clone.sh */,
+				8C7074782C7791DF00FD4F39 /* ci_pre_xcodebuild.sh */,
+			);
+			path = ci_scripts;
+			sourceTree = "<group>";
+		};
 		8C772B0C2BCBCBCA00F2BADC = {
 			isa = PBXGroup;
 			children = (
-				830BFA7B2C74EBF40017A600 /* compose-resources */,
+				83CD07FD2C7B1F5400CDEFDB /* compose-resources */,
+				8C7074752C77919300FD4F39 /* ci_scripts */,
 				C412816C2C149FB500B458D1 /* DroidKaigi2024App-Info.plist */,
 				8C7DACC22BCBD111002C298A /* App */,
 				8C7DACC12BCBD0F1002C298A /* app-ios */,
@@ -79,6 +95,7 @@
 				8C7DACB52BCBCCB0002C298A /* App.entitlements */,
 				8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */,
 				8C7DACBB2BCBCDA0002C298A /* PrivacyInfo.xcprivacy */,
+				9EA589E42C7F98E6007EE5EC /* InfoPlist.xcstrings */,
 			);
 			name = App;
 			sourceTree = "<group>";
@@ -136,6 +153,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ja,
 			);
 			mainGroup = 8C772B0C2BCBCBCA00F2BADC;
 			productRefGroup = 8C772B162BCBCBCA00F2BADC /* Products */;
@@ -153,9 +171,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				8C7DACB92BCBCCB0002C298A /* Assets.xcassets in Resources */,
+				9EA589E52C7F98E6007EE5EC /* InfoPlist.xcstrings in Resources */,
+				8C7074792C7791DF00FD4F39 /* ci_pre_xcodebuild.sh in Resources */,
 				8C7DACB72BCBCCB0002C298A /* Preview Assets.xcassets in Resources */,
 				8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */,
-				830BFA7C2C74EBF40017A600 /* compose-resources in Resources */,
+				8C7074772C7791BD00FD4F39 /* ci_post_clone.sh in Resources */,
+				83CD07FE2C7B1F5400CDEFDB /* compose-resources in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -164,6 +185,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		8C619CE72C405A97003E28A8 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -177,7 +199,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/zsh;
-			shellScript = "cd ${SRCROOT}/../..\n./gradlew assembleSharedXCFramework --no-configuration-cache\n./gradlew iosSimulatorArm64AggregateResources --no-configuration-cache\n\nRESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64\"\n\nmkdir ${RESOURCE_DIR}/compose-resources\ncp -R ${RESOURCE_DIR}/composeResources ${RESOURCE_DIR}/compose-resources\n";
+			shellScript = "cd ${SRCROOT}/../..\n\n./build_xcframework_with_xcode_environment_variable.sh\n./gradlew iosSimulatorArm64AggregateResources --no-configuration-cache\n./gradlew iosX64AggregateResources --no-configuration-cache\n\nARM_RESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosSimulatorArm64\"\nX64_RESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/iosX64\"\nRESOURCE_DIR=\"./app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/compose-resources\"\n\nmkdir -p ${ARM_RESOURCE_DIR}/composeResources\nmkdir -p ${X64_RESOURCE_DIR}/composeResources\n\nmkdir -p ${RESOURCE_DIR}\n\ncp -R ${ARM_RESOURCE_DIR}/composeResources ${RESOURCE_DIR}\n\n# Check if X64 resources exist and are not empty\nif [ -d \"${X64_RESOURCE_DIR}/composeResources\" ] && [ \"$(ls -A \"${X64_RESOURCE_DIR}/composeResources\")\" ]; then\n    # Copy X64 resources\n    cp -R \"${X64_RESOURCE_DIR}/composeResources\" \"${RESOURCE_DIR}\"\nelse\n    echo \"Warning: X64_RESOURCE_DIR is empty or does not exist. Skipping X64 resource copy.\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -318,6 +340,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Preview Content\"";
+				DEVELOPMENT_TEAM = DFY27HWN2G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DroidKaigi2024App-Info.plist";
@@ -337,7 +360,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.4;
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = io.github.droidkaigi.DroidKaigi2024;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.droidkaigi.DroidKaigi2024.Release;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -357,6 +380,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Preview Content\"";
+				DEVELOPMENT_TEAM = DFY27HWN2G;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "DroidKaigi2024App-Info.plist";
@@ -376,7 +400,7 @@
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 14.4;
 				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = io.github.droidkaigi.DroidKaigi2024;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.droidkaigi.DroidKaigi2024.Release;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
