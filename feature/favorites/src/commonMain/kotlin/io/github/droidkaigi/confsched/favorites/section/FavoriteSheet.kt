@@ -195,7 +195,7 @@ fun FavoriteSheetPreview() {
                             Session.fake(),
                         ),
                     ),
-                    timetable = Timetable.fake()
+                    timetable = Timetable.fake(),
                 ),
                 filterBackgroundColor = MaterialTheme.colorScheme.surface,
                 onAllFilterChipClick = {},

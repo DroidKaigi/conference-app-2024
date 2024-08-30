@@ -134,7 +134,7 @@ fun FavoriteList(
                                 AnimatedVisibility(
                                     visible = isBookmarked,
                                     enter = fadeIn(),
-                                    exit = fadeOut()
+                                    exit = fadeOut(),
                                 ) {
                                     TimetableItemCard(
                                         modifier = Modifier
@@ -147,7 +147,7 @@ fun FavoriteList(
                                                 icon = timetableItem.room.icon,
                                                 tagColor = LocalRoomTheme.current.primaryColor,
                                                 modifier = Modifier.background(
-                                                    LocalRoomTheme.current.containerColor
+                                                    LocalRoomTheme.current.containerColor,
                                                 ),
                                             )
                                             timetableItem.language.labels.forEach { label ->

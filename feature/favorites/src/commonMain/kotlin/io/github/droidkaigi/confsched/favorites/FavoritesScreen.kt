@@ -185,7 +185,7 @@ fun FavoritesScreenPreview() {
                                 Session.fake(),
                             ),
                         ),
-                        timetable = Timetable.fake()
+                        timetable = Timetable.fake(),
                     ),
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
