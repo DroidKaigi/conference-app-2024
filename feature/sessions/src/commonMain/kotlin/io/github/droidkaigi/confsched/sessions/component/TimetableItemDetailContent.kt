@@ -174,9 +174,10 @@ private fun ArchiveSection(
     modifier: Modifier = Modifier,
     onWatchVideoClick: (url: String) -> Unit,
 ) {
-    Column(modifier = modifier
-        .padding(8.dp)
-        .testTag(TimetableItemDetailContentArchiveSectionTestTag)
+    Column(
+        modifier = modifier
+            .padding(8.dp)
+            .testTag(TimetableItemDetailContentArchiveSectionTestTag),
     ) {
         Text(
             text = stringResource(SessionsRes.string.archive),

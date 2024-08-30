@@ -238,7 +238,7 @@ public fun SessionsAllResponse.Companion.bothAssetAvailableFake(): SessionsAllRe
             asset = SessionAssetResponse(
                 videoUrl = "https://2024.droidkaigi.jp/",
                 slideUrl = "https://2024.droidkaigi.jp/",
-            )
+            ),
         )
     }
 
@@ -257,7 +257,7 @@ public fun SessionsAllResponse.Companion.onlySlideAssetAvailableFake(): Sessions
             asset = SessionAssetResponse(
                 videoUrl = null,
                 slideUrl = "https://2024.droidkaigi.jp/",
-            )
+            ),
         )
     }
 
@@ -276,7 +276,7 @@ public fun SessionsAllResponse.Companion.onlyVideoAssetAvailableFake(): Sessions
             asset = SessionAssetResponse(
                 videoUrl = "https://2024.droidkaigi.jp/",
                 slideUrl = null,
-            )
+            ),
         )
     }
 
