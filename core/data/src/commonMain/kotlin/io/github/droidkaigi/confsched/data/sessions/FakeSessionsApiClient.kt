@@ -30,6 +30,24 @@ public class FakeSessionsApiClient : SessionsApiClient {
             }
         }
 
+        public data object OperationalBothAssetAvailable : Status() {
+            override suspend fun sessionsAllResponse(): SessionsAllResponse {
+                return SessionsAllResponse.bothAssetAvailableFake()
+            }
+        }
+
+        public data object OperationalOnlySlideAssetAvailable : Status() {
+            override suspend fun sessionsAllResponse(): SessionsAllResponse {
+                return SessionsAllResponse.onlySlideAssetAvailableFake()
+            }
+        }
+
+        public data object OperationalOnlyVideoAssetAvailable : Status() {
+            override suspend fun sessionsAllResponse(): SessionsAllResponse {
+                return SessionsAllResponse.onlyVideoAssetAvailableFake()
+            }
+        }
+
         public data object Error : Status() {
             override suspend fun sessionsAllResponse(): SessionsAllResponse {
                 throw IOException("Fake IO Exception")
@@ -213,6 +231,63 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
         rooms = rooms,
         speakers = speakers,
         categories = categories,
+    )
+}
+
+public fun SessionsAllResponse.Companion.bothAssetAvailableFake(): SessionsAllResponse {
+    val baseFake = fake()
+    val sessions = baseFake.sessions.map { session ->
+        session.copy(
+            asset = SessionAssetResponse(
+                videoUrl = "https://2024.droidkaigi.jp/",
+                slideUrl = "https://2024.droidkaigi.jp/",
+            )
+        )
+    }
+
+    return SessionsAllResponse(
+        sessions = sessions,
+        rooms = baseFake.rooms,
+        speakers = baseFake.speakers,
+        categories = baseFake.categories,
+    )
+}
+
+public fun SessionsAllResponse.Companion.onlySlideAssetAvailableFake(): SessionsAllResponse {
+    val baseFake = fake()
+    val sessions = baseFake.sessions.map { session ->
+        session.copy(
+            asset = SessionAssetResponse(
+                videoUrl = null,
+                slideUrl = "https://2024.droidkaigi.jp/",
+            )
+        )
+    }
+
+    return SessionsAllResponse(
+        sessions = sessions,
+        rooms = baseFake.rooms,
+        speakers = baseFake.speakers,
+        categories = baseFake.categories,
+    )
+}
+
+public fun SessionsAllResponse.Companion.onlyVideoAssetAvailableFake(): SessionsAllResponse {
+    val baseFake = fake()
+    val sessions = baseFake.sessions.map { session ->
+        session.copy(
+            asset = SessionAssetResponse(
+                videoUrl = "https://2024.droidkaigi.jp/",
+                slideUrl = null,
+            )
+        )
+    }
+
+    return SessionsAllResponse(
+        sessions = sessions,
+        rooms = baseFake.rooms,
+        speakers = baseFake.speakers,
+        categories = baseFake.categories,
     )
 }
 

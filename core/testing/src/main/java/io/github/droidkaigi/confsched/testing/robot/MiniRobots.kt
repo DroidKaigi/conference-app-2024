@@ -10,6 +10,7 @@ import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
 import io.github.droidkaigi.confsched.data.profilecard.ProfileCardDataStore
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
+import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient.Status
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.data.settings.SettingsDataStore
 import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
@@ -28,6 +29,11 @@ import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.Setti
 import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus.UseDotGothic16FontFamily
 import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus.UseSystemDefaultFont
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.Error
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.Operational
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalBothAssetAvailable
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalOnlySlideAssetAvailable
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalOnlyVideoAssetAvailable
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.TestDispatcher
@@ -168,6 +174,9 @@ class DefaultDeviceSetupRobot @Inject constructor() : DeviceSetupRobot {
 interface TimetableServerRobot {
     enum class ServerStatus {
         Operational,
+        OperationalBothAssetAvailable,
+        OperationalOnlySlideAssetAvailable,
+        OperationalOnlyVideoAssetAvailable,
         Error,
     }
 
@@ -180,8 +189,11 @@ class DefaultTimetableServerRobot @Inject constructor(sessionsApiClient: Session
     override fun setupTimetableServer(serverStatus: TimetableServerRobot.ServerStatus) {
         fakeSessionsApiClient.setup(
             when (serverStatus) {
-                TimetableServerRobot.ServerStatus.Operational -> FakeSessionsApiClient.Status.Operational
-                TimetableServerRobot.ServerStatus.Error -> FakeSessionsApiClient.Status.Error
+                Operational -> Status.Operational
+                OperationalBothAssetAvailable -> Status.OperationalBothAssetAvailable
+                OperationalOnlySlideAssetAvailable -> Status.OperationalOnlySlideAssetAvailable
+                OperationalOnlyVideoAssetAvailable -> Status.OperationalOnlyVideoAssetAvailable
+                Error -> Status.Error
             },
         )
     }
