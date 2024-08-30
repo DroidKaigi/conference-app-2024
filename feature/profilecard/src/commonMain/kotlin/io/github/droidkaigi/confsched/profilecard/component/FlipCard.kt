@@ -4,6 +4,9 @@ import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.draggable
+import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -26,6 +29,8 @@ import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
 import kotlinx.coroutines.delay
 
 const val ProfileCardFlipCardTestTag = "ProfileCardFlipCardTestTag"
+
+private const val ChangeFlipCardDeltaThreshold = 20f
 
 @Composable
 internal fun FlipCard(
@@ -50,7 +55,18 @@ internal fun FlipCard(
         modifier = modifier
             .testTag(ProfileCardFlipCardTestTag)
             .size(width = 300.dp, height = 380.dp)
-            .clickable { isFlipped = !isFlipped }
+            .clickable { isFlipped = isFlipped.not() }
+            .draggable(
+                orientation = Orientation.Horizontal,
+                state = rememberDraggableState { delta ->
+                    if (isFlipped && delta > ChangeFlipCardDeltaThreshold) {
+                        isFlipped = false
+                    }
+                    if (isFlipped.not() && delta < -ChangeFlipCardDeltaThreshold) {
+                        isFlipped = true
+                    }
+                },
+            )
             .graphicsLayer {
                 rotationY = rotation
                 cameraDistance = 12f * density

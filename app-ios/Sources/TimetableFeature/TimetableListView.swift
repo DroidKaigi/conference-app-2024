@@ -90,7 +90,7 @@ struct TimetableListView: View {
 
     var body: some View {
         ScrollView{
-            LazyVStack {
+            LazyVStack(spacing: 0) {
                 ForEach(store.timetableItems, id: \.self) { item in
                     TimeGroupMiniList(contents: item, onItemTap: { item in
                         store.send(.view(.timetableItemTapped(item)))
@@ -137,7 +137,7 @@ struct TimetableGridView: View {
                             Text(timeBlock.startsTimeString).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor).textStyle(.labelMedium)
                             Spacer()
                             
-                        }.frame(height: 153)
+                        }.frame(width: 40, height: 153)
                         
                         if (timeBlock.items.count == 1 && timeBlock.isTopLunch()) {
                             
@@ -179,14 +179,14 @@ struct TimeGroupMiniList: View {
     let onFavoriteTap: (TimetableItemWithFavorite) -> Void
     
     var body: some View {
-        HStack {
+        HStack(spacing: 16) {
             VStack {
                 Text(contents.startsTimeString).textStyle(.titleMedium)
                 Text("|").font(.system(size: 8))
                 Text(contents.endsTimeString).textStyle(.titleMedium)
                 Spacer()
-            }.padding(10).foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
-            VStack {
+            }.foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
+            VStack(spacing: 12) {
                 ForEach(contents.items, id: \.self) { item in
                     TimetableCard(
                         timetableItem: item.timetableItem,
@@ -199,8 +199,7 @@ struct TimeGroupMiniList: View {
                         })
                 }
             }
-        }.background(Color.clear)
-            
+        }.padding(16).background(Color.clear)
     }
 }
 

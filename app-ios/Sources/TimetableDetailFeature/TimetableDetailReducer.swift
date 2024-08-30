@@ -28,7 +28,7 @@ public struct TimetableDetailReducer: Sendable {
         @Presents var confirmationDialog: ConfirmationDialogState<ConfirmationDialog>?
     }
 
-    public enum Action: BindableAction {
+    public enum Action: BindableAction, Sendable {
         case binding(BindingAction<State>)
         case view(View)
         case confirmationDialog(PresentationAction<ConfirmationDialog>)
@@ -36,7 +36,7 @@ public struct TimetableDetailReducer: Sendable {
         case requestEventAccessResponse(Result<Bool, any Error>)
         case addEventResponse(Result<Void, any Error>)
 
-        public enum View {
+        public enum View: Sendable{
             case favoriteButtonTapped
             case calendarButtonTapped
             case slideButtonTapped(URL)
@@ -46,7 +46,7 @@ public struct TimetableDetailReducer: Sendable {
     }
     
     @CasePathable
-    public enum ConfirmationDialog {
+    public enum ConfirmationDialog: Sendable {
         case addEvent
     }
     

@@ -15,7 +15,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.settings.generated.resources.settings_title
@@ -25,7 +25,6 @@ import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedMediumTopAppBar
-import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
 import io.github.droidkaigi.confsched.droidkaigiui.plus
 import io.github.droidkaigi.confsched.model.FontFamily
 import io.github.droidkaigi.confsched.settings.section.accessibility
@@ -38,15 +37,8 @@ fun NavGraphBuilder.settingsScreens(
     onNavigationIconClick: () -> Unit,
 ) {
     composable(settingsScreenRoute) {
-        val lifecycleOwner = LocalLifecycleOwner.current
-
         SettingsScreen(
-            onNavigationIconClick = {
-                handleOnClickIfNotNavigating(
-                    lifecycleOwner,
-                    onNavigationIconClick,
-                )
-            },
+            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
         )
     }
 }

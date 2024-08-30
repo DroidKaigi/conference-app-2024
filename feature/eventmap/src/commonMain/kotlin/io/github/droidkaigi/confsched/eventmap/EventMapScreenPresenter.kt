@@ -19,7 +19,9 @@ fun eventMapScreenPresenter(
     val eventMap by rememberUpdatedState(eventMapRepository.eventMapEvents())
     EventEffect(events) { event ->
     }
-    EventMapUiState(
+
+    if (eventMap.isEmpty()) return@providePresenterDefaults EventMapUiState.Loading(userMessageStateHolder)
+    EventMapUiState.Exists(
         eventMap = eventMap,
         userMessageStateHolder = userMessageStateHolder,
     )

@@ -17,7 +17,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
-import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.staff.generated.resources.staff_title
@@ -26,8 +26,6 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedMediumTopAppBar
-import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.staff.component.StaffItem
@@ -45,15 +43,8 @@ fun NavGraphBuilder.staffScreens(
     onStaffItemClick: (url: String) -> Unit,
 ) {
     composable(staffScreenRoute) {
-        val lifecycleOwner = LocalLifecycleOwner.current
-
         StaffScreen(
-            onNavigationIconClick = {
-                handleOnClickIfNotNavigating(
-                    lifecycleOwner,
-                    onNavigationIconClick,
-                )
-            },
+            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
             onStaffItemClick = onStaffItemClick,
         )
     }

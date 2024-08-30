@@ -6,9 +6,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -31,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
@@ -40,14 +43,15 @@ import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.dropUnlessStarted
 import conference_app_2024.feature.sessions.generated.resources.content_description_error_icon
 import conference_app_2024.feature.sessions.generated.resources.content_description_user_icon
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
+import io.github.droidkaigi.confsched.droidkaigiui.component.speakerPainter
 import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
-import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
 import io.github.droidkaigi.confsched.model.MultiLangText
 import io.github.droidkaigi.confsched.model.RoomType.RoomH
 import io.github.droidkaigi.confsched.model.TimetableAsset
@@ -137,9 +141,7 @@ fun TimetableGridItem(
                 )
                 .width(TimetableGridItemSizes.width)
                 .height(height)
-                .clickable {
-                    onTimetableItemClick(timetableItem)
-                }
+                .clickable(onClick = dropUnlessStarted { onTimetableItemClick(timetableItem) })
                 .padding(
                     horizontal = TimetableGridItemSizes.padding,
                     vertical = if (isNarrowedVerticalPadding) {
@@ -277,27 +279,42 @@ private fun SpeakerIcon(
     iconUrl: String,
     modifier: Modifier = Modifier,
 ) {
-    Image(
-        painter = previewOverride(previewPainter = { rememberVectorPainter(image = Icons.Default.Person) }) {
-            rememberAsyncImagePainter(iconUrl)
-        },
-        contentDescription = stringResource(SessionsRes.string.content_description_user_icon),
+    Box(
         modifier = modifier
             .border(
                 BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
                 CircleShape,
             )
-            .height(TimetableGridItemSizes.speakerHeight)
+            .clip(CircleShape)
             .layout { measurable, constraints ->
                 // To keep circle shape, it needs to match the vertical size when pinching in
-                val placeable = measurable.measure(constraints)
-                val size = placeable.height
+                val size = constraints.maxWidth.coerceAtMost(constraints.maxHeight)
+                val placeable = measurable.measure(
+                    constraints.copy(
+                        minWidth = size,
+                        maxWidth = size,
+                        minHeight = size,
+                        maxHeight = size,
+                    ),
+                )
                 layout(size, size) {
                     placeable.placeRelative(0, 0)
                 }
-            }
-            .clip(CircleShape),
-    )
+            },
+    ) {
+        Image(
+            painter = previewOverride(
+                previewPainter = {
+                    rememberVectorPainter(image = Icons.Default.Person)
+                },
+            ) {
+                speakerPainter(iconUrl)
+            },
+            contentDescription = stringResource(SessionsRes.string.content_description_user_icon),
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
 }
 
 /**
