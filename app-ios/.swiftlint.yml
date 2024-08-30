@@ -9,9 +9,9 @@ opt_in_rules:
 
 included:
   - App/DroidKaigi2024
-  - Modules/Package.swift
-  - Modules/Sources
-  - Modules/Tests
+  - Package.swift
+  - Sources
+  - Tests
 
 identifier_name:
   min_length: 2
