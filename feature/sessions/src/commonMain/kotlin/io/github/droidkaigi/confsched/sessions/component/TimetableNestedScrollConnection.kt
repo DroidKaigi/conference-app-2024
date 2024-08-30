@@ -70,16 +70,16 @@ internal data class TimetableNestedScrollConnection(
 
 @Composable
 internal fun rememberTimetableNestedScrollConnection(
-    timetableScope: TimetableScope,
+    timetableNestedScrollController: TimetableNestedScrollController,
 ): TimetableNestedScrollConnection {
     val flingBehavior = rememberFlingBehavior()
 
-    return remember(timetableScope, flingBehavior) {
+    return remember(timetableNestedScrollController, flingBehavior) {
         TimetableNestedScrollConnection(
             flingBehavior = flingBehavior,
-            minOffset = { -timetableScope.dayTabHeight },
-            currentOffset = { timetableScope.dayTabOffsetY },
-            onOffsetChange = { timetableScope.updateDayTabOffsetY(it) },
+            minOffset = { -timetableNestedScrollController.dayTabHeight },
+            currentOffset = { timetableNestedScrollController.dayTabOffsetY },
+            onOffsetChange = { timetableNestedScrollController.updateDayTabOffsetY(it) },
         )
     }
 }

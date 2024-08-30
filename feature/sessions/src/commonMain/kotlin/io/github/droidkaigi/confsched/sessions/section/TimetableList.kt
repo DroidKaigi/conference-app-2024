@@ -43,8 +43,9 @@ import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedT
 import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.sessions.component.TimetableScope
+import io.github.droidkaigi.confsched.sessions.component.TimetableNestedScrollController
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollConnection
+import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollController
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import kotlinx.collections.immutable.PersistentMap
 
@@ -64,13 +65,14 @@ data class TimetableListUiState(
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-internal fun TimetableScope.TimetableList(
+internal fun TimetableList(
     uiState: TimetableListUiState,
     scrollState: LazyListState,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
+    nestedScrollController: TimetableNestedScrollController = rememberTimetableNestedScrollController(true),
     highlightWord: String = "",
 ) {
     val layoutDirection = LocalLayoutDirection.current
@@ -85,12 +87,14 @@ internal fun TimetableScope.TimetableList(
     }
     val columnNum by remember { derivedStateOf { if (isWideWidthScreen) 2 else 1 } }
 
-    val nestedScrollConnection = rememberTimetableNestedScrollConnection(this)
+    val nestedScrollConnection = rememberTimetableNestedScrollConnection(
+        timetableNestedScrollController = nestedScrollController,
+    )
 
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag)
             .offset {
-                IntOffset(x = 0, y = dayTabOffsetY.toInt())
+                IntOffset(x = 0, y = nestedScrollController.dayTabOffsetY.toInt())
             }
             .nestedScroll(nestedScrollConnection),
         state = scrollState,

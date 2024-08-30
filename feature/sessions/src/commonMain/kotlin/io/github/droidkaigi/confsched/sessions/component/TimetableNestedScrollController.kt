@@ -8,34 +8,26 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 
 @Composable
-internal fun rememberTimetableScope(
+internal fun rememberTimetableNestedScrollController(
     isListTimetable: Boolean,
-): TimetableScope {
+): TimetableNestedScrollController {
     return remember(isListTimetable) {
-        TimetableScopeImpl(
+        TimetableNestedScrollControllerImpl(
             isListTimetable = isListTimetable,
         )
     }
 }
 
-@Composable
-internal fun WithTimetableScope(
-    scope: TimetableScope = rememberTimetableScope(isListTimetable = true),
-    content: @Composable TimetableScope.() -> Unit,
-) {
-    scope.content()
-}
-
-internal sealed interface TimetableScope {
+internal sealed interface TimetableNestedScrollController {
     val dayTabHeight: Float
     val dayTabOffsetY: Float
     fun setDayTabHeight(height: Float)
     fun updateDayTabOffsetY(offset: Float)
 }
 
-private class TimetableScopeImpl(
+private class TimetableNestedScrollControllerImpl(
     isListTimetable: Boolean,
-) : TimetableScope {
+) : TimetableNestedScrollController {
     private var _dayTabHeight: MutableState<Float> = mutableStateOf(0f)
     override val dayTabHeight: Float by _dayTabHeight
 
