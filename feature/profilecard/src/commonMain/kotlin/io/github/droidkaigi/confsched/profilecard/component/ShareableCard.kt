@@ -92,10 +92,10 @@ private fun ShareableCardContent(
     val heightPx = 630
     val cardWidthPx = 300
     val cardHeightPx = 380
-    val offsetXBackPx = 140f
-    val offsetYBackPx = 75f
-    val offsetXFrontPx = -140f
-    val offsetYFrontPx = -75f
+    val offsetXBackPx = 148f
+    val offsetYBackPx = 76f
+    val offsetXFrontPx = -136f
+    val offsetYFrontPx = -61f
 
     val density = LocalDensity.current
 
@@ -134,7 +134,7 @@ private fun ShareableCardContent(
                             x = with(density) { offsetXFrontPx.toDp() },
                             y = with(density) { offsetYFrontPx.toDp() },
                         )
-                        .rotate(-10f)
+                        .rotate(-12.2f)
                         .size(
                             width = with(density) { cardWidthPx.toDp() },
                             height = with(density) { cardHeightPx.toDp() },
