@@ -175,7 +175,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                             scrollToAssetSection()
                         }
-                        itShould("both assets are displayed") {
+                        itShould("display both assets") {
                             captureScreenWithChecks {
                                 checkBothAssetButtonDisplayed()
                             }
