@@ -105,7 +105,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             doIt {
                                 scrollLazyColumnByIndex(2)
                             }
-                            itShould("both assets does not displayed") {
+                            itShould("not display both assets") {
                                 captureScreenWithChecks {
                                     checkAssetSectionDoesNotDisplayed()
                                 }
