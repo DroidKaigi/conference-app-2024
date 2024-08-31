@@ -160,8 +160,8 @@ fun TimetableGridItem(
             ) {
                 if (isShowingAllContent) {
                     Row(
-                        modifier = Modifier
-                            .weight(1f, fill = false),
+                        modifier = Modifier.weight(1f, fill = false),
+                        verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
                             modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
