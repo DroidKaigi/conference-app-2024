@@ -191,7 +191,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                             scrollToAssetSection()
                         }
-                        itShould("only slide assets are displayed") {
+                        itShould("display only slide assets") {
                             captureScreenWithChecks {
                                 checkOnlySlideAssetButtonDisplayed()
                             }
