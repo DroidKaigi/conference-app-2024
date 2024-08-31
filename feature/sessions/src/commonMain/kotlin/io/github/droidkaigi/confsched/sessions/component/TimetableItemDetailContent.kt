@@ -55,6 +55,7 @@ const val DescriptionMoreButtonTestTag = "DescriptionMoreButtonTestTag"
 const val TimetableItemDetailContentArchiveSectionTestTag = "TimetableItemDetailContentArchiveSectionTestTag"
 const val TimetableItemDetailContentArchiveSectionSlideButtonTestTag = "TimetableItemDetailContentArchiveSectionSlideButtonTestTag"
 const val TimetableItemDetailContentArchiveSectionVideoButtonTestTag = "TimetableItemDetailContentArchiveSectionVideoButtonTestTag"
+const val TimetableItemDetailContentTargetAudienceSectionBottomTestTag = "TimetableItemDetailContentTargetAudienceSectionBottomTestTag"
 
 @Composable
 fun TimetableItemDetailContent(
@@ -163,7 +164,7 @@ private fun TargetAudienceSection(
             text = timetableItem.targetAudience,
             style = MaterialTheme.typography.bodyLarge,
         )
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp).testTag(TimetableItemDetailContentTargetAudienceSectionBottomTestTag))
     }
 }
 

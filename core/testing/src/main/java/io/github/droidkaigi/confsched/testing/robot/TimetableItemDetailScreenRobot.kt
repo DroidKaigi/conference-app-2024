@@ -30,6 +30,7 @@ import io.github.droidkaigi.confsched.sessions.component.TargetAudienceSectionTe
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailContentArchiveSectionSlideButtonTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailContentArchiveSectionTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailContentArchiveSectionVideoButtonTestTag
+import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailContentTargetAudienceSectionBottomTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHeadlineTestTag
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
 import javax.inject.Inject
@@ -99,6 +100,16 @@ class TimetableItemDetailScreenRobot @Inject constructor(
                     endY = visibleSize.height / 7F,
                 )
             }
+    }
+
+    fun scrollToBeforeAssetSection() {
+        composeTestRule
+            .onNode(hasTestTag(TimetableItemDetailScreenLazyColumnTestTag))
+            .performScrollToNode(
+                hasTestTag(
+                    TimetableItemDetailContentTargetAudienceSectionBottomTestTag
+                )
+            )
     }
 
     fun scrollToAssetSection() {

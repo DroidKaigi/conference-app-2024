@@ -103,7 +103,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         }
                         describe("when scroll to bottom") {
                             doIt {
-                                scrollLazyColumnByIndex(2)
+                                scrollToBeforeAssetSection()
                             }
                             itShould("not display both assets") {
                                 captureScreenWithChecks {
