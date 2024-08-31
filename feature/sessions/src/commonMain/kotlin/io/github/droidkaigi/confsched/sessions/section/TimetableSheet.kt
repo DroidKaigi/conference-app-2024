@@ -29,7 +29,7 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimeLine
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
-import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollController
+import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.GridTimetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.ListTimetable
@@ -66,7 +66,7 @@ fun Timetable(
     }
     val layoutDirection = LocalLayoutDirection.current
 
-    val nestedScrollController = rememberTimetableNestedScrollController(isListTimetable = uiState is ListTimetable)
+    val nestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(isListTimetable = uiState is ListTimetable)
 
     Surface(
         modifier = modifier.padding(contentPadding.calculateTopPadding()),
@@ -81,16 +81,21 @@ fun Timetable(
                     selectedDay = day
                 },
                 modifier = Modifier.onGloballyPositioned {
-                    nestedScrollController.setDayTabHeight(it.size.height.toFloat())
+                    nestedScrollStateHolder.onDayTabHeightMeasured(
+                        it.size.height.toFloat(),
+                    )
                 }.offset {
-                    IntOffset(x = 0, y = nestedScrollController.dayTabOffsetY.toInt())
+                    IntOffset(
+                        x = 0,
+                        y = nestedScrollStateHolder.uiState.dayTabOffsetY.toInt(),
+                    )
                 },
             )
             when (uiState) {
                 is ListTimetable -> {
                     val scrollStates = rememberListTimetableScrollStates()
                     TimetableList(
-                        nestedScrollController = nestedScrollController,
+                        nestedScrollStateHolder = nestedScrollStateHolder,
                         uiState = requireNotNull(uiState.timetableListUiStates[selectedDay]),
                         scrollState = scrollStates.getValue(selectedDay),
                         onTimetableItemClick = onTimetableItemClick,

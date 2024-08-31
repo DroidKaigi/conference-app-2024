@@ -70,16 +70,16 @@ internal data class TimetableNestedScrollConnection(
 
 @Composable
 internal fun rememberTimetableNestedScrollConnection(
-    timetableNestedScrollController: TimetableNestedScrollController,
+    nestedScrollStateHolder: TimetableNestedScrollStateHolder,
 ): TimetableNestedScrollConnection {
     val flingBehavior = rememberFlingBehavior()
 
-    return remember(timetableNestedScrollController, flingBehavior) {
+    return remember(nestedScrollStateHolder, flingBehavior) {
         TimetableNestedScrollConnection(
             flingBehavior = flingBehavior,
-            minOffset = { -timetableNestedScrollController.dayTabHeight },
-            currentOffset = { timetableNestedScrollController.dayTabOffsetY },
-            onOffsetChange = { timetableNestedScrollController.updateDayTabOffsetY(it) },
+            minOffset = { -nestedScrollStateHolder.uiState.scrollConnectionMinOffset },
+            currentOffset = { nestedScrollStateHolder.uiState.dayTabOffsetY },
+            onOffsetChange = { nestedScrollStateHolder.onTimetableListOffsetChanged(it) },
         )
     }
 }

@@ -43,9 +43,9 @@ import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedT
 import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.sessions.component.TimetableNestedScrollController
+import io.github.droidkaigi.confsched.sessions.component.TimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollConnection
-import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollController
+import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import kotlinx.collections.immutable.PersistentMap
 
@@ -72,7 +72,7 @@ internal fun TimetableList(
     onTimetableItemClick: (TimetableItem) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
-    nestedScrollController: TimetableNestedScrollController = rememberTimetableNestedScrollController(true),
+    nestedScrollStateHolder: TimetableNestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(true),
     highlightWord: String = "",
 ) {
     val layoutDirection = LocalLayoutDirection.current
@@ -88,13 +88,13 @@ internal fun TimetableList(
     val columnNum by remember { derivedStateOf { if (isWideWidthScreen) 2 else 1 } }
 
     val nestedScrollConnection = rememberTimetableNestedScrollConnection(
-        timetableNestedScrollController = nestedScrollController,
+        nestedScrollStateHolder = nestedScrollStateHolder,
     )
 
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag)
             .offset {
-                IntOffset(x = 0, y = nestedScrollController.dayTabOffsetY.toInt())
+                IntOffset(x = 0, y = nestedScrollStateHolder.uiState.dayTabOffsetY.toInt())
             }
             .nestedScroll(nestedScrollConnection),
         state = scrollState,
