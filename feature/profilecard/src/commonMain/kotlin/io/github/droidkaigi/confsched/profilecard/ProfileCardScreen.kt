@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -80,6 +81,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.navigation.NavController
@@ -404,6 +406,7 @@ internal fun EditScreen(
                 nickname = it
                 onChangeNickname(it)
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
         InputFieldWithError(
             value = occupation,
@@ -414,6 +417,7 @@ internal fun EditScreen(
                 occupation = it
                 onChangeOccupation(it)
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
         val linkLabel = stringResource(ProfileCardRes.string.link)
             .plus(stringResource(ProfileCardRes.string.link_example_text))
@@ -426,6 +430,7 @@ internal fun EditScreen(
                 link = it
                 onChangeLink(it)
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         )
 
         Column(
@@ -506,6 +511,7 @@ private fun InputFieldWithError(
     textFieldTestTag: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     maxLines: Int = 1,
 ) {
     Column(modifier = modifier) {
@@ -524,6 +530,7 @@ private fun InputFieldWithError(
             onValueChange = onValueChange,
             isError = isError,
             shape = RoundedCornerShape(4.dp),
+            keyboardOptions = keyboardOptions,
             maxLines = maxLines,
             modifier = Modifier
                 .indicatorLine(
