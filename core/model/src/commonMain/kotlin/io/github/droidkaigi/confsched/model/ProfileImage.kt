@@ -6,8 +6,9 @@ data class ProfileImage(
     val bytes: ByteArray,
 ) {
     fun crop(rect: IntRect): ProfileImage {
-        // TODO
-        return this
+        return copy(
+            bytes = bytes.crop(rect),
+        )
     }
 
     override fun equals(other: Any?): Boolean {
@@ -23,3 +24,5 @@ data class ProfileImage(
         return bytes.contentHashCode()
     }
 }
+
+expect fun ByteArray.crop(rect: IntRect): ByteArray
