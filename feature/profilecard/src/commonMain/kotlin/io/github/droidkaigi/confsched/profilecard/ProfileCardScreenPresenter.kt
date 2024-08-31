@@ -84,19 +84,20 @@ internal fun profileCardScreenPresenter(
     events: EventFlow<ProfileCardScreenEvent>,
     repository: ProfileCardRepository = localProfileCardRepository(),
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
-    val nicknameValidationErrorString = stringResource(
+    val emptyNicknameErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.nickname),
     )
-    val occupationValidationErrorString = stringResource(
+    val emptyOccupationErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.occupation),
     )
-    val linkValidationErrorString = stringResource(
+    val emptyLinkErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.link),
     )
     val imageValidationErrorString = stringResource(
+    val emptyImageErrorString = stringResource(
         ProfileCardRes.string.add_validate_format,
         stringResource(ProfileCardRes.string.image),
     )
@@ -148,13 +149,13 @@ internal fun profileCardScreenPresenter(
 
             is EditScreenEvent.OnChangeNickname -> {
                 cardError = cardError.copy(
-                    nicknameError = if (event.nickname.isEmpty()) nicknameValidationErrorString else "",
+                    nicknameError = if (event.nickname.isEmpty()) emptyNicknameErrorString else "",
                 )
             }
 
             is EditScreenEvent.OnChangeOccupation -> {
                 cardError = cardError.copy(
-                    occupationError = if (event.occupation.isEmpty()) occupationValidationErrorString else "",
+                    occupationError = if (event.occupation.isEmpty()) emptyOccupationErrorString else "",
                 )
             }
 
@@ -164,13 +165,13 @@ internal fun profileCardScreenPresenter(
                 // ex. https://www.example.com/hogefuga/foobar
                 val invalidFormat = event.link.matches(Regex("^https?://(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(?:/\\S*)?\$")).not()
                 cardError = cardError.copy(
-                    linkError = if (event.link.isEmpty() || invalidFormat) linkValidationErrorString else "",
+                    linkError = if (event.link.isEmpty()) emptyLinkErrorString else "",
                 )
             }
 
             is EditScreenEvent.OnChangeImage -> {
                 cardError = cardError.copy(
-                    imageError = if (event.image.isEmpty()) imageValidationErrorString else "",
+                    imageError = if (event.image.isEmpty()) emptyImageErrorString else "",
                 )
             }
         }
