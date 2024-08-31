@@ -254,6 +254,8 @@ private fun SingleSpeaker(
             text = speaker.name,
             style = textStyle,
             color = textColor,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }
