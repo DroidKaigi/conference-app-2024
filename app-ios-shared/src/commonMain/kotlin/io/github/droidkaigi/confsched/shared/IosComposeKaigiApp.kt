@@ -10,6 +10,7 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -104,6 +105,7 @@ private object ExternalNavControllerLink {
 
 data class IosComposeKaigiAppUiState(
     val userMessageStateHolder: UserMessageStateHolder,
+    val shouldGoToSettingsApp: Boolean,
 )
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -136,6 +138,13 @@ fun kaigiAppController(
         snackbarHostState = snackbarHostState,
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
+
+    LaunchedEffect(uiState.shouldGoToSettingsApp) {
+        if (uiState.shouldGoToSettingsApp) {
+            eventFlow.tryEmit(IosComposeKaigiAppEvent.SettingsAppNavigated)
+            openSettingsApp()
+        }
+    }
 
     CompositionLocalProvider(
         LocalRepositories provides repositories.map,
