@@ -13,6 +13,7 @@ import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
 import conference_app_2024.feature.profilecard.generated.resources.nickname
 import conference_app_2024.feature.profilecard.generated.resources.occupation
+import conference_app_2024.feature.profilecard.generated.resources.url_is_invalid
 import io.github.droidkaigi.confsched.compose.EventEffect
 import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
@@ -96,7 +97,9 @@ internal fun profileCardScreenPresenter(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.link),
     )
-    val imageValidationErrorString = stringResource(
+    val invalidLinkErrorString = stringResource(
+        ProfileCardRes.string.url_is_invalid,
+    )
     val emptyImageErrorString = stringResource(
         ProfileCardRes.string.add_validate_format,
         stringResource(ProfileCardRes.string.image),
@@ -165,7 +168,7 @@ internal fun profileCardScreenPresenter(
                 // ex. https://www.example.com/hogefuga/foobar
                 val invalidFormat = event.link.matches(Regex("^https?://(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}(?:/\\S*)?\$")).not()
                 cardError = cardError.copy(
-                    linkError = if (event.link.isEmpty()) emptyLinkErrorString else "",
+                    linkError = if (event.link.isEmpty()) emptyLinkErrorString else if (invalidFormat) invalidLinkErrorString else "",
                 )
             }
 
