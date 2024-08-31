@@ -1,11 +1,8 @@
 package io.github.droidkaigi.confsched.shared
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
@@ -15,11 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.ComposeUIViewController
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -39,6 +34,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
 import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSnackbarHostState
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
@@ -137,7 +133,8 @@ fun kaigiAppController(
     )
 
     CompositionLocalProvider(
-        LocalRepositories provides repositories.map
+        LocalRepositories provides repositories.map,
+        LocalSnackbarHostState provides snackbarHostState
     ) {
         val windowSizeClass = calculateWindowSizeClass()
 
@@ -153,18 +150,10 @@ fun kaigiAppController(
         }
 
         Logging.initialize()
-        Box(modifier = Modifier.fillMaxSize()) {
-            KaigiApp(
-                windowSize = windowSizeClass,
-                fontFamily = fontFamily,
-            )
-            SnackbarHost(
-                hostState = snackbarHostState,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 108.dp)
-            )
-        }
+        KaigiApp(
+            windowSize = windowSizeClass,
+            fontFamily = fontFamily,
+        )
     }
 }
 
