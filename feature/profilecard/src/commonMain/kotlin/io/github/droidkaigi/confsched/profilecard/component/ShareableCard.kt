@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
@@ -86,21 +88,41 @@ private fun ShareableCardContent(
     backImage: ImageBitmap?,
     modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .background(LocalProfileCardTheme.current.primaryColor)
-                .padding(vertical = 50.dp, horizontal = 120.dp),
-        ) {
+    val widthPx = 1200
+    val heightPx = 630
+    val cardWidthPx = 300
+    val cardHeightPx = 380
+    val offsetXBackPx = 140f
+    val offsetYBackPx = 75f
+    val offsetXFrontPx = -140f
+    val offsetYFrontPx = -75f
+
+    val density = LocalDensity.current
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .requiredSize(
+                width = with(density) { widthPx.toDp() },
+                height = with(density) { heightPx.toDp() },
+            )
+            .background(LocalProfileCardTheme.current.primaryColor)
+    ) {
+        Box(modifier = Modifier.padding(vertical = 30.dp)) {
             backImage?.let {
                 Image(
                     bitmap = it,
                     contentDescription = null,
                     modifier = Modifier
-                        .offset(x = 70.dp, y = 15.dp)
+                        .offset(
+                            x = with(density) { offsetXBackPx.toDp() },
+                            y = with(density) { offsetYBackPx.toDp() },
+                        )
                         .rotate(10f)
-                        .size(150.dp, 190.dp),
+                        .size(
+                            width = with(density) { cardWidthPx.toDp() },
+                            height = with(density) { cardHeightPx.toDp() },
+                        ),
                 )
             }
             frontImage?.let {
@@ -108,9 +130,15 @@ private fun ShareableCardContent(
                     bitmap = it,
                     contentDescription = null,
                     modifier = Modifier
-                        .offset(x = (-70).dp, y = (-15).dp)
+                        .offset(
+                            x = with(density) { offsetXFrontPx.toDp() },
+                            y = with(density) { offsetYFrontPx.toDp() },
+                        )
                         .rotate(-10f)
-                        .size(150.dp, 190.dp),
+                        .size(
+                            width = with(density) { cardWidthPx.toDp() },
+                            height = with(density) { cardHeightPx.toDp() },
+                        ),
                 )
             }
         }
