@@ -22,6 +22,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 import conference_app_2024.app_ios_shared.generated.resources.permission_required
+import conference_app_2024.app_ios_shared.generated.resources.open_settings
 import io.github.droidkaigi.confsched.about.aboutScreen
 import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
@@ -118,12 +119,16 @@ fun kaigiAppController(
 
     ExternalNavControllerLink.apply {
         val snackbarMessage = stringResource(AppIosSharedRes.string.permission_required)
+        val snackbarActionLabel = stringResource(AppIosSharedRes.string.open_settings)
 
         this.onLicenseScreenRequest = onLicenseScreenRequest
         this.onAccessCalendarIsDenied = {
-            eventFlow.tryEmit(IosComposeKaigiAppEvent.ShowRequiresAuthorization(
-                snackbarMessage = snackbarMessage,
-            ))
+            eventFlow.tryEmit(
+                IosComposeKaigiAppEvent.ShowRequiresAuthorization(
+                    snackbarMessage = snackbarMessage,
+                    actionLabel = snackbarActionLabel,
+                )
+            )
         }
     }
 

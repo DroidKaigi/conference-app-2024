@@ -7,10 +7,9 @@ import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.shared.IosComposeKaigiAppEvent.ShowRequiresAuthorization
 
 sealed interface IosComposeKaigiAppEvent {
-    val snackbarMessage: String
-
     data class ShowRequiresAuthorization(
-        override val snackbarMessage: String,
+        val snackbarMessage: String,
+        val actionLabel: String,
     ) : IosComposeKaigiAppEvent
 }
 
@@ -25,7 +24,7 @@ fun iosComposeKaigiAppPresenter(
                     message = event.snackbarMessage,
                     // TODO Add code to transition to the settings screen when the action button is pressed.
                     // TODO Perhaps UIApplication.openSettingsURLString can be used to achieve this.
-                    actionLabel = null,
+                    actionLabel = event.actionLabel,
                 )
             }
         }
