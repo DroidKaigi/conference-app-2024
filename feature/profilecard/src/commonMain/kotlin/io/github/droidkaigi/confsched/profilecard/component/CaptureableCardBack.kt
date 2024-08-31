@@ -63,11 +63,6 @@ internal fun BackgroundCapturableCardBack(
             qrCodeImagePainter,
             modifier = Modifier
                 .size(width = 300.dp, height = 380.dp)
-                .border(
-                    3.dp,
-                    Color.Black,
-                    RoundedCornerShape(8.dp),
-                )
                 .graphicsLayer {
                     rotationY = 180f
                 },
