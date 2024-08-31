@@ -11,7 +11,9 @@ extension EventKitClient: DependencyKey {
                 switch EKEventStore.authorizationStatus(for: .event) {
                 case .denied, .restricted:
                     Task.detached { @MainActor in
-                        _ = await UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                        _ = await UIApplication.shared.open(
+                            .init(string: UIApplication.openSettingsURLString)!
+                        )
                     }
                 case .authorized, .fullAccess, .writeOnly:
                         return true
