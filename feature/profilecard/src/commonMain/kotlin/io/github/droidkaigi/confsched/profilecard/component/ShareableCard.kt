@@ -106,7 +106,7 @@ private fun ShareableCardContent(
                 width = with(density) { widthPx.toDp() },
                 height = with(density) { heightPx.toDp() },
             )
-            .background(LocalProfileCardTheme.current.primaryColor)
+            .background(LocalProfileCardTheme.current.primaryColor),
     ) {
         Box(modifier = Modifier.padding(vertical = 30.dp)) {
             backImage?.let {

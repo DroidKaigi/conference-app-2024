@@ -840,10 +840,9 @@ internal fun CardScreen(
                             text = stringResource(ProfileCardRes.string.edit),
                             modifier = Modifier.padding(8.dp),
                             style = MaterialTheme.typography.labelLarge,
-                            color = Color.Black
+                            color = Color.Black,
                         )
                     }
-
                 }
             }
         }
