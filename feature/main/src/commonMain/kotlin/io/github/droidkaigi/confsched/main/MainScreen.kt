@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalResourceApi::class)
-
 package io.github.droidkaigi.confsched.main
 
 import androidx.compose.animation.AnimatedVisibility
@@ -29,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -69,7 +66,6 @@ import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
 import io.github.droidkaigi.confsched.main.section.GlassLikeNavRail
 import io.github.droidkaigi.confsched.model.isBlurSupported
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 
 const val mainScreenRoute = "main"
@@ -146,13 +142,6 @@ fun MainScreen(
             mainNestedNavGraph = mainNestedNavGraph,
         )
     }
-}
-
-sealed class IconRepresentation {
-    data class Vector(val imageVector: ImageVector) : IconRepresentation()
-
-    @ExperimentalResourceApi
-    data class Drawable(val drawableId: DrawableResource) : IconRepresentation()
 }
 
 enum class MainScreenTab(
