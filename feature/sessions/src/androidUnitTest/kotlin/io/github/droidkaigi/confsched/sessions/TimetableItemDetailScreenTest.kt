@@ -207,7 +207,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             setupScreenContent()
                             scrollToAssetSection()
                         }
-                        itShould("only video assets are displayed") {
+                        itShould("only display video assets") {
                             captureScreenWithChecks {
                                 checkOnlyVideoAssetButtonDisplayed()
                             }
