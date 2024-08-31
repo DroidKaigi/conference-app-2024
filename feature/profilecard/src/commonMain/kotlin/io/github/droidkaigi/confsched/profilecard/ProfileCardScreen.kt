@@ -82,6 +82,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.navigation.NavController
@@ -431,7 +432,10 @@ internal fun EditScreen(
                 link = it
                 onChangeLink(it)
             },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Uri,
+            ),
         )
 
         Column(
@@ -841,10 +845,9 @@ internal fun CardScreen(
                             text = stringResource(ProfileCardRes.string.edit),
                             modifier = Modifier.padding(8.dp),
                             style = MaterialTheme.typography.labelLarge,
-                            color = Color.Black
+                            color = Color.Black,
                         )
                     }
-
                 }
             }
         }
