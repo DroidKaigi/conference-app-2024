@@ -9,6 +9,16 @@ interface ProfileCardRepository {
     fun profileCard(): ProfileCard
     suspend fun save(profileCard: ProfileCard.Exists)
     suspend fun loadQrCodeImageByteArray(link: String, centerLogoRes: DrawableResource): ByteArray
+
+    @Composable
+    fun profileImageInEdit(): ProfileImage?
+    fun setProfileImageInEdit(profileImage: ProfileImage)
+    fun clearProfileImageInEdit()
+
+    @Composable
+    fun profileImageCandidate(): ProfileImage?
+    fun setProfileImageCandidate(profileImage: ProfileImage)
+    fun clearProfileImageCache()
 }
 
 @Composable
