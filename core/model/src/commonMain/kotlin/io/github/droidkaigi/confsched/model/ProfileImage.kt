@@ -1,10 +1,14 @@
 package io.github.droidkaigi.confsched.model
 
 import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
 
 data class ProfileImage(
     val bytes: ByteArray,
 ) {
+    val size: IntSize
+        get() = bytes.imageSize
+
     fun crop(rect: IntRect): ProfileImage {
         return copy(
             bytes = bytes.crop(rect),
@@ -25,4 +29,5 @@ data class ProfileImage(
     }
 }
 
+expect val ByteArray.imageSize: IntSize
 expect fun ByteArray.crop(rect: IntRect): ByteArray
