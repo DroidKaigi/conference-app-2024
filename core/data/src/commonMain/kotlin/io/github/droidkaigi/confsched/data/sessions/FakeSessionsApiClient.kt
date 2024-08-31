@@ -105,7 +105,7 @@ public fun SessionsAllResponse.Companion.bothAssetAvailableFake(): SessionsAllRe
             videoUrl = "https://2024.droidkaigi.jp/",
             slideUrl = "https://2024.droidkaigi.jp/",
         ),
-    )
+    ),
 )
 
 public fun SessionsAllResponse.Companion.onlySlideAssetAvailableFake(): SessionsAllResponse = SessionsAllResponse.fake(
@@ -114,7 +114,7 @@ public fun SessionsAllResponse.Companion.onlySlideAssetAvailableFake(): Sessions
             videoUrl = null,
             slideUrl = "https://2024.droidkaigi.jp/",
         ),
-    )
+    ),
 )
 
 public fun SessionsAllResponse.Companion.onlyVideoAssetAvailableFake(): SessionsAllResponse = SessionsAllResponse.fake(
@@ -123,7 +123,7 @@ public fun SessionsAllResponse.Companion.onlyVideoAssetAvailableFake(): Sessions
             videoUrl = "https://2024.droidkaigi.jp/",
             slideUrl = null,
         ),
-    )
+    ),
 )
 
 private fun RoomResponse.Companion.fakes(): List<RoomResponse> = listOf(

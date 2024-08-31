@@ -107,8 +107,8 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onNode(hasTestTag(TimetableItemDetailScreenLazyColumnTestTag))
             .performScrollToNode(
                 hasTestTag(
-                    TimetableItemDetailContentTargetAudienceSectionBottomTestTag
-                )
+                    TimetableItemDetailContentTargetAudienceSectionBottomTestTag,
+                ),
             )
     }
 
