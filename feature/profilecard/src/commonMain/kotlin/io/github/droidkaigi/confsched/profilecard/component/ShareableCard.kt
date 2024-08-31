@@ -120,7 +120,7 @@ private fun ShareableCardContent(
                     offsetY = offsetYBackPx,
                     rotation = 10f,
                     cardWidthPx = cardWidthPx,
-                    cardHeightPx = cardHeightPx
+                    cardHeightPx = cardHeightPx,
                 )
             }
             frontImage?.let { frontBitmap ->
@@ -130,7 +130,7 @@ private fun ShareableCardContent(
                     offsetY = offsetYFrontPx,
                     rotation = -12.2f,
                     cardWidthPx = cardWidthPx,
-                    cardHeightPx = cardHeightPx
+                    cardHeightPx = cardHeightPx,
                 )
             }
         }
@@ -168,12 +168,12 @@ private fun ShadowedImage(
                 drawBlurredShadow(size, Color.Black.copy(alpha = 0.2f))
                 // The child element Image is drawn by calling drawContent.
                 drawContent()
-            }
+            },
     ) {
         Image(
             bitmap = imageBitmap,
             contentDescription = null,
-            modifier = Modifier.graphicsLayer()
+            modifier = Modifier.graphicsLayer(),
         )
     }
 }
@@ -206,7 +206,7 @@ private fun ContentDrawScope.drawBlurredShadow(size: Size, color: Color) {
             topLeft = Offset(offset, offset),
             // Increasing the size of the rectangles with each iteration creates the effect of a shadow
             // that gets thinner and more diffused the further it is from the base.
-            size = Size(size.width + offset, size.height + offset)
+            size = Size(size.width + offset, size.height + offset),
         )
     }
 }
