@@ -49,20 +49,66 @@ class ProfileCardScreenTest(
                             checkEditScreenDisplayed()
                         }
                     }
-                    // FIXME Add a test to confirm that it is possible to transition to the Card screen after entering the required input fields, including images.
-                    // FIXME Currently, the test code does not allow the user to select and input an image from the Add Image button.
-                    describe("when url is invalid") {
-                        // This Url is invalid because it does not have a domain name like "https://not-valid-url.com".
-                        val invalidUrl = "https://not-valid-url"
+
+                    describe("when url protocol is invalid") {
+                        val url = "ttps://example.com"
                         doIt {
-                            inputLink(invalidUrl)
+                            inputLink("ttps://example.com")
                         }
                         itShould("show error message") {
                             captureScreenWithChecks {
-                                checkLinkError(invalidUrl)
+                                checkLinkError(url)
                             }
                         }
                     }
+
+                    describe("when url top level domain is missing") {
+                        val url = "https://example"
+                        doIt {
+                            inputLink(url)
+                        }
+                        itShould("show error message") {
+                            captureScreenWithChecks {
+                                checkLinkError(url)
+                            }
+                        }
+                    }
+                    describe("when url contains IDN domain name") {
+                        val url = "https://example.xn--com"
+                        doIt {
+                            inputLink(url)
+                        }
+                        itShould("not show error message") {
+                            captureScreenWithChecks {
+                                checkLinkNotError(url)
+                            }
+                        }
+                    }
+                    describe("when protocol is missing") {
+                        val url = "example.com/foobar"
+                        doIt {
+                            inputLink(url)
+                        }
+                        itShould("not show error message") {
+                            captureScreenWithChecks {
+                                checkLinkNotError(url)
+                            }
+                        }
+                    }
+                    describe("when url contains sub domain") {
+                        val url = "https://www.example.co.jp/foobar"
+                        doIt {
+                            inputLink(url)
+                        }
+                        itShould("not show error message") {
+                            captureScreenWithChecks {
+                                checkLinkNotError(url)
+                            }
+                        }
+                    }
+
+                    // FIXME Add a test to confirm that it is possible to transition to the Card screen after entering the required input fields, including images.
+                    // FIXME Currently, the test code does not allow the user to select and input an image from the Add Image button.
                 }
                 describe("when profile card is exists") {
                     doIt {

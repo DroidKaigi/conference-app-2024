@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.testing.robot
 import android.graphics.RenderNode
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
@@ -147,6 +148,14 @@ class ProfileCardScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(ProfileCardInputErrorTextTestTag.plus(link)))
             .assertIsDisplayed()
+    }
+
+    fun checkLinkNotError(
+        link: String,
+    ) {
+        composeTestRule
+            .onNode(hasTestTag(ProfileCardInputErrorTextTestTag.plus(link)))
+            .assertIsNotDisplayed()
     }
 
     fun checkCardScreenDisplayed() {
