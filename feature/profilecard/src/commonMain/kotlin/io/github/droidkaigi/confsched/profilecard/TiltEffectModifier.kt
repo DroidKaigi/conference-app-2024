@@ -21,7 +21,7 @@ import kotlin.math.roundToInt
  */
 fun Modifier.tiltEffect(deviceOrientationScope: DeviceOrientationScope) =
     this then TiltEffectElement(
-        orientation = deviceOrientationScope.orientation
+        orientation = deviceOrientationScope.orientation,
     )
 
 /**
@@ -64,6 +64,22 @@ private data class TiltEffectNode(
     private val minTiltAngle = -75f
     private val maxTiltAngleRange = 75f
 
+    /** Computes the pitch in degrees from the current orientation in radians. */
+    private val pitchDegree: Float
+        get() = radianToDegree(orientation.pitch)
+
+    /** Computes the roll in degrees from the current orientation in radians. */
+    private val rollDegree: Float
+        get() = radianToDegree(orientation.roll)
+
+    /** Checks if the pitch is within the valid tilt range. */
+    private val isPitchWithinValidRange: Boolean
+        get() = pitchDegree in minTiltAngle..maxTiltAngleRange
+
+    /** Checks if the roll is within the valid tilt range. */
+    private val isRollWithinValidRange: Boolean
+        get() = rollDegree in minTiltAngle..maxTiltAngleRange
+
     override fun MeasureScope.measure(
         measurable: Measurable,
         constraints: Constraints,
@@ -79,7 +95,7 @@ private data class TiltEffectNode(
                 layerBlock = {
                     rotationX = tiltX
                     rotationY = tiltY
-                }
+                },
             )
         }
     }
@@ -104,22 +120,6 @@ private data class TiltEffectNode(
             previousTiltX to previousTiltY
         }
     }
-
-    /** Computes the pitch in degrees from the current orientation in radians. */
-    private val pitchDegree: Float
-        get() = radianToDegree(orientation.pitch)
-
-    /** Computes the roll in degrees from the current orientation in radians. */
-    private val rollDegree: Float
-        get() = radianToDegree(orientation.roll)
-
-    /** Checks if the pitch is within the valid tilt range. */
-    private val isPitchWithinValidRange: Boolean
-        get() = pitchDegree in minTiltAngle..maxTiltAngleRange
-
-    /** Checks if the roll is within the valid tilt range. */
-    private val isRollWithinValidRange: Boolean
-        get() = rollDegree in minTiltAngle..maxTiltAngleRange
 
     /**
      * Converts radians to degrees.
