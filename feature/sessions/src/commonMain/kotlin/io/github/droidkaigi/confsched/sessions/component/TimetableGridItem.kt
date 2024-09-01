@@ -190,7 +190,7 @@ fun TimetableGridItem(
                     if (isShowingAllContent && measurables.size > 1) {
                         // Layout if `isShowingAllContent` is `true`
                         val scheduleRowHeight = measurables[0].minIntrinsicHeight(constraints.maxWidth)
-                        val remainingHeight = constraints.maxHeight - scheduleRowHeight
+                        val remainingHeight = constraints.maxHeight - scheduleRowHeight - TimetableGridItemSizes.scheduleToTitleSpace.roundToPx()
 
                         // Measure title text
                         val titlePlaceable = measurables[measurables.lastIndex].measure(
@@ -205,7 +205,7 @@ fun TimetableGridItem(
                             // Place schedule text line at the top
                             schedulePlaceable.placeRelative(0, 0)
                             // Title text placed below the schedule
-                            titlePlaceable.placeRelative(0, scheduleRowHeight)
+                            titlePlaceable.placeRelative(0, scheduleRowHeight + TimetableGridItemSizes.scheduleToTitleSpace.roundToPx())
                         }
                     } else {
                         // Layout if only title is displayed
