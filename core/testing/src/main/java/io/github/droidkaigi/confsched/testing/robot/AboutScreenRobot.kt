@@ -41,6 +41,7 @@ class AboutScreenRobot @Inject constructor(
             .onNode(hasTestTag(AboutScreenLazyColumnTestTag))
             .performScrollToNode(hasTestTag(AboutCreditsStaffItemTestTag))
 
+        // FIXME Without this, you won't be able to scroll to the exact middle of the credits section.
         composeTestRule.onRoot().performTouchInput {
             swipeUp(startY = centerY, endY = centerY - 200)
         }
