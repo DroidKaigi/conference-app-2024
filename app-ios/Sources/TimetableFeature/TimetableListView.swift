@@ -88,8 +88,10 @@ struct TimetableListView: View {
         self.store = store
     }
 
-    @State private var animatingItemId: TimetableItemId?
+    // (only 0 or 1...)
     @State private var animationProgress: CGFloat = 0
+    //
+    @State private var targetTimetableItemId: TimetableItemId?
     @State private var targetLocationPoint: CGPoint?
 
     var body: some View {
@@ -99,12 +101,13 @@ struct TimetableListView: View {
                     ForEach(store.timetableItems, id: \.self) { item in
                         TimeGroupMiniList(contents: item, onItemTap: { item in
                             store.send(.view(.timetableItemTapped(item)))
-                        }, onFavoriteTap: { item, point in
+                        }, onFavoriteTap: { item, adjustedLocationPoint in
+                            // MEMO:
                             store.send(.view(.favoriteTapped(item)))
+
+                            // MEMO:
                             if item.isFavorited == false {
-                                print("point.x:", point?.x)
-                                print("point.y:", point?.y)
-                                toggleFavorite(item.timetableItem, point: point)
+                                toggleFavorite(timetableItem: item.timetableItem, adjustedLocationPoint: adjustedLocationPoint)
                             }
                         })
                     }
@@ -122,41 +125,50 @@ struct TimetableListView: View {
     
     private var heartAnimation: some View {
         GeometryReader { geometry in
-            if let id = animatingItemId {
+            if targetTimetableItemId != nil {
                 Image(systemName: "heart.fill")
                     .foregroundColor(
                         AssetColors.Primary.primaryFixed.swiftUIColor
                     )
                     .frame(width: 24, height: 24)
                     .foregroundColor(.red)
-                    .position(animationPosition(for: id, in: geometry))
-                    //.scaleEffect(1 - animationProgress)
+                    .position(animationPosition(geometry: geometry))
                     .opacity(1 - animationProgress)
                     .zIndex(99)
             }
         }
     }
     
-    private func animationPosition(for id: TimetableItemId, in geometry: GeometryProxy) -> CGPoint {
-        let startY = targetLocationPoint?.y ?? 0.0
-        let endY = geometry.size.height - 25
-        let x = animationProgress * (geometry.frame(in: .global).size.width / 2 - geometry.frame(in: .global).size.width + 50)
-        let y = startY + (endY - startY) * animationProgress
-        return CGPoint(x: geometry.size.width - 50 + x, y: y)
+    private func animationPosition(geometry: GeometryProxy) -> CGPoint {
+
+        //
+        let globalGeometrySize = geometry.frame(in: .global).size
+        let defaultGeometrySize = geometry.size
+
+        //
+        let startPositionY = targetLocationPoint?.y ?? 0
+        let endPositionY = defaultGeometrySize.height - 25
+        let targetY = startPositionY + (endPositionY - startPositionY) * animationProgress
+
+        //
+        let adjustedPositionX = animationProgress * (globalGeometrySize.width / 2 - globalGeometrySize.width + 50)
+        let targetX = defaultGeometrySize.width - 50 + adjustedPositionX
+
+        return CGPoint(x: targetX, y: targetY)
     }
-    
-    private func toggleFavorite(_ item: TimetableItem, point: CGPoint?) {
+
+    private func toggleFavorite(timetableItem: TimetableItem, adjustedLocationPoint: CGPoint?) {
         
-        targetLocationPoint = point
-        animatingItemId = item.id
-        
-        if let id = animatingItemId {
-            //animatingItemId = item.id
+        targetLocationPoint = adjustedLocationPoint
+        targetTimetableItemId = timetableItem.id
+
+        if targetTimetableItemId != nil {
             withAnimation(.easeOut(duration: 1)) {
                 animationProgress = 1
             }
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                animatingItemId = nil
+            Task {
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+                targetTimetableItemId = nil
                 targetLocationPoint = nil
                 animationProgress = 0
             }

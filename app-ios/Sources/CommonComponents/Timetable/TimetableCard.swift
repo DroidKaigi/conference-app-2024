@@ -35,28 +35,31 @@ public struct TimetableCard: View {
                         LanguageTag(label)
                     }
                     Spacer()
+
+                    // [NOTE] In order to calculate the value from GeometryReader, it is supported by assigning DragGesture to the Image element instead of Button.
                     HStack {
                         GeometryReader { geometry in
+                            // MEMO: Since the coordinate values ​​are based on the inside of the View, ".local" is specified.
+                            let localGeometry = geometry.frame(in: .local)
                             Image(isFavorite ? .icFavoriteFill : .icFavoriteOutline)
                                 .resizable()
                                 .renderingMode(.template)
                                 .foregroundColor(
-                                    isFavorite ?
-                                    AssetColors.Primary.primaryFixed.swiftUIColor
-                                    :
-                                        AssetColors.Surface.onSurfaceVariant.swiftUIColor
+                                    isFavorite ? AssetColors.Primary.primaryFixed.swiftUIColor : AssetColors.Surface.onSurfaceVariant.swiftUIColor
                                 )
                                 .frame(width: 24, height: 24)
                                 .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global).onEnded { dragGesture in
-                                    let nowLocationX = dragGesture.location.x
-                                    let nowLocationY = dragGesture.location.y - 128.0
-                                    onTapFavorite(timetableItem, CGPoint(x: nowLocationX, y: nowLocationY))
+                                    // MEMO: The offset value in the Y-axis direction is subtracted for adjustment. (-128).
+                                    let adjustedLocationPoint = CGPoint(x: dragGesture.location.x, y: dragGesture.location.y - 128)
+                                    onTapFavorite(timetableItem, adjustedLocationPoint)
                                 })
-                                .position(x: geometry.frame(in: .local).maxX - 12, y: geometry.frame(in: .local).midY)
+                                // MEMO: To adjust horizontal position, I'm subtracting half the size of Image (-12).
+                                .position(x: localGeometry.maxX - 12, y: localGeometry.midY)
                         }
                     }
                     .frame(height: 24, alignment: .trailing)
                     .sensoryFeedback(.impact, trigger: isFavorite) { _, newValue in newValue }
+
 //                    Button {
 //                        onTapFavorite(timetableItem)
 //                    } label: {
