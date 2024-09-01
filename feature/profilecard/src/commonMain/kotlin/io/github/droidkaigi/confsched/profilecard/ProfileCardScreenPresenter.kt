@@ -13,6 +13,7 @@ import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
 import conference_app_2024.feature.profilecard.generated.resources.nickname
 import conference_app_2024.feature.profilecard.generated.resources.occupation
+import conference_app_2024.feature.profilecard.generated.resources.url_is_invalid
 import io.github.droidkaigi.confsched.compose.EventEffect
 import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
@@ -84,19 +85,22 @@ internal fun profileCardScreenPresenter(
     events: EventFlow<ProfileCardScreenEvent>,
     repository: ProfileCardRepository = localProfileCardRepository(),
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
-    val nicknameValidationErrorString = stringResource(
+    val emptyNicknameErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.nickname),
     )
-    val occupationValidationErrorString = stringResource(
+    val emptyOccupationErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.occupation),
     )
-    val linkValidationErrorString = stringResource(
+    val emptyLinkErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.link),
     )
-    val imageValidationErrorString = stringResource(
+    val invalidLinkErrorString = stringResource(
+        ProfileCardRes.string.url_is_invalid,
+    )
+    val emptyImageErrorString = stringResource(
         ProfileCardRes.string.add_validate_format,
         stringResource(ProfileCardRes.string.image),
     )
@@ -148,25 +152,29 @@ internal fun profileCardScreenPresenter(
 
             is EditScreenEvent.OnChangeNickname -> {
                 cardError = cardError.copy(
-                    nicknameError = if (event.nickname.isEmpty()) nicknameValidationErrorString else "",
+                    nicknameError = if (event.nickname.isEmpty()) emptyNicknameErrorString else "",
                 )
             }
 
             is EditScreenEvent.OnChangeOccupation -> {
                 cardError = cardError.copy(
-                    occupationError = if (event.occupation.isEmpty()) occupationValidationErrorString else "",
+                    occupationError = if (event.occupation.isEmpty()) emptyOccupationErrorString else "",
                 )
             }
 
             is EditScreenEvent.OnChangeLink -> {
+                // Only matches if the link is in this format "${http or https + ://}${sub domain + .}${domain}.${tld}/${sub directories}".
+                // Protocol, sub domain and sub directories are optional.
+                // ex. https://www.example.com/hogefuga/foobar
+                val invalidFormat = event.link.matches(Regex("^(?:https?://)?(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z0-9-]{2,}(?:/\\S*)?\$")).not()
                 cardError = cardError.copy(
-                    linkError = if (event.link.isEmpty()) linkValidationErrorString else "",
+                    linkError = if (event.link.isEmpty()) emptyLinkErrorString else if (invalidFormat) invalidLinkErrorString else "",
                 )
             }
 
             is EditScreenEvent.OnChangeImage -> {
                 cardError = cardError.copy(
-                    imageError = if (event.image.isEmpty()) imageValidationErrorString else "",
+                    imageError = if (event.image.isEmpty()) emptyImageErrorString else "",
                 )
             }
         }
