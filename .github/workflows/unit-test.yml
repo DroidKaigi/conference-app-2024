@@ -35,6 +35,12 @@ jobs:
 
       - run: ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace
 
+      - run: |
+          ./gradlew \
+                :core:data:iosSimulatorArm64Test \
+                :core:model:iosSimulatorArm64Test \
+                --stacktrace
+
       # Saving cost
       # - run: ./gradlew koverHtmlReportDevDebug --stacktrace
 
