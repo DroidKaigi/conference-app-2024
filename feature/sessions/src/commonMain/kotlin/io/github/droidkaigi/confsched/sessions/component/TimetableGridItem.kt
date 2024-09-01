@@ -591,3 +591,23 @@ fun PreviewTimetableGridItemWelcomeTalk() {
         }
     }
 }
+
+@Preview
+@Composable
+fun PreviewTimetableGridItemMoreLongTitleItem() {
+    KaigiTheme {
+        Surface {
+            TimetableGridItem(
+                timetableItem = Session.fake().let {
+                    val longTitle = it.title.copy(
+                        jaTitle = it.title.jaTitle.repeat(10),
+                        enTitle = it.title.enTitle.repeat(10),
+                    )
+                    it.copy(title = longTitle, speakers = persistentListOf(it.speakers.first()))
+                },
+                onTimetableItemClick = {},
+                gridItemHeightPx = 500,
+            )
+        }
+    }
+}
