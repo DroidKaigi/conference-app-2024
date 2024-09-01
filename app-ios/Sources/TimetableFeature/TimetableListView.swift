@@ -88,22 +88,78 @@ struct TimetableListView: View {
         self.store = store
     }
 
+    @State private var animatingItemId: TimetableItemId?
+    @State private var animationProgress: CGFloat = 0
+    @State private var targetLocationPoint: CGPoint?
+
     var body: some View {
-        ScrollView{
-            LazyVStack(spacing: 0) {
-                ForEach(store.timetableItems, id: \.self) { item in
-                    TimeGroupMiniList(contents: item, onItemTap: { item in
-                        store.send(.view(.timetableItemTapped(item)))
-                    }, onFavoriteTap: {
-                        store.send(.view(.favoriteTapped($0)))
-                    })
-                }
-            }.scrollContentBackground(.hidden)
-            .onAppear {
-                store.send(.view(.onAppear))
-            }.background(AssetColors.Surface.surface.swiftUIColor)
-            
-            bottomTabBarPadding
+        ZStack {
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(store.timetableItems, id: \.self) { item in
+                        TimeGroupMiniList(contents: item, onItemTap: { item in
+                            store.send(.view(.timetableItemTapped(item)))
+                        }, onFavoriteTap: { item, point in
+                            store.send(.view(.favoriteTapped(item)))
+                            if item.isFavorited == false {
+                                print("point.x:", point?.x)
+                                print("point.y:", point?.y)
+                                toggleFavorite(item.timetableItem, point: point)
+                            }
+                        })
+                    }
+                }.scrollContentBackground(.hidden)
+                .onAppear {
+                    store.send(.view(.onAppear))
+                }.background(AssetColors.Surface.surface.swiftUIColor)
+                bottomTabBarPadding
+            }
+
+            heartAnimation
+        }
+    }
+    
+    
+    private var heartAnimation: some View {
+        GeometryReader { geometry in
+            if let id = animatingItemId {
+                Image(systemName: "heart.fill")
+                    .foregroundColor(
+                        AssetColors.Primary.primaryFixed.swiftUIColor
+                    )
+                    .frame(width: 24, height: 24)
+                    .foregroundColor(.red)
+                    .position(animationPosition(for: id, in: geometry))
+                    //.scaleEffect(1 - animationProgress)
+                    .opacity(1 - animationProgress)
+                    .zIndex(99)
+            }
+        }
+    }
+    
+    private func animationPosition(for id: TimetableItemId, in geometry: GeometryProxy) -> CGPoint {
+        let startY = targetLocationPoint?.y ?? 0.0
+        let endY = geometry.size.height - 25
+        let x = animationProgress * (geometry.frame(in: .global).size.width / 2 - geometry.frame(in: .global).size.width + 50)
+        let y = startY + (endY - startY) * animationProgress
+        return CGPoint(x: geometry.size.width - 50 + x, y: y)
+    }
+    
+    private func toggleFavorite(_ item: TimetableItem, point: CGPoint?) {
+        
+        targetLocationPoint = point
+        animatingItemId = item.id
+        
+        if let id = animatingItemId {
+            //animatingItemId = item.id
+            withAnimation(.easeOut(duration: 1)) {
+                animationProgress = 1
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                animatingItemId = nil
+                targetLocationPoint = nil
+                animationProgress = 0
+            }
         }
     }
 }
@@ -176,7 +232,7 @@ struct TimetableGridView: View {
 struct TimeGroupMiniList: View {
     let contents: TimetableTimeGroupItems
     let onItemTap: (TimetableItemWithFavorite) -> Void
-    let onFavoriteTap: (TimetableItemWithFavorite) -> Void
+    let onFavoriteTap: (TimetableItemWithFavorite, CGPoint?) -> Void
     
     var body: some View {
         HStack(spacing: 16) {
@@ -194,8 +250,8 @@ struct TimeGroupMiniList: View {
                         onTap: {_ in
                             onItemTap(item)
                         },
-                        onTapFavorite: { _ in
-                            onFavoriteTap(item)
+                        onTapFavorite: { _, point in
+                            onFavoriteTap(item, point)
                         })
                 }
             }

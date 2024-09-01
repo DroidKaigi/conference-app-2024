@@ -6,13 +6,13 @@ public struct TimetableCard: View {
     let timetableItem: TimetableItem
     let isFavorite: Bool
     let onTap: (TimetableItem) -> Void
-    let onTapFavorite: (TimetableItem) -> Void
+    let onTapFavorite: (TimetableItem, CGPoint?) -> Void
     
     public init(
         timetableItem: TimetableItem,
         isFavorite: Bool,
         onTap: @escaping (TimetableItem) -> Void,
-        onTapFavorite: @escaping (TimetableItem) -> Void
+        onTapFavorite: @escaping (TimetableItem, CGPoint?) -> Void
     ) {
         self.timetableItem = timetableItem
         self.isFavorite = isFavorite
@@ -35,21 +35,43 @@ public struct TimetableCard: View {
                         LanguageTag(label)
                     }
                     Spacer()
-                    Button {
-                        onTapFavorite(timetableItem)
-                    } label: {
-                        Image(isFavorite ? .icFavoriteFill : .icFavoriteOutline)
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(
-                                isFavorite ?
+                    HStack {
+                        GeometryReader { geometry in
+                            Image(isFavorite ? .icFavoriteFill : .icFavoriteOutline)
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundColor(
+                                    isFavorite ?
                                     AssetColors.Primary.primaryFixed.swiftUIColor
                                     :
-                                    AssetColors.Surface.onSurfaceVariant.swiftUIColor
-                            )
-                            .frame(width: 24, height: 24)
+                                        AssetColors.Surface.onSurfaceVariant.swiftUIColor
+                                )
+                                .frame(width: 24, height: 24)
+                                .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global).onEnded { dragGesture in
+                                    let nowLocationX = dragGesture.location.x
+                                    let nowLocationY = dragGesture.location.y - 128.0
+                                    onTapFavorite(timetableItem, CGPoint(x: nowLocationX, y: nowLocationY))
+                                })
+                                .position(x: geometry.frame(in: .local).maxX - 12, y: geometry.frame(in: .local).midY)
+                        }
                     }
+                    .frame(height: 24, alignment: .trailing)
                     .sensoryFeedback(.impact, trigger: isFavorite) { _, newValue in newValue }
+//                    Button {
+//                        onTapFavorite(timetableItem)
+//                    } label: {
+//                        Image(isFavorite ? .icFavoriteFill : .icFavoriteOutline)
+//                            .resizable()
+//                            .renderingMode(.template)
+//                            .foregroundColor(
+//                                isFavorite ?
+//                                    AssetColors.Primary.primaryFixed.swiftUIColor
+//                                    :
+//                                    AssetColors.Surface.onSurfaceVariant.swiftUIColor
+//                            )
+//                            .frame(width: 24, height: 24)
+//                    }
+//                    .sensoryFeedback(.impact, trigger: isFavorite) { _, newValue in newValue }
                 }
                 
                 Text(timetableItem.title.currentLangTitle)
@@ -93,7 +115,7 @@ public struct TimetableCard: View {
             timetableItem: TimetableItem.Session.companion.fake(),
             isFavorite: true,
             onTap: { _ in },
-            onTapFavorite: { _ in }
+            onTapFavorite: { _,_  in }
         )
         .padding(.horizontal, 16)
     }
