@@ -17,6 +17,6 @@ fun rememberAsyncImagePainter(model: ImageRequest): Painter {
     val requestModel = remember(model) { model }
 
     return coil3.compose.rememberAsyncImagePainter(
-        model = requestModel
+        model = requestModel,
     )
 }
