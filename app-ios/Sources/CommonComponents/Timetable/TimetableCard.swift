@@ -49,7 +49,7 @@ public struct TimetableCard: View {
                                 )
                                 .frame(width: 24, height: 24)
                                 .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global).onEnded { dragGesture in
-                                    // MEMO: The offset value in the Y-axis direction is subtracted for adjustment. (-128).
+                                    // MEMO: The offset value in the Y-axis direction is subtracted for adjustment (-128).
                                     let adjustedLocationPoint = CGPoint(x: dragGesture.location.x, y: dragGesture.location.y - 128)
                                     onTapFavorite(timetableItem, adjustedLocationPoint)
                                 })
@@ -59,22 +59,6 @@ public struct TimetableCard: View {
                     }
                     .frame(height: 24, alignment: .trailing)
                     .sensoryFeedback(.impact, trigger: isFavorite) { _, newValue in newValue }
-
-//                    Button {
-//                        onTapFavorite(timetableItem)
-//                    } label: {
-//                        Image(isFavorite ? .icFavoriteFill : .icFavoriteOutline)
-//                            .resizable()
-//                            .renderingMode(.template)
-//                            .foregroundColor(
-//                                isFavorite ?
-//                                    AssetColors.Primary.primaryFixed.swiftUIColor
-//                                    :
-//                                    AssetColors.Surface.onSurfaceVariant.swiftUIColor
-//                            )
-//                            .frame(width: 24, height: 24)
-//                    }
-//                    .sensoryFeedback(.impact, trigger: isFavorite) { _, newValue in newValue }
                 }
                 
                 Text(timetableItem.title.currentLangTitle)
