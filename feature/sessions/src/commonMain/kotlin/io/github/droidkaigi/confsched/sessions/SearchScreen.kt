@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -150,7 +151,9 @@ fun SearchScreen(
         containerColor = MaterialTheme.colorScheme.surface,
     ) { innerPadding ->
         Column(
-            modifier = Modifier.padding(top = innerPadding.calculateTopPadding()),
+            modifier = Modifier
+                .padding(top = innerPadding.calculateTopPadding())
+                .verticalScroll(rememberScrollState()),
         ) {
             HorizontalDivider()
             SearchFilters(
