@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="permission_required">セッションを予定として追加するには、カレンダーへのアクセス権限が必要です。</string>
+</resources>
