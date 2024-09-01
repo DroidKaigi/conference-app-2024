@@ -101,6 +101,16 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 )
                             }
                         }
+                        describe("when scroll to bottom") {
+                            doIt {
+                                scrollToBeforeAssetSection()
+                            }
+                            itShould("not display both assets") {
+                                captureScreenWithChecks {
+                                    checkAssetSectionDoesNotDisplayed()
+                                }
+                            }
+                        }
                     }
                     describe("when the description is lengthy") {
                         doIt {
@@ -153,6 +163,54 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                     checkSummaryCardTexts()
                                 },
                             )
+                        }
+                    }
+                }
+                describe("when server is operational available both asset") {
+                    doIt {
+                        setupTimetableServer(ServerStatus.OperationalBothAssetAvailable)
+                    }
+                    describe("when launch") {
+                        doIt {
+                            setupScreenContent()
+                            scrollToAssetSection()
+                        }
+                        itShould("display both assets") {
+                            captureScreenWithChecks {
+                                checkBothAssetButtonDisplayed()
+                            }
+                        }
+                    }
+                }
+                describe("when server is operational available only slide asset") {
+                    doIt {
+                        setupTimetableServer(ServerStatus.OperationalOnlySlideAssetAvailable)
+                    }
+                    describe("when launch") {
+                        doIt {
+                            setupScreenContent()
+                            scrollToAssetSection()
+                        }
+                        itShould("display only slide assets") {
+                            captureScreenWithChecks {
+                                checkOnlySlideAssetButtonDisplayed()
+                            }
+                        }
+                    }
+                }
+                describe("when server is operational available only video asset") {
+                    doIt {
+                        setupTimetableServer(ServerStatus.OperationalOnlyVideoAssetAvailable)
+                    }
+                    describe("when launch") {
+                        doIt {
+                            setupScreenContent()
+                            scrollToAssetSection()
+                        }
+                        itShould("only display video assets") {
+                            captureScreenWithChecks {
+                                checkOnlyVideoAssetButtonDisplayed()
+                            }
                         }
                     }
                 }
