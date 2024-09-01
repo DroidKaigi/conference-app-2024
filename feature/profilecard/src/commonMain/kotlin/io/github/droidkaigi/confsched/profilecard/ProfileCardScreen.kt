@@ -454,7 +454,10 @@ internal fun EditScreen(
                 )
             }
 
-            Text(stringResource(ProfileCardRes.string.select_theme))
+            Text(
+                text = stringResource(ProfileCardRes.string.select_theme),
+                style = MaterialTheme.typography.titleMedium,
+            )
 
             CardTypePiker(
                 selectedCardType = selectedCardType,
