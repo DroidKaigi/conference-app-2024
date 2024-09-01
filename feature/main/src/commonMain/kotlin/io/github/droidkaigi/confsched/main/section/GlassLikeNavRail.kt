@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -59,6 +61,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.animation.onGloballyPositionedWithFavoriteAnimationScope
 import io.github.droidkaigi.confsched.droidkaigiui.useIf
 import io.github.droidkaigi.confsched.main.MainScreenTab
+import io.github.droidkaigi.confsched.model.isBlurSupported
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -72,16 +75,22 @@ fun GlassLikeNavRail(
 ) {
     Box(
         modifier = modifier.size(width = 64.dp, height = 320.dp)
-            .hazeChild(state = hazeState, shape = CircleShape).border(
-                width = Dp.Hairline,
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.White.copy(alpha = .8f),
-                        Color.White.copy(alpha = .2f),
-                    ),
-                ),
-                shape = CircleShape,
-            ),
+            .run {
+                if (isBlurSupported()) {
+                    hazeChild(state = hazeState, shape = CircleShape).border(
+                        width = Dp.Hairline,
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = .8f),
+                                Color.White.copy(alpha = .2f),
+                            ),
+                        ),
+                        shape = CircleShape,
+                    )
+                } else {
+                    background(MaterialTheme.colorScheme.background.copy(alpha = .95f))
+                }
+            },
     ) {
         NavRailTabs(
             selectedTab = currentTab,
@@ -113,15 +122,32 @@ fun GlassLikeNavRail(
                 .blur(50.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
         ) {
             val tabWidth = size.height / MainScreenTab.size
-            drawCircle(
-                color = animatedColor.copy(alpha = .6f),
-                radius = size.width / 2,
-                center =
-                Offset(
-                    size.width / 2,
-                    (tabWidth * animatedSelectedTabIndex) + tabWidth / 2,
-                ),
+            val radius = size.width / 2
+            val center = Offset(
+                size.width / 2,
+                (tabWidth * animatedSelectedTabIndex) + tabWidth / 2,
             )
+
+            if (isBlurSupported()) {
+                drawCircle(
+                    color = animatedColor.copy(alpha = .6f),
+                    radius = radius,
+                    center = center,
+                )
+            } else {
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            animatedColor.copy(alpha = .5f),
+                            animatedColor.copy(alpha = .1f),
+                        ),
+                        center = center,
+                        radius = radius,
+                    ),
+                    radius = radius,
+                    center = center,
+                )
+            }
         }
 
         Canvas(
