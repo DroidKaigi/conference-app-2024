@@ -48,13 +48,13 @@ private data class TiltEffectElement(
  * A node to apply tilt effect to a layout based on device orientation.
  *
  * @property orientation The current orientation of the device.
- * @property previousTiltX The last computed X-axis tilt value, used for stabilization.
- * @property previousTiltY The last computed Y-axis tilt value, used for stabilization.
+ * @property previousTiltRoll The last computed X-axis tilt value (roll), used for stabilization.
+ * @property previousTiltPitch The last computed Y-axis tilt value (pitch), used for stabilization.
  */
 private data class TiltEffectNode(
     var orientation: Orientation,
-    var previousTiltX: Float = 0f,
-    var previousTiltY: Float = 0f,
+    var previousTiltRoll: Float = 0f,
+    var previousTiltPitch: Float = 0f,
 ) : Modifier.Node(), LayoutModifierNode {
 
     /** Maximum tilt angle applied to the element. */
@@ -86,38 +86,40 @@ private data class TiltEffectNode(
     ): MeasureResult {
         val placeable = measurable.measure(constraints)
 
-        val (tiltX, tiltY) = calculateTilt()
+        val (tiltRoll, tiltPitch) = calculateTilt()
 
         return layout(placeable.width, placeable.height) {
             placeable.placeRelativeWithLayer(
-                x = tiltX.roundToInt(),
-                y = tiltY.roundToInt(),
+                x = tiltRoll.roundToInt(),
+                y = tiltPitch.roundToInt(),
                 layerBlock = {
-                    rotationX = tiltX
-                    rotationY = tiltY
+                    // > Note that this definition of yaw, pitch and roll is different from the traditional definition used in aviation where the X axis is along the long side of the plane (tail to nose).
+                    // https://developer.android.com/reference/android/hardware/SensorListener.html
+                    rotationX = tiltPitch
+                    rotationY = tiltRoll
                 },
             )
         }
     }
 
     /**
-     * Calculates the tilt values (X and Y) based on the current device orientation.
+     * Calculates the tilt values (roll and pitch) based on the current device orientation.
      * If the orientation is out of the valid range, the last known values are used.
      *
-     * @return A pair of Floats representing the X and Y tilt values.
+     * @return A pair of Floats representing the roll and pitch tilt values.
      */
     private fun calculateTilt(): Pair<Float, Float> {
         return if (isPitchWithinValidRange && isRollWithinValidRange) {
-            val tiltX = (pitchDegree / 90f) * maxTiltAngle
-            val tiltY = (rollDegree / 90f).coerceIn(-1f, 1f) * maxTiltAngle
+            val tiltPitch = (pitchDegree / 90f) * maxTiltAngle
+            val tiltRoll = (rollDegree / 90f).coerceIn(-1f, 1f) * maxTiltAngle
 
             // Save the current values for future use
-            previousTiltX = tiltX
-            previousTiltY = tiltY
+            previousTiltRoll = tiltRoll
+            previousTiltPitch = tiltPitch
 
-            tiltX to tiltY
+            tiltRoll to tiltPitch
         } else {
-            previousTiltX to previousTiltY
+            previousTiltRoll to previousTiltPitch
         }
     }
 
