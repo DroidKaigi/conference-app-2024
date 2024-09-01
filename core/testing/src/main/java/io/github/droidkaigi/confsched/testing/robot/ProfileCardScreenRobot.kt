@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.testing.robot
 import android.graphics.RenderNode
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
+import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
@@ -14,6 +15,7 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardCardScreenTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardCreateButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditButtonTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardEditScreenColumnTestTag
+import io.github.droidkaigi.confsched.profilecard.ProfileCardInputErrorTextTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardLinkTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardNicknameTextFieldTestTag
 import io.github.droidkaigi.confsched.profilecard.ProfileCardOccupationTextFieldTestTag
@@ -138,6 +140,22 @@ class ProfileCardScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(ProfileCardLinkTextFieldTestTag))
             .assertTextEquals(link)
+    }
+
+    fun checkLinkError(
+        link: String,
+    ) {
+        composeTestRule
+            .onNode(hasTestTag(ProfileCardInputErrorTextTestTag.plus(link)))
+            .assertIsDisplayed()
+    }
+
+    fun checkLinkNotError(
+        link: String,
+    ) {
+        composeTestRule
+            .onNode(hasTestTag(ProfileCardInputErrorTextTestTag.plus(link)))
+            .assertIsNotDisplayed()
     }
 
     fun checkCardScreenDisplayed() {
