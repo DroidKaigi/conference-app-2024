@@ -53,15 +53,6 @@ class KmpKtorfitPlugin : Plugin<Project> {
                     add("ksp$it", libs.library("ktorfitKsp"))
                 }
             }
-
-            // https://github.com/DroidKaigi/conference-app-2024/issues/485#issuecomment-2304251937
-            tasks.withType<KspTaskNative>().configureEach {
-                notCompatibleWithConfigurationCache("Configuration chache not supported for a system property read at configuration time")
-
-            }
-            tasks.withType<KotlinNativeLink>().configureEach {
-                notCompatibleWithConfigurationCache("Configuration chache not supported for a system property read at configuration time")
-            }
         }
     }
 }

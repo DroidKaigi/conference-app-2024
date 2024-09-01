@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.shared
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -20,15 +21,20 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
+import conference_app_2024.app_ios_shared.generated.resources.permission_required
 import io.github.droidkaigi.confsched.about.aboutScreen
 import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
+import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.contributors.contributorsScreenRoute
 import io.github.droidkaigi.confsched.contributors.contributorsScreens
 import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
 import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
+import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSnackbarHostState
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
 import io.github.droidkaigi.confsched.eventmap.navigateEventMapScreen
@@ -76,6 +82,7 @@ import io.github.droidkaigi.confsched.staff.staffScreenRoute
 import io.github.droidkaigi.confsched.staff.staffScreens
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.stringResource
 import platform.EventKit.EKEntityType.EKEntityTypeEvent
 import platform.EventKit.EKEvent
 import platform.EventKit.EKEventStore
@@ -89,9 +96,9 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 import platform.darwin.NSObject
 
-private object ExternalNavControllerLink {
-    var onLicenseScreenRequest: (() -> Unit)? = null
-}
+data class IosComposeKaigiAppUiState(
+    val userMessageStateHolder: UserMessageStateHolder,
+)
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Suppress("UNUSED")
@@ -99,10 +106,11 @@ fun kaigiAppController(
     repositories: Repositories,
     onLicenseScreenRequest: () -> Unit,
 ): UIViewController = ComposeUIViewController {
-    ExternalNavControllerLink.onLicenseScreenRequest = onLicenseScreenRequest
+    val snackbarHostState = remember { SnackbarHostState() }
 
     CompositionLocalProvider(
-        LocalRepositories provides repositories.map
+        LocalRepositories provides repositories.map,
+        LocalSnackbarHostState provides snackbarHostState
     ) {
         val windowSizeClass = calculateWindowSizeClass()
 
@@ -121,6 +129,8 @@ fun kaigiAppController(
         KaigiApp(
             windowSize = windowSizeClass,
             fontFamily = fontFamily,
+            snackbarHostState = snackbarHostState,
+            onLicenseScreenRequest = onLicenseScreenRequest,
         )
     }
 }
@@ -129,8 +139,18 @@ fun kaigiAppController(
 fun KaigiApp(
     windowSize: WindowSizeClass,
     fontFamily: FontFamily?,
+    snackbarHostState: SnackbarHostState,
+    onLicenseScreenRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val eventFlow = rememberEventFlow<IosComposeKaigiAppEvent>()
+    val uiState = iosComposeKaigiAppPresenter(events = eventFlow)
+
+    SnackbarMessageEffect(
+        snackbarHostState = snackbarHostState,
+        userMessageStateHolder = uiState.userMessageStateHolder,
+    )
+
     KaigiTheme(
         fontFamily = fontFamily,
     ) {
@@ -138,8 +158,17 @@ fun KaigiApp(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
+            val snackbarMessage = stringResource(AppIosSharedRes.string.permission_required)
             KaigiNavHost(
                 windowSize = windowSize,
+                onLicenseScreenRequest = onLicenseScreenRequest,
+                onAccessCalendarIsDenied = {
+                    eventFlow.tryEmit(
+                        IosComposeKaigiAppEvent.ShowRequiresAuthorization(
+                            snackbarMessage = snackbarMessage,
+                        )
+                    )
+                }
             )
         }
     }
@@ -148,19 +177,27 @@ fun KaigiApp(
 @Composable
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
+    onLicenseScreenRequest: () -> Unit,
+    onAccessCalendarIsDenied: () -> Unit,
     navController: NavHostController = rememberNavController(),
-    externalNavController: ExternalNavController = rememberExternalNavController()
+    externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
         mainScreen(
             windowSize = windowSize,
             navController = navController,
             externalNavController = externalNavController,
+            onLicenseScreenRequest = onLicenseScreenRequest,
         )
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
-            onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
+            onCalendarRegistrationClick = { timetableItem ->
+                externalNavController.navigateToCalendarRegistration(
+                    timetableItem = timetableItem,
+                    onAccessCalendarIsDenied = onAccessCalendarIsDenied,
+                )
+            },
             onShareClick = externalNavController::onShareClick,
             onFavoriteListClick = {
                 navController.navigate(
@@ -205,6 +242,7 @@ private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     navController: NavHostController,
     externalNavController: ExternalNavController,
+    onLicenseScreenRequest: () -> Unit,
 ) {
     mainScreen(
         windowSize = windowSize,
@@ -246,7 +284,7 @@ private fun NavGraphBuilder.mainScreen(
                         }
 
                         AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
-                        AboutItem.License -> externalNavController.navigateToLicenseScreen()
+                        AboutItem.License -> onLicenseScreenRequest()
                         AboutItem.Medium -> externalNavController.navigate(
                             url = "https://medium.com/droidkaigi",
                         )
@@ -334,20 +372,18 @@ private class ExternalNavController(
         UIApplication.sharedApplication.openURL(nsUrl)
     }
 
-    fun navigateToLicenseScreen() {
-        ExternalNavControllerLink.onLicenseScreenRequest?.invoke()
-    }
-
     /**
      * Navigate to Calendar Registration
      */
-    fun navigateToCalendarRegistration(timetableItem: TimetableItem) {
+    fun navigateToCalendarRegistration(
+        timetableItem: TimetableItem,
+        onAccessCalendarIsDenied: () -> Unit,
+    ) {
         val eventStore = EKEventStore()
 
         eventStore.requestAccessToEntityType(EKEntityTypeEvent) { granted, error ->
             if (granted.not()) {
-                // TODO Display a message asking the user to add permissions.
-                // TODO Otherwise, the privileges will remain permanently denied.
+                onAccessCalendarIsDenied()
                 Logger.e("Calendar access was denied by the user.")
                 return@requestAccessToEntityType
             }
