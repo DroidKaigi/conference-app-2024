@@ -10,6 +10,7 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -22,6 +23,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
 import conference_app_2024.app_ios_shared.generated.resources.permission_required
+import conference_app_2024.app_ios_shared.generated.resources.open_settings
 import io.github.droidkaigi.confsched.about.aboutScreen
 import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
@@ -93,11 +95,13 @@ import platform.Foundation.NSDate
 import platform.Foundation.NSURL
 import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.UIKit.UIApplication
+import platform.UIKit.UIApplicationOpenSettingsURLString
 import platform.UIKit.UIViewController
 import platform.darwin.NSObject
 
 data class IosComposeKaigiAppUiState(
     val userMessageStateHolder: UserMessageStateHolder,
+    val shouldGoToSettingsApp: Boolean,
 )
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -142,6 +146,7 @@ fun KaigiApp(
     snackbarHostState: SnackbarHostState,
     onLicenseScreenRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     val eventFlow = rememberEventFlow<IosComposeKaigiAppEvent>()
     val uiState = iosComposeKaigiAppPresenter(events = eventFlow)
@@ -151,6 +156,13 @@ fun KaigiApp(
         userMessageStateHolder = uiState.userMessageStateHolder,
     )
 
+    LaunchedEffect(uiState.shouldGoToSettingsApp) {
+        if (uiState.shouldGoToSettingsApp) {
+            eventFlow.tryEmit(IosComposeKaigiAppEvent.SettingsAppNavigated)
+            externalNavController.navigateToSettingsApp()
+        }
+    }
+
     KaigiTheme(
         fontFamily = fontFamily,
     ) {
@@ -159,13 +171,17 @@ fun KaigiApp(
             color = MaterialTheme.colorScheme.background,
         ) {
             val snackbarMessage = stringResource(AppIosSharedRes.string.permission_required)
+            val snackbarActionLabel = stringResource(AppIosSharedRes.string.open_settings)
+
             KaigiNavHost(
                 windowSize = windowSize,
+                externalNavController = externalNavController,
                 onLicenseScreenRequest = onLicenseScreenRequest,
                 onAccessCalendarIsDenied = {
                     eventFlow.tryEmit(
                         IosComposeKaigiAppEvent.ShowRequiresAuthorization(
                             snackbarMessage = snackbarMessage,
+                            actionLabel = snackbarActionLabel,
                         )
                     )
                 }
@@ -177,10 +193,10 @@ fun KaigiApp(
 @Composable
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
+    externalNavController: ExternalNavController,
     onLicenseScreenRequest: () -> Unit,
     onAccessCalendarIsDenied: () -> Unit,
     navController: NavHostController = rememberNavController(),
-    externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
         mainScreen(
@@ -357,7 +373,7 @@ private fun rememberExternalNavController(): ExternalNavController {
     }
 }
 
-private class ExternalNavController(
+class ExternalNavController(
     private val shareNavigator: ShareNavigator,
     private val coroutineScope: CoroutineScope,
 ) {
@@ -427,6 +443,13 @@ private class ExternalNavController(
                     completion = null,
                 )
             }
+        }
+    }
+
+    fun navigateToSettingsApp() {
+        val settingsUrl = NSURL.URLWithString(UIApplicationOpenSettingsURLString)
+        if (settingsUrl != null) {
+            UIApplication.sharedApplication.openURL(settingsUrl)
         }
     }
 

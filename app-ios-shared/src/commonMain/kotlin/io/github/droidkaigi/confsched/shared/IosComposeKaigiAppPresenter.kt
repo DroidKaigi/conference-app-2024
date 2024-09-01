@@ -1,34 +1,51 @@
 package io.github.droidkaigi.confsched.shared
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import io.github.droidkaigi.confsched.compose.EventEffect
 import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageResult.ActionPerformed
 import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
+import io.github.droidkaigi.confsched.shared.IosComposeKaigiAppEvent.SettingsAppNavigated
 import io.github.droidkaigi.confsched.shared.IosComposeKaigiAppEvent.ShowRequiresAuthorization
 
 sealed interface IosComposeKaigiAppEvent {
-    val snackbarMessage: String
-
     data class ShowRequiresAuthorization(
-        override val snackbarMessage: String,
+        val snackbarMessage: String,
+        val actionLabel: String,
     ) : IosComposeKaigiAppEvent
+
+    data object SettingsAppNavigated : IosComposeKaigiAppEvent
 }
 
 @Composable
 fun iosComposeKaigiAppPresenter(
     events: EventFlow<IosComposeKaigiAppEvent>
 ) : IosComposeKaigiAppUiState = providePresenterDefaults { userMessageStateHolder ->
+    var shouldGoToSettingsApp by remember { mutableStateOf(false) }
+
     EventEffect(events) { event ->
         when (event) {
             is ShowRequiresAuthorization -> {
-                userMessageStateHolder.showMessage(
+                val result = userMessageStateHolder.showMessage(
                     message = event.snackbarMessage,
-                    // TODO Add code to transition to the settings screen when the action button is pressed.
-                    // TODO Perhaps UIApplication.openSettingsURLString can be used to achieve this.
-                    actionLabel = null,
+                    actionLabel = event.actionLabel,
                 )
+                if (result == ActionPerformed) {
+                    shouldGoToSettingsApp = true
+                }
+            }
+
+            SettingsAppNavigated -> {
+                shouldGoToSettingsApp = false
             }
         }
     }
-    IosComposeKaigiAppUiState(userMessageStateHolder)
+    IosComposeKaigiAppUiState(
+        userMessageStateHolder = userMessageStateHolder,
+        shouldGoToSettingsApp = shouldGoToSettingsApp,
+    )
 }
