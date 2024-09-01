@@ -72,6 +72,8 @@ import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.Lang.JAPANESE
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.defaultLang
+import io.github.droidkaigi.confsched.profilecard.cropImageScreenRoute
+import io.github.droidkaigi.confsched.profilecard.cropImageScreens
 import io.github.droidkaigi.confsched.profilecard.navigateProfileCardScreen
 import io.github.droidkaigi.confsched.profilecard.profileCardScreen
 import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
@@ -189,6 +191,10 @@ private fun KaigiNavHost(
                     onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
                     contentPadding = PaddingValues(),
                 )
+
+                cropImageScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                )
             }
         }
     }
@@ -267,6 +273,7 @@ private fun NavGraphBuilder.mainScreen(
             profileCardScreen(
                 contentPadding = contentPadding,
                 onClickShareProfileCard = externalNavController::onShareProfileCardClick,
+                onNavigateToCropImage = { navController.navigate(cropImageScreenRoute) },
             )
         },
     )

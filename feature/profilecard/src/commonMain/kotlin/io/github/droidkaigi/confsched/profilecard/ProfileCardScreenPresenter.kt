@@ -20,6 +20,7 @@ import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
+import io.github.droidkaigi.confsched.model.ProfileImage
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -44,6 +45,9 @@ internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
     ) : EditScreenEvent
 
     data object SelectImage : EditScreenEvent
+
+    data class CropImage(val image: String) : EditScreenEvent
+
     data class Create(val profileCard: ProfileCard.Exists) : EditScreenEvent
 }
 
@@ -82,6 +86,7 @@ internal fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun profileCardScreenPresenter(
+    onNavigateToCropImage: () -> Unit,
     events: EventFlow<ProfileCardScreenEvent>,
     repository: ProfileCardRepository = localProfileCardRepository(),
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
@@ -105,6 +110,7 @@ internal fun profileCardScreenPresenter(
         stringResource(ProfileCardRes.string.image),
     )
 
+    val navigateToCropImage by rememberUpdatedState(onNavigateToCropImage)
     val profileCard: ProfileCard by rememberUpdatedState(repository.profileCard())
     var isLoading: Boolean by remember { mutableStateOf(false) }
     val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
@@ -166,7 +172,9 @@ internal fun profileCardScreenPresenter(
                 // Only matches if the link is in this format "${http or https + ://}${sub domain + .}${domain}.${tld}/${sub directories}".
                 // Protocol, sub domain and sub directories are optional.
                 // ex. https://www.example.com/hogefuga/foobar
-                val invalidFormat = event.link.matches(Regex("^(?:https?://)?(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z0-9-]{2,}(?:/\\S*)?\$")).not()
+                val invalidFormat = event.link
+                    .matches(Regex("^(?:https?://)?(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z0-9-]{2,}(?:/\\S*)?\$"))
+                    .not()
                 cardError = cardError.copy(
                     linkError = if (event.link.isEmpty()) emptyLinkErrorString else if (invalidFormat) invalidLinkErrorString else "",
                 )
@@ -176,6 +184,13 @@ internal fun profileCardScreenPresenter(
                 cardError = cardError.copy(
                     imageError = if (event.image.isEmpty()) emptyImageErrorString else "",
                 )
+            }
+
+            is EditScreenEvent.CropImage -> {
+                repository.setProfileImageCandidate(
+                    ProfileImage(bytes = event.image.decodeBase64Bytes()),
+                )
+                navigateToCropImage()
             }
         }
     }

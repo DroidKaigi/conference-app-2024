@@ -147,11 +147,13 @@ const val ProfileCardShareButtonTestTag = "ProfileCardShareButtonTestTag"
 fun NavGraphBuilder.profileCardScreen(
     contentPadding: PaddingValues,
     onClickShareProfileCard: (String, ImageBitmap) -> Unit,
+    onNavigateToCropImage: () -> Unit,
 ) {
     composable(profileCardScreenRoute) {
         ProfileCardScreen(
             contentPadding = contentPadding,
             onClickShareProfileCard = onClickShareProfileCard,
+            onNavigateToCropImage = onNavigateToCropImage,
         )
     }
 }
@@ -210,12 +212,14 @@ data class ProfileCardScreenState(
 @Composable
 fun ProfileCardScreen(
     onClickShareProfileCard: (String, ImageBitmap) -> Unit,
+    onNavigateToCropImage: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
     ProfileCardScreen(
         contentPadding = contentPadding,
         onClickShareProfileCard = onClickShareProfileCard,
+        onNavigateToCropImage = onNavigateToCropImage,
         modifier = modifier,
         eventFlow = rememberEventFlow(),
     )
@@ -226,9 +230,13 @@ fun ProfileCardScreen(
 internal fun ProfileCardScreen(
     contentPadding: PaddingValues,
     onClickShareProfileCard: (String, ImageBitmap) -> Unit,
+    onNavigateToCropImage: () -> Unit,
     modifier: Modifier = Modifier,
     eventFlow: EventFlow<ProfileCardScreenEvent> = rememberEventFlow(),
-    uiState: ProfileCardScreenState = profileCardScreenPresenter(eventFlow),
+    uiState: ProfileCardScreenState = profileCardScreenPresenter(
+        onNavigateToCropImage = onNavigateToCropImage,
+        events = eventFlow,
+    ),
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
@@ -330,6 +338,9 @@ internal fun ProfileCardScreen(
                     onClickCreate = {
                         eventFlow.tryEmit(EditScreenEvent.Create(it))
                     },
+                    onCropImage = {
+                        eventFlow.tryEmit(EditScreenEvent.CropImage(it))
+                    },
                     contentPadding = padding,
                 )
             }
@@ -375,6 +386,7 @@ internal fun EditScreen(
     onChangeLink: (String) -> Unit,
     onChangeImage: (String) -> Unit,
     onClickCreate: (ProfileCard.Exists) -> Unit,
+    onCropImage: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
@@ -466,6 +478,9 @@ internal fun EditScreen(
                     onClearImage = {
                         imageByteArray = null
                         onChangeImage("")
+                    },
+                    onCropImage = {
+                        onCropImage(it.toBase64())
                     },
                 )
             }
@@ -592,6 +607,7 @@ private fun ImagePickerWithError(
     errorMessage: String,
     onSelectedImage: (ByteArray) -> Unit,
     onClearImage: () -> Unit,
+    onCropImage: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -634,6 +650,7 @@ private fun ImagePickerWithError(
         } ?: run {
             PhotoPickerButton(
                 onSelectedImage = onSelectedImage,
+                onCropImage = onCropImage,
                 modifier = Modifier
                     .padding(bottom = 20.dp)
                     .testTag(ProfileCardSelectImageButtonTestTag),
