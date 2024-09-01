@@ -393,13 +393,11 @@ internal fun EditScreen(
     var nickname by remember { mutableStateOf(uiState.nickname) }
     var occupation by remember { mutableStateOf(uiState.occupation) }
     var link by remember { mutableStateOf(uiState.link) }
-    var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
-    val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
     var selectedCardType by remember { mutableStateOf(uiState.cardType) }
 
-    val isValidInputs by remember {
+    val isValidInputs by remember(uiState.image) {
         derivedStateOf {
-            nickname.isNotEmpty() && occupation.isNotEmpty() && link.isNotEmpty() && image != null
+            nickname.isNotEmpty() && occupation.isNotEmpty() && link.isNotEmpty() && uiState.image != null
         }
     }
 
@@ -469,14 +467,12 @@ internal fun EditScreen(
                 Label(label = stringResource(ProfileCardRes.string.image))
                 Spacer(modifier = Modifier.height(12.dp))
                 ImagePickerWithError(
-                    image = image,
+                    image = uiState.image?.decodeBase64Bytes()?.toImageBitmap(),
                     onSelectedImage = {
-                        imageByteArray = it
                         onChangeImage(it.toBase64())
                     },
                     errorMessage = profileCardError.imageError,
                     onClearImage = {
-                        imageByteArray = null
                         onChangeImage("")
                     },
                     onCropImage = {
@@ -502,7 +498,7 @@ internal fun EditScreen(
                             nickname = nickname,
                             occupation = occupation,
                             link = link,
-                            image = imageByteArray?.toBase64() ?: "",
+                            image = uiState.image ?: "",
                             cardType = selectedCardType,
                         ),
                     )
