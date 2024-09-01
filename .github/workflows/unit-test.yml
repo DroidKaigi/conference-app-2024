@@ -33,13 +33,12 @@ jobs:
           name: event-payload
           path: ${{ github.event_path }}
 
-      - run: ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace
-
-      - run: |
-          ./gradlew \
-                :core:data:iosSimulatorArm64Test \
-                :core:model:iosSimulatorArm64Test \
-                --stacktrace
+      - run: ./gradlew \
+          testDevDebugUnitTest \
+          testDebugUnitTest \
+          :core:data:iosSimulatorArm64Test \
+          :core:model:iosSimulatorArm64Test \
+          --stacktrace
 
       # Saving cost
       # - run: ./gradlew koverHtmlReportDevDebug --stacktrace
