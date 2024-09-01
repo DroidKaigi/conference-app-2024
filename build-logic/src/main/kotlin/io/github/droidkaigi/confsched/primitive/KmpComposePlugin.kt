@@ -37,6 +37,7 @@ class KmpComposePlugin : Plugin<Project> {
                             implementation(libs.library("rin"))
                             implementation(libs.library("composeNavigation"))
                             implementation(libs.library("composeMaterialWindowSize"))
+                            implementation(libs.library("androidxLifecycleRuntimeCompose"))
                             implementation(libs.library("androidxLifecycleViewModel"))
                             implementation(libs.library("androidxLifecycleViewModelCompose"))
                             implementation(libs.library("androidxLifecycleCommon"))

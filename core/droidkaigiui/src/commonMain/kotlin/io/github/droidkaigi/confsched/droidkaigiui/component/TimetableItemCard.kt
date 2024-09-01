@@ -23,6 +23,7 @@ import androidx.compose.material.icons.Icons.Filled
 import androidx.compose.material.icons.Icons.Outlined
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
@@ -47,6 +49,7 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.dropUnlessResumed
 import conference_app_2024.core.droidkaigiui.generated.resources.bookmarked
 import conference_app_2024.core.droidkaigiui.generated.resources.image
 import conference_app_2024.core.droidkaigiui.generated.resources.not_bookmarked
@@ -55,7 +58,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.droidkaigiui.DroidKaigiUiRes
 import io.github.droidkaigi.confsched.droidkaigiui.animation.LocalFavoriteAnimationScope
-import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
+import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import org.jetbrains.compose.resources.stringResource
@@ -105,7 +108,7 @@ fun TimetableItemCard(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = rememberRipple(color = LocalRoomTheme.current.primaryColor),
-                    onClick = { onTimetableItemClick(timetableItem) },
+                    onClick = dropUnlessResumed { onTimetableItemClick(timetableItem) },
                 ),
         ) {
             val contentPadding = 12.dp
@@ -136,7 +139,13 @@ fun TimetableItemCard(
                             horizontalArrangement = Arrangement.spacedBy(8.dp),
                         ) {
                             // TODO: Fixed image loading again but its still slow. Maybe we need smaller images?
-                            val painter = rememberAsyncImagePainter(speaker.iconUrl)
+                            val painter = previewOverride(
+                                previewPainter = {
+                                    rememberVectorPainter(image = Icons.Default.Person)
+                                },
+                            ) {
+                                speakerPainter(speaker.iconUrl)
+                            }
                             Image(
                                 painter = painter,
                                 modifier = Modifier

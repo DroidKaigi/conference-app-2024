@@ -34,7 +34,9 @@ public struct EventMapView: View {
             
             VStack(spacing: 24) {
                 ForEach(store.events, id: \.self) { event in
-                    EventItem(event: event)
+                    EventItem(event: event) { url in
+                        store.send(.view(.moreDetailButtonTapped(url)))
+                    }
                 }
             }
             // bottom floating tabbar padding
@@ -44,6 +46,10 @@ public struct EventMapView: View {
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(String(localized: "NavigationTitle", bundle: .module))
         .onAppear { store.send(.view(.onAppear)) }
+        .sheet(item: $store.url, content: { url in
+            SafariView(url: url.id)
+                .ignoresSafeArea()
+        })
     }
 }
 

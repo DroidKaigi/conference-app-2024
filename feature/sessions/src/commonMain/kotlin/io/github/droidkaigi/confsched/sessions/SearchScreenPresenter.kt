@@ -96,7 +96,7 @@ fun searchScreenPresenter(
     val searchFilterLanguageUiState: SearchFilterUiState<Lang> by rememberUpdatedState(
         SearchFilterUiState(
             selectedItems = selectedLanguages,
-            selectableItems = sessions.languages.map { it.toLang() },
+            selectableItems = sessions.languages.map { it.toLang() }.distinct(),
             selectedValuesText = selectedLanguages.joinToString { it.tagName },
         ),
     )

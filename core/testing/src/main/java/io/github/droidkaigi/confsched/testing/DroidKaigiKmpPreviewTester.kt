@@ -7,11 +7,11 @@ import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.testing.rules.CoilRule
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
+import sergio.sastre.composable.preview.scanner.jvm.JvmAnnotationInfo
 import sergio.sastre.composable.preview.scanner.jvm.JvmAnnotationScanner
-import sergio.sastre.composable.preview.scanner.jvm.JvmAnnotationScanner.DesktopPreviewInfo
 
 @OptIn(ExperimentalRoborazziApi::class)
-class DroidKaigiKmpPreviewTester : ComposePreviewTester<JvmAnnotationScanner.DesktopPreviewInfo> {
+class DroidKaigiKmpPreviewTester : ComposePreviewTester<JvmAnnotationInfo> {
     override fun options(): Options {
         return super.options().copy(
             testLifecycleOptions = JUnit4TestLifecycleOptions {
@@ -19,13 +19,13 @@ class DroidKaigiKmpPreviewTester : ComposePreviewTester<JvmAnnotationScanner.Des
             },
         )
     }
-    override fun previews(): List<ComposablePreview<DesktopPreviewInfo>> {
+    override fun previews(): List<ComposablePreview<JvmAnnotationInfo>> {
         return JvmAnnotationScanner("org.jetbrains.compose.ui.tooling.preview.Preview")
             .scanPackageTrees(*options().scanOptions.packages.toTypedArray())
             .getPreviews()
     }
 
-    override fun test(preview: ComposablePreview<JvmAnnotationScanner.DesktopPreviewInfo>) {
+    override fun test(preview: ComposablePreview<JvmAnnotationInfo>) {
         captureRoboImage("${preview.methodName}.png") {
             println(preview.methodName)
             preview()

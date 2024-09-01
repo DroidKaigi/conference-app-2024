@@ -1,4 +1,4 @@
-package io.github.droidkaigi.confsched.shared.share
+package io.github.droidkaigi.confsched.droidkaigiui
 
 import androidx.compose.ui.graphics.ImageBitmap
 import kotlinx.cinterop.ExperimentalForeignApi

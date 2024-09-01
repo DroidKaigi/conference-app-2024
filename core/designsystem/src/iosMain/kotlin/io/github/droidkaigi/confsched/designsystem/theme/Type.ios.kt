@@ -9,7 +9,7 @@ import org.jetbrains.skia.Typeface
 
 @Composable
 actual fun dotGothic16FontFamily(): FontFamily {
-    val skTypeface = loadCustomFont("dot_gothic16_regular")
+    val skTypeface = loadCustomFont("DotGothic16")
 
     return try {
         FontFamily(Typeface(skTypeface))
@@ -18,10 +18,10 @@ actual fun dotGothic16FontFamily(): FontFamily {
     }
 }
 
-private fun loadCustomFont(name: String): Typeface {
+private fun loadCustomFont(familyName: String): Typeface {
     val fontMgr = FontMgr.default
 
-    return fontMgr.matchFamilyStyle(name, FontStyle.NORMAL)
+    return fontMgr.matchFamilyStyle(familyName, FontStyle.NORMAL)
         ?: fontMgr.matchFamilyStyle(null, FontStyle.NORMAL) // default system font.
         ?: Typeface.makeEmpty()
 }
