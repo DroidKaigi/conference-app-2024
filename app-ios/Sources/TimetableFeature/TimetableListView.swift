@@ -101,13 +101,13 @@ struct TimetableListView: View {
                     ForEach(store.timetableItems, id: \.self) { item in
                         TimeGroupMiniList(contents: item, onItemTap: { item in
                             store.send(.view(.timetableItemTapped(item)))
-                        }, onFavoriteTap: { item, adjustedLocationPoint in
-                            // MEMO:
-                            store.send(.view(.favoriteTapped(item)))
+                        }, onFavoriteTap: { timetableItemWithFavorite, adjustedLocationPoint in
 
-                            // MEMO:
-                            if item.isFavorited == false {
-                                toggleFavorite(timetableItem: item.timetableItem, adjustedLocationPoint: adjustedLocationPoint)
+                            store.send(.view(.favoriteTapped(timetableItemWithFavorite)))
+
+                            // MEMO: When "isFavorited" flag is false, this view executes animation.
+                            if timetableItemWithFavorite.isFavorited == false {
+                                toggleFavorite(timetableItem: timetableItemWithFavorite.timetableItem, adjustedLocationPoint: adjustedLocationPoint)
                             }
                         })
                     }
@@ -118,12 +118,13 @@ struct TimetableListView: View {
                 bottomTabBarPadding
             }
 
-            heartAnimation
+            // MEMO: Stack the Image elements that will be animated using ZStack.
+            makeHeartAnimationView()
         }
     }
     
-    
-    private var heartAnimation: some View {
+    @ViewBuilder
+    private func makeHeartAnimationView() -> some View {
         GeometryReader { geometry in
             if targetTimetableItemId != nil {
                 Image(systemName: "heart.fill")
@@ -141,16 +142,16 @@ struct TimetableListView: View {
     
     private func animationPosition(geometry: GeometryProxy) -> CGPoint {
 
-        //
+        // MEMO: Get the value calculated from both the default and .global GeometryReader.
         let globalGeometrySize = geometry.frame(in: .global).size
         let defaultGeometrySize = geometry.size
 
-        //
+        // MEMO: Calculate the offset value in the Y-axis direction using GeometryReader.
         let startPositionY = targetLocationPoint?.y ?? 0
         let endPositionY = defaultGeometrySize.height - 25
         let targetY = startPositionY + (endPositionY - startPositionY) * animationProgress
 
-        //
+        // MEMO: Calculate the offset value in the X-axis direction using GeometryReader.
         let adjustedPositionX = animationProgress * (globalGeometrySize.width / 2 - globalGeometrySize.width + 50)
         let targetX = defaultGeometrySize.width - 50 + adjustedPositionX
 
@@ -158,10 +159,11 @@ struct TimetableListView: View {
     }
 
     private func toggleFavorite(timetableItem: TimetableItem, adjustedLocationPoint: CGPoint?) {
-        
+
         targetLocationPoint = adjustedLocationPoint
         targetTimetableItemId = timetableItem.id
 
+        // MEMO: Execute animation.
         if targetTimetableItemId != nil {
             withAnimation(.easeOut(duration: 1)) {
                 animationProgress = 1
