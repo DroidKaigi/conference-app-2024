@@ -88,9 +88,9 @@ struct TimetableListView: View {
         self.store = store
     }
 
-    // (only 0 or 1...)
+    // MEMO: A variable that stores the value of Animation variation. (Only 0 or 1)
     @State private var animationProgress: CGFloat = 0
-    //
+    // MEMO: Select target targetTimetableItemId & targetLocationPoint (for Animation).
     @State private var targetTimetableItemId: TimetableItemId?
     @State private var targetLocationPoint: CGPoint?
 
