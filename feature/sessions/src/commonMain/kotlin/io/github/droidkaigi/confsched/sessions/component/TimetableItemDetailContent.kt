@@ -52,6 +52,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val TargetAudienceSectionTestTag = "TargetAudienceSectionTestTag"
 const val DescriptionMoreButtonTestTag = "DescriptionMoreButtonTestTag"
+const val TimetableItemDetailContentArchiveSectionTestTag = "TimetableItemDetailContentArchiveSectionTestTag"
+const val TimetableItemDetailContentArchiveSectionSlideButtonTestTag = "TimetableItemDetailContentArchiveSectionSlideButtonTestTag"
+const val TimetableItemDetailContentArchiveSectionVideoButtonTestTag = "TimetableItemDetailContentArchiveSectionVideoButtonTestTag"
+const val TimetableItemDetailContentTargetAudienceSectionBottomTestTag = "TimetableItemDetailContentTargetAudienceSectionBottomTestTag"
 
 @Composable
 fun TimetableItemDetailContent(
@@ -160,7 +164,7 @@ private fun TargetAudienceSection(
             text = timetableItem.targetAudience,
             style = MaterialTheme.typography.bodyLarge,
         )
-        Spacer(Modifier.height(8.dp))
+        Spacer(Modifier.height(8.dp).testTag(TimetableItemDetailContentTargetAudienceSectionBottomTestTag))
     }
 }
 
@@ -171,7 +175,11 @@ private fun ArchiveSection(
     modifier: Modifier = Modifier,
     onWatchVideoClick: (url: String) -> Unit,
 ) {
-    Column(modifier = modifier.padding(8.dp)) {
+    Column(
+        modifier = modifier
+            .padding(8.dp)
+            .testTag(TimetableItemDetailContentArchiveSectionTestTag),
+    ) {
         Text(
             text = stringResource(SessionsRes.string.archive),
             style = MaterialTheme.typography.titleLarge,
@@ -183,7 +191,9 @@ private fun ArchiveSection(
         ) {
             timetableItem.asset.slideUrl?.let { slideUrl ->
                 Button(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag(TimetableItemDetailContentArchiveSectionSlideButtonTestTag),
                     onClick = { onViewSlideClick(slideUrl) },
                     colors = ButtonDefaults.buttonColors().copy(
                         containerColor = LocalRoomTheme.current.primaryColor,
@@ -194,7 +204,7 @@ private fun ArchiveSection(
                         contentDescription = stringResource(SessionsRes.string.slide),
                     )
                     Text(
-                        text = "スライド",
+                        text = stringResource(SessionsRes.string.slide),
                         style = MaterialTheme.typography.labelLarge,
                     )
                 }
@@ -202,7 +212,9 @@ private fun ArchiveSection(
             timetableItem.asset.videoUrl?.let { videoUrl ->
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier
+                        .weight(1f)
+                        .testTag(TimetableItemDetailContentArchiveSectionVideoButtonTestTag),
                     onClick = { onWatchVideoClick(videoUrl) },
                     colors = ButtonDefaults.buttonColors().copy(
                         containerColor = LocalRoomTheme.current.primaryColor,
@@ -213,7 +225,7 @@ private fun ArchiveSection(
                         contentDescription = stringResource(SessionsRes.string.video),
                     )
                     Text(
-                        text = "動画",
+                        text = stringResource(SessionsRes.string.video),
                         style = MaterialTheme.typography.labelLarge,
                     )
                 }

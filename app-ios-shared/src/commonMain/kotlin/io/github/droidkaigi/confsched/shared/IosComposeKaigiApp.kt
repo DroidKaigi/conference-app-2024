@@ -98,11 +98,6 @@ import platform.UIKit.UIApplication
 import platform.UIKit.UIViewController
 import platform.darwin.NSObject
 
-private object ExternalNavControllerLink {
-    var onLicenseScreenRequest: (() -> Unit)? = null
-    var onAccessCalendarIsDenied: (() -> Unit)? = null
-}
-
 data class IosComposeKaigiAppUiState(
     val userMessageStateHolder: UserMessageStateHolder,
     val shouldGoToSettingsApp: Boolean,
@@ -114,37 +109,7 @@ fun kaigiAppController(
     repositories: Repositories,
     onLicenseScreenRequest: () -> Unit,
 ): UIViewController = ComposeUIViewController {
-    val eventFlow = rememberEventFlow<IosComposeKaigiAppEvent>()
-    val uiState = iosComposeKaigiAppPresenter(events = eventFlow)
-
     val snackbarHostState = remember { SnackbarHostState() }
-
-    ExternalNavControllerLink.apply {
-        val snackbarMessage = stringResource(AppIosSharedRes.string.permission_required)
-        val snackbarActionLabel = stringResource(AppIosSharedRes.string.open_settings)
-
-        this.onLicenseScreenRequest = onLicenseScreenRequest
-        this.onAccessCalendarIsDenied = {
-            eventFlow.tryEmit(
-                IosComposeKaigiAppEvent.ShowRequiresAuthorization(
-                    snackbarMessage = snackbarMessage,
-                    actionLabel = snackbarActionLabel,
-                )
-            )
-        }
-    }
-
-    SnackbarMessageEffect(
-        snackbarHostState = snackbarHostState,
-        userMessageStateHolder = uiState.userMessageStateHolder,
-    )
-
-    LaunchedEffect(uiState.shouldGoToSettingsApp) {
-        if (uiState.shouldGoToSettingsApp) {
-            eventFlow.tryEmit(IosComposeKaigiAppEvent.SettingsAppNavigated)
-            openSettingsApp()
-        }
-    }
 
     CompositionLocalProvider(
         LocalRepositories provides repositories.map,
@@ -167,6 +132,8 @@ fun kaigiAppController(
         KaigiApp(
             windowSize = windowSizeClass,
             fontFamily = fontFamily,
+            snackbarHostState = snackbarHostState,
+            onLicenseScreenRequest = onLicenseScreenRequest,
         )
     }
 }
@@ -175,8 +142,25 @@ fun kaigiAppController(
 fun KaigiApp(
     windowSize: WindowSizeClass,
     fontFamily: FontFamily?,
+    snackbarHostState: SnackbarHostState,
+    onLicenseScreenRequest: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val eventFlow = rememberEventFlow<IosComposeKaigiAppEvent>()
+    val uiState = iosComposeKaigiAppPresenter(events = eventFlow)
+
+    SnackbarMessageEffect(
+        snackbarHostState = snackbarHostState,
+        userMessageStateHolder = uiState.userMessageStateHolder,
+    )
+
+    LaunchedEffect(uiState.shouldGoToSettingsApp) {
+        if (uiState.shouldGoToSettingsApp) {
+            eventFlow.tryEmit(IosComposeKaigiAppEvent.SettingsAppNavigated)
+            openSettingsApp()
+        }
+    }
+
     KaigiTheme(
         fontFamily = fontFamily,
     ) {
@@ -184,8 +168,20 @@ fun KaigiApp(
             modifier = modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background,
         ) {
+            val snackbarMessage = stringResource(AppIosSharedRes.string.permission_required)
+            val snackbarActionLabel = stringResource(AppIosSharedRes.string.open_settings)
+
             KaigiNavHost(
                 windowSize = windowSize,
+                onLicenseScreenRequest = onLicenseScreenRequest,
+                onAccessCalendarIsDenied = {
+                    eventFlow.tryEmit(
+                        IosComposeKaigiAppEvent.ShowRequiresAuthorization(
+                            snackbarMessage = snackbarMessage,
+                            actionLabel = snackbarActionLabel,
+                        )
+                    )
+                }
             )
         }
     }
@@ -194,19 +190,27 @@ fun KaigiApp(
 @Composable
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
+    onLicenseScreenRequest: () -> Unit,
+    onAccessCalendarIsDenied: () -> Unit,
     navController: NavHostController = rememberNavController(),
-    externalNavController: ExternalNavController = rememberExternalNavController()
+    externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
         mainScreen(
             windowSize = windowSize,
             navController = navController,
             externalNavController = externalNavController,
+            onLicenseScreenRequest = onLicenseScreenRequest,
         )
         sessionScreens(
             onNavigationIconClick = navController::popBackStack,
             onLinkClick = externalNavController::navigate,
-            onCalendarRegistrationClick = externalNavController::navigateToCalendarRegistration,
+            onCalendarRegistrationClick = { timetableItem ->
+                externalNavController.navigateToCalendarRegistration(
+                    timetableItem = timetableItem,
+                    onAccessCalendarIsDenied = onAccessCalendarIsDenied,
+                )
+            },
             onShareClick = externalNavController::onShareClick,
             onFavoriteListClick = {
                 navController.navigate(
@@ -251,6 +255,7 @@ private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     navController: NavHostController,
     externalNavController: ExternalNavController,
+    onLicenseScreenRequest: () -> Unit,
 ) {
     mainScreen(
         windowSize = windowSize,
@@ -292,7 +297,7 @@ private fun NavGraphBuilder.mainScreen(
                         }
 
                         AboutItem.Contributors -> navController.navigate(contributorsScreenRoute)
-                        AboutItem.License -> externalNavController.navigateToLicenseScreen()
+                        AboutItem.License -> onLicenseScreenRequest()
                         AboutItem.Medium -> externalNavController.navigate(
                             url = "https://medium.com/droidkaigi",
                         )
@@ -380,19 +385,18 @@ private class ExternalNavController(
         UIApplication.sharedApplication.openURL(nsUrl)
     }
 
-    fun navigateToLicenseScreen() {
-        ExternalNavControllerLink.onLicenseScreenRequest?.invoke()
-    }
-
     /**
      * Navigate to Calendar Registration
      */
-    fun navigateToCalendarRegistration(timetableItem: TimetableItem) {
+    fun navigateToCalendarRegistration(
+        timetableItem: TimetableItem,
+        onAccessCalendarIsDenied: () -> Unit,
+    ) {
         val eventStore = EKEventStore()
 
         eventStore.requestAccessToEntityType(EKEntityTypeEvent) { granted, error ->
             if (granted.not()) {
-                ExternalNavControllerLink.onAccessCalendarIsDenied?.invoke()
+                onAccessCalendarIsDenied()
                 Logger.e("Calendar access was denied by the user.")
                 return@requestAccessToEntityType
             }
