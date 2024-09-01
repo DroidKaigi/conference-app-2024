@@ -82,6 +82,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.navigation.NavController
@@ -134,6 +135,7 @@ const val ProfileCardEditScreenColumnTestTag = "ProfileCardEditScreenColumnTestT
 const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
 const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
 const val ProfileCardLinkTextFieldTestTag = "ProfileCardLinkTextFieldTestTag"
+const val ProfileCardInputErrorTextTestTag = "ProfileCardInputErrorTextTestTag"
 const val ProfileCardSelectImageButtonTestTag = "ProfileCardSelectImageButtonTestTag"
 const val ProfileCardCreateButtonTestTag = "ProfileCardCreateButtonTestTag"
 const val ProfileCardCardScreenTestTag = "ProfileCardCardScreenTestTag"
@@ -430,7 +432,10 @@ internal fun EditScreen(
                 link = it
                 onChangeLink(it)
             },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Uri,
+            ),
         )
 
         Column(
@@ -454,7 +459,10 @@ internal fun EditScreen(
                 )
             }
 
-            Text(stringResource(ProfileCardRes.string.select_theme))
+            Text(
+                text = stringResource(ProfileCardRes.string.select_theme),
+                style = MaterialTheme.typography.titleMedium,
+            )
 
             CardTypePiker(
                 selectedCardType = selectedCardType,
@@ -558,7 +566,7 @@ private fun InputFieldWithError(
                     start = 16.dp,
                     top = 4.dp,
                     end = 16.dp,
-                ),
+                ).testTag(ProfileCardInputErrorTextTestTag.plus(value)),
         )
     }
 }
