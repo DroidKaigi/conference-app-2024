@@ -132,7 +132,6 @@ struct TimetableListView: View {
                         AssetColors.Primary.primaryFixed.swiftUIColor
                     )
                     .frame(width: 24, height: 24)
-                    .foregroundColor(.red)
                     .position(animationPosition(geometry: geometry))
                     .opacity(1 - animationProgress)
                     .zIndex(99)
