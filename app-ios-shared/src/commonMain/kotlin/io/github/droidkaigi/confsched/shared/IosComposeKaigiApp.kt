@@ -95,6 +95,7 @@ import platform.Foundation.NSDate
 import platform.Foundation.NSURL
 import platform.Foundation.dateWithTimeIntervalSince1970
 import platform.UIKit.UIApplication
+import platform.UIKit.UIApplicationOpenSettingsURLString
 import platform.UIKit.UIViewController
 import platform.darwin.NSObject
 
@@ -145,6 +146,7 @@ fun KaigiApp(
     snackbarHostState: SnackbarHostState,
     onLicenseScreenRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     val eventFlow = rememberEventFlow<IosComposeKaigiAppEvent>()
     val uiState = iosComposeKaigiAppPresenter(events = eventFlow)
@@ -157,7 +159,7 @@ fun KaigiApp(
     LaunchedEffect(uiState.shouldGoToSettingsApp) {
         if (uiState.shouldGoToSettingsApp) {
             eventFlow.tryEmit(IosComposeKaigiAppEvent.SettingsAppNavigated)
-            openSettingsApp()
+            externalNavController.navigateToSettingsApp()
         }
     }
 
@@ -173,6 +175,7 @@ fun KaigiApp(
 
             KaigiNavHost(
                 windowSize = windowSize,
+                externalNavController = externalNavController,
                 onLicenseScreenRequest = onLicenseScreenRequest,
                 onAccessCalendarIsDenied = {
                     eventFlow.tryEmit(
@@ -190,10 +193,10 @@ fun KaigiApp(
 @Composable
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
+    externalNavController: ExternalNavController,
     onLicenseScreenRequest: () -> Unit,
     onAccessCalendarIsDenied: () -> Unit,
     navController: NavHostController = rememberNavController(),
-    externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
         mainScreen(
@@ -370,7 +373,7 @@ private fun rememberExternalNavController(): ExternalNavController {
     }
 }
 
-private class ExternalNavController(
+class ExternalNavController(
     private val shareNavigator: ShareNavigator,
     private val coroutineScope: CoroutineScope,
 ) {
@@ -440,6 +443,13 @@ private class ExternalNavController(
                     completion = null,
                 )
             }
+        }
+    }
+
+    fun navigateToSettingsApp() {
+        val settingsUrl = NSURL.URLWithString(UIApplicationOpenSettingsURLString)
+        if (settingsUrl != null) {
+            UIApplication.sharedApplication.openURL(settingsUrl)
         }
     }
 
