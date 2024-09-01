@@ -20,6 +20,10 @@ public struct TimetableCard: View {
         self.onTapFavorite = onTapFavorite
     }
 
+    // MEMO: Used to adjust margins by Orientation.
+    @Environment(\.horizontalSizeClass) var heightSizeClass
+    @Environment(\.verticalSizeClass) var widthSizeClass
+
     public var body: some View {
         Button {
             onTap(timetableItem)
@@ -49,8 +53,8 @@ public struct TimetableCard: View {
                                 )
                                 .frame(width: 24, height: 24)
                                 .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global).onEnded { dragGesture in
-                                    // MEMO: The offset value in the Y-axis direction is subtracted for adjustment (-128).
-                                    let adjustedLocationPoint = CGPoint(x: dragGesture.location.x, y: dragGesture.location.y - 128)
+                                    // MEMO: The offset value in the Y-axis direction is subtracted for adjustment (decided by device orientation).
+                                    let adjustedLocationPoint = CGPoint(x: dragGesture.location.x, y: dragGesture.location.y - calculateTopMarginByDevideOrietation())
                                     onTapFavorite(timetableItem, adjustedLocationPoint)
                                 })
                                 // MEMO: To adjust horizontal position, I'm subtracting half the size of Image (-12).
@@ -92,6 +96,14 @@ public struct TimetableCard: View {
             .padding(12)
             .background(AssetColors.Surface.surface.swiftUIColor, in: RoundedRectangle(cornerRadius: 4))
             .overlay(RoundedRectangle(cornerRadius: 4).stroke(AssetColors.Outline.outlineVariant.swiftUIColor, lineWidth: 1))
+        }
+    }
+
+    private func calculateTopMarginByDevideOrietation() -> CGFloat {
+        if widthSizeClass == .regular && heightSizeClass == .compact {
+            return CGFloat(128)
+        } else {
+            return CGFloat(96)
         }
     }
 }
