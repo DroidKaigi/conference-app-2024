@@ -5,15 +5,18 @@ import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.assertIsSelected
+import androidx.compose.ui.test.assertWidthIsAtLeast
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onChild
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeUp
+import androidx.compose.ui.unit.Dp
 import com.github.takahirom.roborazzi.Dump
 import com.github.takahirom.roborazzi.RoborazziOptions
 import com.github.takahirom.roborazzi.captureRoboImage
@@ -32,6 +35,7 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridItemTestTa
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
+import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -139,6 +143,19 @@ class TimetableScreenRobot @Inject constructor(
             .onAllNodes(hasTestTag(TimetableItemCardTestTag))
             .onFirst()
             .assertIsNotDisplayed()
+    }
+
+    fun checkTimeTableItemExists(timetableString: String) {
+        composeTestRule
+            .onAllNodesWithText(timetableString, true, true)
+            .assertCountAtLeast(1)
+    }
+
+    fun checkTimeTableItemMinWidth(timetableString: String, minWidth: Dp) {
+        composeTestRule
+            .onAllNodesWithText(timetableString, true, true)
+            .onFirst()
+            .assertWidthIsAtLeast(minWidth)
     }
 
     fun checkTimetableGridDisplayed() {

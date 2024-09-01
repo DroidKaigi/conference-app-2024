@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.sessions
 import dagger.hilt.android.testing.BindValue
 import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
+import io.github.droidkaigi.confsched.sessions.component.TimetableGridItemSizes
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
@@ -86,6 +87,16 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                             })
                         }
                     }
+                    describe("verify lunch exists") {
+                        itShould("lunch should exist in list, be at least two cells wide") {
+                            checkTimeTableItemExists("Lunch")
+                        }
+                    }
+                    describe("verify lunch length") {
+                        itShould("lunch should exist in list, be at least two cells wide") {
+                            checkTimeTableItemMinWidth("Lunch", TimetableGridItemSizes.width * 2)
+                        }
+                    }
                     describe("click conference day2 tab") {
                         doIt {
                             clickTimetableTab(2)
@@ -114,6 +125,11 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                                 captureScreenWithChecks(checks = {
                                     checkTimetableGridFirstItemNotDisplayed()
                                 })
+                            }
+                        }
+                        describe("check lunch") {
+                            doIt {
+                                scrollTimetable()
                             }
                         }
                         describe("click conference day2 tab") {

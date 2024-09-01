@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.data.sessions
 
+import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.data.sessions.DefaultSessionsRepository.Companion.filterConferenceDaySessions
 import io.github.droidkaigi.confsched.data.sessions.response.CategoryItemResponse
 import io.github.droidkaigi.confsched.data.sessions.response.CategoryResponse
@@ -207,6 +208,99 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
             }
         }
     }
+
+    //Add Lunch
+    val day1 = 1
+    val day2 = 2
+    val lunchRoom = rooms.last()
+    val roomIndex = rooms.indexOf(lunchRoom)
+    val sessionCategoryItemId =
+        if (categories.first().items.size % roomIndex.plus(1) == 0) {
+            1
+        } else {
+            2
+        }
+    val lunchSession1 = SessionResponse(
+        id = "$day1$lunchRoom$roomIndex",
+        isServiceSession = false,
+        title = LocaledResponse(
+            ja = "Lunch",
+            en = "Lunch",
+//            ja = "Lunch Break",
+//            en = "Lunch Break",
+        ),
+        speakers = listOf(),
+        description = "",
+        i18nDesc = LocaledResponse(
+            ja = "Lunch",
+            en = "Lunch",
+        ),
+        startsAt = (DroidKaigi2024Day.ConferenceDay1.start + 13.hours + roomIndex.days)
+            .toCustomIsoString(),
+        endsAt = (DroidKaigi2024Day.ConferenceDay1.start + 14.hours + roomIndex.days)
+            .toCustomIsoString(),
+        language = if (Lang.entries.size > roomIndex) {
+            Lang.entries[roomIndex].name
+        } else {
+            Lang.JAPANESE.name
+        },
+        roomId = lunchRoom.id,
+        sessionCategoryItemId = sessionCategoryItemId,
+        sessionType = "",
+        message = null,
+        isPlenumSession = false,
+        targetAudience = "",
+        interpretationTarget = false,
+        asset = SessionAssetResponse(
+            videoUrl = "",
+            slideUrl = "",
+        ),
+        levels = listOf(""),
+    )
+    sessions.add(lunchSession1)
+
+
+    val lunchSession2 = SessionResponse(
+        id = "$day2$lunchRoom$roomIndex",
+        isServiceSession = false,
+        title = LocaledResponse(
+            ja = "Lunch",
+            en = "Lunch",
+//            ja = "Lunch Break",
+//            en = "Lunch Break",
+        ),
+        speakers = listOf(),
+        description = "",
+        i18nDesc = LocaledResponse(
+            ja = "Lunch",
+            en = "Lunch",
+        ),
+        startsAt = (DroidKaigi2024Day.ConferenceDay2.start + 13.hours + roomIndex.days)
+            .toCustomIsoString(),
+        endsAt = (DroidKaigi2024Day.ConferenceDay2.start + 14.hours + roomIndex.days)
+            .toCustomIsoString(),
+        language = if (Lang.entries.size > roomIndex) {
+            Lang.entries[roomIndex].name
+        } else {
+            Lang.JAPANESE.name
+        },
+        roomId = lunchRoom.id,
+        sessionCategoryItemId = sessionCategoryItemId,
+        sessionType = "",
+        message = null,
+        isPlenumSession = false,
+        targetAudience = "",
+        interpretationTarget = false,
+        asset = SessionAssetResponse(
+            videoUrl = "",
+            slideUrl = "",
+        ),
+        levels = listOf(""),
+    )
+    sessions.add(lunchSession2)
+
+
+    println("FAKE SESSIONS: $sessions")
 
     return SessionsAllResponse(
         sessions = sessions,

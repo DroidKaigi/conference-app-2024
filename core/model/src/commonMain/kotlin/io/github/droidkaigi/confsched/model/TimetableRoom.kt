@@ -15,7 +15,7 @@ data class TimetableRoom(
         }
         return sort.compareTo(other.sort)
     }
-    
+
     fun getThemeKey(isLunch: Boolean? = false): String = if (isLunch == true) "lunch" else name.enTitle.lowercase()
 }
 
