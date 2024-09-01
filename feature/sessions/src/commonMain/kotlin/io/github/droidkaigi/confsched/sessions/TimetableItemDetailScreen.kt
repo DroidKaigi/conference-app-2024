@@ -99,8 +99,6 @@ fun TimetableItemDetailScreen(
         events = eventFlow,
     ),
 ) {
-    // We provide a function that displays a message in the snack bar when the iOS side does not have permission to access the calendar through LocalSnackbarHostState.
-    // For this reason, we use this process to swap SnackbarHostState between Android and iOS.
     val snackbarHostState = snackbarHostSate()
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
