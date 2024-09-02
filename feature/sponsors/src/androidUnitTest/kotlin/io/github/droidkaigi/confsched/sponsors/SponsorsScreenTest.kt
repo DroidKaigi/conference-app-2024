@@ -65,9 +65,9 @@ class SponsorsScreenTest(
                             }
                         }
 
-                        describe("when scroll to supporters header") {
+                        describe("when scroll to scroll Bottom") {
                             doIt {
-                                scrollToSupportersSponsorsHeader()
+                                scrollBottom()
                             }
                             itShould("display supporters sponsors") {
                                 captureScreenWithChecks {
