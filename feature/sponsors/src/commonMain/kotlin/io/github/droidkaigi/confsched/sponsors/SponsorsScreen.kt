@@ -22,7 +22,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedMediumTopAppBar
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
 import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
@@ -106,7 +106,7 @@ fun SponsorsScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (!isTopAppBarHidden) {
-                AnimatedLargeTopAppBar(
+                AnimatedMediumTopAppBar(
                     title = stringResource(SponsorsRes.string.sponsor),
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
