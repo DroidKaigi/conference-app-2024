@@ -121,6 +121,99 @@ class ProfileCardScreenTest(
                             checkProfileCardFrontDisplayed()
                         }
                     }
+                    describe("tilt tests") {
+                        doIt {
+                            setupMockSensor()
+                        }
+                        describe("tilt to horizontal") {
+                            doIt {
+                                tiltToHorizontal()
+                            }
+                            itShould("show card in horizontal") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to mid-range") {
+                            doIt {
+                                tiltToMidRange()
+                            }
+                            itShould("show card at mid-range") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to upper bound") {
+                            doIt {
+                                tiltToUpperBound()
+                            }
+                            itShould("show card at upper bound") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt pitch out of bounds") {
+                            doIt {
+                                tiltPitchOutOfBounds()
+                            }
+                            itShould("keep last valid pitch") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt roll out of bounds") {
+                            doIt {
+                                tiltRollOutOfBounds()
+                            }
+                            itShould("keep last valid roll") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt both axes out of bounds") {
+                            doIt {
+                                tiltBothAxesOutOfBounds()
+                            }
+                            itShould("keep last valid orientation") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to boundary") {
+                            doIt {
+                                tiltToPitchRollBoundary()
+                            }
+                            itShould("show card at boundary") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to opposite boundary") {
+                            doIt {
+                                tiltToPitchRollBoundaryOpposite()
+                            }
+                            itShould("show card at opposite boundary") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                    }
                     describe("flip profile card") {
                         doIt {
                             flipProfileCard()
