@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -78,6 +79,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -231,6 +233,7 @@ internal fun ProfileCardScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
@@ -256,6 +259,7 @@ internal fun ProfileCardScreen(
             .pointerInput(Unit) {
                 detectTapGestures {
                     keyboardController?.hide()
+                    focusManager.clearFocus()
                 }
             },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -387,6 +391,8 @@ internal fun EditScreen(
         }
     }
 
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -435,6 +441,11 @@ internal fun EditScreen(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Uri,
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                },
             ),
         )
 
@@ -520,6 +531,7 @@ private fun InputFieldWithError(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLines: Int = 1,
 ) {
     Column(modifier = modifier) {
@@ -539,6 +551,7 @@ private fun InputFieldWithError(
             isError = isError,
             shape = RoundedCornerShape(4.dp),
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             maxLines = maxLines,
             modifier = Modifier
                 .indicatorLine(
