@@ -445,8 +445,8 @@ internal fun EditScreen(
             keyboardActions = KeyboardActions(
                 onDone = {
                     focusManager.clearFocus()
-                }
-            )
+                },
+            ),
         )
 
         Column(
