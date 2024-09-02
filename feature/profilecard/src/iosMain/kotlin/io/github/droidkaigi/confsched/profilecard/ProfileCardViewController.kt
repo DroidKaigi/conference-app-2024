@@ -26,7 +26,7 @@ fun profileCardViewController(
         },
         // FIXME This is a workaround. For permanent support, we will get the inset value etc. from the iOS side and respond.
         contentPadding = PaddingValues(
-            bottom = 30.dp, // Hight of bottom tab bar
+            bottom = 30.dp, // Height of bottom tab bar
         ),
     )
 }
