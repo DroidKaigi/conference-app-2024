@@ -184,6 +184,8 @@ fun TimetableGridItem(
                         style = titleTextStyle,
                         maxLines = 3,
                         overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .padding(bottom = TimetableGridItemSizes.titleToSpeakerSpace),
                     )
                 },
                 measurePolicy = { measurables, constraints ->
@@ -482,6 +484,7 @@ object TimetableGridItemSizes {
     val padding = 12.dp
     val scheduleToTitleSpace = 6.dp
     val scheduleHeight = 16.dp
+    val titleToSpeakerSpace = 4.dp
     val errorHeight = 16.dp
     val speakerHeight = 32.dp
     val minTitleFontSize = 10.sp
