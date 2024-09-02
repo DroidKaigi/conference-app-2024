@@ -63,7 +63,7 @@ internal fun BackgroundCapturableCardFront(
             LocalDensity provides Density(
                 density = 1f,
                 fontScale = 1f,
-            )
+            ),
         ) {
             FlipCardFront(
                 uiState,
