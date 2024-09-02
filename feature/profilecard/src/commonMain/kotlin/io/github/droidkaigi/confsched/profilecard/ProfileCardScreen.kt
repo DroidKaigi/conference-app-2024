@@ -521,6 +521,7 @@ private fun InputFieldWithError(
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     maxLines: Int = 1,
+    singleLine: Boolean = true,
 ) {
     Column(modifier = modifier) {
         val isError = errorMessage.isNotEmpty()
@@ -540,6 +541,7 @@ private fun InputFieldWithError(
             shape = RoundedCornerShape(4.dp),
             keyboardOptions = keyboardOptions,
             maxLines = maxLines,
+            singleLine = singleLine,
             modifier = Modifier
                 .indicatorLine(
                     enabled = false,
