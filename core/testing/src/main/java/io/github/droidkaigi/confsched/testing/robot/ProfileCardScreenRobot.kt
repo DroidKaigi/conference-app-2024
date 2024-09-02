@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.testing.robot
 
 import android.graphics.RenderNode
+import android.hardware.Sensor
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -29,8 +30,11 @@ import javax.inject.Inject
 class ProfileCardScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,
     profileCardRepositoryRobot: DefaultProfileCardDataStoreRobot,
+    sensorRobot: DefaultSensorRobot,
 ) : ScreenRobot by screenRobot,
-    ProfileCardDataStoreRobot by profileCardRepositoryRobot {
+    ProfileCardDataStoreRobot by profileCardRepositoryRobot,
+    SensorRobot by sensorRobot {
+
     fun setupScreenContent() {
         robotTestRule.setContent {
             KaigiTheme {
@@ -48,6 +52,15 @@ class ProfileCardScreenRobot @Inject constructor(
                 "updateDisplayListIfDirty",
             )
         waitUntilIdle()
+    }
+
+    fun setupMockSensor() {
+        setupMockSensors(
+            listOf(
+                Sensor.TYPE_ACCELEROMETER,
+                Sensor.TYPE_MAGNETIC_FIELD,
+            )
+        )
     }
 
     fun inputNickName(
@@ -97,6 +110,70 @@ class ProfileCardScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(ProfileCardFlipCardTestTag))
             .performClick()
+        waitUntilIdle()
+    }
+
+    fun tiltToHorizontal() {
+        tiltAllAxes(
+            pitch = 0f,
+            roll = 0f,
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltToMidRange() {
+        tiltAllAxes(
+            pitch = 45f,
+            roll = 45f,
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltToUpperBound() {
+        tiltAllAxes(
+            pitch = 75f,
+            roll = 75f,
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltPitchOutOfBounds() {
+        tiltAllAxes(
+            pitch = -80f,
+            roll = 0f,
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltRollOutOfBounds() {
+        tiltAllAxes(
+            pitch = 0f,
+            roll = 80f,
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltBothAxesOutOfBounds() {
+        tiltAllAxes(
+            pitch = -80f,
+            roll = 80f,
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltToPitchRollBoundary() {
+        tiltAllAxes(
+            pitch = -75f,
+            roll = 75f,
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltToPitchRollBoundaryOpposite() {
+        tiltAllAxes(
+            pitch = 75f,
+            roll = -75f,
+        )
         waitUntilIdle()
     }
 
