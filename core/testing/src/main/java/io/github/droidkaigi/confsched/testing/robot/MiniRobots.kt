@@ -231,7 +231,6 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
         if (sensor != null) {
             val event = createTiltEvent(sensor, pitch, roll, azimuth)
             shadowSensorManager.sendSensorEventToListeners(event)
-
         }
     }
 

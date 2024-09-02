@@ -59,7 +59,7 @@ class ProfileCardScreenRobot @Inject constructor(
             listOf(
                 Sensor.TYPE_ACCELEROMETER,
                 Sensor.TYPE_MAGNETIC_FIELD,
-            )
+            ),
         )
     }
 
