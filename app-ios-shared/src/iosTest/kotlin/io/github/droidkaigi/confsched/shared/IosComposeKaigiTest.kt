@@ -58,7 +58,8 @@ class IosComposeKaigiTest {
                                 height = 812F
                             ),
                             density = LocalDensity.current,
-                        )
+                        ),
+                        fontFamily = null,
                     )
                 }
             }

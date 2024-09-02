@@ -34,12 +34,16 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.sessions.generated.resources.grid_view
 import conference_app_2024.feature.sessions.generated.resources.ic_grid_view
 import conference_app_2024.feature.sessions.generated.resources.ic_view_timeline
+import conference_app_2024.feature.sessions.generated.resources.search
+import conference_app_2024.feature.sessions.generated.resources.timeline_view
 import conference_app_2024.feature.sessions.generated.resources.timetable
 import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.rememberEventFlow
@@ -53,7 +57,6 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
-import io.github.droidkaigi.confsched.model.TimetableUiType.Grid
 import io.github.droidkaigi.confsched.sessions.section.Timetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
@@ -163,18 +166,21 @@ private fun TimetableScreen(
                             modifier = Modifier.weight(1F),
                         )
                         IconButton(
-                            onClick = onSearchClick,
+                            onClick = dropUnlessResumed(block = onSearchClick),
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Search,
-                                contentDescription = null,
+                                contentDescription = stringResource(SessionsRes.string.search),
                             )
                         }
                         Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
-                            val iconRes = if (timetableUiType == Grid) {
-                                SessionsRes.drawable.ic_view_timeline
-                            } else {
-                                SessionsRes.drawable.ic_grid_view
+                            val iconRes = when (timetableUiType) {
+                                TimetableUiType.Grid -> SessionsRes.drawable.ic_view_timeline
+                                TimetableUiType.List -> SessionsRes.drawable.ic_grid_view
+                            }
+                            val descriptionRes = when (timetableUiType) {
+                                TimetableUiType.Grid -> SessionsRes.string.timeline_view
+                                TimetableUiType.List -> SessionsRes.string.grid_view
                             }
                             IconButton(
                                 onClick = onTimetableUiChangeClick,
@@ -182,7 +188,7 @@ private fun TimetableScreen(
                             ) {
                                 Image(
                                     painter = painterResource(iconRes),
-                                    contentDescription = null,
+                                    contentDescription = stringResource(descriptionRes),
                                 )
                             }
                         }

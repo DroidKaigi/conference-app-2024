@@ -4,6 +4,7 @@ import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.data.Repositories
 import io.github.droidkaigi.confsched.droidkaigiui.composeViewController
 import io.github.droidkaigi.confsched.droidkaigiui.presenterStateFlow
+import io.github.droidkaigi.confsched.droidkaigiui.toUiImage
 import kotlinx.coroutines.flow.Flow
 import platform.UIKit.UIImage
 import platform.UIKit.UIViewController
@@ -18,7 +19,7 @@ fun profileCardViewController(
         onClickShareProfileCard = { shareText, imageBitmap ->
             onClickShareProfileCard(
                 shareText,
-                imageBitmap.toUiImage(),
+                imageBitmap.toUiImage() ?: UIImage(),
             )
         },
     )

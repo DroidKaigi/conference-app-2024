@@ -16,6 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavGraphBuilder
@@ -26,7 +27,6 @@ import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
-import io.github.droidkaigi.confsched.droidkaigiui.handleOnClickIfNotNavigating
 import io.github.droidkaigi.confsched.model.Contributor
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.stringResource
@@ -41,14 +41,8 @@ fun NavGraphBuilder.contributorsScreens(
     onContributorItemClick: (url: String) -> Unit,
 ) {
     composable(contributorsScreenRoute) {
-        val lifecycleOwner = LocalLifecycleOwner.current
         ContributorsScreen(
-            onNavigationIconClick = {
-                handleOnClickIfNotNavigating(
-                    lifecycleOwner,
-                    onNavigationIconClick,
-                )
-            },
+            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
             onContributorsItemClick = onContributorItemClick,
         )
     }

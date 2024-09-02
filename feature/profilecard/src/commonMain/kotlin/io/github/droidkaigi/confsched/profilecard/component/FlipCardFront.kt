@@ -81,6 +81,7 @@ internal fun FlipCardFront(
             Image(
                 painter = profileImagePainter,
                 contentDescription = null,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(131.dp),

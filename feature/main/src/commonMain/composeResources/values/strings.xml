@@ -2,6 +2,7 @@
 <resources>
     <string name="timetable">Timetable</string>
     <string name="event_map">Event Map</string>
+    <string name="favorite">Favorite</string>
     <string name="profile_card">Profile Card</string>
     <string name="about">About</string>
     <string name="contributor">Contributor</string>

@@ -33,6 +33,8 @@ import org.jetbrains.compose.resources.stringResource
 
 const val aboutScreenRoute = "about"
 
+const val AboutScreenLazyColumnTestTag = "AboutScreenLazyColumnTestTag"
+
 object AboutScreenTestTag {
     const val Screen = "AboutScreen"
 }
@@ -93,7 +95,9 @@ fun AboutScreen(
         ),
     ) { padding ->
         LazyColumn(
-            Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .testTag(AboutScreenLazyColumnTestTag),
             contentPadding = padding,
             state = lazyListState,
         ) {

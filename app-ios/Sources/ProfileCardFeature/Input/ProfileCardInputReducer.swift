@@ -103,7 +103,7 @@ public struct ProfileCardInputReducer: Sendable {
                         await send(.internal(.profileCardSaved))
                     }
                 }
-            case let .internal(internalAction):
+            case .internal:
                 return .none
             }
         }

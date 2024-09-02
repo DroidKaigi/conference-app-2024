@@ -6,6 +6,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -17,9 +18,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -43,6 +46,12 @@ import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -70,7 +79,13 @@ fun GlassLikeBottomNavigation(
             .padding(horizontal = 48.dp)
             .fillMaxWidth()
             .height(64.dp)
-            .hazeChild(state = hazeState, shape = CircleShape)
+            .run {
+                if (isBlurSupported()) {
+                    hazeChild(state = hazeState, shape = CircleShape)
+                } else {
+                    background(MaterialTheme.colorScheme.background.copy(alpha = .95f))
+                }
+            }
             .border(
                 width = Dp.Hairline,
                 brush =
@@ -123,15 +138,32 @@ fun GlassLikeBottomNavigation(
                 },
         ) {
             val tabWidth = size.width / MainScreenTab.size
-            drawCircle(
-                color = animatedColor.copy(alpha = .6f),
-                radius = size.height / 2,
-                center =
-                Offset(
-                    (tabWidth * animatedSelectedTabIndex) + tabWidth / 2,
-                    size.height / 2,
-                ),
+            val center = Offset(
+                (tabWidth * animatedSelectedTabIndex) + tabWidth / 2,
+                size.height / 2,
             )
+            val radius = size.height / 2
+
+            if (isBlurSupported()) {
+                drawCircle(
+                    color = animatedColor.copy(alpha = .6f),
+                    radius = radius,
+                    center = center,
+                )
+            } else {
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            animatedColor.copy(alpha = .5f),
+                            animatedColor.copy(alpha = .1f),
+                        ),
+                        center = center,
+                        radius = radius,
+                    ),
+                    radius = radius,
+                    center = center,
+                )
+            }
         }
 
         Canvas(
@@ -175,7 +207,7 @@ fun GlassLikeBottomNavigation(
 }
 
 @Composable
-fun BottomBarTabs(
+private fun BottomBarTabs(
     selectedTab: MainScreenTab,
     onTabSelected: (MainScreenTab) -> Unit,
     modifier: Modifier = Modifier,
@@ -189,11 +221,12 @@ fun BottomBarTabs(
         LocalContentColor provides Color.White,
     ) {
         Row(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize().selectableGroup(),
         ) {
             for (tab in MainScreenTab.entries) {
+                val selected = selectedTab == tab
                 val scale by animateFloatAsState(
-                    targetValue = if (selectedTab == tab) 1f else .98f,
+                    targetValue = if (selected) 1f else .98f,
                     visibilityThreshold = .000001f,
                     animationSpec =
                     spring(
@@ -202,14 +235,14 @@ fun BottomBarTabs(
                     ),
                     label = "scale",
                 )
-                val iconRes = if (selectedTab == tab) {
+                val iconRes = if (selected) {
                     tab.iconOn
                 } else {
                     tab.iconOff
                 }
+                val label = stringResource(tab.label)
                 Column(
-                    modifier =
-                    Modifier
+                    modifier = Modifier
                         .scale(scale)
                         .fillMaxHeight()
                         .weight(1f)
@@ -217,6 +250,18 @@ fun BottomBarTabs(
                             detectTapGestures {
                                 onTabSelected(tab)
                             }
+                        }
+                        .semantics {
+                            onClick(
+                                label = null,
+                                action = {
+                                    onTabSelected(tab)
+                                    true
+                                },
+                            )
+                            contentDescription = label
+                            role = Role.Tab
+                            this.selected = selected
                         },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
@@ -231,7 +276,7 @@ fun BottomBarTabs(
                             }
                         },
                         painter = painterResource(iconRes),
-                        contentDescription = "tab ${stringResource(tab.contentDescription)}",
+                        contentDescription = null,
                     )
                 }
             }
