@@ -44,15 +44,8 @@ public struct TimetableGridCard: View {
                 
                 ForEach(timetableItem.speakers, id: \.id) { speaker in
                     HStack(spacing: 8) {
-                        Group {
-                            AsyncImage(url: URL(string: speaker.iconUrl)) {
-                                $0.resizable()
-                            } placeholder: {
-                                Color.gray
-                            }
-                        }
-                        .frame(width: 32, height: 32)
-                        .clipShape(Circle())
+                        CircularUserIcon(urlString: speaker.iconUrl)
+                            .frame(width: 32, height: 32)
 
                         Text(speaker.name)
                             .textStyle(.titleSmall)
