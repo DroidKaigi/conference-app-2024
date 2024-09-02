@@ -1,6 +1,11 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorManager
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.github.takahirom.roborazzi.roboOutputName
@@ -38,7 +43,10 @@ import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.shadows.SensorEventBuilder
 import org.robolectric.shadows.ShadowLooper
+import org.robolectric.shadows.ShadowSensor
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -168,6 +176,71 @@ interface DeviceSetupRobot {
 class DefaultDeviceSetupRobot @Inject constructor() : DeviceSetupRobot {
     override fun setupTabletDevice() {
         RuntimeEnvironment.setQualifiers(RobolectricDeviceQualifiers.MediumTablet)
+    }
+}
+
+interface SensorRobot {
+    fun setupMockSensors(sensorTypes: List<Int>)
+    fun tiltPitch(pitch: Float = 10f)
+    fun tiltRoll(roll: Float = 10f)
+    fun tiltAzimuth(azimuth: Float = 10f)
+    fun tiltAllAxes(pitch: Float = 10f, roll: Float = 10f, azimuth: Float = 10f)
+}
+
+class DefaultSensorRobot @Inject constructor() : SensorRobot {
+    private val sensorManager: SensorManager =
+        getApplicationContext<Context>().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    private val shadowSensorManager = shadowOf(sensorManager)
+
+    private lateinit var mockAccelerometerSensor: Sensor
+    private lateinit var mockMagneticFieldSensor: Sensor
+
+    override fun setupMockSensors(sensorTypes: List<Int>) {
+        sensorTypes.forEach { sensorType ->
+            val sensor = ShadowSensor.newInstance(sensorType)
+            shadowSensorManager.addSensor(sensor)
+            when (sensorType) {
+                Sensor.TYPE_ACCELEROMETER -> mockAccelerometerSensor = sensor
+                Sensor.TYPE_MAGNETIC_FIELD -> mockMagneticFieldSensor = sensor
+                else -> throw IllegalArgumentException("Unsupported sensor type: $sensorType")
+            }
+        }
+    }
+
+    override fun tiltPitch(pitch: Float) {
+        sendTiltEvent(mockAccelerometerSensor, pitch = pitch)
+        sendTiltEvent(mockMagneticFieldSensor, pitch = pitch)
+    }
+
+    override fun tiltRoll(roll: Float) {
+        sendTiltEvent(mockAccelerometerSensor, roll = roll)
+        sendTiltEvent(mockMagneticFieldSensor, roll = roll)
+    }
+
+    override fun tiltAzimuth(azimuth: Float) {
+        sendTiltEvent(mockAccelerometerSensor, azimuth = azimuth)
+        sendTiltEvent(mockMagneticFieldSensor, azimuth = azimuth)
+    }
+
+    override fun tiltAllAxes(pitch: Float, roll: Float, azimuth: Float) {
+        sendTiltEvent(mockAccelerometerSensor, pitch, roll, azimuth)
+        sendTiltEvent(mockMagneticFieldSensor, pitch, roll, azimuth)
+    }
+
+    private fun sendTiltEvent(sensor: Sensor?, pitch: Float = 0f, roll: Float = 0f, azimuth: Float = 0f) {
+        if (sensor != null) {
+            val event = createTiltEvent(sensor, pitch, roll, azimuth)
+            shadowSensorManager.sendSensorEventToListeners(event)
+
+        }
+    }
+
+    private fun createTiltEvent(sensor: Sensor, pitch: Float, roll: Float, azimuth: Float): SensorEvent {
+        return SensorEventBuilder.newBuilder()
+            .setSensor(sensor)
+            .setTimestamp(System.currentTimeMillis())
+            .setValues(floatArrayOf(pitch, roll, azimuth))
+            .build()
     }
 }
 
