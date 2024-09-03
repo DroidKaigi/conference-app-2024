@@ -65,6 +65,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
+const val TimetableTitleTestTag = "TimetableTitle"
 const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
 fun NavGraphBuilder.nestedSessionScreens(
     onSearchClick: () -> Unit,
@@ -158,7 +159,7 @@ private fun TimetableScreen(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         AutoSizeText(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier.testTag(TimetableTitleTestTag).weight(1f),
                             text = stringResource(SessionsRes.string.timetable),
                             style = MaterialTheme.typography.headlineSmall,
                             maxLines = 1,

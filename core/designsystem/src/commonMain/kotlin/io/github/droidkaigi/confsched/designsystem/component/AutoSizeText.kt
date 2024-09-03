@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFontFamilyResolver
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.Paragraph
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
@@ -34,7 +35,7 @@ fun AutoSizeText(
     color: Color = Color.Unspecified,
 ) {
     BoxWithConstraints(
-        modifier = modifier,
+        modifier = modifier.semantics(mergeDescendants = true) {},
         contentAlignment = when (textAlign) {
             TextAlign.Left, TextAlign.Start -> Alignment.CenterStart
             TextAlign.Center -> Alignment.Center
