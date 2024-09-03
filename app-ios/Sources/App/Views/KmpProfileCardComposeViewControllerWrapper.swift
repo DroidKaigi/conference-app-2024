@@ -2,12 +2,12 @@ import SwiftUI
 import shared
 import ComposableArchitecture
 
-public struct KmpProfileCardComposeViewControllerWrapper: UIViewControllerRepresentable {
+struct KmpProfileCardComposeViewControllerWrapper: UIViewControllerRepresentable {
     @Dependency(\.containerClient) var containerClient
 
-    public init() {}
+    init() {}
 
-    public func makeUIViewController(context: Context) -> UIViewController {
+    func makeUIViewController(context: Context) -> UIViewController {
         profileCardViewController(
             repositories: containerClient.repositories(),
             onClickShareProfileCard: { image, text in
@@ -23,6 +23,6 @@ public struct KmpProfileCardComposeViewControllerWrapper: UIViewControllerRepres
         )
     }
 
-    public func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
     }
 }
