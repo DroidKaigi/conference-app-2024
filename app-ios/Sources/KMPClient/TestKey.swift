@@ -1,5 +1,10 @@
 import Dependencies
 
+extension FirebaseAppClient: TestDependencyKey {
+    public static let previewValue: Self = Self()
+    public static let testValue: Self = Self()
+}
+
 extension TimetableClient: TestDependencyKey {
     public static let previewValue: Self = Self()
 
