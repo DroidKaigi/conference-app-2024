@@ -1,18 +1,22 @@
 package io.github.droidkaigi.confsched.sponsors.section
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -21,13 +25,17 @@ import conference_app_2024.feature.sponsors.generated.resources.gold_sponsor
 import conference_app_2024.feature.sponsors.generated.resources.platinum_sponsor
 import conference_app_2024.feature.sponsors.generated.resources.supporters
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
 import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
+import io.github.droidkaigi.confsched.sponsors.GoldSponsorsUiState
+import io.github.droidkaigi.confsched.sponsors.PlatinumSponsorsUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsListUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsRes
+import io.github.droidkaigi.confsched.sponsors.SupportersUiState
 import io.github.droidkaigi.confsched.sponsors.component.SponsorHeader
 import io.github.droidkaigi.confsched.sponsors.component.SponsorItem
 import kotlinx.collections.immutable.toPersistentList
@@ -77,18 +85,34 @@ fun SponsorsList(
                     ),
             )
         }
-        items(
-            items = uiState.platinumSponsors,
-            span = { GridItemSpan(maxLineSpan) },
-        ) { sponsor ->
-            SponsorItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(110.dp)
-                    .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
-                sponsor = sponsor,
-                onSponsorsItemClick = onSponsorsItemClick,
-            )
+        when (uiState.platinumSponsorsUiState) {
+            is PlatinumSponsorsUiState.Exists -> {
+                items(
+                    items = uiState.platinumSponsorsUiState.platinumSponsors,
+                    span = { GridItemSpan(maxLineSpan) },
+                ) { sponsor ->
+                    SponsorItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(110.dp)
+                            .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
+                        sponsor = sponsor,
+                        onSponsorsItemClick = onSponsorsItemClick,
+                    )
+                }
+            }
+            is PlatinumSponsorsUiState.Loading -> {
+                item(
+                    span = { GridItemSpan(maxLineSpan) },
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(contentPadding).fillMaxWidth(),
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -106,18 +130,34 @@ fun SponsorsList(
                     ),
             )
         }
-        items(
-            items = uiState.goldSponsors,
-            span = { GridItemSpan(3) },
-        ) { sponsor ->
-            SponsorItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(77.dp)
-                    .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
-                sponsor = sponsor,
-                onSponsorsItemClick = onSponsorsItemClick,
-            )
+        when (uiState.goldSponsorsUiState) {
+            is GoldSponsorsUiState.Exists -> {
+                items(
+                    items = uiState.goldSponsorsUiState.goldSponsors,
+                    span = { GridItemSpan(3) },
+                ) { sponsor ->
+                    SponsorItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(77.dp)
+                            .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
+                        sponsor = sponsor,
+                        onSponsorsItemClick = onSponsorsItemClick,
+                    )
+                }
+            }
+            is GoldSponsorsUiState.Loading -> {
+                item(
+                    span = { GridItemSpan(maxLineSpan) },
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(contentPadding).fillMaxWidth(),
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
         }
 
         item(span = { GridItemSpan(maxLineSpan) }) {
@@ -135,18 +175,34 @@ fun SponsorsList(
                     ),
             )
         }
-        items(
-            items = uiState.supporters,
-            span = { GridItemSpan(2) },
-        ) { sponsor ->
-            SponsorItem(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(77.dp)
-                    .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
-                sponsor = sponsor,
-                onSponsorsItemClick = onSponsorsItemClick,
-            )
+        when (uiState.supportersUiState) {
+            is SupportersUiState.Exists -> {
+                items(
+                    items = uiState.supportersUiState.supporters,
+                    span = { GridItemSpan(2) },
+                ) { sponsor ->
+                    SponsorItem(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(77.dp)
+                            .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
+                        sponsor = sponsor,
+                        onSponsorsItemClick = onSponsorsItemClick,
+                    )
+                }
+            }
+            is SupportersUiState.Loading -> {
+                item(
+                    span = { GridItemSpan(maxLineSpan) },
+                ) {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier.padding(contentPadding).fillMaxWidth(),
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+            }
         }
     }
 }
@@ -159,9 +215,18 @@ fun SponsorsListPreview() {
         Surface {
             SponsorsList(
                 uiState = SponsorsListUiState(
-                    platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
-                    goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
-                    supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                    platinumSponsorsUiState = PlatinumSponsorsUiState.Exists(
+                        userMessageStateHolder = UserMessageStateHolderImpl(),
+                        platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
+                    ),
+                    goldSponsorsUiState = GoldSponsorsUiState.Exists(
+                        userMessageStateHolder = UserMessageStateHolderImpl(),
+                        goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
+                    ),
+                    supportersUiState = SupportersUiState.Exists(
+                        userMessageStateHolder = UserMessageStateHolderImpl(),
+                        supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                    ),
                 ),
                 onSponsorsItemClick = {},
                 scrollBehavior = null,

@@ -54,10 +54,49 @@ data class SponsorsScreenUiState(
 )
 
 data class SponsorsListUiState(
-    val platinumSponsors: PersistentList<Sponsor>,
-    val goldSponsors: PersistentList<Sponsor>,
-    val supporters: PersistentList<Sponsor>,
+    val platinumSponsorsUiState: PlatinumSponsorsUiState,
+    val goldSponsorsUiState: GoldSponsorsUiState,
+    val supportersUiState: SupportersUiState,
 )
+
+sealed interface PlatinumSponsorsUiState {
+    val userMessageStateHolder: UserMessageStateHolder
+
+    data class Loading(
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ) : PlatinumSponsorsUiState
+
+    data class Exists(
+        override val userMessageStateHolder: UserMessageStateHolder,
+        val platinumSponsors: PersistentList<Sponsor>,
+    ) : PlatinumSponsorsUiState
+}
+
+sealed interface GoldSponsorsUiState {
+    val userMessageStateHolder: UserMessageStateHolder
+
+    data class Loading(
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ) : GoldSponsorsUiState
+
+    data class Exists(
+        override val userMessageStateHolder: UserMessageStateHolder,
+        val goldSponsors: PersistentList<Sponsor>,
+    ) : GoldSponsorsUiState
+}
+
+sealed interface SupportersUiState {
+    val userMessageStateHolder: UserMessageStateHolder
+
+    data class Loading(
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ) : SupportersUiState
+
+    data class Exists(
+        override val userMessageStateHolder: UserMessageStateHolder,
+        val supporters: PersistentList<Sponsor>,
+    ) : SupportersUiState
+}
 
 @Composable
 fun SponsorsScreen(
@@ -135,9 +174,18 @@ fun SponsorsScreenPreview() {
             SponsorsScreen(
                 uiState = SponsorsScreenUiState(
                     sponsorsListUiState = SponsorsListUiState(
-                        platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
-                        goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
-                        supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                        platinumSponsorsUiState = PlatinumSponsorsUiState.Exists(
+                            userMessageStateHolder = UserMessageStateHolderImpl(),
+                            platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
+                        ),
+                        goldSponsorsUiState = GoldSponsorsUiState.Exists(
+                            userMessageStateHolder = UserMessageStateHolderImpl(),
+                            goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
+                        ),
+                        supportersUiState = SupportersUiState.Exists(
+                            userMessageStateHolder = UserMessageStateHolderImpl(),
+                            supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                        ),
                     ),
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),
