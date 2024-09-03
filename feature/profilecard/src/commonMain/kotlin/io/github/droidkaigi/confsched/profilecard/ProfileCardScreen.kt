@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -78,10 +79,12 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.navigation.NavController
@@ -134,6 +137,7 @@ const val ProfileCardEditScreenColumnTestTag = "ProfileCardEditScreenColumnTestT
 const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
 const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
 const val ProfileCardLinkTextFieldTestTag = "ProfileCardLinkTextFieldTestTag"
+const val ProfileCardInputErrorTextTestTag = "ProfileCardInputErrorTextTestTag"
 const val ProfileCardSelectImageButtonTestTag = "ProfileCardSelectImageButtonTestTag"
 const val ProfileCardCreateButtonTestTag = "ProfileCardCreateButtonTestTag"
 const val ProfileCardCardScreenTestTag = "ProfileCardCardScreenTestTag"
@@ -229,6 +233,7 @@ internal fun ProfileCardScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
@@ -254,6 +259,7 @@ internal fun ProfileCardScreen(
             .pointerInput(Unit) {
                 detectTapGestures {
                     keyboardController?.hide()
+                    focusManager.clearFocus()
                 }
             },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -385,6 +391,8 @@ internal fun EditScreen(
         }
     }
 
+    val focusManager = LocalFocusManager.current
+
     Column(
         modifier = modifier
             .fillMaxWidth()
@@ -430,7 +438,15 @@ internal fun EditScreen(
                 link = it
                 onChangeLink(it)
             },
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Uri,
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                },
+            ),
         )
 
         Column(
@@ -454,7 +470,10 @@ internal fun EditScreen(
                 )
             }
 
-            Text(stringResource(ProfileCardRes.string.select_theme))
+            Text(
+                text = stringResource(ProfileCardRes.string.select_theme),
+                style = MaterialTheme.typography.titleMedium,
+            )
 
             CardTypePiker(
                 selectedCardType = selectedCardType,
@@ -512,7 +531,9 @@ private fun InputFieldWithError(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLines: Int = 1,
+    singleLine: Boolean = true,
 ) {
     Column(modifier = modifier) {
         val isError = errorMessage.isNotEmpty()
@@ -531,7 +552,9 @@ private fun InputFieldWithError(
             isError = isError,
             shape = RoundedCornerShape(4.dp),
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             maxLines = maxLines,
+            singleLine = singleLine,
             modifier = Modifier
                 .indicatorLine(
                     enabled = false,
@@ -558,7 +581,7 @@ private fun InputFieldWithError(
                     start = 16.dp,
                     top = 4.dp,
                     end = 16.dp,
-                ),
+                ).testTag(ProfileCardInputErrorTextTestTag.plus(value)),
         )
     }
 }

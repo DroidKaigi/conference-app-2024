@@ -1,5 +1,6 @@
 import Foundation
 import SwiftUI
+import Theme
 
 private actor CircularUserIconInMemoryCache {
     static let shared = CircularUserIconInMemoryCache()
@@ -35,6 +36,10 @@ public struct CircularUserIcon: View {
             }
         }
         .clipShape(Circle())
+        .overlay(
+            Circle()
+                .stroke(AssetColors.Outline.outline.swiftUIColor, lineWidth: 1)
+        )
         .task {
             if let data = await CircularUserIconInMemoryCache.shared.data(urlString: urlString) {
                 iconData = data
