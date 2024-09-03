@@ -19,9 +19,9 @@ public struct Container: Sendable {
     }
 
     public func get<TypeProtocol, ReturnType>(type: TypeProtocol) -> ReturnType where TypeProtocol: Protocol {
-            guard let object = entryPoint.get(objCProtocol: type) as? ReturnType else {
-                fatalError("Not found instance for \(type)")
-            }
-            return object
+        guard let object = entryPoint.get(objCProtocol: type) as? ReturnType else {
+            fatalError("Not found instance for \(type)")
         }
+        return object
+    }
 }
