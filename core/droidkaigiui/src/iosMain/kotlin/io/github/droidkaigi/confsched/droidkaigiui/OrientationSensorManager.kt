@@ -27,7 +27,7 @@ internal class IosOrientationSensorManager(
         }
         NSOperationQueue.mainQueue().let { queue ->
             motionManager.startDeviceMotionUpdatesToQueue(
-                queue
+                queue,
             ) { motion, _ ->
                 if (motion == null) {
                     return@startDeviceMotionUpdatesToQueue
