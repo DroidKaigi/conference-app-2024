@@ -24,7 +24,6 @@ import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImagePainter
 import com.preat.peekaboo.image.picker.toImageBitmap
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
@@ -96,6 +95,7 @@ private fun ShareableCardContent(
     val offsetYBackPx = 76f
     val offsetXFrontPx = -136f
     val offsetYFrontPx = -61f
+    val verticalPaddingPx = 30f
 
     val density = LocalDensity.current
 
@@ -108,7 +108,7 @@ private fun ShareableCardContent(
             )
             .background(LocalProfileCardTheme.current.primaryColor),
     ) {
-        Box(modifier = Modifier.padding(vertical = 30.dp)) {
+        Box(modifier = Modifier.padding(vertical = with(density) { verticalPaddingPx.toDp() })) {
             backImage?.let {
                 Image(
                     bitmap = it,
