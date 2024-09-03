@@ -44,9 +44,12 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Implementation
+import org.robolectric.annotation.Implements
 import org.robolectric.shadows.SensorEventBuilder
 import org.robolectric.shadows.ShadowLooper
 import org.robolectric.shadows.ShadowSensor
+import org.robolectric.shadows.ShadowSensorManager
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -230,6 +233,17 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
     private fun sendTiltEvent(sensor: Sensor?, pitch: Float = 0f, roll: Float = 0f, azimuth: Float = 0f) {
         if (sensor != null) {
             val event = createTiltEvent(sensor, pitch, roll, azimuth)
+            CustomShadowSensorManager.setCustomRotationMatrix(
+                FloatArray(9).apply {
+                    SensorManager.getRotationMatrix(
+                        this,
+                        null,
+                        floatArrayOf(pitch, roll, azimuth),
+                        floatArrayOf(0f, 0f, 0f),
+                    )
+                },
+            )
+            CustomShadowSensorManager.setCustomOrientationAngles(floatArrayOf(azimuth, pitch, roll))
             shadowSensorManager.sendSensorEventToListeners(event)
         }
     }
@@ -240,6 +254,47 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
             .setTimestamp(System.currentTimeMillis())
             .setValues(floatArrayOf(pitch, roll, azimuth))
             .build()
+    }
+
+    @Implements(SensorManager::class)
+    class CustomShadowSensorManager : ShadowSensorManager() {
+
+        companion object {
+            private var customRotationMatrix: FloatArray? = null
+            private var customOrientationAngles: FloatArray? = null
+
+            fun setCustomRotationMatrix(rotationMatrix: FloatArray) {
+                customRotationMatrix = rotationMatrix
+            }
+
+            @Implementation
+            @JvmStatic
+            fun getRotationMatrix(R: FloatArray?, I: FloatArray?, gravity: FloatArray?, geomagnetic: FloatArray?): Boolean {
+                customRotationMatrix?.let {
+                    if (R != null && it.size == R.size) {
+                        System.arraycopy(it, 0, R, 0, it.size)
+                    }
+                    return true
+                }
+                return false // or call the real method if needed
+            }
+
+            fun setCustomOrientationAngles(orientationAngles: FloatArray) {
+                customOrientationAngles = orientationAngles
+            }
+
+            @Implementation
+            @JvmStatic
+            fun getOrientation(R: FloatArray?, values: FloatArray?): FloatArray {
+                customOrientationAngles?.let {
+                    if (values != null && it.size == values.size) {
+                        System.arraycopy(it, 0, values, 0, it.size)
+                    }
+                    return it
+                }
+                return R!! // or call the real method if needed
+            }
+        }
     }
 }
 

@@ -5,6 +5,7 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
+import io.github.droidkaigi.confsched.testing.robot.DefaultSensorRobot.CustomShadowSensorManager
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.runRobot
@@ -13,9 +14,13 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.annotation.Config
 import javax.inject.Inject
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
+@Config(
+    shadows = [CustomShadowSensorManager::class],
+)
 @HiltAndroidTest
 class ProfileCardScreenTest(
     private val testCase: DescribedBehavior<ProfileCardScreenRobot>,
