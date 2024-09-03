@@ -19,8 +19,8 @@ fun contributorsScreenPresenter(
     val contributors by rememberUpdatedState(contributorsRepository.contributors())
     EventEffect(events) { event ->
     }
-    if (contributors.isEmpty()) return@providePresenterDefaults ContributorsUiState.Loading(userMessageStateHolder)
-    ContributorsUiState.Exists(
+    if (contributors.isEmpty()) return@providePresenterDefaults Loading(userMessageStateHolder)
+    Exists(
         contributors = contributors,
         userMessageStateHolder = userMessageStateHolder,
     )

@@ -49,18 +49,18 @@ fun NavGraphBuilder.contributorsScreens(
     }
 }
 
-sealed interface ContributorsUiState {
-    val userMessageStateHolder: UserMessageStateHolder
-
-    data class Loading(
-        override val userMessageStateHolder: UserMessageStateHolder,
-    ) : ContributorsUiState
-
-    data class Exists(
-        override val userMessageStateHolder: UserMessageStateHolder,
-        val contributors: PersistentList<Contributor>,
-    ) : ContributorsUiState
+sealed class ContributorsUiState {
+    abstract val userMessageStateHolder: UserMessageStateHolder
 }
+
+class Loading(
+    override val userMessageStateHolder: UserMessageStateHolder,
+) : ContributorsUiState()
+
+class Exists(
+    override val userMessageStateHolder: UserMessageStateHolder,
+    val contributors: PersistentList<Contributor>,
+) : ContributorsUiState()
 
 @Composable
 fun ContributorsScreen(
@@ -121,7 +121,7 @@ fun ContributorsScreen(
         },
     ) { padding ->
         when (uiState) {
-            is ContributorsUiState.Exists -> {
+            is Exists -> {
                 Contributors(
                     contributors = uiState.contributors,
                     onContributorsItemClick = onContributorsItemClick,
@@ -138,7 +138,7 @@ fun ContributorsScreen(
                         },
                 )
             }
-            is ContributorsUiState.Loading -> {
+            is Loading -> {
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier.padding(padding).fillMaxSize(),
