@@ -114,8 +114,6 @@ let package = Package(
             dependencies: [
                 .app,
                 .timetableFeature,
-                .firebaseAuth,
-                .firebaseRemoteConfig,
                 .tca
             ]
         ),
