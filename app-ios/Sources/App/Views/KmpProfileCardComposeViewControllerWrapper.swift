@@ -1,12 +1,15 @@
 import SwiftUI
 import shared
+import ComposableArchitecture
 
 public struct KmpProfileCardComposeViewControllerWrapper: UIViewControllerRepresentable {
+    @Dependency(\.containerClient) var containerClient
+
     public init() {}
 
     public func makeUIViewController(context: Context) -> UIViewController {
         profileCardViewController(
-            repositories: Container.shared.get(type: (any Repositories).self),
+            repositories: containerClient.repositories(),
             onClickShareProfileCard: { image, text in
                 let activityViewController = UIActivityViewController(activityItems: [text, image], applicationActivities: nil)
                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
