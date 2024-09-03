@@ -109,7 +109,7 @@ private fun BoxWithConstraintsScope.calculateFontSize(
     }
 
     // After the binary search, the right pointer is the largest size
-    // that still works without overflowing the box'
+    // that still works without overflowing the box
     return hi.asTextUnit(type)
 }
 
