@@ -2,6 +2,8 @@ import Dependencies
 import shared
 import Model
 import Foundation
+import Firebase
+import KMPClient
 
 private var sessionsRepository: any SessionsRepository {
     Container.shared.get(type: (any SessionsRepository).self)
