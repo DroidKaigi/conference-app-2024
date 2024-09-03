@@ -105,8 +105,6 @@ let package = Package(
             dependencies: [
                 .kmpClient,
                 .kmpModule,
-                .firebaseAuth,
-                .firebaseRemoteConfig,
                 .tca,
                 .commonComponents,
             ]
