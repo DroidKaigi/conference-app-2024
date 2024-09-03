@@ -4,12 +4,12 @@ import shared
 import ComposableArchitecture
 
 @MainActor
-public struct KmpAppComposeViewControllerWrapper: UIViewControllerRepresentable {
+struct KmpAppComposeViewControllerWrapper: UIViewControllerRepresentable {
     @Dependency(\.containerClient) var containerClient
 
-    public init() {}
+    init() {}
 
-    public func makeUIViewController(context: Context) -> UIViewController {
+    func makeUIViewController(context: Context) -> UIViewController {
         IosComposeKaigiAppKt.kaigiAppController(
             repositories: containerClient.repositories(),
             onLicenseScreenRequest: {
@@ -18,7 +18,7 @@ public struct KmpAppComposeViewControllerWrapper: UIViewControllerRepresentable 
         )
     }
 
-    public func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
     }
 
     private func openLicenseScreen() {
