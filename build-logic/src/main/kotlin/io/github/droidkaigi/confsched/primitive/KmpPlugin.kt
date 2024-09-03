@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.primitive
 
+import com.google.devtools.ksp.gradle.KspTaskNative
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -13,6 +14,11 @@ class KmpPlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("org.jetbrains.kotlin.multiplatform")
 
+                withPlugin(libs.plugin("kspGradlePlugin").pluginId) {
+                    tasks.withType<KspTaskNative>().configureEach {
+                        notCompatibleWithConfigurationCache("Configuration chache not supported for a system property read at configuration time")
+                    }
+                }
             }
             tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) {
                 kotlinOptions.jvmTarget = "11"

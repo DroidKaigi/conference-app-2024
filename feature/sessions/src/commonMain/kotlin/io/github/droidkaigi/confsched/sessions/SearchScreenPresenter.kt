@@ -50,6 +50,7 @@ fun searchScreenPresenter(
     val sessions by rememberUpdatedState(sessionsRepository.timetable())
 
     var searchWord by rememberRetained { mutableStateOf("") }
+    var hasSearched by rememberRetained { mutableStateOf(false) }
     val selectedDays = rememberRetained { mutableStateListOf<DroidKaigi2024Day>() }
     val selectedSessionTypes = rememberRetained { mutableStateListOf<TimetableSessionType>() }
     val selectedCategories = rememberRetained { mutableStateListOf<TimetableCategory>() }
@@ -109,6 +110,7 @@ fun searchScreenPresenter(
 
             is UpdateSearchWord -> {
                 searchWord = event.word
+                hasSearched = true
             }
 
             is ClearSearchWord -> {
@@ -150,7 +152,7 @@ fun searchScreenPresenter(
     }
 
     when {
-        filters.isNotEmpty() && filteredSessions.isEmpty() -> {
+        (filters.isNotEmpty() || hasSearched) && filteredSessions.isEmpty() -> {
             SearchScreenUiState.Empty(
                 searchWord = searchWord,
                 searchFilterDayUiState = searchFilterDayUiState,

@@ -362,7 +362,8 @@ private class ExternalNavController(
 
     fun onShareClick(timetableItem: TimetableItem) {
         shareNavigator.share(
-            "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}\n" +
+            "[${timetableItem.room.name.currentLangTitle}] ${timetableItem.formattedMonthAndDayString} " +
+                "${timetableItem.startsTimeString} - ${timetableItem.endsTimeString}\n" +
                 "${timetableItem.title.currentLangTitle}\n" +
                 timetableItem.url,
         )

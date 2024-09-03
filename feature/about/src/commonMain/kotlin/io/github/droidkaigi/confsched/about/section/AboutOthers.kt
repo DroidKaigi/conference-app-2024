@@ -30,6 +30,7 @@ const val AboutOthersTitleTestTag = "AboutOthersTitleTestTag"
 const val AboutOthersCodeOfConductItemTestTag = "AboutOthersCodeOfConductItemTestTag"
 const val AboutOthersLicenseItemTestTag = "AboutOthersLicenseItemTestTag"
 const val AboutOthersPrivacyPolicyItemTestTag = "AboutOthersPrivacyPolicyItemTestTag"
+const val AboutOthersSettingsItemTestTag = "AboutOthersSettingsItemTestTag"
 
 fun LazyListScope.aboutOthers(
     modifier: Modifier = Modifier,
@@ -92,7 +93,7 @@ fun LazyListScope.aboutOthers(
             leadingIcon = Outlined.Settings,
             label = stringResource(AboutRes.string.settings),
             onClickAction = onSettingsItemClick,
-            testTag = "TODO",
+            testTag = AboutOthersSettingsItemTestTag,
             modifier = modifier
                 .padding(
                     horizontal = 16.dp,
