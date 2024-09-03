@@ -21,10 +21,15 @@ public class UserDataStore(private val dataStore: DataStore<Preferences>) {
     private val mutableIdToken = MutableStateFlow<String?>(null)
     public val idToken: StateFlow<String?> = mutableIdToken
 
+    private var favoriteSessionMemoryCache: PersistentSet<TimetableItemId>? = null
+    public val getFavoriteSessionMemoryCacheOrNull: PersistentSet<TimetableItemId>?
+        get() = favoriteSessionMemoryCache
+
     public fun getFavoriteSessionStream(): Flow<PersistentSet<TimetableItemId>> {
         return dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
+                    favoriteSessionMemoryCache = null
                     emit(emptyPreferences())
                 } else {
                     throw exception
@@ -33,7 +38,9 @@ public class UserDataStore(private val dataStore: DataStore<Preferences>) {
             .map { preferences: Preferences ->
                 (preferences[KEY_FAVORITE_SESSION_IDS]?.split(",") ?: listOf())
                     .map { TimetableItemId(it) }
-                    .toPersistentSet()
+                    .toPersistentSet().also {
+                        favoriteSessionMemoryCache = it
+                    }
             }
     }
 
