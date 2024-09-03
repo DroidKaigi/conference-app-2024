@@ -26,6 +26,7 @@ import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardF
 import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardTestTag
 import org.robolectric.util.ReflectionHelpers
 import javax.inject.Inject
+import kotlin.math.PI
 
 class ProfileCardScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,
@@ -115,64 +116,64 @@ class ProfileCardScreenRobot @Inject constructor(
 
     fun tiltToHorizontal() {
         tiltAllAxes(
-            pitch = 0f,
-            roll = 0f,
+            pitch = degreeToRadian(0f),
+            roll = degreeToRadian(0f),
         )
         waitUntilIdle()
     }
 
     fun tiltToMidRange() {
         tiltAllAxes(
-            pitch = 45f,
-            roll = 45f,
+            pitch = degreeToRadian(45f),
+            roll = degreeToRadian(45f),
         )
         waitUntilIdle()
     }
 
     fun tiltToUpperBound() {
         tiltAllAxes(
-            pitch = 75f,
-            roll = 75f,
+            pitch = degreeToRadian(75f),
+            roll = degreeToRadian(75f),
         )
         waitUntilIdle()
     }
 
     fun tiltPitchOutOfBounds() {
         tiltAllAxes(
-            pitch = -80f,
-            roll = 0f,
+            pitch = degreeToRadian(-80f),
+            roll = degreeToRadian(0f),
         )
         waitUntilIdle()
     }
 
     fun tiltRollOutOfBounds() {
         tiltAllAxes(
-            pitch = 0f,
-            roll = 80f,
+            pitch = degreeToRadian(0f),
+            roll = degreeToRadian(80f),
         )
         waitUntilIdle()
     }
 
     fun tiltBothAxesOutOfBounds() {
         tiltAllAxes(
-            pitch = -80f,
-            roll = 80f,
+            pitch = degreeToRadian(-80f),
+            roll = degreeToRadian(80f),
         )
         waitUntilIdle()
     }
 
     fun tiltToPitchRollBoundary() {
         tiltAllAxes(
-            pitch = -75f,
-            roll = 75f,
+            pitch = degreeToRadian(-75f),
+            roll = degreeToRadian(75f),
         )
         waitUntilIdle()
     }
 
     fun tiltToPitchRollBoundaryOpposite() {
         tiltAllAxes(
-            pitch = 75f,
-            roll = -75f,
+            pitch = degreeToRadian(75f),
+            roll = degreeToRadian(-75f),
         )
         waitUntilIdle()
     }
@@ -255,5 +256,9 @@ class ProfileCardScreenRobot @Inject constructor(
 
     fun cleanUp() {
         cleanUpSensors()
+    }
+
+    private fun degreeToRadian(degree: Float): Float {
+        return (degree * PI / 180f).toFloat()
     }
 }
