@@ -4,6 +4,11 @@ import shared
 import Model
 
 extension DependencyValues {
+    public var firebaseAppClient: FirebaseAppClient {
+        get { self[FirebaseAppClient.self] }
+        set { self[FirebaseAppClient.self] = newValue }
+    }
+
     public var timetableClient: TimetableClient {
         get { self[TimetableClient.self] }
         set { self[TimetableClient.self] = newValue }
@@ -33,6 +38,11 @@ extension DependencyValues {
         get { self[ProfileCardClient.self] }
         set { self[ProfileCardClient.self] = newValue }
     }
+}
+
+@DependencyClient
+public struct FirebaseAppClient: Sendable {
+    public var prepareFirebase: @Sendable () -> ()
 }
 
 @DependencyClient

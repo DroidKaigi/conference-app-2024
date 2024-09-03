@@ -2,10 +2,6 @@ import Firebase
 import ObjectiveC
 @preconcurrency import shared
 
-public func prepareFirebase() {
-    FirebaseApp.configure()
-}
-
 public struct Container: Sendable {
     public static let shared: Container = .init()
 

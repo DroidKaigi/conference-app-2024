@@ -29,6 +29,16 @@ private var profileCardRepository: any ProfileCardRepository {
     Container.shared.get(type: (any ProfileCardRepository).self)
 }
 
+extension FirebaseAppClient: DependencyKey {
+    public static var liveValue: Self {
+        Self(
+            prepareFirebase: {
+                FirebaseApp.configure()
+            }
+        )
+    }
+}
+
 extension TimetableClient: DependencyKey {
     public static let liveValue: TimetableClient = .init(
         streamTimetable: {
