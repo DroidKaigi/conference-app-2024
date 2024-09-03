@@ -15,6 +15,9 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
+import androidx.compose.ui.unit.em
+import androidx.compose.ui.unit.sp
 import kotlin.math.ceil
 
 /**
@@ -58,37 +61,60 @@ private fun BoxWithConstraintsScope.calculateFontSize(
     color: Color,
     textAlign: TextAlign,
     maxLines: Int,
-): TextUnit = with(LocalDensity.current) {
-    // Upper bound of the font size, will decrease in the `while` loop below
-    var targetFontSize = style.fontSize
-
-    // Calculate the text layout using the current `targetFontSize`
-    val calculateParagraph = @Composable {
+): TextUnit {
+    // Helper function to calculate if a given text size
+    // would cause an overflow when placed into this BoxWithConstraints
+    val hasOverflowWhenPlaced: @Composable TextUnit.() -> Boolean = {
         val finalStyle = style.merge(
             TextStyle(
                 color = color,
-                fontSize = targetFontSize,
+                fontSize = this,
                 textAlign = textAlign,
             ),
         )
 
-        Paragraph(
-            text = text,
-            style = finalStyle,
-            maxLines = maxLines,
-            constraints = Constraints(maxWidth = ceil(maxWidth.toPx()).toInt()),
-            density = this,
-            fontFamilyResolver = LocalFontFamilyResolver.current,
-        )
+        with(LocalDensity.current) {
+            Paragraph(
+                text = text,
+                style = finalStyle,
+                maxLines = maxLines,
+                constraints = Constraints(maxWidth = ceil(maxWidth.toPx()).toInt()),
+                density = this,
+                fontFamilyResolver = LocalFontFamilyResolver.current,
+            ).run {
+                didExceedMaxLines || maxHeight < height.toDp() || maxWidth < minIntrinsicWidth.toDp()
+            }
+        }
     }
 
-    var paragraph = calculateParagraph()
-
-    // Keep decreasing the font size until the text fits in the box without exceeding the max lines
-    while (paragraph.didExceedMaxLines || maxHeight < paragraph.height.toDp() || maxWidth < paragraph.minIntrinsicWidth.toDp()) {
-        targetFontSize *= 0.95
-        paragraph = calculateParagraph()
+    // If the original text size fits already without overflowing,
+    // then there is no need to do anything
+    if (!style.fontSize.hasOverflowWhenPlaced()) {
+        return style.fontSize
     }
 
-    targetFontSize
+    // Otherwise, find the biggest font size that still fits using binary search
+    var lo = 1
+    var hi = style.fontSize.value.toInt()
+    val type = style.fontSize.type
+
+    while (lo <= hi) {
+        val mid = lo + (hi - lo) / 2
+        if (mid.asTextUnit(type).hasOverflowWhenPlaced()) {
+            hi = mid - 1
+        } else {
+            lo = mid + 1
+        }
+    }
+
+    // After the binary search, the right pointer is the largest size
+    // that still works without overflowing the box'
+    return hi.asTextUnit(type)
+}
+
+private fun Int.asTextUnit(type: TextUnitType) = when (type) {
+    TextUnitType.Sp -> this.sp
+    TextUnitType.Em -> this.em
+    TextUnitType.Unspecified -> TextUnit.Unspecified
+    else -> error("Invalid TextUnitType: $type")
 }
