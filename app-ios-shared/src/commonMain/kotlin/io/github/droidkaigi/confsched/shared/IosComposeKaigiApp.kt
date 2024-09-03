@@ -22,8 +22,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import co.touchlab.kermit.Logger
-import conference_app_2024.app_ios_shared.generated.resources.permission_required
 import conference_app_2024.app_ios_shared.generated.resources.open_settings
+import conference_app_2024.app_ios_shared.generated.resources.permission_required
 import io.github.droidkaigi.confsched.about.aboutScreen
 import io.github.droidkaigi.confsched.about.aboutScreenRoute
 import io.github.droidkaigi.confsched.about.navigateAboutScreen
@@ -64,6 +64,8 @@ import io.github.droidkaigi.confsched.model.SettingsRepository
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.compositionlocal.LocalRepositories
 import io.github.droidkaigi.confsched.model.defaultLang
+import io.github.droidkaigi.confsched.profilecard.cropImageScreenRoute
+import io.github.droidkaigi.confsched.profilecard.cropImageScreens
 import io.github.droidkaigi.confsched.profilecard.navigateProfileCardScreen
 import io.github.droidkaigi.confsched.profilecard.profileCardScreen
 import io.github.droidkaigi.confsched.profilecard.profileCardScreenRoute
@@ -251,6 +253,11 @@ private fun KaigiNavHost(
             onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
             contentPadding = PaddingValues(),
         )
+
+        cropImageScreens(
+            onNavigationIconClick = navController::popBackStack,
+            onConfirm = navController::popBackStack,
+        )
     }
 }
 
@@ -327,6 +334,7 @@ private fun NavGraphBuilder.mainScreen(
             profileCardScreen(
                 contentPadding = contentPadding,
                 onClickShareProfileCard = externalNavController::onShareProfileCardClick,
+                onNavigateToCropImage = { navController.navigate(cropImageScreenRoute) },
             )
         },
     )
