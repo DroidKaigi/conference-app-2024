@@ -1,11 +1,13 @@
 package io.github.droidkaigi.confsched.contributors
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -13,6 +15,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -46,10 +49,18 @@ fun NavGraphBuilder.contributorsScreens(
     }
 }
 
-data class ContributorsUiState(
-    val contributors: PersistentList<Contributor>,
-    val userMessageStateHolder: UserMessageStateHolder,
-)
+sealed interface ContributorsUiState {
+    val userMessageStateHolder: UserMessageStateHolder
+
+    data class Loading(
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ): ContributorsUiState
+
+    data class Exists(
+        override val userMessageStateHolder: UserMessageStateHolder,
+        val contributors: PersistentList<Contributor>,
+    ): ContributorsUiState
+}
 
 @Composable
 fun ContributorsScreen(
@@ -109,21 +120,33 @@ fun ContributorsScreen(
             }
         },
     ) { padding ->
-        Contributors(
-            contributors = uiState.contributors,
-            onContributorsItemClick = onContributorsItemClick,
-            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = padding.calculateTopPadding())
-                .let {
-                    if (scrollBehavior != null) {
-                        it.nestedScroll(scrollBehavior.nestedScrollConnection)
-                    } else {
-                        it
-                    }
-                },
-        )
+        when (uiState) {
+            is ContributorsUiState.Exists -> {
+                Contributors(
+                    contributors = uiState.contributors,
+                    onContributorsItemClick = onContributorsItemClick,
+                    contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = padding.calculateTopPadding())
+                        .let {
+                            if (scrollBehavior != null) {
+                                it.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            } else {
+                                it
+                            }
+                        },
+                )
+            }
+            is ContributorsUiState.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(padding).fillMaxSize(),
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
     }
 }
 
