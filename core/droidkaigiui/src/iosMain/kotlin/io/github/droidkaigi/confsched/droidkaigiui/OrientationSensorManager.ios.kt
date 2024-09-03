@@ -22,12 +22,12 @@ internal class IosOrientationSensorManager(
     private val motionManager = CMMotionManager()
 
     override fun start() {
-        if (!motionManager.deviceMotionActive) {
+        if (!motionManager.deviceMotionAvailable) {
             return
         }
-        NSOperationQueue.currentQueue()?.let {
+        NSOperationQueue.mainQueue().let { queue ->
             motionManager.startDeviceMotionUpdatesToQueue(
-                it,
+                queue,
             ) { motion, _ ->
                 if (motion == null) {
                     return@startDeviceMotionUpdatesToQueue
