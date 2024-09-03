@@ -4,6 +4,7 @@ import Model
 import SwiftUI
 @preconcurrency import shared
 import Theme
+import ComposableArchitecture
 
 struct KmpPresenterContributorView: View {
     private let repositories: any Repositories
@@ -12,8 +13,9 @@ struct KmpPresenterContributorView: View {
     @State private var currentState: ContributorsUiState? = nil
 
     init(onContributorButtonTapped: @escaping (URL) -> Void) {
-        self.repositories = Container.shared.get(type: (any Repositories).self)
+        @Dependency(\.containerClient) var containerClient
 
+        self.repositories = containerClient.repositories()
         self.events = SkieKotlinSharedFlowFactory<any ContributorsScreenEvent>()
             .createSkieKotlinSharedFlow(replay: 0, extraBufferCapacity: 0)
         self.onContributorButtonTapped = onContributorButtonTapped
