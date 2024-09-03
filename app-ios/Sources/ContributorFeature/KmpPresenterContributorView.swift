@@ -55,7 +55,6 @@ struct KmpPresenterContributorView: View {
 
     @MainActor
     private func startListening() async {
-        // contributorsScreenPresenterStateFlowの非同期処理で状態を監視して更新
         let uiStateStateFlow = contributorsScreenPresenterStateFlow(repositories: repositories.map, events: SkieSwiftMutableSharedFlow(events))
 
         for await state in uiStateStateFlow {
