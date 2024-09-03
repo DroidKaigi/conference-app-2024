@@ -54,12 +54,12 @@ sealed interface ContributorsUiState {
 
     data class Loading(
         override val userMessageStateHolder: UserMessageStateHolder,
-    ): ContributorsUiState
+    ) : ContributorsUiState
 
     data class Exists(
         override val userMessageStateHolder: UserMessageStateHolder,
         val contributors: PersistentList<Contributor>,
-    ): ContributorsUiState
+    ) : ContributorsUiState
 }
 
 @Composable
