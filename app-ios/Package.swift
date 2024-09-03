@@ -89,7 +89,6 @@ let package = Package(
                 .firebaseRemoteConfig,
                 .tca,
                 .model,
-                .licenseList,
             ]
         ),
         
