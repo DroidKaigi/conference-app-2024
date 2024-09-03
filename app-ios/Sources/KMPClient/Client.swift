@@ -9,6 +9,11 @@ extension DependencyValues {
         set { self[FirebaseAppClient.self] = newValue }
     }
 
+    public var containerClient: ContainerClient {
+        get { self[ContainerClient.self] }
+        set { self[ContainerClient.self] = newValue }
+    }
+
     public var timetableClient: TimetableClient {
         get { self[TimetableClient.self] }
         set { self[TimetableClient.self] = newValue }
@@ -43,6 +48,17 @@ extension DependencyValues {
 @DependencyClient
 public struct FirebaseAppClient: Sendable {
     public var prepareFirebase: @Sendable () -> ()
+}
+
+@DependencyClient
+public struct ContainerClient: Sendable {
+    private class DefaultRepositories: Repositories {
+        var map = [AnyHashable: Any]()
+    }
+
+    public var repositories: @Sendable () -> any Repositories = {
+        DefaultRepositories()
+    }
 }
 
 @DependencyClient

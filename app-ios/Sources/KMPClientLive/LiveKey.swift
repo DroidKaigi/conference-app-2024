@@ -39,6 +39,16 @@ extension FirebaseAppClient: DependencyKey {
     }
 }
 
+extension ContainerClient: DependencyKey {
+    public static var liveValue: Self {
+        Self(
+            repositories: {
+                Container.shared.get(type: (any Repositories).self)
+            }
+        )
+    }
+}
+
 extension TimetableClient: DependencyKey {
     public static let liveValue: TimetableClient = .init(
         streamTimetable: {
