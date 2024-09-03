@@ -1,5 +1,6 @@
 import SwiftUI
 import shared
+import ComposableArchitecture
 
 public struct KmpContributorComposeViewControllerWrapper: UIViewControllerRepresentable {
     public typealias URLString = String
@@ -8,7 +9,9 @@ public struct KmpContributorComposeViewControllerWrapper: UIViewControllerRepres
     private let onContributorsItemClick: (URLString) -> Void
 
     public init(onContributorsItemClick: @escaping (URLString) -> Void) {
-        self.repositories = Container.shared.get(type: (any Repositories).self)
+        @Dependency(\.containerClient) var containerClient
+
+        self.repositories = containerClient.repositories()
         self.onContributorsItemClick = onContributorsItemClick
     }
 
