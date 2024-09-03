@@ -378,12 +378,12 @@ internal fun EditScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    var nickname by remember { mutableStateOf(uiState.nickname) }
-    var occupation by remember { mutableStateOf(uiState.occupation) }
-    var link by remember { mutableStateOf(uiState.link) }
+    var nickname by rememberSaveable { mutableStateOf(uiState.nickname) }
+    var occupation by rememberSaveable { mutableStateOf(uiState.occupation) }
+    var link by rememberSaveable { mutableStateOf(uiState.link) }
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
-    var selectedCardType by remember { mutableStateOf(uiState.cardType) }
+    var selectedCardType by rememberSaveable { mutableStateOf(uiState.cardType) }
 
     val isValidInputs by remember {
         derivedStateOf {
