@@ -10,6 +10,7 @@ import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.Pr
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -37,6 +38,11 @@ class ProfileCardScreenTest(
         runRobot(robot) {
             testCase.execute(robot)
         }
+    }
+
+    @After
+    fun tearDown() {
+        robot.cleanUp()
     }
 
     companion object {

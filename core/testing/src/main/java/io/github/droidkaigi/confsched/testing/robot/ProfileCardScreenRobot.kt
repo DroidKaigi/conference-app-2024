@@ -252,4 +252,8 @@ class ProfileCardScreenRobot @Inject constructor(
             .onNode(hasTestTag(ProfileCardFlipCardBackTestTag))
             .assertIsDisplayed()
     }
+
+    fun cleanUp() {
+        cleanUpSensors()
+    }
 }

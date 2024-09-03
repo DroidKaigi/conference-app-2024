@@ -184,6 +184,7 @@ class DefaultDeviceSetupRobot @Inject constructor() : DeviceSetupRobot {
 
 interface SensorRobot {
     fun setupMockSensors(sensorTypes: List<Int>)
+    fun cleanUpSensors()
     fun tiltPitch(pitch: Float = 10f)
     fun tiltRoll(roll: Float = 10f)
     fun tiltAzimuth(azimuth: Float = 10f)
@@ -210,6 +211,11 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
         }
     }
 
+    override fun cleanUpSensors() {
+        CustomShadowSensorManager.setCustomRotationMatrix(floatArrayOf())
+        CustomShadowSensorManager.setCustomOrientationAngles(floatArrayOf())
+    }
+
     override fun tiltPitch(pitch: Float) {
         sendTiltEvent(mockAccelerometerSensor, pitch = pitch)
         sendTiltEvent(mockMagneticFieldSensor, pitch = pitch)
@@ -230,7 +236,12 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
         sendTiltEvent(mockMagneticFieldSensor, pitch, roll, azimuth)
     }
 
-    private fun sendTiltEvent(sensor: Sensor?, pitch: Float = 0f, roll: Float = 0f, azimuth: Float = 0f) {
+    private fun sendTiltEvent(
+        sensor: Sensor?,
+        pitch: Float = 0f,
+        roll: Float = 0f,
+        azimuth: Float = 0f,
+    ) {
         if (sensor != null) {
             val event = createTiltEvent(sensor, pitch, roll, azimuth)
             CustomShadowSensorManager.setCustomRotationMatrix(
@@ -248,7 +259,12 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
         }
     }
 
-    private fun createTiltEvent(sensor: Sensor, pitch: Float, roll: Float, azimuth: Float): SensorEvent {
+    private fun createTiltEvent(
+        sensor: Sensor,
+        pitch: Float,
+        roll: Float,
+        azimuth: Float,
+    ): SensorEvent {
         return SensorEventBuilder.newBuilder()
             .setSensor(sensor)
             .setTimestamp(System.currentTimeMillis())
@@ -259,6 +275,7 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
     @Implements(SensorManager::class)
     class CustomShadowSensorManager : ShadowSensorManager() {
 
+        @Suppress("UNUSED_PARAMETER")
         companion object {
             private var customRotationMatrix: FloatArray? = null
             private var customOrientationAngles: FloatArray? = null
@@ -269,14 +286,19 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
 
             @Implementation
             @JvmStatic
-            fun getRotationMatrix(R: FloatArray?, I: FloatArray?, gravity: FloatArray?, geomagnetic: FloatArray?): Boolean {
+            fun getRotationMatrix(
+                r: FloatArray?,
+                i: FloatArray?,
+                gravity: FloatArray?,
+                geomagnetic: FloatArray?,
+            ): Boolean {
                 customRotationMatrix?.let {
-                    if (R != null && it.size == R.size) {
-                        System.arraycopy(it, 0, R, 0, it.size)
+                    if (r != null && it.size == r.size) {
+                        System.arraycopy(it, 0, r, 0, it.size)
                     }
                     return true
                 }
-                return false // or call the real method if needed
+                return false
             }
 
             fun setCustomOrientationAngles(orientationAngles: FloatArray) {
@@ -285,14 +307,14 @@ class DefaultSensorRobot @Inject constructor() : SensorRobot {
 
             @Implementation
             @JvmStatic
-            fun getOrientation(R: FloatArray?, values: FloatArray?): FloatArray {
+            fun getOrientation(r: FloatArray?, values: FloatArray?): FloatArray {
                 customOrientationAngles?.let {
                     if (values != null && it.size == values.size) {
                         System.arraycopy(it, 0, values, 0, it.size)
                     }
                     return it
                 }
-                return R!! // or call the real method if needed
+                return r!!
             }
         }
     }
@@ -467,6 +489,7 @@ class DefaultSettingsDataStoreRobot @Inject constructor(
                     ),
                 )
             }
+
             UseSystemDefaultFont -> {
                 settingsDataStore.save(
                     Settings.Exists(
