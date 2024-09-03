@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.testing.robot
 
 import android.graphics.RenderNode
+import android.hardware.Sensor
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -25,12 +26,16 @@ import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardF
 import io.github.droidkaigi.confsched.profilecard.component.ProfileCardFlipCardTestTag
 import org.robolectric.util.ReflectionHelpers
 import javax.inject.Inject
+import kotlin.math.PI
 
 class ProfileCardScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,
     profileCardRepositoryRobot: DefaultProfileCardDataStoreRobot,
+    sensorRobot: DefaultSensorRobot,
 ) : ScreenRobot by screenRobot,
-    ProfileCardDataStoreRobot by profileCardRepositoryRobot {
+    ProfileCardDataStoreRobot by profileCardRepositoryRobot,
+    SensorRobot by sensorRobot {
+
     fun setupScreenContent() {
         robotTestRule.setContent {
             KaigiTheme {
@@ -48,6 +53,15 @@ class ProfileCardScreenRobot @Inject constructor(
                 "updateDisplayListIfDirty",
             )
         waitUntilIdle()
+    }
+
+    fun setupMockSensor() {
+        setupMockSensors(
+            listOf(
+                Sensor.TYPE_ACCELEROMETER,
+                Sensor.TYPE_MAGNETIC_FIELD,
+            ),
+        )
     }
 
     fun inputNickName(
@@ -97,6 +111,70 @@ class ProfileCardScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(ProfileCardFlipCardTestTag))
             .performClick()
+        waitUntilIdle()
+    }
+
+    fun tiltToHorizontal() {
+        tiltAllAxes(
+            pitch = degreeToRadian(0f),
+            roll = degreeToRadian(0f),
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltToMidRange() {
+        tiltAllAxes(
+            pitch = degreeToRadian(45f),
+            roll = degreeToRadian(45f),
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltToUpperBound() {
+        tiltAllAxes(
+            pitch = degreeToRadian(75f),
+            roll = degreeToRadian(75f),
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltPitchOutOfBounds() {
+        tiltAllAxes(
+            pitch = degreeToRadian(-80f),
+            roll = degreeToRadian(0f),
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltRollOutOfBounds() {
+        tiltAllAxes(
+            pitch = degreeToRadian(0f),
+            roll = degreeToRadian(80f),
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltBothAxesOutOfBounds() {
+        tiltAllAxes(
+            pitch = degreeToRadian(-80f),
+            roll = degreeToRadian(80f),
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltToPitchRollBoundary() {
+        tiltAllAxes(
+            pitch = degreeToRadian(-75f),
+            roll = degreeToRadian(75f),
+        )
+        waitUntilIdle()
+    }
+
+    fun tiltToPitchRollBoundaryOpposite() {
+        tiltAllAxes(
+            pitch = degreeToRadian(75f),
+            roll = degreeToRadian(-75f),
+        )
         waitUntilIdle()
     }
 
@@ -174,5 +252,13 @@ class ProfileCardScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(ProfileCardFlipCardBackTestTag))
             .assertIsDisplayed()
+    }
+
+    fun cleanUp() {
+        cleanUpSensors()
+    }
+
+    private fun degreeToRadian(degree: Float): Float {
+        return (degree * PI / 180f).toFloat()
     }
 }
