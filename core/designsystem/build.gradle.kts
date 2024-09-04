@@ -1,3 +1,5 @@
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+
 plugins {
     id("droidkaigi.primitive.kmp")
     id("droidkaigi.primitive.kmp.android")
@@ -9,6 +11,7 @@ plugins {
 }
 
 android.namespace = "io.github.droidkaigi.confsched.core.designsystem"
+@OptIn(ExperimentalRoborazziApi::class)
 roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.designsystem")
 
 kotlin {
