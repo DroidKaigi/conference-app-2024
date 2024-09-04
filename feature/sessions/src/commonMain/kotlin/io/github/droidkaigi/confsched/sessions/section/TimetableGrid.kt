@@ -75,6 +75,7 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimeLine
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.TimetableItem.Session
 import io.github.droidkaigi.confsched.model.TimetableRoom
 import io.github.droidkaigi.confsched.model.TimetableRooms
 import io.github.droidkaigi.confsched.model.fake
@@ -92,9 +93,11 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
 import kotlinx.datetime.periodUntil
+import kotlinx.datetime.plus
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -254,12 +257,25 @@ fun TimetableGrid(
 
     LaunchedEffect(Unit) {
         val progressingSession = timetable.timetableItems.timetableItems
+            .run {
+                // Insert dummy at a position after the start of the last session to allow scrolling
+                val endOfTheDayInstant = first().startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
+                    .date
+                    .plus(1, DateTimeUnit.DAY)
+                    .atStartOfDayIn(TimeZone.currentSystemDefault())
+                plus(
+                    Session.Companion.fake().copy(
+                        startsAt = endOfTheDayInstant,
+                        endsAt = endOfTheDayInstant,
+                    ),
+                )
+            }
             .windowed(2, 1, true)
             .find { clock.now() in it.first().startsAt..it.last().startsAt }
             ?.first()
 
         progressingSession?.let { session ->
-            val timeZone = TimeZone.of("UTC+9")
+            val timeZone = TimeZone.currentSystemDefault()
             val period = with(session.startsAt) {
                 toLocalDateTime(timeZone)
                     .date.atTime(10, 0)

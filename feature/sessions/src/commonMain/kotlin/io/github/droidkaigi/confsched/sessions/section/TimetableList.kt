@@ -49,9 +49,15 @@ import io.github.droidkaigi.confsched.model.toTimetableTimeString
 import io.github.droidkaigi.confsched.sessions.component.TimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollConnection
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollStateHolder
+import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState.TimeSlot
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import kotlinx.collections.immutable.PersistentMap
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
+import kotlinx.datetime.plus
+import kotlinx.datetime.toLocalDateTime
 
 const val TimetableListTestTag = "TimetableList"
 
@@ -78,7 +84,7 @@ internal fun TimetableList(
     timetableItemTagsContent: @Composable RowScope.(TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     nestedScrollStateHolder: TimetableNestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(
-        true
+        true,
     ),
     highlightWord: String = "",
     enableAutoScrolling: Boolean = true,
@@ -100,16 +106,29 @@ internal fun TimetableList(
         nestedScrollStateHolder = nestedScrollStateHolder,
     )
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(uiState) {
         if (enableAutoScrolling) {
             val progressingSessionIndex = uiState.timetableItemMap.keys
+                .run {
+                    // Insert dummy at a position after the start of the last session to allow scrolling
+                    val endOfTheDayInstant = first().startTime.toLocalDateTime(TimeZone.currentSystemDefault())
+                        .date
+                        .plus(1, DateTimeUnit.DAY)
+                        .atStartOfDayIn(TimeZone.currentSystemDefault())
+                    plus(
+                        TimeSlot(
+                            startTime = endOfTheDayInstant,
+                            endTime = endOfTheDayInstant,
+                        ),
+                    )
+                }
                 .windowed(2, 1, true)
                 .indexOfFirst {
                     clock.now() in it.first().startTime..it.last().startTime
                 }
 
             progressingSessionIndex.takeIf { it != -1 }?.let {
-                scrollState.animateScrollToItem(it)
+                scrollState.scrollToItem(it)
             }
         }
     }
