@@ -26,6 +26,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
@@ -91,7 +92,9 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atTime
 import kotlinx.datetime.minus
+import kotlinx.datetime.periodUntil
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -218,6 +221,7 @@ fun TimetableGrid(
 ) {
     val coroutineScope = rememberCoroutineScope()
     val density = timetableState.density
+    val clock = LocalClock.current
     val verticalScale = timetableState.screenScaleState.verticalScale
     val timetableLayout = remember(timetable, verticalScale) {
         TimetableLayout(timetable = timetable, density = density, verticalScale = verticalScale)
@@ -247,6 +251,30 @@ fun TimetableGrid(
 
     val currentTimeLineColor = MaterialTheme.colorScheme.primary
     val currentTimeDotRadius = with(timetableState.density) { TimetableSizes.currentTimeDotRadius.toPx() }
+
+    LaunchedEffect(Unit) {
+        val progressingSession =
+            timetable.timetableItems.timetableItems.find { clock.now() in it.startsAt..it.endsAt }
+        progressingSession?.let { session ->
+            val timeZone = TimeZone.of("UTC+9")
+            val period = with(session.startsAt) {
+                toLocalDateTime(timeZone)
+                    .date.atTime(10, 0)
+                    .toInstant(timeZone)
+                    .periodUntil(this, timeZone)
+            }
+            val minuteHeightPx =
+                with(density) { TimetableSizes.minuteHeight.times(verticalScale).toPx() }
+            val scrollOffsetY =
+                -with(period) { hours * minuteHeightPx * 60 + minutes * minuteHeightPx }
+            timetableScreen.scroll(
+                Offset(0f, scrollOffsetY),
+                0,
+                Offset.Zero,
+                nestedScrollDispatcher,
+            )
+        }
+    }
 
     LazyLayout(
         modifier = modifier

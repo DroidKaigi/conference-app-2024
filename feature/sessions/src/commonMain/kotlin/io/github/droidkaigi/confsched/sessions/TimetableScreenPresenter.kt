@@ -101,8 +101,8 @@ fun timetableSheet(
                     ),
                 ).timetableItems.groupBy {
                     TimetableListUiState.TimeSlot(
-                        startTimeString = it.startsTimeString,
-                        endTimeString = it.endsTimeString,
+                        startTime = it.startsAt,
+                        endTime = it.endsAt,
                     )
                 }.mapValues { entries ->
                     entries.value.sortedWith(

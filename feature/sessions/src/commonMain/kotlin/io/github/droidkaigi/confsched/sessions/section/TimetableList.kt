@@ -22,6 +22,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -39,15 +40,18 @@ import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCard
 import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableTime
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.model.toTimetableTimeString
 import io.github.droidkaigi.confsched.sessions.component.TimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollConnection
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import kotlinx.collections.immutable.PersistentMap
+import kotlinx.datetime.Instant
 
 const val TimetableListTestTag = "TimetableList"
 
@@ -56,10 +60,10 @@ data class TimetableListUiState(
     val timetable: Timetable,
 ) {
     data class TimeSlot(
-        val startTimeString: String,
-        val endTimeString: String,
+        val startTime: Instant,
+        val endTime: Instant,
     ) {
-        val key: String get() = "$startTimeString-$endTimeString"
+        val key: String get() = "$startTime-$endTime"
     }
 }
 
@@ -75,8 +79,10 @@ internal fun TimetableList(
     modifier: Modifier = Modifier,
     nestedScrollStateHolder: TimetableNestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(true),
     highlightWord: String = "",
+    enableAutoScrolling: Boolean = true,
 ) {
     val layoutDirection = LocalLayoutDirection.current
+    val clock = LocalClock.current
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val animatedScope = LocalAnimatedVisibilityScope.current
     val windowSize = calculateWindowSizeClass()
@@ -91,6 +97,16 @@ internal fun TimetableList(
     val nestedScrollConnection = rememberTimetableNestedScrollConnection(
         nestedScrollStateHolder = nestedScrollStateHolder,
     )
+
+    LaunchedEffect(Unit) {
+        if (enableAutoScrolling) {
+            val progressingSessionIndex =
+                uiState.timetableItemMap.keys.indexOfFirst { clock.now() in it.startTime..it.endTime }
+            progressingSessionIndex.takeIf { it != -1 }?.let {
+                scrollState.animateScrollToItem(it)
+            }
+        }
+    }
 
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag)
@@ -136,8 +152,8 @@ internal fun TimetableList(
                             timeTextHeight = it.size.height
                         }
                         .offset { IntOffset(0, timeTextOffset) },
-                    startTime = time.startTimeString,
-                    endTime = time.endTimeString,
+                    startTime = time.startTime.toTimetableTimeString(),
+                    endTime = time.endTime.toTimetableTimeString(),
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {

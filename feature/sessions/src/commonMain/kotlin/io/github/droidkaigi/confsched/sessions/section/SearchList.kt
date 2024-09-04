@@ -24,6 +24,7 @@ fun SearchList(
         contentPadding = contentPadding,
         highlightWord = highlightWord,
         modifier = modifier,
+        enableAutoScrolling = false,
         timetableItemTagsContent = { timetableItem ->
             timetableItem.day?.monthAndDay()?.let { monthAndDay ->
                 TimetableItemTag(tagText = monthAndDay)

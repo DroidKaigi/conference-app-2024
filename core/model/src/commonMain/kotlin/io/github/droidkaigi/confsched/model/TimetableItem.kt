@@ -71,13 +71,11 @@ public sealed class TimetableItem {
     }
 
     public val startsTimeString: String by lazy {
-        val localDate = startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
-        "${localDate.hour}".padStart(2, '0') + ":" + "${localDate.minute}".padStart(2, '0')
+        startsAt.toTimetableTimeString()
     }
 
     public val endsTimeString: String by lazy {
-        val localDate = endsAt.toLocalDateTime(TimeZone.currentSystemDefault())
-        "${localDate.hour}".padStart(2, '0') + ":" + "${localDate.minute}".padStart(2, '0')
+        endsAt.toTimetableTimeString()
     }
 
     private val minutesString: String by lazy {
@@ -119,6 +117,11 @@ public sealed class TimetableItem {
             else -> language.langOfSpeaker
         }
     }
+}
+
+public fun Instant.toTimetableTimeString(): String {
+    val localDate = toLocalDateTime(TimeZone.currentSystemDefault())
+    return "${localDate.hour}".padStart(2, '0') + ":" + "${localDate.minute}".padStart(2, '0')
 }
 
 public fun Session.Companion.fake(): Session {
