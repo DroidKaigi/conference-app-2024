@@ -185,6 +185,46 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         dateTime = LocalDateTime(
                             year = 2024,
                             monthNumber = 9,
+                            dayOfMonth = 12,
+                            hour = 16,
+                            minute = 45,
+                        ),
+                        shouldShowTimeLine = false,
+                    ),
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(
+                            year = 2024,
+                            monthNumber = 9,
+                            dayOfMonth = 12,
+                            hour = 23,
+                            minute = 0,
+                        ),
+                        shouldShowTimeLine = true,
+                    ),
+                ).forEach { case ->
+                    val formattedDateTime =
+                        case.dateTime.format(LocalDateTime.Format { byUnicodePattern("yyyy-MM-dd HH-mm") })
+                    describe("when the current datetime is $formattedDateTime") {
+                        doIt {
+                            setupTimetableServer(ServerStatus.Operational)
+                            setupTimetableScreenContent(case.dateTime)
+                        }
+
+                        val formattedTime =
+                            case.dateTime.time.format(LocalTime.Format { byUnicodePattern("HH-mm") })
+                        val description = "show an timetable item of the current time at $formattedTime"
+                        itShould(description) {
+                            captureScreenWithChecks {
+                                checkTimetableListDisplayed()
+                            }
+                        }
+                    }
+                }
+                listOf(
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(
+                            year = 2024,
+                            monthNumber = 9,
                             dayOfMonth = 11,
                             hour = 10,
                             minute = 0,
