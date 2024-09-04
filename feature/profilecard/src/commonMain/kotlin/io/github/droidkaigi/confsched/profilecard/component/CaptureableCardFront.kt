@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.profilecard.component
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,6 +14,8 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import co.touchlab.kermit.Logger
 import coil3.compose.AsyncImagePainter
@@ -53,10 +56,17 @@ internal fun BackgroundCapturableCardFront(
                 }
             },
     ) {
-        FlipCardFront(
-            uiState,
-            profileImagePainter,
-            modifier = Modifier.size(width = 300.dp, height = 380.dp),
-        )
+        CompositionLocalProvider(
+            LocalDensity provides Density(
+                density = 1f,
+                fontScale = 1f,
+            ),
+        ) {
+            FlipCardFront(
+                uiState,
+                profileImagePainter,
+                modifier = Modifier.size(width = 300.dp, height = 380.dp)
+            )
+        }
     }
 }
