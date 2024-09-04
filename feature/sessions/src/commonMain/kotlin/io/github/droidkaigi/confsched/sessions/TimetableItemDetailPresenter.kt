@@ -23,6 +23,7 @@ import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.model.TimetableSessionType.NORMAL
 import io.github.droidkaigi.confsched.model.localSessionsRepository
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.Bookmark
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.EndTransitionAnimation
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.FavoriteListNavigated
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailEvent.SelectDescriptionLanguage
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
@@ -34,6 +35,7 @@ sealed interface TimetableItemDetailEvent {
     data class Bookmark(val timetableItem: TimetableItem) : TimetableItemDetailEvent
     data class SelectDescriptionLanguage(val language: Lang) : TimetableItemDetailEvent
     data object FavoriteListNavigated : TimetableItemDetailEvent
+    data object EndTransitionAnimation : TimetableItemDetailEvent
 }
 
 @Composable
@@ -52,6 +54,7 @@ fun timetableItemDetailPresenter(
     )
     var selectedDescriptionLanguage by rememberRetained { mutableStateOf<Lang?>(null) }
     var shouldGoToFavoriteList by remember { mutableStateOf(false) }
+    var isEndTransitionAnimation by remember { mutableStateOf(false) }
     val bookmarkedSuccessfullyString = stringResource(SessionsRes.string.bookmarked_successfully)
     val viewBookmarkListString = stringResource(SessionsRes.string.view_bookmark_list)
 
@@ -82,6 +85,10 @@ fun timetableItemDetailPresenter(
             is FavoriteListNavigated -> {
                 shouldGoToFavoriteList = false
             }
+
+            is EndTransitionAnimation -> {
+                isEndTransitionAnimation = true
+            }
         }
     }
     SafeLaunchedEffect(timetableItemStateWithBookmark?.first) {
@@ -101,6 +108,7 @@ fun timetableItemDetailPresenter(
         timetableItemDetailSectionUiState = TimetableItemDetailSectionUiState(timetableItem),
         isBookmarked = bookmarked,
         isLangSelectable = timetableItem.sessionType == NORMAL,
+        isEndTransitionAnimation = isEndTransitionAnimation,
         currentLang = selectedDescriptionLanguage,
         roomThemeKey = timetableItem.room.getThemeKey(),
         timetableItemId = timetableItemId,

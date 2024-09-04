@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -53,6 +54,8 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHead
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
@@ -124,6 +127,9 @@ fun TimetableItemDetailScreen(
         onSelectedLanguage = {
             eventFlow.tryEmit(TimetableItemDetailEvent.SelectDescriptionLanguage(it))
         },
+        onEndTransitionAnimation = {
+            eventFlow.tryEmit(TimetableItemDetailEvent.EndTransitionAnimation)
+        },
         snackbarHostState = snackbarHostState,
     )
 }
@@ -139,6 +145,7 @@ sealed interface TimetableItemDetailScreenUiState {
         val timetableItemDetailSectionUiState: TimetableItemDetailSectionUiState,
         val isBookmarked: Boolean,
         val isLangSelectable: Boolean,
+        val isEndTransitionAnimation: Boolean,
         val currentLang: Lang?,
         val roomThemeKey: String,
         val shouldGoToFavoriteList: Boolean,
@@ -164,10 +171,23 @@ private fun TimetableItemDetailScreen(
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     onShareClick: (TimetableItem) -> Unit,
     onSelectedLanguage: (Lang) -> Unit,
+    onEndTransitionAnimation: () -> Unit,
     snackbarHostState: SnackbarHostState,
 ) {
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val animatedScope = LocalAnimatedVisibilityScope.current
+
+    if (
+        sharedTransitionScope != null &&
+        animatedScope != null
+    ) {
+        LaunchedEffect(sharedTransitionScope, animatedScope) {
+            snapshotFlow { animatedScope.transition.isRunning }
+                .filter { it.not() }
+                .distinctUntilChanged()
+                .collect { onEndTransitionAnimation() }
+        }
+    }
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
@@ -230,6 +250,7 @@ private fun TimetableItemDetailScreen(
                                 currentLang = uiState.currentLang,
                                 timetableItem = uiState.timetableItem,
                                 isLangSelectable = uiState.isLangSelectable,
+                                isAnimationFinished = uiState.isEndTransitionAnimation,
                                 onLanguageSelect = onSelectedLanguage,
                             )
                         }
@@ -292,6 +313,7 @@ fun TimetableItemDetailScreenPreview() {
                     ),
                     isBookmarked = isBookMarked,
                     isLangSelectable = true,
+                    isEndTransitionAnimation = true,
                     currentLang = Lang.JAPANESE,
                     roomThemeKey = "iguana",
                     timetableItemId = fakeSession.id,
@@ -306,6 +328,7 @@ fun TimetableItemDetailScreenPreview() {
                 onCalendarRegistrationClick = {},
                 onShareClick = {},
                 onSelectedLanguage = {},
+                onEndTransitionAnimation = {},
                 snackbarHostState = SnackbarHostState(),
             )
         }
