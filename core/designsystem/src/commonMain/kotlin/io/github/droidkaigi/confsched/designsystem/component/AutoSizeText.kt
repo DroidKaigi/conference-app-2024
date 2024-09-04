@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -47,7 +48,7 @@ fun AutoSizeText(
         Text(
             text = text,
             color = color,
-            fontSize = calculateFontSize(text, style, color, textAlign, maxLines),
+            fontSize = rememberFontSize(text, style, color, textAlign, maxLines),
             style = style,
             maxLines = maxLines,
             textAlign = textAlign,
@@ -56,61 +57,66 @@ fun AutoSizeText(
 }
 
 @Composable
-private fun BoxWithConstraintsScope.calculateFontSize(
+private fun BoxWithConstraintsScope.rememberFontSize(
     text: String,
     style: TextStyle,
     color: Color,
     textAlign: TextAlign,
     maxLines: Int,
 ): TextUnit {
-    // Helper function to calculate if a given text size
-    // would cause an overflow when placed into this BoxWithConstraints
-    val hasOverflowWhenPlaced: @Composable TextUnit.() -> Boolean = {
-        val finalStyle = style.merge(
-            TextStyle(
-                color = color,
-                fontSize = this,
-                textAlign = textAlign,
-            ),
-        )
+    val density = LocalDensity.current
+    val fontFamilyResolver = LocalFontFamilyResolver.current
 
-        with(LocalDensity.current) {
-            Paragraph(
-                text = text,
-                style = finalStyle,
-                maxLines = maxLines,
-                constraints = Constraints(maxWidth = ceil(maxWidth.toPx()).toInt()),
-                density = this,
-                fontFamilyResolver = LocalFontFamilyResolver.current,
-            ).run {
-                didExceedMaxLines || maxHeight < height.toDp() || maxWidth < minIntrinsicWidth.toDp()
+    return remember(text, style.fontSize, textAlign, maxLines, density, maxWidth, maxHeight) {
+        // Helper function to calculate if a given text size
+        // would cause an overflow when placed into this BoxWithConstraints
+        val hasOverflowWhenPlaced: TextUnit.() -> Boolean = {
+            val finalStyle = style.merge(
+                TextStyle(
+                    color = color,
+                    fontSize = this,
+                    textAlign = textAlign,
+                ),
+            )
+
+            with(density) {
+                Paragraph(
+                    text = text,
+                    style = finalStyle,
+                    maxLines = maxLines,
+                    constraints = Constraints(maxWidth = ceil(maxWidth.toPx()).toInt()),
+                    density = this,
+                    fontFamilyResolver = fontFamilyResolver,
+                ).run {
+                    didExceedMaxLines || maxHeight < height.toDp() || maxWidth < minIntrinsicWidth.toDp()
+                }
             }
         }
-    }
 
-    // If the original text size fits already without overflowing,
-    // then there is no need to do anything
-    if (!style.fontSize.hasOverflowWhenPlaced()) {
-        return style.fontSize
-    }
-
-    // Otherwise, find the biggest font size that still fits using binary search
-    var lo = 1
-    var hi = style.fontSize.value.toInt()
-    val type = style.fontSize.type
-
-    while (lo <= hi) {
-        val mid = lo + (hi - lo) / 2
-        if (mid.asTextUnit(type).hasOverflowWhenPlaced()) {
-            hi = mid - 1
-        } else {
-            lo = mid + 1
+        // If the original text size fits already without overflowing,
+        // then there is no need to do anything
+        if (!style.fontSize.hasOverflowWhenPlaced()) {
+            style.fontSize
         }
-    }
 
-    // After the binary search, the right pointer is the largest size
-    // that still works without overflowing the box
-    return hi.asTextUnit(type)
+        // Otherwise, find the biggest font size that still fits using binary search
+        var lo = 1
+        var hi = style.fontSize.value.toInt()
+        val type = style.fontSize.type
+
+        while (lo <= hi) {
+            val mid = lo + (hi - lo) / 2
+            if (mid.asTextUnit(type).hasOverflowWhenPlaced()) {
+                hi = mid - 1
+            } else {
+                lo = mid + 1
+            }
+        }
+
+        // After the binary search, the right pointer is the largest size
+        // that still works without overflowing the box
+        hi.asTextUnit(type)
+    }
 }
 
 private fun Int.asTextUnit(type: TextUnitType) = when (type) {
