@@ -96,7 +96,7 @@ private fun BoxWithConstraintsScope.rememberFontSize(
         // If the original text size fits already without overflowing,
         // then there is no need to do anything
         if (!style.fontSize.hasOverflowWhenPlaced()) {
-            style.fontSize
+            return@remember style.fontSize
         }
 
         // Otherwise, find the biggest font size that still fits using binary search
