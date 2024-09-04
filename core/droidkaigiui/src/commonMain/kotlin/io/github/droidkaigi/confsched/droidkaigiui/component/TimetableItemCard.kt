@@ -43,6 +43,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -56,6 +57,7 @@ import conference_app_2024.core.droidkaigiui.generated.resources.not_bookmarked
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
+import io.github.droidkaigi.confsched.droidkaigiui.CustomSemanticsProperties
 import io.github.droidkaigi.confsched.droidkaigiui.DroidKaigiUiRes
 import io.github.droidkaigi.confsched.droidkaigiui.animation.LocalFavoriteAnimationScope
 import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
@@ -98,6 +100,10 @@ fun TimetableItemCard(
         Row(
             modifier = modifier
                 .testTag(TimetableItemCardTestTag)
+                .semantics {
+                    this[CustomSemanticsProperties.SessionLanguage] =
+                        timetableItem.language.toLang()
+                }
                 .border(
                     border = BorderStroke(
                         width = 1.dp,

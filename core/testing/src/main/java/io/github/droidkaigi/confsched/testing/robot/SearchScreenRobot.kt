@@ -27,6 +27,8 @@ import io.github.droidkaigi.confsched.sessions.component.SearchFiltersLazyRowTes
 import io.github.droidkaigi.confsched.sessions.component.SearchTextFieldAppBarTextFieldTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
+import io.github.droidkaigi.confsched.testing.utils.assertSessionLanguageDoesNotEqual
+import io.github.droidkaigi.confsched.testing.utils.assertSessionLanguageEquals
 import io.github.droidkaigi.confsched.testing.utils.assertTextDoesNotContain
 import io.github.droidkaigi.confsched.testing.utils.hasTestTag
 
@@ -239,13 +241,13 @@ class SearchScreenRobot @Inject constructor(
         composeTestRule
             .onAllNodes(hasTestTag(TimetableItemCardTestTag))
             .onFirst()
-            .assertTextContains(language.tagName)
+            .assertSessionLanguageEquals(language.tagName)
 
         doesNotContains.forEach { doesNotContain ->
             composeTestRule
                 .onAllNodes(hasTestTag(TimetableItemCardTestTag))
                 .onFirst()
-                .assertTextDoesNotContain(doesNotContain.tagName)
+                .assertSessionLanguageDoesNotEqual(doesNotContain.tagName)
         }
         waitUntilIdle()
     }
