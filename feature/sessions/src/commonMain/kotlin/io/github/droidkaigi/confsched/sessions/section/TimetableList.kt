@@ -77,7 +77,9 @@ internal fun TimetableList(
     contentPadding: PaddingValues,
     timetableItemTagsContent: @Composable RowScope.(TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
-    nestedScrollStateHolder: TimetableNestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(true),
+    nestedScrollStateHolder: TimetableNestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(
+        true
+    ),
     highlightWord: String = "",
     enableAutoScrolling: Boolean = true,
 ) {
@@ -100,8 +102,12 @@ internal fun TimetableList(
 
     LaunchedEffect(Unit) {
         if (enableAutoScrolling) {
-            val progressingSessionIndex =
-                uiState.timetableItemMap.keys.indexOfFirst { clock.now() in it.startTime..it.endTime }
+            val progressingSessionIndex = uiState.timetableItemMap.keys
+                .windowed(2, 1, true)
+                .indexOfFirst {
+                    clock.now() in it.first().startTime..it.last().startTime
+                }
+
             progressingSessionIndex.takeIf { it != -1 }?.let {
                 scrollState.animateScrollToItem(it)
             }

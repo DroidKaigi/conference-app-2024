@@ -253,8 +253,11 @@ fun TimetableGrid(
     val currentTimeDotRadius = with(timetableState.density) { TimetableSizes.currentTimeDotRadius.toPx() }
 
     LaunchedEffect(Unit) {
-        val progressingSession =
-            timetable.timetableItems.timetableItems.find { clock.now() in it.startsAt..it.endsAt }
+        val progressingSession = timetable.timetableItems.timetableItems
+            .windowed(2, 1, true)
+            .find { clock.now() in it.first().startsAt..it.last().startsAt }
+            ?.first()
+
         progressingSession?.let { session ->
             val timeZone = TimeZone.of("UTC+9")
             val period = with(session.startsAt) {
