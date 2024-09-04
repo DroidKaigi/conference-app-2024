@@ -65,7 +65,7 @@ internal fun BackgroundCapturableCardFront(
             FlipCardFront(
                 uiState,
                 profileImagePainter,
-                modifier = Modifier.size(width = 300.dp, height = 380.dp)
+                modifier = Modifier.size(width = 300.dp, height = 380.dp),
             )
         }
     }
