@@ -19,7 +19,8 @@ fun staffScreenPresenter(
     val staff by rememberUpdatedState(staffRepository.staff())
     EventEffect(events) { event ->
     }
-    StaffUiState(
+    if (staff.isEmpty()) return@providePresenterDefaults StaffUiState.Loading(userMessageStateHolder)
+    StaffUiState.Exists(
         staff = staff,
         userMessageStateHolder = userMessageStateHolder,
     )

@@ -393,6 +393,8 @@ internal fun EditScreen(
     var nickname by rememberSaveable { mutableStateOf(uiState.nickname) }
     var occupation by rememberSaveable { mutableStateOf(uiState.occupation) }
     var link by rememberSaveable { mutableStateOf(uiState.link) }
+    var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
+    val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
     var selectedCardType by rememberSaveable { mutableStateOf(uiState.cardType) }
 
     val isValidInputs by remember(uiState.image) {
