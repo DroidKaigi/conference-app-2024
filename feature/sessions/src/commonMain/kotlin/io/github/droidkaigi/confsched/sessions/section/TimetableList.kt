@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -17,7 +18,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
@@ -71,6 +71,7 @@ internal fun TimetableList(
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     contentPadding: PaddingValues,
+    timetableItemTagsContent: @Composable RowScope.(TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     nestedScrollStateHolder: TimetableNestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(true),
     highlightWord: String = "",
@@ -178,12 +179,7 @@ internal fun TimetableList(
                                             tagColor = LocalRoomTheme.current.primaryColor,
                                             modifier = Modifier.background(LocalRoomTheme.current.containerColor),
                                         )
-                                        timetableItem.language.labels.forEach { label ->
-                                            TimetableItemTag(
-                                                tagText = label,
-                                                tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                            )
-                                        }
+                                        timetableItemTagsContent(timetableItem)
                                     },
                                     onTimetableItemClick = onTimetableItemClick,
                                 )
