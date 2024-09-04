@@ -99,7 +99,7 @@ fun TimetableItemDetailHeadline(
                     .height(56.dp)
                     .onSizeChanged { size ->
                         rowWidth = size.width
-                    }
+                    },
             ) {
                 TimetableItemTag(
                     modifier = Modifier
@@ -128,13 +128,13 @@ fun TimetableItemDetailHeadline(
                 LanguageSwitcher(
                     currentLang = currentLang,
                     onLanguageSelect = onLanguageSelect,
-                    isVisible = isAnimationFinished && isLangSelectable && hasSpaceForLanguageSwitcher
+                    isVisible = isAnimationFinished && isLangSelectable && hasSpaceForLanguageSwitcher,
                 )
             }
             LanguageSwitcher(
                 currentLang = currentLang,
                 onLanguageSelect = onLanguageSelect,
-                isVisible = isAnimationFinished && isLangSelectable && hasSpaceForLanguageSwitcher.not()
+                isVisible = isAnimationFinished && isLangSelectable && hasSpaceForLanguageSwitcher.not(),
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -208,7 +208,7 @@ private fun LanguageSwitcher(
             },
     ) {
         Row(
-            modifier = modifier
+            modifier = Modifier
                 .selectableGroup()
                 .semantics {
                     contentDescription = switcherContentDescription
