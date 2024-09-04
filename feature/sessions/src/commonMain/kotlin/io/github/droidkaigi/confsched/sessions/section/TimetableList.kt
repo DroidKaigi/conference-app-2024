@@ -106,7 +106,7 @@ internal fun TimetableList(
         nestedScrollStateHolder = nestedScrollStateHolder,
     )
 
-    LaunchedEffect(uiState) {
+    LaunchedEffect(Unit) {
         if (enableAutoScrolling) {
             val progressingSessionIndex = uiState.timetableItemMap.keys
                 .run {
