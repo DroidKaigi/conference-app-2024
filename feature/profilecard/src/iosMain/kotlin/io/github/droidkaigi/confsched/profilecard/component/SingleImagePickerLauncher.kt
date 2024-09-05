@@ -6,9 +6,9 @@ import kotlinx.coroutines.CoroutineScope
 
 @Composable
 internal actual fun rememberCroppingImagePickerLauncher(
-    scope: CoroutineScope,
     onCropImage: (ByteArray) -> Unit,
     onSelectedImage: (ByteArray) -> Unit,
+    scope: CoroutineScope,
 ): ImagePickerLauncher {
     return rememberSingleImagePickerLauncher(scope) {
         onSelectedImage(it)

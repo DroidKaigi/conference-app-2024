@@ -33,9 +33,9 @@ internal fun PhotoPickerButton(
 
 @Composable
 internal expect fun rememberCroppingImagePickerLauncher(
-    scope: CoroutineScope = rememberCoroutineScope(),
     onCropImage: (ByteArray) -> Unit,
     onSelectedImage: (ByteArray) -> Unit,
+    scope: CoroutineScope = rememberCoroutineScope(),
 ): ImagePickerLauncher
 
 @Composable
