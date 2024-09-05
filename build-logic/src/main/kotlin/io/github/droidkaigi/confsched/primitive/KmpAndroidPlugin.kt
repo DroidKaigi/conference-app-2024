@@ -16,7 +16,7 @@ class KmpAndroidPlugin : Plugin<Project> {
             kotlin {
                 androidTarget {
                     compilations.all {
-                        libraryAndroid {
+                        libraryAndroidOptions {
                             compileTaskProvider.configure {
                                 compilerOptions {
                                     jvmTarget.set(JVM_11)
