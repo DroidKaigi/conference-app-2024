@@ -18,10 +18,10 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -31,9 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -47,6 +45,7 @@ import conference_app_2024.feature.sessions.generated.resources.timeline_view
 import conference_app_2024.feature.sessions.generated.resources.timetable
 import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.rememberEventFlow
+import io.github.droidkaigi.confsched.designsystem.component.AutoSizeText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -66,6 +65,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
+const val TimetableTitleTestTag = "TimetableTitle"
 const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
 fun NavGraphBuilder.nestedSessionScreens(
     onSearchClick: () -> Unit,
@@ -158,12 +158,11 @@ private fun TimetableScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(
+                        AutoSizeText(
+                            modifier = Modifier.testTag(TimetableTitleTestTag).weight(1f),
                             text = stringResource(SessionsRes.string.timetable),
-                            fontSize = 24.sp,
-                            lineHeight = 32.sp,
-                            fontWeight = FontWeight.W400,
-                            modifier = Modifier.weight(1F),
+                            style = MaterialTheme.typography.headlineSmall,
+                            maxLines = 1,
                         )
                         IconButton(
                             onClick = dropUnlessResumed(block = onSearchClick),

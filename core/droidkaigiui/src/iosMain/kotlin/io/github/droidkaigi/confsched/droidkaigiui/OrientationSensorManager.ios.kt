@@ -35,7 +35,8 @@ internal class IosOrientationSensorManager(
                 onOrientationChanged(
                     Orientation(
                         azimuth = motion.attitude.yaw.toFloat(),
-                        pitch = motion.attitude.pitch.toFloat(),
+                        // Unlike Android, iOS uses a left-handed coordinate system, so we need to invert the pitch value.
+                        pitch = -motion.attitude.pitch.toFloat(),
                         roll = motion.attitude.roll.toFloat(),
                     ),
                 )
