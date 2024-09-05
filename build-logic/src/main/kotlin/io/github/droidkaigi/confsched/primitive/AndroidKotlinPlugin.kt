@@ -2,7 +2,6 @@ package io.github.droidkaigi.confsched.primitive
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 
@@ -20,21 +19,19 @@ class AndroidKotlinPlugin : Plugin<Project> {
             }
 
             android {
-                kotlinAndroidOptions {
-                    kotlinAndroid {
-                        compilerOptions {
-                            // Treat all Kotlin warnings as errors (disabled by default)
-                            allWarningsAsErrors.set(properties["warningsAsErrors"] as? Boolean ?: false)
+                kotlinAndroid {
+                    compilerOptions {
+                        // Treat all Kotlin warnings as errors (disabled by default)
+                        allWarningsAsErrors.set(properties["warningsAsErrors"] as? Boolean ?: false)
 
-                            freeCompilerArgs.addAll(listOf(
+                        freeCompilerArgs.addAll(listOf(
 //                                "-opt-in=kotlin.RequiresOptIn",
-                                // Enable experimental coroutines APIs, including Flow
+                            // Enable experimental coroutines APIs, including Flow
 //                                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                                "-Xcontext-receivers"
-                            ))
+                            "-Xcontext-receivers"
+                        ))
 
-                            jvmTarget.set(JVM_11)
-                        }
+                        jvmTarget.set(JVM_11)
                     }
                 }
             }
@@ -45,9 +42,4 @@ class AndroidKotlinPlugin : Plugin<Project> {
             }
         }
     }
-
-    private fun Project.kotlinAndroid(configure: org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension.() -> Unit) {
-        extensions.configure(configure)
-    }
-
 }
