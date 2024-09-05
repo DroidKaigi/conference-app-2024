@@ -81,6 +81,7 @@ public struct TimetableView: View {
     }
 }
 
+@MainActor
 struct TimetableListView: View {
     private let store: StoreOf<TimetableReducer>
 
