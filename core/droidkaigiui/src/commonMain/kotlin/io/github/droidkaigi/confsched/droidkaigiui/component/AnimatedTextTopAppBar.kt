@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
@@ -17,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
+import io.github.droidkaigi.confsched.designsystem.component.AutoSizeText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -38,7 +38,7 @@ fun AnimatedTextTopAppBar(
     TopAppBar(
         title = {
             Box(modifier = Modifier.fillMaxWidth()) {
-                Text(
+                AutoSizeText(
                     text = title,
                     color = textColor,
                     modifier = Modifier
@@ -47,10 +47,11 @@ fun AnimatedTextTopAppBar(
                             alpha = 1f - transitionFraction
                         },
                     textAlign = TextAlign.Start,
+                    maxLines = 1,
                     style = MaterialTheme.typography.headlineSmall,
                 )
 
-                Text(
+                AutoSizeText(
                     text = title,
                     color = textColor,
                     modifier = Modifier
@@ -60,6 +61,7 @@ fun AnimatedTextTopAppBar(
                             alpha = transitionFraction
                         },
                     textAlign = TextAlign.Center,
+                    maxLines = 1,
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
