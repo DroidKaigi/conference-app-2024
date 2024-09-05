@@ -86,6 +86,8 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableGridItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridRooms
 import io.github.droidkaigi.confsched.sessions.section.ScreenScrollState.Companion
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.datetime.DateTimeUnit
@@ -116,6 +118,7 @@ fun TimetableGrid(
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
+    scrolledToCurrentTimeState: ScrolledToCurrentTimeState = ScrolledToCurrentTimeState(),
 ) {
     TimetableGrid(
         timetable = uiState.timetable,
@@ -125,6 +128,7 @@ fun TimetableGrid(
         onTimetableItemClick = onTimetableItemClick,
         modifier = modifier,
         contentPadding = contentPadding,
+        scrolledToCurrentTimeState = scrolledToCurrentTimeState,
     )
 }
 
@@ -138,6 +142,7 @@ fun TimetableGrid(
     onTimetableItemClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
+    scrolledToCurrentTimeState: ScrolledToCurrentTimeState = ScrolledToCurrentTimeState(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val layoutDirection = LocalLayoutDirection.current
@@ -184,6 +189,7 @@ fun TimetableGrid(
                     start = 16.dp + contentPadding.calculateStartPadding(layoutDirection),
                     end = 16.dp + contentPadding.calculateEndPadding(layoutDirection),
                 ),
+                scrolledToCurrentTimeState = scrolledToCurrentTimeState,
             ) { timetableItem, itemHeightPx ->
                 val timetableGridItemModifier = if (sharedTransitionScope != null && animatedScope != null) {
                     with(sharedTransitionScope) {
@@ -220,6 +226,7 @@ fun TimetableGrid(
     selectedDay: DroidKaigi2024Day,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
+    scrolledToCurrentTimeState: ScrolledToCurrentTimeState = ScrolledToCurrentTimeState(),
     content: @Composable (TimetableItem, Int) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -256,42 +263,33 @@ fun TimetableGrid(
     val currentTimeDotRadius = with(timetableState.density) { TimetableSizes.currentTimeDotRadius.toPx() }
 
     LaunchedEffect(Unit) {
-        val progressingSession = timetable.timetableItems.timetableItems
-            .run {
-                // Insert dummy at a position after the start of the last session to allow scrolling
-                val endOfTheDayInstant = first().startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
-                    .date
-                    .plus(1, DateTimeUnit.DAY)
-                    .atStartOfDayIn(TimeZone.currentSystemDefault())
-                plus(
-                    Session.Companion.fake().copy(
-                        startsAt = endOfTheDayInstant,
-                        endsAt = endOfTheDayInstant,
-                    ),
-                )
-            }
-            .windowed(2, 1, true)
-            .find { clock.now() in it.first().startsAt..it.last().startsAt }
-            ?.first()
+        if (scrolledToCurrentTimeState.inTimetableGrid.not()) {
+            val progressingSession = timetable.timetableItems.timetableItems
+                .insertDummyEndOfTheDayItem() // Insert dummy at a position after last session to allow scrolling
+                .windowed(2, 1, true)
+                .find { clock.now() in it.first().startsAt..it.last().startsAt }
+                ?.firstOrNull()
 
-        progressingSession?.let { session ->
-            val timeZone = TimeZone.currentSystemDefault()
-            val period = with(session.startsAt) {
-                toLocalDateTime(timeZone)
-                    .date.atTime(10, 0)
-                    .toInstant(timeZone)
-                    .periodUntil(this, timeZone)
+            progressingSession?.let { session ->
+                val timeZone = TimeZone.currentSystemDefault()
+                val period = with(session.startsAt) {
+                    toLocalDateTime(timeZone)
+                        .date.atTime(10, 0)
+                        .toInstant(timeZone)
+                        .periodUntil(this, timeZone)
+                }
+                val minuteHeightPx =
+                    with(density) { TimetableSizes.minuteHeight.times(verticalScale).toPx() }
+                val scrollOffsetY =
+                    -with(period) { hours * minuteHeightPx * 60 + minutes * minuteHeightPx }
+                timetableScreen.scroll(
+                    Offset(0f, scrollOffsetY),
+                    0,
+                    Offset.Zero,
+                    nestedScrollDispatcher,
+                )
+                scrolledToCurrentTimeState.scrolledInTimetableGrid()
             }
-            val minuteHeightPx =
-                with(density) { TimetableSizes.minuteHeight.times(verticalScale).toPx() }
-            val scrollOffsetY =
-                -with(period) { hours * minuteHeightPx * 60 + minutes * minuteHeightPx }
-            timetableScreen.scroll(
-                Offset(0f, scrollOffsetY),
-                0,
-                Offset.Zero,
-                nestedScrollDispatcher,
-            )
         }
     }
 
@@ -1028,4 +1026,18 @@ object TimetableSizes {
     val lineStrokeSize = 1.dp
     val minuteHeight = 4.dp
     val currentTimeDotRadius = 6.dp
+}
+
+private fun PersistentList<TimetableItem>.insertDummyEndOfTheDayItem(): PersistentList<TimetableItem> {
+    val endOfTheDayInstant =
+        first().startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
+            .date
+            .plus(1, DateTimeUnit.DAY)
+            .atStartOfDayIn(TimeZone.currentSystemDefault())
+    return plus(
+        Session.Companion.fake().copy(
+            startsAt = endOfTheDayInstant,
+            endsAt = endOfTheDayInstant,
+        ),
+    ).toPersistentList()
 }
