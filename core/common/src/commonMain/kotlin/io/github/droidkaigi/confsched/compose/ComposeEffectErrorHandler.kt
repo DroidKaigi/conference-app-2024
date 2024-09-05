@@ -5,7 +5,9 @@ import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.ProvidedValue
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.currentComposer
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.github.takahirom.rin.produceRetainedState
 import kotlinx.coroutines.CancellationException
@@ -52,6 +54,28 @@ fun SafeLaunchedEffect(key: Any?, block: suspend CoroutineScope.() -> Unit) {
         } catch (e: Exception) {
             ensureActive()
             e.printStackTrace()
+            composeEffectErrorHandler.emit(e)
+        }
+    }
+}
+
+@Composable
+fun <T : R, R> StateFlow<T>.safeCollectAsState(
+    context: CoroutineContext = EmptyCoroutineContext,
+): State<R> {
+    val composeEffectErrorHandler = LocalComposeEffectErrorHandler.current
+    return produceState(value, this, context) {
+        try {
+            if (context == EmptyCoroutineContext) {
+                collect { value = it }
+            } else {
+                withContext(context) {
+                    collect { value = it }
+                }
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Throwable) {
             composeEffectErrorHandler.emit(e)
         }
     }
