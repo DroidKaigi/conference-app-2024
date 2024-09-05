@@ -1,6 +1,6 @@
 package io.github.droidkaigi.confsched.profilecard.component
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
@@ -18,12 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.drawscope.ContentDrawScope
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -147,8 +148,15 @@ private fun ShadowedImage(
     cardHeightPx: Int,
     modifier: Modifier = Modifier,
 ) {
+    val sweepGradient = Brush.sweepGradient(
+        colors = listOf(
+            Color.Black.copy(alpha = 0.1f),
+            Color.Transparent,
+        )
+    )
     val density = LocalDensity.current
-    Box(
+
+    Canvas(
         modifier = modifier
             .offset(
                 x = with(density) { offsetX.toDp() },
@@ -159,55 +167,18 @@ private fun ShadowedImage(
                 width = with(density) { cardWidthPx.toDp() },
                 height = with(density) { cardHeightPx.toDp() },
             )
-            .drawWithContent {
-                // Draw the blurred shadow behind the actual content.
-                // This function first draws a shadow by calling drawBlurredShadow(),
-                // then draws the actual content (the image) with drawContent().
-                // By doing this, we ensure the shadow appears behind the image,
-                // creating a layered effect with the shadow in the background.
-                drawBlurredShadow(size, Color.Black.copy(alpha = 0.2f))
-                // The child element Image is drawn by calling drawContent.
-                drawContent()
-            },
     ) {
-        Image(
-            bitmap = imageBitmap,
-            contentDescription = null,
-            modifier = Modifier.graphicsLayer(),
-        )
-    }
-}
-
-/**
- * Draws a blurred shadow effect on the canvas.
- *
- * This function creates a blurred shadow by drawing multiple layers of rectangles with varying offsets
- * and transparency. The shadow effect is created by gradually increasing the offset and reducing the
- * opacity of each rectangle, simulating the natural fading of a shadow.
- *
- * @param size The size of the base rectangle to draw the shadow around.
- * @param color The base color of the shadow. The alpha channel will be adjusted for the blur effect.
- */
-private fun ContentDrawScope.drawBlurredShadow(size: Size, color: Color) {
-    // The number of shadow layers determines the smoothness of the shadow.
-    // Fewer layers result in a less smooth shadow.
-    val shadowLayers = 30
-
-    // Controls how much the shadow spreads out.
-    // A larger number results in a more diffused and smoother shadow.
-    val maxOffset = 20f
-
-    for (i in 1..shadowLayers) {
-        val offset = i * (maxOffset / shadowLayers)
-        drawRect(
-            // The shadow is darkest at its base, and becomes lighter as it extends further away.
-            color = color.copy(alpha = 0.05f / i),
-            // The shadow extends diagonally from the upper left to the lower right.
-            topLeft = Offset(offset, offset),
-            // Increasing the size of the rectangles with each iteration creates the effect of a shadow
-            // that gets thinner and more diffused the further it is from the base.
-            size = Size(size.width + offset, size.height + offset),
-        )
+        rotate(degrees = 180f) {
+            for (i in 1..15) {
+                drawRoundRect(
+                    brush = sweepGradient,
+                    size = Size(cardWidthPx.toFloat(), cardHeightPx.toFloat()),
+                    topLeft = Offset(-i.toFloat(), -i.toFloat()),
+                    cornerRadius = CornerRadius(with(density) { 16.toDp().toPx() })
+                )
+            }
+        }
+        drawImage(imageBitmap)
     }
 }
 
