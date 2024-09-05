@@ -209,7 +209,8 @@ let package = Package(
             dependencies: [
                 .tca,
                 .kmpClient,
-                .theme
+                .theme,
+                .commonComponents,
             ]
         ),
         .testTarget(
