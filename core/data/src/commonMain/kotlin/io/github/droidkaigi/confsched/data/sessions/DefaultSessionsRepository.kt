@@ -17,7 +17,6 @@ import io.github.droidkaigi.confsched.model.SessionsRepository
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItemId
-import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
@@ -91,21 +90,12 @@ public class DefaultSessionsRepository(
     @Composable
     public override fun timetable(): Timetable {
         var first by remember { mutableStateOf(true) }
-        var favoriteSessions: PersistentSet<TimetableItemId> by remember {
-            mutableStateOf(userDataStore.getFavoriteSessionMemoryCacheOrNull ?: persistentSetOf())
-        }
         SafeLaunchedEffect(first) {
             if (first) {
                 Logger.d("DefaultSessionsRepository onStart getTimetableStream()")
                 refreshSessionData()
                 Logger.d("DefaultSessionsRepository onStart fetched")
                 first = false
-            }
-        }
-
-        SafeLaunchedEffect(Unit) {
-            userDataStore.getFavoriteSessionStream().collect {
-                favoriteSessions = it
             }
         }
 
@@ -119,6 +109,10 @@ public class DefaultSessionsRepository(
                 emitAll(sessionCacheDataStore.getTimetableStream())
             }
         }.safeCollectAsRetainedState(Timetable())
+        val favoriteSessions by remember {
+            userDataStore.getFavoriteSessionStream()
+        }.safeCollectAsRetainedState(persistentSetOf())
+
         Logger.d { "DefaultSessionsRepository timetable() count=${timetable.timetableItems.size}" }
         return timetable.copy(bookmarks = favoriteSessions)
     }
