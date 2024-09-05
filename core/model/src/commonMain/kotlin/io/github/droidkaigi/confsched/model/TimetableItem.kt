@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -78,6 +79,14 @@ public sealed class TimetableItem {
         endsAt.toTimetableTimeString()
     }
 
+    public val startsLocalTime: LocalTime by lazy {
+        startsAt.toLocalTime()
+    }
+
+    public val endsLocalTime: LocalTime by lazy {
+        endsAt.toLocalTime()
+    }
+
     private val minutesString: String by lazy {
         val minutes = (endsAt - startsAt)
             .toComponents { minutes, _, _ -> minutes }
@@ -119,9 +128,14 @@ public sealed class TimetableItem {
     }
 }
 
-public fun Instant.toTimetableTimeString(): String {
+private fun Instant.toTimetableTimeString(): String {
     val localDate = toLocalDateTime(TimeZone.currentSystemDefault())
     return "${localDate.hour}".padStart(2, '0') + ":" + "${localDate.minute}".padStart(2, '0')
+}
+
+private fun Instant.toLocalTime(): LocalTime {
+    val localDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    return localDateTime.time
 }
 
 public fun Session.Companion.fake(): Session {

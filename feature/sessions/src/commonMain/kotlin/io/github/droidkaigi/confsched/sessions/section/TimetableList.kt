@@ -45,7 +45,6 @@ import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedT
 import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
-import io.github.droidkaigi.confsched.model.toTimetableTimeString
 import io.github.droidkaigi.confsched.sessions.component.TimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollConnection
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollStateHolder
@@ -54,11 +53,9 @@ import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentState
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.PersistentMap
 import kotlinx.collections.immutable.toImmutableSet
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
-import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 
 const val TimetableListTestTag = "TimetableList"
@@ -68,10 +65,17 @@ data class TimetableListUiState(
     val timetable: Timetable,
 ) {
     data class TimeSlot(
-        val startTime: Instant,
-        val endTime: Instant,
+        val startTime: LocalTime,
+        val endTime: LocalTime,
     ) {
+        val startTimeString: String get() = startTime.toTimetableTimeString()
+        val endTimeString: String get() = endTime.toTimetableTimeString()
+
         val key: String get() = "$startTime-$endTime"
+
+        private fun LocalTime.toTimetableTimeString(): String {
+            return "$hour".padStart(2, '0') + ":" + "$minute".padStart(2, '0')
+        }
     }
 }
 
@@ -112,7 +116,7 @@ internal fun TimetableList(
             val progressingSessionIndex = uiState.timetableItemMap.keys
                 .insertDummyEndOfTheDayItem() // Insert dummy at a position after last session to allow scrolling
                 .windowed(2, 1, true)
-                .indexOfFirst { clock.now() in it.first().startTime..it.last().startTime }
+                .indexOfFirst { clock.now().toLocalTime() in it.first().startTime..it.last().startTime }
 
             progressingSessionIndex.takeIf { it != -1 }?.let {
                 scrollState.scrollToItem(it)
@@ -165,8 +169,8 @@ internal fun TimetableList(
                             timeTextHeight = it.size.height
                         }
                         .offset { IntOffset(0, timeTextOffset) },
-                    startTime = time.startTime.toTimetableTimeString(),
-                    endTime = time.endTime.toTimetableTimeString(),
+                    startTime = time.startTimeString,
+                    endTime = time.endTimeString,
                 )
                 Spacer(modifier = Modifier.width(12.dp))
                 Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -230,14 +234,16 @@ internal fun TimetableList(
 }
 
 private fun ImmutableSet<TimeSlot>.insertDummyEndOfTheDayItem(): ImmutableSet<TimeSlot> {
-    val endOfTheDayInstant = first().startTime.toLocalDateTime(TimeZone.currentSystemDefault())
-        .date
-        .plus(1, DateTimeUnit.DAY)
-        .atStartOfDayIn(TimeZone.currentSystemDefault())
+    val endOfTheDayInstant = LocalTime(23, 59, 59)
     return plus(
         TimeSlot(
             startTime = endOfTheDayInstant,
             endTime = endOfTheDayInstant,
         ),
     ).toImmutableSet()
+}
+
+private fun Instant.toLocalTime(): LocalTime {
+    val localDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    return localDateTime.time
 }
