@@ -152,7 +152,7 @@ private fun ShadowedImage(
         colors = listOf(
             Color.Black.copy(alpha = 0.1f),
             Color.Transparent,
-        )
+        ),
     )
     val density = LocalDensity.current
 
@@ -166,7 +166,7 @@ private fun ShadowedImage(
             .size(
                 width = with(density) { cardWidthPx.toDp() },
                 height = with(density) { cardHeightPx.toDp() },
-            )
+            ),
     ) {
         rotate(degrees = 180f) {
             for (i in 1..15) {
@@ -174,7 +174,7 @@ private fun ShadowedImage(
                     brush = sweepGradient,
                     size = Size(cardWidthPx.toFloat(), cardHeightPx.toFloat()),
                     topLeft = Offset(-i.toFloat(), -i.toFloat()),
-                    cornerRadius = CornerRadius(with(density) { 16.toDp().toPx() })
+                    cornerRadius = CornerRadius(with(density) { 16.toDp().toPx() }),
                 )
             }
         }
