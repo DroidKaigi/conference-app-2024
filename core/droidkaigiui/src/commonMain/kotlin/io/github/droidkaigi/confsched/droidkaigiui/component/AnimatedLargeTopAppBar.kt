@@ -14,7 +14,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -29,6 +28,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confsched.designsystem.component.AutoSizeText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -68,7 +68,7 @@ fun AnimatedLargeTopAppBar(
                 // No animation required as it is erased with alpha
                 exit = ExitTransition.None,
             ) {
-                Text(
+                AutoSizeText(
                     text = title,
                     modifier = Modifier.then(
                         when (isCenterTitle) {
@@ -82,6 +82,7 @@ fun AnimatedLargeTopAppBar(
                         },
                     ),
                     textAlign = TextAlign.Center,
+                    maxLines = 1,
                 )
             }
         },

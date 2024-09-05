@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.settings.section
 
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.HorizontalDivider
@@ -34,9 +33,7 @@ fun LazyListScope.accessibility(
 ) {
     item {
         Text(
-            modifier = Modifier
-                .height(40.dp)
-                .padding(top = 16.dp),
+            modifier = Modifier.padding(top = 16.dp),
             text = stringResource(SettingsRes.string.section_title_accessibility),
             style = MaterialTheme.typography.titleMedium,
         )

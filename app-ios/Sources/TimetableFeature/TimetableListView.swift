@@ -84,7 +84,7 @@ public struct TimetableView: View {
 struct TimetableListView: View {
     private let store: StoreOf<TimetableReducer>
 
-    public init(store: StoreOf<TimetableReducer>) {
+    init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
 
@@ -110,7 +110,8 @@ struct TimetableListView: View {
 
 struct TimetableGridView: View {
     private let store: StoreOf<TimetableReducer>
-    public init(store: StoreOf<TimetableReducer>) {
+
+    init(store: StoreOf<TimetableReducer>) {
         self.store = store
     }
 
@@ -204,7 +205,7 @@ struct TimeGroupMiniList: View {
 }
 
 struct DashedDivider: View {
-    public let axis: Axis
+    let axis: Axis
     
     var body: some View {
         let shape = LineShape(axis: axis)
@@ -219,7 +220,7 @@ struct DashedDivider: View {
 }
 
 struct LineShape: Shape {
-    public let axis: Axis
+    let axis: Axis
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
