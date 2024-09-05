@@ -20,6 +20,9 @@ public class DefaultProfileCardRepository(
     private val profileCardDataStore: ProfileCardDataStore,
     private val ioDispatcher: CoroutineDispatcher,
 ) : ProfileCardRepository {
+    private val profileImageInEditStateFlow = MutableStateFlow<ProfileImage?>(null)
+    private val profileImageCandidateStateFlow = MutableStateFlow<ProfileImage?>(null)
+
     @Composable
     override fun profileCard(): ProfileCard {
         val profileCard by remember {
@@ -49,9 +52,6 @@ public class DefaultProfileCardRepository(
                 .renderToBytes()
         }
     }
-
-    private val profileImageInEditStateFlow = MutableStateFlow<ProfileImage?>(null)
-    private val profileImageCandidateStateFlow = MutableStateFlow<ProfileImage?>(null)
 
     @Composable
     override fun profileImageInEdit(): ProfileImage? {
