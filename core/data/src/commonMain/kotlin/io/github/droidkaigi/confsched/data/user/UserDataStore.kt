@@ -8,20 +8,27 @@ import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import io.github.droidkaigi.confsched.model.TimetableItemId
 import kotlinx.collections.immutable.PersistentSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 
 public class UserDataStore(private val dataStore: DataStore<Preferences>) {
 
     private val mutableIdToken = MutableStateFlow<String?>(null)
     public val idToken: StateFlow<String?> = mutableIdToken
 
-    public fun getFavoriteSessionStream(): Flow<PersistentSet<TimetableItemId>> {
+    private val singletonCoroutineScope: CoroutineScope = CoroutineScope(Job())
+
+    public fun getFavoriteSessionStream(): StateFlow<PersistentSet<TimetableItemId>> {
         return dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
@@ -34,7 +41,11 @@ public class UserDataStore(private val dataStore: DataStore<Preferences>) {
                 (preferences[KEY_FAVORITE_SESSION_IDS]?.split(",") ?: listOf())
                     .map { TimetableItemId(it) }
                     .toPersistentSet()
-            }
+            }.stateIn(
+                scope = singletonCoroutineScope,
+                started = SharingStarted.WhileSubscribed(5_000),
+                initialValue = persistentSetOf()
+            )
     }
 
     public suspend fun toggleFavorite(id: TimetableItemId) {
