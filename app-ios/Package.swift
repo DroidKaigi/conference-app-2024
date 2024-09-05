@@ -210,6 +210,7 @@ let package = Package(
                 .tca,
                 .kmpClient,
                 .theme,
+                .model,
                 .commonComponents,
             ]
         ),
