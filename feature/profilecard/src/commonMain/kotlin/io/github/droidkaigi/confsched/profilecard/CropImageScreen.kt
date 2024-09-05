@@ -112,7 +112,7 @@ internal fun CropImageScreen(
             is CropImageScreenState.Init -> Unit
             is CropImageScreenState.Select -> {
                 Box(
-                    modifier = modifier.padding(contentPadding),
+                    modifier = Modifier.padding(contentPadding),
                 ) {
                     SelectScreen(
                         profileImage = uiState.profileImage,
@@ -143,7 +143,7 @@ internal fun CropImageScreen(
                     onCancel = {
                         eventEmitter.tryEmit(CropImageScreenEvent.Cancel)
                     },
-                    modifier = modifier.padding(contentPadding),
+                    modifier = Modifier.padding(contentPadding),
                 )
             }
         }
