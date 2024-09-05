@@ -1,13 +1,14 @@
 package io.github.droidkaigi.confsched.primitive
 
-import com.android.build.gradle.TestedExtension
+import org.gradle.api.Project
 import org.gradle.api.artifacts.MinimalExternalModuleDependency
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.kotlin.dsl.DependencyHandlerScope
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
+import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
-fun TestedExtension.kotlinOptions(block: KotlinJvmOptions.() -> Unit) {
-    (this as ExtensionAware).extensions.configure("kotlinOptions", block)
+fun Project.kotlinAndroidOptions(block: KotlinAndroidProjectExtension.() -> Unit) {
+    (this as ExtensionAware).extensions.configure(block)
 }
 
 fun DependencyHandlerScope.ksp(

@@ -1,9 +1,10 @@
 package io.github.droidkaigi.confsched.primitive
 
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 
 @Suppress("unused")
 class AndroidKotlinPlugin : Plugin<Project> {
@@ -13,22 +14,28 @@ class AndroidKotlinPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.android")
             }
             tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile::class.java) {
-                kotlinOptions.jvmTarget = "11"
+                compilerOptions {
+                    jvmTarget.set(JVM_11)
+                }
             }
 
             android {
-                kotlinOptions {
-                    // Treat all Kotlin warnings as errors (disabled by default)
-                    allWarningsAsErrors = properties["warningsAsErrors"] as? Boolean ?: false
+                kotlinAndroidOptions {
+                    kotlinAndroid {
+                        compilerOptions {
+                            // Treat all Kotlin warnings as errors (disabled by default)
+                            allWarningsAsErrors.set(properties["warningsAsErrors"] as? Boolean ?: false)
 
-                    freeCompilerArgs = freeCompilerArgs + listOf(
-//              "-opt-in=kotlin.RequiresOptIn",
-                        // Enable experimental coroutines APIs, including Flow
-//              "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                        "-Xcontext-receivers"
-                    )
+                            freeCompilerArgs.addAll(listOf(
+//                                "-opt-in=kotlin.RequiresOptIn",
+                                // Enable experimental coroutines APIs, including Flow
+//                                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                                "-Xcontext-receivers"
+                            ))
 
-                    jvmTarget = JavaVersion.VERSION_11.toString()
+                            jvmTarget.set(JVM_11)
+                        }
+                    }
                 }
             }
             dependencies {
@@ -38,4 +45,9 @@ class AndroidKotlinPlugin : Plugin<Project> {
             }
         }
     }
+
+    private fun Project.kotlinAndroid(configure: org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension.() -> Unit) {
+        extensions.configure(configure)
+    }
+
 }
