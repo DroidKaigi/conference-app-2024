@@ -143,7 +143,7 @@ internal fun profileCardScreenPresenter(
                 repository.setProfileImageInEdit(
                     ProfileImage(
                         bytes = card.image.decodeBase64Bytes(),
-                    )
+                    ),
                 )
                 ProfileCardUiType.Card
             }
