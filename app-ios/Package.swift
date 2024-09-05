@@ -105,8 +105,6 @@ let package = Package(
             dependencies: [
                 .kmpClient,
                 .kmpModule,
-                .firebaseAuth,
-                .firebaseRemoteConfig,
                 .tca,
                 .commonComponents,
             ]
@@ -116,8 +114,6 @@ let package = Package(
             dependencies: [
                 .app,
                 .timetableFeature,
-                .firebaseAuth,
-                .firebaseRemoteConfig,
                 .tca
             ]
         ),
