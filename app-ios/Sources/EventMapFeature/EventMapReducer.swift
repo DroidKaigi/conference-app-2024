@@ -2,7 +2,7 @@ import ComposableArchitecture
 import KMPClient
 import Model
 import Foundation
-@preconcurrency import shared
+import shared
 
 @Reducer
 public struct EventMapReducer: Sendable {
