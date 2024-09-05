@@ -44,7 +44,7 @@ public class DefaultSessionsRepository(
                 refreshSessionData()
                 emitAll(sessionCacheDataStore.getTimetableStream())
             },
-            userDataStore.getFavoriteSessionStream(),
+            userDataStore.getFavoriteSessionStream,
         ) { timetable, favorites ->
             timetable.copy(bookmarks = favorites)
         }
@@ -110,7 +110,7 @@ public class DefaultSessionsRepository(
             }
         }.safeCollectAsRetainedState(Timetable())
         val favoriteSessions by remember {
-            userDataStore.getFavoriteSessionStream()
+            userDataStore.getFavoriteSessionStream
         }.safeCollectAsState()
 
         Logger.d { "DefaultSessionsRepository timetable() count=${timetable.timetableItems.size}" }

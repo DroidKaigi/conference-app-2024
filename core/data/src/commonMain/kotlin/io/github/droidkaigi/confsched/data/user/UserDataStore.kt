@@ -28,8 +28,8 @@ public class UserDataStore(private val dataStore: DataStore<Preferences>) {
 
     private val singletonCoroutineScope: CoroutineScope = CoroutineScope(Job())
 
-    public fun getFavoriteSessionStream(): StateFlow<PersistentSet<TimetableItemId>> {
-        return dataStore.data
+    public val getFavoriteSessionStream: StateFlow<PersistentSet<TimetableItemId>> =
+        dataStore.data
             .catch { exception ->
                 if (exception is IOException) {
                     emit(emptyPreferences())
@@ -46,10 +46,9 @@ public class UserDataStore(private val dataStore: DataStore<Preferences>) {
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = persistentSetOf()
             )
-    }
 
     public suspend fun toggleFavorite(id: TimetableItemId) {
-        val updatedFavorites = getFavoriteSessionStream().first().toMutableSet()
+        val updatedFavorites = getFavoriteSessionStream.first().toMutableSet()
 
         if (updatedFavorites.contains(id)) {
             updatedFavorites.remove(id)
