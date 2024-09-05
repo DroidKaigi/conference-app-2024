@@ -60,7 +60,7 @@ public struct ContributorClient: Sendable {
 
 @DependencyClient
 public struct EventMapClient: Sendable {
-    public var streamEvents: @Sendable () throws -> AsyncThrowingStream<[EventMapEvent], any Error>
+    public var streamEvents: @Sendable () throws -> AsyncThrowingStream<[Model.EventMapEvent], any Error>
 }
 
 @DependencyClient

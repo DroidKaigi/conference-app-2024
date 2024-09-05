@@ -114,7 +114,39 @@ extension ContributorClient: DependencyKey {
 
 extension EventMapClient: DependencyKey {
     public static let liveValue: EventMapClient = .init {
-        eventMapRepository.getEventMapStream().eraseToThrowingStream()
+        eventMapRepository
+            .getEventMapStream()
+            .map {
+                $0.map {
+                    Model.EventMapEvent(
+                        name: .init(
+                            currentLangTitle: $0.name.currentLangTitle,
+                            enTitle: $0.name.enTitle,
+                            jaTitle: $0.name.jaTitle
+                        ),
+                        roomName: .init(
+                            currentLangTitle: $0.roomName.currentLangTitle,
+                            enTitle: $0.roomName.enTitle,
+                            jaTitle: $0.roomName.jaTitle
+                        ),
+                        roomIcon: RoomIcon(rawValue: $0.roomIcon.name.lowercased()) ?? .none,
+                        description_: .init(
+                            currentLangTitle: $0.description_.currentLangTitle,
+                            enTitle: $0.description_.enTitle,
+                            jaTitle: $0.description_.jaTitle
+                        ),
+                        moreDetailsUrl: $0.moreDetailsUrl.flatMap(URL.init(string:)),
+                        message: $0.message.map {
+                            .init(
+                                currentLangTitle: $0.currentLangTitle,
+                                enTitle: $0.enTitle,
+                                jaTitle: $0.jaTitle
+                            )
+                        }
+                    )
+                }
+            }
+            .eraseToThrowingStream()
     }
 }
 

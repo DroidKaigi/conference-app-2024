@@ -13,7 +13,7 @@ public struct EventMapReducer: Sendable {
     @ObservableState
     public struct State: Equatable {
         public var selectedFloorMap: FloorMap = .first
-        public var events: [EventMapEvent] = []
+        public var events: [Model.EventMapEvent] = []
         public var url: IdentifiableURL?
         
         public init() { }
@@ -32,7 +32,7 @@ public struct EventMapReducer: Sendable {
         }
         
         public enum Internal {
-            case response(Result<[EventMapEvent], any Error>)
+            case response(Result<[Model.EventMapEvent], any Error>)
         }
     }
     
