@@ -5,7 +5,7 @@ import Theme
 struct SwiftUIContributorView: View {
     private let store: StoreOf<ContributorReducer>
 
-    public init(store: StoreOf<ContributorReducer>) {
+    init(store: StoreOf<ContributorReducer>) {
         self.store = store
     }
 
