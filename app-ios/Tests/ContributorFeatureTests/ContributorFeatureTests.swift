@@ -23,7 +23,7 @@ final class ContributorFeatureTests: XCTestCase {
         }
 
         await store.send(.onAppear)
-        await store.receive(\.response) {
+        await store.receive(\.response.success) {
             $0.contributors = [
                 .init(id: 0, userName: "hoge", profileUrl: URL(string: "https://2024.droidkaigi.jp/"), iconUrl: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!),
                 .init(id: 0, userName: "fuga", profileUrl: nil, iconUrl: URL(string: "https://avatars.githubusercontent.com/u/10727543?s=200&v=4")!),
@@ -47,7 +47,7 @@ final class ContributorFeatureTests: XCTestCase {
         }
 
         await store.send(.onAppear)
-        await store.receive(\.response)
+        await store.receive(\.response.failure)
     }
     
     @MainActor
