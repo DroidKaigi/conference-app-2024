@@ -8,7 +8,7 @@ import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.text.TextLayoutResult
-import io.github.droidkaigi.confsched.droidkaigiui.CustomSemanticsProperties
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItem
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 
@@ -82,8 +82,8 @@ fun SemanticsNodeInteraction.assertLineCount(expectedCount: Int) {
             assertTrue(
                 "Node has unexpected line count (expected $expectedCount, but was ${result?.lineCount})",
                 result?.lineCount == expectedCount,
-			)
-		}
+            )
+        }
 }
 
 fun SemanticsNodeInteraction.assertSessionLanguageEquals(expected: String) {
@@ -91,12 +91,11 @@ fun SemanticsNodeInteraction.assertSessionLanguageEquals(expected: String) {
         .let { node ->
             val actual = node
                 .config
-                .getOrNull(CustomSemanticsProperties.SessionLanguage)
-                ?.tagName
+                .getOrNull(SemanticsProperties.TimetableItem)
 
             assertTrue(
                 "Node language $actual does not match expected language $expected",
-                actual == expected,
+                actual?.language?.toLang()?.tagName == expected,
             )
         }
 }
@@ -106,12 +105,11 @@ fun SemanticsNodeInteraction.assertSessionLanguageDoesNotEqual(value: String) {
         .let { node ->
             val actual = node
                 .config
-                .getOrNull(CustomSemanticsProperties.SessionLanguage)
-                ?.tagName
+                .getOrNull(SemanticsProperties.TimetableItem)
 
             assertFalse(
                 "Node language matches language $value unexpectedly",
-                actual == value,
+                actual?.language?.toLang()?.tagName == value,
             )
         }
 }

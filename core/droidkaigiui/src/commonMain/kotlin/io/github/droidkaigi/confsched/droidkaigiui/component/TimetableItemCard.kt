@@ -43,6 +43,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
@@ -57,7 +59,6 @@ import conference_app_2024.core.droidkaigiui.generated.resources.not_bookmarked
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.ProvideRoomTheme
 import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
-import io.github.droidkaigi.confsched.droidkaigiui.CustomSemanticsProperties
 import io.github.droidkaigi.confsched.droidkaigiui.DroidKaigiUiRes
 import io.github.droidkaigi.confsched.droidkaigiui.animation.LocalFavoriteAnimationScope
 import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
@@ -69,6 +70,11 @@ const val TimetableItemCardBookmarkButtonTestTag = "TimetableItemCardBookmarkBut
 const val TimetableItemCardBookmarkedIconTestTag = "TimetableItemCardBookmarkedIcon"
 const val TimetableItemCardTestTag = "TimetableListItem"
 const val TimetableItemCardTitleTextTestTag = "TimetableItemCardTitleText"
+
+private val timetableItemSemanticsKey = SemanticsPropertyKey<TimetableItem>("TimetableItem")
+
+@Suppress("UnusedReceiverParameter")
+val SemanticsProperties.TimetableItem get() = timetableItemSemanticsKey
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -101,8 +107,7 @@ fun TimetableItemCard(
             modifier = modifier
                 .testTag(TimetableItemCardTestTag)
                 .semantics {
-                    this[CustomSemanticsProperties.SessionLanguage] =
-                        timetableItem.language.toLang()
+                    this[SemanticsProperties.TimetableItem] = timetableItem
                 }
                 .border(
                     border = BorderStroke(
