@@ -189,7 +189,7 @@ fun SearchScreen(
 
 @Preview
 @Composable
-fun SearchScreenPreview_Empty() {
+fun EmptySearchScreenPreview() {
     KaigiTheme {
         SearchScreen(
             uiState = SearchScreenUiState.Empty(

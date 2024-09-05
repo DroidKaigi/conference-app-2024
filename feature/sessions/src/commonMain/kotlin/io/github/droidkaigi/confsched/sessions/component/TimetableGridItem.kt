@@ -494,7 +494,7 @@ object TimetableGridItemSizes {
 
 @Preview
 @Composable
-fun PreviewTimetableGridItem() {
+fun TimetableGridItemPreview() {
     KaigiTheme {
         Surface {
             TimetableGridItem(
@@ -509,7 +509,7 @@ fun PreviewTimetableGridItem() {
 
 @Preview
 @Composable
-fun PreviewTimetableGridLongTitleItem() {
+fun TimetableGridLongTitleItemPreview() {
     val fake = Session.fake()
 
     val localDensity = LocalDensity.current
@@ -538,7 +538,7 @@ fun PreviewTimetableGridLongTitleItem() {
 
 @Preview
 @Composable
-fun PreviewTimetableGridMultiSpeakersItem() {
+fun TimetableGridMultiSpeakersItemPreview() {
     KaigiTheme {
         Surface {
             TimetableGridItem(
@@ -552,7 +552,7 @@ fun PreviewTimetableGridMultiSpeakersItem() {
 
 @Preview
 @Composable
-fun PreviewTimetableGridItemWelcomeTalk() {
+fun TimetableGridItemWelcomeTalkPreview() {
     KaigiTheme {
         Surface {
             TimetableGridItem(
@@ -597,7 +597,7 @@ fun PreviewTimetableGridItemWelcomeTalk() {
 
 @Preview
 @Composable
-fun PreviewTimetableGridItemMoreLongTitleItem() {
+fun TimetableGridItemMoreLongTitleItemPreview() {
     KaigiTheme {
         Surface {
             TimetableGridItem(
