@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import io.github.droidkaigi.confsched.droidkaigiui.WithDeviceOrientation
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
+import io.github.droidkaigi.confsched.profilecard.tiltEffect
 import kotlinx.coroutines.delay
 
 const val ProfileCardFlipCardTestTag = "ProfileCardFlipCardTestTag"
@@ -51,32 +52,33 @@ internal fun FlipCard(
     )
     val isBack by remember { derivedStateOf { rotation > 90f } }
 
-    Card(
-        modifier = modifier
-            .testTag(ProfileCardFlipCardTestTag)
-            .size(width = 300.dp, height = 380.dp)
-            .clickable { isFlipped = isFlipped.not() }
-            .draggable(
-                orientation = Orientation.Horizontal,
-                state = rememberDraggableState { delta ->
-                    if (isFlipped && delta > ChangeFlipCardDeltaThreshold) {
-                        isFlipped = false
-                    }
-                    if (isFlipped.not() && delta < -ChangeFlipCardDeltaThreshold) {
-                        isFlipped = true
-                    }
-                },
-            )
-            .graphicsLayer {
-                rotationY = rotation
-                cameraDistance = 12f * density
-            },
-        elevation = CardDefaults.cardElevation(10.dp),
-    ) {
-        if (isBack) { // Back
-            FlipCardBack(uiState, qrCodeImagePainter)
-        } else { // Front
-            WithDeviceOrientation {
+    WithDeviceOrientation {
+        Card(
+            modifier = modifier
+                .testTag(ProfileCardFlipCardTestTag)
+                .size(width = 300.dp, height = 380.dp)
+                .clickable { isFlipped = isFlipped.not() }
+                .draggable(
+                    orientation = Orientation.Horizontal,
+                    state = rememberDraggableState { delta ->
+                        if (isFlipped && delta > ChangeFlipCardDeltaThreshold) {
+                            isFlipped = false
+                        }
+                        if (isFlipped.not() && delta < -ChangeFlipCardDeltaThreshold) {
+                            isFlipped = true
+                        }
+                    },
+                )
+                .graphicsLayer {
+                    rotationY = rotation
+                    cameraDistance = 12f * density
+                }
+                .tiltEffect(this@WithDeviceOrientation),
+            elevation = CardDefaults.cardElevation(10.dp),
+        ) {
+            if (isBack) { // Back
+                FlipCardBack(uiState, qrCodeImagePainter)
+            } else { // Front
                 FlipCardFront(
                     modifier = Modifier.hologramaticEffect(this@WithDeviceOrientation),
                     uiState = uiState,

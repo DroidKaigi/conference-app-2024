@@ -5,17 +5,23 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
+import io.github.droidkaigi.confsched.testing.robot.DefaultSensorRobot.CustomShadowSensorManager
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.annotation.Config
 import javax.inject.Inject
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
+@Config(
+    shadows = [CustomShadowSensorManager::class],
+)
 @HiltAndroidTest
 class ProfileCardScreenTest(
     private val testCase: DescribedBehavior<ProfileCardScreenRobot>,
@@ -32,6 +38,11 @@ class ProfileCardScreenTest(
         runRobot(robot) {
             testCase.execute(robot)
         }
+    }
+
+    @After
+    fun tearDown() {
+        robot.cleanUp()
     }
 
     companion object {
@@ -119,6 +130,99 @@ class ProfileCardScreenTest(
                         captureScreenWithChecks {
                             checkCardScreenDisplayed()
                             checkProfileCardFrontDisplayed()
+                        }
+                    }
+                    describe("tilt tests") {
+                        doIt {
+                            setupMockSensor()
+                        }
+                        describe("tilt to horizontal") {
+                            doIt {
+                                tiltToHorizontal()
+                            }
+                            itShould("show card in horizontal") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to mid-range") {
+                            doIt {
+                                tiltToMidRange()
+                            }
+                            itShould("show card at mid-range") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to upper bound") {
+                            doIt {
+                                tiltToUpperBound()
+                            }
+                            itShould("show card at upper bound") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt pitch out of bounds") {
+                            doIt {
+                                tiltPitchOutOfBounds()
+                            }
+                            itShould("keep last valid pitch") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt roll out of bounds") {
+                            doIt {
+                                tiltRollOutOfBounds()
+                            }
+                            itShould("keep last valid roll") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt both axes out of bounds") {
+                            doIt {
+                                tiltBothAxesOutOfBounds()
+                            }
+                            itShould("keep last valid orientation") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to boundary") {
+                            doIt {
+                                tiltToPitchRollBoundary()
+                            }
+                            itShould("show card at boundary") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to opposite boundary") {
+                            doIt {
+                                tiltToPitchRollBoundaryOpposite()
+                            }
+                            itShould("show card at opposite boundary") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
                         }
                     }
                     describe("flip profile card") {

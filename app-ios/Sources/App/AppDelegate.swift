@@ -3,6 +3,7 @@ import KMPClient
 
 @Reducer
 public struct AppDelegateReducer {
+    @Dependency(\.firebaseAppClient) var firebaseAppClient
     public struct State: Equatable {
       public init() {}
     }
@@ -15,7 +16,7 @@ public struct AppDelegateReducer {
         Reduce { state, action in
             switch action {
             case .didFinishLaunching:
-                prepareFirebase()
+                firebaseAppClient.prepareFirebase()
 
                 return .none
             }

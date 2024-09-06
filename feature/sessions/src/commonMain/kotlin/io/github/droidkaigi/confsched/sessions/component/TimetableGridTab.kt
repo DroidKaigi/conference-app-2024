@@ -123,7 +123,7 @@ private fun FloorText(
 
 @Preview
 @Composable
-fun PreviewTimetableDayTab() {
+fun TimetableDayTabPreview() {
     KaigiTheme {
         Surface {
             TimetableDayTab(

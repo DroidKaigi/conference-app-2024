@@ -12,8 +12,8 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -32,7 +32,7 @@ import io.github.droidkaigi.confsched.designsystem.component.AutoSizeText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AnimatedLargeTopAppBar(
+fun AnimatedMediumTopAppBar(
     title: String,
     onBackClick: () -> Unit,
     navIconContentDescription: String?,
@@ -60,7 +60,7 @@ fun AnimatedLargeTopAppBar(
         }
     }
 
-    LargeTopAppBar(
+    MediumTopAppBar(
         title = {
             AnimatedVisibility(
                 visible = isCenterTitle != null,
@@ -77,6 +77,7 @@ fun AnimatedLargeTopAppBar(
                                     .padding(end = navigationIconWidthDp.dp)
                                     .fillMaxWidth()
                             }
+
                             false -> Modifier
                             null -> Modifier.alpha(0f)
                         },

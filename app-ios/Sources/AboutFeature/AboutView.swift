@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import SwiftUI
-import LicenseList
 import Theme
 
 @ViewAction(for: AboutReducer.self)

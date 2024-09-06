@@ -4,4 +4,8 @@
     <style name="Theme.KaigiApp" parent="android:Theme.Material.NoActionBar">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="Theme.KaigiApp.Licenses" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Overridden by v35 -->
+    </style>
 </resources>

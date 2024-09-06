@@ -1,7 +1,7 @@
 package io.github.droidkaigi.confsched.sessions.section
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -20,7 +20,9 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -29,6 +31,7 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimeLine
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.component.TimetableDayTab
+import io.github.droidkaigi.confsched.sessions.component.TimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.Empty
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState.GridTimetable
@@ -71,9 +74,8 @@ fun Timetable(
     Surface(
         modifier = modifier.padding(contentPadding.calculateTopPadding()),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
+        Box(
+            modifier = Modifier.fillMaxSize(),
         ) {
             TimetableDayTab(
                 selectedDay = selectedDay,
@@ -100,9 +102,7 @@ fun Timetable(
                         scrollState = scrollStates.getValue(selectedDay),
                         onTimetableItemClick = onTimetableItemClick,
                         onBookmarkClick = onFavoriteClick,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f),
+                        modifier = timetableModifier(nestedScrollStateHolder),
                         contentPadding = PaddingValues(
                             bottom = contentPadding.calculateBottomPadding(),
                             start = contentPadding.calculateStartPadding(layoutDirection),
@@ -119,9 +119,7 @@ fun Timetable(
                         timeLine = uiState.timeLine,
                         selectedDay = selectedDay,
                         onTimetableItemClick = onTimetableItemClick,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .weight(1f),
+                        modifier = timetableModifier(nestedScrollStateHolder),
                         contentPadding = PaddingValues(
                             bottom = contentPadding.calculateBottomPadding(),
                             start = contentPadding.calculateStartPadding(layoutDirection),
@@ -159,4 +157,20 @@ private fun rememberGridTimetableStates(): Map<DroidKaigi2024Day, TimetableState
         rememberTimetableGridState()
     }
     return remember { timetableStateMap }
+}
+
+@Composable
+private fun timetableModifier(
+    nestedScrollStateHolder: TimetableNestedScrollStateHolder,
+): Modifier {
+    val density = LocalDensity.current
+
+    return Modifier
+        .padding(
+            top = with(density) {
+                (nestedScrollStateHolder.uiState.scrollConnectionMinOffset + nestedScrollStateHolder.uiState.dayTabOffsetY).toDp()
+            },
+        )
+        .fillMaxSize()
+        .background(Color.Transparent)
 }

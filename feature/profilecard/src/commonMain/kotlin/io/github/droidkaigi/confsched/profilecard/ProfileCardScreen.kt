@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -78,6 +79,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
@@ -231,6 +233,7 @@ internal fun ProfileCardScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
     val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
@@ -256,6 +259,7 @@ internal fun ProfileCardScreen(
             .pointerInput(Unit) {
                 detectTapGestures {
                     keyboardController?.hide()
+                    focusManager.clearFocus()
                 }
             },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -374,18 +378,20 @@ internal fun EditScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    var nickname by remember { mutableStateOf(uiState.nickname) }
-    var occupation by remember { mutableStateOf(uiState.occupation) }
-    var link by remember { mutableStateOf(uiState.link) }
+    var nickname by rememberSaveable { mutableStateOf(uiState.nickname) }
+    var occupation by rememberSaveable { mutableStateOf(uiState.occupation) }
+    var link by rememberSaveable { mutableStateOf(uiState.link) }
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
-    var selectedCardType by remember { mutableStateOf(uiState.cardType) }
+    var selectedCardType by rememberSaveable { mutableStateOf(uiState.cardType) }
 
     val isValidInputs by remember {
         derivedStateOf {
             nickname.isNotEmpty() && occupation.isNotEmpty() && link.isNotEmpty() && image != null
         }
     }
+
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = modifier
@@ -435,6 +441,11 @@ internal fun EditScreen(
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
                 keyboardType = KeyboardType.Uri,
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                },
             ),
         )
 
@@ -520,7 +531,9 @@ private fun InputFieldWithError(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     maxLines: Int = 1,
+    singleLine: Boolean = true,
 ) {
     Column(modifier = modifier) {
         val isError = errorMessage.isNotEmpty()
@@ -539,7 +552,9 @@ private fun InputFieldWithError(
             isError = isError,
             shape = RoundedCornerShape(4.dp),
             keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
             maxLines = maxLines,
+            singleLine = singleLine,
             modifier = Modifier
                 .indicatorLine(
                     enabled = false,

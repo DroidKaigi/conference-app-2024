@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.favorites.generated.resources.empty_description
 import conference_app_2024.feature.favorites.generated.resources.empty_guide
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.favorites.FavoritesRes
 import io.github.droidkaigi.confsched.favorites.component.FavoriteFilters
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
@@ -154,7 +155,7 @@ private fun EmptyView(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(36.dp),
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = null,
-                tint = Color.Green,
+                tint = MaterialTheme.colorScheme.primaryFixed,
             )
         }
         Spacer(Modifier.height(12.dp))

@@ -5,7 +5,7 @@ import ComposableArchitecture
 final class SponsorFeatureTests: XCTestCase {
 
     @MainActor
-    func testExample() async throws {
+    func testOnAppear() async throws {
         let store = TestStore(initialState: SponsorReducer.State()) {
             SponsorReducer()
         } withDependencies: {

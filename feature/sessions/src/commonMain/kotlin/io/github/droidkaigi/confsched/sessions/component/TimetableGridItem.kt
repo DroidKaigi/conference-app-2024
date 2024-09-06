@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.testTag
@@ -151,45 +152,79 @@ fun TimetableGridItem(
                     },
                 ),
         ) {
-            Column(
+            Layout(
                 modifier = Modifier.weight(3f),
-                verticalArrangement = Arrangement.spacedBy(
-                    space = TimetableGridItemSizes.scheduleToTitleSpace,
-                    alignment = if (isShowingAllContent) Alignment.Top else Alignment.CenterVertically,
-                ),
-            ) {
-                if (isShowingAllContent) {
-                    Row(
-                        modifier = Modifier.weight(1f, fill = false),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Icon(
-                            modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
-                            imageVector = vectorResource(checkNotNull(timetableItem.room.icon)),
-                            contentDescription = timetableItem.room.name.currentLangTitle,
-                            tint = LocalRoomTheme.current.primaryColor,
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        var scheduleTextStyle = MaterialTheme.typography.labelSmall
-                        if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
-                            scheduleTextStyle =
-                                scheduleTextStyle.copy(fontSize = titleTextStyle.fontSize)
+                content = {
+                    if (isShowingAllContent) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                modifier = Modifier.height(TimetableGridItemSizes.scheduleHeight),
+                                imageVector = vectorResource(checkNotNull(timetableItem.room.icon)),
+                                contentDescription = timetableItem.room.name.currentLangTitle,
+                                tint = LocalRoomTheme.current.primaryColor,
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            var scheduleTextStyle = MaterialTheme.typography.labelSmall
+                            if (titleTextStyle.fontSize < scheduleTextStyle.fontSize) {
+                                scheduleTextStyle =
+                                    scheduleTextStyle.copy(fontSize = titleTextStyle.fontSize)
+                            }
+                            Text(
+                                text = "${timetableItem.startsTimeString}~${timetableItem.endsTimeString}",
+                                style = scheduleTextStyle,
+                                color = LocalRoomTheme.current.primaryColor,
+                            )
                         }
-                        Text(
-                            text = "${timetableItem.startsTimeString}~${timetableItem.endsTimeString}",
-                            style = scheduleTextStyle,
-                            color = LocalRoomTheme.current.primaryColor,
-                        )
                     }
-                }
 
-                Text(
-                    modifier = Modifier.weight(1f, fill = false),
-                    text = timetableItem.title.currentLangTitle,
-                    style = titleTextStyle,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
+                    Text(
+                        text = timetableItem.title.currentLangTitle,
+                        style = titleTextStyle,
+                        maxLines = 3,
+                        overflow = TextOverflow.Ellipsis,
+                        modifier = Modifier
+                            .padding(bottom = TimetableGridItemSizes.titleToSpeakerSpace),
+                    )
+                },
+                measurePolicy = { measurables, constraints ->
+                    if (isShowingAllContent && measurables.size > 1) {
+                        // Layout if `isShowingAllContent` is `true`
+                        val scheduleRowHeight = measurables[0].minIntrinsicHeight(constraints.maxWidth)
+                        val remainingHeight = constraints.maxHeight - scheduleRowHeight - TimetableGridItemSizes.scheduleToTitleSpace.roundToPx()
+
+                        // Measure title text
+                        val titlePlaceable = measurables[measurables.lastIndex].measure(
+                            constraints.copy(minHeight = remainingHeight, maxHeight = remainingHeight),
+                        )
+
+                        layout(constraints.maxWidth, constraints.maxHeight) {
+                            // Measure schedule text line
+                            val schedulePlaceable = measurables[0].measure(
+                                constraints.copy(minHeight = scheduleRowHeight, maxHeight = scheduleRowHeight),
+                            )
+                            // Place schedule text line at the top
+                            schedulePlaceable.placeRelative(0, 0)
+                            // Title text placed below the schedule
+                            titlePlaceable.placeRelative(0, scheduleRowHeight + TimetableGridItemSizes.scheduleToTitleSpace.roundToPx())
+                        }
+                    } else {
+                        // Layout if only title is displayed
+                        val titleMinHeight = measurables[0].minIntrinsicHeight(constraints.maxWidth)
+                        // If `isShowingAllContent` is `false`, center the title.
+                        // (Same as  Alignment.CenterVertically in Column)
+                        val titlePlaceable = measurables[measurables.lastIndex].measure(
+                            constraints.copy(minHeight = titleMinHeight, maxHeight = titleMinHeight),
+                        )
+
+                        layout(constraints.maxWidth, constraints.maxHeight) {
+                            val titleY = (constraints.maxHeight - titlePlaceable.height) / 2
+                            titlePlaceable.placeRelative(0, titleY)
+                        }
+                    }
+                },
+            )
 
             val shouldShowError = timetableItem is Session && timetableItem.message != null
 
@@ -449,6 +484,7 @@ object TimetableGridItemSizes {
     val padding = 12.dp
     val scheduleToTitleSpace = 6.dp
     val scheduleHeight = 16.dp
+    val titleToSpeakerSpace = 4.dp
     val errorHeight = 16.dp
     val speakerHeight = 32.dp
     val minTitleFontSize = 10.sp
@@ -458,7 +494,7 @@ object TimetableGridItemSizes {
 
 @Preview
 @Composable
-fun PreviewTimetableGridItem() {
+fun TimetableGridItemPreview() {
     KaigiTheme {
         Surface {
             TimetableGridItem(
@@ -473,7 +509,7 @@ fun PreviewTimetableGridItem() {
 
 @Preview
 @Composable
-fun PreviewTimetableGridLongTitleItem() {
+fun TimetableGridLongTitleItemPreview() {
     val fake = Session.fake()
 
     val localDensity = LocalDensity.current
@@ -502,7 +538,7 @@ fun PreviewTimetableGridLongTitleItem() {
 
 @Preview
 @Composable
-fun PreviewTimetableGridMultiSpeakersItem() {
+fun TimetableGridMultiSpeakersItemPreview() {
     KaigiTheme {
         Surface {
             TimetableGridItem(
@@ -516,7 +552,7 @@ fun PreviewTimetableGridMultiSpeakersItem() {
 
 @Preview
 @Composable
-fun PreviewTimetableGridItemWelcomeTalk() {
+fun TimetableGridItemWelcomeTalkPreview() {
     KaigiTheme {
         Surface {
             TimetableGridItem(
@@ -554,6 +590,26 @@ fun PreviewTimetableGridItemWelcomeTalk() {
                 ),
                 onTimetableItemClick = {},
                 gridItemHeightPx = 154,
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun TimetableGridItemMoreLongTitleItemPreview() {
+    KaigiTheme {
+        Surface {
+            TimetableGridItem(
+                timetableItem = Session.fake().let {
+                    val longTitle = it.title.copy(
+                        jaTitle = it.title.jaTitle.repeat(10),
+                        enTitle = it.title.enTitle.repeat(10),
+                    )
+                    it.copy(title = longTitle, speakers = persistentListOf(it.speakers.first()))
+                },
+                onTimetableItemClick = {},
+                gridItemHeightPx = 500,
             )
         }
     }

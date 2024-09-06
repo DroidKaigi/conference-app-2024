@@ -15,14 +15,14 @@ final class TimetableDetail_iosTests: XCTestCase {
         
         // add favorite
         await store.send(.view(.favoriteButtonTapped))
-        await store.receive(\.favoriteResponse) {
+        await store.receive(\.favoriteResponse.success) {
             $0.isFavorited = !isFavorited
             $0.toast = .init(text: String(localized: "TimetableDetailAddBookmark", bundle: .module))
         }
         
         // remove favorite
         await store.send(.view(.favoriteButtonTapped))
-        await store.receive(\.favoriteResponse) {
+        await store.receive(\.favoriteResponse.success) {
             $0.isFavorited = isFavorited
         }
         
@@ -36,7 +36,7 @@ final class TimetableDetail_iosTests: XCTestCase {
         }
         
         await store.send(.view(.favoriteButtonTapped))
-        await store.receive(\.favoriteResponse)
+        await store.receive(\.favoriteResponse.failure)
     }
     
     @MainActor func testTappedURL() async throws {
@@ -58,7 +58,7 @@ final class TimetableDetail_iosTests: XCTestCase {
         }
         
         await store.send(.view(.calendarButtonTapped))
-        await store.receive(\.requestEventAccessResponse) {
+        await store.receive(\.requestEventAccessResponse.success) {
             $0.confirmationDialog = ConfirmationDialogState(title: {
                 TextState("")
             }, actions: {
@@ -71,7 +71,7 @@ final class TimetableDetail_iosTests: XCTestCase {
         await store.send(.confirmationDialog(.presented(.addEvent))) {
             $0.confirmationDialog = nil
         }
-        await store.receive(\.addEventResponse)
+        await store.receive(\.addEventResponse.success)
     }
     
     @MainActor func testTappedVideoButton() async throws {
