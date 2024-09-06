@@ -52,14 +52,14 @@ const val cropImageScreenRoute = "cropImage"
 
 fun NavGraphBuilder.cropImageScreens(
     onNavigationIconClick: () -> Unit,
-    onConfirm: () -> Unit,
+    onBackWithConfirm: () -> Unit,
 ) {
     composable(
         cropImageScreenRoute,
     ) {
         CropImageScreen(
             onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
-            onConfirm = onConfirm,
+            onBackWithConfirm = onBackWithConfirm,
         )
     }
 }
@@ -82,14 +82,14 @@ internal sealed interface CropImageScreenState {
 @Composable
 internal fun CropImageScreen(
     onNavigationIconClick: () -> Unit,
-    onConfirm: () -> Unit,
+    onBackWithConfirm: () -> Unit,
     modifier: Modifier = Modifier,
     eventFlow: EventFlow<CropImageScreenEvent> = rememberEventFlow(),
     uiState: CropImageScreenState = cropImageScreenPresenter(eventFlow),
 ) {
     LaunchedEffect(uiState is CropImageScreenState.Confirm && uiState.shouldBack) {
         if (uiState is CropImageScreenState.Confirm && uiState.shouldBack) {
-            onConfirm()
+            onBackWithConfirm()
         }
     }
 

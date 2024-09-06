@@ -194,7 +194,7 @@ private fun KaigiNavHost(
 
                 cropImageScreens(
                     onNavigationIconClick = navController::popBackStack,
-                    onConfirm = navController::popBackStack,
+                    onBackWithConfirm = navController::popBackStack,
                 )
             }
         }
