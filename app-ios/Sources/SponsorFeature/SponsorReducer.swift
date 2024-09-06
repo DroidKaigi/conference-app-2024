@@ -14,21 +14,29 @@ public struct SponsorReducer : Sendable {
         var platinums = [Sponsor]()
         var golds = [Sponsor]()
         var supporters = [Sponsor]()
+        var url: IdentifiableURL?
 
         public init() { }
     }
 
-    public enum Action : Sendable {
-        case onAppear
+    public enum Action : Sendable, BindableAction {
+        case binding(BindingAction<State>)
         case response(Result<[Sponsor], any Error>)
+        case view(View)
+        
+        public enum View: Sendable {
+            case onAppear
+            case sponsorTapped(URL)
+        }
     }
 
     public var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce { state, action in
             enum CancelID { case connection }
             
             switch action {
-            case .onAppear:
+            case .view(.onAppear):
                 return .run { send in
                     do {
                         for try await sponsors in try sponsorsData.streamSponsors() {
@@ -39,6 +47,11 @@ public struct SponsorReducer : Sendable {
                     }
                 }
                 .cancellable(id: CancelID.connection)
+                
+            case let .view(.sponsorTapped(url)):
+                state.url = IdentifiableURL(url)
+                return .none
+                
             case .response(.success(let sponsors)):
                 var platinums = [Sponsor]()
                 var golds = [Sponsor]()
@@ -59,8 +72,12 @@ public struct SponsorReducer : Sendable {
                 state.golds = golds
                 state.supporters = supporters
                 return .none
+
             case .response(.failure(let error)):
                 print(error)
+                return .none
+                
+            case .binding:
                 return .none
             }
         }
