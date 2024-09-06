@@ -267,7 +267,7 @@ fun TimetableGridItem(
                                 .size(TimetableGridItemSizes.errorHeight),
                             imageVector = Icons.Default.Error,
                             contentDescription = stringResource(SessionsRes.string.content_description_error_icon),
-                            tint = MaterialTheme.colorScheme.errorContainer,
+                            tint = MaterialTheme.colorScheme.error,
                         )
                     }
                 }
