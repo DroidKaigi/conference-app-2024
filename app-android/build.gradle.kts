@@ -25,7 +25,7 @@ android {
         buildConfig = true
     }
     defaultConfig {
-        versionCode = 5
+        versionCode = 6
         versionName = "1.2.0"
     }
     signingConfigs {
