@@ -225,7 +225,7 @@ private fun TimetableScreen(
 
 @Preview
 @Composable
-fun PreviewTimetableScreenDark() {
+fun TimetableScreenDarkPreview() {
     CompositionLocalProvider(LocalClock provides FakeClock) {
         KaigiTheme {
             TimetableScreen(
