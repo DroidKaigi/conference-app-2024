@@ -207,7 +207,7 @@ private fun EventMap(
 
 @Composable
 @Preview
-fun PreviewEventMapScreen() {
+fun EventMapScreenPreview() {
     EventMapScreen(
         uiState = EventMapUiState.Exists(
             userMessageStateHolder = rememberUserMessageStateHolder(),

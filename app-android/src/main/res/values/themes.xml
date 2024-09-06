@@ -6,6 +6,6 @@
     </style>
 
     <style name="Theme.KaigiApp.Licenses" parent="Theme.AppCompat.DayNight.DarkActionBar">
-        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+        <!-- Overridden by v35 -->
     </style>
 </resources>

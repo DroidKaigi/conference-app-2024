@@ -27,11 +27,13 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.sessions.TimetableScreen
 import io.github.droidkaigi.confsched.sessions.TimetableScreenTestTag
+import io.github.droidkaigi.confsched.sessions.TimetableTitleTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableUiTypeChangeButtonTestTag
 import io.github.droidkaigi.confsched.sessions.component.TimetableGridItemTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableGridTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableTabTestTag
+import io.github.droidkaigi.confsched.testing.utils.assertLineCount
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
@@ -41,9 +43,11 @@ class TimetableScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
     private val deviceSetupRobot: DefaultDeviceSetupRobot,
+    fontScaleRobot: DefaultFontScaleRobot,
 ) : ScreenRobot by screenRobot,
     TimetableServerRobot by timetableServerRobot,
-    DeviceSetupRobot by deviceSetupRobot {
+    DeviceSetupRobot by deviceSetupRobot,
+    FontScaleRobot by fontScaleRobot {
     val clickedItems = mutableSetOf<TimetableItem>()
 
     fun setupTimetableScreenContent(customTime: LocalDateTime? = null) {
@@ -66,6 +70,12 @@ class TimetableScreenRobot @Inject constructor(
             }
         }
         waitUntilIdle()
+    }
+
+    fun checkTitleDisplayedInSingleLine() {
+        composeTestRule
+            .onNode(hasTestTag(TimetableTitleTestTag))
+            .assertLineCount(1)
     }
 
     fun clickFirstSession() {

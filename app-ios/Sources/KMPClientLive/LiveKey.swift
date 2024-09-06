@@ -2,6 +2,8 @@ import Dependencies
 import shared
 import Model
 import Foundation
+import Firebase
+import KMPClient
 
 private var sessionsRepository: any SessionsRepository {
     Container.shared.get(type: (any SessionsRepository).self)
@@ -25,6 +27,26 @@ private var eventMapRepository: any EventMapRepository {
 
 private var profileCardRepository: any ProfileCardRepository {
     Container.shared.get(type: (any ProfileCardRepository).self)
+}
+
+extension FirebaseAppClient: DependencyKey {
+    public static var liveValue: Self {
+        Self(
+            prepareFirebase: {
+                FirebaseApp.configure()
+            }
+        )
+    }
+}
+
+extension ContainerClient: DependencyKey {
+    public static var liveValue: Self {
+        Self(
+            repositories: {
+                Container.shared.get(type: (any Repositories).self)
+            }
+        )
+    }
 }
 
 extension TimetableClient: DependencyKey {
