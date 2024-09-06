@@ -82,10 +82,10 @@ internal fun CropImageScreen(
     onNavigationIconClick: () -> Unit,
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier,
-    eventEmitter: EventFlow<CropImageScreenEvent> = rememberEventFlow(),
+    eventFlow: EventFlow<CropImageScreenEvent> = rememberEventFlow(),
     uiState: CropImageScreenState = cropImageScreenPresenter(
         onConfirm = onConfirm,
-        events = eventEmitter,
+        events = eventFlow,
     ),
 ) {
     Scaffold(
@@ -118,7 +118,7 @@ internal fun CropImageScreen(
                         profileImage = uiState.profileImage,
                         isCropButtonEnabled = !uiState.isProcessing,
                         onCrop = { cropRect ->
-                            eventEmitter.tryEmit(
+                            eventFlow.tryEmit(
                                 CropImageScreenEvent.Crop(
                                     rect = cropRect,
                                 ),
@@ -138,10 +138,10 @@ internal fun CropImageScreen(
                 ConfirmScreen(
                     profileImage = uiState.profileImage,
                     onConfirm = {
-                        eventEmitter.tryEmit(CropImageScreenEvent.Confirm)
+                        eventFlow.tryEmit(CropImageScreenEvent.Confirm)
                     },
                     onCancel = {
-                        eventEmitter.tryEmit(CropImageScreenEvent.Cancel)
+                        eventFlow.tryEmit(CropImageScreenEvent.Cancel)
                     },
                     modifier = Modifier.padding(contentPadding),
                 )
