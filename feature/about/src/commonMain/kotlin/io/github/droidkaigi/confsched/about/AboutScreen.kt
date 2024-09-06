@@ -72,6 +72,7 @@ data class AboutUiState(
 fun AboutScreen(
     onAboutItemClick: (AboutItem) -> Unit,
     contentPadding: PaddingValues = PaddingValues(),
+    modifier: Modifier = Modifier,
 ) {
     val uiState = aboutScreenPresenter()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -81,6 +82,7 @@ fun AboutScreen(
         snackbarHostState = snackbarHostState,
         contentPadding = contentPadding,
         onAboutItemClick = onAboutItemClick,
+        modifier = modifier,
     )
 }
 
