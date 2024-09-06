@@ -24,6 +24,12 @@ struct KmpPresenterContributorView: View {
             if let contributors = currentState.map(\.contributors) {
                 ScrollView {
                     LazyVStack(spacing: 0) {
+                        
+                        ContributorsCountItem(totalContributor: contributors.count)
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
+                        
                         ForEach(contributors, id: \.id) { value in
                             let contributor = Model.Contributor(
                                 id: Int(value.id),
