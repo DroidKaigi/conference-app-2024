@@ -34,6 +34,7 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.geometry.toRect
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.IntRect
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.roundToIntRect
@@ -49,6 +50,8 @@ import io.github.droidkaigi.confsched.profilecard.component.ImageCropAreaSelecto
 import kotlin.math.max
 
 const val cropImageScreenRoute = "cropImage"
+
+const val CropImageScreenTestTag = "CropImageScreenTestTag"
 
 fun NavGraphBuilder.cropImageScreens(
     onNavigationIconClick: () -> Unit,
@@ -78,6 +81,20 @@ internal sealed interface CropImageScreenState {
     ) : CropImageScreenState
 }
 
+@Composable
+fun CropImageScreen(
+    onNavigationIconClick: () -> Unit,
+    onBackWithConfirm: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    CropImageScreen(
+        onNavigationIconClick = onNavigationIconClick,
+        onBackWithConfirm = onBackWithConfirm,
+        modifier = modifier,
+        eventFlow = rememberEventFlow(),
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CropImageScreen(
@@ -94,7 +111,9 @@ internal fun CropImageScreen(
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .testTag(CropImageScreenTestTag)
+            .fillMaxSize(),
         topBar = {
             TopAppBar(
                 title = {
