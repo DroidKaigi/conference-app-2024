@@ -21,6 +21,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.contributors.generated.resources.contributor_title
 import io.github.droidkaigi.confsched.compose.rememberEventFlow
+import io.github.droidkaigi.confsched.contributors.component.ContributorsCountItem
 import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -33,6 +34,7 @@ const val contributorsScreenRoute = "contributors"
 const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
 const val ContributorsTestTag = "ContributorsTestTag"
 const val ContributorsItemTestTagPrefix = "ContributorsItemTestTag:"
+const val ContributorsTotalCountTestTag = "ContributorsTotalCountTestTag"
 
 fun NavGraphBuilder.contributorsScreens(
     onNavigationIconClick: () -> Unit,
@@ -138,6 +140,14 @@ private fun Contributors(
         modifier = modifier.testTag(ContributorsTestTag),
         contentPadding = contentPadding,
     ) {
+        item {
+            ContributorsCountItem(
+                totalContributor = contributors.size,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ContributorsTotalCountTestTag),
+            )
+        }
         items(contributors) {
             ContributorsItem(
                 contributor = it,
