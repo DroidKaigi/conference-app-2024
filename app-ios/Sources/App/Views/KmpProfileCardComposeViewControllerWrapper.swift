@@ -1,17 +1,20 @@
 import SwiftUI
 import shared
+import ComposableArchitecture
 
-public struct KmpProfileCardComposeViewControllerWrapper: UIViewControllerRepresentable {
-    public init() {}
-    
-    public func makeUIViewController(context: Context) -> UIViewController {
+struct KmpProfileCardComposeViewControllerWrapper: UIViewControllerRepresentable {
+    @Dependency(\.containerClient) var containerClient
+
+    init() {}
+
+    func makeUIViewController(context: Context) -> UIViewController {
         profileCardViewController(
-            repositories: Container.shared.get(type: (any Repositories).self),
+            repositories: containerClient.repositories(),
             onClickShareProfileCard: { image, text in
                 let activityViewController = UIActivityViewController(activityItems: [text, image], applicationActivities: nil)
                 if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }),
-                let rootViewController = keyWindow.rootViewController {
+                   let keyWindow = windowScene.windows.first(where: { $0.isKeyWindow }),
+                   let rootViewController = keyWindow.rootViewController {
                     rootViewController.present(activityViewController, animated: true, completion: nil)
                 } else {
                     print("Unable to find the root view controller.")
@@ -19,7 +22,7 @@ public struct KmpProfileCardComposeViewControllerWrapper: UIViewControllerRepres
             }
         )
     }
-    
-    public func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
     }
 }

@@ -1,6 +1,5 @@
 package io.github.droidkaigi.confsched.primitive
 
-import com.google.devtools.ksp.gradle.KspTaskNative
 import io.github.droidkaigi.confsched.primitive.Arch.ALL
 import io.github.droidkaigi.confsched.primitive.Arch.ARM
 import io.github.droidkaigi.confsched.primitive.Arch.ARM_SIMULATOR_DEBUG
@@ -10,8 +9,6 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.get
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.KotlinNativeLink
 
 @Suppress("unused")
 class KmpKtorfitPlugin : Plugin<Project> {
