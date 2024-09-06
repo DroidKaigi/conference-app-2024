@@ -6,6 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -55,6 +57,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val TimetableItemDetailHeadlineTestTag = "TimetableItemDetailHeadlineTestTag"
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TimetableItemDetailHeadline(
     currentLang: Lang?,
@@ -71,14 +74,16 @@ fun TimetableItemDetailHeadline(
             .padding(horizontal = 8.dp)
             .fillMaxWidth(),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        FlowRow {
             TimetableItemTag(
+                modifier = Modifier.align(Alignment.CenterVertically),
                 tagText = timetableItem.room.name.currentLangTitle,
                 tagColor = LocalRoomTheme.current.primaryColor,
             )
             timetableItem.language.labels.forEach { label ->
                 Spacer(modifier = Modifier.padding(4.dp))
                 TimetableItemTag(
+                    modifier = Modifier.align(Alignment.CenterVertically),
                     tagText = label,
                     tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
@@ -86,6 +91,7 @@ fun TimetableItemDetailHeadline(
             Spacer(modifier = Modifier.weight(1f))
             if (isLangSelectable) {
                 LanguageSwitcher(
+                    modifier = Modifier.align(Alignment.CenterVertically),
                     currentLang = currentLang,
                     onLanguageSelect = onLanguageSelect,
                 )
