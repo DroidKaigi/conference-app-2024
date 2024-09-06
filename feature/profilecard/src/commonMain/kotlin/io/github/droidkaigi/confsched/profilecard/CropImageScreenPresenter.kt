@@ -24,13 +24,13 @@ internal sealed interface CropImageScreenEvent {
 
 @Composable
 internal fun cropImageScreenPresenter(
-    onConfirm: () -> Unit,
     events: Flow<CropImageScreenEvent>,
     repository: ProfileCardRepository = localProfileCardRepository(),
 ): CropImageScreenState = providePresenterDefaults { _ ->
     val profileImageCandidate: ProfileImage? by rememberUpdatedState(repository.profileImageCandidate())
     var croppedProfileImage: ProfileImage? by remember { mutableStateOf(null) }
     var isProcessing: Boolean by remember { mutableStateOf(false) }
+    var shouldBack: Boolean by remember { mutableStateOf(false) }
 
     SafeLaunchedEffect(Unit) {
         events.collect { event ->
@@ -49,7 +49,7 @@ internal fun cropImageScreenPresenter(
                     val result = requireNotNull(croppedProfileImage)
                     repository.setProfileImageInEdit(result)
 
-                    onConfirm()
+                    shouldBack = true
                 }
 
                 is CropImageScreenEvent.Cancel -> {
@@ -76,6 +76,7 @@ internal fun cropImageScreenPresenter(
         else -> {
             CropImageScreenState.Confirm(
                 profileImage = cropped,
+                shouldBack = shouldBack,
             )
         }
     }

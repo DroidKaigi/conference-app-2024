@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -73,6 +74,7 @@ internal sealed interface CropImageScreenState {
 
     data class Confirm(
         val profileImage: ProfileImage,
+        val shouldBack: Boolean,
     ) : CropImageScreenState
 }
 
@@ -83,11 +85,14 @@ internal fun CropImageScreen(
     onConfirm: () -> Unit,
     modifier: Modifier = Modifier,
     eventFlow: EventFlow<CropImageScreenEvent> = rememberEventFlow(),
-    uiState: CropImageScreenState = cropImageScreenPresenter(
-        onConfirm = onConfirm,
-        events = eventFlow,
-    ),
+    uiState: CropImageScreenState = cropImageScreenPresenter(eventFlow),
 ) {
+    LaunchedEffect(uiState is CropImageScreenState.Confirm && uiState.shouldBack) {
+        if (uiState is CropImageScreenState.Confirm && uiState.shouldBack) {
+            onConfirm()
+        }
+    }
+
     Scaffold(
         modifier = modifier.fillMaxSize(),
         topBar = {
