@@ -50,6 +50,11 @@ class ContributorsScreenTest(private val testCase: DescribedBehavior<Contributor
                                 checkShowFirstAndSecondContributors()
                             }
                         }
+                        itShould("show contributors total count") {
+                            captureScreenWithChecks {
+                                checkContributorTotalCountDisplayed()
+                            }
+                        }
 
                         describe("when scroll to index 10") {
                             doIt {
