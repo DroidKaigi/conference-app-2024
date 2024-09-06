@@ -22,14 +22,15 @@ data class TimetableRoom(
 val TimetableRoom.nameAndFloor: String
     get() {
         val basementFloorString = MultiLangText(jaTitle = "地下1階", enTitle = "B1F")
+        val floor1FString = MultiLangText(jaTitle = "1階", enTitle = "1F")
         val floor = when (type) {
-            RoomType.RoomF -> basementFloorString.currentLangTitle
-            RoomType.RoomG -> basementFloorString.currentLangTitle
+            RoomType.RoomF -> floor1FString.currentLangTitle
+            RoomType.RoomG -> floor1FString.currentLangTitle
             RoomType.RoomH -> basementFloorString.currentLangTitle
-            RoomType.RoomI -> "1F"
-            RoomType.RoomJ -> "1F"
+            RoomType.RoomI -> basementFloorString.currentLangTitle
+            RoomType.RoomJ -> basementFloorString.currentLangTitle
             // Assume the room on the first day.
-            RoomType.RoomIJ -> "1F"
+            RoomType.RoomIJ -> basementFloorString.currentLangTitle
         }
         return "${name.currentLangTitle} ($floor)"
     }
