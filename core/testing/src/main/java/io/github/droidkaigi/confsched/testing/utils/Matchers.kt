@@ -3,12 +3,12 @@ package io.github.droidkaigi.confsched.testing.utils
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
 import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.text.TextLayoutResult
-import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItem
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 
@@ -86,30 +86,19 @@ fun SemanticsNodeInteraction.assertLineCount(expectedCount: Int) {
         }
 }
 
-fun SemanticsNodeInteraction.assertSessionLanguageEquals(expected: String) {
+fun <T> SemanticsNodeInteraction.assertSemanticsProperty(
+    key: SemanticsPropertyKey<T>,
+    condition: (T?) -> Boolean,
+) {
     fetchSemanticsNode()
         .let { node ->
             val actual = node
                 .config
-                .getOrNull(SemanticsProperties.TimetableItem)
+                .getOrNull(key)
 
             assertTrue(
-                "Node language $actual does not match expected language $expected",
-                actual?.language?.toLang()?.tagName == expected,
-            )
-        }
-}
-
-fun SemanticsNodeInteraction.assertSessionLanguageDoesNotEqual(value: String) {
-    fetchSemanticsNode()
-        .let { node ->
-            val actual = node
-                .config
-                .getOrNull(SemanticsProperties.TimetableItem)
-
-            assertFalse(
-                "Node language matches language $value unexpectedly",
-                actual?.language?.toLang()?.tagName == value,
+                "Node has unexpected value for semantics property $key: $actual",
+                condition(actual),
             )
         }
 }

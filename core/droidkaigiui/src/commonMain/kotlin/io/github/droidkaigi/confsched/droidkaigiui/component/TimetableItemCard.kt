@@ -71,10 +71,10 @@ const val TimetableItemCardBookmarkedIconTestTag = "TimetableItemCardBookmarkedI
 const val TimetableItemCardTestTag = "TimetableListItem"
 const val TimetableItemCardTitleTextTestTag = "TimetableItemCardTitleText"
 
-private val timetableItemSemanticsKey = SemanticsPropertyKey<TimetableItem>("TimetableItem")
+private val timetableItemCardSemanticsKey = SemanticsPropertyKey<TimetableItem>("TimetableItem")
 
 @Suppress("UnusedReceiverParameter")
-val SemanticsProperties.TimetableItem get() = timetableItemSemanticsKey
+val SemanticsProperties.TimetableItemCard get() = timetableItemCardSemanticsKey
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -107,7 +107,7 @@ fun TimetableItemCard(
             modifier = modifier
                 .testTag(TimetableItemCardTestTag)
                 .semantics {
-                    this[SemanticsProperties.TimetableItem] = timetableItem
+                    this[SemanticsProperties.TimetableItemCard] = timetableItem
                 }
                 .border(
                     border = BorderStroke(

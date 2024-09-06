@@ -4,7 +4,10 @@ import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorManager
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.compose.ui.test.onFirst
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.provideRoborazziContext
@@ -22,6 +25,8 @@ import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
 import io.github.droidkaigi.confsched.data.sponsors.SponsorsApiClient
 import io.github.droidkaigi.confsched.data.staff.FakeStaffApiClient
 import io.github.droidkaigi.confsched.data.staff.StaffApiClient
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCard
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemCardTestTag
 import io.github.droidkaigi.confsched.model.FontFamily
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.Settings
@@ -34,12 +39,14 @@ import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.Setti
 import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus.UseDotGothic16FontFamily
 import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus.UseSystemDefaultFont
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
+import io.github.droidkaigi.confsched.testing.robot.TimetableItemCardRobot.Language
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.Error
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.Operational
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalBothAssetAvailable
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalOnlySlideAssetAvailable
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalOnlyVideoAssetAvailable
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
+import io.github.droidkaigi.confsched.testing.utils.assertSemanticsProperty
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
@@ -501,4 +508,40 @@ class DefaultSettingsDataStoreRobot @Inject constructor(
     }
 
     override fun get(): Flow<Settings> = settingsDataStore.get()
+}
+
+interface TimetableItemCardRobot {
+    enum class Language(
+        val tagName: String,
+    ) {
+        MIXED("MIXED"),
+        JAPANESE("JA"),
+        ENGLISH("EN"),
+    }
+
+    fun checkTimetableListItemByLanguage(language: Language)
+}
+
+class DefaultTimetableItemCardRobot @Inject constructor(
+    private val robotTestRule: RobotTestRule,
+) : TimetableItemCardRobot {
+    override fun checkTimetableListItemByLanguage(language: Language) {
+        val doesNotContains = Language.entries.filterNot { it == language }
+
+        robotTestRule.composeTestRule
+            .onAllNodes(hasTestTag(TimetableItemCardTestTag))
+            .onFirst()
+            .assertSemanticsProperty(SemanticsProperties.TimetableItemCard) { item ->
+                item?.language?.toLang()?.tagName == language.tagName
+            }
+
+        doesNotContains.forEach { doesNotContain ->
+            robotTestRule.composeTestRule
+                .onAllNodes(hasTestTag(TimetableItemCardTestTag))
+                .onFirst()
+                .assertSemanticsProperty(SemanticsProperties.TimetableItemCard) { item ->
+                    item?.language?.toLang()?.tagName != doesNotContain.tagName
+                }
+        }
+    }
 }

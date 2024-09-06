@@ -8,7 +8,7 @@ import io.github.droidkaigi.confsched.testing.execute
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Category
 import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.ConferenceDay
-import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Language
+import io.github.droidkaigi.confsched.testing.robot.TimetableItemCardRobot.Language
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
