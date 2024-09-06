@@ -11,7 +11,6 @@ import kotlinx.collections.immutable.PersistentSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,12 +20,13 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 
-public class UserDataStore(private val dataStore: DataStore<Preferences>) {
+public class UserDataStore(
+    private val dataStore: DataStore<Preferences>,
+    coroutineScope: CoroutineScope,
+) {
 
     private val mutableIdToken = MutableStateFlow<String?>(null)
     public val idToken: StateFlow<String?> = mutableIdToken
-
-    private val singletonCoroutineScope: CoroutineScope = CoroutineScope(Job())
 
     public val getFavoriteSessionStream: StateFlow<PersistentSet<TimetableItemId>> =
         dataStore.data
@@ -42,7 +42,7 @@ public class UserDataStore(private val dataStore: DataStore<Preferences>) {
                     .map { TimetableItemId(it) }
                     .toPersistentSet()
             }.stateIn(
-                scope = singletonCoroutineScope,
+                scope = coroutineScope,
                 started = SharingStarted.WhileSubscribed(5_000),
                 initialValue = persistentSetOf(),
             )

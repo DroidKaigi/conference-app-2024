@@ -46,6 +46,7 @@ import io.ktor.client.plugins.logging.Logging
 import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -109,7 +110,10 @@ public val dataModule: Module = module {
                 requireNotNull(documentDirectory).path + "/confsched2024.preferences_pb"
             },
         )
-        UserDataStore(dataStore)
+        UserDataStore(
+            dataStore = dataStore,
+            coroutineScope = CoroutineScope(Job()),
+        )
     }
     single {
         val dataStore = createDataStore(
