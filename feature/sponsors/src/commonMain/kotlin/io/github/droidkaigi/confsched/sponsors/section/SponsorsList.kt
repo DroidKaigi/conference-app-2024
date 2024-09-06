@@ -25,13 +25,17 @@ import conference_app_2024.feature.sponsors.generated.resources.gold_sponsor
 import conference_app_2024.feature.sponsors.generated.resources.platinum_sponsor
 import conference_app_2024.feature.sponsors.generated.resources.supporters
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
 import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
+import io.github.droidkaigi.confsched.sponsors.GoldSponsorsUiState
+import io.github.droidkaigi.confsched.sponsors.PlatinumSponsorsUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsListUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsRes
+import io.github.droidkaigi.confsched.sponsors.SupportersUiState
 import io.github.droidkaigi.confsched.sponsors.component.SponsorHeader
 import io.github.droidkaigi.confsched.sponsors.component.SponsorItem
 import kotlinx.collections.immutable.toPersistentList
@@ -81,10 +85,10 @@ fun SponsorsList(
                     ),
             )
         }
-        when (uiState) {
-            is SponsorsListUiState.Exists -> {
+        when (uiState.platinumSponsorsUiState) {
+            is PlatinumSponsorsUiState.Exists -> {
                 items(
-                    items = uiState.platinumSponsors,
+                    items = uiState.platinumSponsorsUiState.platinumSponsors,
                     span = { GridItemSpan(maxLineSpan) },
                 ) { sponsor ->
                     SponsorItem(
@@ -97,8 +101,7 @@ fun SponsorsList(
                     )
                 }
             }
-
-            is SponsorsListUiState.Loading -> {
+            is PlatinumSponsorsUiState.Loading -> {
                 item(
                     span = { GridItemSpan(maxLineSpan) },
                 ) {
@@ -127,10 +130,10 @@ fun SponsorsList(
                     ),
             )
         }
-        when (uiState) {
-            is SponsorsListUiState.Exists -> {
+        when (uiState.goldSponsorsUiState) {
+            is GoldSponsorsUiState.Exists -> {
                 items(
-                    items = uiState.goldSponsors,
+                    items = uiState.goldSponsorsUiState.goldSponsors,
                     span = { GridItemSpan(3) },
                 ) { sponsor ->
                     SponsorItem(
@@ -143,8 +146,7 @@ fun SponsorsList(
                     )
                 }
             }
-
-            is SponsorsListUiState.Loading -> {
+            is GoldSponsorsUiState.Loading -> {
                 item(
                     span = { GridItemSpan(maxLineSpan) },
                 ) {
@@ -173,10 +175,10 @@ fun SponsorsList(
                     ),
             )
         }
-        when (uiState) {
-            is SponsorsListUiState.Exists -> {
+        when (uiState.supportersUiState) {
+            is SupportersUiState.Exists -> {
                 items(
-                    items = uiState.supporters,
+                    items = uiState.supportersUiState.supporters,
                     span = { GridItemSpan(2) },
                 ) { sponsor ->
                     SponsorItem(
@@ -189,8 +191,7 @@ fun SponsorsList(
                     )
                 }
             }
-
-            is SponsorsListUiState.Loading -> {
+            is SupportersUiState.Loading -> {
                 item(
                     span = { GridItemSpan(maxLineSpan) },
                 ) {
@@ -213,13 +214,19 @@ fun SponsorsListPreview() {
     KaigiTheme {
         Surface {
             SponsorsList(
-                uiState = SponsorsListUiState.Exists(
-                    platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }
-                        .toPersistentList(),
-                    goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }
-                        .toPersistentList(),
-                    supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }
-                        .toPersistentList(),
+                uiState = SponsorsListUiState(
+                    platinumSponsorsUiState = PlatinumSponsorsUiState.Exists(
+                        userMessageStateHolder = UserMessageStateHolderImpl(),
+                        platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
+                    ),
+                    goldSponsorsUiState = GoldSponsorsUiState.Exists(
+                        userMessageStateHolder = UserMessageStateHolderImpl(),
+                        goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
+                    ),
+                    supportersUiState = SupportersUiState.Exists(
+                        userMessageStateHolder = UserMessageStateHolderImpl(),
+                        supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                    ),
                 ),
                 onSponsorsItemClick = {},
                 scrollBehavior = null,

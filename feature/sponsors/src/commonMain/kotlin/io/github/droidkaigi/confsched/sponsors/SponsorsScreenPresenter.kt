@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import io.github.droidkaigi.confsched.compose.EventEffect
 import io.github.droidkaigi.confsched.compose.EventFlow
+import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
@@ -24,7 +25,10 @@ fun sponsorsScreenPresenter(
 ): SponsorsScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     val sponsors by rememberUpdatedState(sponsorsRepository.sponsors())
     val sponsorListUiState by rememberUpdatedState(
-        sponsorList(sponsors = sponsors),
+        sponsorList(
+            userMessageStateHolder = userMessageStateHolder,
+            sponsors = sponsors,
+        ),
     )
     EventEffect(events) { event ->
     }
@@ -37,21 +41,48 @@ fun sponsorsScreenPresenter(
 @Composable
 private fun sponsorList(
     sponsors: PersistentList<Sponsor>,
+    userMessageStateHolder: UserMessageStateHolder,
 ): SponsorsListUiState {
     val platinumSponsors = sponsors.filter { it.plan == PLATINUM }.toPersistentList()
     val goldSponsors = sponsors.filter { it.plan == GOLD }.toPersistentList()
     val supporters = sponsors.filter { it.plan == SUPPORTER }.toPersistentList()
 
-    if (
-        platinumSponsors.isEmpty() ||
-        goldSponsors.isEmpty() ||
-        supporters.isEmpty()
-    ) {
-        return SponsorsListUiState.Loading
+    val platinumSponsorsUiState = if (platinumSponsors.isNotEmpty()) {
+        PlatinumSponsorsUiState.Exists(
+            userMessageStateHolder = userMessageStateHolder,
+            platinumSponsors = platinumSponsors,
+        )
+    } else {
+        PlatinumSponsorsUiState.Loading(
+            userMessageStateHolder = userMessageStateHolder,
+        )
     }
-    return SponsorsListUiState.Exists(
-        platinumSponsors = platinumSponsors,
-        goldSponsors = goldSponsors,
-        supporters = supporters,
+
+    val goldSponsorsUiState = if (goldSponsors.isNotEmpty()) {
+        GoldSponsorsUiState.Exists(
+            userMessageStateHolder = userMessageStateHolder,
+            goldSponsors = goldSponsors,
+        )
+    } else {
+        GoldSponsorsUiState.Loading(
+            userMessageStateHolder = userMessageStateHolder,
+        )
+    }
+
+    val supportersUiState = if (supporters.isNotEmpty()) {
+        SupportersUiState.Exists(
+            userMessageStateHolder = userMessageStateHolder,
+            supporters = supporters,
+        )
+    } else {
+        SupportersUiState.Loading(
+            userMessageStateHolder = userMessageStateHolder,
+        )
+    }
+
+    return SponsorsListUiState(
+        platinumSponsorsUiState = platinumSponsorsUiState,
+        goldSponsorsUiState = goldSponsorsUiState,
+        supportersUiState = supportersUiState,
     )
 }
