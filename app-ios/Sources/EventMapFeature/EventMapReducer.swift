@@ -2,7 +2,6 @@ import ComposableArchitecture
 import KMPClient
 import Model
 import Foundation
-import shared
 
 @Reducer
 public struct EventMapReducer: Sendable {
@@ -13,7 +12,7 @@ public struct EventMapReducer: Sendable {
     @ObservableState
     public struct State: Equatable {
         public var selectedFloorMap: FloorMap = .first
-        public var events: [Model.EventMapEvent] = []
+        public var events: [EventMapEvent] = []
         public var url: IdentifiableURL?
         
         public init() { }
@@ -32,7 +31,7 @@ public struct EventMapReducer: Sendable {
         }
         
         public enum Internal: Sendable {
-            case response(Result<[Model.EventMapEvent], any Error>)
+            case response(Result<[EventMapEvent], any Error>)
         }
     }
     

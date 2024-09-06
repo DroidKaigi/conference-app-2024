@@ -1,11 +1,10 @@
 import SwiftUI
 import CommonComponents
 import Theme
-import shared
 import Model
 
 struct EventItem: View {
-    let event: Model.EventMapEvent
+    let event: EventMapEvent
     let onTappedMoreDetail: (URL) -> Void
 
     var body: some View {
