@@ -19,9 +19,9 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import io.github.droidkaigi.confsched.designsystem.theme.RoomTheme
 
 private const val ClickableTextExpandAnimateDurationMillis = 300
 
@@ -58,9 +58,8 @@ private fun getAnnotatedString(
             val endIndex = startIndex + matchResult.value.length
             addStyle(
                 style = SpanStyle(
-                    color = MaterialTheme.colorScheme.primary,
+                    color = RoomTheme.Jellyfish.primaryColor,
                     textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold,
                 ),
                 start = startIndex,
                 end = endIndex,

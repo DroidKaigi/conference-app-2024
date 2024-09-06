@@ -30,7 +30,7 @@ public fun ProfileCard.Exists.Companion.fake(): ProfileCard.Exists {
         nickname = "test",
         occupation = "test",
         link = "test",
-        image = generateWhiteImageBase64(),
+        image = generateColoredImageBase64(),
         cardType = ProfileCardType.Iguana,
     )
 }

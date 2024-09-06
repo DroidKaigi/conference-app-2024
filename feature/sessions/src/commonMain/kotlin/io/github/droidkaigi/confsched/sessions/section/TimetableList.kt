@@ -28,6 +28,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
@@ -42,6 +43,9 @@ import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedT
 import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
+import io.github.droidkaigi.confsched.sessions.component.TimetableNestedScrollStateHolder
+import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollConnection
+import io.github.droidkaigi.confsched.sessions.component.rememberTimetableNestedScrollStateHolder
 import io.github.droidkaigi.confsched.sessions.timetableDetailSharedContentStateKey
 import kotlinx.collections.immutable.PersistentMap
 
@@ -61,13 +65,14 @@ data class TimetableListUiState(
 
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun TimetableList(
+internal fun TimetableList(
     uiState: TimetableListUiState,
     scrollState: LazyListState,
     onBookmarkClick: (TimetableItem, Boolean) -> Unit,
     onTimetableItemClick: (TimetableItem) -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
+    nestedScrollStateHolder: TimetableNestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(true),
     highlightWord: String = "",
 ) {
     val layoutDirection = LocalLayoutDirection.current
@@ -82,10 +87,15 @@ fun TimetableList(
     }
     val columnNum by remember { derivedStateOf { if (isWideWidthScreen) 2 else 1 } }
 
+    val nestedScrollConnection = rememberTimetableNestedScrollConnection(
+        nestedScrollStateHolder = nestedScrollStateHolder,
+    )
+
     LazyColumn(
-        modifier = modifier.testTag(TimetableListTestTag),
+        modifier = modifier.testTag(TimetableListTestTag)
+            .nestedScroll(nestedScrollConnection),
         state = scrollState,
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        verticalArrangement = Arrangement.spacedBy(32.dp),
         contentPadding = PaddingValues(
             top = contentPadding.calculateTopPadding(),
             bottom = contentPadding.calculateBottomPadding(),

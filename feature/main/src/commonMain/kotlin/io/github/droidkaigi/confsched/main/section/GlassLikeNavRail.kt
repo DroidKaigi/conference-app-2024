@@ -5,6 +5,7 @@ import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -14,10 +15,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -42,6 +45,12 @@ import androidx.compose.ui.graphics.PathMeasure
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.positionInRoot
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.role
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -52,6 +61,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.animation.onGloballyPositionedWithFavoriteAnimationScope
 import io.github.droidkaigi.confsched.droidkaigiui.useIf
 import io.github.droidkaigi.confsched.main.MainScreenTab
+import io.github.droidkaigi.confsched.model.isBlurSupported
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -65,19 +75,25 @@ fun GlassLikeNavRail(
 ) {
     Box(
         modifier = modifier.size(width = 64.dp, height = 320.dp)
-            .hazeChild(state = hazeState, shape = CircleShape).border(
-                width = Dp.Hairline,
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color.White.copy(alpha = .8f),
-                        Color.White.copy(alpha = .2f),
-                    ),
-                ),
-                shape = CircleShape,
-            ),
+            .run {
+                if (isBlurSupported()) {
+                    hazeChild(state = hazeState, shape = CircleShape).border(
+                        width = Dp.Hairline,
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.White.copy(alpha = .8f),
+                                Color.White.copy(alpha = .2f),
+                            ),
+                        ),
+                        shape = CircleShape,
+                    )
+                } else {
+                    background(MaterialTheme.colorScheme.background.copy(alpha = .95f))
+                }
+            },
     ) {
         NavRailTabs(
-            selectedTab = currentTab.ordinal,
+            selectedTab = currentTab,
             onTabSelected = { onTabSelected(it) },
         )
 
@@ -106,15 +122,32 @@ fun GlassLikeNavRail(
                 .blur(50.dp, edgeTreatment = BlurredEdgeTreatment.Unbounded),
         ) {
             val tabWidth = size.height / MainScreenTab.size
-            drawCircle(
-                color = animatedColor.copy(alpha = .6f),
-                radius = size.width / 2,
-                center =
-                Offset(
-                    size.width / 2,
-                    (tabWidth * animatedSelectedTabIndex) + tabWidth / 2,
-                ),
+            val radius = size.width / 2
+            val center = Offset(
+                size.width / 2,
+                (tabWidth * animatedSelectedTabIndex) + tabWidth / 2,
             )
+
+            if (isBlurSupported()) {
+                drawCircle(
+                    color = animatedColor.copy(alpha = .6f),
+                    radius = radius,
+                    center = center,
+                )
+            } else {
+                drawCircle(
+                    brush = Brush.radialGradient(
+                        colors = listOf(
+                            animatedColor.copy(alpha = .5f),
+                            animatedColor.copy(alpha = .1f),
+                        ),
+                        center = center,
+                        radius = radius,
+                    ),
+                    radius = radius,
+                    center = center,
+                )
+            }
         }
 
         Canvas(
@@ -159,8 +192,8 @@ fun GlassLikeNavRail(
 }
 
 @Composable
-fun NavRailTabs(
-    selectedTab: Int,
+private fun NavRailTabs(
+    selectedTab: MainScreenTab,
     onTabSelected: (MainScreenTab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -172,16 +205,17 @@ fun NavRailTabs(
         LocalContentColor provides Color.White,
     ) {
         Column(
-            modifier = modifier.padding(vertical = 12.dp).fillMaxWidth(),
+            modifier = modifier.padding(vertical = 12.dp).fillMaxWidth().selectableGroup(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             for (tab in MainScreenTab.entries) {
+                val selected = selectedTab == tab
                 val alpha by animateFloatAsState(
-                    targetValue = if (selectedTab == MainScreenTab.indexOf(tab)) 1f else .35f,
+                    targetValue = if (selected) 1f else .35f,
                     label = "alpha",
                 )
                 val scale by animateFloatAsState(
-                    targetValue = if (selectedTab == MainScreenTab.indexOf(tab)) 1f else .98f,
+                    targetValue = if (selected) 1f else .98f,
                     visibilityThreshold = .000001f,
                     animationSpec = spring(
                         stiffness = Spring.StiffnessLow,
@@ -189,23 +223,40 @@ fun NavRailTabs(
                     ),
                     label = "scale",
                 )
+                val label = stringResource(tab.label)
                 Column(
-                    modifier = Modifier.scale(scale).alpha(alpha).weight(1f).pointerInput(Unit) {
-                        detectTapGestures {
-                            onTabSelected(tab)
+                    modifier = Modifier
+                        .scale(scale)
+                        .alpha(alpha)
+                        .weight(1f)
+                        .pointerInput(Unit) {
+                            detectTapGestures {
+                                onTabSelected(tab)
+                            }
                         }
-                    },
+                        .semantics {
+                            onClick(
+                                label = null,
+                                action = {
+                                    onTabSelected(tab)
+                                    true
+                                },
+                            )
+                            contentDescription = label
+                            role = Role.Tab
+                            this.selected = selected
+                        },
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
-                    val iconRes = if (selectedTab == MainScreenTab.indexOf(tab)) {
+                    val iconRes = if (selected) {
                         tab.iconOn
                     } else {
                         tab.iconOff
                     }
                     Icon(
                         painter = painterResource(iconRes),
-                        contentDescription = "tab ${stringResource(tab.contentDescription)}",
+                        contentDescription = null,
                         modifier = Modifier.useIf(
                             tab == MainScreenTab.Favorite,
                         ) {

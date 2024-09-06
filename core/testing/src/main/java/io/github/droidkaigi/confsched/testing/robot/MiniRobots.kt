@@ -1,6 +1,11 @@
 package io.github.droidkaigi.confsched.testing.robot
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorManager
 import androidx.compose.ui.test.junit4.ComposeTestRule
+import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.provideRoborazziContext
 import com.github.takahirom.roborazzi.roboOutputName
@@ -10,6 +15,7 @@ import io.github.droidkaigi.confsched.data.eventmap.EventMapApiClient
 import io.github.droidkaigi.confsched.data.eventmap.FakeEventMapApiClient
 import io.github.droidkaigi.confsched.data.profilecard.ProfileCardDataStore
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
+import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient.Status
 import io.github.droidkaigi.confsched.data.sessions.SessionsApiClient
 import io.github.droidkaigi.confsched.data.settings.SettingsDataStore
 import io.github.droidkaigi.confsched.data.sponsors.FakeSponsorsApiClient
@@ -28,11 +34,22 @@ import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.Setti
 import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus.UseDotGothic16FontFamily
 import io.github.droidkaigi.confsched.testing.robot.SettingsDataStoreRobot.SettingsStatus.UseSystemDefaultFont
 import io.github.droidkaigi.confsched.testing.robot.SponsorsServerRobot.ServerStatus
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.Error
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.Operational
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalBothAssetAvailable
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalOnlySlideAssetAvailable
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalOnlyVideoAssetAvailable
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.test.TestDispatcher
 import org.robolectric.RuntimeEnvironment
+import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Implementation
+import org.robolectric.annotation.Implements
+import org.robolectric.shadows.SensorEventBuilder
 import org.robolectric.shadows.ShadowLooper
+import org.robolectric.shadows.ShadowSensor
+import org.robolectric.shadows.ShadowSensorManager
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.seconds
 
@@ -165,9 +182,150 @@ class DefaultDeviceSetupRobot @Inject constructor() : DeviceSetupRobot {
     }
 }
 
+interface SensorRobot {
+    fun setupMockSensors(sensorTypes: List<Int>)
+    fun cleanUpSensors()
+    fun tiltPitch(pitch: Float = 10f)
+    fun tiltRoll(roll: Float = 10f)
+    fun tiltAzimuth(azimuth: Float = 10f)
+    fun tiltAllAxes(pitch: Float = 10f, roll: Float = 10f, azimuth: Float = 10f)
+}
+
+class DefaultSensorRobot @Inject constructor() : SensorRobot {
+    private val sensorManager: SensorManager =
+        getApplicationContext<Context>().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    private val shadowSensorManager = shadowOf(sensorManager)
+
+    private lateinit var mockAccelerometerSensor: Sensor
+    private lateinit var mockMagneticFieldSensor: Sensor
+
+    override fun setupMockSensors(sensorTypes: List<Int>) {
+        sensorTypes.forEach { sensorType ->
+            val sensor = ShadowSensor.newInstance(sensorType)
+            shadowSensorManager.addSensor(sensor)
+            when (sensorType) {
+                Sensor.TYPE_ACCELEROMETER -> mockAccelerometerSensor = sensor
+                Sensor.TYPE_MAGNETIC_FIELD -> mockMagneticFieldSensor = sensor
+                else -> throw IllegalArgumentException("Unsupported sensor type: $sensorType")
+            }
+        }
+    }
+
+    override fun cleanUpSensors() {
+        CustomShadowSensorManager.setCustomRotationMatrix(floatArrayOf())
+        CustomShadowSensorManager.setCustomOrientationAngles(floatArrayOf())
+    }
+
+    override fun tiltPitch(pitch: Float) {
+        sendTiltEvent(mockAccelerometerSensor, pitch = pitch)
+        sendTiltEvent(mockMagneticFieldSensor, pitch = pitch)
+    }
+
+    override fun tiltRoll(roll: Float) {
+        sendTiltEvent(mockAccelerometerSensor, roll = roll)
+        sendTiltEvent(mockMagneticFieldSensor, roll = roll)
+    }
+
+    override fun tiltAzimuth(azimuth: Float) {
+        sendTiltEvent(mockAccelerometerSensor, azimuth = azimuth)
+        sendTiltEvent(mockMagneticFieldSensor, azimuth = azimuth)
+    }
+
+    override fun tiltAllAxes(pitch: Float, roll: Float, azimuth: Float) {
+        sendTiltEvent(mockAccelerometerSensor, pitch, roll, azimuth)
+        sendTiltEvent(mockMagneticFieldSensor, pitch, roll, azimuth)
+    }
+
+    private fun sendTiltEvent(
+        sensor: Sensor?,
+        pitch: Float = 0f,
+        roll: Float = 0f,
+        azimuth: Float = 0f,
+    ) {
+        if (sensor != null) {
+            val event = createTiltEvent(sensor, pitch, roll, azimuth)
+            CustomShadowSensorManager.setCustomRotationMatrix(
+                FloatArray(9).apply {
+                    SensorManager.getRotationMatrix(
+                        this,
+                        null,
+                        floatArrayOf(pitch, roll, azimuth),
+                        floatArrayOf(0f, 0f, 0f),
+                    )
+                },
+            )
+            CustomShadowSensorManager.setCustomOrientationAngles(floatArrayOf(azimuth, pitch, roll))
+            shadowSensorManager.sendSensorEventToListeners(event)
+        }
+    }
+
+    private fun createTiltEvent(
+        sensor: Sensor,
+        pitch: Float,
+        roll: Float,
+        azimuth: Float,
+    ): SensorEvent {
+        return SensorEventBuilder.newBuilder()
+            .setSensor(sensor)
+            .setTimestamp(System.currentTimeMillis())
+            .setValues(floatArrayOf(pitch, roll, azimuth))
+            .build()
+    }
+
+    @Implements(SensorManager::class)
+    class CustomShadowSensorManager : ShadowSensorManager() {
+
+        @Suppress("UNUSED_PARAMETER")
+        companion object {
+            private var customRotationMatrix: FloatArray? = null
+            private var customOrientationAngles: FloatArray? = null
+
+            fun setCustomRotationMatrix(rotationMatrix: FloatArray) {
+                customRotationMatrix = rotationMatrix
+            }
+
+            @Implementation
+            @JvmStatic
+            fun getRotationMatrix(
+                r: FloatArray?,
+                i: FloatArray?,
+                gravity: FloatArray?,
+                geomagnetic: FloatArray?,
+            ): Boolean {
+                customRotationMatrix?.let {
+                    if (r != null && it.size == r.size) {
+                        System.arraycopy(it, 0, r, 0, it.size)
+                    }
+                    return true
+                }
+                return false
+            }
+
+            fun setCustomOrientationAngles(orientationAngles: FloatArray) {
+                customOrientationAngles = orientationAngles
+            }
+
+            @Implementation
+            @JvmStatic
+            fun getOrientation(r: FloatArray?, values: FloatArray?): FloatArray {
+                customOrientationAngles?.let {
+                    if (values != null && it.size == values.size) {
+                        System.arraycopy(it, 0, values, 0, it.size)
+                    }
+                    return it
+                }
+                return r!!
+            }
+        }
+    }
+}
+
 interface TimetableServerRobot {
     enum class ServerStatus {
         Operational,
+        OperationalBothAssetAvailable,
+        OperationalOnlySlideAssetAvailable,
+        OperationalOnlyVideoAssetAvailable,
         Error,
     }
 
@@ -180,8 +338,11 @@ class DefaultTimetableServerRobot @Inject constructor(sessionsApiClient: Session
     override fun setupTimetableServer(serverStatus: TimetableServerRobot.ServerStatus) {
         fakeSessionsApiClient.setup(
             when (serverStatus) {
-                TimetableServerRobot.ServerStatus.Operational -> FakeSessionsApiClient.Status.Operational
-                TimetableServerRobot.ServerStatus.Error -> FakeSessionsApiClient.Status.Error
+                Operational -> Status.Operational
+                OperationalBothAssetAvailable -> Status.OperationalBothAssetAvailable
+                OperationalOnlySlideAssetAvailable -> Status.OperationalOnlySlideAssetAvailable
+                OperationalOnlyVideoAssetAvailable -> Status.OperationalOnlyVideoAssetAvailable
+                Error -> Status.Error
             },
         )
     }
@@ -328,6 +489,7 @@ class DefaultSettingsDataStoreRobot @Inject constructor(
                     ),
                 )
             }
+
             UseSystemDefaultFont -> {
                 settingsDataStore.save(
                     Settings.Exists(

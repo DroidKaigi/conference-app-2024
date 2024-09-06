@@ -2,8 +2,8 @@ package io.github.droidkaigi.confsched.droidkaigiui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.core.bundle.Bundle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavBackStackEntry
 
 @Composable

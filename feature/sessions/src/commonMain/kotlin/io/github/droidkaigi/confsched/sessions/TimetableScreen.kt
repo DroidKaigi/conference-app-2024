@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.sessions
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -18,10 +17,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -31,18 +31,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.sessions.generated.resources.grid_view
 import conference_app_2024.feature.sessions.generated.resources.ic_grid_view
 import conference_app_2024.feature.sessions.generated.resources.ic_view_timeline
+import conference_app_2024.feature.sessions.generated.resources.search
+import conference_app_2024.feature.sessions.generated.resources.timeline_view
 import conference_app_2024.feature.sessions.generated.resources.timetable
 import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.rememberEventFlow
+import io.github.droidkaigi.confsched.designsystem.component.AutoSizeText
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
@@ -53,7 +56,6 @@ import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.Timetable
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableUiType
-import io.github.droidkaigi.confsched.model.TimetableUiType.Grid
 import io.github.droidkaigi.confsched.sessions.section.Timetable
 import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import io.github.droidkaigi.confsched.sessions.section.TimetableUiState
@@ -63,6 +65,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableScreenRoute = "timetable"
+const val TimetableTitleTestTag = "TimetableTitle"
 const val TimetableUiTypeChangeButtonTestTag = "TimetableUiTypeChangeButton"
 fun NavGraphBuilder.nestedSessionScreens(
     onSearchClick: () -> Unit,
@@ -155,33 +158,38 @@ private fun TimetableScreen(
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(
+                        AutoSizeText(
+                            modifier = Modifier.testTag(TimetableTitleTestTag).weight(1f),
                             text = stringResource(SessionsRes.string.timetable),
-                            fontSize = 24.sp,
-                            lineHeight = 32.sp,
-                            fontWeight = FontWeight.W400,
-                            modifier = Modifier.weight(1F),
+                            style = MaterialTheme.typography.headlineSmall,
+                            maxLines = 1,
                         )
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = null,
-                            modifier = Modifier.padding(8.dp).clickable {
-                                onSearchClick()
-                            },
-                        )
-                        Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
-                            val iconRes = if (timetableUiType == Grid) {
-                                SessionsRes.drawable.ic_view_timeline
-                            } else {
-                                SessionsRes.drawable.ic_grid_view
-                            }
-                            Image(
-                                painter = painterResource(iconRes),
-                                contentDescription = null,
-                                modifier = Modifier.padding(8.dp).clickable {
-                                    onTimetableUiChangeClick()
-                                }.testTag(TimetableUiTypeChangeButtonTestTag),
+                        IconButton(
+                            onClick = dropUnlessResumed(block = onSearchClick),
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = stringResource(SessionsRes.string.search),
                             )
+                        }
+                        Crossfade(targetState = uiState.timetableUiType) { timetableUiType ->
+                            val iconRes = when (timetableUiType) {
+                                TimetableUiType.Grid -> SessionsRes.drawable.ic_view_timeline
+                                TimetableUiType.List -> SessionsRes.drawable.ic_grid_view
+                            }
+                            val descriptionRes = when (timetableUiType) {
+                                TimetableUiType.Grid -> SessionsRes.string.timeline_view
+                                TimetableUiType.List -> SessionsRes.string.grid_view
+                            }
+                            IconButton(
+                                onClick = onTimetableUiChangeClick,
+                                modifier = Modifier.testTag(TimetableUiTypeChangeButtonTestTag),
+                            ) {
+                                Image(
+                                    painter = painterResource(iconRes),
+                                    contentDescription = stringResource(descriptionRes),
+                                )
+                            }
                         }
                     }
                 },
@@ -217,7 +225,7 @@ private fun TimetableScreen(
 
 @Preview
 @Composable
-fun PreviewTimetableScreenDark() {
+fun TimetableScreenDarkPreview() {
     CompositionLocalProvider(LocalClock provides FakeClock) {
         KaigiTheme {
             TimetableScreen(

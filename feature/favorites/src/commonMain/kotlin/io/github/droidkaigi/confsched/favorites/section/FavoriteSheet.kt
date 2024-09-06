@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.favorites.generated.resources.empty_description
 import conference_app_2024.feature.favorites.generated.resources.empty_guide
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.favorites.FavoritesRes
 import io.github.droidkaigi.confsched.favorites.component.FavoriteFilters
 import io.github.droidkaigi.confsched.favorites.section.FavoritesSheetUiState.FavoriteListUiState.TimeSlot
@@ -132,7 +135,10 @@ fun FavoriteSheet(
 @Composable
 private fun EmptyView(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.testTag(FavoritesScreenEmptyViewTestTag).fillMaxSize(),
+        modifier = modifier
+            .testTag(FavoritesScreenEmptyViewTestTag)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -149,7 +155,7 @@ private fun EmptyView(modifier: Modifier = Modifier) {
                 modifier = Modifier.size(36.dp),
                 imageVector = Icons.Filled.Favorite,
                 contentDescription = null,
-                tint = Color.Green,
+                tint = MaterialTheme.colorScheme.primaryFixed,
             )
         }
         Spacer(Modifier.height(12.dp))

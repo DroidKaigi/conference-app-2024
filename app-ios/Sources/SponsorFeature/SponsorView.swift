@@ -2,10 +2,10 @@ import ComposableArchitecture
 import SwiftUI
 import Theme
 import Model
+import CommonComponents
 
 public struct SponsorView: View {
-    private let store: StoreOf<SponsorReducer>
-    @State var selectedSponsorData: Sponsor?
+    @Bindable private var store: StoreOf<SponsorReducer>
 
     public init(store: StoreOf<SponsorReducer>) {
         self.store = store
@@ -39,10 +39,14 @@ public struct SponsorView: View {
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
         .onAppear {
-            store.send(.onAppear)
+            store.send(.view(.onAppear))
         }
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(String(localized: "Sponsor", bundle: .module))
+        .sheet(item: $store.url, content: { url in
+            SafariView(url: url.id)
+                .ignoresSafeArea()
+        })
     }
 
     @ViewBuilder
@@ -53,15 +57,16 @@ public struct SponsorView: View {
             }
         LazyVGrid(columns: gridItems, spacing: 12) {
             ForEach(items) { item in
-                Button {
-                    selectedSponsorData = item
-                } label: {
-                    ZStack {
-                        Color.white.clipShape(RoundedRectangle(cornerRadius: 12))
+                ZStack {
+                    Color.white.clipShape(RoundedRectangle(cornerRadius: 12))
+                    Button {
+                        store.send(.view(.sponsorTapped(item.link)))
+                    } label: {
                         AsyncImage(url: item.logo) {
                             $0.image?
                                 .resizable()
                                 .scaledToFit()
+                                .frame(maxWidth: .infinity, maxHeight: .infinity)
                         }
                         .frame(height: imageHeight)
                         .padding(.vertical, 6)

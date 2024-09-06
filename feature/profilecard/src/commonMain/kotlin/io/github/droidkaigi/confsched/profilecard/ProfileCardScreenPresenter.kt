@@ -7,11 +7,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import conference_app_2024.feature.profilecard.generated.resources.add_validate_format
+import conference_app_2024.feature.profilecard.generated.resources.droidkaigi_logo
 import conference_app_2024.feature.profilecard.generated.resources.enter_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.image
 import conference_app_2024.feature.profilecard.generated.resources.link
 import conference_app_2024.feature.profilecard.generated.resources.nickname
 import conference_app_2024.feature.profilecard.generated.resources.occupation
+import conference_app_2024.feature.profilecard.generated.resources.url_is_invalid
 import io.github.droidkaigi.confsched.compose.EventEffect
 import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
@@ -19,11 +21,10 @@ import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
-import io.github.droidkaigi.confsched.profilecard.ProfileCardUiType.Card
-import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
-internal sealed interface ProfileCardScreenEvent
+sealed interface ProfileCardScreenEvent
 
 internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
     data class OnChangeNickname(
@@ -50,7 +51,7 @@ internal sealed interface CardScreenEvent : ProfileCardScreenEvent {
     data object Edit : CardScreenEvent
 }
 
-private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
+internal fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
     return when (this) {
         is ProfileCard.Exists -> ProfileCardUiState.Edit(
             nickname = nickname,
@@ -64,7 +65,7 @@ private fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
     }
 }
 
-private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
+internal fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
     return when (this) {
         is ProfileCard.Exists -> ProfileCardUiState.Card(
             nickname = nickname,
@@ -78,24 +79,28 @@ private fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
     }
 }
 
+@OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun profileCardScreenPresenter(
     events: EventFlow<ProfileCardScreenEvent>,
     repository: ProfileCardRepository = localProfileCardRepository(),
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
-    val nicknameValidationErrorString = stringResource(
+    val emptyNicknameErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.nickname),
     )
-    val occupationValidationErrorString = stringResource(
+    val emptyOccupationErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.occupation),
     )
-    val linkValidationErrorString = stringResource(
+    val emptyLinkErrorString = stringResource(
         ProfileCardRes.string.enter_validate_format,
         stringResource(ProfileCardRes.string.link),
     )
-    val imageValidationErrorString = stringResource(
+    val invalidLinkErrorString = stringResource(
+        ProfileCardRes.string.url_is_invalid,
+    )
+    val emptyImageErrorString = stringResource(
         ProfileCardRes.string.add_validate_format,
         stringResource(ProfileCardRes.string.image),
     )
@@ -116,56 +121,60 @@ internal fun profileCardScreenPresenter(
         }
     }
 
+    var qrCodeImageByteArray by remember { mutableStateOf(ByteArray(0)) }
+    val link = cardUiState?.link
+    SafeLaunchedEffect(link) {
+        link?.let { link ->
+            qrCodeImageByteArray = repository
+                .loadQrCodeImageByteArray(
+                    link = link,
+                    centerLogoRes = ProfileCardRes.drawable.droidkaigi_logo,
+                )
+        }
+    }
+
     EventEffect(events) { event ->
         when (event) {
             is CardScreenEvent.Edit -> {
-                isLoading = true
-                launch {
-                    userMessageStateHolder.showMessage("Edit")
-                }
                 uiType = ProfileCardUiType.Edit
-                isLoading = false
             }
 
             is EditScreenEvent.Create -> {
                 isLoading = true
-                launch {
-                    userMessageStateHolder.showMessage("Create Profile Card")
-                }
                 repository.save(event.profileCard)
-                uiType = Card
+                uiType = ProfileCardUiType.Card
                 isLoading = false
             }
 
             is EditScreenEvent.SelectImage -> {
-                isLoading = true
-                launch {
-                    userMessageStateHolder.showMessage("Select Image")
-                }
-                isLoading = false
+                // NOOP Put in some processing if necessary.
             }
 
             is EditScreenEvent.OnChangeNickname -> {
                 cardError = cardError.copy(
-                    nicknameError = if (event.nickname.isEmpty()) nicknameValidationErrorString else "",
+                    nicknameError = if (event.nickname.isEmpty()) emptyNicknameErrorString else "",
                 )
             }
 
             is EditScreenEvent.OnChangeOccupation -> {
                 cardError = cardError.copy(
-                    occupationError = if (event.occupation.isEmpty()) occupationValidationErrorString else "",
+                    occupationError = if (event.occupation.isEmpty()) emptyOccupationErrorString else "",
                 )
             }
 
             is EditScreenEvent.OnChangeLink -> {
+                // Only matches if the link is in this format "${http or https + ://}${sub domain + .}${domain}.${tld}/${sub directories}".
+                // Protocol, sub domain and sub directories are optional.
+                // ex. https://www.example.com/hogefuga/foobar
+                val invalidFormat = event.link.matches(Regex("^(?:https?://)?(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z0-9-]{2,}(?:/\\S*)?\$")).not()
                 cardError = cardError.copy(
-                    linkError = if (event.link.isEmpty()) linkValidationErrorString else "",
+                    linkError = if (event.link.isEmpty()) emptyLinkErrorString else if (invalidFormat) invalidLinkErrorString else "",
                 )
             }
 
             is EditScreenEvent.OnChangeImage -> {
                 cardError = cardError.copy(
-                    imageError = if (event.image.isEmpty()) imageValidationErrorString else "",
+                    imageError = if (event.image.isEmpty()) emptyImageErrorString else "",
                 )
             }
         }
@@ -178,5 +187,6 @@ internal fun profileCardScreenPresenter(
         cardError = cardError,
         uiType = uiType,
         userMessageStateHolder = userMessageStateHolder,
+        qrCodeImageByteArray = qrCodeImageByteArray,
     )
 }

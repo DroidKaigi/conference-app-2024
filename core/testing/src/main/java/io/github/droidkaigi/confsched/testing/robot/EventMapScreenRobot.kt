@@ -2,6 +2,8 @@ package io.github.droidkaigi.confsched.testing.robot
 
 import androidx.compose.ui.test.assertContentDescriptionEquals
 import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -133,5 +135,11 @@ class EventMapScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(EventMapTabImageTestTag))
             .assertContentDescriptionEquals("Map of ${floorLevel.floorName}")
+    }
+
+    fun checkErrorSnackbarDisplayed() {
+        composeTestRule
+            .onNode(hasText("Fake IO Exception"))
+            .isDisplayed()
     }
 }

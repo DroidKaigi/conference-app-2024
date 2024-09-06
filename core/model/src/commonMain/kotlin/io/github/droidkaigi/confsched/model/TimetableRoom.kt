@@ -17,50 +17,20 @@ data class TimetableRoom(
     }
 
     fun getThemeKey(): String = name.enTitle.lowercase()
-
-    // TODO: Names are updated but the shapes need to be checked
-    fun getShape(): Shapes {
-        return when (name.enTitle) {
-            "Flamingo" -> {
-                Shapes.SQUARE
-            }
-            "Giraffe" -> {
-                Shapes.CIRCLE
-            }
-            "Hedgehog" -> {
-                Shapes.SHARP_DIAMOND
-            }
-            "Iguana" -> {
-                Shapes.DIAMOND
-            }
-            "Jellyfish" -> {
-                Shapes.DIAMOND
-            }
-            else -> {
-                Shapes.SQUARE
-            }
-        }
-    }
-
-    enum class Shapes {
-        SQUARE,
-        CIRCLE,
-        SHARP_DIAMOND,
-        DIAMOND,
-    }
 }
 
 val TimetableRoom.nameAndFloor: String
     get() {
         val basementFloorString = MultiLangText(jaTitle = "地下1階", enTitle = "B1F")
+        val floor1FString = MultiLangText(jaTitle = "1階", enTitle = "1F")
         val floor = when (type) {
-            RoomType.RoomF -> basementFloorString.currentLangTitle
-            RoomType.RoomG -> basementFloorString.currentLangTitle
+            RoomType.RoomF -> floor1FString.currentLangTitle
+            RoomType.RoomG -> floor1FString.currentLangTitle
             RoomType.RoomH -> basementFloorString.currentLangTitle
-            RoomType.RoomI -> "1F"
-            RoomType.RoomJ -> "1F"
+            RoomType.RoomI -> basementFloorString.currentLangTitle
+            RoomType.RoomJ -> basementFloorString.currentLangTitle
             // Assume the room on the first day.
-            RoomType.RoomIJ -> "1F"
+            RoomType.RoomIJ -> basementFloorString.currentLangTitle
         }
         return "${name.currentLangTitle} ($floor)"
     }

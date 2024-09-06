@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -58,6 +59,7 @@ fun <T> DropdownFilterChip(
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceContainer),
         ) {
             uiState.selectableItems.forEach { item ->
                 DropdownMenuItem(

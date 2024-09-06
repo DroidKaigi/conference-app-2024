@@ -5,17 +5,23 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
+import io.github.droidkaigi.confsched.testing.robot.DefaultSensorRobot.CustomShadowSensorManager
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardDataStoreRobot.ProfileCardInputStatus
 import io.github.droidkaigi.confsched.testing.robot.ProfileCardScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.runRobot
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
+import org.junit.After
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.ParameterizedRobolectricTestRunner
+import org.robolectric.annotation.Config
 import javax.inject.Inject
 
 @RunWith(ParameterizedRobolectricTestRunner::class)
+@Config(
+    shadows = [CustomShadowSensorManager::class],
+)
 @HiltAndroidTest
 class ProfileCardScreenTest(
     private val testCase: DescribedBehavior<ProfileCardScreenRobot>,
@@ -34,6 +40,11 @@ class ProfileCardScreenTest(
         }
     }
 
+    @After
+    fun tearDown() {
+        robot.cleanUp()
+    }
+
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
@@ -49,6 +60,64 @@ class ProfileCardScreenTest(
                             checkEditScreenDisplayed()
                         }
                     }
+
+                    describe("when url protocol is invalid") {
+                        val url = "ttps://example.com"
+                        doIt {
+                            inputLink("ttps://example.com")
+                        }
+                        itShould("show error message") {
+                            captureScreenWithChecks {
+                                checkLinkError(url)
+                            }
+                        }
+                    }
+
+                    describe("when url top level domain is missing") {
+                        val url = "https://example"
+                        doIt {
+                            inputLink(url)
+                        }
+                        itShould("show error message") {
+                            captureScreenWithChecks {
+                                checkLinkError(url)
+                            }
+                        }
+                    }
+                    describe("when url contains IDN domain name") {
+                        val url = "https://example.xn--com"
+                        doIt {
+                            inputLink(url)
+                        }
+                        itShould("not show error message") {
+                            captureScreenWithChecks {
+                                checkLinkNotError(url)
+                            }
+                        }
+                    }
+                    describe("when protocol is missing") {
+                        val url = "example.com/foobar"
+                        doIt {
+                            inputLink(url)
+                        }
+                        itShould("not show error message") {
+                            captureScreenWithChecks {
+                                checkLinkNotError(url)
+                            }
+                        }
+                    }
+                    describe("when url contains sub domain") {
+                        val url = "https://www.example.co.jp/foobar"
+                        doIt {
+                            inputLink(url)
+                        }
+                        itShould("not show error message") {
+                            captureScreenWithChecks {
+                                checkLinkNotError(url)
+                            }
+                        }
+                    }
+
                     // FIXME Add a test to confirm that it is possible to transition to the Card screen after entering the required input fields, including images.
                     // FIXME Currently, the test code does not allow the user to select and input an image from the Add Image button.
                 }
@@ -59,12 +128,104 @@ class ProfileCardScreenTest(
                     }
                     itShould("show card screen") {
                         captureScreenWithChecks {
-                            checkShareProfileCardButtonEnabled()
                             checkCardScreenDisplayed()
                             checkProfileCardFrontDisplayed()
                         }
                     }
-                    describe("flip prifle card") {
+                    describe("tilt tests") {
+                        doIt {
+                            setupMockSensor()
+                        }
+                        describe("tilt to horizontal") {
+                            doIt {
+                                tiltToHorizontal()
+                            }
+                            itShould("show card in horizontal") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to mid-range") {
+                            doIt {
+                                tiltToMidRange()
+                            }
+                            itShould("show card at mid-range") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to upper bound") {
+                            doIt {
+                                tiltToUpperBound()
+                            }
+                            itShould("show card at upper bound") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt pitch out of bounds") {
+                            doIt {
+                                tiltPitchOutOfBounds()
+                            }
+                            itShould("keep last valid pitch") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt roll out of bounds") {
+                            doIt {
+                                tiltRollOutOfBounds()
+                            }
+                            itShould("keep last valid roll") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt both axes out of bounds") {
+                            doIt {
+                                tiltBothAxesOutOfBounds()
+                            }
+                            itShould("keep last valid orientation") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to boundary") {
+                            doIt {
+                                tiltToPitchRollBoundary()
+                            }
+                            itShould("show card at boundary") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                        describe("tilt to opposite boundary") {
+                            doIt {
+                                tiltToPitchRollBoundaryOpposite()
+                            }
+                            itShould("show card at opposite boundary") {
+                                captureScreenWithChecks {
+                                    checkCardScreenDisplayed()
+                                    checkProfileCardFrontDisplayed()
+                                }
+                            }
+                        }
+                    }
+                    describe("flip profile card") {
                         doIt {
                             flipProfileCard()
                         }

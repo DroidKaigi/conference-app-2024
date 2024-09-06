@@ -73,6 +73,7 @@ let package = Package(
                 .eventMapFeature,
                 .tca,
                 .kmpClient,
+                .KMPClientLive,
                 .licenseList,
             ]
         ),
@@ -85,13 +86,20 @@ let package = Package(
             name: "KMPClient",
             dependencies: [
                 .kmpModule,
-                .firebaseAuth,
-                .firebaseRemoteConfig,
                 .tca,
-                .model
+                .model,
             ]
         ),
-        
+
+        .target(
+            name: "KMPClientLive",
+            dependencies: [
+                .kmpClient,
+                .firebaseAuth,
+                .firebaseRemoteConfig,
+            ]
+        ),
+
         .target(
             name: "EventKitClient",
             dependencies: [
@@ -104,8 +112,6 @@ let package = Package(
             dependencies: [
                 .kmpClient,
                 .kmpModule,
-                .firebaseAuth,
-                .firebaseRemoteConfig,
                 .tca,
                 .commonComponents,
             ]
@@ -115,8 +121,6 @@ let package = Package(
             dependencies: [
                 .app,
                 .timetableFeature,
-                .firebaseAuth,
-                .firebaseRemoteConfig,
                 .tca
             ]
         ),
@@ -205,7 +209,9 @@ let package = Package(
             dependencies: [
                 .tca,
                 .kmpClient,
-                .theme
+                .theme,
+                .model,
+                .commonComponents,
             ]
         ),
         .testTarget(
@@ -292,6 +298,7 @@ extension Target.Dependency {
     static let profileCardFeature: Target.Dependency = "ProfileCardFeature"
     static let kmpModule: Target.Dependency = "KmpModule"
     static let kmpClient: Target.Dependency = "KMPClient"
+    static let KMPClientLive: Target.Dependency = "KMPClientLive"
     static let eventKitClient: Target.Dependency = "EventKitClient"
     static let theme: Target.Dependency = "Theme"
     static let commonComponents: Target.Dependency = "CommonComponents"

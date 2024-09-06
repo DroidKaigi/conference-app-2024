@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalResourceApi::class)
-
 package io.github.droidkaigi.confsched.main
 
 import androidx.compose.animation.AnimatedVisibility
@@ -29,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -49,6 +46,7 @@ import conference_app_2024.core.designsystem.generated.resources.ic_timetable_of
 import conference_app_2024.core.designsystem.generated.resources.ic_timetable_on
 import conference_app_2024.feature.main.generated.resources.about
 import conference_app_2024.feature.main.generated.resources.event_map
+import conference_app_2024.feature.main.generated.resources.favorite
 import conference_app_2024.feature.main.generated.resources.profile_card
 import conference_app_2024.feature.main.generated.resources.timetable
 import dev.chrisbanes.haze.HazeState
@@ -68,7 +66,6 @@ import io.github.droidkaigi.confsched.main.section.GlassLikeBottomNavigation
 import io.github.droidkaigi.confsched.main.section.GlassLikeNavRail
 import io.github.droidkaigi.confsched.model.isBlurSupported
 import org.jetbrains.compose.resources.DrawableResource
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.StringResource
 
 const val mainScreenRoute = "main"
@@ -147,53 +144,40 @@ fun MainScreen(
     }
 }
 
-sealed class IconRepresentation {
-    data class Vector(val imageVector: ImageVector) : IconRepresentation()
-
-    @ExperimentalResourceApi
-    data class Drawable(val drawableId: DrawableResource) : IconRepresentation()
-}
-
 enum class MainScreenTab(
     val iconOff: DrawableResource,
     val iconOn: DrawableResource,
     val label: StringResource,
-    val contentDescription: StringResource,
     val testTag: String = "mainScreenTab:$label",
 ) {
     Timetable(
         iconOff = DesignSystemRes.drawable.ic_timetable_off,
         iconOn = DesignSystemRes.drawable.ic_timetable_on,
         label = MainRes.string.timetable,
-        contentDescription = MainRes.string.timetable,
     ),
 
     EventMap(
         iconOff = DesignSystemRes.drawable.ic_map_off,
         iconOn = DesignSystemRes.drawable.ic_map_on,
         label = MainRes.string.event_map,
-        contentDescription = MainRes.string.event_map,
     ),
 
     Favorite(
         iconOff = DesignSystemRes.drawable.ic_fav_off,
         iconOn = DesignSystemRes.drawable.ic_fav_on,
-        label = MainRes.string.event_map,
-        contentDescription = MainRes.string.event_map,
+        label = MainRes.string.favorite,
     ),
 
     About(
         iconOff = DesignSystemRes.drawable.ic_info_off,
         iconOn = DesignSystemRes.drawable.ic_info_on,
         label = MainRes.string.about,
-        contentDescription = MainRes.string.about,
     ),
 
     ProfileCard(
         iconOff = DesignSystemRes.drawable.ic_profilecard_off,
         iconOn = DesignSystemRes.drawable.ic_profilecard_on,
         label = MainRes.string.profile_card,
-        contentDescription = MainRes.string.profile_card,
     ),
     ;
 

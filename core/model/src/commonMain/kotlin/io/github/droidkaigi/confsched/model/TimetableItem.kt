@@ -93,6 +93,11 @@ public sealed class TimetableItem {
         "$startsDateString / $formattedTimeString ($minutesString)"
     }
 
+    public val formattedMonthAndDayString: String by lazy {
+        val localDate = startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
+        "${localDate.monthNumber}".padStart(2, '0') + "/" + "${localDate.dayOfMonth}".padStart(2, '0')
+    }
+
     public val url: String get() = if (defaultLang() == Lang.JAPANESE) {
         "https://2024.droidkaigi.jp/timetable/${id.value}"
     } else {

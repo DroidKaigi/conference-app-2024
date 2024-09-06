@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
+import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -38,6 +39,7 @@ import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalAnimatedVisibilityScope
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSnackbarHostState
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
@@ -69,11 +71,11 @@ fun NavGraphBuilder.sessionScreens(
             LocalAnimatedVisibilityScope provides this@composable,
         ) {
             TimetableItemDetailScreen(
-                onNavigationIconClick = onNavigationIconClick,
+                onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
                 onLinkClick = onLinkClick,
                 onCalendarRegistrationClick = onCalendarRegistrationClick,
                 onShareClick = onShareClick,
-                onFavoriteListClick = onFavoriteListClick,
+                onFavoriteListClick = dropUnlessResumed(block = onFavoriteListClick),
             )
         }
     }
@@ -97,7 +99,7 @@ fun TimetableItemDetailScreen(
         events = eventFlow,
     ),
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackbarHostState = snackbarHostSate()
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
         userMessageStateHolder = uiState.userMessageStateHolder,
@@ -176,9 +178,7 @@ private fun TimetableItemDetailScreen(
             if (uiState is Loaded) {
                 ProvideRoomTheme(uiState.roomThemeKey) {
                     TimetableItemDetailTopAppBar(
-                        isLangSelectable = uiState.isLangSelectable,
                         onNavigationIconClick = onNavigationIconClick,
-                        onSelectedLanguage = onSelectedLanguage,
                         scrollBehavior = scrollBehavior,
                     )
                 }
@@ -229,6 +229,8 @@ private fun TimetableItemDetailScreen(
                             TimetableItemDetailHeadline(
                                 currentLang = uiState.currentLang,
                                 timetableItem = uiState.timetableItem,
+                                isLangSelectable = uiState.isLangSelectable,
+                                onLanguageSelect = onSelectedLanguage,
                             )
                         }
 
@@ -263,6 +265,15 @@ private fun TimetableItemDetailScreen(
             )
         }
     }
+}
+
+@Composable
+fun snackbarHostSate(): SnackbarHostState {
+    val state = LocalSnackbarHostState.current
+    if (state != null) {
+        return state
+    }
+    return remember { SnackbarHostState() }
 }
 
 @Composable

@@ -1,9 +1,12 @@
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+
 plugins {
     id("droidkaigi.convention.kmpfeature")
     id("droidkaigi.primitive.kmp.serialization")
 }
 
 android.namespace = "io.github.droidkaigi.confsched.feature.eventmap"
+@OptIn(ExperimentalRoborazziApi::class)
 roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.eventmap")
 kotlin {
     sourceSets {
@@ -16,7 +19,6 @@ kotlin {
                 implementation(libs.kotlinxCoroutinesCore)
                 implementation(libs.kotlinSerializationJson)
                 implementation(libs.moleculeRuntime)
-                implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
             }
         }

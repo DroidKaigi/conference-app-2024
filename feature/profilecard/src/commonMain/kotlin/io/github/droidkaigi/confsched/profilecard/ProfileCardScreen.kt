@@ -4,6 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,12 +16,15 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -40,6 +44,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextFieldDefaults.indicatorLine
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -50,12 +55,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -66,20 +72,27 @@ import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.layer.GraphicsLayer
-import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.graphics.rememberGraphicsLayer
 import androidx.compose.ui.graphics.vector.VectorPainter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import co.touchlab.kermit.Logger
+import coil3.compose.rememberAsyncImagePainter
 import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
 import conference_app_2024.feature.profilecard.generated.resources.card_type
@@ -107,9 +120,10 @@ import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppB
 import io.github.droidkaigi.confsched.droidkaigiui.component.resetScroll
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType
-import io.github.droidkaigi.confsched.profilecard.component.CapturableCard
 import io.github.droidkaigi.confsched.profilecard.component.FlipCard
+import io.github.droidkaigi.confsched.profilecard.component.InvertSystemBarAppearance
 import io.github.droidkaigi.confsched.profilecard.component.PhotoPickerButton
+import io.github.droidkaigi.confsched.profilecard.component.ShareableCard
 import io.ktor.util.decodeBase64Bytes
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -123,6 +137,7 @@ const val ProfileCardEditScreenColumnTestTag = "ProfileCardEditScreenColumnTestT
 const val ProfileCardNicknameTextFieldTestTag = "ProfileCardNicknameTextFieldTestTag"
 const val ProfileCardOccupationTextFieldTestTag = "ProfileCardOccupationTextFieldTestTag"
 const val ProfileCardLinkTextFieldTestTag = "ProfileCardLinkTextFieldTestTag"
+const val ProfileCardInputErrorTextTestTag = "ProfileCardInputErrorTextTestTag"
 const val ProfileCardSelectImageButtonTestTag = "ProfileCardSelectImageButtonTestTag"
 const val ProfileCardCreateButtonTestTag = "ProfileCardCreateButtonTestTag"
 const val ProfileCardCardScreenTestTag = "ProfileCardCardScreenTestTag"
@@ -151,7 +166,7 @@ fun NavController.navigateProfileCardScreen() {
     }
 }
 
-internal sealed interface ProfileCardUiState {
+sealed interface ProfileCardUiState {
     data class Edit(
         val nickname: String = "",
         val occupation: String = "",
@@ -169,26 +184,27 @@ internal sealed interface ProfileCardUiState {
     ) : ProfileCardUiState
 }
 
-internal data class ProfileCardError(
+data class ProfileCardError(
     val nicknameError: String = "",
     val occupationError: String = "",
     val linkError: String = "",
     val imageError: String = "",
 )
 
-internal enum class ProfileCardUiType {
+enum class ProfileCardUiType {
     Loading,
     Edit,
     Card,
 }
 
-internal data class ProfileCardScreenState(
+data class ProfileCardScreenState(
     val isLoading: Boolean,
     val editUiState: ProfileCardUiState.Edit,
     val cardUiState: ProfileCardUiState.Card?,
     val cardError: ProfileCardError,
     val uiType: ProfileCardUiType,
     val userMessageStateHolder: UserMessageStateHolder,
+    val qrCodeImageByteArray: ByteArray? = null,
 )
 
 @Composable
@@ -216,6 +232,8 @@ internal fun ProfileCardScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
+    val keyboardController = LocalSoftwareKeyboardController.current
+    val focusManager = LocalFocusManager.current
 
     SnackbarMessageEffect(
         snackbarHostState = snackbarHostState,
@@ -232,14 +250,24 @@ internal fun ProfileCardScreen(
         }
     }
 
+    val contentWindowInsetsBottom = max(
+        contentPadding.calculateBottomPadding(),
+        with(LocalDensity.current) { WindowInsets.ime.getBottom(this).toDp() },
+    )
     Scaffold(
-        modifier = modifier,
+        modifier = modifier
+            .pointerInput(Unit) {
+                detectTapGestures {
+                    keyboardController?.hide()
+                    focusManager.clearFocus()
+                }
+            },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         contentWindowInsets = WindowInsets(
             left = contentPadding.calculateLeftPadding(layoutDirection),
             top = contentPadding.calculateTopPadding(),
             right = contentPadding.calculateRightPadding(layoutDirection),
-            bottom = contentPadding.calculateBottomPadding()
+            bottom = contentWindowInsetsBottom
                 .plus(16.dp), // Adjusting Snackbar position
         ),
         topBar = {
@@ -321,6 +349,7 @@ internal fun ProfileCardScreen(
                     },
                     contentPadding = padding,
                     isCreated = true,
+                    qrCodeImageByte = uiState.qrCodeImageByteArray,
                 )
             }
         }
@@ -349,18 +378,20 @@ internal fun EditScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
-    var nickname by remember { mutableStateOf(uiState.nickname) }
-    var occupation by remember { mutableStateOf(uiState.occupation) }
-    var link by remember { mutableStateOf(uiState.link) }
+    var nickname by rememberSaveable { mutableStateOf(uiState.nickname) }
+    var occupation by rememberSaveable { mutableStateOf(uiState.occupation) }
+    var link by rememberSaveable { mutableStateOf(uiState.link) }
     var imageByteArray: ByteArray? by remember { mutableStateOf(uiState.image?.decodeBase64Bytes()) }
     val image by remember { derivedStateOf { imageByteArray?.toImageBitmap() } }
-    var selectedCardType by remember { mutableStateOf(uiState.cardType) }
+    var selectedCardType by rememberSaveable { mutableStateOf(uiState.cardType) }
 
     val isValidInputs by remember {
         derivedStateOf {
             nickname.isNotEmpty() && occupation.isNotEmpty() && link.isNotEmpty() && image != null
         }
     }
+
+    val focusManager = LocalFocusManager.current
 
     Column(
         modifier = modifier
@@ -383,6 +414,7 @@ internal fun EditScreen(
                 nickname = it
                 onChangeNickname(it)
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
         InputFieldWithError(
             value = occupation,
@@ -393,6 +425,7 @@ internal fun EditScreen(
                 occupation = it
                 onChangeOccupation(it)
             },
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
         val linkLabel = stringResource(ProfileCardRes.string.link)
             .plus(stringResource(ProfileCardRes.string.link_example_text))
@@ -405,26 +438,42 @@ internal fun EditScreen(
                 link = it
                 onChangeLink(it)
             },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Uri,
+            ),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.clearFocus()
+                },
+            ),
         )
 
         Column(
+            modifier = Modifier.padding(bottom = 20.dp),
             verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
-            Label(label = stringResource(ProfileCardRes.string.image))
-            ImagePickerWithError(
-                image = image,
-                onSelectedImage = {
-                    imageByteArray = it
-                    onChangeImage(it.toBase64())
-                },
-                errorMessage = profileCardError.imageError,
-                onClearImage = {
-                    imageByteArray = null
-                    onChangeImage("")
-                },
-            )
+            Column {
+                Label(label = stringResource(ProfileCardRes.string.image))
+                Spacer(modifier = Modifier.height(12.dp))
+                ImagePickerWithError(
+                    image = image,
+                    onSelectedImage = {
+                        imageByteArray = it
+                        onChangeImage(it.toBase64())
+                    },
+                    errorMessage = profileCardError.imageError,
+                    onClearImage = {
+                        imageByteArray = null
+                        onChangeImage("")
+                    },
+                )
+            }
 
-            Text(stringResource(ProfileCardRes.string.select_theme))
+            Text(
+                text = stringResource(ProfileCardRes.string.select_theme),
+                style = MaterialTheme.typography.titleMedium,
+            )
 
             CardTypePiker(
                 selectedCardType = selectedCardType,
@@ -445,10 +494,11 @@ internal fun EditScreen(
                 },
                 enabled = isValidInputs,
                 modifier = Modifier.fillMaxWidth()
+                    .padding(top = 12.dp)
                     .testTag(ProfileCardCreateButtonTestTag),
             ) {
                 Text(
-                    modifier = Modifier.padding(8.dp),
+                    modifier = Modifier.padding(10.dp),
                     text = stringResource(ProfileCardRes.string.create_card),
                 )
             }
@@ -457,10 +507,10 @@ internal fun EditScreen(
 }
 
 @OptIn(ExperimentalEncodingApi::class)
-private fun ByteArray.toBase64(): String = Base64.encode(this)
+internal fun ByteArray.toBase64(): String = Base64.encode(this)
 
 @OptIn(ExperimentalEncodingApi::class)
-private fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
+internal fun String.decodeBase64Bytes(): ByteArray = Base64.decode(this)
 
 @Composable
 internal fun Label(label: String) {
@@ -480,6 +530,10 @@ private fun InputFieldWithError(
     textFieldTestTag: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    maxLines: Int = 1,
+    singleLine: Boolean = true,
 ) {
     Column(modifier = modifier) {
         val isError = errorMessage.isNotEmpty()
@@ -497,6 +551,10 @@ private fun InputFieldWithError(
             onValueChange = onValueChange,
             isError = isError,
             shape = RoundedCornerShape(4.dp),
+            keyboardOptions = keyboardOptions,
+            keyboardActions = keyboardActions,
+            maxLines = maxLines,
+            singleLine = singleLine,
             modifier = Modifier
                 .indicatorLine(
                     enabled = false,
@@ -523,7 +581,7 @@ private fun InputFieldWithError(
                     start = 16.dp,
                     top = 4.dp,
                     end = 16.dp,
-                ),
+                ).testTag(ProfileCardInputErrorTextTestTag.plus(value)),
         )
     }
 }
@@ -546,7 +604,9 @@ private fun ImagePickerWithError(
                 Image(
                     bitmap = image,
                     contentDescription = null,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier
+                        .fillMaxSize()
                         .clip(RoundedCornerShape(2.dp))
                         .align(Alignment.BottomStart),
                 )
@@ -554,9 +614,10 @@ private fun ImagePickerWithError(
                     onClick = onClearImage,
                     modifier = Modifier
                         .graphicsLayer {
-                            translationX = 6.dp.toPx()
-                            translationY = -6.dp.toPx()
+                            translationX = 9.dp.toPx()
+                            translationY = -9.dp.toPx()
                         }
+                        .shadow(elevation = 4.dp, shape = CircleShape)
                         .size(24.dp)
                         .align(Alignment.TopEnd),
                     colors = IconButtonDefaults
@@ -649,7 +710,7 @@ private fun CardTypeImage(
     )
 }
 
-fun Modifier.selectedBorder(
+private fun Modifier.selectedBorder(
     isSelected: Boolean,
     selectedBorderColor: Color,
     vectorPainter: VectorPainter,
@@ -692,6 +753,7 @@ internal fun CardScreen(
     onClickEdit: () -> Unit,
     onClickShareProfileCard: (ImageBitmap) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
+    qrCodeImageByte: ByteArray?,
     modifier: Modifier = Modifier,
     isCreated: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(16.dp),
@@ -699,14 +761,21 @@ internal fun CardScreen(
     val coroutineScope = rememberCoroutineScope()
     val graphicsLayer = rememberGraphicsLayer()
     var isShareReady by remember { mutableStateOf(false) }
+    val profileCardImagePainter = rememberProfileImagePainter(uiState.image)
+    val qrCodeImagePainter = rememberAsyncImagePainter(qrCodeImageByte)
+
+    // The background of this screen is light, contrasting any other screen in the app.
+    // Invert the content color of system bars to accommodate this unique property.
+    InvertSystemBarAppearance()
 
     ProvideProfileCardTheme(uiState.cardType.toString()) {
         Box {
             // Not for display, for sharing
-            ShareableProfileCard(
+            ShareableCard(
                 uiState = uiState,
                 graphicsLayer = graphicsLayer,
-                contentPadding = contentPadding,
+                profileImagePainter = profileCardImagePainter,
+                qrCodeImagePainter = qrCodeImagePainter,
                 onReadyShare = {
                     Logger.d { "Ready to share" }
                     isShareReady = true
@@ -730,6 +799,8 @@ internal fun CardScreen(
                 ) {
                     FlipCard(
                         uiState = uiState,
+                        profileImagePainter = profileCardImagePainter,
+                        qrCodeImagePainter = qrCodeImagePainter,
                         isCreated = isCreated,
                     )
                     Spacer(Modifier.height(32.dp))
@@ -741,7 +812,10 @@ internal fun CardScreen(
                                 onClickShareProfileCard(graphicsLayer.toImageBitmap())
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.White,
+                            disabledContainerColor = Color.White,
+                        ),
                         border = if (uiState.cardType == ProfileCardType.None) {
                             BorderStroke(
                                 0.5.dp,
@@ -772,14 +846,26 @@ internal fun CardScreen(
                         )
                     }
                     Spacer(Modifier.height(8.dp))
-                    Text(
-                        text = stringResource(ProfileCardRes.string.edit),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = Color.Black,
+                    TextButton(
+                        onClick = {
+                            onClickEdit()
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Transparent,
+                            disabledContainerColor = Color.Transparent,
+                        ),
                         modifier = Modifier
-                            .clickable { onClickEdit() }
+                            .padding(horizontal = 16.dp)
+                            .fillMaxWidth()
                             .testTag(ProfileCardEditButtonTestTag),
-                    )
+                    ) {
+                        Text(
+                            text = stringResource(ProfileCardRes.string.edit),
+                            modifier = Modifier.padding(8.dp),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = Color.Black,
+                        )
+                    }
                 }
             }
         }
@@ -787,58 +873,8 @@ internal fun CardScreen(
 }
 
 @Composable
-private fun ShareableProfileCard(
-    uiState: ProfileCardUiState.Card,
-    graphicsLayer: GraphicsLayer,
-    contentPadding: PaddingValues,
-    onReadyShare: () -> Unit,
-) {
-    var frontImage: ImageBitmap? by remember { mutableStateOf(null) }
-    var backImage: ImageBitmap? by remember { mutableStateOf(null) }
-    CapturableCard(
-        uiState = uiState,
-        onCaptured = { front, back ->
-            frontImage = front
-            backImage = back
-            onReadyShare()
-        },
-    )
-    Box(
-        modifier = Modifier.padding(contentPadding)
-            .drawWithContent {
-                graphicsLayer.record {
-                    this@drawWithContent.drawContent()
-                }
-                drawLayer(graphicsLayer)
-            },
-    ) {
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(LocalProfileCardTheme.current.primaryColor)
-                .padding(vertical = 50.dp),
-        ) {
-            backImage?.let {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset(x = 70.dp, y = 15.dp)
-                        .rotate(10f)
-                        .size(150.dp, 190.dp),
-                )
-            }
-            frontImage?.let {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset(x = (-70).dp, y = (-15).dp)
-                        .rotate(-10f)
-                        .size(150.dp, 190.dp),
-                )
-            }
-        }
-    }
-}
+private fun rememberProfileImagePainter(
+    imageBase64String: String,
+) = rememberAsyncImagePainter(
+    model = rememberSaveable { imageBase64String.decodeBase64Bytes() },
+)
