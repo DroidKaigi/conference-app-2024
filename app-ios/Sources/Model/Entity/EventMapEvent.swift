@@ -4,15 +4,15 @@ public struct EventMapEvent: Equatable, Sendable, Hashable {
     public let name: MultiLangText
     public let roomName: MultiLangText
     public let roomIcon: RoomIcon
-    public let description_: MultiLangText
+    public let description: MultiLangText
     public let moreDetailsUrl: URL?
     public let message: MultiLangText?
 
-    public init(name: MultiLangText, roomName: MultiLangText, roomIcon: RoomIcon, description_: MultiLangText, moreDetailsUrl: URL?, message: MultiLangText?) {
+    public init(name: MultiLangText, roomName: MultiLangText, roomIcon: RoomIcon, description: MultiLangText, moreDetailsUrl: URL?, message: MultiLangText?) {
         self.name = name
         self.roomName = roomName
         self.roomIcon = roomIcon
-        self.description_ = description_
+        self.description = description
         self.moreDetailsUrl = moreDetailsUrl
         self.message = message
     }

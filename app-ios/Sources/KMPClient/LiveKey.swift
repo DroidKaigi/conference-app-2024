@@ -130,7 +130,7 @@ extension EventMapClient: DependencyKey {
                             jaTitle: $0.roomName.jaTitle
                         ),
                         roomIcon: RoomIcon(rawValue: $0.roomIcon.name.lowercased()) ?? .none,
-                        description_: .init(
+                        description: .init(
                             currentLangTitle: $0.description_.currentLangTitle,
                             enTitle: $0.description_.enTitle,
                             jaTitle: $0.description_.jaTitle

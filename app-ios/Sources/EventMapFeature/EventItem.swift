@@ -25,7 +25,7 @@ struct EventItem: View {
             .padding(.bottom, 8)
 
             VStack(alignment: .leading ,spacing: 8) {
-                Text(event.description_.currentLangTitle)
+                Text(event.description.currentLangTitle)
                     .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     .textStyle(.bodyLarge)
 
@@ -67,7 +67,7 @@ struct EventItem: View {
             name: .init(currentLangTitle: "name", enTitle: "name", jaTitle: "name"),
             roomName: .init(currentLangTitle: "roomName", enTitle: "roomName", jaTitle: "roomName"),
             roomIcon: .square,
-            description_: .init(currentLangTitle: "description", enTitle: "description", jaTitle: "description"),
+            description: .init(currentLangTitle: "description", enTitle: "description", jaTitle: "description"),
             moreDetailsUrl: nil,
             message: nil
         )
