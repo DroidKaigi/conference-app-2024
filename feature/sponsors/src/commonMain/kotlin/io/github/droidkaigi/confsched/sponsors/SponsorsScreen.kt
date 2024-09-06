@@ -54,48 +54,22 @@ data class SponsorsScreenUiState(
 )
 
 data class SponsorsListUiState(
-    val platinumSponsorsUiState: PlatinumSponsorsUiState,
-    val goldSponsorsUiState: GoldSponsorsUiState,
-    val supportersUiState: SupportersUiState,
+    val platinumSponsorsUiState: SponsorsByPlanUiState,
+    val goldSponsorsUiState: SponsorsByPlanUiState,
+    val supportersUiState: SponsorsByPlanUiState,
 )
 
-sealed interface PlatinumSponsorsUiState {
+sealed interface SponsorsByPlanUiState {
     val userMessageStateHolder: UserMessageStateHolder
 
     data class Loading(
         override val userMessageStateHolder: UserMessageStateHolder,
-    ) : PlatinumSponsorsUiState
+    ) : SponsorsByPlanUiState
 
     data class Exists(
         override val userMessageStateHolder: UserMessageStateHolder,
-        val platinumSponsors: PersistentList<Sponsor>,
-    ) : PlatinumSponsorsUiState
-}
-
-sealed interface GoldSponsorsUiState {
-    val userMessageStateHolder: UserMessageStateHolder
-
-    data class Loading(
-        override val userMessageStateHolder: UserMessageStateHolder,
-    ) : GoldSponsorsUiState
-
-    data class Exists(
-        override val userMessageStateHolder: UserMessageStateHolder,
-        val goldSponsors: PersistentList<Sponsor>,
-    ) : GoldSponsorsUiState
-}
-
-sealed interface SupportersUiState {
-    val userMessageStateHolder: UserMessageStateHolder
-
-    data class Loading(
-        override val userMessageStateHolder: UserMessageStateHolder,
-    ) : SupportersUiState
-
-    data class Exists(
-        override val userMessageStateHolder: UserMessageStateHolder,
-        val supporters: PersistentList<Sponsor>,
-    ) : SupportersUiState
+        val sponsors: PersistentList<Sponsor>,
+    ) : SponsorsByPlanUiState
 }
 
 @Composable
@@ -174,17 +148,17 @@ fun SponsorsScreenPreview() {
             SponsorsScreen(
                 uiState = SponsorsScreenUiState(
                     sponsorsListUiState = SponsorsListUiState(
-                        platinumSponsorsUiState = PlatinumSponsorsUiState.Exists(
+                        platinumSponsorsUiState = SponsorsByPlanUiState.Exists(
                             userMessageStateHolder = UserMessageStateHolderImpl(),
-                            platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
+                            sponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
                         ),
-                        goldSponsorsUiState = GoldSponsorsUiState.Exists(
+                        goldSponsorsUiState = SponsorsByPlanUiState.Exists(
                             userMessageStateHolder = UserMessageStateHolderImpl(),
-                            goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
+                            sponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
                         ),
-                        supportersUiState = SupportersUiState.Exists(
+                        supportersUiState = SponsorsByPlanUiState.Exists(
                             userMessageStateHolder = UserMessageStateHolderImpl(),
-                            supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                            sponsors = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
                         ),
                     ),
                     userMessageStateHolder = UserMessageStateHolderImpl(),

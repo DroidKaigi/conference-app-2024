@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridItemSpanScope
+import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -20,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.sponsors.generated.resources.gold_sponsor
 import conference_app_2024.feature.sponsors.generated.resources.platinum_sponsor
@@ -31,14 +34,13 @@ import io.github.droidkaigi.confsched.model.Plan.PLATINUM
 import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
 import io.github.droidkaigi.confsched.model.Sponsor
 import io.github.droidkaigi.confsched.model.fakes
-import io.github.droidkaigi.confsched.sponsors.GoldSponsorsUiState
-import io.github.droidkaigi.confsched.sponsors.PlatinumSponsorsUiState
+import io.github.droidkaigi.confsched.sponsors.SponsorsByPlanUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsListUiState
 import io.github.droidkaigi.confsched.sponsors.SponsorsRes
-import io.github.droidkaigi.confsched.sponsors.SupportersUiState
 import io.github.droidkaigi.confsched.sponsors.component.SponsorHeader
 import io.github.droidkaigi.confsched.sponsors.component.SponsorItem
 import kotlinx.collections.immutable.toPersistentList
+import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -74,135 +76,87 @@ fun SponsorsList(
             bottom = 48.dp + contentPadding.calculateBottomPadding(),
         ),
     ) {
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            SponsorHeader(
-                text = stringResource(SponsorsRes.string.platinum_sponsor),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(
-                        SponsorsListSponsorHeaderTestTagPrefix
-                            .plus(stringResource(SponsorsRes.string.platinum_sponsor)),
-                    ),
-            )
-        }
-        when (uiState.platinumSponsorsUiState) {
-            is PlatinumSponsorsUiState.Exists -> {
-                items(
-                    items = uiState.platinumSponsorsUiState.platinumSponsors,
-                    span = { GridItemSpan(maxLineSpan) },
-                ) { sponsor ->
-                    SponsorItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(110.dp)
-                            .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
-                        sponsor = sponsor,
-                        onSponsorsItemClick = onSponsorsItemClick,
-                    )
-                }
-            }
-            is PlatinumSponsorsUiState.Loading -> {
-                item(
-                    span = { GridItemSpan(maxLineSpan) },
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(contentPadding).fillMaxWidth(),
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
+        sponsorsByPlanSection(
+            headerStringResource = SponsorsRes.string.platinum_sponsor,
+            sponsorsByPlanUiState = uiState.platinumSponsorsUiState,
+            onSponsorsItemClick = onSponsorsItemClick,
+            contentPadding = contentPadding,
+            sponsorItemSpan = { GridItemSpan(maxLineSpan) },
+            sponsorItemHeight = 110.dp,
+        )
+
+        sponsorsByPlanSection(
+            headerStringResource = SponsorsRes.string.gold_sponsor,
+            sponsorsByPlanUiState = uiState.goldSponsorsUiState,
+            onSponsorsItemClick = onSponsorsItemClick,
+            contentPadding = contentPadding,
+            sponsorItemSpan = { GridItemSpan(3) },
+            sponsorItemHeight = 77.dp,
+        )
+
+        sponsorsByPlanSection(
+            headerStringResource = SponsorsRes.string.supporters,
+            sponsorsByPlanUiState = uiState.supportersUiState,
+            onSponsorsItemClick = onSponsorsItemClick,
+            contentPadding = contentPadding,
+            sponsorItemSpan = { GridItemSpan(2) },
+            sponsorItemHeight = 77.dp,
+            isLastSection = true,
+        )
+    }
+}
+
+private fun LazyGridScope.sponsorsByPlanSection(
+    headerStringResource: StringResource,
+    sponsorsByPlanUiState: SponsorsByPlanUiState,
+    contentPadding: PaddingValues,
+    sponsorItemSpan: LazyGridItemSpanScope.() -> GridItemSpan,
+    sponsorItemHeight: Dp,
+    onSponsorsItemClick: (url: String) -> Unit,
+    isLastSection: Boolean = false,
+) {
+    item(span = { GridItemSpan(maxLineSpan) }) {
+        val headerText = stringResource(headerStringResource)
+        SponsorHeader(
+            text = headerText,
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(SponsorsListSponsorHeaderTestTagPrefix.plus(headerText)),
+        )
+    }
+    when (sponsorsByPlanUiState) {
+        is SponsorsByPlanUiState.Exists -> {
+            items(
+                items = sponsorsByPlanUiState.sponsors,
+                span = { sponsorItemSpan() },
+            ) { sponsor ->
+                SponsorItem(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(sponsorItemHeight)
+                        .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
+                    sponsor = sponsor,
+                    onSponsorsItemClick = onSponsorsItemClick,
+                )
             }
         }
 
+        is SponsorsByPlanUiState.Loading -> {
+            item(
+                span = { GridItemSpan(maxLineSpan) },
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(contentPadding).fillMaxWidth(),
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
+    }
+    if (isLastSection.not()) {
         item(span = { GridItemSpan(maxLineSpan) }) {
             Spacer(modifier = Modifier.height(24.dp))
-        }
-
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            SponsorHeader(
-                text = stringResource(SponsorsRes.string.gold_sponsor),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(
-                        SponsorsListSponsorHeaderTestTagPrefix
-                            .plus(stringResource(SponsorsRes.string.gold_sponsor)),
-                    ),
-            )
-        }
-        when (uiState.goldSponsorsUiState) {
-            is GoldSponsorsUiState.Exists -> {
-                items(
-                    items = uiState.goldSponsorsUiState.goldSponsors,
-                    span = { GridItemSpan(3) },
-                ) { sponsor ->
-                    SponsorItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(77.dp)
-                            .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
-                        sponsor = sponsor,
-                        onSponsorsItemClick = onSponsorsItemClick,
-                    )
-                }
-            }
-            is GoldSponsorsUiState.Loading -> {
-                item(
-                    span = { GridItemSpan(maxLineSpan) },
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(contentPadding).fillMaxWidth(),
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
-        }
-
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            Spacer(modifier = Modifier.height(24.dp))
-        }
-
-        item(span = { GridItemSpan(maxLineSpan) }) {
-            SponsorHeader(
-                text = stringResource(SponsorsRes.string.supporters),
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(
-                        SponsorsListSponsorHeaderTestTagPrefix
-                            .plus(stringResource(SponsorsRes.string.supporters)),
-                    ),
-            )
-        }
-        when (uiState.supportersUiState) {
-            is SupportersUiState.Exists -> {
-                items(
-                    items = uiState.supportersUiState.supporters,
-                    span = { GridItemSpan(2) },
-                ) { sponsor ->
-                    SponsorItem(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(77.dp)
-                            .testTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)),
-                        sponsor = sponsor,
-                        onSponsorsItemClick = onSponsorsItemClick,
-                    )
-                }
-            }
-            is SupportersUiState.Loading -> {
-                item(
-                    span = { GridItemSpan(maxLineSpan) },
-                ) {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.padding(contentPadding).fillMaxWidth(),
-                    ) {
-                        CircularProgressIndicator()
-                    }
-                }
-            }
         }
     }
 }
@@ -215,17 +169,19 @@ fun SponsorsListPreview() {
         Surface {
             SponsorsList(
                 uiState = SponsorsListUiState(
-                    platinumSponsorsUiState = PlatinumSponsorsUiState.Exists(
+                    platinumSponsorsUiState = SponsorsByPlanUiState.Exists(
                         userMessageStateHolder = UserMessageStateHolderImpl(),
-                        platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
+                        sponsors = Sponsor.fakes().filter { it.plan == PLATINUM }
+                            .toPersistentList(),
                     ),
-                    goldSponsorsUiState = GoldSponsorsUiState.Exists(
+                    goldSponsorsUiState = SponsorsByPlanUiState.Exists(
                         userMessageStateHolder = UserMessageStateHolderImpl(),
-                        goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
+                        sponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
                     ),
-                    supportersUiState = SupportersUiState.Exists(
+                    supportersUiState = SponsorsByPlanUiState.Exists(
                         userMessageStateHolder = UserMessageStateHolderImpl(),
-                        supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                        sponsors = Sponsor.fakes().filter { it.plan == SUPPORTER }
+                            .toPersistentList(),
                     ),
                 ),
                 onSponsorsItemClick = {},

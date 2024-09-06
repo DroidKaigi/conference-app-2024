@@ -48,34 +48,34 @@ private fun sponsorList(
     val supporters = sponsors.filter { it.plan == SUPPORTER }.toPersistentList()
 
     val platinumSponsorsUiState = if (platinumSponsors.isNotEmpty()) {
-        PlatinumSponsorsUiState.Exists(
+        SponsorsByPlanUiState.Exists(
             userMessageStateHolder = userMessageStateHolder,
-            platinumSponsors = platinumSponsors,
+            sponsors = platinumSponsors,
         )
     } else {
-        PlatinumSponsorsUiState.Loading(
+        SponsorsByPlanUiState.Loading(
             userMessageStateHolder = userMessageStateHolder,
         )
     }
 
     val goldSponsorsUiState = if (goldSponsors.isNotEmpty()) {
-        GoldSponsorsUiState.Exists(
+        SponsorsByPlanUiState.Exists(
             userMessageStateHolder = userMessageStateHolder,
-            goldSponsors = goldSponsors,
+            sponsors = goldSponsors,
         )
     } else {
-        GoldSponsorsUiState.Loading(
+        SponsorsByPlanUiState.Loading(
             userMessageStateHolder = userMessageStateHolder,
         )
     }
 
     val supportersUiState = if (supporters.isNotEmpty()) {
-        SupportersUiState.Exists(
+        SponsorsByPlanUiState.Exists(
             userMessageStateHolder = userMessageStateHolder,
-            supporters = supporters,
+            sponsors = supporters,
         )
     } else {
-        SupportersUiState.Loading(
+        SponsorsByPlanUiState.Loading(
             userMessageStateHolder = userMessageStateHolder,
         )
     }
