@@ -71,8 +71,8 @@ data class AboutUiState(
 @Composable
 fun AboutScreen(
     onAboutItemClick: (AboutItem) -> Unit,
-    contentPadding: PaddingValues = PaddingValues(),
     modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
 ) {
     val uiState = aboutScreenPresenter()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -91,8 +91,8 @@ fun AboutScreen(
 fun AboutScreen(
     uiState: AboutUiState,
     snackbarHostState: SnackbarHostState,
-    contentPadding: PaddingValues,
     onAboutItemClick: (AboutItem) -> Unit,
+    contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
