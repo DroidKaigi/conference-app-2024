@@ -587,6 +587,7 @@ fun TimetableGridItemWelcomeTalkPreview() {
                         enTitle = "This is a description\nThis is a description\nThis is a description\n" +
                             "This is a description\nThis is a description\nThis is a description\n",
                     ),
+                    message = null,
                 ),
                 onTimetableItemClick = {},
                 gridItemHeightPx = 154,

@@ -61,6 +61,7 @@ import io.github.droidkaigi.confsched.droidkaigiui.animation.LocalFavoriteAnimat
 import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.TimetableItem.Special
 import org.jetbrains.compose.resources.stringResource
 
 const val TimetableItemCardBookmarkButtonTestTag = "TimetableItemCardBookmarkButton"
@@ -170,25 +171,27 @@ fun TimetableItemCard(
                         }
                     }
                 }
-                if (timetableItem is Session) {
-                    timetableItem.message?.let {
-                        Row(
-                            modifier = Modifier
-                                .padding(top = 8.dp)
-                                .height(IntrinsicSize.Min),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        ) {
-                            Icon(
-                                Icons.Filled.Info,
-                                contentDescription = stringResource(DroidKaigiUiRes.string.image),
-                                tint = MaterialTheme.colorScheme.error,
-                            )
-                            Text(
-                                text = it.currentLangTitle,
-                                fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.error,
-                            )
-                        }
+
+                when (timetableItem) {
+                    is Session -> timetableItem.message
+                    is Special -> timetableItem.message
+                }?.let {
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Icon(
+                            Icons.Filled.Info,
+                            contentDescription = stringResource(DroidKaigiUiRes.string.image),
+                            tint = MaterialTheme.colorScheme.error,
+                        )
+                        Text(
+                            text = it.currentLangTitle,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.error,
+                        )
                     }
                 }
             }
