@@ -59,6 +59,7 @@ import io.github.droidkaigi.confsched.model.TimetableAsset
 import io.github.droidkaigi.confsched.model.TimetableCategory
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.TimetableItem.Special
 import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.model.TimetableLanguage
 import io.github.droidkaigi.confsched.model.TimetableRoom
@@ -226,7 +227,10 @@ fun TimetableGridItem(
                 },
             )
 
-            val shouldShowError = timetableItem is Session && timetableItem.message != null
+            val shouldShowError = when (timetableItem) {
+                is Session -> timetableItem.message
+                is Special -> timetableItem.message
+            } != null
 
             if (isShowingAllContent && (speakers.isNotEmpty() || shouldShowError)) {
                 Row(
