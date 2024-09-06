@@ -44,7 +44,7 @@ public class UserDataStore(private val dataStore: DataStore<Preferences>) {
             }.stateIn(
                 scope = singletonCoroutineScope,
                 started = SharingStarted.WhileSubscribed(5_000),
-                initialValue = persistentSetOf()
+                initialValue = persistentSetOf(),
             )
 
     public suspend fun toggleFavorite(id: TimetableItemId) {
