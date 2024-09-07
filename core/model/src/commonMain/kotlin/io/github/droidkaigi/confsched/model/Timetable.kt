@@ -161,6 +161,7 @@ public fun Timetable.Companion.fake(): Timetable {
                     enTitle = "This is a description\nThis is a description\nThis is a description\n" +
                         "This is a description\nThis is a description\nThis is a description\n",
                 ),
+                message = null,
             ),
         )
         for (day in -1..1) {
@@ -228,6 +229,10 @@ public fun Timetable.Companion.fake(): Timetable {
                         "これはディスクリプションです。\nこれはディスクリプションです。\nこれはディスクリプションです。\n",
                     enTitle = "This is a description\nThis is a description\nThis is a description\n" +
                         "This is a description\nThis is a description\nThis is a description\n",
+                ),
+                message = MultiLangText(
+                    jaTitle = "このセッションは事情により中止となりました",
+                    enTitle = "This session has been cancelled due to circumstances.",
                 ),
             ),
         )

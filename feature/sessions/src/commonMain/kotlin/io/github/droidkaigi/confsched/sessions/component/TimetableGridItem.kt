@@ -59,6 +59,7 @@ import io.github.droidkaigi.confsched.model.TimetableAsset
 import io.github.droidkaigi.confsched.model.TimetableCategory
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.TimetableItem.Special
 import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.model.TimetableLanguage
 import io.github.droidkaigi.confsched.model.TimetableRoom
@@ -226,7 +227,10 @@ fun TimetableGridItem(
                 },
             )
 
-            val shouldShowError = timetableItem is Session && timetableItem.message != null
+            val shouldShowError = when (timetableItem) {
+                is Session -> timetableItem.message
+                is Special -> timetableItem.message
+            } != null
 
             if (isShowingAllContent && (speakers.isNotEmpty() || shouldShowError)) {
                 Row(
@@ -263,7 +267,7 @@ fun TimetableGridItem(
                                 .size(TimetableGridItemSizes.errorHeight),
                             imageVector = Icons.Default.Error,
                             contentDescription = stringResource(SessionsRes.string.content_description_error_icon),
-                            tint = MaterialTheme.colorScheme.errorContainer,
+                            tint = MaterialTheme.colorScheme.error,
                         )
                     }
                 }
@@ -587,6 +591,7 @@ fun TimetableGridItemWelcomeTalkPreview() {
                         enTitle = "This is a description\nThis is a description\nThis is a description\n" +
                             "This is a description\nThis is a description\nThis is a description\n",
                     ),
+                    message = null,
                 ),
                 onTimetableItemClick = {},
                 gridItemHeightPx = 154,
