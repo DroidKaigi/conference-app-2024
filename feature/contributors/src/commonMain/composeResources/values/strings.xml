@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="contributor_title">Contributor</string>
+    <string name="contributor_total">Total</string>
+    <string name="contributor_person">persons</string>
 </resources>
