@@ -14,13 +14,7 @@ import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.calculateEndPadding
-import androidx.compose.foundation.layout.calculateStartPadding
-import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
@@ -31,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
 import androidx.core.content.getSystemService
 import androidx.core.net.toUri
@@ -100,7 +93,6 @@ fun KaigiApp(
     fontFamily: FontFamily?,
     modifier: Modifier = Modifier,
 ) {
-    val layoutDirection = LocalLayoutDirection.current
     KaigiTheme(
         colorContrast = colorContrast(),
         fontFamily = fontFamily,
@@ -112,14 +104,7 @@ fun KaigiApp(
             KaigiNavHost(
                 windowSize = windowSize,
                 displayFeatures = displayFeatures,
-                modifier = Modifier.padding(
-                    start = WindowInsets.displayCutout
-                        .asPaddingValues()
-                        .calculateStartPadding(layoutDirection),
-                    end = WindowInsets.displayCutout
-                        .asPaddingValues()
-                        .calculateEndPadding(layoutDirection),
-                ),
+                modifier = Modifier.fillMaxSize(),
             )
         }
     }

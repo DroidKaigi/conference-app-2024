@@ -1,8 +1,12 @@
 package io.github.droidkaigi.confsched.sponsors
 
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -124,18 +128,21 @@ fun SponsorsScreen(
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
                     navIconContentDescription = stringResource(SponsorsRes.string.content_description_back),
+                    windowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+                        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
+                    ),
                 )
             }
         },
+        contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { padding ->
         SponsorsList(
             modifier = Modifier
-                .padding(top = padding.calculateTopPadding())
                 .fillMaxSize(),
             uiState = uiState.sponsorsListUiState,
             scrollBehavior = scrollBehavior,
             onSponsorsItemClick = onSponsorsItemClick,
-            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            contentPadding = padding,
         )
     }
 }

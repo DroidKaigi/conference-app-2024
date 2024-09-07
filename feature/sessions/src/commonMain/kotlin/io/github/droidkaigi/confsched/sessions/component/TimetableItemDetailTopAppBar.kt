@@ -30,6 +30,7 @@ fun TimetableItemDetailTopAppBar(
     onNavigationIconClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
 ) {
     // Allow content to be displayed at the statusBar when scrolling
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
@@ -56,6 +57,7 @@ fun TimetableItemDetailTopAppBar(
             }
         },
         scrollBehavior = scrollBehavior,
+        windowInsets = windowInsets,
     )
 }
 

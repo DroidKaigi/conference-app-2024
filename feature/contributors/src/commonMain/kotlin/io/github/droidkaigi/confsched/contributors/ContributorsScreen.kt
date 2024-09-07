@@ -2,9 +2,15 @@ package io.github.droidkaigi.confsched.contributors
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -118,19 +124,22 @@ fun ContributorsScreen(
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
                     navIconContentDescription = "Back",
+                    windowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+                        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
+                    ),
                 )
             }
         },
+        contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { padding ->
         when (uiState) {
             is Exists -> {
                 Contributors(
                     contributors = uiState.contributors,
                     onContributorsItemClick = onContributorsItemClick,
-                    contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+                    contentPadding = padding,
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = padding.calculateTopPadding())
                         .let {
                             if (scrollBehavior != null) {
                                 it.nestedScroll(scrollBehavior.nestedScrollConnection)

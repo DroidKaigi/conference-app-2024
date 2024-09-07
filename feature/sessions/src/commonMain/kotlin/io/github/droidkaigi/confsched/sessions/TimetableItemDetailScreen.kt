@@ -5,8 +5,16 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -24,6 +32,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
@@ -168,6 +177,7 @@ private fun TimetableItemDetailScreen(
 ) {
     val sharedTransitionScope = LocalSharedTransitionScope.current
     val animatedScope = LocalAnimatedVisibilityScope.current
+    val layoutDirection = LocalLayoutDirection.current
 
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     Scaffold(
@@ -180,6 +190,9 @@ private fun TimetableItemDetailScreen(
                     TimetableItemDetailTopAppBar(
                         onNavigationIconClick = onNavigationIconClick,
                         scrollBehavior = scrollBehavior,
+                        windowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+                            WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
+                        ),
                     )
                 }
             }
@@ -192,16 +205,19 @@ private fun TimetableItemDetailScreen(
                     onBookmarkClick = onBookmarkClick,
                     onCalendarRegistrationClick = onCalendarRegistrationClick,
                     onShareClick = onShareClick,
+                    windowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+                        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
+                    ),
                 )
             }
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
+        contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { innerPadding ->
         val surfaceModifier = if (sharedTransitionScope != null && animatedScope != null) {
             with(sharedTransitionScope) {
                 Modifier
                     .fillMaxSize()
-                    .padding(innerPadding)
                     .sharedElement(
                         state = rememberSharedContentState(
                             key = timetableDetailSharedContentStateKey(timetableItemId = uiState.timetableItemId),
@@ -212,7 +228,6 @@ private fun TimetableItemDetailScreen(
         } else {
             Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
         }
 
         Surface(
@@ -223,10 +238,19 @@ private fun TimetableItemDetailScreen(
                     LazyColumn(
                         modifier = Modifier
                             .fillMaxSize()
+                            .padding(
+                                top = innerPadding.calculateTopPadding(),
+                                bottom = innerPadding.calculateBottomPadding(),
+                            )
                             .testTag(TimetableItemDetailScreenLazyColumnTestTag),
                     ) {
                         item {
                             TimetableItemDetailHeadline(
+                                modifier = Modifier
+                                    .padding(
+                                        start = innerPadding.calculateStartPadding(layoutDirection),
+                                        end = innerPadding.calculateEndPadding(layoutDirection),
+                                    ),
                                 currentLang = uiState.currentLang,
                                 timetableItem = uiState.timetableItem,
                                 isLangSelectable = uiState.isLangSelectable,
@@ -236,12 +260,20 @@ private fun TimetableItemDetailScreen(
 
                         item {
                             TimetableItemDetailSummaryCard(
+                                modifier = Modifier.padding(
+                                    start = innerPadding.calculateStartPadding(layoutDirection),
+                                    end = innerPadding.calculateEndPadding(layoutDirection),
+                                ),
                                 timetableItem = uiState.timetableItem,
                             )
                         }
 
                         item {
                             TimetableItemDetailContent(
+                                modifier = Modifier.padding(
+                                    start = innerPadding.calculateStartPadding(layoutDirection),
+                                    end = innerPadding.calculateEndPadding(layoutDirection),
+                                ),
                                 timetableItem = uiState.timetableItem,
                                 currentLang = uiState.currentLang,
                                 onLinkClick = onLinkClick,

@@ -105,6 +105,11 @@ fun AboutScreen(
             AnimatedTextTopAppBar(
                 title = stringResource(AboutRes.string.about_droidkaigi),
                 scrollBehavior = scrollBehavior,
+                windowInsets = WindowInsets(
+                    left = contentPadding.calculateLeftPadding(layoutDirection),
+                    top = contentPadding.calculateTopPadding(),
+                    right = contentPadding.calculateRightPadding(layoutDirection),
+                ),
             )
         },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },

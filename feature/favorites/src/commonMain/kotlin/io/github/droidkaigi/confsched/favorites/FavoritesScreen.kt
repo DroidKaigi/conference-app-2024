@@ -5,6 +5,7 @@ import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -23,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -138,6 +140,7 @@ private fun FavoritesScreen(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(),
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     val fraction = if (scrollBehavior.state.overlappedFraction > 0.01f) 1f else 0f
@@ -171,6 +174,11 @@ private fun FavoritesScreen(
                 scrollBehavior = scrollBehavior,
                 colors = TopAppBarDefaults.topAppBarColors().copy(
                     scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+                ),
+                windowInsets = WindowInsets(
+                    left = contentPadding.calculateLeftPadding(layoutDirection),
+                    top = contentPadding.calculateTopPadding(),
+                    right = contentPadding.calculateRightPadding(layoutDirection),
                 ),
             )
         },

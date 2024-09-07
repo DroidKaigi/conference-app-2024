@@ -280,6 +280,11 @@ internal fun ProfileCardScreen(
                     AnimatedTextTopAppBar(
                         title = stringResource(ProfileCardRes.string.profile_card_title),
                         scrollBehavior = scrollBehavior,
+                        windowInsets = WindowInsets(
+                            left = contentPadding.calculateLeftPadding(layoutDirection),
+                            top = contentPadding.calculateTopPadding(),
+                            right = contentPadding.calculateRightPadding(layoutDirection),
+                        ),
                     )
                 }
 
@@ -294,6 +299,11 @@ internal fun ProfileCardScreen(
                             textColor = MaterialTheme.colorScheme.scrim,
                             title = stringResource(ProfileCardRes.string.profile_card_title),
                             scrollBehavior = scrollBehavior,
+                            windowInsets = WindowInsets(
+                                left = contentPadding.calculateLeftPadding(layoutDirection),
+                                top = contentPadding.calculateTopPadding(),
+                                right = contentPadding.calculateRightPadding(layoutDirection),
+                            ),
                         )
                     }
                 }

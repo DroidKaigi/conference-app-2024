@@ -193,6 +193,11 @@ private fun TimetableScreen(
                         }
                     }
                 },
+                windowInsets = WindowInsets(
+                    left = contentPadding.calculateLeftPadding(layoutDirection),
+                    top = contentPadding.calculateTopPadding(),
+                    right = contentPadding.calculateRightPadding(layoutDirection),
+                ),
             )
         },
         contentWindowInsets = WindowInsets(
