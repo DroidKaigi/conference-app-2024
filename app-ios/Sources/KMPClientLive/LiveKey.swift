@@ -104,7 +104,7 @@ extension SponsorsClient: DependencyKey {
                         return Model.Sponsor(
                             id: $0.name,
                             logo: URL(string: $0.logo)!,
-                            link: URL(string: $0.link)!, 
+                            link: URL(string: $0.link)!,
                             plan: plan
                         )
                     }
