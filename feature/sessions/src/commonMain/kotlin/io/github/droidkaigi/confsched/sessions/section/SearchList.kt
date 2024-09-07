@@ -2,8 +2,10 @@ package io.github.droidkaigi.confsched.sessions.section
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.model.TimetableItem
 
 @Composable
@@ -23,5 +25,13 @@ fun SearchList(
         contentPadding = contentPadding,
         highlightWord = highlightWord,
         modifier = modifier,
+        timetableItemTagsContent = { timetableItem ->
+            timetableItem.day?.monthAndDay()?.let { monthAndDay ->
+                TimetableItemTag(
+                    tagText = monthAndDay,
+                    tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        },
     )
 }

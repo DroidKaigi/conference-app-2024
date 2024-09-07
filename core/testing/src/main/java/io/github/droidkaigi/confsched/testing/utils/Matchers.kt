@@ -3,6 +3,7 @@ package io.github.droidkaigi.confsched.testing.utils
 import androidx.compose.ui.semantics.SemanticsActions
 import androidx.compose.ui.semantics.SemanticsNode
 import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.SemanticsPropertyKey
 import androidx.compose.ui.semantics.getOrNull
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteraction
@@ -81,6 +82,23 @@ fun SemanticsNodeInteraction.assertLineCount(expectedCount: Int) {
             assertTrue(
                 "Node has unexpected line count (expected $expectedCount, but was ${result?.lineCount})",
                 result?.lineCount == expectedCount,
+            )
+        }
+}
+
+fun <T> SemanticsNodeInteraction.assertSemanticsProperty(
+    key: SemanticsPropertyKey<T>,
+    condition: (T?) -> Boolean,
+) {
+    fetchSemanticsNode()
+        .let { node ->
+            val actual = node
+                .config
+                .getOrNull(key)
+
+            assertTrue(
+                "Node has unexpected value for semantics property $key: $actual",
+                condition(actual),
             )
         }
 }
