@@ -8,6 +8,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -24,12 +25,14 @@ import io.github.droidkaigi.confsched.about.section.AboutDroidKaigiDetail
 import io.github.droidkaigi.confsched.about.section.AboutFooterLinks
 import io.github.droidkaigi.confsched.about.section.aboutCredits
 import io.github.droidkaigi.confsched.about.section.aboutOthers
+import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedTextTopAppBar
 import io.github.droidkaigi.confsched.model.AboutItem
 import io.github.droidkaigi.confsched.model.AboutItem.Medium
 import io.github.droidkaigi.confsched.model.AboutItem.X
 import io.github.droidkaigi.confsched.model.AboutItem.YouTube
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val aboutScreenRoute = "about"
 
@@ -65,16 +68,34 @@ data class AboutUiState(
     val versionName: String,
 )
 
+@Composable
+fun AboutScreen(
+    onAboutItemClick: (AboutItem) -> Unit,
+    modifier: Modifier = Modifier,
+    contentPadding: PaddingValues = PaddingValues(),
+) {
+    val uiState = aboutScreenPresenter()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    AboutScreen(
+        uiState = uiState,
+        snackbarHostState = snackbarHostState,
+        contentPadding = contentPadding,
+        onAboutItemClick = onAboutItemClick,
+        modifier = modifier,
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen(
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(),
+    uiState: AboutUiState,
+    snackbarHostState: SnackbarHostState,
     onAboutItemClick: (AboutItem) -> Unit,
+    contentPadding: PaddingValues,
+    modifier: Modifier = Modifier,
 ) {
-    val uiState = aboutScreenPresenter()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val snackbarHostState = remember { SnackbarHostState() }
     val layoutDirection = LocalLayoutDirection.current
     val lazyListState = rememberLazyListState()
 
@@ -148,6 +169,23 @@ fun AboutScreen(
                     },
                 )
             }
+        }
+    }
+}
+
+@Preview
+@Composable
+fun AboutScreenPreview() {
+    KaigiTheme {
+        Surface {
+            AboutScreen(
+                uiState = AboutUiState(
+                    versionName = "1.0",
+                ),
+                snackbarHostState = SnackbarHostState(),
+                contentPadding = PaddingValues(),
+                onAboutItemClick = {},
+            )
         }
     }
 }
