@@ -93,6 +93,9 @@ internal fun TimetableList(
 
     LazyColumn(
         modifier = modifier.testTag(TimetableListTestTag)
+            .offset {
+                IntOffset(x = 0, y = nestedScrollStateHolder.uiState.dayTabOffsetY.toInt())
+            }
             .nestedScroll(nestedScrollConnection),
         state = scrollState,
         verticalArrangement = Arrangement.spacedBy(32.dp),
