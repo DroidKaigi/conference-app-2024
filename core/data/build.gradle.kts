@@ -7,7 +7,6 @@ plugins {
     id("droidkaigi.primitive.detekt")
     id("droidkaigi.primitive.kmp.ktorfit")
     id("droidkaigi.primitive.kmp.serialization")
-    id("droidkaigi.primitive.compose.investigator")
 }
 
 android.namespace = "io.github.droidkaigi.confsched.core.data"

@@ -10,7 +10,6 @@ androidDesugarJdkLibs = "2.0.4"
 compose = "2024.06.00"
 composeMultiplatform = "1.6.11"
 rin = "0.1.0"
-composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.2.1"
 composeHiltNavigation = "1.2.0"
 androidxLifecycle = "2.8.4"
@@ -67,7 +66,6 @@ ossLicensesPlugin = { group = "com.google.android.gms", name = "oss-licenses-plu
 moleculeGradlePlugin = { module = "app.cash.molecule:molecule-gradle-plugin", version.ref = "molecule" }
 moleculeRuntime = { module = "app.cash.molecule:molecule-runtime", version.ref = "molecule" }
 koverPlugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
-composeInvestigatorGradlePlugin = { module = "land.sungbin.composeinvestigator:land.sungbin.composeinvestigator.gradle.plugin", version.ref = "composeInvestigator" }
 skiePlugin = { module = "co.touchlab.skie:co.touchlab.skie.gradle.plugin", version.ref = "skie" }
 
 androidDesugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
@@ -190,7 +188,6 @@ hiltGradlePlugin = { id = "com.google.dagger.hilt.android", version.ref = "dagge
 roborazziGradlePlugin = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 kspGradlePlugin = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 moleculeGradlePlugin = { id = "app.cash.molecule", version.ref = "molecule" }
-composeInvestigatorGradlePlugin = { id = "land.sungbin.composeinvestigator:compiler-gradle-plugin", version.ref = "composeInvestigator" }
 kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 detektGradlePlugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ossLicensesPlugin = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
@@ -212,7 +209,6 @@ plugins = [
     "detektGradlePlugin",
     "ossLicensesPlugin",
     "moleculeGradlePlugin",
-#    "composeInvestigatorGradlePlugin",
     "koverPlugin",
     "firebaseCrashlyticsGradlePlugin"
 ]

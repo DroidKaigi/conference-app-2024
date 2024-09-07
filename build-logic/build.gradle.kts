@@ -99,10 +99,6 @@ gradlePlugin {
             id = "droidkaigi.primitive.kmp.serialization"
             implementationClass = "io.github.droidkaigi.confsched.primitive.KotlinSerializationPlugin"
         }
-        register("ComposeInvestigator") {
-            id = "droidkaigi.primitive.compose.investigator"
-            implementationClass = "io.github.droidkaigi.confsched.primitive.ComposeInvestigatorPlugin"
-        }
 
         register("Molecule") {
             id = "droidkaigi.primitive.molecule"
