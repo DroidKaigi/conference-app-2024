@@ -10,7 +10,7 @@ interface StaffRepository {
 
     public fun staffs(): Flow<PersistentList<Staff>>
 
-    @Throws(CancellationException::class)
+    @Throws(AppError::class, CancellationException::class)
     public suspend fun refresh()
 
     @Composable
