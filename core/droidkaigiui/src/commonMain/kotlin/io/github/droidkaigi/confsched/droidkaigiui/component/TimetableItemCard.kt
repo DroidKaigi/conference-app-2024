@@ -25,11 +25,11 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -61,6 +61,7 @@ import io.github.droidkaigi.confsched.droidkaigiui.animation.LocalFavoriteAnimat
 import io.github.droidkaigi.confsched.droidkaigiui.previewOverride
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.TimetableItem.Special
 import org.jetbrains.compose.resources.stringResource
 
 const val TimetableItemCardBookmarkButtonTestTag = "TimetableItemCardBookmarkButton"
@@ -107,7 +108,7 @@ fun TimetableItemCard(
                 )
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
-                    indication = rememberRipple(color = LocalRoomTheme.current.primaryColor),
+                    indication = ripple(color = LocalRoomTheme.current.primaryColor),
                     onClick = dropUnlessResumed { onTimetableItemClick(timetableItem) },
                 ),
         ) {
@@ -170,25 +171,27 @@ fun TimetableItemCard(
                         }
                     }
                 }
-                if (timetableItem is Session) {
-                    timetableItem.message?.let {
-                        Row(
-                            modifier = Modifier
-                                .padding(top = 8.dp)
-                                .height(IntrinsicSize.Min),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        ) {
-                            Icon(
-                                Icons.Filled.Info,
-                                contentDescription = stringResource(DroidKaigiUiRes.string.image),
-                                tint = MaterialTheme.colorScheme.error,
-                            )
-                            Text(
-                                text = it.currentLangTitle,
-                                fontSize = 16.sp,
-                                color = MaterialTheme.colorScheme.error,
-                            )
-                        }
+
+                when (timetableItem) {
+                    is Session -> timetableItem.message
+                    is Special -> timetableItem.message
+                }?.let {
+                    Row(
+                        modifier = Modifier
+                            .padding(top = 8.dp)
+                            .height(IntrinsicSize.Min),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
+                        Icon(
+                            Icons.Filled.Info,
+                            contentDescription = stringResource(DroidKaigiUiRes.string.image),
+                            tint = MaterialTheme.colorScheme.error,
+                        )
+                        Text(
+                            text = it.currentLangTitle,
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.error,
+                        )
                     }
                 }
             }

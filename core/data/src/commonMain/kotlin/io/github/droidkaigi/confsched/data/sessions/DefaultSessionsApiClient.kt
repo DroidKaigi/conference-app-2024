@@ -156,6 +156,7 @@ public fun SessionsAllResponse.toTimetable(): Timetable {
                         } else {
                             apiSession.i18nDesc.toMultiLangText()
                         },
+                        message = apiSession.message?.toMultiLangText(),
                     )
                 }
             }

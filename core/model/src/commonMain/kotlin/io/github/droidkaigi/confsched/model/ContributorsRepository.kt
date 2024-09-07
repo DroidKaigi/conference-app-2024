@@ -8,7 +8,7 @@ import kotlin.coroutines.cancellation.CancellationException
 
 interface ContributorsRepository {
 
-    @Throws(CancellationException::class)
+    @Throws(AppError::class, CancellationException::class)
     suspend fun refresh()
 
     @Composable
