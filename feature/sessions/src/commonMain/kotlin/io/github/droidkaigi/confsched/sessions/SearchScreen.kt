@@ -1,10 +1,13 @@
 package io.github.droidkaigi.confsched.sessions
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -12,8 +15,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
@@ -41,6 +48,7 @@ import io.github.droidkaigi.confsched.sessions.section.TimetableListUiState
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val searchScreenRoute = "search"
+private val spacerHeight = 15.dp
 
 fun NavGraphBuilder.searchScreens(
     onTimetableItemClick: (TimetableItem) -> Unit,
@@ -137,6 +145,22 @@ fun SearchScreen(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val density = LocalDensity.current
+    val topAppBarHeight = remember { mutableStateOf(0) }
+    val topAppBarHeightDp =
+        with(density) {
+            remember(topAppBarHeight.value) {
+                topAppBarHeight.value.toDp()
+            }
+        }
+    val searchFiltersHeight = remember { mutableStateOf(0) }
+    val searchFiltersHeightDp =
+        with(density) {
+            remember(searchFiltersHeight.value) {
+                searchFiltersHeight.value.toDp()
+            }
+        }
+
     Scaffold(
         topBar = {
             SearchTextFieldAppBar(
@@ -144,6 +168,10 @@ fun SearchScreen(
                 onChangeSearchWord = onSearchWordChanged,
                 onClickClear = onClearSearchWordClick,
                 onClickBack = onBackClick,
+                modifier = modifier
+                    .onGloballyPositioned { coordinates ->
+                        topAppBarHeight.value = coordinates.size.height
+                    },
             )
         },
         modifier = modifier,
@@ -166,13 +194,27 @@ fun SearchScreen(
                     horizontal = 16.dp,
                     vertical = 12.dp,
                 ),
+                modifier = Modifier
+                    .onGloballyPositioned { coordinates ->
+                        searchFiltersHeight.value = coordinates.size.height
+                    },
             )
-            Spacer(Modifier.height(15.dp))
+            Spacer(Modifier.height(spacerHeight))
             when (uiState) {
-                is SearchScreenUiState.Empty -> EmptySearchResultBody(
-                    searchWord = uiState.searchWord,
-                    modifier = Modifier.imePadding(),
-                )
+                is SearchScreenUiState.Empty -> {
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .offset(y = -(topAppBarHeightDp + searchFiltersHeightDp
+                                + spacerHeight) / 2),
+                    ) {
+                        EmptySearchResultBody(
+                            searchWord = uiState.searchWord,
+                            modifier = Modifier.imePadding(),
+                        )
+                    }
+                }
 
                 is SearchScreenUiState.SearchList -> SearchList(
                     uiState = uiState.timetableListUiState,
