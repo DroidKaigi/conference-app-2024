@@ -1,5 +1,6 @@
 package io.github.droidkaigi.confsched.sessions.component
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,15 +15,27 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.VisualTransformation
+import conference_app_2024.feature.sessions.generated.resources.search
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.sessions.SessionsRes
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val SearchTextFieldAppBarTextFieldTestTag = "SearchTextFieldAppBarTextField"
@@ -37,7 +50,13 @@ fun SearchTextFieldAppBar(
     modifier: Modifier = Modifier,
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    val interactionSource = remember { MutableInteractionSource() }
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+    }
 
     TopAppBar(
         title = {
@@ -56,7 +75,32 @@ fun SearchTextFieldAppBar(
                         focusManager.clearFocus()
                     },
                 ),
+                decorationBox = { innerTextField ->
+                    TextFieldDefaults.DecorationBox(
+                        value = searchWord,
+                        innerTextField = innerTextField,
+                        enabled = true,
+                        singleLine = true,
+                        visualTransformation = VisualTransformation.None,
+                        interactionSource = interactionSource,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        ),
+                        placeholder = {
+                            Text(
+                                text = stringResource(SessionsRes.string.search),
+                                style = MaterialTheme.typography.bodyLarge.copy(
+                                    fontFamily = FontFamily.Default
+                                )
+                            )
+                        }
+                    )
+                },
                 modifier = Modifier
+                    .focusRequester(focusRequester)
                     .fillMaxWidth()
                     .height(IntrinsicSize.Max)
                     .testTag(SearchTextFieldAppBarTextFieldTestTag),
