@@ -153,7 +153,7 @@ fun SearchScreen(
         Column(
             modifier = Modifier
                 .padding(top = innerPadding.calculateTopPadding())
-                .verticalScroll(rememberScrollState()),
+
         ) {
             HorizontalDivider()
             SearchFilters(
