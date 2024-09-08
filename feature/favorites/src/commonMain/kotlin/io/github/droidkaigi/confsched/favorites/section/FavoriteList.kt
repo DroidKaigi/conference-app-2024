@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -131,16 +130,10 @@ fun FavoriteList(
                                             modifier = Modifier.background(LocalRoomTheme.current.containerColor),
                                         )
                                         timetableItem.language.labels.forEach { label ->
-                                            TimetableItemTag(
-                                                tagText = label,
-                                                tagColor = MaterialTheme.colorScheme.outline,
-                                            )
+                                            TimetableItemTag(tagText = label)
                                         }
                                         timetableItem.day?.let {
-                                            TimetableItemTag(
-                                                tagText = "9/${it.dayOfMonth}",
-                                                tagColor = MaterialTheme.colorScheme.outline,
-                                            )
+                                            TimetableItemTag(tagText = "9/${it.dayOfMonth}")
                                         }
                                     },
                                     timetableItem = timetableItem,

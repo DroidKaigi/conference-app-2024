@@ -14,6 +14,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.sessions.generated.resources.Res
 import conference_app_2024.feature.sessions.generated.resources.empty_search_result
+import conference_app_2024.feature.sessions.generated.resources.empty_search_result_no_input
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -24,6 +25,12 @@ fun EmptySearchResultBody(
     searchWord: String,
     modifier: Modifier = Modifier,
 ) {
+    val message = if (searchWord.isEmpty()) {
+        stringResource(Res.string.empty_search_result_no_input)
+    } else {
+        stringResource(Res.string.empty_search_result, searchWord)
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -36,7 +43,7 @@ fun EmptySearchResultBody(
             contentDescription = null,
         )
         Text(
-            text = stringResource(Res.string.empty_search_result, searchWord),
+            text = message,
             style = MaterialTheme.typography.titleMedium,
             textAlign = TextAlign.Center,
         )

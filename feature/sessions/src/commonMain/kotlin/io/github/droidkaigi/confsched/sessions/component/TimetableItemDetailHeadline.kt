@@ -6,6 +6,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,6 +47,7 @@ import conference_app_2024.feature.sessions.generated.resources.select_language
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.designsystem.theme.LocalRoomTheme
 import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
+import io.github.droidkaigi.confsched.droidkaigiui.icon
 import io.github.droidkaigi.confsched.droidkaigiui.rememberAsyncImagePainter
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
@@ -55,6 +58,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val TimetableItemDetailHeadlineTestTag = "TimetableItemDetailHeadlineTestTag"
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun TimetableItemDetailHeadline(
     currentLang: Lang?,
@@ -63,29 +67,33 @@ fun TimetableItemDetailHeadline(
     onLanguageSelect: (Lang) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val roomTheme = LocalRoomTheme.current
     val currentLang = currentLang ?: timetableItem.language.toLang()
+
     Column(
         modifier = modifier
-            // FIXME: Implement and use a theme color instead of fixed colors like RoomColors.primary and RoomColors.primaryDim
-            .background(LocalRoomTheme.current.dimColor)
+            .background(roomTheme.dimColor)
             .padding(horizontal = 8.dp)
             .fillMaxWidth(),
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        FlowRow {
             TimetableItemTag(
+                modifier = Modifier.align(Alignment.CenterVertically),
                 tagText = timetableItem.room.name.currentLangTitle,
-                tagColor = LocalRoomTheme.current.primaryColor,
+                tagColor = roomTheme.primaryColor,
+                icon = timetableItem.room.icon,
             )
             timetableItem.language.labels.forEach { label ->
                 Spacer(modifier = Modifier.padding(4.dp))
                 TimetableItemTag(
+                    modifier = Modifier.align(Alignment.CenterVertically),
                     tagText = label,
-                    tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
             if (isLangSelectable) {
                 LanguageSwitcher(
+                    modifier = Modifier.align(Alignment.CenterVertically),
                     currentLang = currentLang,
                     onLanguageSelect = onLanguageSelect,
                 )

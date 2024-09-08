@@ -2,6 +2,7 @@ import App
 import ComposableArchitecture
 import SwiftUI
 import Theme
+import KMPClientLive
 
 final class AppDelegate: NSObject, UIApplicationDelegate {
     let store = Store(

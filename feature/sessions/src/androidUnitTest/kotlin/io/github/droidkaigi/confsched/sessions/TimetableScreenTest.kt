@@ -128,6 +128,18 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         }
                     }
                 }
+                describe("when font scale is large") {
+                    doIt {
+                        setFontScale(3f)
+                        setupTimetableServer(ServerStatus.Operational)
+                        setupTimetableScreenContent()
+                    }
+                    itShould("show title in a single line") {
+                        captureScreenWithChecks(checks = {
+                            checkTitleDisplayedInSingleLine()
+                        })
+                    }
+                }
                 listOf(
                     InitialTabTestSpec(
                         date = LocalDate(2024, 9, 11),

@@ -4,6 +4,7 @@ import com.google.devtools.ksp.gradle.KspTaskMetadata
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
 
 @Suppress("unused")
 class KmpAndroidPlugin : Plugin<Project> {
@@ -15,8 +16,12 @@ class KmpAndroidPlugin : Plugin<Project> {
             kotlin {
                 androidTarget {
                     compilations.all {
-                        kotlinOptions {
-                            jvmTarget = "11"
+                        libraryAndroidOptions {
+                            compileTaskProvider.configure {
+                                compilerOptions {
+                                    jvmTarget.set(JVM_11)
+                                }
+                            }
                         }
                     }
                 }

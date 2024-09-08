@@ -67,6 +67,14 @@ class SponsorsScreenRobot @Inject constructor(
             )
     }
 
+    fun scrollBottom() {
+        composeTestRule
+            .onNode(hasTestTag(SponsorsListLazyVerticalGridTestTag))
+            .performScrollToNode(
+                hasTestTag(SponsorsListSponsorItemTestTagPrefix.plus(Sponsor.fakes().last().name)),
+            )
+    }
+
     fun checkDisplayPlatinumSponsors() {
         checkSponsorItemsDisplayedByRangeAndSponsorType(
             sponsorType = SponsorType.Platinum,
@@ -92,7 +100,8 @@ class SponsorsScreenRobot @Inject constructor(
         sponsorType: SponsorType,
         fromTo: IntRange,
     ) {
-        val sponsorList = Sponsor.fakes().filter { it.plan.toSponsorType() == sponsorType }.subList(fromTo.first, fromTo.last)
+        val sponsorList = Sponsor.fakes().filter { it.plan.toSponsorType() == sponsorType }
+            .subList(fromTo.first, fromTo.last)
         sponsorList.forEach { sponsor ->
             composeTestRule
                 .onNode(hasTestTag(SponsorsListSponsorItemTestTagPrefix.plus(sponsor.name)))

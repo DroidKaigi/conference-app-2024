@@ -22,7 +22,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedMediumTopAppBar
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
 import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
@@ -54,10 +54,23 @@ data class SponsorsScreenUiState(
 )
 
 data class SponsorsListUiState(
-    val platinumSponsors: PersistentList<Sponsor>,
-    val goldSponsors: PersistentList<Sponsor>,
-    val supporters: PersistentList<Sponsor>,
+    val platinumSponsorsUiState: SponsorsByPlanUiState,
+    val goldSponsorsUiState: SponsorsByPlanUiState,
+    val supportersUiState: SponsorsByPlanUiState,
 )
+
+sealed interface SponsorsByPlanUiState {
+    val userMessageStateHolder: UserMessageStateHolder
+
+    data class Loading(
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ) : SponsorsByPlanUiState
+
+    data class Exists(
+        override val userMessageStateHolder: UserMessageStateHolder,
+        val sponsors: PersistentList<Sponsor>,
+    ) : SponsorsByPlanUiState
+}
 
 @Composable
 fun SponsorsScreen(
@@ -106,7 +119,7 @@ fun SponsorsScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (!isTopAppBarHidden) {
-                AnimatedLargeTopAppBar(
+                AnimatedMediumTopAppBar(
                     title = stringResource(SponsorsRes.string.sponsor),
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
@@ -135,9 +148,18 @@ fun SponsorsScreenPreview() {
             SponsorsScreen(
                 uiState = SponsorsScreenUiState(
                     sponsorsListUiState = SponsorsListUiState(
-                        platinumSponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
-                        goldSponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
-                        supporters = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                        platinumSponsorsUiState = SponsorsByPlanUiState.Exists(
+                            userMessageStateHolder = UserMessageStateHolderImpl(),
+                            sponsors = Sponsor.fakes().filter { it.plan == PLATINUM }.toPersistentList(),
+                        ),
+                        goldSponsorsUiState = SponsorsByPlanUiState.Exists(
+                            userMessageStateHolder = UserMessageStateHolderImpl(),
+                            sponsors = Sponsor.fakes().filter { it.plan == GOLD }.toPersistentList(),
+                        ),
+                        supportersUiState = SponsorsByPlanUiState.Exists(
+                            userMessageStateHolder = UserMessageStateHolderImpl(),
+                            sponsors = Sponsor.fakes().filter { it.plan == SUPPORTER }.toPersistentList(),
+                        ),
                     ),
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),

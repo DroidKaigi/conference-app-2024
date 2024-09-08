@@ -5,7 +5,7 @@ import Theme
 struct SwiftUIContributorView: View {
     private let store: StoreOf<ContributorReducer>
 
-    public init(store: StoreOf<ContributorReducer>) {
+    init(store: StoreOf<ContributorReducer>) {
         self.store = store
     }
 
@@ -14,6 +14,12 @@ struct SwiftUIContributorView: View {
             if let contributors = store.contributors {
                 ScrollView {
                     LazyVStack(spacing: 0) {
+                        
+                        ContributorsCountItem(totalContributor: contributors.count)
+                            .frame(maxWidth: .infinity)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 10)
+                        
                         ForEach(contributors, id: \.id) { contributor in
                             ContributorListItemView(contributor: contributor) { url in
                                 store.send(.view(.contributorButtonTapped(url)))

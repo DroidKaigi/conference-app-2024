@@ -1,11 +1,13 @@
 package io.github.droidkaigi.confsched.contributors
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -13,6 +15,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -22,10 +25,11 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.contributors.generated.resources.contributor_title
 import io.github.droidkaigi.confsched.compose.rememberEventFlow
+import io.github.droidkaigi.confsched.contributors.component.ContributorsCountItem
 import io.github.droidkaigi.confsched.contributors.component.ContributorsItem
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
-import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedMediumTopAppBar
 import io.github.droidkaigi.confsched.model.Contributor
 import kotlinx.collections.immutable.PersistentList
 import org.jetbrains.compose.resources.stringResource
@@ -34,6 +38,7 @@ const val contributorsScreenRoute = "contributors"
 const val ContributorsScreenTestTag = "ContributorsScreenTestTag"
 const val ContributorsTestTag = "ContributorsTestTag"
 const val ContributorsItemTestTagPrefix = "ContributorsItemTestTag:"
+const val ContributorsTotalCountTestTag = "ContributorsTotalCountTestTag"
 
 fun NavGraphBuilder.contributorsScreens(
     onNavigationIconClick: () -> Unit,
@@ -47,10 +52,18 @@ fun NavGraphBuilder.contributorsScreens(
     }
 }
 
-data class ContributorsUiState(
+sealed class ContributorsUiState {
+    abstract val userMessageStateHolder: UserMessageStateHolder
+}
+
+class Loading(
+    override val userMessageStateHolder: UserMessageStateHolder,
+) : ContributorsUiState()
+
+class Exists(
+    override val userMessageStateHolder: UserMessageStateHolder,
     val contributors: PersistentList<Contributor>,
-    val userMessageStateHolder: UserMessageStateHolder,
-)
+) : ContributorsUiState()
 
 @Composable
 fun ContributorsScreen(
@@ -101,7 +114,7 @@ fun ContributorsScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (!isTopAppBarHidden) {
-                AnimatedLargeTopAppBar(
+                AnimatedMediumTopAppBar(
                     title = stringResource(ContributorsRes.string.contributor_title),
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
@@ -110,21 +123,33 @@ fun ContributorsScreen(
             }
         },
     ) { padding ->
-        Contributors(
-            contributors = uiState.contributors,
-            onContributorsItemClick = onContributorsItemClick,
-            contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = padding.calculateTopPadding())
-                .let {
-                    if (scrollBehavior != null) {
-                        it.nestedScroll(scrollBehavior.nestedScrollConnection)
-                    } else {
-                        it
-                    }
-                },
-        )
+        when (uiState) {
+            is Exists -> {
+                Contributors(
+                    contributors = uiState.contributors,
+                    onContributorsItemClick = onContributorsItemClick,
+                    contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = padding.calculateTopPadding())
+                        .let {
+                            if (scrollBehavior != null) {
+                                it.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            } else {
+                                it
+                            }
+                        },
+                )
+            }
+            is Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(padding).fillMaxSize(),
+                ) {
+                    CircularProgressIndicator()
+                }
+            }
+        }
     }
 }
 
@@ -139,6 +164,14 @@ private fun Contributors(
         modifier = modifier.testTag(ContributorsTestTag),
         contentPadding = contentPadding,
     ) {
+        item {
+            ContributorsCountItem(
+                totalContributor = contributors.size,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag(ContributorsTotalCountTestTag),
+            )
+        }
         items(contributors) {
             ContributorsItem(
                 contributor = it,

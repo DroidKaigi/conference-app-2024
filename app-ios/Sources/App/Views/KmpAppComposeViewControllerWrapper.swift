@@ -1,24 +1,26 @@
 import SwiftUI
 import LicenseList
-@preconcurrency import shared
+import shared
+import ComposableArchitecture
 
-public struct KmpAppComposeViewControllerWrapper: UIViewControllerRepresentable {
-    public init() {}
+@MainActor
+struct KmpAppComposeViewControllerWrapper: UIViewControllerRepresentable {
+    @Dependency(\.containerClient) var containerClient
 
-    public func makeUIViewController(context: Context) -> UIViewController {
-        let container = Container.shared
-        let repositories: any Repositories = container.get(type: (any Repositories).self)
-        return IosComposeKaigiAppKt.kaigiAppController(
-            repositories: repositories,
+    init() {}
+
+    func makeUIViewController(context: Context) -> UIViewController {
+        IosComposeKaigiAppKt.kaigiAppController(
+            repositories: containerClient.repositories(),
             onLicenseScreenRequest: {
                 openLicenseScreen()
             }
         )
     }
 
-    public func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
     }
-    
+
     private func openLicenseScreen() {
         if let windowScene = UIApplication.shared.connectedScenes.first(where: { $0.activationState == .foregroundActive }) as? UIWindowScene {
             if let rootViewController = windowScene.windows.first?.rootViewController {

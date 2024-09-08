@@ -15,6 +15,7 @@
     <string name="workshop">Workshop</string>
     <string name="back">Back</string>
     <string name="search">Search</string>
+    <string name="search_sessions">Search sessions</string>
     <string name="select_language">Select Language</string>
     <string name="japanese">日本語</string>
     <string name="english">English</string>
@@ -30,6 +31,7 @@
     <string name="language_title">Supported Languages</string>
     <string name="category_title">Category</string>
     <string name="empty_search_result">Nothing matched your search criteria "%1$s"</string>
+    <string name="empty_search_result_no_input">Nothing matched your search criteria</string>
     <string name="filter_chip_day">Day</string>
     <string name="filter_chip_category">Category</string>
     <string name="filter_chip_session_type">Session type</string>

@@ -1,6 +1,7 @@
 package io.github.droidkaigi.confsched.primitive
 
 import com.android.build.api.dsl.CommonExtension
+import com.android.build.api.variant.LibraryAndroidComponentsExtension
 import com.android.build.gradle.LibraryExtension
 import com.android.build.gradle.TestedExtension
 import com.android.build.gradle.internal.dsl.BaseAppModuleExtension
@@ -13,6 +14,7 @@ import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 fun Project.androidApplication(action: BaseAppModuleExtension.() -> Unit) {
     extensions.configure(action)
@@ -26,16 +28,24 @@ fun Project.android(action: TestedExtension.() -> Unit) {
     extensions.configure(action)
 }
 
+fun Project.kotlinAndroidOptions(configure: KotlinAndroidProjectExtension.() -> Unit) {
+    extensions.configure(configure)
+}
+
+fun Project.libraryAndroidOptions(configure: LibraryAndroidComponentsExtension.() -> Unit) {
+    extensions.configure(configure)
+}
+
 fun Project.setupAndroid() {
     android {
         namespace?.let {
             this.namespace = it
         }
-        compileSdkVersion(34)
+        compileSdkVersion(35)
 
         defaultConfig {
             minSdk = 24
-            targetSdk = 34
+            targetSdk = 35
         }
 
         compileOptions {

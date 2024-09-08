@@ -54,8 +54,8 @@ class KmpComposePlugin : Plugin<Project> {
             }
 
             tasks.withType<KotlinCompile>().configureEach {
-                kotlinOptions {
-                    freeCompilerArgs = freeCompilerArgs + buildComposeMetricsParameters()
+                compilerOptions {
+                    freeCompilerArgs.addAll(buildComposeMetricsParameters())
                 }
             }
         }

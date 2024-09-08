@@ -42,7 +42,14 @@ public struct TimetableGridCard: View {
                 
                 Spacer()
                 
-                ForEach(timetableItem.speakers, id: \.id) { speaker in
+                if timetableItem.speakers.count > 1 {
+                    HStack(spacing: 4) {
+                        ForEach(timetableItem.speakers, id: \.id) { speaker in
+                            CircularUserIcon(urlString: speaker.iconUrl)
+                                .frame(width: 32, height: 32)
+                        }
+                    }
+                } else if let speaker = timetableItem.speakers.first {
                     HStack(spacing: 8) {
                         CircularUserIcon(urlString: speaker.iconUrl)
                             .frame(width: 32, height: 32)

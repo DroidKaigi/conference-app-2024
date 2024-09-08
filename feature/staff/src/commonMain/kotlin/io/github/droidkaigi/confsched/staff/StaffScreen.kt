@@ -1,11 +1,13 @@
 package io.github.droidkaigi.confsched.staff
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -14,6 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
@@ -27,7 +30,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
-import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedLargeTopAppBar
+import io.github.droidkaigi.confsched.droidkaigiui.component.AnimatedMediumTopAppBar
 import io.github.droidkaigi.confsched.model.Staff
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.staff.component.StaffItem
@@ -52,10 +55,18 @@ fun NavGraphBuilder.staffScreens(
     }
 }
 
-data class StaffUiState(
-    val staff: PersistentList<Staff>,
-    val userMessageStateHolder: UserMessageStateHolder,
-)
+sealed interface StaffUiState {
+    val userMessageStateHolder: UserMessageStateHolder
+
+    data class Loading(
+        override val userMessageStateHolder: UserMessageStateHolder,
+    ) : StaffUiState
+
+    data class Exists(
+        override val userMessageStateHolder: UserMessageStateHolder,
+        val staff: PersistentList<Staff>,
+    ) : StaffUiState
+}
 
 @Composable
 fun StaffScreen(
@@ -104,7 +115,7 @@ fun StaffScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             if (!isTopAppBarHidden) {
-                AnimatedLargeTopAppBar(
+                AnimatedMediumTopAppBar(
                     title = stringResource(StaffRes.string.staff_title),
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
@@ -127,14 +138,28 @@ fun StaffScreen(
                 .testTag(StaffScreenLazyColumnTestTag),
             contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
         ) {
-            items(uiState.staff) { staff ->
-                StaffItem(
-                    staff = staff,
-                    onStaffItemClick = onStaffItemClick,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .testTag(StaffItemTestTagPrefix.plus(staff.id)),
-                )
+            when (uiState) {
+                is StaffUiState.Exists -> {
+                    items(uiState.staff) { staff ->
+                        StaffItem(
+                            staff = staff,
+                            onStaffItemClick = onStaffItemClick,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .testTag(StaffItemTestTagPrefix.plus(staff.id)),
+                        )
+                    }
+                }
+                is StaffUiState.Loading -> {
+                    item {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.padding(padding).fillMaxSize(),
+                        ) {
+                            CircularProgressIndicator()
+                        }
+                    }
+                }
             }
         }
     }
@@ -146,7 +171,7 @@ fun StaffScreenPreview() {
     KaigiTheme {
         Surface {
             StaffScreen(
-                uiState = StaffUiState(
+                uiState = StaffUiState.Exists(
                     staff = Staff.fakes(),
                     userMessageStateHolder = UserMessageStateHolderImpl(),
                 ),

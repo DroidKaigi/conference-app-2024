@@ -24,6 +24,7 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import io.github.droidkaigi.confsched.droidkaigiui.component.TimetableItemTag
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
 import io.github.droidkaigi.confsched.model.DroidKaigi2024Day
 import io.github.droidkaigi.confsched.model.TimeLine
@@ -108,6 +109,11 @@ fun Timetable(
                             start = contentPadding.calculateStartPadding(layoutDirection),
                             end = contentPadding.calculateEndPadding(layoutDirection),
                         ),
+                        timetableItemTagsContent = { timetableItem ->
+                            timetableItem.language.labels.forEach { label ->
+                                TimetableItemTag(tagText = label)
+                            }
+                        },
                     )
                 }
 
