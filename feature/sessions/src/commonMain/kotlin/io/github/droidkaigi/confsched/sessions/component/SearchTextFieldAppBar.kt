@@ -87,16 +87,16 @@ fun SearchTextFieldAppBar(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
                             focusedIndicatorColor = Color.Transparent,
-                            unfocusedIndicatorColor = Color.Transparent
+                            unfocusedIndicatorColor = Color.Transparent,
                         ),
                         placeholder = {
                             Text(
                                 text = stringResource(SessionsRes.string.search),
                                 style = MaterialTheme.typography.bodyLarge.copy(
-                                    fontFamily = FontFamily.Default
-                                )
+                                    fontFamily = FontFamily.Default,
+                                ),
                             )
-                        }
+                        },
                     )
                 },
                 modifier = Modifier
