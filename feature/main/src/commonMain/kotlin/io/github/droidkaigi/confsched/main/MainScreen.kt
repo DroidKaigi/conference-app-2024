@@ -30,10 +30,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import conference_app_2024.core.designsystem.generated.resources.ic_fav_off
 import conference_app_2024.core.designsystem.generated.resources.ic_fav_on
 import conference_app_2024.core.designsystem.generated.resources.ic_info_off
@@ -73,6 +73,7 @@ const val mainScreenRoute = "main"
 fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
+    mainNestedNavController: NavHostController,
     mainNestedGraph: NavGraphBuilder.(mainNestedNavController: NavController, PaddingValues) -> Unit,
 ) {
     composable(mainScreenRoute) {
@@ -82,6 +83,7 @@ fun NavGraphBuilder.mainScreen(
             MainScreen(
                 windowSize = windowSize,
                 mainNestedGraphStateHolder = mainNestedGraphStateHolder,
+                mainNestedNavController = mainNestedNavController,
                 mainNestedNavGraph = mainNestedGraph,
             )
         }
@@ -108,6 +110,7 @@ enum class NavigationType {
 fun MainScreen(
     windowSize: WindowSizeClass,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
+    mainNestedNavController: NavHostController,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
     eventFlow: EventFlow<MainScreenEvent> = rememberEventFlow(),
     uiState: MainScreenUiState = mainScreenPresenter(eventFlow),
@@ -139,6 +142,7 @@ fun MainScreen(
             navigationType = navigationType,
             routeToTab = mainNestedGraphStateHolder::routeToTab,
             onTabSelected = mainNestedGraphStateHolder::onTabSelected,
+            mainNestedNavController = mainNestedNavController,
             mainNestedNavGraph = mainNestedNavGraph,
         )
     }
@@ -201,11 +205,10 @@ fun MainScreen(
     navigationType: NavigationType,
     routeToTab: String.() -> MainScreenTab?,
     onTabSelected: (NavController, MainScreenTab) -> Unit,
+    mainNestedNavController: NavHostController,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val mainNestedNavController = rememberNavController()
-
     val navBackStackEntryRoute =
         mainNestedNavController.currentBackStackEntryAsState().value?.destination?.route
 

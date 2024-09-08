@@ -197,11 +197,13 @@ private fun KaigiNavHost(
     onLicenseScreenRequest: () -> Unit,
     onAccessCalendarIsDenied: () -> Unit,
     navController: NavHostController = rememberNavController(),
+    mainNestedNavController: NavHostController = rememberNavController(),
 ) {
     NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
         mainScreen(
             windowSize = windowSize,
             navController = navController,
+            mainNestedNavController = mainNestedNavController,
             externalNavController = externalNavController,
             onLicenseScreenRequest = onLicenseScreenRequest,
         )
@@ -257,12 +259,14 @@ private fun KaigiNavHost(
 private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     navController: NavHostController,
+    mainNestedNavController: NavHostController,
     externalNavController: ExternalNavController,
     onLicenseScreenRequest: () -> Unit,
 ) {
     mainScreen(
         windowSize = windowSize,
         mainNestedGraphStateHolder = KaigiAppMainNestedGraphStateHolder(),
+        mainNestedNavController = mainNestedNavController,
         mainNestedGraph = { mainNestedNavController, contentPadding ->
             nestedSessionScreens(
                 modifier = Modifier,

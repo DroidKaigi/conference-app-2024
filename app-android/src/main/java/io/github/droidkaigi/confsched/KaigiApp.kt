@@ -133,6 +133,7 @@ private fun KaigiNavHost(
     displayFeatures: PersistentList<DisplayFeature>,
     modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    mainNestedNavController: NavHostController = rememberNavController(),
     externalNavController: ExternalNavController = rememberExternalNavController(),
 ) {
     SharedTransitionLayout(modifier = modifier) {
@@ -144,9 +145,10 @@ private fun KaigiNavHost(
                 startDestination = mainScreenRoute,
             ) {
                 mainScreen(
-                    windowSize,
-                    navController,
-                    externalNavController,
+                    windowSize = windowSize,
+                    navController = navController,
+                    mainNestedNavController = mainNestedNavController,
+                    externalNavController = externalNavController,
                 )
                 sessionScreens(
                     onNavigationIconClick = navController::popBackStack,
@@ -197,12 +199,14 @@ private fun KaigiNavHost(
 private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     navController: NavHostController,
+    mainNestedNavController: NavHostController,
     @Suppress("UnusedParameter")
     externalNavController: ExternalNavController,
 ) {
     mainScreen(
         windowSize = windowSize,
         mainNestedGraphStateHolder = KaigiAppMainNestedGraphStateHolder(),
+        mainNestedNavController = mainNestedNavController,
         mainNestedGraph = { mainNestedNavController, contentPadding ->
             nestedSessionScreens(
                 modifier = Modifier,
