@@ -32,7 +32,7 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
-import conference_app_2024.feature.sessions.generated.resources.search
+import conference_app_2024.feature.sessions.generated.resources.search_sessions
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.SessionsRes
 import org.jetbrains.compose.resources.stringResource
@@ -91,7 +91,7 @@ fun SearchTextFieldAppBar(
                         ),
                         placeholder = {
                             Text(
-                                text = stringResource(SessionsRes.string.search),
+                                text = stringResource(SessionsRes.string.search_sessions),
                                 style = MaterialTheme.typography.bodyLarge.copy(
                                     fontFamily = FontFamily.Default,
                                 ),
