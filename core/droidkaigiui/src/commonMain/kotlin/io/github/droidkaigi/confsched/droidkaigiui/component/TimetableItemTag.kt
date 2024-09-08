@@ -22,14 +22,45 @@ import org.jetbrains.compose.resources.vectorResource
 @Composable
 fun TimetableItemTag(
     tagText: String,
-    tagColor: Color,
     modifier: Modifier = Modifier,
-    icon: DrawableResource? = null,
+) {
+    TimetableItemTag(
+        tagText = tagText,
+        contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        borderColor = MaterialTheme.colorScheme.outline,
+        icon = null,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun TimetableItemTag(
+    tagText: String,
+    tagColor: Color,
+    icon: DrawableResource?,
+    modifier: Modifier = Modifier,
+) {
+    TimetableItemTag(
+        tagText = tagText,
+        contentColor = tagColor,
+        borderColor = tagColor,
+        icon = icon,
+        modifier = modifier,
+    )
+}
+
+@Composable
+private fun TimetableItemTag(
+    tagText: String,
+    contentColor: Color,
+    borderColor: Color,
+    icon: DrawableResource?,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier
             .border(
-                border = BorderStroke(width = 1.dp, color = tagColor),
+                border = BorderStroke(width = 1.dp, color = borderColor),
                 shape = RoundedCornerShape(2.dp),
             )
             .padding(
@@ -44,11 +75,11 @@ fun TimetableItemTag(
                 modifier = Modifier.size(12.dp),
                 imageVector = vectorResource(ico),
                 contentDescription = "",
-                tint = tagColor,
+                tint = contentColor,
             )
         }
         Text(
-            color = tagColor,
+            color = contentColor,
             text = tagText,
             style = MaterialTheme.typography.labelMedium,
             maxLines = 1,
