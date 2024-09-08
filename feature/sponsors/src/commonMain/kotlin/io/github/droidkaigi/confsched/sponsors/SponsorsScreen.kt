@@ -1,10 +1,14 @@
 package io.github.droidkaigi.confsched.sponsors
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -16,6 +20,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -112,6 +117,7 @@ fun SponsorsScreen(
     modifier: Modifier = Modifier,
     onSponsorsItemClick: (url: String) -> Unit,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -138,11 +144,16 @@ fun SponsorsScreen(
     ) { padding ->
         SponsorsList(
             modifier = Modifier
+                .padding(top = padding.calculateTopPadding())
                 .fillMaxSize(),
             uiState = uiState.sponsorsListUiState,
             scrollBehavior = scrollBehavior,
             onSponsorsItemClick = onSponsorsItemClick,
-            contentPadding = padding,
+            contentPadding = PaddingValues(
+                start = padding.calculateStartPadding(layoutDirection),
+                end = padding.calculateEndPadding(layoutDirection),
+                bottom = padding.calculateBottomPadding(),
+            ),
         )
     }
 }
