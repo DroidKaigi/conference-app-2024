@@ -215,6 +215,14 @@ fun MainScreen(
     val lastEntryRoute = rememberSaveable(navBackStackEntryRoute) {
         navBackStackEntryRoute ?: "timetable"
     }
+    // Workaround:
+    // In iOS environment, when returning from the back stack, the route is reset to the timetable
+    // This is a workaround to prevent unexpected behavior of navigation.
+    // You can see the issue when returning from contributors screen and then navigating to the timetable screen without this
+    val firstDestinationOfComposition = remember {
+        lastEntryRoute
+    }
+
     val currentTab = lastEntryRoute.routeToTab() ?: MainScreenTab.Timetable
 
     val hazeState = remember { HazeState() }
@@ -255,7 +263,7 @@ fun MainScreen(
                 )
             NavHost(
                 navController = mainNestedNavController,
-                startDestination = "timetable",
+                startDestination = firstDestinationOfComposition,
                 modifier =
                 Modifier.haze(
                     hazeState,
