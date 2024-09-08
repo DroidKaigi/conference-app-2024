@@ -7,6 +7,6 @@ import io.github.takahirom.rin.rememberRetained
 
 @Composable
 actual fun provideMainNestedNavController(): NavHostController {
-    val _mainNestedNavController = rememberNavController()
-    return rememberRetained { _mainNestedNavController }
+    val mainNestedNavController = rememberNavController()
+    return rememberRetained { mainNestedNavController }
 }

@@ -33,7 +33,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import conference_app_2024.core.designsystem.generated.resources.ic_fav_off
 import conference_app_2024.core.designsystem.generated.resources.ic_fav_on
 import conference_app_2024.core.designsystem.generated.resources.ic_info_off
