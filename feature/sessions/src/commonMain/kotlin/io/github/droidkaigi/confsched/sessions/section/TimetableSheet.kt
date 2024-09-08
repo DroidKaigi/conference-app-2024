@@ -118,6 +118,7 @@ fun Timetable(
                             end = contentPadding.calculateEndPadding(layoutDirection),
                         ),
                         scrolledToCurrentTimeState = scrolledToCurrentTimeState,
+                        enableAutoScrolling = clock.now() in selectedDay.start..selectedDay.end,
                         timetableItemTagsContent = { timetableItem ->
                             timetableItem.language.labels.forEach { label ->
                                 TimetableItemTag(tagText = label)
