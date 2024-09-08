@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		83CD07FE2C7B1F5400CDEFDB /* compose-resources in Resources */ = {isa = PBXBuildFile; fileRef = 83CD07FD2C7B1F5400CDEFDB /* compose-resources */; };
-		8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */; };
+		8C12EA8F2C8E1705001ACC40 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8C12EA8E2C8E1705001ACC40 /* GoogleService-Info.plist */; };
 		8C7074772C7791BD00FD4F39 /* ci_post_clone.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8C7074762C7791BD00FD4F39 /* ci_post_clone.sh */; };
 		8C7074792C7791DF00FD4F39 /* ci_pre_xcodebuild.sh in Resources */ = {isa = PBXBuildFile; fileRef = 8C7074782C7791DF00FD4F39 /* ci_pre_xcodebuild.sh */; };
 		8C7DACB72BCBCCB0002C298A /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8C7DACB02BCBCCB0002C298A /* Preview Assets.xcassets */; };
@@ -20,7 +20,7 @@
 
 /* Begin PBXFileReference section */
 		83CD07FD2C7B1F5400CDEFDB /* compose-resources */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "compose-resources"; path = "../../app-ios-shared/build/kotlin-multiplatform-resources/aggregated-resources/compose-resources"; sourceTree = "<group>"; };
-		8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		8C12EA8E2C8E1705001ACC40 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		8C7074762C7791BD00FD4F39 /* ci_post_clone.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_post_clone.sh; sourceTree = "<group>"; };
 		8C7074782C7791DF00FD4F39 /* ci_pre_xcodebuild.sh */ = {isa = PBXFileReference; lastKnownFileType = text.script.sh; path = ci_pre_xcodebuild.sh; sourceTree = "<group>"; };
 		8C772B152BCBCBCA00F2BADC /* DroidKaigi2024App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DroidKaigi2024App.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -88,12 +88,12 @@
 		8C7DACC22BCBD111002C298A /* App */ = {
 			isa = PBXGroup;
 			children = (
+				8C12EA8E2C8E1705001ACC40 /* GoogleService-Info.plist */,
 				C495D60A2C075130003B324E /* App.xctestplan */,
 				8C7DACB12BCBCCB0002C298A /* Preview Content */,
 				8C7DACB22BCBCCB0002C298A /* App.swift */,
 				8C7DACB32BCBCCB0002C298A /* Assets.xcassets */,
 				8C7DACB52BCBCCB0002C298A /* App.entitlements */,
-				8C31F46A2BF6909A003F1BBA /* GoogleService-Info.plist */,
 				8C7DACBB2BCBCDA0002C298A /* PrivacyInfo.xcprivacy */,
 				9EA589E42C7F98E6007EE5EC /* InfoPlist.xcstrings */,
 			);
@@ -174,9 +174,9 @@
 				9EA589E52C7F98E6007EE5EC /* InfoPlist.xcstrings in Resources */,
 				8C7074792C7791DF00FD4F39 /* ci_pre_xcodebuild.sh in Resources */,
 				8C7DACB72BCBCCB0002C298A /* Preview Assets.xcassets in Resources */,
-				8C31F46B2BF6909A003F1BBA /* GoogleService-Info.plist in Resources */,
 				8C7074772C7791BD00FD4F39 /* ci_post_clone.sh in Resources */,
 				83CD07FE2C7B1F5400CDEFDB /* compose-resources in Resources */,
+				8C12EA8F2C8E1705001ACC40 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
