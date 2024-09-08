@@ -204,7 +204,7 @@ fun MainScreen(
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val mainNestedNavController = rememberNavController()
+    val mainNestedNavController = provideMainNestedNavController()
 
     val navBackStackEntryRoute =
         mainNestedNavController.currentBackStackEntryAsState().value?.destination?.route
