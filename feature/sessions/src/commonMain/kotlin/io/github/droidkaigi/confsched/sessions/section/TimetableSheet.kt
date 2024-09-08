@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -112,10 +111,7 @@ fun Timetable(
                         ),
                         timetableItemTagsContent = { timetableItem ->
                             timetableItem.language.labels.forEach { label ->
-                                TimetableItemTag(
-                                    tagText = label,
-                                    tagColor = MaterialTheme.colorScheme.onSurfaceVariant,
-                                )
+                                TimetableItemTag(tagText = label)
                             }
                         },
                     )
