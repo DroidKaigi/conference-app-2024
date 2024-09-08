@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.profilecard
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -700,12 +700,12 @@ private fun CardTypeImage(
 
     Image(
         painter = painterResource(ProfileCardRes.drawable.card_type),
-        contentDescription = null,
+        contentDescription = cardType.toString(),
         modifier = modifier
             .selectedBorder(isSelected, selectedBorderColor, painter)
             .clip(RoundedCornerShape(2.dp))
             .background(colorMap[cardType]!!)
-            .clickable { onClickImage(cardType) }
+            .selectable(isSelected) { onClickImage(cardType) }
             .padding(top = 36.dp, start = 30.dp, end = 30.dp, bottom = 36.dp),
     )
 }
