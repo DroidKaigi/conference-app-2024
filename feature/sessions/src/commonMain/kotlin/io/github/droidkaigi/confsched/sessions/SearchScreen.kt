@@ -168,7 +168,7 @@ fun SearchScreen(
                 onChangeSearchWord = onSearchWordChanged,
                 onClickClear = onClearSearchWordClick,
                 onClickBack = onBackClick,
-                modifier = modifier
+                modifier = Modifier
                     .onGloballyPositioned { coordinates ->
                         topAppBarHeight.value = coordinates.size.height
                     },
@@ -206,8 +206,12 @@ fun SearchScreen(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .fillMaxSize()
-                            .offset(y = -(topAppBarHeightDp + searchFiltersHeightDp
-                                + spacerHeight) / 2),
+                            .offset(
+                                y = -(
+                                    topAppBarHeightDp + searchFiltersHeightDp +
+                                        spacerHeight
+                                    ) / 2,
+                            ),
                     ) {
                         EmptySearchResultBody(
                             searchWord = uiState.searchWord,
