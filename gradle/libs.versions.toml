@@ -8,7 +8,7 @@ kotlin = "2.0.10"
 androidxCore = "1.13.1"
 androidDesugarJdkLibs = "2.0.4"
 compose = "2024.09.00"
-composeMultiplatform = "1.7.0-alpha02"
+composeMultiplatform = "1.7.0-alpha03"
 rin = "0.1.0"
 composeInvestigator = "1.5.10-0.2.1"
 composeMaterial3 = "1.3.0"
@@ -89,6 +89,9 @@ kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 kotlinxCollectionsImmutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version = "0.3.5" }
 kotlinxDatetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version = "0.6.0" }
 kotlinxAtomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version = "0.23.2" }
+
+# for Desktop
+kotlinxCoroutinesSwing = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-swing", version.ref = "kotlinxCoroutines" }
 
 # UI
 
@@ -194,6 +197,7 @@ composeInvestigatorGradlePlugin = { id = "land.sungbin.composeinvestigator:compi
 kotlinxKover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 detektGradlePlugin = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ossLicensesPlugin = { id = "com.google.android.gms.oss-licenses-plugin", version.ref = "ossLicensesPlugin" }
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 
 [bundles]
 plugins = [

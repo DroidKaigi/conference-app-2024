@@ -79,6 +79,10 @@ gradlePlugin {
             id = "droidkaigi.primitive.kmp.compose"
             implementationClass = "io.github.droidkaigi.confsched.primitive.KmpComposePlugin"
         }
+        register("kotlinMppDesktop") {
+            id = "droidkaigi.primitive.kmp.desktop"
+            implementationClass = "io.github.droidkaigi.confsched.primitive.KmpDesktopPlugin"
+        }
         register("kotlinMppRoborazzi") {
             id = "droidkaigi.primitive.kmp.roborazzi"
             implementationClass = "io.github.droidkaigi.confsched.primitive.KmpRoborazziPlugin"
