@@ -23,11 +23,14 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import conference_app_2024.feature.profilecard.generated.resources.flip
 import io.github.droidkaigi.confsched.droidkaigiui.WithDeviceOrientation
+import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.profilecard.hologramaticEffect
 import io.github.droidkaigi.confsched.profilecard.tiltEffect
 import kotlinx.coroutines.delay
+import org.jetbrains.compose.resources.stringResource
 
 const val ProfileCardFlipCardTestTag = "ProfileCardFlipCardTestTag"
 
@@ -57,7 +60,9 @@ internal fun FlipCard(
             modifier = modifier
                 .testTag(ProfileCardFlipCardTestTag)
                 .size(width = 300.dp, height = 380.dp)
-                .clickable { isFlipped = isFlipped.not() }
+                .clickable(onClickLabel = stringResource(ProfileCardRes.string.flip)) {
+                    isFlipped = isFlipped.not()
+                }
                 .draggable(
                     orientation = Orientation.Horizontal,
                     state = rememberDraggableState { delta ->
