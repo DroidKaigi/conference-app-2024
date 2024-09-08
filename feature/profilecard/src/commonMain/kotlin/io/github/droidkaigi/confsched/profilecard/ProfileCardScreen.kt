@@ -830,17 +830,15 @@ internal fun CardScreen(
                             .testTag(ProfileCardShareButtonTestTag)
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
-                        val shareLabel = stringResource(ProfileCardRes.string.share)
-
                         Icon(
                             painter = painterResource(ProfileCardRes.drawable.icon_share),
-                            contentDescription = shareLabel,
+                            contentDescription = null,
                             tint = Color.Black,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = shareLabel,
+                            text = stringResource(ProfileCardRes.string.share),
                             modifier = Modifier.padding(8.dp),
                             style = MaterialTheme.typography.labelLarge,
                             color = Color.Black,
