@@ -199,13 +199,13 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "DroidKaigi is a conference tailored for Android developers."
+            "value" : "DroidKaigi is a conference tailored for developers."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "needs_review",
-            "value" : "DroidKaigiはAndroid技術情報の共有とコミュニケーションを目的に開催されるエンジニアが主役のAndroidカンファレンスです。"
+            "value" : "DroidKaigiは技術情報の共有とコミュニケーションを目的に開催されるエンジニアが主役のAndroidカンファレンスです。"
           }
         }
       }

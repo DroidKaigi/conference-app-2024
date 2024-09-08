@@ -13,6 +13,8 @@ plugins {
     id("droidkaigi.primitive.kmp.roborazzi")
 }
 
+version = "0.0.1"
+
 kotlin {
     val frameworkName = "shared"
     val xcf = XCFramework(frameworkName)
