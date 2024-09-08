@@ -9,10 +9,10 @@ import io.github.droidkaigi.confsched.testing.robot.DefaultTimetableItemCardRobo
 import io.github.droidkaigi.confsched.testing.robot.DefaultTimetableServerRobot
 import io.github.droidkaigi.confsched.testing.robot.DeviceSetupRobot
 import io.github.droidkaigi.confsched.testing.robot.ScreenRobot
-import io.github.droidkaigi.confsched.testing.robot.action.SearchScreenActionRobot
-import io.github.droidkaigi.confsched.testing.robot.verify.SearchScreenVerifyRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableItemCardRobot
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot
+import io.github.droidkaigi.confsched.testing.robot.action.SearchScreenActionRobot
+import io.github.droidkaigi.confsched.testing.robot.verify.SearchScreenVerifyRobot
 
 const val DemoSearchWord = "Demo"
 
@@ -26,6 +26,7 @@ class SearchScreenCoreRobot @Inject constructor(
     DeviceSetupRobot by deviceSetupRobot,
     TimetableItemCardRobot by timetableItemRobot {
     @Inject lateinit var actionRobot: SearchScreenActionRobot
+
     @Inject lateinit var verifyRobot: SearchScreenVerifyRobot
 
     enum class ConferenceDay(

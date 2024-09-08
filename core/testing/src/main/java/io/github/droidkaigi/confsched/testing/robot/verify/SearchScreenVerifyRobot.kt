@@ -18,10 +18,10 @@ import io.github.droidkaigi.confsched.sessions.component.SearchTextFieldAppBarTe
 import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
 import io.github.droidkaigi.confsched.testing.robot.DefaultScreenRobot
 import io.github.droidkaigi.confsched.testing.robot.ScreenRobot
-import io.github.droidkaigi.confsched.testing.robot.core.SearchScreenCoreRobot.Category
-import io.github.droidkaigi.confsched.testing.robot.core.SearchScreenCoreRobot.ConferenceDay
 import io.github.droidkaigi.confsched.testing.robot.TimetableItemCardRobot.Language
 import io.github.droidkaigi.confsched.testing.robot.core.DemoSearchWord
+import io.github.droidkaigi.confsched.testing.robot.core.SearchScreenCoreRobot.Category
+import io.github.droidkaigi.confsched.testing.robot.core.SearchScreenCoreRobot.ConferenceDay
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
 import io.github.droidkaigi.confsched.testing.utils.assertTextDoesNotContain
 import io.github.droidkaigi.confsched.testing.utils.hasTestTag
