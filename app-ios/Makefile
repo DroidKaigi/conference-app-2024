@@ -19,6 +19,11 @@ build-kmp-module-debug:
 	cd .. && \
 	./gradlew app-ios-shared:assembleSharedXCFramework -Papp.ios.shared.arch=arm64SimulatorDebug --no-configuration-cache
 
+.PHONY: build-kmp-module-arm64
+build-kmp-module-arm64:
+	cd .. && \
+	./gradlew app-ios-shared:assembleSharedXCFramework -Papp.ios.shared.arch=arm64Debug --no-configuration-cache
+
 .PHONY: build-app-debug
 build-app-debug: build-kmp-module-debug
 	set -o pipefail && \
