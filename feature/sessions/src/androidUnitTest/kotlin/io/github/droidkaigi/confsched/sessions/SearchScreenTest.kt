@@ -5,9 +5,9 @@ import dagger.hilt.android.testing.HiltAndroidTest
 import io.github.droidkaigi.confsched.testing.DescribedBehavior
 import io.github.droidkaigi.confsched.testing.describeBehaviors
 import io.github.droidkaigi.confsched.testing.execute
-import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot
-import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.Category
-import io.github.droidkaigi.confsched.testing.robot.SearchScreenRobot.ConferenceDay
+import io.github.droidkaigi.confsched.testing.robot.core.SearchScreenCoreRobot
+import io.github.droidkaigi.confsched.testing.robot.core.SearchScreenCoreRobot.Category
+import io.github.droidkaigi.confsched.testing.robot.core.SearchScreenCoreRobot.ConferenceDay
 import io.github.droidkaigi.confsched.testing.robot.TimetableItemCardRobot.Language
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus
 import io.github.droidkaigi.confsched.testing.robot.runRobot
@@ -21,26 +21,26 @@ import javax.inject.Inject
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @HiltAndroidTest
 class SearchScreenTest(
-    private val testCase: DescribedBehavior<SearchScreenRobot>,
+    private val testCase: DescribedBehavior<SearchScreenCoreRobot>,
 ) {
     @get:Rule
     @BindValue val robotTestRule: RobotTestRule = RobotTestRule(testInstance = this)
 
     @Inject
-    lateinit var searchScreenRobot: SearchScreenRobot
+    lateinit var searchScreenCoreRobot: SearchScreenCoreRobot
 
     @Test
     fun runTest() {
-        runRobot(searchScreenRobot) {
-            testCase.execute(searchScreenRobot)
+        runRobot(searchScreenCoreRobot) {
+            testCase.execute(searchScreenCoreRobot)
         }
     }
 
     companion object {
         @JvmStatic
         @ParameterizedRobolectricTestRunner.Parameters(name = "{0}")
-        fun behaviors(): List<DescribedBehavior<SearchScreenRobot>> {
-            return describeBehaviors<SearchScreenRobot>(name = "SearchScreen") {
+        fun behaviors(): List<DescribedBehavior<SearchScreenCoreRobot>> {
+            return describeBehaviors<SearchScreenCoreRobot>(name = "SearchScreen") {
                 describe("when server is operational") {
                     doIt {
                         setupTimetableServer(ServerStatus.Operational)
@@ -48,46 +48,60 @@ class SearchScreenTest(
                     }
                     itShould("no timetable items are displayed") {
                         captureScreenWithChecks {
-                            checkTimetableListExists()
-                            checkTimetableListItemsNotDisplayed()
+                            runRobot(verifyRobot) {
+                                checkTimetableListExists()
+                                checkTimetableListItemsNotDisplayed()
+                            }
                         }
                     }
                     describe("input search word to TextField") {
                         doIt {
-                            inputDemoSearchWord()
+                            runRobot(actionRobot) {
+                                inputDemoSearchWord()
+                            }
                         }
                         itShould("show search word and filtered items") {
                             captureScreenWithChecks {
-                                checkDemoSearchWordDisplayed()
-                                checkTimetableListItemsHasDemoText()
-                                checkTimetableListDisplayed()
-                                checkTimetableListItemsDisplayed()
+                                runRobot(verifyRobot) {
+                                    checkDemoSearchWordDisplayed()
+                                    checkTimetableListItemsHasDemoText()
+                                    checkTimetableListDisplayed()
+                                    checkTimetableListItemsDisplayed()
+                                }
                             }
                         }
                     }
                     describe("when filter day chip click") {
                         doIt {
-                            clickFilterDayChip()
+                            runRobot(actionRobot) {
+                                clickFilterDayChip()
+                            }
                         }
                         itShould("show drop down menu") {
                             captureScreenWithChecks {
-                                checkDisplayedFilterDayChip()
+                                runRobot(verifyRobot) {
+                                    checkDisplayedFilterDayChip()
+                                }
                             }
                         }
                         ConferenceDay.entries.forEach { conference ->
                             describe("when click conference day ${conference.day}") {
                                 doIt {
-                                    clickConferenceDay(
-                                        clickDay = conference,
-                                    )
+                                    runRobot(actionRobot) {
+                                        clickConferenceDay(
+                                            clickDay = conference,
+                                        )
+                                    }
                                 }
                                 itShould("selected day ${conference.day}") {
                                     captureScreenWithChecks {
-                                        checkTimetableListItemByConferenceDay(
-                                            checkDay = conference,
-                                        )
-                                        checkTimetableListDisplayed()
-                                        checkTimetableListItemsDisplayed()
+                                        runRobot(verifyRobot) {
+                                            checkTimetableListItemByConferenceDay(
+                                                checkDay = conference,
+                                            )
+                                            checkTimetableListDisplayed()
+                                            checkTimetableListItemsDisplayed()
+                                        }
                                     }
                                 }
                             }
@@ -95,25 +109,33 @@ class SearchScreenTest(
                     }
                     describe("when filter category chip click") {
                         doIt {
-                            clickFilterCategoryChip()
+                            runRobot(actionRobot) {
+                                clickFilterCategoryChip()
+                            }
                         }
                         itShould("show drop down menu") {
                             captureScreenWithChecks {
-                                checkDisplayedFilterCategoryChip()
+                                runRobot(verifyRobot) {
+                                    checkDisplayedFilterCategoryChip()
+                                }
                             }
                         }
                         Category.entries.forEach { category ->
                             describe("when click category ${category.categoryName}") {
                                 doIt {
-                                    clickCategory(
-                                        category = category,
-                                    )
+                                    runRobot(actionRobot) {
+                                        clickCategory(
+                                            category = category,
+                                        )
+                                    }
                                 }
                                 itShould("selected category ${category.categoryName}") {
                                     captureScreenWithChecks {
-                                        checkTimetableListItemByCategory(category)
-                                        checkTimetableListDisplayed()
-                                        checkTimetableListItemsDisplayed()
+                                        runRobot(verifyRobot) {
+                                            checkTimetableListItemByCategory(category)
+                                            checkTimetableListDisplayed()
+                                            checkTimetableListItemsDisplayed()
+                                        }
                                     }
                                 }
                             }
@@ -121,26 +143,34 @@ class SearchScreenTest(
                     }
                     describe("when filter language chip click") {
                         doIt {
-                            scrollToFilterLanguageChip()
-                            clickFilterLanguageChip()
+                            runRobot(actionRobot) {
+                                scrollToFilterLanguageChip()
+                                clickFilterLanguageChip()
+                            }
                         }
                         itShould("show drop down menu") {
                             captureScreenWithChecks {
-                                checkDisplayedFilterLanguageChip()
+                                runRobot(verifyRobot) {
+                                    checkDisplayedFilterLanguageChip()
+                                }
                             }
                         }
                         Language.entries.forEach { language ->
                             describe("when click language ${language.name}") {
                                 doIt {
-                                    clickLanguage(
-                                        language = language,
-                                    )
+                                    runRobot(actionRobot) {
+                                        clickLanguage(
+                                            language = language,
+                                        )
+                                    }
                                 }
                                 itShould("selected language ${language.name}") {
                                     captureScreenWithChecks {
                                         checkTimetableListItemByLanguage(language)
-                                        checkTimetableListDisplayed()
-                                        checkTimetableListItemsDisplayed()
+                                        runRobot(verifyRobot) {
+                                            checkTimetableListDisplayed()
+                                            checkTimetableListItemsDisplayed()
+                                        }
                                     }
                                 }
                             }
@@ -156,21 +186,27 @@ class SearchScreenTest(
                     }
                     itShould("no timetable items are displayed") {
                         captureScreenWithChecks {
-                            checkTimetableListExists()
-                            checkTimetableListItemsNotDisplayed()
+                            runRobot(verifyRobot) {
+                                checkTimetableListExists()
+                                checkTimetableListItemsNotDisplayed()
+                            }
                         }
                     }
 
                     describe("input search word to TextField") {
                         doIt {
-                            inputDemoSearchWord()
+                            runRobot(actionRobot) {
+                                inputDemoSearchWord()
+                            }
                         }
                         itShould("show search word and filtered items") {
                             captureScreenWithChecks {
-                                checkDemoSearchWordDisplayed()
-                                checkTimetableListItemsHasDemoText()
-                                checkTimetableListDisplayed()
-                                checkTimetableListItemsDisplayed()
+                                runRobot(verifyRobot) {
+                                    checkDemoSearchWordDisplayed()
+                                    checkTimetableListItemsHasDemoText()
+                                    checkTimetableListDisplayed()
+                                    checkTimetableListItemsDisplayed()
+                                }
                             }
                         }
                     }
