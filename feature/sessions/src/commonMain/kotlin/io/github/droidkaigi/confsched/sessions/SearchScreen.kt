@@ -174,7 +174,10 @@ fun SearchScreen(
             when (uiState) {
                 is SearchScreenUiState.Empty -> EmptySearchResultBody(
                     searchWord = uiState.searchWord,
-                    modifier = Modifier.imePadding(),
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                        .imePadding(),
+
                 )
 
                 is SearchScreenUiState.SearchList -> SearchList(

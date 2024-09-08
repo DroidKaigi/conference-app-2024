@@ -40,7 +40,6 @@ import kotlinx.collections.immutable.persistentListOf
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
-
 const val FavoritesScreenEmptyViewTestTag = "FavoritesScreenEmptyViewTestTag"
 
 sealed interface FavoritesSheetUiState {
