@@ -97,6 +97,7 @@ import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
 import conference_app_2024.feature.profilecard.generated.resources.card_type
 import conference_app_2024.feature.profilecard.generated.resources.create_card
+import conference_app_2024.feature.profilecard.generated.resources.delete
 import conference_app_2024.feature.profilecard.generated.resources.edit
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.image
@@ -627,7 +628,7 @@ private fun ImagePickerWithError(
                     Icon(
                         modifier = Modifier.padding(4.dp),
                         imageVector = Icons.Default.Close,
-                        contentDescription = null,
+                        contentDescription = stringResource(ProfileCardRes.string.delete),
                     )
                 }
             }

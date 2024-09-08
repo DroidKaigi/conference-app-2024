@@ -10,6 +10,7 @@
     <string name="link">Link</string>
     <string name="image">Image</string>
     <string name="add_image">Add Image</string>
+    <string name="delete">Delete</string>
     <string name="enter_validate_format">Please enter a %1$s</string>
     <string name="add_validate_format">Please add %1$s</string>
     <string name="url_is_invalid">The URL format is incorrect</string>
