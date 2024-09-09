@@ -123,22 +123,22 @@ fun StaffScreen(
             }
         },
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = padding.calculateTopPadding())
-                .let {
-                    if (scrollBehavior != null) {
-                        it.nestedScroll(scrollBehavior.nestedScrollConnection)
-                    } else {
-                        it
-                    }
-                }
-                .testTag(StaffScreenLazyColumnTestTag),
-            contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
-        ) {
-            when (uiState) {
-                is StaffUiState.Exists -> {
+        when (uiState) {
+            is StaffUiState.Exists -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = padding.calculateTopPadding())
+                        .let {
+                            if (scrollBehavior != null) {
+                                it.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            } else {
+                                it
+                            }
+                        }
+                        .testTag(StaffScreenLazyColumnTestTag),
+                    contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
+                ) {
                     items(uiState.staff) { staff ->
                         StaffItem(
                             staff = staff,
@@ -149,15 +149,13 @@ fun StaffScreen(
                         )
                     }
                 }
-                is StaffUiState.Loading -> {
-                    item {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.padding(padding).fillMaxSize(),
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
+            }
+            is StaffUiState.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(padding).fillMaxSize(),
+                ) {
+                    CircularProgressIndicator()
                 }
             }
         }
