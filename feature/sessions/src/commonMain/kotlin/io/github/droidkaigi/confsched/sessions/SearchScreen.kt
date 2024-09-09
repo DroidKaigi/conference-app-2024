@@ -15,7 +15,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -52,7 +51,7 @@ fun NavGraphBuilder.searchScreens(
         ) {
             SearchScreen(
                 onTimetableItemClick = onTimetableItemClick,
-                onBackClick = dropUnlessResumed(block = onBackClick),
+                onBackClick = onBackClick,
             )
         }
     }
