@@ -15,7 +15,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.settings.generated.resources.settings_title
@@ -38,7 +37,7 @@ fun NavGraphBuilder.settingsScreens(
 ) {
     composable(settingsScreenRoute) {
         SettingsScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
         )
     }
 }
