@@ -6,19 +6,23 @@ public struct TimetableCard: View {
     let timetableItem: TimetableItem
     let isFavorite: Bool
     let onTap: (TimetableItem) -> Void
-    let onTapFavorite: (TimetableItem) -> Void
+    let onTapFavorite: (TimetableItem, CGPoint?) -> Void
     
     public init(
         timetableItem: TimetableItem,
         isFavorite: Bool,
         onTap: @escaping (TimetableItem) -> Void,
-        onTapFavorite: @escaping (TimetableItem) -> Void
+        onTapFavorite: @escaping (TimetableItem, CGPoint?) -> Void
     ) {
         self.timetableItem = timetableItem
         self.isFavorite = isFavorite
         self.onTap = onTap
         self.onTapFavorite = onTapFavorite
     }
+
+    // MEMO: Used to adjust margins by Orientation.
+    @Environment(\.horizontalSizeClass) var heightSizeClass
+    @Environment(\.verticalSizeClass) var widthSizeClass
 
     public var body: some View {
         Button {
@@ -35,20 +39,29 @@ public struct TimetableCard: View {
                         LanguageTag(label)
                     }
                     Spacer()
-                    Button {
-                        onTapFavorite(timetableItem)
-                    } label: {
-                        Image(isFavorite ? .icFavoriteFill : .icFavoriteOutline)
-                            .resizable()
-                            .renderingMode(.template)
-                            .foregroundColor(
-                                isFavorite ?
-                                    AssetColors.Primary.primaryFixed.swiftUIColor
-                                    :
-                                    AssetColors.Surface.onSurfaceVariant.swiftUIColor
-                            )
-                            .frame(width: 24, height: 24)
+
+                    // [NOTE] In order to calculate the value from GeometryReader, it is supported by assigning DragGesture to the Image element instead of Button.
+                    HStack {
+                        GeometryReader { geometry in
+                            // MEMO: Since the coordinate values ​​are based on the inside of the View, ".local" is specified.
+                            let localGeometry = geometry.frame(in: .local)
+                            Image(isFavorite ? .icFavoriteFill : .icFavoriteOutline)
+                                .resizable()
+                                .renderingMode(.template)
+                                .foregroundColor(
+                                    isFavorite ? AssetColors.Primary.primaryFixed.swiftUIColor : AssetColors.Surface.onSurfaceVariant.swiftUIColor
+                                )
+                                .frame(width: 24, height: 24)
+                                .gesture(DragGesture(minimumDistance: 0, coordinateSpace: .global).onEnded { dragGesture in
+                                    // MEMO: The offset value in the Y-axis direction is subtracted for adjustment (decided by device orientation).
+                                    let adjustedLocationPoint = CGPoint(x: dragGesture.location.x, y: dragGesture.location.y - calculateTopMarginByDevideOrietation())
+                                    onTapFavorite(timetableItem, adjustedLocationPoint)
+                                })
+                                // MEMO: To adjust horizontal position, I'm subtracting half the size of Image (-12).
+                                .position(x: localGeometry.maxX - 12, y: localGeometry.midY)
+                        }
                     }
+                    .frame(height: 24, alignment: .trailing)
                     .sensoryFeedback(.impact, trigger: isFavorite) { _, newValue in newValue }
                 }
                 
@@ -85,6 +98,14 @@ public struct TimetableCard: View {
             .overlay(RoundedRectangle(cornerRadius: 4).stroke(AssetColors.Outline.outlineVariant.swiftUIColor, lineWidth: 1))
         }
     }
+
+    private func calculateTopMarginByDevideOrietation() -> CGFloat {
+        if widthSizeClass == .regular && heightSizeClass == .compact {
+            return CGFloat(128)
+        } else {
+            return CGFloat(96)
+        }
+    }
 }
 
 #Preview {
@@ -93,7 +114,7 @@ public struct TimetableCard: View {
             timetableItem: TimetableItem.Session.companion.fake(),
             isFavorite: true,
             onTap: { _ in },
-            onTapFavorite: { _ in }
+            onTapFavorite: { _,_  in }
         )
         .padding(.horizontal, 16)
     }

@@ -32,7 +32,7 @@ public struct SearchView: View {
                                     isFavorite: timetableItemWithFavorite.isFavorited
                                 ) { _ in
                                     store.send(.view(.timetableItemTapped(timetableItemWithFavorite)))
-                                } onTapFavorite: { _ in
+                                } onTapFavorite: { _, _ in
                                     store.send(.view(.toggleFavoriteTapped(timetableItem.id)))
                                 }
                             }

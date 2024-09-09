@@ -81,6 +81,7 @@ public struct TimetableView: View {
     }
 }
 
+@MainActor
 struct TimetableListView: View {
     private let store: StoreOf<TimetableReducer>
 
@@ -88,22 +89,91 @@ struct TimetableListView: View {
         self.store = store
     }
 
+    // MEMO: A variable that stores the value of Animation variation. (Only 0 or 1)
+    @State private var animationProgress: CGFloat = 0
+    // MEMO: Select target targetTimetableItemId & targetLocationPoint (for Animation).
+    @State private var targetTimetableItemId: TimetableItemId?
+    @State private var targetLocationPoint: CGPoint?
+
     var body: some View {
-        ScrollView{
-            LazyVStack(spacing: 0) {
-                ForEach(store.timetableItems, id: \.self) { item in
-                    TimeGroupMiniList(contents: item, onItemTap: { item in
-                        store.send(.view(.timetableItemTapped(item)))
-                    }, onFavoriteTap: {
-                        store.send(.view(.favoriteTapped($0)))
-                    })
-                }
-            }.scrollContentBackground(.hidden)
-            .onAppear {
-                store.send(.view(.onAppear))
-            }.background(AssetColors.Surface.surface.swiftUIColor)
-            
-            bottomTabBarPadding
+        ZStack {
+            ScrollView {
+                LazyVStack(spacing: 0) {
+                    ForEach(store.timetableItems, id: \.self) { item in
+                        TimeGroupMiniList(contents: item, onItemTap: { item in
+                            store.send(.view(.timetableItemTapped(item)))
+                        }, onFavoriteTap: { timetableItemWithFavorite, adjustedLocationPoint in
+
+                            store.send(.view(.favoriteTapped(timetableItemWithFavorite)))
+
+                            // MEMO: When "isFavorited" flag is false, this view executes animation.
+                            if timetableItemWithFavorite.isFavorited == false {
+                                toggleFavorite(timetableItem: timetableItemWithFavorite.timetableItem, adjustedLocationPoint: adjustedLocationPoint)
+                            }
+                        })
+                    }
+                }.scrollContentBackground(.hidden)
+                .onAppear {
+                    store.send(.view(.onAppear))
+                }.background(AssetColors.Surface.surface.swiftUIColor)
+                bottomTabBarPadding
+            }
+
+            // MEMO: Stack the Image elements that will be animated using ZStack.
+            makeHeartAnimationView()
+        }
+    }
+    
+    @ViewBuilder
+    private func makeHeartAnimationView() -> some View {
+        GeometryReader { geometry in
+            if targetTimetableItemId != nil {
+                Image(systemName: "heart.fill")
+                    .foregroundColor(
+                        AssetColors.Primary.primaryFixed.swiftUIColor
+                    )
+                    .frame(width: 24, height: 24)
+                    .position(animationPosition(geometry: geometry))
+                    .opacity(1 - animationProgress)
+                    .zIndex(99)
+            }
+        }
+    }
+    
+    private func animationPosition(geometry: GeometryProxy) -> CGPoint {
+
+        // MEMO: Get the value calculated from both the default and .global GeometryReader.
+        let globalGeometrySize = geometry.frame(in: .global).size
+        let defaultGeometrySize = geometry.size
+
+        // MEMO: Calculate the offset value in the Y-axis direction using GeometryReader.
+        let startPositionY = targetLocationPoint?.y ?? 0
+        let endPositionY = defaultGeometrySize.height - 25
+        let targetY = startPositionY + (endPositionY - startPositionY) * animationProgress
+
+        // MEMO: Calculate the offset value in the X-axis direction using GeometryReader.
+        let adjustedPositionX = animationProgress * (globalGeometrySize.width / 2 - globalGeometrySize.width + 50)
+        let targetX = defaultGeometrySize.width - 50 + adjustedPositionX
+
+        return CGPoint(x: targetX, y: targetY)
+    }
+
+    private func toggleFavorite(timetableItem: TimetableItem, adjustedLocationPoint: CGPoint?) {
+
+        targetLocationPoint = adjustedLocationPoint
+        targetTimetableItemId = timetableItem.id
+
+        // MEMO: Execute animation.
+        if targetTimetableItemId != nil {
+            withAnimation(.easeOut(duration: 1)) {
+                animationProgress = 1
+            }
+            Task {
+                try await Task.sleep(nanoseconds: 1_000_000_000)
+                targetTimetableItemId = nil
+                targetLocationPoint = nil
+                animationProgress = 0
+            }
         }
     }
 }
@@ -177,7 +247,7 @@ struct TimetableGridView: View {
 struct TimeGroupMiniList: View {
     let contents: TimetableTimeGroupItems
     let onItemTap: (TimetableItemWithFavorite) -> Void
-    let onFavoriteTap: (TimetableItemWithFavorite) -> Void
+    let onFavoriteTap: (TimetableItemWithFavorite, CGPoint?) -> Void
     
     var body: some View {
         HStack(spacing: 16) {
@@ -195,8 +265,8 @@ struct TimeGroupMiniList: View {
                         onTap: {_ in
                             onItemTap(item)
                         },
-                        onTapFavorite: { _ in
-                            onFavoriteTap(item)
+                        onTapFavorite: { _, point in
+                            onFavoriteTap(item, point)
                         })
                 }
             }
