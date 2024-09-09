@@ -555,14 +555,14 @@ private fun InputFieldWithError(
                 if (value.isNotEmpty()) {
                     IconButton(
                         onClick = {
-                            //TODO
+                            // TODO
                         },
                         modifier = Modifier
                             .padding(
                                 top = 8.dp,
                                 bottom = 8.dp,
                                 end = 4.dp,
-                            )
+                            ),
                     ) {
                         Icon(
                             modifier = Modifier.padding(8.dp),
