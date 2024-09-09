@@ -26,6 +26,7 @@ import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
+import io.github.droidkaigi.confsched.droidkaigiui.ProvideAndroidContextToComposeResource
 import io.github.droidkaigi.confsched.testing.HiltTestActivity
 import org.junit.rules.RuleChain
 import org.junit.rules.TestRule
@@ -141,6 +142,7 @@ class RobotTestRule(
             .getRepositoryProvider()
         composeTestRule.setContent {
             repositoryProvider.Provide {
+                ProvideAndroidContextToComposeResource()
                 content()
             }
         }

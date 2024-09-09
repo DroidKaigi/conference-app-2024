@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.staff.generated.resources.staff_title
@@ -48,7 +48,7 @@ fun NavGraphBuilder.staffScreens(
 ) {
     composable(staffScreenRoute) {
         StaffScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
             onStaffItemClick = onStaffItemClick,
         )
     }
@@ -135,7 +135,7 @@ fun StaffScreen(
                     }
                 }
                 .testTag(StaffScreenLazyColumnTestTag),
-            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
         ) {
             when (uiState) {
                 is StaffUiState.Exists -> {

@@ -5,6 +5,7 @@ import com.github.takahirom.roborazzi.ComposePreviewTester.Options
 import com.github.takahirom.roborazzi.ComposePreviewTester.Options.JUnit4TestLifecycleOptions
 import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
 import com.github.takahirom.roborazzi.captureRoboImage
+import io.github.droidkaigi.confsched.droidkaigiui.ProvideAndroidContextToComposeResource
 import io.github.droidkaigi.confsched.testing.rules.CoilRule
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
 import sergio.sastre.composable.preview.scanner.jvm.JvmAnnotationInfo
@@ -28,6 +29,7 @@ class DroidKaigiKmpPreviewTester : ComposePreviewTester<JvmAnnotationInfo> {
     override fun test(preview: ComposablePreview<JvmAnnotationInfo>) {
         captureRoboImage("${preview.methodName}.png") {
             println(preview.methodName)
+            ProvideAndroidContextToComposeResource()
             preview()
         }
     }

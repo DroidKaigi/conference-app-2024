@@ -26,6 +26,7 @@ import io.github.droidkaigi.confsched.sessions.component.SearchFiltersFilterLang
 import io.github.droidkaigi.confsched.sessions.component.SearchFiltersLazyRowTestTag
 import io.github.droidkaigi.confsched.sessions.component.SearchTextFieldAppBarTextFieldTestTag
 import io.github.droidkaigi.confsched.sessions.section.TimetableListTestTag
+import io.github.droidkaigi.confsched.testing.robot.TimetableItemCardRobot.Language
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
 import io.github.droidkaigi.confsched.testing.utils.assertTextDoesNotContain
 import io.github.droidkaigi.confsched.testing.utils.hasTestTag
@@ -36,9 +37,11 @@ class SearchScreenRobot @Inject constructor(
     private val screenRobot: DefaultScreenRobot,
     private val timetableServerRobot: DefaultTimetableServerRobot,
     private val deviceSetupRobot: DefaultDeviceSetupRobot,
+    timetableItemRobot: DefaultTimetableItemCardRobot,
 ) : ScreenRobot by screenRobot,
     TimetableServerRobot by timetableServerRobot,
-    DeviceSetupRobot by deviceSetupRobot {
+    DeviceSetupRobot by deviceSetupRobot,
+    TimetableItemCardRobot by timetableItemRobot {
     enum class ConferenceDay(
         val day: Int,
         val dateText: String,
@@ -53,14 +56,6 @@ class SearchScreenRobot @Inject constructor(
         AppArchitecture("App Architecture en"),
         JetpackCompose("Jetpack Compose en"),
         Other("Other en"),
-    }
-
-    enum class Language(
-        val tagName: String,
-    ) {
-        MIXED("MIXED"),
-        JAPANESE("JA"),
-        ENGLISH("EN"),
     }
 
     fun setupSearchScreenContent() {
@@ -228,25 +223,6 @@ class SearchScreenRobot @Inject constructor(
                 value = containText,
                 substring = true,
             )
-        waitUntilIdle()
-    }
-
-    fun checkTimetableListItemByLanguage(
-        language: Language,
-    ) {
-        val doesNotContains = Language.entries.filterNot { it == language }
-
-        composeTestRule
-            .onAllNodes(hasTestTag(TimetableItemCardTestTag))
-            .onFirst()
-            .assertTextContains(language.tagName)
-
-        doesNotContains.forEach { doesNotContain ->
-            composeTestRule
-                .onAllNodes(hasTestTag(TimetableItemCardTestTag))
-                .onFirst()
-                .assertTextDoesNotContain(doesNotContain.tagName)
-        }
         waitUntilIdle()
     }
 

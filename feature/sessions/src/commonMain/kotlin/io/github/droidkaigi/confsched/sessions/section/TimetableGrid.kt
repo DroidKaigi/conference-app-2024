@@ -139,7 +139,7 @@ fun TimetableGrid(
     val animatedScope = LocalAnimatedVisibilityScope.current
 
     Row(
-        modifier = modifier
+        modifier = Modifier
             .testTag(TimetableGridTestTag)
             .padding(
                 top = contentPadding.calculateTopPadding(),
@@ -171,6 +171,7 @@ fun TimetableGrid(
                 timetableState = timetableState,
                 timeLine = timeLine,
                 selectedDay = selectedDay,
+                modifier = modifier,
                 contentPadding = PaddingValues(
                     top = 16.dp + contentPadding.calculateTopPadding(),
                     bottom = 16.dp + 80.dp + contentPadding.calculateBottomPadding(),
