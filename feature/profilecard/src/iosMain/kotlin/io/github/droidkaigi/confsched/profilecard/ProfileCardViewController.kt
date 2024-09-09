@@ -28,6 +28,7 @@ fun profileCardViewController(
         contentPadding = PaddingValues(
             bottom = 30.dp, // Height of bottom tab bar
         ),
+        onNavigateToCropImage = { /* no action for iOS side */ },
     )
 }
 
@@ -39,5 +40,8 @@ fun profileCardScreenPresenterStateFlow(
     events = events,
     repositories = repositories,
 ) {
-    profileCardScreenPresenter(events)
+    profileCardScreenPresenter(
+        onNavigateToCropImage = { /* no action for iOS side */ },
+        events = events,
+    )
 }

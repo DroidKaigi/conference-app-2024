@@ -41,6 +41,7 @@ class ProfileCardScreenRobot @Inject constructor(
             KaigiTheme {
                 ProfileCardScreen(
                     onClickShareProfileCard = { _, _ -> },
+                    onNavigateToCropImage = {},
                 )
             }
         }

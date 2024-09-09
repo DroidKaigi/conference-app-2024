@@ -1,10 +1,12 @@
 package io.github.droidkaigi.confsched.profilecard
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import conference_app_2024.feature.profilecard.generated.resources.add_validate_format
 import conference_app_2024.feature.profilecard.generated.resources.droidkaigi_logo
@@ -20,6 +22,7 @@ import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.droidkaigiui.providePresenterDefaults
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardRepository
+import io.github.droidkaigi.confsched.model.ProfileImage
 import io.github.droidkaigi.confsched.model.localProfileCardRepository
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
@@ -44,6 +47,9 @@ internal sealed interface EditScreenEvent : ProfileCardScreenEvent {
     ) : EditScreenEvent
 
     data object SelectImage : EditScreenEvent
+
+    data class CropImage(val image: String) : EditScreenEvent
+
     data class Create(val profileCard: ProfileCard.Exists) : EditScreenEvent
 }
 
@@ -51,17 +57,21 @@ internal sealed interface CardScreenEvent : ProfileCardScreenEvent {
     data object Edit : CardScreenEvent
 }
 
-internal fun ProfileCard.toEditUiState(): ProfileCardUiState.Edit {
+internal fun ProfileCard.toEditUiState(
+    profileImageInEditString: String?,
+): ProfileCardUiState.Edit {
     return when (this) {
         is ProfileCard.Exists -> ProfileCardUiState.Edit(
             nickname = nickname,
             occupation = occupation,
             link = link,
-            image = image,
+            image = profileImageInEditString,
             cardType = cardType,
         )
 
-        ProfileCard.DoesNotExists, ProfileCard.Loading -> ProfileCardUiState.Edit()
+        ProfileCard.DoesNotExists, ProfileCard.Loading -> ProfileCardUiState.Edit(
+            image = profileImageInEditString,
+        )
     }
 }
 
@@ -82,6 +92,7 @@ internal fun ProfileCard.toCardUiState(): ProfileCardUiState.Card? {
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 internal fun profileCardScreenPresenter(
+    onNavigateToCropImage: () -> Unit,
     events: EventFlow<ProfileCardScreenEvent>,
     repository: ProfileCardRepository = localProfileCardRepository(),
 ): ProfileCardScreenState = providePresenterDefaults { userMessageStateHolder ->
@@ -105,17 +116,38 @@ internal fun profileCardScreenPresenter(
         stringResource(ProfileCardRes.string.image),
     )
 
+    val navigateToCropImage by rememberUpdatedState(onNavigateToCropImage)
     val profileCard: ProfileCard by rememberUpdatedState(repository.profileCard())
+    val profileImageInEdit: ProfileImage? by rememberUpdatedState(repository.profileImageInEdit())
+    val profileImageInEditString: String? by remember {
+        derivedStateOf {
+            profileImageInEdit?.bytes?.toBase64()
+        }
+    }
     var isLoading: Boolean by remember { mutableStateOf(false) }
-    val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(profileCard.toEditUiState())
+    val editUiState: ProfileCardUiState.Edit by rememberUpdatedState(
+        profileCard.toEditUiState(
+            profileImageInEditString = profileImageInEditString,
+        ),
+    )
     val cardUiState: ProfileCardUiState.Card? by rememberUpdatedState(profileCard.toCardUiState())
     var cardError by remember { mutableStateOf(ProfileCardError()) }
-    var uiType: ProfileCardUiType by remember { mutableStateOf(ProfileCardUiType.Loading) }
+    var uiType: ProfileCardUiType by rememberSaveable { mutableStateOf(ProfileCardUiType.Loading) }
 
     // at first launch, if you have a profile card, show card ui
     SafeLaunchedEffect(profileCard) {
-        uiType = when (profileCard) {
-            is ProfileCard.Exists -> ProfileCardUiType.Card
+        if (uiType != ProfileCardUiType.Loading) return@SafeLaunchedEffect
+
+        uiType = when (val card = profileCard) {
+            is ProfileCard.Exists -> {
+                repository.setProfileImageInEdit(
+                    ProfileImage(
+                        bytes = card.image.decodeBase64Bytes(),
+                    ),
+                )
+                ProfileCardUiType.Card
+            }
+
             ProfileCard.DoesNotExists -> ProfileCardUiType.Edit
             ProfileCard.Loading -> ProfileCardUiType.Loading
         }
@@ -166,7 +198,9 @@ internal fun profileCardScreenPresenter(
                 // Only matches if the link is in this format "${http or https + ://}${sub domain + .}${domain}.${tld}/${sub directories}".
                 // Protocol, sub domain and sub directories are optional.
                 // ex. https://www.example.com/hogefuga/foobar
-                val invalidFormat = event.link.matches(Regex("^(?:https?://)?(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z0-9-]{2,}(?:/\\S*)?\$")).not()
+                val invalidFormat = event.link
+                    .matches(Regex("^(?:https?://)?(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z0-9-]{2,}(?:/\\S*)?\$"))
+                    .not()
                 cardError = cardError.copy(
                     linkError = if (event.link.isEmpty()) emptyLinkErrorString else if (invalidFormat) invalidLinkErrorString else "",
                 )
@@ -176,6 +210,20 @@ internal fun profileCardScreenPresenter(
                 cardError = cardError.copy(
                     imageError = if (event.image.isEmpty()) emptyImageErrorString else "",
                 )
+                if (event.image.isEmpty()) {
+                    repository.clearProfileImageInEdit()
+                } else {
+                    repository.setProfileImageInEdit(
+                        ProfileImage(bytes = event.image.decodeBase64Bytes()),
+                    )
+                }
+            }
+
+            is EditScreenEvent.CropImage -> {
+                repository.setProfileImageCandidate(
+                    ProfileImage(bytes = event.image.decodeBase64Bytes()),
+                )
+                navigateToCropImage()
             }
         }
     }

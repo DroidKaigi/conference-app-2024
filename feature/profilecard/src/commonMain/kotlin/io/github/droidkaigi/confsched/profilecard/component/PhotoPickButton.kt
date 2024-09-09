@@ -5,6 +5,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import com.preat.peekaboo.image.picker.ImagePickerLauncher
 import com.preat.peekaboo.image.picker.SelectionMode
 import com.preat.peekaboo.image.picker.rememberImagePickerLauncher
 import kotlinx.coroutines.CoroutineScope
@@ -12,10 +13,14 @@ import kotlinx.coroutines.CoroutineScope
 @Composable
 internal fun PhotoPickerButton(
     onSelectedImage: (ByteArray) -> Unit,
+    onCropImage: (ByteArray) -> Unit,
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit,
 ) {
-    val imagePicker = rememberSingleImagePickerLauncher(onResult = onSelectedImage)
+    val imagePicker = rememberCroppingImagePickerLauncher(
+        onSelectedImage = onSelectedImage,
+        onCropImage = onCropImage,
+    )
 
     OutlinedButton(
         onClick = imagePicker::launch,
@@ -27,7 +32,14 @@ internal fun PhotoPickerButton(
 }
 
 @Composable
-private fun rememberSingleImagePickerLauncher(
+internal expect fun rememberCroppingImagePickerLauncher(
+    onCropImage: (ByteArray) -> Unit,
+    onSelectedImage: (ByteArray) -> Unit,
+    scope: CoroutineScope = rememberCoroutineScope(),
+): ImagePickerLauncher
+
+@Composable
+internal fun rememberSingleImagePickerLauncher(
     scope: CoroutineScope = rememberCoroutineScope(),
     onResult: (ByteArray) -> Unit,
 ) = rememberImagePickerLauncher(
