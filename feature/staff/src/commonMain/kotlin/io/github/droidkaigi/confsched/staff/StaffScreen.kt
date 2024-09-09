@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -135,7 +136,7 @@ fun StaffScreen(
                     }
                 }
                 .testTag(StaffScreenLazyColumnTestTag),
-            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
         ) {
             when (uiState) {
                 is StaffUiState.Exists -> {
