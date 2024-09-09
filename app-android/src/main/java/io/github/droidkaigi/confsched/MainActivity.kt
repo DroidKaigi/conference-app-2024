@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
@@ -21,8 +22,9 @@ import androidx.window.layout.WindowInfoTracker
 import dagger.hilt.android.AndroidEntryPoint
 import io.github.droidkaigi.confsched.data.di.RepositoryProvider
 import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
-import io.github.droidkaigi.confsched.droidkaigiui.KaigiAppCompositionLocalProvider
+import io.github.droidkaigi.confsched.droidkaigiui.ProvideAndroidContextToComposeResource
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalClock
+import io.github.droidkaigi.confsched.droidkaigiui.isTest
 import io.github.droidkaigi.confsched.model.FontFamily.DotGothic16Regular
 import io.github.droidkaigi.confsched.model.FontFamily.SystemDefault
 import io.github.droidkaigi.confsched.model.Settings.DoesNotExists
@@ -90,11 +92,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
 
-            KaigiAppCompositionLocalProvider(
-                locals = arrayOf(
-                    LocalClock provides clockProvider.clock(),
-                ),
-            ) {
+            CompositionLocalProvider(LocalClock provides clockProvider.clock()) {
+                if (isTest()) {
+                    ProvideAndroidContextToComposeResource()
+                }
                 repositoryProvider.Provide {
                     KaigiApp(
                         windowSize = windowSize,
