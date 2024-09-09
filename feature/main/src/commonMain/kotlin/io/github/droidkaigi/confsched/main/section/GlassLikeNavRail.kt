@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
@@ -74,7 +75,8 @@ fun GlassLikeNavRail(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.size(width = 64.dp, height = 320.dp)
+        modifier = modifier
+            .size(width = 64.dp, height = 420.dp)
             .run {
                 if (isBlurSupported()) {
                     hazeChild(state = hazeState, shape = CircleShape).border(
