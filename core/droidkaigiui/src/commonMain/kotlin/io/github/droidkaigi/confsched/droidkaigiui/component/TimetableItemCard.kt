@@ -52,7 +52,6 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.dropUnlessResumed
 import conference_app_2024.core.droidkaigiui.generated.resources.bookmarked
 import conference_app_2024.core.droidkaigiui.generated.resources.image
 import conference_app_2024.core.droidkaigiui.generated.resources.not_bookmarked
@@ -120,7 +119,7 @@ fun TimetableItemCard(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(color = LocalRoomTheme.current.primaryColor),
-                    onClick = dropUnlessResumed { onTimetableItemClick(timetableItem) },
+                    onClick = { onTimetableItemClick(timetableItem) },
                 ),
         ) {
             val contentPadding = 12.dp

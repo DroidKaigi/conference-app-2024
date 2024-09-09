@@ -12,7 +12,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.sponsors.generated.resources.content_description_back
@@ -42,7 +41,7 @@ fun NavGraphBuilder.sponsorsScreens(
 ) {
     composable(sponsorsScreenRoute) {
         SponsorsScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
             onSponsorsItemClick = onSponsorsItemClick,
         )
     }
