@@ -228,7 +228,7 @@ fun MainScreen(
     Row(
         modifier = modifier.fillMaxSize(),
         verticalAlignment = Alignment.CenterVertically,
-        ) {
+    ) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
             GlassLikeNavRail(
                 hazeState = hazeState,
