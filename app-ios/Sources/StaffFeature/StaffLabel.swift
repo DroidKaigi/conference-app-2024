@@ -10,10 +10,6 @@ struct StaffLabel: View {
         HStack(alignment: .center, spacing: 12) {
             CircularUserIcon(urlString: icon.absoluteString)
                 .frame(width: 52, height: 52)
-                .overlay(
-                    Circle()
-                        .stroke(AssetColors.Outline.outline.swiftUIColor, lineWidth: 1)
-                )
 
             Text(name)
                 .textStyle(.bodyLarge)

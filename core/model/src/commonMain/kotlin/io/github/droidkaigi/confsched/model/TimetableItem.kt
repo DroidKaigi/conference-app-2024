@@ -62,6 +62,7 @@ public sealed class TimetableItem {
         override val levels: PersistentList<String>,
         override val speakers: PersistentList<TimetableSpeaker>,
         val description: MultiLangText,
+        val message: MultiLangText?,
     ) : TimetableItem()
 
     private val startsDateString: String by lazy {
@@ -91,6 +92,11 @@ public sealed class TimetableItem {
 
     public val formattedDateTimeString: String by lazy {
         "$startsDateString / $formattedTimeString ($minutesString)"
+    }
+
+    public val formattedMonthAndDayString: String by lazy {
+        val localDate = startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
+        "${localDate.monthNumber}".padStart(2, '0') + "/" + "${localDate.dayOfMonth}".padStart(2, '0')
     }
 
     public val url: String get() = if (defaultLang() == Lang.JAPANESE) {

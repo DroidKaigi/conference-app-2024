@@ -1,16 +1,25 @@
 package io.github.droidkaigi.confsched.favorites.component
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandHorizontally
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import conference_app_2024.feature.favorites.generated.resources.filter_all
 import conference_app_2024.feature.favorites.generated.resources.filter_day1
@@ -25,27 +34,31 @@ fun FavoriteFilters(
     allFilterSelected: Boolean,
     day1FilterSelected: Boolean,
     day2FilterSelected: Boolean,
+    backgroundColor: Color,
     onAllFilterChipClick: () -> Unit,
     onDay1FilterChipClick: () -> Unit,
     onDay2FilterChipClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier.padding(start = 16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(backgroundColor)
+            .padding(start = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         FavoriteFilterChip(
-            selected = allFilterSelected,
+            isSelected = allFilterSelected,
             onClick = onAllFilterChipClick,
             text = stringResource(FavoritesRes.string.filter_all),
         )
         FavoriteFilterChip(
-            selected = day1FilterSelected,
+            isSelected = day1FilterSelected,
             onClick = onDay1FilterChipClick,
             text = stringResource(FavoritesRes.string.filter_day1),
         )
         FavoriteFilterChip(
-            selected = day2FilterSelected,
+            isSelected = day2FilterSelected,
             onClick = onDay2FilterChipClick,
             text = stringResource(FavoritesRes.string.filter_day2),
         )
@@ -54,16 +67,22 @@ fun FavoriteFilters(
 
 @Composable
 private fun FavoriteFilterChip(
-    selected: Boolean,
+    isSelected: Boolean,
     text: String,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     FilterChip(
-        selected = selected,
+        modifier = modifier.padding(top = 8.dp, bottom = 12.dp),
+        selected = isSelected,
         onClick = onClick,
         label = { Text(text) },
         leadingIcon = {
-            if (selected) {
+            AnimatedVisibility(
+                visible = isSelected,
+                enter = fadeIn() + expandHorizontally(),
+                exit = fadeOut() + shrinkHorizontally(),
+            ) {
                 Icon(
                     imageVector = Icons.Filled.Check,
                     contentDescription = null,
@@ -82,6 +101,7 @@ fun FavoriteFiltersPreview() {
                 allFilterSelected = false,
                 day1FilterSelected = true,
                 day2FilterSelected = true,
+                backgroundColor = MaterialTheme.colorScheme.surface,
                 onAllFilterChipClick = {},
                 onDay1FilterChipClick = {},
                 onDay2FilterChipClick = {},

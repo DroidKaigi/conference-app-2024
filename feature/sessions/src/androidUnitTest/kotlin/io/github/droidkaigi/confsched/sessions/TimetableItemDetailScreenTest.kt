@@ -47,11 +47,11 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
         fun behaviors(): List<DescribedBehavior<TimetableItemDetailScreenRobot>> {
             return describeBehaviors<TimetableItemDetailScreenRobot>(name = "TimetableItemDetailScreen") {
                 describe("when server is operational") {
-                    run {
+                    doIt {
                         setupTimetableServer(ServerStatus.Operational)
                     }
                     describe("when launch") {
-                        run {
+                        doIt {
                             setupScreenContent()
                         }
                         itShould("show session detail title") {
@@ -65,7 +65,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             checkAccessibilityCapture()
                         }
                         describe("click bookmark") {
-                            run {
+                            doIt {
                                 clickBookmarkButton()
                             }
                             itShould("show bookmarked session") {
@@ -76,7 +76,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 )
                             }
                             describe("click bookmark again") {
-                                run {
+                                doIt {
                                     clickBookmarkButton()
                                 }
                                 itShould("show unBookmarked session") {
@@ -90,7 +90,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                             }
                         }
                         describe("scroll") {
-                            run {
+                            doIt {
                                 scroll()
                             }
                             itShould("show scrolled session detail") {
@@ -101,9 +101,19 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                 )
                             }
                         }
+                        describe("when scroll to bottom") {
+                            doIt {
+                                scrollToBeforeAssetSection()
+                            }
+                            itShould("not display both assets") {
+                                captureScreenWithChecks {
+                                    checkAssetSectionDoesNotDisplayed()
+                                }
+                            }
+                        }
                     }
                     describe("when the description is lengthy") {
-                        run {
+                        doIt {
                             setupScreenContentWithLongDescription()
                             scrollToMiddleOfScreen()
                             waitUntilIdle()
@@ -115,7 +125,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         }
                     }
                     describe("when font scale is small") {
-                        run {
+                        doIt {
                             setFontScale(0.5f)
                             setupScreenContent()
                         }
@@ -128,7 +138,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         }
                     }
                     describe("when font scale is large") {
-                        run {
+                        doIt {
                             setFontScale(1.5f)
                             setupScreenContent()
                             scrollLazyColumnByIndex(1)
@@ -142,7 +152,7 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         }
                     }
                     describe("when font scale is huge") {
-                        run {
+                        doIt {
                             setFontScale(2.0f)
                             setupScreenContent()
                             scrollLazyColumnByIndex(1)
@@ -153,6 +163,70 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                                     checkSummaryCardTexts()
                                 },
                             )
+                        }
+                    }
+                }
+                describe("when server is operational available both asset") {
+                    doIt {
+                        setupTimetableServer(ServerStatus.OperationalBothAssetAvailable)
+                    }
+                    describe("when launch") {
+                        doIt {
+                            setupScreenContent()
+                            scrollToAssetSection()
+                        }
+                        itShould("display both assets") {
+                            captureScreenWithChecks {
+                                checkBothAssetButtonDisplayed()
+                            }
+                        }
+                    }
+                }
+                describe("when server is operational available only slide asset") {
+                    doIt {
+                        setupTimetableServer(ServerStatus.OperationalOnlySlideAssetAvailable)
+                    }
+                    describe("when launch") {
+                        doIt {
+                            setupScreenContent()
+                            scrollToAssetSection()
+                        }
+                        itShould("display only slide assets") {
+                            captureScreenWithChecks {
+                                checkOnlySlideAssetButtonDisplayed()
+                            }
+                        }
+                    }
+                }
+                describe("when server is operational available only video asset") {
+                    doIt {
+                        setupTimetableServer(ServerStatus.OperationalOnlyVideoAssetAvailable)
+                    }
+                    describe("when launch") {
+                        doIt {
+                            setupScreenContent()
+                            scrollToAssetSection()
+                        }
+                        itShould("only display video assets") {
+                            captureScreenWithChecks {
+                                checkOnlyVideoAssetButtonDisplayed()
+                            }
+                        }
+                    }
+                }
+                describe("when server is operational exists message") {
+                    doIt {
+                        setupTimetableServer(ServerStatus.OperationalMessageExists)
+                    }
+                    describe("when launch") {
+                        doIt {
+                            setupScreenContent()
+                            scrollToMessageRow()
+                        }
+                        itShould("display message") {
+                            captureScreenWithChecks {
+                                checkMessageDisplayed()
+                            }
                         }
                     }
                 }

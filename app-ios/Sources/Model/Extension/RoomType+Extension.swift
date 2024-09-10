@@ -1,6 +1,5 @@
 import Foundation
 import Theme
-import shared
 
 extension RoomType {
     public var theme: RoomTheme {

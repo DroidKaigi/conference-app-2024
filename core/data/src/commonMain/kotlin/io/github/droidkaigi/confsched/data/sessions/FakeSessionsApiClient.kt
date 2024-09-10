@@ -6,6 +6,7 @@ import io.github.droidkaigi.confsched.data.sessions.response.CategoryResponse
 import io.github.droidkaigi.confsched.data.sessions.response.LocaledResponse
 import io.github.droidkaigi.confsched.data.sessions.response.RoomResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionAssetResponse
+import io.github.droidkaigi.confsched.data.sessions.response.SessionMessageResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SpeakerResponse
@@ -30,6 +31,30 @@ public class FakeSessionsApiClient : SessionsApiClient {
             }
         }
 
+        public data object OperationalBothAssetAvailable : Status() {
+            override suspend fun sessionsAllResponse(): SessionsAllResponse {
+                return SessionsAllResponse.bothAssetAvailableFake()
+            }
+        }
+
+        public data object OperationalOnlySlideAssetAvailable : Status() {
+            override suspend fun sessionsAllResponse(): SessionsAllResponse {
+                return SessionsAllResponse.onlySlideAssetAvailableFake()
+            }
+        }
+
+        public data object OperationalOnlyVideoAssetAvailable : Status() {
+            override suspend fun sessionsAllResponse(): SessionsAllResponse {
+                return SessionsAllResponse.onlyVideoAssetAvailableFake()
+            }
+        }
+
+        public data object OperationalMessageExists : Status() {
+            override suspend fun sessionsAllResponse(): SessionsAllResponse {
+                return SessionsAllResponse.messageExistsFake()
+            }
+        }
+
         public data object Error : Status() {
             override suspend fun sessionsAllResponse(): SessionsAllResponse {
                 throw IOException("Fake IO Exception")
@@ -50,7 +75,11 @@ public class FakeSessionsApiClient : SessionsApiClient {
     public companion object {
         public val defaultSession: SessionResponse = SessionsAllResponse.fake()
             .filterConferenceDaySessions().sessions.find { it.sessionType == "NORMAL" }!!
-        public val defaultSessionId: String = defaultSession!!.id
+        public val defaultSessionId: String = defaultSession.id
+
+        public val defaultSessions: List<SessionResponse> = SessionsAllResponse.fake()
+            .filterConferenceDaySessions().sessions.filter { it.sessionType == "NORMAL" }.take(7)
+        public val defaultSessionIds: List<String> = defaultSessions.map { it.id }
 
         public val defaultSessionWithLongDescription: SessionResponse = SessionsAllResponse.fake()
             .filterConferenceDaySessions().sessions.find {
@@ -61,50 +90,117 @@ public class FakeSessionsApiClient : SessionsApiClient {
     }
 }
 
-public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
-    val sessions = mutableListOf<SessionResponse>()
-    val speakers = listOf(
-        SpeakerResponse(fullName = "taka", id = "1", isTopSpeaker = true),
-        SpeakerResponse(fullName = "ry", id = "2", isTopSpeaker = true),
-    )
-    val rooms = listOf(
-        RoomResponse(name = LocaledResponse(ja = "Hedgehog ja", en = "Hedgehog"), id = 1, sort = 1),
-        RoomResponse(
-            name = LocaledResponse(ja = "Flamingo ja", en = "Flamingo"),
-            id = 2,
-            sort = 2,
+public fun SessionsAllResponse.Companion.fake(
+    sessions: List<SessionResponse> = SessionResponse.fakes(
+        rooms = RoomResponse.fakes(),
+        categories = CategoryResponse.fakes(),
+        asset = SessionAssetResponse.fake(),
+    ),
+    rooms: List<RoomResponse> = RoomResponse.fakes(),
+    speakers: List<SpeakerResponse> = SpeakerResponse.fakes(),
+    categories: List<CategoryResponse> = CategoryResponse.fakes(),
+): SessionsAllResponse = SessionsAllResponse(
+    sessions = sessions,
+    rooms = rooms,
+    speakers = speakers,
+    categories = categories,
+)
+
+public fun SessionsAllResponse.Companion.bothAssetAvailableFake(): SessionsAllResponse = SessionsAllResponse.fake(
+    sessions = SessionResponse.fakes(
+        asset = SessionAssetResponse(
+            videoUrl = "https://2024.droidkaigi.jp/",
+            slideUrl = "https://2024.droidkaigi.jp/",
         ),
-        RoomResponse(
-            name = LocaledResponse(ja = "Giraffe ja", en = "Giraffe"),
-            id = 3,
-            sort = 3,
+    ),
+)
+
+public fun SessionsAllResponse.Companion.onlySlideAssetAvailableFake(): SessionsAllResponse = SessionsAllResponse.fake(
+    sessions = SessionResponse.fakes(
+        asset = SessionAssetResponse(
+            videoUrl = null,
+            slideUrl = "https://2024.droidkaigi.jp/",
         ),
-        RoomResponse(name = LocaledResponse(ja = "Iguana ja", en = "Iguana"), id = 4, sort = 3),
-    )
-    val categories = listOf(
-        CategoryResponse(
-            id = 1,
-            sort = 1,
-            title = LocaledResponse(ja = "Category1 ja", en = "Category1 en"),
-            items = listOf(
-                CategoryItemResponse(
-                    id = 1,
-                    name = LocaledResponse(ja = "App Architecture ja", en = "App Architecture en"),
-                    sort = 1,
-                ),
-                CategoryItemResponse(
-                    id = 2,
-                    name = LocaledResponse(ja = "Jetpack Compose ja", en = "Jetpack Compose en"),
-                    sort = 2,
-                ),
-                CategoryItemResponse(
-                    id = 3,
-                    name = LocaledResponse(ja = "Other ja", en = "Other en"),
-                    sort = 3,
-                ),
+    ),
+)
+
+public fun SessionsAllResponse.Companion.onlyVideoAssetAvailableFake(): SessionsAllResponse = SessionsAllResponse.fake(
+    sessions = SessionResponse.fakes(
+        asset = SessionAssetResponse(
+            videoUrl = "https://2024.droidkaigi.jp/",
+            slideUrl = null,
+        ),
+    ),
+)
+
+public fun SessionsAllResponse.Companion.messageExistsFake(): SessionsAllResponse = SessionsAllResponse.fake(
+    sessions = SessionResponse.fakes(
+        message = SessionMessageResponse.fake(),
+    ),
+)
+
+public fun SessionMessageResponse.Companion.fake(): SessionMessageResponse = SessionMessageResponse(
+    ja = "このセッションは中止になりました",
+    en = "This session has been canceled.",
+)
+
+private fun RoomResponse.Companion.fakes(): List<RoomResponse> = listOf(
+    RoomResponse(name = LocaledResponse(ja = "Hedgehog ja", en = "Hedgehog"), id = 1, sort = 1),
+    RoomResponse(
+        name = LocaledResponse(ja = "Flamingo ja", en = "Flamingo"),
+        id = 2,
+        sort = 2,
+    ),
+    RoomResponse(
+        name = LocaledResponse(ja = "Giraffe ja", en = "Giraffe"),
+        id = 3,
+        sort = 3,
+    ),
+    RoomResponse(name = LocaledResponse(ja = "Iguana ja", en = "Iguana"), id = 4, sort = 3),
+)
+
+private fun CategoryResponse.Companion.fakes(): List<CategoryResponse> = listOf(
+    CategoryResponse(
+        id = 1,
+        sort = 1,
+        title = LocaledResponse(ja = "Category1 ja", en = "Category1 en"),
+        items = listOf(
+            CategoryItemResponse(
+                id = 1,
+                name = LocaledResponse(ja = "App Architecture ja", en = "App Architecture en"),
+                sort = 1,
+            ),
+            CategoryItemResponse(
+                id = 2,
+                name = LocaledResponse(ja = "Jetpack Compose ja", en = "Jetpack Compose en"),
+                sort = 2,
+            ),
+            CategoryItemResponse(
+                id = 3,
+                name = LocaledResponse(ja = "Other ja", en = "Other en"),
+                sort = 3,
             ),
         ),
-    )
+    ),
+)
+
+private fun SessionAssetResponse.Companion.fake(): SessionAssetResponse = SessionAssetResponse(
+    videoUrl = null,
+    slideUrl = null,
+)
+
+private fun SpeakerResponse.Companion.fakes(): List<SpeakerResponse> = listOf(
+    SpeakerResponse(fullName = "taka", id = "1", isTopSpeaker = true),
+    SpeakerResponse(fullName = "ry", id = "2", isTopSpeaker = true),
+)
+
+private fun SessionResponse.Companion.fakes(
+    rooms: List<RoomResponse> = RoomResponse.fakes(),
+    categories: List<CategoryResponse> = CategoryResponse.fakes(),
+    asset: SessionAssetResponse = SessionAssetResponse.fake(),
+    message: SessionMessageResponse? = null,
+): List<SessionResponse> {
+    val sessions = mutableListOf<SessionResponse>()
 
     for (dayIndex in 0..2) {
         sessions.add(
@@ -126,8 +222,8 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                 language = "JAPANESE",
                 sessionCategoryItemId = 3,
                 interpretationTarget = false,
-                asset = SessionAssetResponse(videoUrl = null, slideUrl = null),
-                message = null,
+                asset = asset,
+                message = message,
                 sessionType = "WELCOME_TALK",
                 levels = listOf("UNSPECIFIED"),
             ),
@@ -189,14 +285,11 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
                     roomId = room.id,
                     sessionCategoryItemId = sessionCategoryItemId,
                     sessionType = "NORMAL",
-                    message = null,
+                    message = message,
                     isPlenumSession = false,
                     targetAudience = "For App developer アプリ開発者向け",
                     interpretationTarget = false,
-                    asset = SessionAssetResponse(
-                        videoUrl = "https://www.youtube.com/watch?v=hFdKCyJ-Z9A",
-                        slideUrl = "https://droidkaigi.jp/2021/",
-                    ),
+                    asset = asset,
                     levels = listOf("INTERMEDIATE"),
                 )
                 sessions.add(session)
@@ -204,12 +297,7 @@ public fun SessionsAllResponse.Companion.fake(): SessionsAllResponse {
         }
     }
 
-    return SessionsAllResponse(
-        sessions = sessions,
-        rooms = rooms,
-        speakers = speakers,
-        categories = categories,
-    )
+    return sessions
 }
 
 private fun Instant.toCustomIsoString(): String {

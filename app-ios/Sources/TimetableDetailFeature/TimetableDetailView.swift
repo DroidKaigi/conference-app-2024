@@ -84,6 +84,7 @@ public struct TimetableDetailView: View {
                 .background(AssetColors.Secondary.secondaryContainer.swiftUIColor)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
             }
+            .sensoryFeedback(.impact, trigger: store.isFavorited) { _, newValue in newValue }
         }
         .frame(height: 80)
         .frame(maxWidth: .infinity)
@@ -94,7 +95,12 @@ public struct TimetableDetailView: View {
     @MainActor var headLine: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
-                RoomTag(store.timetableItem.room.name)
+                RoomTag(.init(
+                    currentLangTitle: store.timetableItem.room.name.currentLangTitle,
+                    enTitle: store.timetableItem.room.name.enTitle,
+                    jaTitle: store.timetableItem.room.name.jaTitle
+                ))
+
                 ForEach(store.timetableItem.language.labels, id: \.self) { label in
                     LanguageTag(label)
                 }
@@ -149,7 +155,7 @@ public struct TimetableDetailView: View {
                     icon: Image(.icLanguage),
                     title: String(localized: "TimeTableDetailLanguage", bundle: .module),
                     titleColor: store.timetableItem.room.roomTheme.primaryColor,
-                    content: store.timetableItem.getSupportedLangString(isJapaneseLocale: LocaleKt.getDefaultLocale() == .japan)
+                    content: store.timetableItem.getSupportedLangString(isJapaneseLocale: Locale_iosKt.getDefaultLocale() == .japan)
                 )
                 InformationRow(
                     icon: Image(.icCategory),

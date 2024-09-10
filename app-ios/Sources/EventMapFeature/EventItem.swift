@@ -1,17 +1,21 @@
 import SwiftUI
 import CommonComponents
 import Theme
-import shared
+import Model
 
 struct EventItem: View {
-    @State private var isDescriptionExpanded: Bool = false
-    @State private var canBeExpanded: Bool = false
     let event: EventMapEvent
+    let onTappedMoreDetail: (URL) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 12) {
-                RoomTag(event.roomName)
+                RoomTag(.init(
+                    currentLangTitle: event.roomName.currentLangTitle,
+                    enTitle: event.roomName.enTitle,
+                    jaTitle: event.roomName.jaTitle
+                ))
+
                 Text(event.name.currentLangTitle)
                     .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
                     .textStyle(.titleMedium)
@@ -20,32 +24,19 @@ struct EventItem: View {
             .padding(.bottom, 8)
 
             VStack(alignment: .leading ,spacing: 8) {
-                Text(event.description_.currentLangTitle)
+                Text(event.description.currentLangTitle)
                     .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     .textStyle(.bodyLarge)
-                    .lineLimit(isDescriptionExpanded ? nil : 3)
-                    .background {
-                        ViewThatFits(in: .vertical) {
-                            Text(event.description_.currentLangTitle)
-                                .textStyle(.bodyLarge)
-                                .hidden()
-                            // Just for receiving onAppear event if the description exceeds its line limit
-                            Color.clear
-                                .onAppear {
-                                    canBeExpanded = true
-                                }
-                        }
-                    }
+
                 if let message = event.message {
                     Text(message.currentLangTitle)
                         .foregroundStyle(AssetColors.Tertiary.tertiary.swiftUIColor)
                         .textStyle(.bodyMedium)
                 }
                 
-                if canBeExpanded {
+                if let url = event.moreDetailsUrl {
                     Button {
-                        isDescriptionExpanded = true
-                        canBeExpanded = false
+                        onTappedMoreDetail(url)
                     } label: {
                         Text(String(localized: "Detail", bundle: .module))
                             .textStyle(.labelLarge)
@@ -66,10 +57,18 @@ struct EventItem: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.horizontal, 16)
-        .animation(.default, value: isDescriptionExpanded)
     }
 }
 
 #Preview {
-    EventItem(event: EventMapEvent.companion.fakes().first!)
+    EventItem(
+        event: .init(
+            name: .init(currentLangTitle: "name", enTitle: "name", jaTitle: "name"),
+            roomName: .init(currentLangTitle: "roomName", enTitle: "roomName", jaTitle: "roomName"),
+            roomIcon: .square,
+            description: .init(currentLangTitle: "description", enTitle: "description", jaTitle: "description"),
+            moreDetailsUrl: nil,
+            message: nil
+        )
+    ) { _ in }
 }

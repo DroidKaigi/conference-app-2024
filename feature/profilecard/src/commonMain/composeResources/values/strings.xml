@@ -10,6 +10,13 @@
     <string name="link">Link</string>
     <string name="image">Image</string>
     <string name="add_image">Add Image</string>
+    <string name="delete">Delete</string>
     <string name="enter_validate_format">Please enter a %1$s</string>
     <string name="add_validate_format">Please add %1$s</string>
+    <string name="url_is_invalid">The URL format is incorrect</string>
+    <string name="flip">Flip</string>
+    <string name="qrcode">QR code</string>
+    <string name="share">Share</string>
+    <string name="edit">Edit</string>
+    <string name="share_description">Check out my DroidKaigi Profile Card! Let's connect at the event. #DroidKaigi</string>
 </resources>

@@ -9,7 +9,7 @@ import kotlin.coroutines.cancellation.CancellationException
 public interface SponsorsRepository {
     public fun getSponsorStream(): Flow<PersistentList<Sponsor>>
 
-    @Throws(CancellationException::class)
+    @Throws(AppError::class, CancellationException::class)
     public suspend fun refresh()
 
     @Composable

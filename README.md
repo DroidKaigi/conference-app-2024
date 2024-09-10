@@ -14,7 +14,7 @@ In addition to the standard features of a conference app, the DroidKaigi 2024 of
 - **Contributors**: Discover the contributors behind the app.
 ...and more!
 
-![image](https://github.com/user-attachments/assets/ffed2cb2-455b-4de8-a9d2-be9ca0842b99)
+![image](https://github.com/user-attachments/assets/d1aeccc1-1e8e-475f-9c51-72fb595c6563)
 
 ## Try the app
 
@@ -70,16 +70,16 @@ timetableScreenPresenter ----> TimetableScreen
 @Composable
 fun TimetableScreen(
     ...
-    eventEmitter: EventEmitter<TimetableScreenEvent> = rememberEventEmitter<TimetableScreenEvent>(),
+    eventFlow: EventFlow<TimetableScreenEvent> = rememberEventFlow<TimetableScreenEvent>(),
     uiState: TimetableScreenUiState = timetableScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     ),
 ) {
     ...
     TimetableScreen(
         uiState = uiState,
         onBookmarkClick = { item, bookmarked ->
-            eventEmitter.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
+            eventFlow.tryEmit(TimetableScreenEvent.Bookmark(item, bookmarked))
         },
 ```
 
@@ -97,18 +97,16 @@ TimetableScreen ----> timetableScreenPresenter -> sessionsRepository
 ```kotlin
 @Composable
 fun timetableScreenPresenter(
-    events: Flow<TimetableScreenEvent>,
+    events: EventFlow<TimetableScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     ...
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            when (event) {
-                is Bookmark -> {
-                    sessionsRepository.toggleBookmark(event.timetableItem.id)
-                }
-                ...
+    EventEffect(Unit) { event ->
+        when (event) {
+            is Bookmark -> {
+                sessionsRepository.toggleBookmark(event.timetableItem.id)
             }
+            ...
         }
     }
     ...
@@ -176,7 +174,7 @@ SessionsRepository ----> timetableScreenPresenter
 ```kotlin
 @Composable
 fun timetableScreenPresenter(
-    events: Flow<TimetableScreenEvent>,
+    events: EventFlow<TimetableScreenEvent>,
     sessionsRepository: SessionsRepository = localSessionsRepository(),
 ): TimetableScreenUiState = providePresenterDefaults { userMessageStateHolder ->
     // Sessions are updated in the timetable() function
@@ -189,10 +187,8 @@ fun timetableScreenPresenter(
         ),
     )
     ...
-    SafeLaunchedEffect(Unit) {
-        events.collect { event ->
-            ...
-        }
+    EventEffect(events) { event ->
+        ...
     }
     TimetableScreenUiState(
         contentUiState = timetableUiState,
@@ -218,7 +214,7 @@ timetableScreenPresenter ----> TimetableScreen
 fun TimetableScreen(
     ...,
     uiState: TimetableScreenUiState = timetableScreenPresenter(
-        events = eventEmitter,
+        events = eventFlow,
     ),
 ) {
     ...

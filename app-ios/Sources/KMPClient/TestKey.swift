@@ -1,5 +1,15 @@
 import Dependencies
 
+extension FirebaseAppClient: TestDependencyKey {
+    public static let previewValue: Self = Self()
+    public static let testValue: Self = Self()
+}
+
+extension ContainerClient: TestDependencyKey {
+    public static let previewValue: Self = Self()
+    public static let testValue: Self = Self()
+}
+
 extension TimetableClient: TestDependencyKey {
     public static let previewValue: Self = Self()
 
@@ -29,6 +39,11 @@ extension ContributorClient: TestDependencyKey {
 }
 
 extension EventMapClient: TestDependencyKey {
+    public static let previewValue: Self = Self()
+    public static let testValue: Self = Self()
+}
+
+extension ProfileCardClient: TestDependencyKey {
     public static let previewValue: Self = Self()
     public static let testValue: Self = Self()
 }

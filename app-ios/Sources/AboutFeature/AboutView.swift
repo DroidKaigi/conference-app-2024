@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import SwiftUI
-import LicenseList
 import Theme
 
 @ViewAction(for: AboutReducer.self)
@@ -39,6 +38,7 @@ public struct AboutView: View {
                 SafariView(url: .medium)
                     .ignoresSafeArea()
             })
+            .alert($store.scope(state: \.destination?.alert, action: \.presentation.alert))
     }
     
     @ViewBuilder var content: some View {
@@ -155,6 +155,25 @@ public struct AboutView: View {
                                 .textStyle(.titleMedium)
                         } icon: {
                             Image(.icPrivacyTip)
+                        }
+                        .labelStyle(AboutLabelStyle())
+                        Spacer()
+                    })
+                    .padding(.init(top: 24, leading: 12, bottom: 24, trailing: 16))
+
+                    Divider()
+                        .background(AssetColors.Outline.outlineVariant.swiftUIColor)
+
+                    Button(action: {
+                        send(.switchComposeModeTapped)
+                    }, label: {
+                        Label {
+                            Text(String(localized: "SwitchComposeMultiplatform", bundle: .module))
+                                .textStyle(.titleMedium)
+                        } icon: {
+                            Image(systemName: "switch.2")
+                                .resizable()
+                                .frame(width: 18, height: 18)
                         }
                         .labelStyle(AboutLabelStyle())
                         Spacer()

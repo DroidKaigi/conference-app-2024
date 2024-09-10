@@ -35,7 +35,7 @@ include(
     ":core:designsystem",
     ":core:data",
     ":core:model",
-    ":core:ui",
+    ":core:droidkaigiui",
     ":core:testing",
     ":core:testing-manifest",
     ":core:common",

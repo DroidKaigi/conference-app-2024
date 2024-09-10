@@ -5,17 +5,19 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.performScrollToIndex
 import io.github.droidkaigi.confsched.contributors.ContributorsItemTestTagPrefix
 import io.github.droidkaigi.confsched.contributors.ContributorsScreen
 import io.github.droidkaigi.confsched.contributors.ContributorsTestTag
+import io.github.droidkaigi.confsched.contributors.ContributorsTotalCountTestTag
 import io.github.droidkaigi.confsched.contributors.component.ContributorsItemImageTestTagPrefix
 import io.github.droidkaigi.confsched.contributors.component.ContributorsUserNameTextTestTagPrefix
+import io.github.droidkaigi.confsched.droidkaigiui.Inject
 import io.github.droidkaigi.confsched.model.Contributor
 import io.github.droidkaigi.confsched.model.fakes
 import io.github.droidkaigi.confsched.testing.utils.assertCountAtLeast
 import io.github.droidkaigi.confsched.testing.utils.hasTestTag
-import io.github.droidkaigi.confsched.ui.Inject
 
 class ContributorsScreenRobot @Inject constructor(
     screenRobot: DefaultScreenRobot,
@@ -78,6 +80,14 @@ class ContributorsScreenRobot @Inject constructor(
         composeTestRule
             .onAllNodes(hasTestTag(ContributorsItemTestTagPrefix, substring = true))
             .assertCountAtLeast(2)
+    }
+
+    fun checkContributorTotalCountDisplayed() {
+        // Check contributors total count is being displayed
+        composeTestRule
+            .onNode(hasTestTag(ContributorsTotalCountTestTag))
+            .assertExists()
+            .isDisplayed()
     }
 
     fun checkDoesNotFirstContributorItemDisplayed() {

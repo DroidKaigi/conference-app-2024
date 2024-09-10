@@ -1,13 +1,16 @@
 import shared
-import SwiftUI
 import Theme
 
-public struct RoomTheme {
-    public let primaryColor: Color
-    public let containerColor: Color
-    public let dimColor: Color
-}
-
 extension TimetableRoom {
-    public var roomTheme: RoomTheme { type.theme }
+    public var roomTheme: RoomTheme {
+        let roomType: Model.RoomType = switch type {
+        case .roomF: .roomF
+        case .roomG: .roomG
+        case .roomH: .roomH
+        case .roomI: .roomI
+        case .roomJ: .roomJ
+        case .roomIj: .roomIj
+        }
+        return roomType.theme
+    }
 }

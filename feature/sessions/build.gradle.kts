@@ -1,9 +1,12 @@
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+
 plugins {
     id("droidkaigi.convention.kmpfeature")
     id("droidkaigi.primitive.kmp.serialization")
 }
 
 android.namespace = "io.github.droidkaigi.confsched.feature.sessions"
+@OptIn(ExperimentalRoborazziApi::class)
 roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.sessions")
 
 kotlin {
@@ -11,7 +14,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(projects.core.designsystem)
-                implementation(projects.core.ui)
+                implementation(projects.core.droidkaigiui)
                 implementation(projects.core.model)
 
                 implementation(libs.kotlinSerializationJson)

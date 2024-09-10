@@ -4,6 +4,16 @@ import shared
 import Model
 
 extension DependencyValues {
+    public var firebaseAppClient: FirebaseAppClient {
+        get { self[FirebaseAppClient.self] }
+        set { self[FirebaseAppClient.self] = newValue }
+    }
+
+    public var containerClient: ContainerClient {
+        get { self[ContainerClient.self] }
+        set { self[ContainerClient.self] = newValue }
+    }
+
     public var timetableClient: TimetableClient {
         get { self[TimetableClient.self] }
         set { self[TimetableClient.self] = newValue }
@@ -27,6 +37,27 @@ extension DependencyValues {
     public var eventMapClient: EventMapClient {
         get { self[EventMapClient.self] }
         set { self[EventMapClient.self] = newValue }
+    }
+
+    public var profileCardClient: ProfileCardClient {
+        get { self[ProfileCardClient.self] }
+        set { self[ProfileCardClient.self] = newValue }
+    }
+}
+
+@DependencyClient
+public struct FirebaseAppClient: Sendable {
+    public var prepareFirebase: @Sendable () -> ()
+}
+
+@DependencyClient
+public struct ContainerClient: Sendable {
+    private class DefaultRepositories: Repositories {
+        var map = [AnyHashable: Any]()
+    }
+
+    public var repositories: @Sendable () -> any Repositories = {
+        DefaultRepositories()
     }
 }
 
@@ -55,5 +86,26 @@ public struct ContributorClient: Sendable {
 
 @DependencyClient
 public struct EventMapClient: Sendable {
-    public var streamEvents: @Sendable () throws -> AsyncThrowingStream<[EventMapEvent], any Error>
+    public var streamEvents: @Sendable () throws -> AsyncThrowingStream<[Model.EventMapEvent], any Error>
+}
+
+@DependencyClient
+public struct ProfileCardClient: Sendable {
+    public struct SaveParameter: Sendable {
+        public var nickname: String
+        public var link: String
+        public var occupation: String
+        public var image: String
+        public var cardType: ProfileCardType
+
+        public init(nickname: String, link: String, occupation: String, image: String, cardType: ProfileCardType) {
+            self.nickname = nickname
+            self.link = link
+            self.occupation = occupation
+            self.image = image
+            self.cardType = cardType
+        }
+    }
+
+    public var save: @Sendable (_ param: SaveParameter) async throws -> Void
 }

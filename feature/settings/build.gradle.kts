@@ -1,15 +1,18 @@
+import com.github.takahirom.roborazzi.ExperimentalRoborazziApi
+
 plugins {
     id("droidkaigi.convention.kmpfeature")
 }
 
 android.namespace = "io.github.droidkaigi.confsched.feature.settings"
+@OptIn(ExperimentalRoborazziApi::class)
 roborazzi.generateComposePreviewRobolectricTests.packages = listOf("io.github.droidkaigi.confsched.settings")
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
                 implementation(projects.core.model)
-                implementation(projects.core.ui)
+                implementation(projects.core.droidkaigiui)
                 implementation(projects.core.designsystem)
 
                 implementation(libs.kotlinxCoroutinesCore)

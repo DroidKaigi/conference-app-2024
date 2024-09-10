@@ -10,6 +10,13 @@
     <string name="link">リンク</string>
     <string name="image">画像</string>
     <string name="add_image">画像を追加</string>
+    <string name="delete">削除する</string>
     <string name="enter_validate_format">%1$sを入力してください</string>
     <string name="add_validate_format">%1$sを追加してください</string>
+    <string name="url_is_invalid">URLの形式が正しくありません</string>
+    <string name="flip">裏返す</string>
+    <string name="qrcode">QRコード</string>
+    <string name="share">共有する</string>
+    <string name="edit">編集する</string>
+    <string name="share_description">DroidKaigiのプロフィールカードを作成しました！イベントでつながりましょう。#DroidKaigi</string>
 </resources>

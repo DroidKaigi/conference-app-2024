@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import KMPClient
-@preconcurrency import shared
+import Model
+import Foundation
 
 @Reducer
 public struct EventMapReducer: Sendable {
@@ -12,26 +13,30 @@ public struct EventMapReducer: Sendable {
     public struct State: Equatable {
         public var selectedFloorMap: FloorMap = .first
         public var events: [EventMapEvent] = []
+        public var url: IdentifiableURL?
         
         public init() { }
     }
     
-    public enum Action {
+    public enum Action: Sendable, BindableAction {
+        case binding(BindingAction<State>)
         case view(View)
         case `internal`(Internal)
 
         @CasePathable
-        public enum View {
+        public enum View: Sendable {
             case onAppear
             case selectFloorMap(FloorMap)
+            case moreDetailButtonTapped(URL)
         }
         
-        public enum Internal {
+        public enum Internal: Sendable {
             case response(Result<[EventMapEvent], any Error>)
         }
     }
     
     public var body: some ReducerOf<Self> {
+        BindingReducer()
         Reduce { state, action in
             switch action {
             case .view(.onAppear):
@@ -49,12 +54,19 @@ public struct EventMapReducer: Sendable {
                 state.selectedFloorMap = floor
                 return .none
                 
+            case let .view(.moreDetailButtonTapped(url)):
+                state.url = IdentifiableURL(url)
+                return .none
+                
             case let .internal(.response(.success(events))):
                 state.events = events
                 return .none
                 
             case let .internal(.response(.failure(error))):
                 print(error.localizedDescription)
+                return .none
+                
+            case .binding:
                 return .none
             }
         }

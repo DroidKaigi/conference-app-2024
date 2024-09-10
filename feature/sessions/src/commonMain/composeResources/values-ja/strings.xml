@@ -14,6 +14,8 @@
     <string name="video">動画</string>
     <string name="workshop">ワークショップ</string>
     <string name="back">戻る</string>
+    <string name="search">検索</string>
+    <string name="search_sessions">セッションを検索</string>
     <string name="select_language">言語選択</string>
     <string name="japanese">日本語</string>
     <string name="english">English</string>
@@ -29,8 +31,11 @@
     <string name="language_title">対応言語</string>
     <string name="category_title">カテゴリ</string>
     <string name="empty_search_result">「%1$s」と一致する検索結果がありません</string>
+    <string name="empty_search_result_no_input">一致する検索結果がありません</string>
     <string name="filter_chip_day">開催日</string>
     <string name="filter_chip_category">カテゴリ</string>
     <string name="filter_chip_session_type">セッション種別</string>
     <string name="filter_chip_supported_language">対応言語</string>
+    <string name="timeline_view">タイムライン表示</string>
+    <string name="grid_view">グリッド表示</string>
 </resources>

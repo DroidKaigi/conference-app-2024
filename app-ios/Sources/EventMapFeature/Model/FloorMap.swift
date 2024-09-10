@@ -2,7 +2,7 @@ import Foundation
 import Model
 import SwiftUI
 
-public enum FloorMap {
+public enum FloorMap: Sendable {
     case first
     case firstBasement
 }

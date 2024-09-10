@@ -31,7 +31,7 @@ public struct FavoriteView: View {
                                     isFavorite: timetableItemWithFavorite.isFavorited
                                 ) { _ in
                                     store.send(.view(.timetableItemTapped(timetableItemWithFavorite)))
-                                } onTapFavorite: { _ in
+                                } onTapFavorite: { _, _ in
                                     store.send(.view(.toggleFavoriteTapped(timetableItem.id)))
                                 }
                             }
@@ -77,18 +77,13 @@ public struct FavoriteView: View {
     private var daySelection: some View {
         SelectionChips<DroidKaigi2024Day>(
             selected: $store.selectedDay.sending(\.view.selectedDayChanged),
-            notSelectedTitle: String(localized: "All", bundle: .module)
+            notSelectedTitle: String(localized: "All", bundle: .module),
+            options: DroidKaigi2024Day.options
         )
     }
 }
 
-#if hasFeature(RetroactiveAttribute)
-extension DroidKaigi2024Day: @retroactive Selectable {}
-#else
-extension DroidKaigi2024Day: Selectable {}
-#endif
-
-extension DroidKaigi2024Day {
+extension DroidKaigi2024Day: Model.Selectable {
     public var id: Self {
         self
     }
@@ -104,6 +99,10 @@ extension DroidKaigi2024Day {
         case .conferenceDay2:
             String(localized: "9/13", bundle: .module)
         }
+    }
+
+    public static var options: [DroidKaigi2024Day] {
+        [.conferenceDay1, .conferenceDay2]
     }
 }
 

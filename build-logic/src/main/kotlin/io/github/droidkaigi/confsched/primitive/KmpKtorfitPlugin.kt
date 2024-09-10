@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.primitive
 
 import io.github.droidkaigi.confsched.primitive.Arch.ALL
 import io.github.droidkaigi.confsched.primitive.Arch.ARM
+import io.github.droidkaigi.confsched.primitive.Arch.ARM_SIMULATOR_DEBUG
 import io.github.droidkaigi.confsched.primitive.Arch.X86
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -32,7 +33,12 @@ class KmpKtorfitPlugin : Plugin<Project> {
 
             dependencies {
                 val iosConfigs = when (activeArch) {
-                    ARM -> listOf("IosSimulatorArm64")
+                    ARM -> listOf(
+                        "IosArm64",
+                        "IosSimulatorArm64"
+                    )
+
+                    ARM_SIMULATOR_DEBUG -> listOf("IosSimulatorArm64")
                     X86 -> listOf("IosX64")
                     ALL -> listOf(
                         "IosArm64",

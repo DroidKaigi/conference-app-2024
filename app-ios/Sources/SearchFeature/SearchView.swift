@@ -8,6 +8,7 @@ import Theme
 
 public struct SearchView: View {
     @Bindable private var store: StoreOf<SearchReducer>
+    @State private var isFocused: Bool = false
 
     public init(store: StoreOf<SearchReducer>) {
         self.store = store
@@ -31,7 +32,7 @@ public struct SearchView: View {
                                     isFavorite: timetableItemWithFavorite.isFavorited
                                 ) { _ in
                                     store.send(.view(.timetableItemTapped(timetableItemWithFavorite)))
-                                } onTapFavorite: { _ in
+                                } onTapFavorite: { _, _ in
                                     store.send(.view(.toggleFavoriteTapped(timetableItem.id)))
                                 }
                             }
@@ -50,11 +51,13 @@ public struct SearchView: View {
                     store.send(.view(.searchWordChanged($0)))
                 }
             ),
+            isPresented: $isFocused,
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
         .onAppear {
             store.send(.view(.onAppear))
+            isFocused = true
         }
     }
 
@@ -91,7 +94,8 @@ public struct SearchView: View {
                         store.send(.view(.selectedDayChanged($0)))
                     }
                 )
-                searchFilterChip(
+                searchCategoryFilterChip(
+                    allCategories: store.timetable?.categories ?? [],
                     selection: store.selectedCategory,
                     defaultTitle: String(localized: "カテゴリ", bundle: .module),
                     onSelect: {
@@ -116,6 +120,37 @@ public struct SearchView: View {
             .padding(.horizontal, 16)
             .padding(.top, 8)
             .padding(.bottom, 12)
+        }
+    }
+
+    // MEMO: All Category can get from timetable TimetableCategories get timetable model.
+    // (TimetableCategory don't have to conform to Selectable protocol.)
+    private func searchCategoryFilterChip(
+        allCategories: [TimetableCategory],
+        selection: TimetableCategory?,
+        defaultTitle: String,
+        onSelect: @escaping (TimetableCategory) -> Void
+    ) -> some View {
+        Menu {
+            ForEach(allCategories, id: \.id) { category in
+                Button {
+                    onSelect(category)
+                } label: {
+                    HStack {
+                        if category == selection {
+                            Image(.icCheck)
+                        }
+                        Text(category.title.currentLangTitle)
+                    }
+                }
+            }
+
+        } label: {
+            SelectionChip(
+                title: selection?.title.currentLangTitle ?? defaultTitle,
+                isMultiSelect: true,
+                isSelected: selection != nil
+            ) {}
         }
     }
 
@@ -148,13 +183,7 @@ public struct SearchView: View {
     }
 }
 
-#if hasFeature(RetroactiveAttribute)
-extension DroidKaigi2024Day: @retroactive Selectable {}
-#else
-extension DroidKaigi2024Day: Selectable {}
-#endif
-
-extension DroidKaigi2024Day {
+extension DroidKaigi2024Day: Model.Selectable {
     public var id: Self {
         self
     }
@@ -177,30 +206,7 @@ extension DroidKaigi2024Day {
     }
 }
 
-#if hasFeature(RetroactiveAttribute)
-extension TimetableCategory: @retroactive Selectable {}
-#else
-extension TimetableCategory: Selectable {}
-#endif
-
-extension TimetableCategory {
-    public var caseTitle: String {
-        title.currentLangTitle
-    }
-    
-    static public var allCases: [TimetableCategory] {
-        // TODO: use correct
-        []
-    }
-}
-
-#if hasFeature(RetroactiveAttribute)
-extension TimetableSessionType: @retroactive Selectable {}
-#else
-extension TimetableSessionType: Selectable {}
-#endif
-
-extension TimetableSessionType {
+extension TimetableSessionType: Model.Selectable {
     public var id: Self {
         self
     }
@@ -210,13 +216,7 @@ extension TimetableSessionType {
     }
 }
 
-#if hasFeature(RetroactiveAttribute)
-extension Lang: @retroactive Selectable {}
-#else
-extension Lang: Selectable {}
-#endif
-
-extension Lang {
+extension Lang: Model.Selectable {
     public var id: Self {
         self
     }

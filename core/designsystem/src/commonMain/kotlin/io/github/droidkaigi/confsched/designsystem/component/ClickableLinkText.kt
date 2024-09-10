@@ -7,21 +7,18 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import io.github.droidkaigi.confsched.designsystem.theme.RoomTheme
 
 private const val ClickableTextExpandAnimateDurationMillis = 300
 
@@ -58,9 +55,8 @@ private fun getAnnotatedString(
             val endIndex = startIndex + matchResult.value.length
             addStyle(
                 style = SpanStyle(
-                    color = MaterialTheme.colorScheme.primary,
+                    color = RoomTheme.Jellyfish.primaryColor,
                     textDecoration = TextDecoration.Underline,
-                    fontWeight = FontWeight.Bold,
                 ),
                 start = startIndex,
                 end = endIndex,
@@ -106,19 +102,7 @@ fun ClickableLinkText(
         findUrlResults = findResults,
     )
 
-    val layoutResult = remember { mutableStateOf<LayoutCoordinates?>(null) }
-
-    val density = LocalDensity.current
-
-    val isOverflowing by remember {
-        derivedStateOf {
-            val actualHeight = layoutResult.value?.size?.height?.toFloat() ?: 0f
-            val expectedHeight = with(density) {
-                style.fontSize.toPx() + style.lineHeight.toPx() * (maxLines - 1)
-            }
-            actualHeight > expectedHeight
-        }
-    }
+    var isOverflowing by remember { mutableStateOf(false) }
 
     LaunchedEffect(isOverflowing) {
         onOverflow(isOverflowing)
@@ -128,14 +112,14 @@ fun ClickableLinkText(
         modifier = modifier
             .animateContentSize(
                 animationSpec = tween(ClickableTextExpandAnimateDurationMillis, easing = EaseInQuart),
-            )
-            .onGloballyPositioned { coordinates ->
-                layoutResult.value = coordinates
-            },
+            ),
         text = annotatedString,
         style = style,
         overflow = overflow,
         maxLines = maxLines,
+        onTextLayout = { textLayoutResult ->
+            isOverflowing = textLayoutResult.hasVisualOverflow
+        },
         onClick = { offset ->
             findResults.forEach { matchResult ->
                 annotatedString.getStringAnnotations(

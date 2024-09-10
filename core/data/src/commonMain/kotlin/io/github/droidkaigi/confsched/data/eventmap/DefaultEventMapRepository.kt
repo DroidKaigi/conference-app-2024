@@ -2,6 +2,7 @@ package io.github.droidkaigi.confsched.data.eventmap
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import co.touchlab.kermit.Logger
 import io.github.droidkaigi.confsched.compose.SafeLaunchedEffect
 import io.github.droidkaigi.confsched.compose.safeCollectAsRetainedState
 import io.github.droidkaigi.confsched.model.EventMapEvent
@@ -11,6 +12,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onStart
 
 public class DefaultEventMapRepository(
@@ -36,6 +38,12 @@ public class DefaultEventMapRepository(
                 refresh()
             }
         }
+            .catch {
+                // SKIE doesn't support throwing exceptions from Flow.
+                // For more information, please refer to https://github.com/touchlab/SKIE/discussions/19 .
+                Logger.e("Failed to refresh in getEventMapStream()", it)
+                emit(eventMapStateFlow.value)
+            }
     }
 
     override suspend fun refresh() {

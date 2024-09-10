@@ -40,7 +40,7 @@ class AboutScreenTest(
         fun behaviors(): List<DescribedBehavior<AboutScreenRobot>> {
             return describeBehaviors("AboutScreen") {
                 describe("when launch") {
-                    run {
+                    doIt {
                         setupScreenContent()
                     }
                     itShould("show detail section") {
@@ -48,6 +48,29 @@ class AboutScreenTest(
                             checkDetailSectionDisplayed()
                         }
                     }
+                    describe("when scroll to credits section") {
+                        doIt {
+                            scrollToCreditsSection()
+                        }
+                        itShould("show credits contents") {
+                            captureScreenWithChecks {
+                                checkCreditsSectionTitleDisplayed()
+                                checkCreditsSectionContentsDisplayed()
+                            }
+                        }
+                    }
+                    describe("when scroll to others section") {
+                        doIt {
+                            scrollToOthersSection()
+                        }
+                        itShould("show others contents") {
+                            captureScreenWithChecks {
+                                checkOthersSectionTitleDisplayed()
+                                checkOthersSectionContentsDisplayed()
+                            }
+                        }
+                    }
+                    // TODO https://github.com/DroidKaigi/conference-app-2024/issues/670
                 }
             }
         }
