@@ -6,6 +6,7 @@ import io.github.droidkaigi.confsched.data.sessions.response.CategoryResponse
 import io.github.droidkaigi.confsched.data.sessions.response.LocaledResponse
 import io.github.droidkaigi.confsched.data.sessions.response.RoomResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionAssetResponse
+import io.github.droidkaigi.confsched.data.sessions.response.SessionMessageResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SessionsAllResponse
 import io.github.droidkaigi.confsched.data.sessions.response.SpeakerResponse
@@ -45,6 +46,12 @@ public class FakeSessionsApiClient : SessionsApiClient {
         public data object OperationalOnlyVideoAssetAvailable : Status() {
             override suspend fun sessionsAllResponse(): SessionsAllResponse {
                 return SessionsAllResponse.onlyVideoAssetAvailableFake()
+            }
+        }
+
+        public data object OperationalMessageExists : Status() {
+            override suspend fun sessionsAllResponse(): SessionsAllResponse {
+                return SessionsAllResponse.messageExistsFake()
             }
         }
 
@@ -126,6 +133,17 @@ public fun SessionsAllResponse.Companion.onlyVideoAssetAvailableFake(): Sessions
     ),
 )
 
+public fun SessionsAllResponse.Companion.messageExistsFake(): SessionsAllResponse = SessionsAllResponse.fake(
+    sessions = SessionResponse.fakes(
+        message = SessionMessageResponse.fake(),
+    ),
+)
+
+public fun SessionMessageResponse.Companion.fake(): SessionMessageResponse = SessionMessageResponse(
+    ja = "このセッションは中止になりました",
+    en = "This session has been canceled.",
+)
+
 private fun RoomResponse.Companion.fakes(): List<RoomResponse> = listOf(
     RoomResponse(name = LocaledResponse(ja = "Hedgehog ja", en = "Hedgehog"), id = 1, sort = 1),
     RoomResponse(
@@ -180,6 +198,7 @@ private fun SessionResponse.Companion.fakes(
     rooms: List<RoomResponse> = RoomResponse.fakes(),
     categories: List<CategoryResponse> = CategoryResponse.fakes(),
     asset: SessionAssetResponse = SessionAssetResponse.fake(),
+    message: SessionMessageResponse? = null,
 ): List<SessionResponse> {
     val sessions = mutableListOf<SessionResponse>()
 
@@ -204,7 +223,7 @@ private fun SessionResponse.Companion.fakes(
                 sessionCategoryItemId = 3,
                 interpretationTarget = false,
                 asset = asset,
-                message = null,
+                message = message,
                 sessionType = "WELCOME_TALK",
                 levels = listOf("UNSPECIFIED"),
             ),
@@ -266,7 +285,7 @@ private fun SessionResponse.Companion.fakes(
                     roomId = room.id,
                     sessionCategoryItemId = sessionCategoryItemId,
                     sessionType = "NORMAL",
-                    message = null,
+                    message = message,
                     isPlenumSession = false,
                     targetAudience = "For App developer アプリ開発者向け",
                     interpretationTarget = false,

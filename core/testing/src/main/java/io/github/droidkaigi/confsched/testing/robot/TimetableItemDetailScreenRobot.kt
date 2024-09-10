@@ -22,6 +22,8 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import io.github.droidkaigi.confsched.data.sessions.FakeSessionsApiClient
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailBookmarkIconTestTag
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailMessageRowTestTag
+import io.github.droidkaigi.confsched.sessions.TimetableItemDetailMessageRowTextTestTag
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreen
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenLazyColumnTestTag
 import io.github.droidkaigi.confsched.sessions.component.DescriptionMoreButtonTestTag
@@ -116,6 +118,18 @@ class TimetableItemDetailScreenRobot @Inject constructor(
         composeTestRule
             .onNode(hasTestTag(TimetableItemDetailScreenLazyColumnTestTag))
             .performScrollToNode(hasTestTag(TimetableItemDetailContentArchiveSectionTestTag))
+    }
+
+    fun scrollToMessageRow() {
+        composeTestRule
+            .onNode(hasTestTag(TimetableItemDetailScreenLazyColumnTestTag))
+            .performScrollToNode(hasTestTag(TimetableItemDetailMessageRowTestTag))
+
+        // FIXME Without this, you won't be able to scroll to the exact middle of the message section.
+        composeTestRule.onRoot().performTouchInput {
+            swipeUp(startY = centerY, endY = centerY - 175)
+        }
+        waitUntilIdle()
     }
 
     fun checkScreenCapture() {
@@ -246,6 +260,15 @@ class TimetableItemDetailScreenRobot @Inject constructor(
             .onFirst()
             .assertIsNotDisplayed()
             .assertDoesNotExist()
+    }
+
+    fun checkMessageDisplayed() {
+        composeTestRule
+            .onAllNodes(hasTestTag(TimetableItemDetailMessageRowTextTestTag))
+            .onFirst()
+            .assertExists()
+            .assertIsDisplayed()
+            .assertTextEquals("This session has been canceled.")
     }
 
     companion object {
