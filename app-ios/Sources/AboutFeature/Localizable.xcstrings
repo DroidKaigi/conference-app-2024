@@ -204,8 +204,8 @@
         },
         "ja" : {
           "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "DroidKaigiは技術情報の共有とコミュニケーションを目的に開催されるエンジニアが主役のAndroidカンファレンスです。"
+            "state" : "translated",
+            "value" : "DroidKaigiは技術情報の共有とコミュニケーションを目的に開催されるエンジニアが主役のカンファレンスです。"
           }
         }
       }
