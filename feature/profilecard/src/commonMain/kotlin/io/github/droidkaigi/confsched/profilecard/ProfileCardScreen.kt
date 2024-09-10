@@ -416,6 +416,10 @@ internal fun EditScreen(
                 nickname = it
                 onChangeNickname(it)
             },
+            onInputClear = {
+                nickname = ""
+                onChangeNickname("")
+            },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
         InputFieldWithError(
@@ -426,6 +430,10 @@ internal fun EditScreen(
             onValueChange = {
                 occupation = it
                 onChangeOccupation(it)
+            },
+            onInputClear = {
+                occupation = ""
+                onChangeOccupation("")
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
@@ -439,6 +447,10 @@ internal fun EditScreen(
             onValueChange = {
                 link = it
                 onChangeLink(it)
+            },
+            onInputClear = {
+                link = ""
+                onChangeLink("")
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
@@ -531,6 +543,7 @@ private fun InputFieldWithError(
     errorMessage: String,
     textFieldTestTag: String,
     onValueChange: (String) -> Unit,
+    onInputClear: () -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -554,9 +567,7 @@ private fun InputFieldWithError(
             trailingIcon = {
                 if (value.isNotEmpty()) {
                     IconButton(
-                        onClick = {
-                            // TODO
-                        },
+                        onClick = onInputClear,
                         modifier = Modifier
                             .padding(
                                 top = 8.dp,
