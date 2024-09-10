@@ -5,30 +5,6 @@ import Foundation
 import Firebase
 import KMPClient
 
-private var sessionsRepository: any SessionsRepository {
-    Container.shared.get(type: (any SessionsRepository).self)
-}
-
-private var staffRepository: any StaffRepository {
-    Container.shared.get(type: (any StaffRepository).self)
-}
-
-private var sponsorsRepository: any SponsorsRepository {
-    Container.shared.get(type: (any SponsorsRepository).self)
-}
-
-private var contributorRepository: any ContributorsRepository {
-    Container.shared.get(type: (any ContributorsRepository).self)
-}
-
-private var eventMapRepository: any EventMapRepository {
-    Container.shared.get(type: (any EventMapRepository).self)
-}
-
-private var profileCardRepository: any ProfileCardRepository {
-    Container.shared.get(type: (any ProfileCardRepository).self)
-}
-
 extension FirebaseAppClient: DependencyKey {
     public static var liveValue: Self {
         Self(
@@ -50,6 +26,10 @@ extension ContainerClient: DependencyKey {
 }
 
 extension TimetableClient: DependencyKey {
+    private static var sessionsRepository: any SessionsRepository {
+        Container.shared.get(type: (any SessionsRepository).self)
+    }
+
     public static let liveValue: TimetableClient = .init(
         streamTimetable: {
             sessionsRepository.getTimetableStream().eraseToThrowingStream()
@@ -70,6 +50,10 @@ extension TimetableClient: DependencyKey {
 }
 
 extension StaffClient: DependencyKey {
+    private static var staffRepository: any StaffRepository {
+        Container.shared.get(type: (any StaffRepository).self)
+    }
+
     public static let liveValue: StaffClient = .init(
         streamStaffs: {
             staffRepository
@@ -90,6 +74,10 @@ extension StaffClient: DependencyKey {
 }
 
 extension SponsorsClient: DependencyKey {
+    private static var sponsorsRepository: any SponsorsRepository {
+        Container.shared.get(type: (any SponsorsRepository).self)
+    }
+
     public static let liveValue: SponsorsClient = .init(
         streamSponsors: {
             sponsorsRepository
@@ -104,7 +92,7 @@ extension SponsorsClient: DependencyKey {
                         return Model.Sponsor(
                             id: $0.name,
                             logo: URL(string: $0.logo)!,
-                            link: URL(string: $0.link)!, 
+                            link: URL(string: $0.link)!,
                             plan: plan
                         )
                     }
@@ -115,6 +103,10 @@ extension SponsorsClient: DependencyKey {
 }
 
 extension ContributorClient: DependencyKey {
+    private static var contributorRepository: any ContributorsRepository {
+        Container.shared.get(type: (any ContributorsRepository).self)
+    }
+
     public static let liveValue: ContributorClient = Self {
         contributorRepository
             .getContributorStream()
@@ -135,6 +127,10 @@ extension ContributorClient: DependencyKey {
 }
 
 extension EventMapClient: DependencyKey {
+    private static var eventMapRepository: any EventMapRepository {
+        Container.shared.get(type: (any EventMapRepository).self)
+    }
+
     public static let liveValue: EventMapClient = .init {
         eventMapRepository
             .getEventMapStream()
@@ -173,6 +169,10 @@ extension EventMapClient: DependencyKey {
 }
 
 extension ProfileCardClient: DependencyKey {
+    private static var profileCardRepository: any ProfileCardRepository {
+        Container.shared.get(type: (any ProfileCardRepository).self)
+    }
+
     public static let liveValue: ProfileCardClient = .init { param in
         try await profileCardRepository.save(
             profileCard: .init(
