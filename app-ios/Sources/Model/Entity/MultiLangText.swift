@@ -1,6 +1,6 @@
 import Foundation
 
-public struct MultiLangText {
+public struct MultiLangText: Equatable, Sendable {
     public let currentLangTitle: String
     public let enTitle: String
     public let jaTitle: String
