@@ -1,5 +1,7 @@
 package io.github.droidkaigi.confsched.shared
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +38,7 @@ import io.github.droidkaigi.confsched.designsystem.theme.dotGothic16FontFamily
 import io.github.droidkaigi.confsched.droidkaigiui.NavHostWithSharedAxisX
 import io.github.droidkaigi.confsched.droidkaigiui.SnackbarMessageEffect
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolder
+import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSharedTransitionScope
 import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSnackbarHostState
 import io.github.droidkaigi.confsched.eventmap.eventMapScreenRoute
 import io.github.droidkaigi.confsched.eventmap.eventMapScreens
@@ -190,79 +193,94 @@ fun KaigiApp(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun KaigiNavHost(
     windowSize: WindowSizeClass,
     externalNavController: ExternalNavController,
     onLicenseScreenRequest: () -> Unit,
     onAccessCalendarIsDenied: () -> Unit,
+    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
+    mainNestedNavController: NavHostController = rememberNavController(),
 ) {
-    NavHostWithSharedAxisX(navController = navController, startDestination = mainScreenRoute) {
-        mainScreen(
-            windowSize = windowSize,
-            navController = navController,
-            externalNavController = externalNavController,
-            onLicenseScreenRequest = onLicenseScreenRequest,
-        )
-        sessionScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onLinkClick = externalNavController::navigate,
-            onCalendarRegistrationClick = { timetableItem ->
-                externalNavController.navigateToCalendarRegistration(
-                    timetableItem = timetableItem,
-                    onAccessCalendarIsDenied = onAccessCalendarIsDenied,
+    SharedTransitionLayout(modifier = modifier) {
+        CompositionLocalProvider(
+            LocalSharedTransitionScope provides this,
+        ) {
+            NavHostWithSharedAxisX(
+                navController = navController,
+                startDestination = mainScreenRoute,
+            ) {
+                mainScreen(
+                    windowSize = windowSize,
+                    navController = navController,
+                    mainNestedNavController = mainNestedNavController,
+                    externalNavController = externalNavController,
+                    onLicenseScreenRequest = onLicenseScreenRequest,
                 )
-            },
-            onShareClick = externalNavController::onShareClick,
-            onFavoriteListClick = {
-                navController.navigate(
-                    favoritesScreenWithNavigationIconRoute
+                sessionScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onLinkClick = externalNavController::navigate,
+                    onCalendarRegistrationClick = { timetableItem ->
+                        externalNavController.navigateToCalendarRegistration(
+                            timetableItem = timetableItem,
+                            onAccessCalendarIsDenied = onAccessCalendarIsDenied,
+                        )
+                    },
+                    onShareClick = externalNavController::onShareClick,
+                    onFavoriteListClick = {
+                        navController.navigate(
+                            favoritesScreenWithNavigationIconRoute
+                        )
+                    },
                 )
-            },
-        )
 
-        contributorsScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onContributorItemClick = externalNavController::navigate,
-        )
+                contributorsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onContributorItemClick = externalNavController::navigate,
+                )
 
-        searchScreens(
-            onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-            onBackClick = navController::popBackStack,
-        )
+                searchScreens(
+                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                    onBackClick = navController::popBackStack,
+                )
 
-        staffScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onStaffItemClick = externalNavController::navigate,
-        )
+                staffScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onStaffItemClick = externalNavController::navigate,
+                )
 
-        settingsScreens(
-            onNavigationIconClick = navController::popBackStack,
-        )
+                settingsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                )
 
-        sponsorsScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onSponsorsItemClick = externalNavController::navigate,
-        )
+                sponsorsScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onSponsorsItemClick = externalNavController::navigate,
+                )
 
-        favoritesScreens(
-            onNavigationIconClick = navController::popBackStack,
-            onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
-            contentPadding = PaddingValues(),
-        )
+                favoritesScreens(
+                    onNavigationIconClick = navController::popBackStack,
+                    onTimetableItemClick = navController::navigateToTimetableItemDetailScreen,
+                    contentPadding = PaddingValues(),
+                )
+            }
+        }
     }
 }
 
 private fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     navController: NavHostController,
+    mainNestedNavController: NavHostController,
     externalNavController: ExternalNavController,
     onLicenseScreenRequest: () -> Unit,
 ) {
     mainScreen(
         windowSize = windowSize,
         mainNestedGraphStateHolder = KaigiAppMainNestedGraphStateHolder(),
+        mainNestedNavController = mainNestedNavController,
         mainNestedGraph = { mainNestedNavController, contentPadding ->
             nestedSessionScreens(
                 modifier = Modifier,

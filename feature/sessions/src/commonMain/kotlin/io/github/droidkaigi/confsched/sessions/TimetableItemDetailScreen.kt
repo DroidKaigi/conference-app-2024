@@ -34,7 +34,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -80,11 +79,11 @@ fun NavGraphBuilder.sessionScreens(
             LocalAnimatedVisibilityScope provides this@composable,
         ) {
             TimetableItemDetailScreen(
-                onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+                onNavigationIconClick = onNavigationIconClick,
                 onLinkClick = onLinkClick,
                 onCalendarRegistrationClick = onCalendarRegistrationClick,
                 onShareClick = onShareClick,
-                onFavoriteListClick = dropUnlessResumed(block = onFavoriteListClick),
+                onFavoriteListClick = onFavoriteListClick,
             )
         }
     }

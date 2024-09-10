@@ -1,8 +1,11 @@
 package io.github.droidkaigi.confsched.staff
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +27,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.staff.generated.resources.staff_title
@@ -53,7 +57,7 @@ fun NavGraphBuilder.staffScreens(
 ) {
     composable(staffScreenRoute) {
         StaffScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
             onStaffItemClick = onStaffItemClick,
         )
     }
@@ -108,6 +112,7 @@ fun StaffScreen(
     modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -132,21 +137,25 @@ fun StaffScreen(
         },
         contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { padding ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .let {
-                    if (scrollBehavior != null) {
-                        it.nestedScroll(scrollBehavior.nestedScrollConnection)
-                    } else {
-                        it
-                    }
-                }
-                .testTag(StaffScreenLazyColumnTestTag),
-            contentPadding = padding,
-        ) {
-            when (uiState) {
-                is StaffUiState.Exists -> {
+        when (uiState) {
+            is StaffUiState.Exists -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = padding.calculateTopPadding())
+                        .let {
+                            if (scrollBehavior != null) {
+                                it.nestedScroll(scrollBehavior.nestedScrollConnection)
+                            } else {
+                                it
+                            }
+                        }
+                        .testTag(StaffScreenLazyColumnTestTag),
+                    contentPadding = PaddingValues(
+                        start = padding.calculateStartPadding(layoutDirection),
+                        end = padding.calculateEndPadding(layoutDirection),
+                        bottom = 40.dp + padding.calculateBottomPadding()),
+                ) {
                     items(uiState.staff) { staff ->
                         StaffItem(
                             staff = staff,
@@ -157,15 +166,13 @@ fun StaffScreen(
                         )
                     }
                 }
-                is StaffUiState.Loading -> {
-                    item {
-                        Box(
-                            contentAlignment = Alignment.Center,
-                            modifier = Modifier.padding(padding).fillMaxSize(),
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
+            }
+            is StaffUiState.Loading -> {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.padding(padding).fillMaxSize(),
+                ) {
+                    CircularProgressIndicator()
                 }
             }
         }

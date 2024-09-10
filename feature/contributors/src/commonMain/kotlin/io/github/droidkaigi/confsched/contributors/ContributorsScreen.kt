@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,8 +26,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.contributors.generated.resources.contributor_title
@@ -51,7 +54,7 @@ fun NavGraphBuilder.contributorsScreens(
 ) {
     composable(contributorsScreenRoute) {
         ContributorsScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
             onContributorsItemClick = onContributorItemClick,
         )
     }
@@ -108,6 +111,7 @@ fun ContributorsScreen(
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -137,9 +141,14 @@ fun ContributorsScreen(
                 Contributors(
                     contributors = uiState.contributors,
                     onContributorsItemClick = onContributorsItemClick,
-                    contentPadding = padding,
+                    contentPadding = PaddingValues(
+                        start = padding.calculateStartPadding(layoutDirection),
+                        end = padding.calculateEndPadding(layoutDirection),
+                        bottom = 40.dp + padding.calculateBottomPadding()
+                    ),
                     modifier = Modifier
                         .fillMaxSize()
+                        .padding(top = padding.calculateTopPadding())
                         .let {
                             if (scrollBehavior != null) {
                                 it.nestedScroll(scrollBehavior.nestedScrollConnection)

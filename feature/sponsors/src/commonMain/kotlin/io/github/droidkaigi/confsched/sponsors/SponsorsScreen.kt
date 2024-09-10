@@ -51,7 +51,7 @@ fun NavGraphBuilder.sponsorsScreens(
 ) {
     composable(sponsorsScreenRoute) {
         SponsorsScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
             onSponsorsItemClick = onSponsorsItemClick,
         )
     }
