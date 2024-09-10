@@ -48,6 +48,7 @@ class KmpComposePlugin : Plugin<Project> {
                             dependencies {
                                 implementation(libs.library("androidxActivityActivityCompose"))
                                 implementation(libs.library("composeUiToolingPreview"))
+                                implementation(libs.library("composeFoundation"))
                             }
                         }
                 }
