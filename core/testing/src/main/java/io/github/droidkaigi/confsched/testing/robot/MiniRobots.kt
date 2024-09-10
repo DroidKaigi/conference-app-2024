@@ -43,6 +43,7 @@ import io.github.droidkaigi.confsched.testing.robot.TimetableItemCardRobot.Langu
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.Error
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.Operational
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalBothAssetAvailable
+import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalMessageExists
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalOnlySlideAssetAvailable
 import io.github.droidkaigi.confsched.testing.robot.TimetableServerRobot.ServerStatus.OperationalOnlyVideoAssetAvailable
 import io.github.droidkaigi.confsched.testing.rules.RobotTestRule
@@ -333,6 +334,7 @@ interface TimetableServerRobot {
         OperationalBothAssetAvailable,
         OperationalOnlySlideAssetAvailable,
         OperationalOnlyVideoAssetAvailable,
+        OperationalMessageExists,
         Error,
     }
 
@@ -349,6 +351,7 @@ class DefaultTimetableServerRobot @Inject constructor(sessionsApiClient: Session
                 OperationalBothAssetAvailable -> Status.OperationalBothAssetAvailable
                 OperationalOnlySlideAssetAvailable -> Status.OperationalOnlySlideAssetAvailable
                 OperationalOnlyVideoAssetAvailable -> Status.OperationalOnlyVideoAssetAvailable
+                OperationalMessageExists -> Status.OperationalMessageExists
                 Error -> Status.Error
             },
         )
