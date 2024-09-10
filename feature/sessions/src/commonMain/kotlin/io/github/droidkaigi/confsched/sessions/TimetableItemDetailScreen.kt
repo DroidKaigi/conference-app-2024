@@ -6,12 +6,10 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
@@ -189,9 +187,6 @@ private fun TimetableItemDetailScreen(
                     TimetableItemDetailTopAppBar(
                         onNavigationIconClick = onNavigationIconClick,
                         scrollBehavior = scrollBehavior,
-                        windowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
-                            WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
-                        ),
                     )
                 }
             }
@@ -204,9 +199,6 @@ private fun TimetableItemDetailScreen(
                     onBookmarkClick = onBookmarkClick,
                     onCalendarRegistrationClick = onCalendarRegistrationClick,
                     onShareClick = onShareClick,
-                    windowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
-                        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
-                    ),
                 )
             }
         },

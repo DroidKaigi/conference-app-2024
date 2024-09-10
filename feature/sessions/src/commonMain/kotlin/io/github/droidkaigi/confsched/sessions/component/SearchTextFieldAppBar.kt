@@ -3,8 +3,13 @@ package io.github.droidkaigi.confsched.sessions.component
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -19,7 +24,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -50,7 +54,7 @@ fun SearchTextFieldAppBar(
     onClickClear: () -> Unit,
     onClickBack: () -> Unit,
     modifier: Modifier = Modifier,
-    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    windowInsets: WindowInsets = SearchTextFieldAppBarDefaults.windowInsets(),
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -129,6 +133,13 @@ fun SearchTextFieldAppBar(
         },
         modifier = modifier,
         windowInsets = windowInsets,
+    )
+}
+
+object SearchTextFieldAppBarDefaults {
+    @Composable
+    fun windowInsets() = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
     )
 }
 

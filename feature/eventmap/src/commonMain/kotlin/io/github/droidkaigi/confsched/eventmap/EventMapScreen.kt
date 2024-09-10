@@ -133,11 +133,6 @@ fun EventMapScreen(
             AnimatedTextTopAppBar(
                 title = stringResource(EventMapRes.string.eventmap),
                 scrollBehavior = scrollBehavior,
-                windowInsets = WindowInsets(
-                    left = contentPadding.calculateLeftPadding(layoutDirection),
-                    top = contentPadding.calculateTopPadding(),
-                    right = contentPadding.calculateRightPadding(layoutDirection),
-                ),
             )
         },
         contentWindowInsets = WindowInsets(

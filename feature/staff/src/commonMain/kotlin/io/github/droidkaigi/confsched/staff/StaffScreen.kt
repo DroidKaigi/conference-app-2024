@@ -3,13 +3,11 @@ package io.github.droidkaigi.confsched.staff
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
@@ -129,9 +127,6 @@ fun StaffScreen(
                     onBackClick = onBackClick,
                     scrollBehavior = scrollBehavior,
                     navIconContentDescription = "Back",
-                    windowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
-                        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
-                    ),
                 )
             }
         },
@@ -154,7 +149,8 @@ fun StaffScreen(
                     contentPadding = PaddingValues(
                         start = padding.calculateStartPadding(layoutDirection),
                         end = padding.calculateEndPadding(layoutDirection),
-                        bottom = 40.dp + padding.calculateBottomPadding()),
+                        bottom = 40.dp + padding.calculateBottomPadding(),
+                    ),
                 ) {
                     items(uiState.staff) { staff ->
                         StaffItem(
