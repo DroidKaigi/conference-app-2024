@@ -116,7 +116,7 @@ internal fun TimetableList(
             val progressingSessionIndex = uiState.timetableItemMap.keys
                 .insertDummyEndOfTheDayItem() // Insert dummy at a position after last session to allow scrolling
                 .windowed(2, 1, true)
-                .indexOfFirst { clock.now().toLocalTime() in it.first().startTime..it.last().startTime }
+                .indexOfFirst { clock.now().toLocalTime() in it.first().startTime..<it.last().startTime }
 
             progressingSessionIndex.takeIf { it != -1 }?.let {
                 scrollState.scrollToItem(it)
