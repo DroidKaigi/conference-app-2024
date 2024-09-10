@@ -80,12 +80,16 @@ public struct TimetableCard: View {
                             .lineLimit(1)
                     }
                 }
-                if let timetableItemSession = timetableItem as? TimetableItem.Session,
-                   let sessionMessage = timetableItemSession.message?.currentLangTitle,
-                   !sessionMessage.isEmpty {
+
+                let message: String? = switch timetableItem {
+                case let session as TimetableItem.Session: session.message?.currentLangTitle
+                case let special as TimetableItem.Special: special.message?.currentLangTitle
+                default: nil
+                }
+                if let message, !message.isEmpty {
                     HStack(spacing: 8) {
                         Image(.icInfoFill)
-                        Text(sessionMessage)
+                        Text(message)
                             .textStyle(.bodySmall)
                             .multilineTextAlignment(.leading)
                             .foregroundStyle(AssetColors.Error.error.swiftUIColor)

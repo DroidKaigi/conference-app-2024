@@ -214,6 +214,22 @@ class TimetableItemDetailScreenTest(private val testCase: DescribedBehavior<Time
                         }
                     }
                 }
+                describe("when server is operational exists message") {
+                    doIt {
+                        setupTimetableServer(ServerStatus.OperationalMessageExists)
+                    }
+                    describe("when launch") {
+                        doIt {
+                            setupScreenContent()
+                            scrollToMessageRow()
+                        }
+                        itShould("display message") {
+                            captureScreenWithChecks {
+                                checkMessageDisplayed()
+                            }
+                        }
+                    }
+                }
             }
         }
     }

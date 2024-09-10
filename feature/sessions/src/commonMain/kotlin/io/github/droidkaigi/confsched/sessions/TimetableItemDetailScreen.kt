@@ -9,17 +9,26 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -32,9 +41,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import conference_app_2024.feature.sessions.generated.resources.image
 import io.github.droidkaigi.confsched.compose.EventFlow
 import io.github.droidkaigi.confsched.compose.rememberEventFlow
 import io.github.droidkaigi.confsched.designsystem.component.LoadingText
@@ -49,6 +61,7 @@ import io.github.droidkaigi.confsched.droidkaigiui.compositionlocal.LocalSnackba
 import io.github.droidkaigi.confsched.model.Lang
 import io.github.droidkaigi.confsched.model.TimetableItem
 import io.github.droidkaigi.confsched.model.TimetableItem.Session
+import io.github.droidkaigi.confsched.model.TimetableItem.Special
 import io.github.droidkaigi.confsched.model.TimetableItemId
 import io.github.droidkaigi.confsched.model.fake
 import io.github.droidkaigi.confsched.sessions.TimetableItemDetailScreenUiState.Loaded
@@ -59,11 +72,14 @@ import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailHead
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailSummaryCard
 import io.github.droidkaigi.confsched.sessions.component.TimetableItemDetailTopAppBar
 import io.github.droidkaigi.confsched.sessions.navigation.TimetableItemDetailDestination
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 const val timetableItemDetailScreenRouteItemIdParameterName = "timetableItemId"
 const val TimetableItemDetailBookmarkIconTestTag = "TimetableItemDetailBookmarkIconTestTag"
 const val TimetableItemDetailScreenLazyColumnTestTag = "TimetableItemDetailScreenLazyColumnTestTag"
+const val TimetableItemDetailMessageRowTestTag = "TimetableItemDetailMessageRowTestTag"
+const val TimetableItemDetailMessageRowTextTestTag = "TimetableItemDetailMessageRowTextTestTag"
 
 fun NavGraphBuilder.sessionScreens(
     onNavigationIconClick: () -> Unit,
@@ -247,6 +263,41 @@ private fun TimetableItemDetailScreen(
                                 isLangSelectable = uiState.isLangSelectable,
                                 onLanguageSelect = onSelectedLanguage,
                             )
+                        }
+
+                        when (uiState.timetableItem) {
+                            is Session -> uiState.timetableItem.message
+                            is Special -> uiState.timetableItem.message
+                        }?.let {
+                            item {
+                                Row(
+                                    modifier = Modifier
+                                        .padding(
+                                            start = 8.dp,
+                                            top = 24.dp,
+                                            end = 8.dp,
+                                            bottom = 4.dp,
+                                        )
+                                        .height(IntrinsicSize.Min)
+                                        .testTag(TimetableItemDetailMessageRowTestTag),
+                                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                ) {
+                                    Icon(
+                                        modifier = Modifier.fillMaxHeight(),
+                                        imageVector = Icons.Filled.Info,
+                                        contentDescription = stringResource(SessionsRes.string.image),
+                                        tint = MaterialTheme.colorScheme.error,
+                                    )
+                                    Text(
+                                        modifier = Modifier.testTag(
+                                            TimetableItemDetailMessageRowTextTestTag,
+                                        ),
+                                        text = it.currentLangTitle,
+                                        fontSize = 16.sp,
+                                        color = MaterialTheme.colorScheme.error,
+                                    )
+                                }
+                            }
                         }
 
                         item {
