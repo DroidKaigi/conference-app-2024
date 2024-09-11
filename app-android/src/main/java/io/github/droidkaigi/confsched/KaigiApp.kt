@@ -394,6 +394,14 @@ private class ExternalNavController(
     ): Boolean {
         val pm = context.packageManager
 
+        // Get all apps that resolve the specific Url
+        val specializedActivityIntent = Intent(Intent.ACTION_VIEW, uri)
+            .addCategory(Intent.CATEGORY_BROWSABLE)
+        val resolvedSpecializedList: MutableSet<String> =
+            pm.queryIntentActivities(specializedActivityIntent, 0)
+                .map { it.activityInfo.packageName }
+                .toMutableSet()
+
         // Get all Apps that resolve a generic url
         val browserActivityIntent = Intent()
             .setAction(Intent.ACTION_VIEW)
@@ -403,14 +411,6 @@ private class ExternalNavController(
             pm.queryIntentActivities(browserActivityIntent, 0)
                 .map { it.activityInfo.packageName }
                 .toSet()
-
-        // Get all apps that resolve the specific Url
-        val specializedActivityIntent = Intent(Intent.ACTION_VIEW, uri)
-            .addCategory(Intent.CATEGORY_BROWSABLE)
-        val resolvedSpecializedList: MutableSet<String> =
-            pm.queryIntentActivities(specializedActivityIntent, 0)
-                .map { it.activityInfo.packageName }
-                .toMutableSet()
 
         // Keep only the Urls that resolve the specific, but not the generic urls.
         resolvedSpecializedList.removeAll(genericResolvedList)
