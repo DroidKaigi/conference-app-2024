@@ -107,7 +107,7 @@ private fun favoritesSheet(
                 ),
             )
             .timetableItems.groupBy {
-                TimeSlot(it.startsTimeString, it.endsTimeString)
+                TimeSlot(it.day, it.startsTimeString, it.endsTimeString)
             }.mapValues { entry ->
                 entry.value.sortedWith(
                     compareBy({ it.day?.name.orEmpty() }, { it.startsTimeString }),
