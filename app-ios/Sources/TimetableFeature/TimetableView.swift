@@ -13,7 +13,6 @@ public struct TimetableView: View {
     
     @State private var timetableMode = TimetableMode.list
     @State private var switchModeIcon: ImageResource = .icGrid
-    @State private var selectedTab: DayTab = DayTab.day1
     
     public var body: some View {
         VStack {
@@ -21,12 +20,11 @@ public struct TimetableView: View {
                 ForEach(DayTab.allCases) { tabItem in
                     Button(action: {
                         store.send(.view(.selectDay(tabItem)))
-                        selectedTab = tabItem
                     }, label: {
                         HStack(spacing: 6) {
-                            Text(tabItem.rawValue).textStyle(.titleMedium).underline(selectedTab == tabItem)
+                            Text(tabItem.rawValue).textStyle(.titleMedium).underline(store.selectedDay == tabItem)
                         }
-                        .foregroundStyle(selectedTab == tabItem ? AssetColors.Custom.iguana.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
+                        .foregroundStyle(store.selectedDay == tabItem ? AssetColors.Custom.iguana.swiftUIColor : AssetColors.Surface.onSurface.swiftUIColor)
                         .padding(6)
                     })
                 }
@@ -59,7 +57,7 @@ public struct TimetableView: View {
                         }
                         .frame(width: 40, height: 40)
                     }
-                    
+
                     Button {
                         switch timetableMode {
                         case .list:
