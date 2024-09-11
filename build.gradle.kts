@@ -21,13 +21,3 @@ buildscript {
         }
     }
 }
-
-allprojects {
-    configurations.all {
-        resolutionStrategy {
-            // When the fixed version is released, remove this block
-            // https://issuetracker.google.com/issues/341880461
-            force("androidx.compose.foundation:foundation:1.8.0-alpha01")
-        }
-    }
-}

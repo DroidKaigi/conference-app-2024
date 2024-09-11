@@ -16,9 +16,13 @@ public struct StaffReducer : Sendable {
         public init() { }
     }
 
-    public enum Action : Sendable {
-        case onAppear
+    public enum Action: Sendable, ViewAction {
+        case view(View)
         case response(Result<[Model.Staff], any Error>)
+
+        public enum View: Sendable {
+            case onAppear
+        }
     }
 
     public var body: some ReducerOf<Self> {
@@ -26,7 +30,7 @@ public struct StaffReducer : Sendable {
             enum CancelID { case connection }
             
             switch action {
-            case .onAppear:
+            case .view(.onAppear):
                 return .run { send in
                     do {
                         for try await staffs in try staffsData.streamStaffs() {

@@ -2,7 +2,6 @@ import ComposableArchitecture
 import KMPClient
 import Model
 import Foundation
-@preconcurrency import shared
 
 @Reducer
 public struct EventMapReducer: Sendable {
@@ -19,19 +18,19 @@ public struct EventMapReducer: Sendable {
         public init() { }
     }
     
-    public enum Action: BindableAction {
+    public enum Action: Sendable, BindableAction {
         case binding(BindingAction<State>)
         case view(View)
         case `internal`(Internal)
 
         @CasePathable
-        public enum View {
+        public enum View: Sendable {
             case onAppear
             case selectFloorMap(FloorMap)
             case moreDetailButtonTapped(URL)
         }
         
-        public enum Internal {
+        public enum Internal: Sendable {
             case response(Result<[EventMapEvent], any Error>)
         }
     }

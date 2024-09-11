@@ -1,7 +1,7 @@
 import SwiftUI
 import CommonComponents
 import Theme
-import shared
+import Model
 
 struct EventItem: View {
     let event: EventMapEvent
@@ -24,7 +24,7 @@ struct EventItem: View {
             .padding(.bottom, 8)
 
             VStack(alignment: .leading ,spacing: 8) {
-                Text(event.description_.currentLangTitle)
+                Text(event.description.currentLangTitle)
                     .foregroundStyle(AssetColors.Surface.onSurface.swiftUIColor)
                     .textStyle(.bodyLarge)
 
@@ -34,7 +34,7 @@ struct EventItem: View {
                         .textStyle(.bodyMedium)
                 }
                 
-                if let urlString = event.moreDetailsUrl, let url = URL(string: urlString) {
+                if let url = event.moreDetailsUrl {
                     Button {
                         onTappedMoreDetail(url)
                     } label: {
@@ -61,5 +61,14 @@ struct EventItem: View {
 }
 
 #Preview {
-    EventItem(event: EventMapEvent.companion.fakes().first!) { _ in }
+    EventItem(
+        event: .init(
+            name: .init(currentLangTitle: "name", enTitle: "name", jaTitle: "name"),
+            roomName: .init(currentLangTitle: "roomName", enTitle: "roomName", jaTitle: "roomName"),
+            roomIcon: .square,
+            description: .init(currentLangTitle: "description", enTitle: "description", jaTitle: "description"),
+            moreDetailsUrl: nil,
+            message: nil
+        )
+    ) { _ in }
 }

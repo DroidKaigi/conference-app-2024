@@ -5,6 +5,7 @@ import Theme
 import shared
 import CommonComponents
 
+@ViewAction(for: ContributorReducer.self)
 public struct ContributorView: View {
     private enum ViewType: String, CaseIterable {
         case swift
@@ -27,7 +28,7 @@ public struct ContributorView: View {
 
     @State private var selectedTab: ViewType = .swift
     @Namespace var namespace
-    @Bindable var store: StoreOf<ContributorReducer>
+    @Bindable public var store: StoreOf<ContributorReducer>
 
     public init(store: StoreOf<ContributorReducer>) {
         self.store = store
@@ -43,7 +44,7 @@ public struct ContributorView: View {
 
             case .kmpPresenter:
                 KmpPresenterContributorView {
-                    store.send(.view(.contributorButtonTapped($0)))
+                    send(.contributorButtonTapped($0))
                 }
                 .tag(ViewType.kmpPresenter)
             case .fullKmp:
@@ -51,7 +52,7 @@ public struct ContributorView: View {
                     guard let url = URL(string: urlString) else {
                         return
                     }
-                    store.send(.view(.contributorButtonTapped(url)))
+                    send(.contributorButtonTapped(url))
                 }
             }
         }
