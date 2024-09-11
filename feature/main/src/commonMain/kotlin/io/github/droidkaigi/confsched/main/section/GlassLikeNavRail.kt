@@ -74,7 +74,8 @@ fun GlassLikeNavRail(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier.size(width = 64.dp, height = 320.dp)
+        modifier = modifier
+            .size(width = 64.dp, height = 420.dp)
             .run {
                 if (isBlurSupported()) {
                     hazeChild(state = hazeState, shape = CircleShape).border(
