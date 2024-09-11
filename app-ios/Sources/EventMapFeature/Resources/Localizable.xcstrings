@@ -3,9 +3,15 @@
   "strings" : {
     "Description" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "In addition to the sessions, DroidKaigi will also hold other events that participants can enjoy. Enjoy the conference through communication and technical exchange!"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "DroidKaigiでは、セッション以外にも参加者が楽しめるイベントを開催。コミュニケーションや技術交流を通じてカンファレンスを満喫しましょう！"
           }
         }
@@ -13,9 +19,15 @@
     },
     "Detail" : {
       "localizations" : {
-        "ja" : {
+        "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Read More"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "needs_review",
             "value" : "詳しく見る"
           }
         }
