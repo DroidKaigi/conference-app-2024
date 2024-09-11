@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -415,6 +416,10 @@ internal fun EditScreen(
                 nickname = it
                 onChangeNickname(it)
             },
+            onInputClear = {
+                nickname = ""
+                onChangeNickname("")
+            },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
         InputFieldWithError(
@@ -425,6 +430,10 @@ internal fun EditScreen(
             onValueChange = {
                 occupation = it
                 onChangeOccupation(it)
+            },
+            onInputClear = {
+                occupation = ""
+                onChangeOccupation("")
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
@@ -438,6 +447,10 @@ internal fun EditScreen(
             onValueChange = {
                 link = it
                 onChangeLink(it)
+            },
+            onInputClear = {
+                link = ""
+                onChangeLink("")
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
@@ -530,6 +543,7 @@ private fun InputFieldWithError(
     errorMessage: String,
     textFieldTestTag: String,
     onValueChange: (String) -> Unit,
+    onInputClear: () -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -550,6 +564,25 @@ private fun InputFieldWithError(
             value = value,
             textStyle = MaterialTheme.typography.bodyLarge,
             onValueChange = onValueChange,
+            trailingIcon = {
+                if (value.isNotEmpty()) {
+                    IconButton(
+                        onClick = onInputClear,
+                        modifier = Modifier
+                            .padding(
+                                top = 8.dp,
+                                bottom = 8.dp,
+                                end = 4.dp,
+                            ),
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(8.dp),
+                            imageVector = Icons.Outlined.Cancel,
+                            contentDescription = stringResource(ProfileCardRes.string.delete),
+                        )
+                    }
+                }
+            },
             isError = isError,
             shape = RoundedCornerShape(4.dp),
             keyboardOptions = keyboardOptions,
