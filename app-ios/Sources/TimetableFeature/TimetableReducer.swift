@@ -13,6 +13,7 @@ public struct TimetableReducer : Sendable{
 
     @ObservableState
     public struct State: Equatable {
+        var selectedDay: DayTab = .day1
         var timetableItems: [TimetableTimeGroupItems] = [] //Should be simple objects
         
         public init(timetableItems: [TimetableTimeGroupItems] = []) {
@@ -70,14 +71,13 @@ public struct TimetableReducer : Sendable{
 
             case let .requestDay(dayTab):
                 return .run { send in
-                    let internalDay: DroidKaigi2024Day = switch dayTab {
-                    case DayTab.day1:
-                        DroidKaigi2024Day.conferenceDay1
-                    case DayTab.day2:
-                        DroidKaigi2024Day.conferenceDay2
-                    }
-                    
                     for try await timetables in try timetableClient.streamTimetable() {
+                        let internalDay: DroidKaigi2024Day = switch dayTab {
+                        case DayTab.day1:
+                            DroidKaigi2024Day.conferenceDay1
+                        case DayTab.day2:
+                            DroidKaigi2024Day.conferenceDay2
+                        }
                         await send(.response(.success(timetables.dayTimetable(droidKaigi2024Day: internalDay).contents)))
                     }
                 }
@@ -92,7 +92,8 @@ public struct TimetableReducer : Sendable{
             case .view(.timetableItemTapped), .view(.searchTapped):
                 return .none
             case .view(.selectDay(let dayTab)):
-                
+                state.selectedDay = dayTab
+
                 return .run { send in
                     await send(.requestDay(dayTab))
                 }
@@ -113,6 +114,3 @@ public struct TimetableReducer : Sendable{
         }
     }
 }
-
-
-
