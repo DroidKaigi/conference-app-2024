@@ -4,8 +4,9 @@ import Theme
 import Model
 import CommonComponents
 
+@ViewAction(for: SponsorReducer.self)
 public struct SponsorView: View {
-    @Bindable private var store: StoreOf<SponsorReducer>
+    @Bindable public var store: StoreOf<SponsorReducer>
 
     public init(store: StoreOf<SponsorReducer>) {
         self.store = store
@@ -39,7 +40,7 @@ public struct SponsorView: View {
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
         .onAppear {
-            store.send(.view(.onAppear))
+            send(.onAppear)
         }
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(String(localized: "Sponsor", bundle: .module))
@@ -60,7 +61,7 @@ public struct SponsorView: View {
                 ZStack {
                     Color.white.clipShape(RoundedRectangle(cornerRadius: 12))
                     Button {
-                        store.send(.view(.sponsorTapped(item.link)))
+                        send(.sponsorTapped(item.link))
                     } label: {
                         AsyncImage(url: item.logo) {
                             $0.image?

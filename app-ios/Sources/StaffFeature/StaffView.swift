@@ -4,8 +4,9 @@ import Theme
 import CommonComponents
 import Model
 
+@ViewAction(for: StaffReducer.self)
 public struct StaffView: View {
-    private let store: StoreOf<StaffReducer>
+    public let store: StoreOf<StaffReducer>
     @State private var selectedStaffData: Staff?
 
     public init(store: StoreOf<StaffReducer>) {
@@ -28,7 +29,7 @@ public struct StaffView: View {
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
         .onAppear {
-            store.send(.onAppear)
+            send(.onAppear)
         }
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(String(localized: "Staff", bundle: .module))

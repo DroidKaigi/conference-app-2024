@@ -18,7 +18,7 @@ public struct ContributorReducer: Sendable {
         }
     }
 
-    public enum Action: Sendable, BindableAction {
+    public enum Action: Sendable, BindableAction, ViewAction {
         case binding(BindingAction<State>)
         case onAppear
         case response(Result<[Contributor], any Error>)
