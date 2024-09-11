@@ -204,6 +204,7 @@ fun FavoritesScreenPreview() {
                         currentDayFilter = persistentListOf(DroidKaigi2024Day.ConferenceDay1),
                         timetableItemMap = persistentMapOf(
                             TimeSlot(
+                                day = DroidKaigi2024Day.ConferenceDay1,
                                 startTimeString = "10:00",
                                 endTimeString = "11:00",
                             ) to listOf(
