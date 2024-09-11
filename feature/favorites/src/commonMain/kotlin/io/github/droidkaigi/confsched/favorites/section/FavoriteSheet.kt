@@ -71,7 +71,7 @@ sealed interface FavoritesSheetUiState {
             val startTimeString: String,
             val endTimeString: String,
         ) {
-            val key: String get() = "${day?.name}$startTimeString-$endTimeString"
+            val key: String get() = "${day?.ordinal}-$startTimeString-$endTimeString"
         }
     }
 
