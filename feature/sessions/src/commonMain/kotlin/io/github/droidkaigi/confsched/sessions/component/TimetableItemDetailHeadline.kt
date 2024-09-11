@@ -71,10 +71,11 @@ fun TimetableItemDetailHeadline(
     val currentLang = currentLang ?: timetableItem.language.toLang()
 
     Column(
-        modifier = modifier
+        modifier = Modifier
             .background(roomTheme.dimColor)
             .padding(horizontal = 8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .then(modifier),
     ) {
         FlowRow {
             TimetableItemTag(

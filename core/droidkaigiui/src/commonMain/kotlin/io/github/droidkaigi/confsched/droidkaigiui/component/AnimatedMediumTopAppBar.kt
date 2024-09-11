@@ -5,8 +5,13 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.fadeIn
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.material.icons.Icons.AutoMirrored.Filled
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,7 +43,7 @@ fun AnimatedMediumTopAppBar(
     navIconContentDescription: String?,
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
-    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    windowInsets: WindowInsets = AnimatedMediumTopAppBarDefaults.windowInsets(),
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors().copy(
         scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
     ),
@@ -106,5 +111,12 @@ fun AnimatedMediumTopAppBar(
         windowInsets = windowInsets,
         colors = colors,
         scrollBehavior = scrollBehavior,
+    )
+}
+
+object AnimatedMediumTopAppBarDefaults {
+    @Composable
+    fun windowInsets() = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
     )
 }

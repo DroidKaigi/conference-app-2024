@@ -1,7 +1,11 @@
 package io.github.droidkaigi.confsched.settings
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -103,6 +107,7 @@ fun SettingsScreen(
                 )
             }
         },
+        contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { padding ->
         LazyColumn(
             Modifier

@@ -2,9 +2,15 @@ package io.github.droidkaigi.confsched.staff
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -19,6 +25,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
@@ -103,6 +110,7 @@ fun StaffScreen(
     modifier: Modifier = Modifier,
     onStaffItemClick: (url: String) -> Unit,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -122,6 +130,7 @@ fun StaffScreen(
                 )
             }
         },
+        contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { padding ->
         when (uiState) {
             is StaffUiState.Exists -> {
@@ -137,7 +146,11 @@ fun StaffScreen(
                             }
                         }
                         .testTag(StaffScreenLazyColumnTestTag),
-                    contentPadding = PaddingValues(bottom = 40.dp + padding.calculateBottomPadding()),
+                    contentPadding = PaddingValues(
+                        start = padding.calculateStartPadding(layoutDirection),
+                        end = padding.calculateEndPadding(layoutDirection),
+                        bottom = 40.dp + padding.calculateBottomPadding(),
+                    ),
                 ) {
                     items(uiState.staff) { staff ->
                         StaffItem(

@@ -11,9 +11,16 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -28,6 +35,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -210,6 +218,8 @@ fun MainScreen(
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
+
     val navBackStackEntryRoute =
         mainNestedNavController.currentBackStackEntryAsState().value?.destination?.route
 
@@ -226,7 +236,12 @@ fun MainScreen(
     val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
 
     Row(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize()
+            .windowInsetsPadding(
+                WindowInsets.displayCutout
+                    .union(WindowInsets.systemBars)
+                    .only(WindowInsetsSides.Start),
+            ),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
@@ -236,7 +251,9 @@ fun MainScreen(
                     onTabSelected(mainNestedNavController, it)
                 },
                 currentTab = currentTab,
-                modifier = Modifier.padding(scaffoldPadding.value),
+                modifier = Modifier.padding(
+                    top = scaffoldPadding.value.calculateTopPadding(),
+                ),
             )
         }
 
@@ -253,6 +270,8 @@ fun MainScreen(
                     )
                 }
             },
+            contentWindowInsets = WindowInsets.displayCutout
+                .union(WindowInsets.systemBars),
         ) { padding ->
             scaffoldPadding.value = padding
             val hazeStyle =
@@ -271,7 +290,19 @@ fun MainScreen(
                 enterTransition = { materialFadeThroughIn() },
                 exitTransition = { materialFadeThroughOut() },
             ) {
-                mainNestedNavGraph(mainNestedNavController, padding)
+                mainNestedNavGraph(
+                    mainNestedNavController,
+                    PaddingValues(
+                        top = padding.calculateTopPadding(),
+                        bottom = padding.calculateBottomPadding(),
+                        start = if (navigationType == NavigationRail) {
+                            0.dp
+                        } else {
+                            padding.calculateLeftPadding(layoutDirection)
+                        },
+                        end = padding.calculateRightPadding(layoutDirection),
+                    ),
+                )
             }
         }
     }

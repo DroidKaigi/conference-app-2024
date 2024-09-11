@@ -2,10 +2,15 @@ package io.github.droidkaigi.confsched.sessions.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +35,7 @@ fun TimetableItemDetailTopAppBar(
     onNavigationIconClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TimetableItemDetailTopAppBarDefaults.windowInsets(),
 ) {
     // Allow content to be displayed at the statusBar when scrolling
     val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
@@ -56,6 +62,14 @@ fun TimetableItemDetailTopAppBar(
             }
         },
         scrollBehavior = scrollBehavior,
+        windowInsets = windowInsets,
+    )
+}
+
+object TimetableItemDetailTopAppBarDefaults {
+    @Composable
+    fun windowInsets() = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
     )
 }
 

@@ -1,5 +1,11 @@
 package io.github.droidkaigi.confsched.sessions.component
 
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -34,6 +40,7 @@ fun TimetableItemDetailBottomAppBar(
     onBookmarkClick: (TimetableItem) -> Unit,
     onCalendarRegistrationClick: (TimetableItem) -> Unit,
     modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = TimetableItemDetailBottomAppBarDefaults.windowInsets(),
     onShareClick: (TimetableItem) -> Unit,
 ) {
     val haptic = LocalHapticFeedback.current
@@ -78,6 +85,14 @@ fun TimetableItemDetailBottomAppBar(
             }
         },
         containerColor = MaterialTheme.colorScheme.surfaceContainer,
+        windowInsets = windowInsets,
+    )
+}
+
+object TimetableItemDetailBottomAppBarDefaults {
+    @Composable
+    fun windowInsets() = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+        WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom,
     )
 }
 

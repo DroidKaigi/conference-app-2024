@@ -3,7 +3,12 @@ package io.github.droidkaigi.confsched.droidkaigiui.component
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
@@ -25,7 +30,7 @@ fun AnimatedTextTopAppBar(
     modifier: Modifier = Modifier,
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
-    windowInsets: WindowInsets = TopAppBarDefaults.windowInsets,
+    windowInsets: WindowInsets = AnimatedTextTopAppBarDefaults.windowInsets(),
     colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors().copy(
         scrolledContainerColor = MaterialTheme.colorScheme.surfaceContainer,
     ),
@@ -79,4 +84,11 @@ fun AnimatedTextTopAppBar(
 fun TopAppBarScrollBehavior.resetScroll() {
     this.state.heightOffset = 0f
     this.state.contentOffset = 0f
+}
+
+object AnimatedTextTopAppBarDefaults {
+    @Composable
+    fun windowInsets() = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+        WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
+    )
 }
