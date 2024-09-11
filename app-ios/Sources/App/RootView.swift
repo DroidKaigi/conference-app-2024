@@ -69,21 +69,30 @@ public struct RootView: View {
             (tab: .about, icon: .icInfo),
             (tab: .profileCard, icon: .icProfileCard),
         ]
-        HStack(spacing: 36) {
-            ForEach(items, id: \.tab) { item in
-                let isSelected = selection == item.tab
-                Button {
-                    selection = item.tab
-                } label: {
-                    Image(item.icon).renderingMode(.template).tint(isSelected ? nil : .white)
+        
+        GeometryReader { geometry in
+            HStack(spacing: 0) {
+                ForEach(items, id: \.tab) { item in
+                    let isSelected = selection == item.tab
+                    Button {
+                        selection = item.tab
+                    } label: {
+                        Image(item.icon).renderingMode(.template).tint(isSelected ? nil : .white)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                            .contentShape(Rectangle())
+                    }
+                    .frame(maxWidth: geometry.size.width / CGFloat(items.count), maxHeight: .infinity, alignment: .center)
                 }
             }
+            .frame(width: geometry.size.width, height: geometry.size.height)
         }
-        .padding(.vertical)
-        .padding(.horizontal, 24)
+        .frame(height: 64)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 12)
         .background(.ultraThinMaterial, in: Capsule())
         .overlay(Capsule().stroke(.gray, lineWidth: 1))
         .environment(\.colorScheme, .dark)
+        .padding(.horizontal, 48)
     }
 
     @MainActor
