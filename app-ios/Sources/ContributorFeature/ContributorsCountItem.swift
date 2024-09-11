@@ -34,6 +34,8 @@ struct ContributorsCountItem: View {
     }
     
     func animate() {
+        if tracker >= totalContributor { return }
+
         let interval = duration / Double(totalContributor)
         Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { time in
             tracker += 1
