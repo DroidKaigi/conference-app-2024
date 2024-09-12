@@ -59,6 +59,7 @@ import androidx.compose.ui.unit.sp
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
+import io.github.droidkaigi.confsched.designsystem.theme.primaryFixed
 import io.github.droidkaigi.confsched.droidkaigiui.animation.onGloballyPositionedWithFavoriteAnimationScope
 import io.github.droidkaigi.confsched.droidkaigiui.useIf
 import io.github.droidkaigi.confsched.main.MainScreenTab
@@ -115,8 +116,7 @@ fun GlassLikeBottomNavigation(
         )
 
         val animatedColor by animateColorAsState(
-            // FIXME: apply theme
-            targetValue = Color(0xFF67FF8D),
+            targetValue = MaterialTheme.colorScheme.primaryFixed,
             label = "animatedColor",
             animationSpec =
             spring(
