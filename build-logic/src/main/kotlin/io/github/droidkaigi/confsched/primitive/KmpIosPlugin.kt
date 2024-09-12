@@ -64,6 +64,7 @@ class KmpIosPlugin : Plugin<Project> {
                                 // export kdoc to header file
                                 // https://kotlinlang.org/docs/native-objc-interop.html#export-of-kdoc-comments-to-generated-objective-c-headers
                                 freeCompilerArgs.add("-Xexport-kdoc")
+                                freeCompilerArgs.add("-Xprofile-phases")
                             }
                         }
                     }
