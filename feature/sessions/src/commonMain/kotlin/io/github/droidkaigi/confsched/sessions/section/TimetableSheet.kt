@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -67,7 +68,14 @@ fun Timetable(
     }
     val layoutDirection = LocalLayoutDirection.current
 
-    val nestedScrollStateHolder = rememberTimetableNestedScrollStateHolder(isListTimetable = uiState is ListTimetable)
+    val nestedScrollStateHolder =
+        rememberTimetableNestedScrollStateHolder(isListTimetable = uiState is ListTimetable)
+    val scrolledToCurrentTimeState = rememberSaveable(
+        saver = listSaver(
+            save = { listOf(it.inTimetableList, it.inTimetableGrid) },
+            restore = { ScrolledToCurrentTimeState(it[0], it[1]) },
+        ),
+    ) { ScrolledToCurrentTimeState() }
 
     Surface(
         modifier = modifier.padding(contentPadding.calculateTopPadding()),
@@ -109,6 +117,8 @@ fun Timetable(
                             start = contentPadding.calculateStartPadding(layoutDirection),
                             end = contentPadding.calculateEndPadding(layoutDirection),
                         ),
+                        scrolledToCurrentTimeState = scrolledToCurrentTimeState,
+                        enableAutoScrolling = clock.now() in selectedDay.start..selectedDay.end,
                         timetableItemTagsContent = { timetableItem ->
                             timetableItem.language.labels.forEach { label ->
                                 TimetableItemTag(tagText = label)
@@ -132,6 +142,7 @@ fun Timetable(
                             bottom = contentPadding.calculateBottomPadding(),
                             start = contentPadding.calculateStartPadding(layoutDirection),
                         ),
+                        scrolledToCurrentTimeState = scrolledToCurrentTimeState,
                     )
                 }
 
@@ -165,4 +176,22 @@ private fun rememberGridTimetableStates(): Map<DroidKaigi2024Day, TimetableState
         rememberTimetableGridState()
     }
     return remember { timetableStateMap }
+}
+
+class ScrolledToCurrentTimeState(
+    inTimetableList: Boolean = false,
+    inTimetableGrid: Boolean = false,
+) {
+    var inTimetableList: Boolean by mutableStateOf(inTimetableList)
+        private set
+    var inTimetableGrid: Boolean by mutableStateOf(inTimetableGrid)
+        private set
+
+    fun scrolledInTimetableList() {
+        inTimetableList = true
+    }
+
+    fun scrolledInTimetableGrid() {
+        inTimetableGrid = true
+    }
 }
