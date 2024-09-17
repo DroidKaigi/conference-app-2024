@@ -1,8 +1,14 @@
 package io.github.droidkaigi.confsched.sponsors
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -12,7 +18,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.sponsors.generated.resources.content_description_back
@@ -42,7 +48,7 @@ fun NavGraphBuilder.sponsorsScreens(
 ) {
     composable(sponsorsScreenRoute) {
         SponsorsScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
             onSponsorsItemClick = onSponsorsItemClick,
         )
     }
@@ -108,6 +114,7 @@ fun SponsorsScreen(
     modifier: Modifier = Modifier,
     onSponsorsItemClick: (url: String) -> Unit,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -127,6 +134,7 @@ fun SponsorsScreen(
                 )
             }
         },
+        contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { padding ->
         SponsorsList(
             modifier = Modifier
@@ -135,7 +143,11 @@ fun SponsorsScreen(
             uiState = uiState.sponsorsListUiState,
             scrollBehavior = scrollBehavior,
             onSponsorsItemClick = onSponsorsItemClick,
-            contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+            contentPadding = PaddingValues(
+                start = padding.calculateStartPadding(layoutDirection),
+                end = padding.calculateEndPadding(layoutDirection),
+                bottom = padding.calculateBottomPadding(),
+            ),
         )
     }
 }

@@ -43,12 +43,11 @@ public struct AboutView: View {
     
     @ViewBuilder var content: some View {
         ScrollView {
-            VStack(spacing: 0) {
+            VStack(spacing: 32) {
                 KeyVisual()
                     .padding(.top, 28)
-                    .padding(.bottom, 32)
                 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text("Credits")
                         .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
                         .textStyle(.titleMedium)
@@ -62,10 +61,7 @@ public struct AboutView: View {
                         } icon: {
                             Image(.icDiversity)
                         }
-                        .labelStyle(AboutLabelStyle())
-                        Spacer()
                     })
-                    .padding(.init(top: 24, leading: 12, bottom: 24, trailing: 16))
                     
                     Divider()
                         .background(AssetColors.Outline.outlineVariant.swiftUIColor)
@@ -79,11 +75,7 @@ public struct AboutView: View {
                         } icon: {
                             Image(.icVerySatisfied)
                         }
-                        .labelStyle(AboutLabelStyle())
-
-                        Spacer()
                     })
-                    .padding(.init(top: 24, leading: 12, bottom: 24, trailing: 16))
 
                     Divider()
                         .background(AssetColors.Outline.outlineVariant.swiftUIColor)
@@ -97,18 +89,15 @@ public struct AboutView: View {
                         } icon: {
                             Image(.icApartment)
                         }
-                        .labelStyle(AboutLabelStyle())
-                        Spacer()
                     })
-                    .padding(.init(top: 24, leading: 12, bottom: 24, trailing: 16))
 
                     Divider()
                         .background(AssetColors.Outline.outlineVariant.swiftUIColor)
 
                 }
-                .padding(.bottom, 32)
+                .buttonStyle(.about)
 
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text("Others")
                         .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
                         .textStyle(.titleMedium)
@@ -122,10 +111,7 @@ public struct AboutView: View {
                         } icon: {
                             Image(.icGavel)
                         }
-                        .labelStyle(AboutLabelStyle())
-                        Spacer()
                     })
-                    .padding(.init(top: 24, leading: 12, bottom: 24, trailing: 16))
 
                     Divider()
                         .background(AssetColors.Outline.outlineVariant.swiftUIColor)
@@ -139,10 +125,7 @@ public struct AboutView: View {
                         } icon: {
                             Image(.icFileCopy)
                         }
-                        .labelStyle(AboutLabelStyle())
-                        Spacer()
                     })
-                    .padding(.init(top: 24, leading: 12, bottom: 24, trailing: 16))
 
                     Divider()
                         .background(AssetColors.Outline.outlineVariant.swiftUIColor)
@@ -156,10 +139,7 @@ public struct AboutView: View {
                         } icon: {
                             Image(.icPrivacyTip)
                         }
-                        .labelStyle(AboutLabelStyle())
-                        Spacer()
                     })
-                    .padding(.init(top: 24, leading: 12, bottom: 24, trailing: 16))
 
                     Divider()
                         .background(AssetColors.Outline.outlineVariant.swiftUIColor)
@@ -175,15 +155,13 @@ public struct AboutView: View {
                                 .resizable()
                                 .frame(width: 18, height: 18)
                         }
-                        .labelStyle(AboutLabelStyle())
-                        Spacer()
                     })
-                    .padding(.init(top: 24, leading: 12, bottom: 24, trailing: 16))
 
                     Divider()
                         .background(AssetColors.Outline.outlineVariant.swiftUIColor)
 
                 }
+                .buttonStyle(.about)
                 
                 HStack(spacing: 12) {
                     Button(action: {
@@ -191,38 +169,33 @@ public struct AboutView: View {
                     }, label: {
                         Image(.youtubeSocialCircle)
                             .resizable()
-                            .frame(width: 48, height: 48)
                     })
-                    .frame(width: 48, height: 48)
 
                     Button(action: {
                         send(.xcomTapped)
                     }, label: {
                         Image(.xSocialCircle)
                             .resizable()
-                            .frame(width: 48, height: 48)
                     })
-                    .frame(width: 48, height: 48)
 
                     Button(action: {
                         send(.mediumTapped)
                     }, label: {
                         Image(.mediumSocialCircle)
                             .resizable()
-                            .frame(width: 48, height: 48)
                     })
-                    .frame(width: 48, height: 48)
                 }
-                .padding(.vertical, 24)
+                .buttonStyle(.social)
 
-                Text(String(localized: "AppVersion", bundle: .module))
-                    .textStyle(.titleSmall)
-                    .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
-                
-                Text(version)
-                    .textStyle(.titleSmall)
-                    .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
-                    .padding(.bottom, 16)
+                VStack(spacing: 0) {
+                    Text(String(localized: "AppVersion", bundle: .module))
+                        .textStyle(.titleSmall)
+                    
+                    Text(version)
+                        .textStyle(.titleSmall)
+                }
+                .foregroundStyle(AssetColors.Surface.onSurfaceVariant.swiftUIColor)
+                .padding(.bottom, 16)
             }
             .padding(.horizontal, 16)
             // bottom floating tabbar padding
@@ -230,16 +203,59 @@ public struct AboutView: View {
         }
         .background(AssetColors.Surface.surface.swiftUIColor)
     }
+}
 
-    struct AboutLabelStyle: LabelStyle {
-        func makeBody(configuration: Configuration) -> some View {
-            HStack(spacing: 12) {
-                configuration.icon
-                    .frame(width: 24, height: 24)
-                configuration.title
-            }
-            .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
+private extension LabelStyle where Self == AboutLabelStyle {
+    static var about: AboutLabelStyle {
+        .init()
+    }
+}
+
+private struct AboutLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 12) {
+            configuration.icon
+                .frame(width: 24, height: 24)
+            configuration.title
         }
+        .foregroundStyle(AssetColors.Primary.primaryFixed.swiftUIColor)
+    }
+}
+
+private extension ButtonStyle where Self == AboutListButtonStyle {
+    static var about: AboutListButtonStyle {
+        .init()
+    }
+}
+
+private struct AboutListButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .labelStyle(.about)
+            .padding(.vertical, 24)
+            .padding(.leading, 12)
+            .padding(.trailing, 16)
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+            .opacity(configuration.isPressed ? 0.3 : 1)
+            .animation(.easeOut, value: configuration.isPressed)
+            .padding(.horizontal, -16)
+    }
+}
+
+private extension ButtonStyle where Self == SocialButtonStyle {
+    static var social: SocialButtonStyle {
+        .init()
+    }
+}
+
+private struct SocialButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .frame(width: 48, height: 48)
+            .opacity(configuration.isPressed ? 0.3 : 1)
+            .animation(.easeOut, value: configuration.isPressed)
     }
 }
 

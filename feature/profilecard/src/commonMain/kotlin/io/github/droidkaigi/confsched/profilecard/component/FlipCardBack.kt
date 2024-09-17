@@ -21,6 +21,7 @@ import conference_app_2024.feature.profilecard.generated.resources.card_back_ora
 import conference_app_2024.feature.profilecard.generated.resources.card_back_pink
 import conference_app_2024.feature.profilecard.generated.resources.card_back_white
 import conference_app_2024.feature.profilecard.generated.resources.card_back_yellow
+import conference_app_2024.feature.profilecard.generated.resources.qrcode
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.model.ProfileCard
 import io.github.droidkaigi.confsched.model.ProfileCardType.Flamingo
@@ -34,6 +35,7 @@ import io.github.droidkaigi.confsched.profilecard.ProfileCardRes
 import io.github.droidkaigi.confsched.profilecard.ProfileCardUiState.Card
 import io.github.droidkaigi.confsched.profilecard.toCardUiState
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import qrcode.QRCode
 
@@ -70,7 +72,7 @@ internal fun FlipCardBack(
         )
         Image(
             painter = painter,
-            contentDescription = null,
+            contentDescription = stringResource(ProfileCardRes.string.qrcode),
             modifier = Modifier.size(160.dp),
         )
     }

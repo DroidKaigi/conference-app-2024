@@ -7,6 +7,7 @@ import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -71,13 +72,19 @@ public sealed class TimetableItem {
     }
 
     public val startsTimeString: String by lazy {
-        val localDate = startsAt.toLocalDateTime(TimeZone.currentSystemDefault())
-        "${localDate.hour}".padStart(2, '0') + ":" + "${localDate.minute}".padStart(2, '0')
+        startsAt.toTimetableTimeString()
     }
 
     public val endsTimeString: String by lazy {
-        val localDate = endsAt.toLocalDateTime(TimeZone.currentSystemDefault())
-        "${localDate.hour}".padStart(2, '0') + ":" + "${localDate.minute}".padStart(2, '0')
+        endsAt.toTimetableTimeString()
+    }
+
+    public val startsLocalTime: LocalTime by lazy {
+        startsAt.toLocalTime()
+    }
+
+    public val endsLocalTime: LocalTime by lazy {
+        endsAt.toLocalTime()
     }
 
     private val minutesString: String by lazy {
@@ -119,6 +126,16 @@ public sealed class TimetableItem {
             else -> language.langOfSpeaker
         }
     }
+}
+
+private fun Instant.toTimetableTimeString(): String {
+    val localDate = toLocalDateTime(TimeZone.currentSystemDefault())
+    return "${localDate.hour}".padStart(2, '0') + ":" + "${localDate.minute}".padStart(2, '0')
+}
+
+private fun Instant.toLocalTime(): LocalTime {
+    val localDateTime = toLocalDateTime(TimeZone.currentSystemDefault())
+    return localDateTime.time
 }
 
 public fun Session.Companion.fake(): Session {

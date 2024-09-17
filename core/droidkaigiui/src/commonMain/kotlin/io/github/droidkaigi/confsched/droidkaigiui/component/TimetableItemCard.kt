@@ -43,13 +43,15 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.semantics.SemanticsPropertyKey
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.dropUnlessResumed
 import conference_app_2024.core.droidkaigiui.generated.resources.bookmarked
 import conference_app_2024.core.droidkaigiui.generated.resources.image
 import conference_app_2024.core.droidkaigiui.generated.resources.not_bookmarked
@@ -68,6 +70,11 @@ const val TimetableItemCardBookmarkButtonTestTag = "TimetableItemCardBookmarkBut
 const val TimetableItemCardBookmarkedIconTestTag = "TimetableItemCardBookmarkedIcon"
 const val TimetableItemCardTestTag = "TimetableListItem"
 const val TimetableItemCardTitleTextTestTag = "TimetableItemCardTitleText"
+
+private val timetableItemCardSemanticsKey = SemanticsPropertyKey<TimetableItem>("TimetableItem")
+
+@Suppress("UnusedReceiverParameter")
+val SemanticsProperties.TimetableItemCard get() = timetableItemCardSemanticsKey
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -99,6 +106,9 @@ fun TimetableItemCard(
         Row(
             modifier = modifier
                 .testTag(TimetableItemCardTestTag)
+                .semantics {
+                    this[SemanticsProperties.TimetableItemCard] = timetableItem
+                }
                 .border(
                     border = BorderStroke(
                         width = 1.dp,
@@ -109,7 +119,7 @@ fun TimetableItemCard(
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(color = LocalRoomTheme.current.primaryColor),
-                    onClick = dropUnlessResumed { onTimetableItemClick(timetableItem) },
+                    onClick = { onTimetableItemClick(timetableItem) },
                 ),
         ) {
             val contentPadding = 12.dp

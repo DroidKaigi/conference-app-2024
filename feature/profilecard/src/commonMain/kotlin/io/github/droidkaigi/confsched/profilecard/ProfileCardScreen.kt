@@ -3,7 +3,6 @@ package io.github.droidkaigi.confsched.profilecard
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +20,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -30,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -97,6 +98,7 @@ import com.preat.peekaboo.image.picker.toImageBitmap
 import conference_app_2024.feature.profilecard.generated.resources.add_image
 import conference_app_2024.feature.profilecard.generated.resources.card_type
 import conference_app_2024.feature.profilecard.generated.resources.create_card
+import conference_app_2024.feature.profilecard.generated.resources.delete
 import conference_app_2024.feature.profilecard.generated.resources.edit
 import conference_app_2024.feature.profilecard.generated.resources.icon_share
 import conference_app_2024.feature.profilecard.generated.resources.image
@@ -414,6 +416,10 @@ internal fun EditScreen(
                 nickname = it
                 onChangeNickname(it)
             },
+            onInputClear = {
+                nickname = ""
+                onChangeNickname("")
+            },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
         InputFieldWithError(
@@ -424,6 +430,10 @@ internal fun EditScreen(
             onValueChange = {
                 occupation = it
                 onChangeOccupation(it)
+            },
+            onInputClear = {
+                occupation = ""
+                onChangeOccupation("")
             },
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         )
@@ -437,6 +447,10 @@ internal fun EditScreen(
             onValueChange = {
                 link = it
                 onChangeLink(it)
+            },
+            onInputClear = {
+                link = ""
+                onChangeLink("")
             },
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done,
@@ -529,6 +543,7 @@ private fun InputFieldWithError(
     errorMessage: String,
     textFieldTestTag: String,
     onValueChange: (String) -> Unit,
+    onInputClear: () -> Unit,
     modifier: Modifier = Modifier,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -549,6 +564,25 @@ private fun InputFieldWithError(
             value = value,
             textStyle = MaterialTheme.typography.bodyLarge,
             onValueChange = onValueChange,
+            trailingIcon = {
+                if (value.isNotEmpty()) {
+                    IconButton(
+                        onClick = onInputClear,
+                        modifier = Modifier
+                            .padding(
+                                top = 8.dp,
+                                bottom = 8.dp,
+                                end = 4.dp,
+                            ),
+                    ) {
+                        Icon(
+                            modifier = Modifier.padding(8.dp),
+                            imageVector = Icons.Outlined.Cancel,
+                            contentDescription = stringResource(ProfileCardRes.string.delete),
+                        )
+                    }
+                }
+            },
             isError = isError,
             shape = RoundedCornerShape(4.dp),
             keyboardOptions = keyboardOptions,
@@ -627,7 +661,7 @@ private fun ImagePickerWithError(
                     Icon(
                         modifier = Modifier.padding(4.dp),
                         imageVector = Icons.Default.Close,
-                        contentDescription = null,
+                        contentDescription = stringResource(ProfileCardRes.string.delete),
                     )
                 }
             }
@@ -700,12 +734,12 @@ private fun CardTypeImage(
 
     Image(
         painter = painterResource(ProfileCardRes.drawable.card_type),
-        contentDescription = null,
+        contentDescription = cardType.toString(),
         modifier = modifier
             .selectedBorder(isSelected, selectedBorderColor, painter)
             .clip(RoundedCornerShape(2.dp))
             .background(colorMap[cardType]!!)
-            .clickable { onClickImage(cardType) }
+            .selectable(isSelected) { onClickImage(cardType) }
             .padding(top = 36.dp, start = 30.dp, end = 30.dp, bottom = 36.dp),
     )
 }
@@ -829,17 +863,15 @@ internal fun CardScreen(
                             .testTag(ProfileCardShareButtonTestTag)
                             .padding(horizontal = 16.dp, vertical = 8.dp),
                     ) {
-                        val shareLabel = stringResource(ProfileCardRes.string.share)
-
                         Icon(
                             painter = painterResource(ProfileCardRes.drawable.icon_share),
-                            contentDescription = shareLabel,
+                            contentDescription = null,
                             tint = Color.Black,
                             modifier = Modifier.size(18.dp),
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = shareLabel,
+                            text = stringResource(ProfileCardRes.string.share),
                             modifier = Modifier.padding(8.dp),
                             style = MaterialTheme.typography.labelLarge,
                             color = Color.Black,

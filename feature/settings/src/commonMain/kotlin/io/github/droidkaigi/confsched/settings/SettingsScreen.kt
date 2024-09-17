@@ -1,7 +1,11 @@
 package io.github.droidkaigi.confsched.settings
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -15,7 +19,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.settings.generated.resources.settings_title
@@ -38,7 +41,7 @@ fun NavGraphBuilder.settingsScreens(
 ) {
     composable(settingsScreenRoute) {
         SettingsScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
         )
     }
 }
@@ -104,6 +107,7 @@ fun SettingsScreen(
                 )
             }
         },
+        contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { padding ->
         LazyColumn(
             Modifier

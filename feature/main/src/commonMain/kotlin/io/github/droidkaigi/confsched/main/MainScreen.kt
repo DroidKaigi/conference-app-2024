@@ -11,9 +11,16 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -25,15 +32,17 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import conference_app_2024.core.designsystem.generated.resources.ic_fav_off
 import conference_app_2024.core.designsystem.generated.resources.ic_fav_on
 import conference_app_2024.core.designsystem.generated.resources.ic_info_off
@@ -73,6 +82,7 @@ const val mainScreenRoute = "main"
 fun NavGraphBuilder.mainScreen(
     windowSize: WindowSizeClass,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
+    mainNestedNavController: NavHostController,
     mainNestedGraph: NavGraphBuilder.(mainNestedNavController: NavController, PaddingValues) -> Unit,
 ) {
     composable(mainScreenRoute) {
@@ -82,6 +92,7 @@ fun NavGraphBuilder.mainScreen(
             MainScreen(
                 windowSize = windowSize,
                 mainNestedGraphStateHolder = mainNestedGraphStateHolder,
+                mainNestedNavController = mainNestedNavController,
                 mainNestedNavGraph = mainNestedGraph,
             )
         }
@@ -108,6 +119,7 @@ enum class NavigationType {
 fun MainScreen(
     windowSize: WindowSizeClass,
     mainNestedGraphStateHolder: MainNestedGraphStateHolder,
+    mainNestedNavController: NavHostController,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
     eventFlow: EventFlow<MainScreenEvent> = rememberEventFlow(),
     uiState: MainScreenUiState = mainScreenPresenter(eventFlow),
@@ -139,6 +151,7 @@ fun MainScreen(
             navigationType = navigationType,
             routeToTab = mainNestedGraphStateHolder::routeToTab,
             onTabSelected = mainNestedGraphStateHolder::onTabSelected,
+            mainNestedNavController = mainNestedNavController,
             mainNestedNavGraph = mainNestedNavGraph,
         )
     }
@@ -201,10 +214,11 @@ fun MainScreen(
     navigationType: NavigationType,
     routeToTab: String.() -> MainScreenTab?,
     onTabSelected: (NavController, MainScreenTab) -> Unit,
+    mainNestedNavController: NavHostController,
     mainNestedNavGraph: NavGraphBuilder.(NavController, PaddingValues) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val mainNestedNavController = rememberNavController()
+    val layoutDirection = LocalLayoutDirection.current
 
     val navBackStackEntryRoute =
         mainNestedNavController.currentBackStackEntryAsState().value?.destination?.route
@@ -221,7 +235,15 @@ fun MainScreen(
 
     val scaffoldPadding = remember { mutableStateOf(PaddingValues(0.dp)) }
 
-    Row(modifier = modifier.fillMaxSize()) {
+    Row(
+        modifier = modifier.fillMaxSize()
+            .windowInsetsPadding(
+                WindowInsets.displayCutout
+                    .union(WindowInsets.systemBars)
+                    .only(WindowInsetsSides.Start),
+            ),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         AnimatedVisibility(visible = navigationType == NavigationRail) {
             GlassLikeNavRail(
                 hazeState = hazeState,
@@ -229,7 +251,9 @@ fun MainScreen(
                     onTabSelected(mainNestedNavController, it)
                 },
                 currentTab = currentTab,
-                modifier = Modifier.padding(scaffoldPadding.value),
+                modifier = Modifier.padding(
+                    top = scaffoldPadding.value.calculateTopPadding(),
+                ),
             )
         }
 
@@ -246,6 +270,8 @@ fun MainScreen(
                     )
                 }
             },
+            contentWindowInsets = WindowInsets.displayCutout
+                .union(WindowInsets.systemBars),
         ) { padding ->
             scaffoldPadding.value = padding
             val hazeStyle =
@@ -264,7 +290,19 @@ fun MainScreen(
                 enterTransition = { materialFadeThroughIn() },
                 exitTransition = { materialFadeThroughOut() },
             ) {
-                mainNestedNavGraph(mainNestedNavController, padding)
+                mainNestedNavGraph(
+                    mainNestedNavController,
+                    PaddingValues(
+                        top = padding.calculateTopPadding(),
+                        bottom = padding.calculateBottomPadding(),
+                        start = if (navigationType == NavigationRail) {
+                            0.dp
+                        } else {
+                            padding.calculateLeftPadding(layoutDirection)
+                        },
+                        end = padding.calculateRightPadding(layoutDirection),
+                    ),
+                )
             }
         }
     }

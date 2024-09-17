@@ -174,8 +174,8 @@ fun searchScreenPresenter(
                 timetableListUiState = TimetableListUiState(
                     timetableItemMap = filteredSessions.groupBy {
                         TimetableListUiState.TimeSlot(
-                            startTimeString = it.startsTimeString,
-                            endTimeString = it.endsTimeString,
+                            startTime = it.startsLocalTime,
+                            endTime = it.endsLocalTime,
                         )
                     }.mapValues { entries ->
                         entries.value.sortedWith(

@@ -67,10 +67,11 @@ sealed interface FavoritesSheetUiState {
         val timetableItemMap: PersistentMap<TimeSlot, List<TimetableItem>>,
     ) : FavoritesSheetUiState {
         data class TimeSlot(
+            val day: DroidKaigi2024Day?,
             val startTimeString: String,
             val endTimeString: String,
         ) {
-            val key: String get() = "$startTimeString-$endTimeString"
+            val key: String get() = "${day?.ordinal}-$startTimeString-$endTimeString"
         }
     }
 
@@ -187,6 +188,7 @@ fun FavoriteSheetPreview() {
                     currentDayFilter = persistentListOf(ConferenceDay1, ConferenceDay2),
                     timetableItemMap = persistentMapOf(
                         TimeSlot(
+                            day = DroidKaigi2024Day.ConferenceDay1,
                             startTimeString = "10:00",
                             endTimeString = "11:00",
                         ) to listOf(

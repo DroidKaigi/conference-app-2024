@@ -38,7 +38,12 @@ class KmpPlugin : Plugin<Project> {
                     }
                 }
                 compilerOptions {
-                    freeCompilerArgs.add("-Xcontext-receivers")
+                    freeCompilerArgs.addAll(
+                        listOf(
+                            "-Xcontext-receivers",
+                            "-Xexpect-actual-classes",
+                        )
+                    )
                 }
             }
         }

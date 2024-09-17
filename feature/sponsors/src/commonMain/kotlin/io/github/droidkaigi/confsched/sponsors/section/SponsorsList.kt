@@ -29,6 +29,7 @@ import conference_app_2024.feature.sponsors.generated.resources.platinum_sponsor
 import conference_app_2024.feature.sponsors.generated.resources.supporters
 import io.github.droidkaigi.confsched.designsystem.theme.KaigiTheme
 import io.github.droidkaigi.confsched.droidkaigiui.UserMessageStateHolderImpl
+import io.github.droidkaigi.confsched.droidkaigiui.plus
 import io.github.droidkaigi.confsched.model.Plan.GOLD
 import io.github.droidkaigi.confsched.model.Plan.PLATINUM
 import io.github.droidkaigi.confsched.model.Plan.SUPPORTER
@@ -73,8 +74,8 @@ fun SponsorsList(
         contentPadding = PaddingValues(
             start = 16.dp,
             end = 16.dp,
-            bottom = 48.dp + contentPadding.calculateBottomPadding(),
-        ),
+            bottom = 48.dp,
+        ).plus(contentPadding),
     ) {
         sponsorsByPlanSection(
             headerStringResource = SponsorsRes.string.platinum_sponsor,

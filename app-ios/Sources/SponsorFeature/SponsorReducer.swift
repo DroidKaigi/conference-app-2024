@@ -19,7 +19,7 @@ public struct SponsorReducer : Sendable {
         public init() { }
     }
 
-    public enum Action : Sendable, BindableAction {
+    public enum Action: Sendable, BindableAction, ViewAction {
         case binding(BindingAction<State>)
         case response(Result<[Sponsor], any Error>)
         case view(View)

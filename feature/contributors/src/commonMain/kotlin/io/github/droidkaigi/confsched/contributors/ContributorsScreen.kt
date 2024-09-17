@@ -2,9 +2,15 @@ package io.github.droidkaigi.confsched.contributors
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.calculateEndPadding
+import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
@@ -18,8 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
-import androidx.lifecycle.compose.dropUnlessResumed
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import conference_app_2024.feature.contributors.generated.resources.contributor_title
@@ -45,7 +52,7 @@ fun NavGraphBuilder.contributorsScreens(
 ) {
     composable(contributorsScreenRoute) {
         ContributorsScreen(
-            onNavigationIconClick = dropUnlessResumed(block = onNavigationIconClick),
+            onNavigationIconClick = onNavigationIconClick,
             onContributorsItemClick = onContributorItemClick,
         )
     }
@@ -102,6 +109,7 @@ fun ContributorsScreen(
     isTopAppBarHidden: Boolean,
     modifier: Modifier = Modifier,
 ) {
+    val layoutDirection = LocalLayoutDirection.current
     val scrollBehavior =
         if (!isTopAppBarHidden) {
             TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -121,13 +129,18 @@ fun ContributorsScreen(
                 )
             }
         },
+        contentWindowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars),
     ) { padding ->
         when (uiState) {
             is Exists -> {
                 Contributors(
                     contributors = uiState.contributors,
                     onContributorsItemClick = onContributorsItemClick,
-                    contentPadding = PaddingValues(bottom = padding.calculateBottomPadding()),
+                    contentPadding = PaddingValues(
+                        start = padding.calculateStartPadding(layoutDirection),
+                        end = padding.calculateEndPadding(layoutDirection),
+                        bottom = 40.dp + padding.calculateBottomPadding(),
+                    ),
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(top = padding.calculateTopPadding())

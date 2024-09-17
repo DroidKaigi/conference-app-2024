@@ -7,12 +7,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.union
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,7 +37,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.dropUnlessResumed
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
@@ -165,7 +169,7 @@ private fun TimetableScreen(
                             maxLines = 1,
                         )
                         IconButton(
-                            onClick = dropUnlessResumed(block = onSearchClick),
+                            onClick = onSearchClick,
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Search,
@@ -193,6 +197,9 @@ private fun TimetableScreen(
                         }
                     }
                 },
+                windowInsets = WindowInsets.displayCutout.union(WindowInsets.systemBars).only(
+                    WindowInsetsSides.Horizontal + WindowInsetsSides.Top,
+                ),
             )
         },
         contentWindowInsets = WindowInsets(

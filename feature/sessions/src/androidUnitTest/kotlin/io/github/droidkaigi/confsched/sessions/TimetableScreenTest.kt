@@ -205,6 +205,16 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         dateTime = LocalDateTime(
                             year = 2024,
                             monthNumber = 9,
+                            dayOfMonth = 12,
+                            hour = 23,
+                            minute = 0,
+                        ),
+                        shouldShowTimeLine = false,
+                    ),
+                    TimeLineTestSpec(
+                        dateTime = LocalDateTime(
+                            year = 2024,
+                            monthNumber = 9,
                             dayOfMonth = 13,
                             hour = 11,
                             minute = 0,
@@ -218,19 +228,28 @@ class TimetableScreenTest(private val testCase: DescribedBehavior<TimetableScree
                         doIt {
                             setupTimetableServer(ServerStatus.Operational)
                             setupTimetableScreenContent(case.dateTime)
-                            clickTimetableUiTypeChangeButton()
                         }
-
                         val formattedTime =
                             case.dateTime.time.format(LocalTime.Format { byUnicodePattern("HH-mm") })
-                        val description = if (case.shouldShowTimeLine) {
-                            "show an indicator of the current time at $formattedTime"
-                        } else {
-                            "not show an indicator of the current time"
-                        }
-                        itShould(description) {
+                        val timetableListDescription = "show an timetable item of the current time at $formattedTime"
+                        itShould(timetableListDescription) {
                             captureScreenWithChecks {
-                                checkTimetableGridDisplayed()
+                                checkTimetableListDisplayed()
+                            }
+                        }
+                        describe("switch to grid timetable") {
+                            doIt {
+                                clickTimetableUiTypeChangeButton()
+                            }
+                            val timetableGridDescription = if (case.shouldShowTimeLine) {
+                                "show an indicator of the current time at $formattedTime"
+                            } else {
+                                "not show an indicator of the current time"
+                            }
+                            itShould(timetableGridDescription) {
+                                captureScreenWithChecks {
+                                    checkTimetableGridDisplayed()
+                                }
                             }
                         }
                     }
