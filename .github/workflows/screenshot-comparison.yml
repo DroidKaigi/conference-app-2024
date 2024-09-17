@@ -13,7 +13,7 @@ permissions: { }
 
 jobs:
   screenshot-comparison:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 60
 
     permissions:
