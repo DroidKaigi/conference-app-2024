@@ -70,18 +70,21 @@ public struct TimetableReducer : Sendable{
                  }
 
             case let .requestDay(dayTab):
-                return .run { send in
-                    for try await timetables in try timetableClient.streamTimetable() {
-                        let internalDay: DroidKaigi2024Day = switch dayTab {
-                        case DayTab.day1:
-                            DroidKaigi2024Day.conferenceDay1
-                        case DayTab.day2:
-                            DroidKaigi2024Day.conferenceDay2
+                return .concatenate(
+                    .cancel(id: CancelID.connection),
+                    .run { send in
+                        for try await timetables in try timetableClient.streamTimetable() {
+                            let internalDay: DroidKaigi2024Day = switch dayTab {
+                            case DayTab.day1:
+                                DroidKaigi2024Day.conferenceDay1
+                            case DayTab.day2:
+                                DroidKaigi2024Day.conferenceDay2
+                            }
+                            await send(.response(.success(timetables.dayTimetable(droidKaigi2024Day: internalDay).contents)))
                         }
-                        await send(.response(.success(timetables.dayTimetable(droidKaigi2024Day: internalDay).contents)))
                     }
-                }
-                .cancellable(id: CancelID.connection)
+                    .cancellable(id: CancelID.connection)
+                )
 
             case .response(.success(let timetables)):
                 state.timetableItems = sortListIntoTimeGroups(timetableItems: timetables)
