@@ -24,7 +24,7 @@ class ProfileCardJsonTest {
         assertEquals("test occupation", profileCardJson.occupation)
         assertEquals("https://github.com/DroidKaigi/conference-app-2024", profileCardJson.link)
         assertEquals("BASE64_ENCODED_SAMPLE_IMAGE_STRING", profileCardJson.image)
-        assertEquals("Iguana", profileCardJson.theme)
+        assertEquals("Iguana", profileCardJson.cardType)
         assertNull(profileCardJson.cardType)
     }
 
@@ -44,7 +44,7 @@ class ProfileCardJsonTest {
         assertEquals("test occupation", profileCardJson.occupation)
         assertEquals("https://github.com/DroidKaigi/conference-app-2024", profileCardJson.link)
         assertEquals("BASE64_ENCODED_SAMPLE_IMAGE_STRING", profileCardJson.image)
-        assertNull(profileCardJson.theme)
+        assertNull(profileCardJson.cardType)
         assertEquals("Iguana", profileCardJson.cardType)
     }
 

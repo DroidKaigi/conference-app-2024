@@ -11,7 +11,10 @@ internal data class ProfileCardJson(
     val occupation: String,
     val link: String,
     val image: String,
-    @Deprecated("Use cardType instead", replaceWith = ReplaceWith("cardType"))
+    @Deprecated(
+        "Let's use cardType, but keep it for compatibility.",
+        replaceWith = ReplaceWith("cardType")
+    )
     val theme: String? = null,
     @SerialName("card_type")
     val cardType: String? = null,
@@ -22,7 +25,7 @@ internal fun ProfileCardJson.toModel() = ProfileCard.Exists(
     occupation = occupation,
     link = link,
     image = image,
-    cardType = checkNotNull(cardType ?: theme).toProfileCardType(),
+    cardType = checkNotNull(cardType ?: cardType).toProfileCardType(),
 )
 
 internal fun String.toProfileCardType() = ProfileCardType.valueOf(this)
