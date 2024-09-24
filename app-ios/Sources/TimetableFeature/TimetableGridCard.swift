@@ -61,7 +61,6 @@ public struct TimetableGridCard: View {
                     }
                 }
             }
-            .frame(maxWidth: .infinity)
             .padding(12)
             .frame(maxWidth: 192 * CGFloat(cellCount) + CGFloat(12 * (cellCount - 1)))
             .frame(height: 153)
