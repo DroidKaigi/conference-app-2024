@@ -33,7 +33,9 @@ jobs:
           name: event-payload
           path: ${{ github.event_path }}
 
-      - run: ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace
+      - run: >
+          ulimit -c unlimited
+          ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace
 
       # Saving cost
       # - run: ./gradlew koverHtmlReportDevDebug --stacktrace
