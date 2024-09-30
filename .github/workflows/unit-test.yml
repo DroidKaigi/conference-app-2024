@@ -14,7 +14,7 @@ permissions: { }
 
 jobs:
   unit-test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     timeout-minutes: 60
 
     permissions:
@@ -33,7 +33,9 @@ jobs:
           name: event-payload
           path: ${{ github.event_path }}
 
-      - run: ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace
+      - run: |
+          ulimit -c unlimited
+          ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace || cat /Users/runner/work/conference-app-2024/conference-app-2024/feature/sessions/*.log /cores/core*
 
       # Saving cost
       # - run: ./gradlew koverHtmlReportDevDebug --stacktrace
