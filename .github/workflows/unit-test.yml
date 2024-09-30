@@ -35,7 +35,7 @@ jobs:
 
       - run: |
           ulimit -c unlimited
-          ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace || cat Users/runner/work/conference-app-2024/conference-app-2024/feature/sessions/*.log
+          ./gradlew testDevDebugUnitTest testDebugUnitTest --stacktrace || cat /Users/runner/work/conference-app-2024/conference-app-2024/feature/sessions/*.log /cores/core*
 
       # Saving cost
       # - run: ./gradlew koverHtmlReportDevDebug --stacktrace
