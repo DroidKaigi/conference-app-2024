@@ -1,6 +1,6 @@
 package io.github.droidkaigi.confsched.profilecard.component
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
@@ -18,8 +18,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.layer.GraphicsLayer
 import androidx.compose.ui.graphics.layer.drawLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -109,39 +114,71 @@ private fun ShareableCardContent(
             .background(LocalProfileCardTheme.current.primaryColor),
     ) {
         Box(modifier = Modifier.padding(vertical = with(density) { verticalPaddingPx.toDp() })) {
-            backImage?.let {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset(
-                            x = with(density) { offsetXBackPx.toDp() },
-                            y = with(density) { offsetYBackPx.toDp() },
-                        )
-                        .rotate(10f)
-                        .size(
-                            width = with(density) { cardWidthPx.toDp() },
-                            height = with(density) { cardHeightPx.toDp() },
-                        ),
+            backImage?.let { backBitmap ->
+                ShadowedImage(
+                    imageBitmap = backBitmap,
+                    offsetX = offsetXBackPx,
+                    offsetY = offsetYBackPx,
+                    rotation = 10f,
+                    cardWidthPx = cardWidthPx,
+                    cardHeightPx = cardHeightPx,
                 )
             }
-            frontImage?.let {
-                Image(
-                    bitmap = it,
-                    contentDescription = null,
-                    modifier = Modifier
-                        .offset(
-                            x = with(density) { offsetXFrontPx.toDp() },
-                            y = with(density) { offsetYFrontPx.toDp() },
-                        )
-                        .rotate(-12.2f)
-                        .size(
-                            width = with(density) { cardWidthPx.toDp() },
-                            height = with(density) { cardHeightPx.toDp() },
-                        ),
+            frontImage?.let { frontBitmap ->
+                ShadowedImage(
+                    imageBitmap = frontBitmap,
+                    offsetX = offsetXFrontPx,
+                    offsetY = offsetYFrontPx,
+                    rotation = -12.2f,
+                    cardWidthPx = cardWidthPx,
+                    cardHeightPx = cardHeightPx,
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun ShadowedImage(
+    imageBitmap: ImageBitmap,
+    offsetX: Float,
+    offsetY: Float,
+    rotation: Float,
+    cardWidthPx: Int,
+    cardHeightPx: Int,
+    modifier: Modifier = Modifier,
+) {
+    val sweepGradient = Brush.sweepGradient(
+        colors = listOf(
+            Color.Black.copy(alpha = 0.1f),
+            Color.Transparent,
+        ),
+    )
+    val density = LocalDensity.current
+
+    Canvas(
+        modifier = modifier
+            .offset(
+                x = with(density) { offsetX.toDp() },
+                y = with(density) { offsetY.toDp() },
+            )
+            .rotate(rotation)
+            .size(
+                width = with(density) { cardWidthPx.toDp() },
+                height = with(density) { cardHeightPx.toDp() },
+            ),
+    ) {
+        rotate(degrees = 180f) {
+            for (i in 1..15) {
+                drawRoundRect(
+                    brush = sweepGradient,
+                    size = Size(cardWidthPx.toFloat(), cardHeightPx.toFloat()),
+                    topLeft = Offset(-i.toFloat(), -i.toFloat()),
+                    cornerRadius = CornerRadius(with(density) { 16.toDp().toPx() }),
+                )
+            }
+        }
+        drawImage(imageBitmap)
     }
 }
 
